@@ -16,16 +16,9 @@ module.exports = (env, options) => {
 					use: 'babel-loader',
 				},
 				{
-					test: /\.(png|jp(e*)g|svg|gif)$/,
-					use: [
-						{
-							loader: 'file-loader',
-							options: {
-								name: 'images/[hash]-[name].[ext]',
-							},
-						},
-					],
-				},
+					test: /\.(s(a|c)ss)$/,
+					use: ['style-loader','css-loader', 'sass-loader']
+				}
 			],
 		},
 		devtool: 'source-map',
