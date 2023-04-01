@@ -15,7 +15,9 @@ export function request(action, payload={}, callback) {
 		type: 'POST',
 		data: payload,
 		success: function(response) {
-			callback(response.data);
+			if ( typeof callback == 'function' ) {
+				callback(response);
+			}
 		},
 		error: function() {
 

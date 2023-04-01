@@ -2,17 +2,16 @@ import React, { useState } from 'react';
 import { request } from '../../utilities/request.jsx';
 
 export function SettingPage(props) {
-	const {pages={}, savedValues={}} = props;
-	const [state, setState] = useState({savedValues});
+	const {pages={}, savedSettings={}} = props;
+	const [state, setState] = useState({changedSettings:{}});
 
 	const saveOptions=()=>{
-		console.log(state);
-		request('save_admin_settings', state.savedValues);
+		request('save_admin_settings', state.changedSettings);
 	}
 
 	const onChange=(el)=>{
 		let {name, value} = el.currentTarget;
-		setState({...state, savedValues:{...state.savedValues, [name]: value}});
+		setState({...state, changedSettings:{...state.changedSettings, [name]: value}});
 	}
 
 	return <>
@@ -23,7 +22,7 @@ export function SettingPage(props) {
 						<label>Dashboard</label>
 					</th>
 					<td>
-						<select defaultValue={state.savedValues.dashboard_page_id} name="dashboard_page_id" onChange={onChange}>
+						<select defaultValue={savedSettings.dashboard_page_id} name="dashboard_page_id" onChange={onChange}>
 							<option>- Select -</option>
 							{Object.keys(pages).map(id=>{
 								return <option key={id} value={id}>

@@ -10,10 +10,6 @@ class AdminSetting {
 	 */
 	private static $name = '_app_store_admin_settings';
 
-	private function getOptionKey() {
-		
-	}
-
 	/**
 	 * Save admin settings
 	 *
@@ -25,6 +21,27 @@ class AdminSetting {
 			return false;
 		}
 
-		update_option(  );
+		$options = get_option( self::$name, array() );
+		$options = array_merge( $options, $settings );
+
+		update_option( self::$name, $settings );
+	}
+
+	/**
+	 * Get AppStore option
+	 *
+	 * @param string|null $key
+	 * @param string|int|array|bool|null $default
+	 * 
+	 * @return string|int|array|bool|null
+	 */
+	public static function get( $key = null, $default = null ) {
+		$options = get_option( self::$name, array() );
+		
+		if ( ! $key ) {
+			return $options;
+		}
+
+		return isset( $options[ $key ] ) ? $options[ $key ] : $default;
 	}
 }

@@ -5,11 +5,13 @@ namespace AppStore\Setup;
 use AppStore\Helpers\Nonce;
 use AppStore\Models\AdminSetting;
 use AppStore\Models\Apps as AppModel;
+use AppStore\Models\Store;
 
 class Dispatcher {
 	private static $endpoints = array(
 		'get_my_app_list',
-		'save_admin_settings'
+		'save_admin_settings',
+		'create_store'
 	);
 
 	private $model;
@@ -26,7 +28,16 @@ class Dispatcher {
 	}
 
 	public function dispatch( $endpoint ) {
+		// Verify nonce
 		Nonce::verify();
+
+		// Remove action
+		if ( isset( $_POST['action'] ) ) {
+			unset( $_POST['action'] );
+		}
+		if ( isset( $_GET['action'] ) ) {
+			unset( $_GET['action'] );
+		}
 
 		// Now pass to the controller
 		if ( method_exists( $this, $endpoint ) ) {
@@ -49,5 +60,25 @@ class Dispatcher {
 	private function save_admin_settings() {
 		AdminSetting::save( $_POST );
 		wp_send_json_success();
+	}
+
+	/**
+	 * Create store
+	 *
+	 * @return void
+	 */
+	private function create_store() {
+		$store_name = sanitize_text_field( $_POST['store_name'] );
+
+		if ( empty( $store_name ) ) {
+			wp_send_json_error( 'Invalid Store Name' );
+			exit;
+		}
+
+		$store_url = Store::createStore( $store_name );
+
+		wp_send_json_success( array(
+			'store_url' => $store_url
+		) );
 	}
 }

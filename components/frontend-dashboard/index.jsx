@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom/client';
 import { AppList } from './dashboard/apps/apps.jsx';
-import './style.scss';
 import { request } from '../utilities/request.jsx';
+import './style.scss';
+import { DashboardIndex } from './dashboard/index.jsx';
 
 const menu_map = [
 	{
@@ -184,7 +185,7 @@ function D() {
 		setTemplate();
 	}, []);
 
-	const Comp = state.active_slug ? (getComp() || <p>Page Component Not Found</p>) : null;
+	const Comp = state.active_slug ? (getComp() || DashboardIndex) : DashboardIndex;
 
 	return <div className="grid">
 		<header className="header">
@@ -242,7 +243,7 @@ function D() {
 											{children.map(child_menu=>{
 												let {slug, label} = child_menu;
 												let is_active = slug==state.active_slug;
-												return <li className={"subList__item"+(is_active ? ' subList__item--active' : '')}>{label}</li>
+												return <li key={slug} className={"subList__item"+(is_active ? ' subList__item--active' : '')}>{label}</li>
 											})}
 										</ul> || null
 									}

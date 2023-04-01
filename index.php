@@ -19,7 +19,8 @@ add_action( 'plugins_loaded', function(){
 	define( 'APPSTORE_DIR', __DIR__ . DIRECTORY_SEPARATOR );
 	define( 'APPSTORE_URL', plugin_dir_url( __FILE__ ) );
 	define( 'APPSTORE_DIST_URL', APPSTORE_URL . '/dist/' );
-
+	define( 'APPSTORE_CURRENT_URL', "http".((!empty($_SERVER['HTTPS'])&&$_SERVER['HTTPS']!='off')?'s':'').'://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
+	
 	require_once 'classes/Init.php';
 	(new \AppStore\Init())->setup();
 } );

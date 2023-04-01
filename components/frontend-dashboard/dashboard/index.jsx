@@ -1,4 +1,5 @@
 import React from 'react';
+import { CreateStoreModal } from './modules/create-store/create-store.jsx';
 
 
 
@@ -19,6 +20,6 @@ export function DashboardIndex(props) {
 			</div>
 		}
 		
-		<p>+ Create Store</p>
+		<CreateStoreModal/>
 	</div>
 }
