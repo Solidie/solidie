@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { request } from '../../utilities/request.jsx';
+import { request } from '../../../utilities/request.jsx';
 
 export function AppList() {
 	const [state, setState] = useState({apps: [], loading: true});

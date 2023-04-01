@@ -4,10 +4,16 @@ export function request(action, payload={}, callback) {
 		payload = {};
 	}
 
+	payload = {
+		...payload, 
+		...window.AppStore.nonce, 
+		action
+	};
+
 	window.jQuery.ajax({
 		url: window.AppStore.ajax_url,
 		type: 'POST',
-		data: {...payload, action},
+		data: payload,
 		success: function(response) {
 			callback(response.data);
 		},

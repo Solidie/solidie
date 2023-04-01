@@ -70,7 +70,9 @@ module.exports = (env, options) => {
 		{
 			dest_path: './dist',
 			src_files: {
-				'dashboard': './components/Dashboard.jsx'
+				'frontend-dashboard': './components/frontend-dashboard/index.jsx',
+				'admin-dashboard': './components/admin-dashboard/index.jsx',
+				'frontend': './components/frontend/index.jsx'
 			},
 		}
 	];

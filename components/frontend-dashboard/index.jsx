@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom/client';
 import { AppList } from './dashboard/apps/apps.jsx';
 import './style.scss';
-import { request } from './utilities/request.jsx';
+import { request } from '../utilities/request.jsx';
 
 const menu_map = [
 	{

@@ -1,6 +1,6 @@
 <?php
 
-namespace AppStore;
+namespace AppStore\Models;
 
 class Apps{
 	/**
