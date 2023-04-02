@@ -2,65 +2,60 @@ import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom/client';
 import { AppList } from './dashboard/apps/apps.jsx';
 import { request } from '../utilities/request.jsx';
-import './style.scss';
 import { DashboardIndex } from './dashboard/index.jsx';
+import { getElementDataSet } from '../utilities/helpers.jsx';
+import './style.scss';
 
-const menu_map = [
+const menu_map_blueprint = [
 	{
-		label: 'My Profile',
-		icon: 'far fa-file-alt',
-		menus: [
-			{
-				label: 'Orders',
-				slug: 'orders',
-				icon: 'fas fa-pen'
-			},
-			{
-				label: 'Apps',
-				slug: 'apps',
-				icon: 'fas fa-cog'
-			},
-			{
-				label: 'Account',
-				slug: 'account',
-				icon: 'fas fa-user'
-			},
-		]
+		label: 'Purchased Apps',
+		slug: 'apps',
+		icon: 'fas fa-cog',
 	},
 	{
-		label: 'Store 1',
-		menus: [
-			{
-				label: 'Store 1',
-				icon: 'fas fa-cog',
-				children: [
-					{
-						label: 'Inventory',
-						slug: 'store/store-1/inventory',
-						component: AppList
-					},
-					{
-						label: 'Sales',
-						slug: 'store/store-1/sales'
-					},
-					{
-						label: 'Customers',
-						slug: 'store/store-1/customers'
-					}
-				]
-			},
-		]
+		label: 'Purchase History',
+		slug: 'orders',
+		icon: 'fas fa-pen'
+	},
+	{
+		label: 'My Account',
+		slug: 'account',
+		icon: 'fas fa-user'
 	}
-]
+];
+
+const store_menu_blueprint = [
+	{
+		label: 'Inventory',
+		slug: 'inventory',
+		component: AppList
+	},
+	{
+		label: 'Sales',
+		slug: 'sales'
+	},
+	{
+		label: 'Customers',
+		slug: 'customers'
+	},
+	{
+		label: 'Reports',
+		slug: 'reports'
+	},
+];
 
 /* Dashboard Adopted from https://codepen.io/trooperandz/pen/EOgJvg */
 
-function D() {
+function D(props) {
 	const [state, setState] = useState({
 		active_slug: null,
-		stores: []
+		expanded_menu: null,
+		menu_map: [],
 	});
+
 	const $ = window.jQuery;
+	const current_url = window.location.href.split('?')[0];
+	let {stores=[], dashbaord_url, avatar_url} = props.frontendDashboardData || {};
 
 	const setTemplate=()=>{
 		/* Scripts for css grid dashboard */
@@ -68,7 +63,6 @@ function D() {
 		addResizeListeners();
 		setSidenavListeners();
 		setUserDropdownListener();
-		setMenuClickListener();
 		setSidenavCloseListener();
 
 		// Set constants and grab needed elements
@@ -140,14 +134,6 @@ function D() {
 		});
 		}
 
-		// Menu open sidenav icon, shown only on mobile
-		function setMenuClickListener() {
-		$('.header__menu').on('click', function(e) { console.log('clicked menu icon');
-			toggleClass(sidenavEl, SIDENAV_ACTIVE_CLASS);
-			toggleClass(gridEl, GRID_NO_SCROLL_CLASS);
-		});
-		}
-
 		// Sidenav close icon
 		function setSidenavCloseListener() {
 		$('.sidenav__brand-close').on('click', function(e) {
@@ -158,34 +144,59 @@ function D() {
 	}
 
 	const getComp=()=>{
-		for(let i=0; i<menu_map.length; i++) {
-			for(let n=0; n<menu_map[i].menus.length; n++) {
-				let {children=[], slug, component} = menu_map[i].menus[n];
+		let {menu_map} = state;
 
-				if(slug==state.active_slug) {
-					return component;
-				} 
-				
-				for(let num=0; num<children.length; num++) {
-					if(children[num].slug==state.active_slug) {
-						return children[num].component;
-					}
+		if (current_url==dashbaord_url) {
+			return <DashboardIndex/>
+		}
+
+		for(let n=0; n<menu_map.length; n++) {
+			let {children=[], url, component: Comp, props={}} = menu_map[n];
+
+			if(url==current_url && Comp) {
+				return <Comp {...props}/>
+			} 
+			
+			for(let num=0; num<children.length; num++) {
+				if(children[num].url==current_url) {
+					let Comp = children[num].component;
+					return Comp ? <Comp {...props}/> : null;
 				}
 			}
 		}
 	}
 
-	const getDashboardData=()=>{
-		/* request('get_dashboard_data', ()=>{
-			
-		}); */
-	}
-
 	useEffect(()=>{
+		// Prepare menus
+		let menu_map = menu_map_blueprint.map(menu=>{
+			return {
+				...menu,
+				url: dashbaord_url+menu.slug+'/'
+			}
+		});
+
+		for( let i=0; i<stores.length; i++ ) {
+			let {store_name, store_slug, store_url} = stores[i];
+			menu_map.push({
+				label: store_name,
+				icon: 'fas fa-cog',
+				slug: 'store/'+store_slug,
+				url: store_url,
+				children: store_menu_blueprint.map(m=>{
+					return {
+						...m, 
+						props: stores[i],
+						url: store_url+m.slug+'/'
+					};
+				})
+			})
+		}
+		setState({...state, menu_map});
+		
 		setTemplate();
 	}, []);
 
-	const Comp = state.active_slug ? (getComp() || DashboardIndex) : DashboardIndex;
+	const page_content = getComp() || <>Component Not Found</>
 
 	return <div className="grid">
 		<header className="header">
@@ -193,7 +204,7 @@ function D() {
 			<div className="header__search">
 				<input className="header__input" placeholder="Search..." />
 			</div>
-			<div className="header__avatar">
+			<div className="header__avatar" style={{backgroundImage: 'url('+avatar_url+')'}}>
 				<div className="dropdown">
 					<ul className="dropdown__list">
 						<li className="dropdown__list-item">
@@ -220,43 +231,42 @@ function D() {
 				<i className="fas fa-times sidenav__brand-close"></i>
 			</div>
 			<div className="sidenav__profile">
-				<div className="sidenav__profile-avatar"></div>
+				<div className="sidenav__profile-avatar" style={{backgroundImage: 'url('+avatar_url+')'}}></div>
 				<div className="sidenav__profile-title text-light">John Doe</div>
 			</div>
 			<div className="row-appstore row--align-v-center row--align-h-center">
 				<ul className="navList">
-					{menu_map.map(segment=>{
-						return <>
-							{/* segment.label && <li className="navList__heading">{segment.label}<i className={segment.icon}></i></li> || null */}
-							{segment.menus.map(menu=>{
-								let {children=[], slug} = menu;
-								let is_active = state.active_slug==slug || children.filter(c=>c.slug==state.active_slug).length;
+					{state.menu_map.map(menu=>{
+						let {children=[], url, slug} = menu;
+						let is_active = state.expanded_menu==slug || current_url==url || current_url.indexOf(url)===0;
 
-								return <li key={slug}>
-									<div className={"navList__subheading row-appstore row--align-v-center"+(!children.length ? ' singular' : '')+(is_active ? ' navList__subheading--open' : '')}>
-										<span className="navList__subheading-icon"><i className={menu.icon}></i></span>
-										<span className="navList__subheading-title">{menu.label}</span>
-									</div>
-									{
-										children.length && 
-										<ul className={"subList"+(!is_active ? ' subList--hidden' : '')}>
-											{children.map(child_menu=>{
-												let {slug, label} = child_menu;
-												let is_active = slug==state.active_slug;
-												return <li key={slug} className={"subList__item"+(is_active ? ' subList__item--active' : '')}>{label}</li>
-											})}
-										</ul> || null
-									}
-								</li>
-							})}
-						</>
+						return <li key={slug}>
+							<div className={"navList__subheading row-appstore row--align-v-center"+(!children.length ? ' singular' : '')+(is_active ? ' navList__subheading--open' : '')} onClick={()=>setState({...state, expanded_menu: state.expanded_menu==slug ? null : slug})}>
+								<a href={children.length ? '#' : url} onClick={e=>children.length ? e.preventDefault() : 0}>
+									<span className="navList__subheading-icon"><i className={menu.icon}></i></span>
+									<span className="navList__subheading-title">{menu.label}</span>
+								</a>
+							</div>
+							{
+								children.length && 
+								<ul className={"subList"+(!is_active ? ' subList--hidden' : '')}>
+									{children.map(child_menu=>{
+										let {slug, label, url} = child_menu;
+										let is_active = url==current_url;
+										return <li key={slug} className={"subList__item"+(is_active ? ' subList__item--active' : '')}>
+											<a href={url}>{label}</a>
+										</li>
+									})}
+								</ul> || null
+							}
+						</li>
 					})}
 				</ul>
 			</div>
 		</aside>
 
 		<main className="main">
-			<Comp/>
+			{page_content}
 		</main>
 
 		<footer className="footer">
@@ -266,7 +276,7 @@ function D() {
 	</div>
 }
 
-let dashboard = document.getElementById('AppDashboard');
+let dashboard = document.getElementById('AppStore_Dashboard');
 if ( dashboard ) {
-	ReactDOM.createRoot( dashboard ).render( <D/> );
+	ReactDOM.createRoot( dashboard ).render( <D {...getElementDataSet(dashboard)}/> );
 }

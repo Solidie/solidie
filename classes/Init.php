@@ -5,6 +5,8 @@ namespace AppStore;
 use AppStore\Setup\Dispatcher;
 use AppStore\Setup\Scripts;
 use AppStore\Setup\AdminPage;
+use AppStore\Setup\Utilities;
+use AppStore\Setup\FrontendDashboard;
 
 class Init {
 	/**
@@ -17,9 +19,11 @@ class Init {
 		spl_autoload_register( array( $this, 'loader' ) );
 
 		// Modules
+		( new Utilities() )->setup();
 		( new Dispatcher() )->setup();
 		( new Scripts() )->setup();
 		( new AdminPage() )->setup();
+		( new FrontendDashboard() )->setup();
 	}
 
 	/**

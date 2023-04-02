@@ -13,8 +13,12 @@ class FrontendDashboard{
 	 * @param string $path
 	 * @return string
 	 */
-	public static function getUrl( string $path ) {
-		$url = get_permalink( self::getPageID() ) . '/' . $path . '/';
-		return preg_replace('#([^:])//+#', '$1/', $url);
+	public static function getUrl( $path = null ) {
+		$url = get_permalink( self::getPageID() );
+		if ( $path ) {
+			$url .= '/' . $path . '/';
+		}
+
+		return esc_url( $url );
 	}
 }

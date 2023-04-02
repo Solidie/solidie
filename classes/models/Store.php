@@ -38,13 +38,13 @@ class Store {
 	 * @param string|int $id_or_slug
 	 * @return void
 	 */
-	public function getStoreURL( string $slug, $sub_page = null ) {
+	public static function getStoreURL( string $slug, $sub_page = null ) {
 		$url = FrontendDashboard::getUrl( '/store/' . $slug . '/');
 		if ( $sub_page ) {
 			$url .= '/' . $sub_page . '/';
 		}
 
-		return preg_replace('#([^:])//+#', '$1/', $url);
+		return esc_url( $url );
 	}
 
 	/**
@@ -53,15 +53,16 @@ class Store {
 	 * @param integer $store_id
 	 * @param integer $user_id
 	 * @param string $role
+	 * @param bool $check_capability
 	 * @return void
 	 */
-	public function updateStoreKeeperRole( int $store_id, int $user_id, string $role, bool $check_capability = true ) {
+	public function updateStoreKeeperRole( int $store_id, int $user_id, string $role, $check_capability = true ) {
 		if ( $check_capability && ! self::hasKeeperRole( $store_id, get_current_user_id(), 'admin' ) ) {
 			return false;
 		}
 
 		global $wpdb;
-		$keeper = DB::app_store_keeprs();
+		$keeper = DB::app_store_keepers();
 
 		if ( self::getKeeperRole( $store_id, $user_id ) ) {
 			$wpdb->update( $keeper, array( 'role' => $role ), array( 'store_id' => $store_id, 'user_id' => $user_id ) );
@@ -70,8 +71,8 @@ class Store {
 				$keeper, 
 				array( 
 					'store_id' => $store_id,
-					'user_id' => $user_id,
-					'role' => $role
+					'user_id'  => $user_id,
+					'role'     => $role
 				) 
 			);
 		}
@@ -121,5 +122,36 @@ class Store {
 		);
 
 		return $role ? $role : null;
+	}
+
+	/**
+	 * Return stores that the user has access to.
+	 *
+	 * @param integer $user_id
+	 * @param string $role
+	 * @return array
+	 */
+	public static function getStoresForKeeper( int $user_id, $role = null ) {
+		global $wpdb;
+		$keeping = DB::app_store_keepers();
+		$store = DB::app_stores();
+
+		$role_clause = $role ? " AND keeping.role='{$role}' " : "";
+
+		$keepings = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT keeping.role, store.store_id, store.name AS store_name, store.slug AS store_slug 
+				FROM {$keeping} keeping INNER JOIN {$store} store ON keeping.store_id=store.store_id
+				WHERE keeping.user_id=%d" . $role_clause,
+				$user_id
+			),
+			ARRAY_A
+		);
+
+		foreach ( $keepings as $index => $keep ) {
+			$keepings[ $index ]['store_url'] = self::getStoreURL( $keep['store_slug'] );
+		}
+
+		return $keepings;
 	}
 }
