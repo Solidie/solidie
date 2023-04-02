@@ -83,23 +83,18 @@ class Store {
 	 *
 	 * @param integer $store_id
 	 * @param integer $user_id
-	 * @param string $role
+	 * @param string|array $role
 	 * @return boolean
 	 */
-	public static function hasKeeperRole( int $store_id, int $user_id, string $role ) {
-		global $wpdb;
-		$keepers = DB::app_store_keepers();
+	public static function hasKeeperRole( int $store_id, int $user_id, $role ) {
+		// Convert to array
+		if ( ! is_array( $role ) ) {
+			$role = array( $role );
+		}
 
-		$keeping_id = $wpdb->get_var(
-			$wpdb->prepare(
-				"SELECT keeper_id FROM {$keepers} WHERE store_id={%d} AND user_id={%d} AND role={%s}",
-				$store_id,
-				$user_id,
-				$role
-			)
-		);
+		$keeper_role = self::getKeeperRole( $store_id, $user_id );
 
-		return $keeping_id ? true : false;
+		return $keeper_role && in_array( $keeper_role, $role );
 	}
 
 	/**
@@ -115,7 +110,7 @@ class Store {
 
 		$role = $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT role FROM {$keepers} WHERE store_id={%d} AND user_id={%d}",
+				"SELECT role FROM {$keepers} WHERE store_id=%d AND user_id=%d",
 				$store_id,
 				$user_id
 			)
@@ -153,5 +148,30 @@ class Store {
 		}
 
 		return $keepings;
+	}
+
+	/**
+	 * Returns apps in store
+	 *
+	 * @param integer $store_id
+	 * @param integer $user_id
+	 * @return array
+	 */
+	public static function getApps( int $store_id ) {
+		global $wpdb;
+		$apps     = DB::app_apps();
+
+		$apps = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT product.post_title AS app_name, product.ID as product_id, app.app_id, app.status AS app_status
+				FROM {$wpdb->posts} product INNER JOIN {$apps} app ON product.ID=app.product_id
+				WHERE app.store_id=%d",
+				$store_id
+			),
+			ARRAY_A
+		);
+		
+		
+		return $apps;
 	}
 }

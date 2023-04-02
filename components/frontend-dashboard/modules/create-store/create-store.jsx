@@ -1,6 +1,6 @@
 import React from "react";
 import Swal from "sweetalert2";
-import { request } from "../../../../utilities/request.jsx";
+import { request } from "../../../utilities/request.jsx";
 
 export function CreateStoreModal() {
 	const createStore = async () => {

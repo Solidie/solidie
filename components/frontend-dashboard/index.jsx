@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom/client';
-import { AppList } from './dashboard/apps/apps.jsx';
-import { request } from '../utilities/request.jsx';
-import { DashboardIndex } from './dashboard/index.jsx';
+import { DashboardIndex } from './pages/index.jsx';
 import { getElementDataSet } from '../utilities/helpers.jsx';
+import { Inventory } from './pages/store/inventory/apps.jsx';
 import './style.scss';
 
 const menu_map_blueprint = [
@@ -28,7 +27,7 @@ const store_menu_blueprint = [
 	{
 		label: 'Inventory',
 		slug: 'inventory',
-		component: AppList
+		component: Inventory
 	},
 	{
 		label: 'Sales',
@@ -158,8 +157,8 @@ function D(props) {
 			} 
 			
 			for(let num=0; num<children.length; num++) {
-				if(children[num].url==current_url) {
-					let Comp = children[num].component;
+				let {component: Comp, url, props} = children[num];
+				if(url==current_url) {
 					return Comp ? <Comp {...props}/> : null;
 				}
 			}

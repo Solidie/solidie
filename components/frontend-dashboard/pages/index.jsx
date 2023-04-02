@@ -1,7 +1,5 @@
 import React from 'react';
-import { CreateStoreModal } from './modules/create-store/create-store.jsx';
-
-
+import { CreateStoreModal } from '../modules/create-store/create-store.jsx';
 
 export function DashboardIndex(props) {
 	let {stores=[]} = props;

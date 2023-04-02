@@ -7,7 +7,10 @@ class Nonce {
 	private static $action = '_appstore_nonce_action';
 
 	public static function generate() {
-		return array( self::$name => wp_create_nonce( self::$action ) );
+		return array( 
+			'name' => self::$name, 
+			'action' => wp_create_nonce( self::$action ) 
+		);
 	}
 
 	public static function verify( $request_method = null ) {
