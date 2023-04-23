@@ -2,7 +2,10 @@
 
 namespace AppStore\Models;
 
-class Apps{
+use AppStore\Base;
+
+class Apps extends Base{
+	
 	/**
 	 * Get app list that is accessible by a user. 
 	 *
@@ -21,11 +24,10 @@ class Apps{
 	 */
 	public static function getProductID( int $app_id ) {
 		global $wpdb;
-		$apps = DB::app_apps();
 
 		$id = $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT product_id FROM {$apps} WHERE app_id=%d",
+				"SELECT product_id FROM " . self::table( 'apps' ) . " WHERE app_id=%d",
 				$app_id
 			)
 		);
@@ -99,7 +101,7 @@ class Apps{
 		// Create AppStore entry
 		global $wpdb;
 		$wpdb->insert( 
-			DB::app_apps(), 
+			self::table( 'apps' ), 
 			array(
 				'product_id' => $product_id,
 				'status'     => 'pending',
@@ -122,5 +124,135 @@ class Apps{
 	 */
 	public static function getReleases( int $app_id) {
 		return array();
+	}
+
+	/**
+	 * Get linked app id by WooCommerce product id
+	 *
+	 * @param integer $product_id
+	 * @return object|null
+	 */
+	public static function getAppByProductId( int $product_id ) {
+		global $wpdb;
+		$app = $wpdb->get_row(
+			$wpdb->prepare(
+				"SELECT * FROM " . self::table( 'apps' ) . " WHERE product_id=%d",
+				$product_id
+			)
+		);
+
+		return ( $app && is_object( $app ) ) ? $app : null;
+	}
+
+	/**
+	 * Get purchae by order id and variation id
+	 *
+	 * @param integer $order_id
+	 * @param integer $variation_id
+	 * @return object|null
+	 */
+	public static function getPurchaseByOrderVariation( int $order_id, int $variation_id ) {
+		global $wpdb;
+		$purchase = $wpdb->get_row(
+			$wpdb->prepare(
+				"SELECT * FROM " . self::table( 'sales' ) . " WHERE order_id=%d AND variation_id=%d",
+				$order_id,
+				$variation_id
+			)
+		);
+
+		return ( $purchase && is_object( $purchase ) ) ? $purchase : null;
+	}
+
+	/**
+	 * Link apps to customer after order complete
+	 *
+	 * @param integer $order_id
+	 * @return void
+	 */
+	public static function processPurchase( int $order_id ) {
+		global $wpdb;
+		$apps            = self::getAppsFromOrder( $order_id );
+		$commission_rate = self::getSiteCommissionRate();
+
+		foreach ( $apps as $app ) {
+			// Skip if already added
+			if ( self::getPurchaseByOrderVariation( $order_id, $app['variation_id'] ) ) {
+				continue;
+			}
+
+			// Calculate commission
+			$sale_price = (int)$app['sale_price'];
+			$commission = ( $commission_rate / 100 ) * $sale_price;
+
+			// Variation validity
+			$expires_on  = null;
+			$valid_days = self::getVariationValidity( new \WC_Product_Variation( $app['variation_id'] ) );
+			if ( $valid_days ) {
+				$expires_on = \Date( 'Y-m-d', strtotime( '+' . $valid_days . ' days' ) );
+			}
+
+			$wpdb->insert(
+				self::table( 'sales' ),
+				array(
+					'app_id'             => $app['app_id'],
+					'order_id'           => $order_id,
+					'variation_id'       => $app['variation_id'],
+					'sale_price'         => $app['sale_price'],
+					'commission'         => $commission,
+					'commission_rate'    => $commission_rate,
+					'license_key_limit'  => $app['licensing']['license_key_limit'],
+					'license_expires_on' => $expires_on,
+				)
+			);
+		}
+	}
+
+	/**
+	 * Return only purchased app info from a mixed cart
+	 *
+	 * @param integer $order_id
+	 * @return array
+	 */
+	public static function getAppsFromOrder( int $order_id ) {
+		$apps  = array();
+		$order = wc_get_order( $order_id ); 
+		
+		foreach ( $order->get_items() as $item ) {
+			$product_type = $item->get_product()->get_type();
+			$product_id   = $item->get_product_id();
+			$variation_id = $item->get_variation_id();
+			$variation    = new \WC_Product_Variation( $variation_id );
+			$attributes   = $variation->get_attributes();
+			$app          = self::getAppByProductId( $product_id );
+			$lincensing   = self::getVariationBluePrint();
+
+			// Skip non-app products or unsupported variation.
+			if ( ! $app || 'variation' !== $product_type || ! isset( $attributes[ self::LICENSING_VARIATION ] ) || ! isset( $lincensing[ $attributes[ self::LICENSING_VARIATION ] ] ) ) {
+				continue;
+			}
+
+			// To Do: Get sale price in USD currency
+			$apps[] = array(
+				'product_id'     => $product_id,
+				'app_id'         => $app->app_id,
+				'variation_id'   => $variation_id,
+				'licensing'      => $lincensing[ $attributes[ self::LICENSING_VARIATION ] ],
+				'sale_price'     => $variation->get_sale_price(),
+			);
+		}
+
+		return $apps;
+	}
+
+	/**
+	 * Get variation validty in days
+	 *
+	 * @param \WC_Product_Variation $variation
+	 * @return int|null
+	 */
+	public static function getVariationValidity( \WC_Product_Variation $variation ) {
+		// To Do: Return days count the variation is valid for like 30, 90, 365 or null
+		return 30;
 	}
 }
