@@ -7,6 +7,7 @@ use AppStore\Setup\Scripts;
 use AppStore\Setup\AdminPage;
 use AppStore\Setup\Utilities;
 use AppStore\Setup\FrontendDashboard;
+use AppStore\Setup\RestAPI;
 use AppStore\Setup\WooCommerce;
 
 class Init {
@@ -26,6 +27,7 @@ class Init {
 		( new AdminPage() )->setup();
 		( new FrontendDashboard() )->setup();
 		( new WooCommerce() )->setup();
+		( new RestAPI() )->setup();
 	}
 
 	/**

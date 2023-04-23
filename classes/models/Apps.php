@@ -192,6 +192,7 @@ class Apps extends Base{
 				$expires_on = \Date( 'Y-m-d', strtotime( '+' . $valid_days . ' days' ) );
 			}
 
+			// Insert the app in the sales table
 			$wpdb->insert(
 				self::table( 'sales' ),
 				array(
@@ -205,6 +206,10 @@ class Apps extends Base{
 					'license_expires_on' => $expires_on,
 				)
 			);
+
+			// Generate license keys
+			// To Do: Do not create key for free product
+			Licensing::generateLicenseKeys( $wpdb->insert_id, $app['licensing']['license_key_limit'] );
 		}
 	}
 
