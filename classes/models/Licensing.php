@@ -26,8 +26,7 @@ class Licensing extends Base{
 	 * @param integer $sale_id
 	 * @return string
 	 */
-	private static function encrypt( int $sale_id ) {
-		$string = (string) $sale_id;
+	public static function encrypt( string $string ) {
 		$string = $string . '-' . self::generateRandomString();
 		$salt   = openssl_random_pseudo_bytes(16); // Generate a 16-byte salt
 		$key    = openssl_pbkdf2('sha256', $salt, 32, 10000, 'sha256'); // Derive a 32-byte encryption key from the password and salt
@@ -41,14 +40,15 @@ class Licensing extends Base{
 	 * @param string $license_key
 	 * @return int|null
 	 */
-	private static function decrypt( string $license_key ) {
+	public static function decrypt( string $license_key ) {
 		$data      = base64_decode($license_key);
 		$salt      = substr($data, 0, 16); // Extract the salt from the encoded string
 		$cipher    = substr($data, 16);
 		$key       = openssl_pbkdf2('sha256', $salt, 32, 10000, 'sha256'); // Derive the decryption key from the password and salt
 		$decrypted = openssl_decrypt($cipher, 'AES-256-CBC', $key, OPENSSL_RAW_DATA, str_repeat("\0", 16)); // Decrypt the ciphertext with AES-256-CBC
 		$decrypted = explode('-', $decrypted);
-		return count( $decrypted ) === 2 ? (int)$decrypted[0] : null;
+		$count     = count( $decrypted );
+		return $count > 1 ? implode( '-', array_slice( $decrypted, 0, $count-1 ) ) : null;
 	}
 
 	/**
@@ -74,7 +74,7 @@ class Licensing extends Base{
 		for( $i = 0; $i < $limit; $i++ ) {
 			$license_key = array(
 				'sale_id'     => $sale_id,
-				'license_key' => self::encrypt( $sale_id ),
+				'license_key' => self::encrypt( (int) $sale_id ),
 			);
 
 			$wpdb->insert(
@@ -122,8 +122,8 @@ class Licensing extends Base{
 	 */
 	public static function getLicenseInfo( string $license_key, int $app_id, $endpoint = null ) {
 		// Check if there is any sale associated with the license key.
-		$sale_id = self::decrypt( $license_key );
-		$licenses = self::getLicenseKeys( $sale_id, $app_id, $endpoint );
+		$sale_id  = self::decrypt( $license_key );
+		$licenses = $sale_id ? self::getLicenseKeys( (int) $sale_id, $app_id, $endpoint ) : array();
 
 		foreach ( $licenses as $license ) {
 			if ( $license->license_key !== $license_key ) {
@@ -133,7 +133,8 @@ class Licensing extends Base{
 			$var_info = Apps::getVariationInfo( new \WC_Product_Variation( (int) $license->variation_id ) );
 			$data     = array();
 
-			$data['license_id']  = $license->license_id;
+			$data['app_id']      = (int) $license->app_id;
+			$data['license_id']  = (int) $license->license_id;
 			$data['license_key'] = $license_key;
 			$data['endpoint']    = $license->endpoint;
 			$data['expires_on']  = $license->license_expires_on;
