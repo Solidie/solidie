@@ -69,7 +69,11 @@ class Store extends Base{
 		global $wpdb;
 
 		if ( self::getKeeperRole( $store_id, $user_id ) ) {
-			$wpdb->update( self::table( 'store_keepers' ), array( 'role' => $role ), array( 'store_id' => $store_id, 'user_id' => $user_id ) );
+			$wpdb->update(
+				self::table( 'store_keepers' ), 
+				array( 'role' => $role ), 
+				array( 'store_id' => $store_id, 'user_id' => $user_id )
+			);
 		} else {
 			$wpdb->insert( 
 				self::table( 'store_keepers' ), 

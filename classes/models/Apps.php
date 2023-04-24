@@ -228,12 +228,11 @@ class Apps extends Base{
 			$product_id   = $item->get_product_id();
 			$variation_id = $item->get_variation_id();
 			$variation    = new \WC_Product_Variation( $variation_id );
-			$attributes   = $variation->get_attributes();
 			$app          = self::getAppByProductId( $product_id );
-			$lincensing   = self::getVariationBluePrint();
+			$var_info     = self::getVariationInfo( $variation );
 
 			// Skip non-app products or unsupported variation.
-			if ( ! $app || 'variation' !== $product_type || ! isset( $attributes[ self::LICENSING_VARIATION ] ) || ! isset( $lincensing[ $attributes[ self::LICENSING_VARIATION ] ] ) ) {
+			if ( ! $app || 'variation' !== $product_type || ! $var_info ) {
 				continue;
 			}
 
@@ -242,12 +241,31 @@ class Apps extends Base{
 				'product_id'     => $product_id,
 				'app_id'         => $app->app_id,
 				'variation_id'   => $variation_id,
-				'licensing'      => $lincensing[ $attributes[ self::LICENSING_VARIATION ] ],
+				'licensing'      => $var_info,
 				'sale_price'     => $variation->get_sale_price(),
 			);
 		}
 
 		return $apps;
+	}
+
+	/**
+	 * Return variation label
+	 *
+	 * @param \WC_Product_Variation $variation
+	 * @return array|null
+	 */
+	public static function getVariationInfo( \WC_Product_Variation $variation ) {
+		$lincensing = self::getVariationBluePrint();
+		$attributes = $variation->get_attributes();
+
+		if ( isset( $attributes[ self::LICENSING_VARIATION ], $lincensing[ $attributes[ self::LICENSING_VARIATION ] ] ) ) {
+			$data = $lincensing[ $attributes[ self::LICENSING_VARIATION ] ];
+			$data['plan_key'] = $attributes[ self::LICENSING_VARIATION ];
+			return $data;
+		}
+
+		return null;
 	}
 
 	/**

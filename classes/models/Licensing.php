@@ -88,13 +88,23 @@ class Licensing extends Base{
 	 * Get license keys
 	 *
 	 * @param integer $sale_id
+	 * @param integer|null $app_id
+	 * @param string|null $endpoint
+	 * 
 	 * @return array
 	 */
-	public static function getLicenseKeys( int $sale_id ) {
+	public static function getLicenseKeys( int $sale_id, $app_id = null, $endpoint = null ) {
 		global $wpdb;
-		$keys = $wpdb->get_col(
+
+		$app_clause      = null !== $app_id ? " AND sale.app_id=" . $app_id : '';
+		$endpoint_clause = null !== $endpoint ? " AND license.endpoint='".esc_sql( $endpoint )."'" : '';
+
+		$keys = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT license_key FROM " . self::table( 'license_keys' ) . " WHERE sale_id=%d",
+				"SELECT license.*, sale.license_expires_on, sale.app_id, sale.variation_id
+				FROM ".self::table( 'license_keys' )." license 
+				INNER JOIN ".self::table( 'sales' )." sale ON sale.sale_id=license.sale_id
+				WHERE license.sale_id=%d" . $app_clause . $endpoint_clause,
 				$sale_id
 			)
 		);
@@ -110,22 +120,27 @@ class Licensing extends Base{
 	 * @param string $endpoint
 	 * @return array
 	 */
-	public static function getLicenseInfo( string $license_key, int $app_id, string $endpoint ) {
-		$data = array();
-
+	public static function getLicenseInfo( string $license_key, int $app_id, $endpoint = null ) {
 		// Check if there is any sale associated with the license key.
 		$sale_id = self::decrypt( $license_key );
+		$licenses = self::getLicenseKeys( $sale_id, $app_id, $endpoint );
 
-		var_dump( $sale_id, $license_key );
+		foreach ( $licenses as $license ) {
+			if ( $license->license_key !== $license_key ) {
+				continue;
+			}
 
-		if ( ! $sale_id || ! in_array( $license_key, self::getLicenseKeys( $sale_id ) ) ) {
-			$data['is_valid'] = false;
-			$data['message']  = __( 'Invalid license key' );
+			$var_info = Apps::getVariationInfo( new \WC_Product_Variation( (int) $license->variation_id ) );
+			$data     = array();
+
+			$data['license_id']  = $license->license_id;
+			$data['license_key'] = $license_key;
+			$data['endpoint']    = $license->endpoint;
+			$data['expires_on']  = $license->license_expires_on;
+			$data['app_name']    = get_the_title( Apps::getProductID( $license->app_id ) );
+			$data['plan_name']   = $var_info['label'];
+
 			return $data;
 		}
-
-		$data['v'] = 's';
-
-		return $data;
 	}
 }
