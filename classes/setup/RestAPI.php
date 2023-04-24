@@ -3,6 +3,7 @@
 namespace AppStore\Setup;
 
 use AppStore\Base;
+use AppStore\Models\Hit;
 use AppStore\Models\Licensing;
 use AppStore\Models\Release;
 
@@ -19,9 +20,8 @@ class RestAPI extends Base {
 	);
 
 	private static $actions = array(
-		'license-activate',
+		'activate-license',
 		'update-check',
-		'update-download'
 	);
 
 	public function setup() {
@@ -64,7 +64,7 @@ class RestAPI extends Base {
 
 		// Process request
 		switch ( $_POST['action'] ) {
-			case 'license-activate' :
+			case 'activate-license' :
 				$this->license_activate( $license_data );
 				break;
 
@@ -88,13 +88,13 @@ class RestAPI extends Base {
 		}
 
 		// If the action is activate, then current endpoint must be null or same as provided endpoint (In case duplicate call) which means slot availabe for the dnpoint. 
-		if ( $_POST['action'] == 'license-activate' && null !== $license_info['endpoint'] && $_POST['endpoint'] !== $license_info['endpoint']) {
+		if ( $_POST['action'] == 'activate-license' && null !== $license_info['endpoint'] && $_POST['endpoint'] !== $license_info['endpoint']) {
 			wp_send_json_error( array( 'message' => _x( 'The license key is in use already.', 'appstore', 'appstore' ) ) );
 			exit;
 		}
 
 		// If the action is non activate, then the both endpoint must match to check update or download. 
-		if ( $_POST['action'] !== 'license-activate' && $license_info['endpoint'] !== $_POST['endpoint'] ) {
+		if ( $_POST['action'] !== 'activate-license' && $license_info['endpoint'] !== $_POST['endpoint'] ) {
 			wp_send_json_error( array( 'message' => _x( 'The license key is not associated with your endpoint.', 'appstore', 'appstore' ) ) );
 			exit;
 		}
@@ -111,15 +111,22 @@ class RestAPI extends Base {
 	private function license_activate( array $license ) {
 		global $wpdb;
 
-		$wpdb->update(
-			self::table( 'license_keys' ),
-			array( 'endpoint' => $_POST['endpoint'] ),
-			array( 'license_id' => $license['license_id'] )
-		);
-
+		if ( $license['endpoint'] === $_POST['endpoint'] ) {
+			$message = _x( 'The license is activated already', 'appstore', 'appstore' );
+		} else {
+			$wpdb->update(
+				self::table( 'license_keys' ),
+				array( 'endpoint' => $_POST['endpoint'] ),
+				array( 'license_id' => $license['license_id'] )
+			);
+		
+			$message = _x( 'License activated succefully', 'appstore', 'appstore' );
+			Hit::registerHit( 'activate-license', null, $license['license_id'] );
+		}
+		
 		wp_send_json_success(
 			array(
-				'message'     => _x( 'License activated succefully', 'appstore', 'appstore' ),
+				'message'     => $message,
 				'license_key' => $license['license_key'],
 				'endpoint'    => $_POST['endpoint'],
 				'app_name'    => $license['app_name'],
@@ -127,7 +134,6 @@ class RestAPI extends Base {
 				'expires_on'  => $license['expires_on'],
 			)
 		);
-
 		exit;
 	}
 
@@ -138,20 +144,14 @@ class RestAPI extends Base {
 			exit;
 		}
 
+		Hit::registerHit( 'update-check', null, $license['license_id'] );
+
 		wp_send_json_success(
 			array(
 				'version'      => $release->version,
 				'release_date' => $release->release_date,
 				'changelog'    => $release->changelog,
-				'k' => self::NONCE_ACTION . '-' . $release->app_id,
-				'download_url' => add_query_arg(
-					array(
-						// First one is app id to download release of
-						// Second one is the token generating time that can be used to restrict acces in case of expiry
-						'download' => urlencode( Licensing::encrypt( $release->app_id . '-' . time() ) ), 
-					),
-					get_home_url() . self::API_PATH . '/' 
-				),
+				'download_url' => get_home_url() . self::API_PATH . '/?download=' . urlencode( Licensing::encrypt( $release->app_id . '-' . $license['license_id'] . '-' . time() ) ),
 			)
 		);
 		
@@ -163,18 +163,22 @@ class RestAPI extends Base {
 		$parse = $parse ? explode( '-', $parse ) : array();
 
 		// Exit if the token is malformed
-		if ( count( $parse ) !== 2 || ! is_numeric( $parse[0] ) || ! is_numeric( $parse[1] ) ) {
+		if ( count( $parse ) !== 3 || ! is_numeric( $parse[0] ) || ! is_numeric( $parse[1] ) || ! is_numeric( $parse[2] ) ) {
 			wp_send_json_error( array( 'message' => _x( 'Invalid Request', 'appstore', 'appstore' ) ) );
 			exit;
 		}
 
+		$app_id     = (int) $parse[0];
+		$license_id = (int) $parse[1];
+		$token_time = (int) $parse[2];
+
 		// Exit if link is older than defined time
-		if ( (int)$parse[1] < time() - ( self::DOWNLOAD_LINK_VALIDITY * 60 ) ) {
+		if ( $token_time < time() - ( self::DOWNLOAD_LINK_VALIDITY * 60 ) ) {
 			wp_send_json_error( array( 'message' => sprintf( _x( 'Download link expired as it is older than %d minutes.', 'appstore', 'appstore' ), self::DOWNLOAD_LINK_VALIDITY ) ) );
 			exit;
 		}
 
-		$release = Release::getRelease( (int) $parse[0] );
+		$release = Release::getRelease( $app_id );
 		if ( ! $release ) {
 			wp_send_json_error( array( 'message' => _x( 'Something went wrong. No release found for this app.', 'appstore', 'appstore' ) ) );
 			exit;
@@ -186,6 +190,8 @@ class RestAPI extends Base {
 			wp_send_json_error( array( 'message' => _x( 'Something went wrong. Release file not found.', 'appstore', 'appstore' ) ) );
 			exit;
 		}
+
+		Hit::registerHit( 'update-download', $release->release_id, $license_id );
 		
 		nocache_headers();
 		header( 'Content-Type: ' . $release->mime_type . '; charset=utf-8' );
