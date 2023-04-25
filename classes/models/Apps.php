@@ -145,6 +145,25 @@ class Apps extends Base{
 	}
 
 	/**
+	 * Get app id associated with woocommerce product post name.
+	 *
+	 * @param string $post_name
+	 * @return int|null
+	 */
+	public static function getAppIdByProductPostName( string $post_name ) {
+		global $wpdb;
+
+		$app_id = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT app.app_id FROM ".self::table('apps')." app INNER JOIN {$wpdb->posts} product ON app.product_id=product.ID WHERE product.post_type='product' AND product.post_name=%s LIMIT 1",
+				$post_name
+			)
+		);
+
+		return $app_id ? $app_id : null;
+	}
+
+	/**
 	 * Get purchae by order id and variation id
 	 *
 	 * @param integer $order_id
@@ -197,6 +216,7 @@ class Apps extends Base{
 				self::table( 'sales' ),
 				array(
 					'app_id'             => $app['app_id'],
+					'customer_id'		 => wc_get_order( $order_id )->get_customer_id(),
 					'order_id'           => $order_id,
 					'variation_id'       => $app['variation_id'],
 					'sale_price'         => $app['sale_price'],

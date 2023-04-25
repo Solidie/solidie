@@ -30,8 +30,8 @@ class Init {
 		( new WooCommerce() )->setup();
 		( new RestAPI() )->setup();
 		
-		// Register plugin updater
-		new Updater( 7, 'https://solidie.com/appstore/api/', 'http://localhost/dashboard/', APPSTORE_FILE, 'appstore' );
+		// Register plugin updater (Registered app name, app main file, parent menu for license page, continous update check)
+		new Updater( 'appstore-test', APPSTORE_FILE, 'appstore', false );
 	}
 
 	/**

@@ -3,6 +3,7 @@
 namespace AppStore\Setup;
 
 use AppStore\Base;
+use AppStore\Models\Apps;
 use AppStore\Models\Hit;
 use AppStore\Models\Licensing;
 use AppStore\Models\Release;
@@ -10,18 +11,13 @@ use AppStore\Models\Release;
 class RestAPI extends Base {
 	const API_PATH               = '/appstore/api';
 	const NONCE_ACTION           = 'app_store_download';
-	const DOWNLOAD_LINK_VALIDITY = 5; // in minutes.
+	const DOWNLOAD_LINK_VALIDITY = 10; // in minutes.
 
 	private static $required_fields = array(
-		'app_id',
+		'app_name',
 		'license_key',
 		'endpoint',
 		'action'
-	);
-
-	private static $actions = array(
-		'activate-license',
-		'update-check',
 	);
 
 	public function setup() {
@@ -45,18 +41,16 @@ class RestAPI extends Base {
 		// Loop through required fields and check if exists
 		foreach ( self::$required_fields as $field ) {
 			if ( empty( $_POST[ $field ] ) ) {
-				wp_send_json_error( array( 'message' => sprintf( 'Invalid Parameters. Required fields: %s.', implode( ', ', self::$required_fields ) ) ) );
+				wp_send_json_error( 
+					array( 
+						'message'        => sprintf( 'Invalid data. Required fields: %s.', implode( ', ', self::$required_fields ) ),
+						'request_params' => $_POST
+					) 
+				);
 				exit;
 			}
 
 			$_POST[ $field ] = sanitize_text_field( $_POST[ $field ] );
-		}
-
-		// Check if valid action and id
-		$_POST['app_id'] = (int)$_POST['app_id'];
-		if ( ! in_array( $_POST['action'], self::$actions ) || ! $_POST['app_id'] ) {
-			wp_send_json( array( 'message' => 'Invalid Action or App Id' ) );
-			exit;
 		}
 
 		// Check and get license data. It will terminate if the license is not usable.
@@ -73,29 +67,45 @@ class RestAPI extends Base {
 				break;
 
 			default :
-				wp_send_json_error( array( 'message' => _x( 'Something went wrong', 'appstore', 'appstore' ) ) );
+				wp_send_json_error( array( 'message' => _x( 'Invalid action!', 'appstore', 'appstore' ) ) );
 				exit;
 		}
 	}
 
 	private function getLicenseData() {
-		$license_info = Licensing::getLicenseInfo( $_POST['license_key'], $_POST['app_id'] );
+		$app_id       = Apps::getAppIdByProductPostName( $_POST['app_name'] );
+		$license_info = $app_id ? Licensing::getLicenseInfo( $_POST['license_key'], $app_id ) : null;
 
 		// If no license found, then it is either malformed or maybe app id is not same for the license
 		if ( ! is_array( $license_info ) || empty( $license_info ) ) {
-			wp_send_json_error( array( 'message' => _x( 'Invalid License Key', 'appstore', 'appstore' ) ) );
+			wp_send_json_error(
+				array( 
+					'message'   => _x( 'Invalid License Key', 'appstore', 'appstore' ),
+					'activated' => false
+				) 
+			);
 			exit;
 		}
 
 		// If the action is activate, then current endpoint must be null or same as provided endpoint (In case duplicate call) which means slot availabe for the dnpoint. 
 		if ( $_POST['action'] == 'activate-license' && null !== $license_info['endpoint'] && $_POST['endpoint'] !== $license_info['endpoint']) {
-			wp_send_json_error( array( 'message' => _x( 'The license key is in use already.', 'appstore', 'appstore' ) ) );
+			wp_send_json_error(
+				array(
+					'message'   => _x( 'The license key is in use somewhere else already.', 'appstore', 'appstore' ),
+					'activated' => false
+				)
+			);
 			exit;
 		}
 
 		// If the action is non activate, then the both endpoint must match to check update or download. 
 		if ( $_POST['action'] !== 'activate-license' && $license_info['endpoint'] !== $_POST['endpoint'] ) {
-			wp_send_json_error( array( 'message' => _x( 'The license key is not associated with your endpoint.', 'appstore', 'appstore' ) ) );
+			wp_send_json_error(
+				array( 
+					'message'   => _x( 'The license key is not associated with your endpoint.', 'appstore', 'appstore' ), 
+					'activated' => false
+				)
+			);
 			exit;
 		}
 
@@ -126,8 +136,10 @@ class RestAPI extends Base {
 		
 		wp_send_json_success(
 			array(
+				'activated'   => true,
 				'message'     => $message,
 				'license_key' => $license['license_key'],
+				'licensee'    => $license['licensee_name'],
 				'endpoint'    => $_POST['endpoint'],
 				'app_name'    => $license['app_name'],
 				'plan_name'   => $license['plan_name'],

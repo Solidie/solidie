@@ -11,7 +11,7 @@ class Licensing extends Base{
 	 * @param integer $length
 	 * @return string
 	 */
-	public static function generateRandomString($length = 5) {
+	public static function generateRandomString( $length = 3 ) {
 		$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 		$randomString = '';
 		for ($i = 0; $i < $length; $i++) {
@@ -69,6 +69,8 @@ class Licensing extends Base{
 			$limit = 20;
 		}
 
+		// Note: License key will be shown to user as base64_encode( get_home_url() . ' ' . $real_license_key );
+
 		// Generate license keys
 		global $wpdb;
 		for( $i = 0; $i < $limit; $i++ ) {
@@ -101,7 +103,7 @@ class Licensing extends Base{
 
 		$keys = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT license.*, sale.license_expires_on, sale.app_id, sale.variation_id
+				"SELECT license.*, sale.license_expires_on, sale.app_id, sale.variation_id, sale.customer_id
 				FROM ".self::table( 'license_keys' )." license 
 				INNER JOIN ".self::table( 'sales' )." sale ON sale.sale_id=license.sale_id
 				WHERE license.sale_id=%d" . $app_clause . $endpoint_clause,
@@ -131,15 +133,18 @@ class Licensing extends Base{
 			}
 
 			$var_info = Apps::getVariationInfo( new \WC_Product_Variation( (int) $license->variation_id ) );
+			$customer = get_userdata( $license->customer_id );
 			$data     = array();
 
-			$data['app_id']      = (int) $license->app_id;
-			$data['license_id']  = (int) $license->license_id;
-			$data['license_key'] = $license_key;
-			$data['endpoint']    = $license->endpoint;
-			$data['expires_on']  = $license->license_expires_on;
-			$data['app_name']    = get_the_title( Apps::getProductID( $license->app_id ) );
-			$data['plan_name']   = $var_info['label'];
+			$data['app_id']        = (int) $license->app_id;
+			$data['license_id']    = (int) $license->license_id;
+			$data['license_key']   = $license_key;
+			$data['endpoint']      = $license->endpoint;
+			$data['expires_on']    = $license->license_expires_on;
+			$data['app_name']      = get_the_title( Apps::getProductID( $license->app_id ) );
+			$data['plan_name']     = $var_info['label'];
+			$data['customer_id']   = $license->customer_id;
+			$data['licensee_name'] = $customer ? $customer->display_name : '(Customer Not Found)';
 
 			return $data;
 		}
