@@ -9,6 +9,7 @@ use AppStore\Setup\Utilities;
 use AppStore\Setup\FrontendDashboard;
 use AppStore\Setup\RestAPI;
 use AppStore\Setup\WooCommerce;
+use AppStore\Updater\Updater;
 
 class Init {
 	/**
@@ -28,6 +29,9 @@ class Init {
 		( new FrontendDashboard() )->setup();
 		( new WooCommerce() )->setup();
 		( new RestAPI() )->setup();
+		
+		// Register plugin updater
+		new Updater( 7, 'https://solidie.com/appstore/api/', 'http://localhost/dashboard/', APPSTORE_FILE, 'appstore' );
 	}
 
 	/**
