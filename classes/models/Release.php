@@ -22,7 +22,7 @@ class Release extends Base {
 
 		$releases = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT * FROM ".self::table( 'releases' )." WHERE app_id=%d ".$version_clause." LIMIT %d, %d",
+				"SELECT *, UNIX_TIMESTAMP(release_date) as release_unix_timestamp FROM ".self::table( 'releases' )." WHERE app_id=%d ".$version_clause." LIMIT %d, %d",
 				$app_id,
 				$offset,
 				$limit
@@ -44,6 +44,7 @@ class Release extends Base {
 			$release->file_url  = $file_url;
 			$release->file_path = $file_path ? $file_path : null;
 			$release->mime_type = get_post_mime_type( $release->file_id );
+			$release->app_url   = get_permalink( $release->app_id );
 			
 			// Store the release in the new array
 			$new_array[] = $release;

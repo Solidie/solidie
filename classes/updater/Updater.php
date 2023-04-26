@@ -1,6 +1,8 @@
 <?php
 namespace AppStore\Updater;
 
+use stdClass;
+
 if ( class_exists( __NAMESPACE__ . '\\Updater' ) ) {
 	return;
 }
@@ -16,7 +18,6 @@ class Updater {
 	private $app_name;
 	private $app_basename;
 	private $url_slug;
-	private $error_message_key;
 	private $update_hook_prefix;
 	private $is_plugin;
 	private $app_version;
@@ -39,7 +40,7 @@ class Updater {
 		$this->app_identifier_name = $app_identifier_name;
 		$this->main_file_path      = $main_file_path;
 		$this->license_page_parent = $license_parent_menu_slug;
-		$this->update_hook_prefix  = ! $continuous_update_check ? '' : 'pre_set_';
+		$this->update_hook_prefix  = $continuous_update_check ? '' : 'pre_set_';
 		$this->app_type            = strpos( str_replace( '\\', '/', $this->main_file_path ) , 'wp-content/plugins' ) ? 'plugin' : 'theme';
 		$this->is_plugin           = $this->app_type == 'plugin';
 
@@ -57,7 +58,6 @@ class Updater {
 		$updater_rel_path         = substr( $updater_full_path, strpos( $updater_full_path, $sep ) + strlen( $sep ) ) . '/';
 		$this->app_slug           = substr( $updater_rel_path, 0, strpos( $updater_rel_path, '/' ) );
 		$this->url_slug           = 'appstore-license-' . $this->app_slug;
-		$this->error_message_key  = 'appstore_update_error_' . $this->app_slug;
 		$this->license_option_key = 'appstore_license_setting_' . $this->app_slug;
 		$this->updater_url        = $app_root_url . substr( $updater_rel_path, strlen( $this->app_slug . '/' ) ) ;
 		$this->activate_action    = 'appstore_activate_license_key_' . $this->app_slug;
@@ -79,26 +79,16 @@ class Updater {
 		if($this->app_type == 'plugin') {
 			add_filter( 'plugins_api', array( $this, 'plugin_info' ), 20, 3 );
 			add_filter( $this->update_hook_prefix . 'site_transient_update_plugins', array( $this, 'check_for_update' ) );
-			add_action( 'in_plugin_update_message-' . $this->app_basename, array( $this, 'custom_update_message' ), 10, 2 );
 		} else if ( $this->app_type == 'theme' ) {
 			add_filter( $this->update_hook_prefix . 'site_transient_update_themes', array( $this, 'check_for_update' ) );
 		}
 	}
 
 	/**
-	 * Show plugin update error
+	 * Enqueue scripts for license key submission page
 	 *
-	 * @param object $plugin_data
-	 * @param object $response
 	 * @return void
 	 */
-	public function custom_update_message( $plugin_data, $response ) {
-		if ( ! $response->package ) {
-			$error_message = get_option( $this->error_message_key );
-			echo $error_message ? ' ' . $error_message . '' : '';
-		}
-	}
-
 	public function license_page_asset_enqueue() {
 		if ( ! isset( $_GET['page'] ) || $_GET['page'] !== $this->url_slug ) {
 			return;
@@ -116,11 +106,25 @@ class Updater {
 		);
 	}
 
+	/**
+	 * Add license key submission as a sub menu under defined parent.
+	 *
+	 * @return void
+	 */
 	public function add_license_page() {
-		add_submenu_page($this->license_page_parent, $this->menu_title, __( 'License' ), 'manage_options', $this->url_slug, array($this, 'license_form'));
+		add_submenu_page( $this->license_page_parent, $this->menu_title, __( 'License' ), 'manage_options', $this->url_slug, array( $this, 'license_form' ) );
 	}
 
+	/**
+	 * License key submission page html contents
+	 *
+	 * @return void
+	 */
 	public function license_form() {
+		// Refresh license state before page load
+		$this->APICall();
+
+		// Load the form now
 		include __DIR__ . '/license-form.php';
 	}
 
@@ -135,6 +139,7 @@ class Updater {
 			$license_info = $this->get_license();
 			$license_key  = $license_info ? ( $license_info['license_key'] ?? '' ) : '';
 		}
+
 	
 		// Parse license key
 		$fragments = explode( ' ', ( @base64_decode( $license_key ) ?? '' ) );
@@ -156,13 +161,19 @@ class Updater {
 		$request = wp_remote_post( $api_endpoint, array( 'body' => $payload ) );
 		$response = ( ! is_wp_error( $request ) && is_array( $request ) ) ? @json_decode( $request['body'] ?? null ) : null;
 
+		// Set fall back
+		$response          = is_object( $response ) ? $response : new stdClass();
+		$response->success = $response->success ?? false;
+		$response->data    = $response->data ?? new stdClass();
+		
 		// Deactivate key if any request send falsy
-		if ( isset( $response->activated ) && $response->activated === false ) {
+		if ( $response && isset( $response->data->activated ) && $response->data->activated === false ) {
 			update_option(
 				$this->license_option_key, 
 				array( 
-					'activated' => false, 
-					'message' => __( 'The license key is expired or revoked!' ) 
+					'activated'   => false, 
+					'license_key' => $license_key,
+					'message'     => __( 'The license key is expired or revoked!' ) 
 				) 
 			);
 		}
@@ -190,20 +201,20 @@ class Updater {
 		$license_key = wp_unslash( $_POST[ 'license_key' ] );
 		$response    = $this->APICall( 'activate-license', $license_key );
 
-		if ( $response ) {
+		if ( $response->success ) {
 			$license_info = array(
-				'license_key'   => $license_key,
-				'activated'     => $response->data->activated ? true : false,
-				'licensee'      => $response->data->licensee ?? null,
-				'expires_on'    => $response->data->expires_on ?? null,
-				'plan_name'     => $response->data->plan_name ?? null,
-				'message'       => $response->data->message ?? null,
+				'license_key' => $license_key,
+				'activated'   => $response->data->activated ? true : false,
+				'licensee'    => $response->data->licensee ?? null,
+				'expires_on'  => $response->data->expires_on ?? null,
+				'plan_name'   => $response->data->plan_name ?? null,
+				'message'     => $response->data->message ?? null,
 			);
 
 			update_option($this->license_option_key, $license_info);
 			wp_send_json_success( array( 'message' => $license_info['message'] ) );
 		} else {
-			wp_send_json_error( array( 'message' => __( 'Request error! The license key is not correct or could not connect to the validator server.' ) ) );
+			wp_send_json_error( array( 'message' => $response->data->message ?? __( 'Request error! The license key is not correct or could not connect to the validator server.' ) ) );
 		}
 
 		exit;
@@ -221,26 +232,25 @@ class Updater {
 	function plugin_info( $res, $action, $args ) {
 
 		// do nothing if this is not about getting plugin information and not about this app.
-		if ( $action !== 'plugin_information' || ( $this->app_slug !== $args->slug && $this->app_basename!==$args->slug ) ) {
+		if ( $action !== 'plugin_information' || ( $this->app_slug !== $args->slug && $this->app_basename !== $args->slug ) ) {
 			return false;
 		}
 
-		$remote = $this->APICall();
-
-		if ( $remote ) {
-			$res               = new \stdClass();
-			$res->slug         = $this->app_slug;
-			$res->name         = $remote->data->app_name;
+		$remote    = $this->APICall();
+		$res       = new \stdClass();
+		$res->slug = $this->app_slug;
+		$res->name = $this->app_name;
+		$res->version = $this->app_version;
+		
+		if ( $remote->success ) {
 			$res->version      = $remote->data->version;
-			$res->last_updated = $remote->data->release_date;
+			$res->last_updated = date_format( date_create( '@' . $remote->data->release_timestamp ), "Y-m-d H:i:s" );
 			$res->sections     = array(
-				'changelog' => $remote->data->change_log,
+				'changelog' => nl2br( $remote->data->changelog ),
 			);
-
-			return $res;
 		}
-
-		return false;
+		
+		return $res;
 	}
 
 	/**
@@ -248,28 +258,31 @@ class Updater {
 	 *
 	 * @return mixed
 	 */
-	public function check_for_update($transient) {
+	public function check_for_update( $transient ) {
+		$update_info = null;
 		$request_body = $this->APICall();
-		if ( ! empty( $request_body->success ) && $request_body->success ) {
-			if ( version_compare( $this->app_version, $request_body->data->version, '<' ) ) {
-
-				$update_info = array(
-					'new_version'   => $request_body->data->version,
-					'package'       => $request_body->data->download_url,
-					'tested'        => $request_body->data->tested_wp_version,
-					'slug'          => $this->app_basename,
-					'url'           => $request_body->data->url,
-				);
-
-				$transient->response[ $this->app_basename ] = $this->app_type=='plugin' ? (object)$update_info : $update_info;
-
-				$error_mesage = empty($request_body->data->error_message) ? null : $request_body->data->error_message;
-				update_option( $this->error_message_key, $error_mesage );
-			}
+		if ( $request_body->success && version_compare( $this->app_version, $request_body->data->version, '<' ) ) {
+			$update_info = array(
+				'new_version'   => $request_body->data->version,
+				'package'       => $request_body->data->download_url,
+				'tested'        => $request_body->host_version[0] ?? null,
+				'compatibility' => $request_body->host_version,
+				'slug'          => $this->app_basename,
+				'url'           => $request_body->data->app_url,
+			);
 		}
+
+		// Now update this app data in the transient
+		$transient->response[ $this->app_basename ] = $update_info ? ( $this->app_type=='plugin' ? (object)$update_info : $update_info ) : null;
+
 		return $transient;
 	}
 
+	/**
+	 * Show license notice at the top if no key assigned or assigned on not valid anymore
+	 *
+	 * @return void
+	 */
 	public function show_inactive_license_notice() {
 		if ( $this->license['activated'] ) {
 			return;

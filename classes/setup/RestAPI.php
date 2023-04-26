@@ -11,7 +11,7 @@ use AppStore\Models\Release;
 class RestAPI extends Base {
 	const API_PATH               = '/appstore/api';
 	const NONCE_ACTION           = 'app_store_download';
-	const DOWNLOAD_LINK_VALIDITY = 10; // in minutes.
+	const DOWNLOAD_LINK_VALIDITY = 720; // in minutes. 12 hours here as WordPress normally checks for updates every 12 hours.
 
 	private static $required_fields = array(
 		'app_name',
@@ -136,14 +136,13 @@ class RestAPI extends Base {
 		
 		wp_send_json_success(
 			array(
-				'activated'   => true,
-				'message'     => $message,
 				'license_key' => $license['license_key'],
+				'activated'   => true,
 				'licensee'    => $license['licensee_name'],
-				'endpoint'    => $_POST['endpoint'],
-				'app_name'    => $license['app_name'],
-				'plan_name'   => $license['plan_name'],
 				'expires_on'  => $license['expires_on'],
+				'plan_name'   => $license['plan_name'],
+				'message'     => $message,
+				'endpoint'    => $_POST['endpoint'],
 			)
 		);
 		exit;
@@ -160,10 +159,13 @@ class RestAPI extends Base {
 
 		wp_send_json_success(
 			array(
-				'version'      => $release->version,
-				'release_date' => $release->release_date,
-				'changelog'    => $release->changelog,
-				'download_url' => get_home_url() . self::API_PATH . '/?download=' . urlencode( Licensing::encrypt( $release->app_id . '-' . $license['license_id'] . '-' . time() ) ),
+				'app_url'           => $release->app_url,
+				'version'           => $release->version,
+				'host_version'		=> array(),
+				'release_datetime'  => $release->release_date,
+				'release_timestamp' => $release->release_unix_timestamp,
+				'changelog'         => $release->changelog,
+				'download_url'      => get_home_url() . self::API_PATH . '/?download=' . urlencode( Licensing::encrypt( $release->app_id . '-' . $license['license_id'] . '-' . time() ) ),
 			)
 		);
 		
@@ -210,7 +212,6 @@ class RestAPI extends Base {
 		header( 'Content-Disposition: attachment; filename=' . $file_name );
 		header( 'Pragma: no-cache' );
 		header( 'Expires: 0' );
-
 		readfile( $file_source );
 		exit;
 	}
