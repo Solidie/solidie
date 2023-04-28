@@ -7,6 +7,15 @@ use AppStore\Base;
 class Store extends Base{
 
 	/**
+	 * Available store keeper roles
+	 *
+	 * @var array
+	 */
+	public static $roles = array(
+		'admin' => 'storekeeper_admin_id',
+	);
+
+	/**
 	 * Create a new store
 	 *
 	 * @param string $store_name
@@ -16,7 +25,7 @@ class Store extends Base{
 		global $wpdb;
 
 		$wpdb->insert( 
-			self::table( 'store' ), 
+			self::table( 'stores' ), 
 			array(
 				'name' => $store_name
 			)
@@ -26,13 +35,13 @@ class Store extends Base{
 
 		// Make the ID slug for now, user can change in dashboard
 		$wpdb->update(
-			self::table( 'store' ), 
+			self::table( 'stores' ), 
 			array( 'slug' => $store_id ), 
 			array( 'store_id' => $store_id )
 		);
 
 		// Make current user admin of the store
-		self::updateStoreKeeperRole( $store_id, get_current_user_id(), 'admin', false );
+		self::updateKeeperRole( $store_id, get_current_user_id(), 'admin' );
 
 		return self::getStoreURL( $store_id );
 	}
@@ -50,40 +59,6 @@ class Store extends Base{
 		}
 
 		return esc_url( $url );
-	}
-
-	/**
-	 * Update user role for store
-	 *
-	 * @param integer $store_id
-	 * @param integer $user_id
-	 * @param string $role
-	 * @param bool $check_capability
-	 * @return void
-	 */
-	public function updateStoreKeeperRole( int $store_id, int $user_id, string $role, $check_capability = true ) {
-		if ( $check_capability && ! self::hasKeeperRole( $store_id, get_current_user_id(), 'admin' ) ) {
-			return false;
-		}
-
-		global $wpdb;
-
-		if ( self::getKeeperRole( $store_id, $user_id ) ) {
-			$wpdb->update(
-				self::table( 'store_keepers' ), 
-				array( 'role' => $role ), 
-				array( 'store_id' => $store_id, 'user_id' => $user_id )
-			);
-		} else {
-			$wpdb->insert( 
-				self::table( 'store_keepers' ), 
-				array( 
-					'store_id' => $store_id,
-					'user_id'  => $user_id,
-					'role'     => $role
-				) 
-			);
-		}
 	}
 
 	/**
@@ -113,21 +88,46 @@ class Store extends Base{
 	 * @return string|null
 	 */
 	public static function getKeeperRole( int $store_id, int $user_id ) {
-		global $wpdb;
-
-		$role = $wpdb->get_var(
-			$wpdb->prepare(
-				"SELECT role FROM " . self::table( 'store_keepers' ) . " WHERE store_id=%d AND user_id=%d",
-				$store_id,
-				$user_id
-			)
-		);
-
-		return $role ? $role : null;
+		foreach( self::$roles as $role => $meta_key ) {
+			$keepers = StoreMeta::getStoreMeta( $store_id, $meta_key );
+			if ( in_array( $user_id, $keepers ) ) {
+				return $role;
+			}
+		}
+		return null;
 	}
 
 	/**
-	 * Return stores that the user has access to.
+	 * Update storekeeper role for user
+	 *
+	 * @param integer $store_id
+	 * @param integer $user_id
+	 * @param string $role
+	 * @return void
+	 */
+	public static function updateKeeperRole( int $store_id, int $user_id, string $role ) {
+		$current_role = self::getKeeperRole( $store_id, $user_id );
+
+		if ( isset( self::$roles[ $current_role ] ) ) {
+			if ( $current_role == $role ) {
+				// Nothing to update
+				return true;
+			} else {
+				// Delete existing role as new one requires different meta key
+				StoreMeta::deleteStoreMeta( $store_id, self::$roles[ $current_role ] );
+			}
+		}
+		
+
+		if ( isset( self::$roles[ $role ] ) ) {
+			return StoreMeta::addStoreMeta( $store_id, self::$roles[ $role ], $user_id );
+		}
+
+		return false;
+	}
+
+	/**
+	 * Return stores that the user has access to regardless of role.
 	 *
 	 * @param integer $user_id
 	 * @param string $role
@@ -136,23 +136,47 @@ class Store extends Base{
 	public static function getStoresForKeeper( int $user_id, $role = null ) {
 		global $wpdb;
 
-		$role_clause = $role ? " AND keeping.role='{$role}' " : "";
+		$roles = self::$roles;
 
-		$keepings = $wpdb->get_results(
-			$wpdb->prepare(
-				"SELECT keeping.role, store.store_id, store.name AS store_name, store.slug AS store_slug 
-				FROM " . self::table( 'store_keepers' ) . " keeping INNER JOIN " . self::table( 'stores' ) . " store ON keeping.store_id=store.store_id
-				WHERE keeping.user_id=%d" . $role_clause,
-				$user_id
-			),
+		// Filter roles if specified
+		if ( $role ) {
+			if ( ! isset( self::$roles[ $role ] ) ) {
+				return array();
+			}
+
+			$roles = array(
+				$role => $roles[ $role ]
+			);
+		}
+
+		// Retrieve store IDs the user has a role in
+		$store_ids = array();
+		foreach( $roles as $role => $meta_key ) {
+			$store_id = StoreMeta::getStoreIDByKeyValue( $meta_key, $user_id );
+			if ( $store_id ) {
+				$store_ids[] = $store_id;
+			}
+		}
+
+		// Return empty array if the user is not assigned to any store
+		if ( empty( $store_ids ) ) {
+			return array();
+		}
+
+		// Get store informations using store ids
+		$stores = $wpdb->get_results(
+			"SELECT store_id, name AS store_name, slug AS store_slug 
+			FROM " . self::table( 'stores' ) . "
+			WHERE store_id IN(".implode( ',', $store_ids ).")",
 			ARRAY_A
 		);
 
-		foreach ( $keepings as $index => $keep ) {
-			$keepings[ $index ]['store_url'] = self::getStoreURL( $keep['store_slug'] );
+		// Loop through stores and assign more meta data like store URL, logo information, cover informarion etc.
+		foreach ( $stores as $index => $store ) {
+			$stores[ $index ]['store_url'] = self::getStoreURL( $store['store_slug'] );
 		}
 
-		return $keepings;
+		return $stores;
 	}
 
 	/**
