@@ -13,7 +13,7 @@ class Hit extends Base {
 	 * @param integer|null $license_id
 	 * @return void
 	 */
-	public static function registerHit( string $action, $release_id, $license_id ) {
+	public static function registerHit( string $action, $release_id, $license_id, $endpoint ) {
 		global $wpdb;
 		$wpdb->insert(
 			self::table( 'hits' ),
@@ -21,6 +21,7 @@ class Hit extends Base {
 				'license_id' => $license_id,
 				'release_id' => $release_id,
 				'action'     => $action,
+				'endpoint'   => $endpoint,
 				'ip_address' => $_SERVER['REMOTE_ADDR'] ?? $_SERVER['HTTP_CLIENT_IP'] ?? $_SERVER['HTTP_X_FORWARDED_FOR']
 			)
 		);

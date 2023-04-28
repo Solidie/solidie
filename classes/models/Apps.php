@@ -5,6 +5,7 @@ namespace AppStore\Models;
 use AppStore\Base;
 
 class Apps extends Base{
+	const FREE_META_KEY = 'appstore_app_is_free';
 	
 	/**
 	 * Get app list that is accessible by a user. 
@@ -104,8 +105,14 @@ class Apps extends Base{
 			self::table( 'apps' ), 
 			array(
 				'product_id' => $product_id,
-				'status'     => 'pending',
 				'store_id'   => $store_id
+			)
+		);
+
+		wp_update_post(
+			array(
+				'ID' => $product_id,
+				'post_status' => 'pending'
 			)
 		);
 
@@ -161,6 +168,18 @@ class Apps extends Base{
 		);
 
 		return $app_id ? $app_id : null;
+	}
+
+	/**
+	 * Check if an associated app is free or not
+	 *
+	 * @param int|string $app_id_or_name
+	 * @return boolean
+	 */
+	public static function isAppFree( $app_id_or_name ) {
+		$app_id = is_numeric( $app_id_or_name ) ? $app_id_or_name : self::getAppIdByProductPostName( $app_id_or_name );
+		$product_id = self::getProductID( $app_id );
+		return get_post_meta( $product_id, self::FREE_META_KEY, true ) == true;
 	}
 
 	/**

@@ -32,18 +32,29 @@ class RestAPI extends Base {
 			return;
 		}
 
+		// Set locale
+		$locale = $_GET['locale'] ?? $_POST['locale'] ?? null;
+		if ( ! empty( $locale ) && is_string( $locale ) ) {
+			setlocale( LC_ALL, $locale );
+		}
+
 		// Process download if token and download parameter is present
 		if ( ! empty( $_GET['download'] ) ) {
 			$this->update_download();
 			exit;
 		}
 
+		// Waive license key requirement for free update check
+		if ( ( $_POST['action'] ?? '' ) === 'update-check-free' ) {
+			unset( self::$required_fields['license_key'] );
+		}
+
 		// Loop through required fields and check if exists
 		foreach ( self::$required_fields as $field ) {
-			if ( empty( $_POST[ $field ] ) ) {
+			if ( empty( $_POST[ $field ] ) || ( $field == 'endpoint' && strpos( $_POST[ $field ], ' ' ) !== false ) ) {
 				wp_send_json_error( 
-					array( 
-						'message'        => sprintf( 'Invalid data. Required fields: %s.', implode( ', ', self::$required_fields ) ),
+					array(
+						'message'        => sprintf( 'Invalid data. Required fields are %s. Whitespace in endpoint is not allowed.', implode( ', ', self::$required_fields ) ),
 						'request_params' => $_POST
 					) 
 				);
@@ -51,6 +62,12 @@ class RestAPI extends Base {
 			}
 
 			$_POST[ $field ] = sanitize_text_field( $_POST[ $field ] );
+		}
+
+		// Now process free-update-check
+		if ( $_POST['action'] == 'update-check-free' ) {
+			$this->update_check_free( $_POST['app_name'] );
+			exit;
 		}
 
 		// Check and get license data. It will terminate if the license is not usable.
@@ -131,7 +148,7 @@ class RestAPI extends Base {
 			);
 		
 			$message = _x( 'License activated succefully', 'appstore', 'appstore' );
-			Hit::registerHit( 'activate-license', null, $license['license_id'] );
+			Hit::registerHit( 'activate-license', null, $license['license_id'], $_POST['endpoint'] );
 		}
 		
 		wp_send_json_success(
@@ -148,14 +165,20 @@ class RestAPI extends Base {
 		exit;
 	}
 
-	private function update_check( $license ) {
+	/**
+	 * Update check for app
+	 *
+	 * @param array $license
+	 * @return void
+	 */
+	private function update_check( array $license ) {
 		$release = Release::getRelease( $license['app_id'] );
 		if ( ! $release ) {
 			wp_send_json_error( array( 'message' => _x( 'No release found.' ) ) );
 			exit;
 		}
 
-		Hit::registerHit( 'update-check', null, $license['license_id'] );
+		Hit::registerHit( $_POST['action'], null, $license['license_id'], $_POST['endpoint'] );
 
 		wp_send_json_success(
 			array(
@@ -165,30 +188,59 @@ class RestAPI extends Base {
 				'release_datetime'  => $release->release_date,
 				'release_timestamp' => $release->release_unix_timestamp,
 				'changelog'         => $release->changelog,
-				'download_url'      => get_home_url() . self::API_PATH . '/?download=' . urlencode( Licensing::encrypt( $release->app_id . '-' . $license['license_id'] . '-' . time() ) ),
+				'download_url'      => get_home_url() . self::API_PATH . '/?download=' . urlencode( Licensing::encrypt( $release->app_id . ' ' . ( $license['license_id'] ?? 0 ) . ' ' . time() . ' ' . $_POST['endpoint'] ) ), // License id null means it's free app
 			)
 		);
 		
 		exit;
 	}
 
+	/**
+	 * Check update for free product
+	 *
+	 * @param string $app_name
+	 * @param string $endpoint
+	 * @return void
+	 */
+	private function update_check_free( string $app_name ) {
+
+		if ( ! Apps::isAppFree( $app_name ) ) {
+			wp_send_json_error( array( 'message' => _x( 'The app you\'ve requested update for is not free. Please correct your credentials and try again.', 'appstore', 'appstore' ) ) );
+			exit;
+		}
+
+		$this->update_check(
+			array(
+				'app_id' => Apps::getAppIdByProductPostName( $app_name ),
+				'license_id' => null, // Means free app
+			)
+		);
+	}
+
 	private function update_download() {
+
 		$parse = Licensing::decrypt( $_GET['download'] );
-		$parse = $parse ? explode( '-', $parse ) : array();
+		$parse = $parse ? explode( ' ', $parse ) : array();
 
 		// Exit if the token is malformed
-		if ( count( $parse ) !== 3 || ! is_numeric( $parse[0] ) || ! is_numeric( $parse[1] ) || ! is_numeric( $parse[2] ) ) {
+		if ( count( $parse ) !== 4 || ! is_numeric( $parse[0] ) || ! is_numeric( $parse[1] ) || ! is_numeric( $parse[2] ) ) {
 			wp_send_json_error( array( 'message' => _x( 'Invalid Request', 'appstore', 'appstore' ) ) );
 			exit;
 		}
 
 		$app_id     = (int) $parse[0];
-		$license_id = (int) $parse[1];
+		$license_id = (int) $parse[1]; // 0 means free app
 		$token_time = (int) $parse[2];
+		$endpoint   = $parse[3];
 
 		// Exit if link is older than defined time
 		if ( $token_time < time() - ( self::DOWNLOAD_LINK_VALIDITY * 60 ) ) {
 			wp_send_json_error( array( 'message' => sprintf( _x( 'Download link expired as it is older than %d minutes.', 'appstore', 'appstore' ), self::DOWNLOAD_LINK_VALIDITY ) ) );
+			exit;
+		}
+
+		if ( ! $license_id && ! Apps::isAppFree( $app_id ) ) {
+			wp_send_json_error( array( 'message' => _x( 'Sorry! The app is no more free to download. You need to activate license first.', 'appstore', 'appstore' ) ) );
 			exit;
 		}
 
@@ -205,7 +257,8 @@ class RestAPI extends Base {
 			exit;
 		}
 
-		Hit::registerHit( 'update-download', $release->release_id, $license_id );
+		// License id 0 means it's free app
+		Hit::registerHit( 'update-download', $release->release_id, ($license_id===0 ? null : $license_id), $endpoint );
 		
 		nocache_headers();
 		header( 'Content-Type: ' . $release->mime_type . '; charset=utf-8' );
