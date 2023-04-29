@@ -229,6 +229,11 @@ class Apps extends Base{
 	 * @return void
 	 */
 	public static function processPurchase( int $order_id ) {
+		// This method is for only initial order. Skip if it is renewal one. 
+		if ( function_exists( 'wcs_order_contains_renewal' ) && wcs_order_contains_renewal( $order_id ) ) {
+			return;
+		}
+
 		global $wpdb;
 		$order               = wc_get_order( $order_id );
 		$order_complete_date = $order->get_date_completed();
@@ -270,16 +275,52 @@ class Apps extends Base{
 	}
 
 	/**
+	 * When customer renews a subscription
+	 *
+	 * @param object $subscription
+	 * @return void
+	 */
+	public static function processSubscriptionRenewal( $subscription ) {
+		global $wpdb;
+		
+		$apps  = self::filterAppsFromOrderItems( $subscription->get_items() );
+
+		foreach ( $apps as $app ) {
+			// Don't update if validity is null which means lifetime license
+			if ( ! $app['licensing']['validity_days'] ) {
+				continue;
+			}
+
+			$wpdb->query(
+				$wpdb->prepare(
+					"UPDATE ".self::table( 'sales' )." SET license_expires_on=DATE_ADD(license_expires_on, INTERVAL %d DAY) WHERE app_id=%d AND license_expires_on IS NOT NULL",
+					$app['licensing']['validity_days'],
+					$app['app_id']
+				)
+			);
+		}
+	}
+
+	/**
 	 * Return only purchased app info from a mixed cart
 	 *
 	 * @param integer $order_id
 	 * @return array
 	 */
 	public static function getAppsFromOrder( int $order_id ) {
-		$apps  = array();
 		$order = wc_get_order( $order_id ); 
-		
-		foreach ( $order->get_items() as $item ) {
+		return self::filterAppsFromOrderItems( $order->get_items() );
+	}
+
+	/**
+	 * Filter apps from order items
+	 *
+	 * @param array $items
+	 * @return array
+	 */
+	public static function filterAppsFromOrderItems( array $items ) {
+		$apps  = array();
+		foreach ( $items as $item ) {
 			$product_type = $item->get_product()->get_type();
 			$product_id   = $item->get_product_id();
 			$variation_id = $item->get_variation_id();
