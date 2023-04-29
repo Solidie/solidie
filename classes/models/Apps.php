@@ -5,6 +5,14 @@ namespace AppStore\Models;
 use AppStore\Base;
 
 class Apps extends Base{
+	/**
+	 * Licensing variation key for apps
+	 */
+	const LICENSING_VARIATION = 'licensing-variation';
+
+	/**
+	 * Free product identifer meta key
+	 */
 	const FREE_META_KEY = 'appstore_app_is_free';
 	
 	/**
@@ -171,6 +179,18 @@ class Apps extends Base{
 	}
 
 	/**
+	 * Check if a product is appstore app
+	 *
+	 * @param string|int $product_id_or_name
+	 * @return boolean
+	 */
+	public static function isProductApp( $product_id_or_name ) {
+		$product_id = is_numeric( $product_id_or_name ) ? $product_id_or_name : self::getAppIdByProductPostName( $product_id_or_name );
+		$app = self::getAppByProductId( $product_id );
+		return $app !== null;
+	}
+
+	/**
 	 * Check if an associated app is free or not
 	 *
 	 * @param int|string $app_id_or_name
@@ -210,8 +230,10 @@ class Apps extends Base{
 	 */
 	public static function processPurchase( int $order_id ) {
 		global $wpdb;
-		$apps            = self::getAppsFromOrder( $order_id );
-		$commission_rate = self::getSiteCommissionRate();
+		$order               = wc_get_order( $order_id );
+		$order_complete_date = $order->get_date_completed();
+		$apps                = self::getAppsFromOrder( $order_id );
+		$commission_rate     = self::getSiteCommissionRate();
 
 		foreach ( $apps as $app ) {
 			// Skip if already added
@@ -220,16 +242,12 @@ class Apps extends Base{
 			}
 
 			// Calculate commission
-			$sale_price = (int)$app['sale_price'];
-			$commission = ( $commission_rate / 100 ) * $sale_price;
+			$sale_price   = (int)$app['sale_price'];
+			$commission   = ( $commission_rate / 100 ) * $sale_price;
 
 			// Variation validity
-			$expires_on  = null;
-			$valid_days = self::getVariationValidity( new \WC_Product_Variation( $app['variation_id'] ) );
-			if ( $valid_days ) {
-				$expires_on = \Date( 'Y-m-d', strtotime( '+' . $valid_days . ' days' ) );
-			}
-
+			$expires_on  = $app['licensing']['validity_days'] ? ( new \DateTime( $order_complete_date ) )->modify('+'.$app['licensing']['validity_days'].' days')->format('Y-m-d') : null;
+			
 			// Insert the app in the sales table
 			$wpdb->insert(
 				self::table( 'sales' ),
@@ -247,7 +265,6 @@ class Apps extends Base{
 			);
 
 			// Generate license keys
-			// To Do: Do not create key for free product
 			Licensing::generateLicenseKeys( $wpdb->insert_id, $app['licensing']['license_key_limit'] );
 		}
 	}
@@ -271,12 +288,13 @@ class Apps extends Base{
 			$var_info     = self::getVariationInfo( $variation );
 
 			// Skip non-app products or unsupported variation.
-			if ( ! $app || 'variation' !== $product_type || ! $var_info ) {
+			if ( ! $app || ! in_array( $product_type, array( 'subscription_variation', 'variation' ) )  || ! $var_info ) {
 				continue;
 			}
 
 			// To Do: Get sale price in USD currency
 			$apps[] = array(
+				'item'			 => $item,
 				'product_id'     => $product_id,
 				'app_id'         => $app->app_id,
 				'variation_id'   => $variation_id,
@@ -305,16 +323,5 @@ class Apps extends Base{
 		}
 
 		return null;
-	}
-
-	/**
-	 * Get variation validty in days
-	 *
-	 * @param \WC_Product_Variation $variation
-	 * @return int|null
-	 */
-	public static function getVariationValidity( \WC_Product_Variation $variation ) {
-		// To Do: Return days count the variation is valid for like 30, 90, 365 or null
-		return 30;
 	}
 }

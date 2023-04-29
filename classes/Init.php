@@ -9,6 +9,7 @@ use AppStore\Setup\Utilities;
 use AppStore\Setup\FrontendDashboard;
 use AppStore\Setup\RestAPI;
 use AppStore\Setup\WooCommerce;
+use AppStore\Setup\WooCommerceSubscription;
 use AppStore\Updater\Updater;
 
 class Init {
@@ -28,6 +29,7 @@ class Init {
 		( new AdminPage() )->setup();
 		( new FrontendDashboard() )->setup();
 		( new WooCommerce() )->setup();
+		( new WooCommerceSubscription() )->setup();
 		( new RestAPI() )->setup();
 		
 		// Register plugin updater (Registered app name, app main file, parent menu for license page, continous update check)
