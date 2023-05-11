@@ -8,6 +8,7 @@ use AppStore\Setup\AdminPage;
 use AppStore\Setup\Utilities;
 use AppStore\Setup\FrontendDashboard;
 use AppStore\Setup\RestAPI;
+use AppStore\Setup\SingleProduct;
 use AppStore\Setup\WooCommerce;
 use AppStore\Setup\WooCommerceSubscription;
 use AppStore\Updater\Updater;
@@ -28,6 +29,7 @@ class Init {
 		( new Scripts() )->setup();
 		( new AdminPage() )->setup();
 		( new FrontendDashboard() )->setup();
+		( new SingleProduct() )->setup();
 		( new WooCommerce() )->setup();
 		( new WooCommerceSubscription() )->setup();
 		( new RestAPI() )->setup();
