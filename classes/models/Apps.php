@@ -302,6 +302,18 @@ class Apps extends Base{
 	}
 
 	/**
+	 * Update next payment date
+	 *
+	 * @param object $subscription
+	 * @return void
+	 */
+	public static function supportCustomPeriodForSubscription( $subscription ) {
+		/* $parent_order = $subscription->get_parent_id();
+		$subscription->set_date( 'next_payment', '2025-05-04' );
+		$subscription->save(); */
+	}
+
+	/**
 	 * Return only purchased app info from a mixed cart
 	 *
 	 * @param integer $order_id

@@ -10,6 +10,7 @@ class WooCommerceSubscription extends Base {
 		add_filter( 'woocommerce_subscription_periods', array( $this, 'custom_subscription_periods' ), 10, 2 );
 		add_filter( 'woocommerce_subscription_lengths', array( $this, 'sub_length' ), 10, 2 );
 		add_action( 'woocommerce_subscription_renewal_payment_complete', array( $this, 'renewal_complete' ) );
+		add_action( 'woocommerce_checkout_subscription_created', array( $this, 'alter_billing_period' ) );
 	}
 
 	// Add custom subscription period
@@ -62,5 +63,9 @@ class WooCommerceSubscription extends Base {
 
 	public function renewal_complete( $subscription ) {
 		Apps::processSubscriptionRenewal( $subscription );
+	}
+
+	public function alter_billing_period( $subscription ) {
+		Apps::supportCustomPeriodForSubscription( $subscription );
 	}
 }
