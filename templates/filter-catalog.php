@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 	<head>
-		<?php require 'includes/header.php'; ?>
+		<?php wp_head(); ?>
 	</head>
 	<body>
 		<!-- Fahad: Use raw HTML in this page -->

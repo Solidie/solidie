@@ -6,4 +6,3 @@ function Gallery() {
 		This is app gallery
 	</div>
 }
-

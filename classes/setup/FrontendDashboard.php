@@ -78,7 +78,7 @@ class FrontendDashboard {
 	 * @return string
 	 */
 	public function force_template_for_dashboard( $template ) {
-		if ( is_page() && get_the_ID() == AdminSetting::get( 'dashboard_page_id' ) ) {
+		if ( FrontendDashboardModel::is_dashboard() ) {
 			$template = APPSTORE_DIR . 'templates/frontend-dashboard.php';
 		}
 

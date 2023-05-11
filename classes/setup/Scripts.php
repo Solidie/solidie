@@ -3,6 +3,7 @@
 namespace AppStore\Setup;
 
 use AppStore\Helpers\Nonce;
+use AppStore\Models\FrontendDashboard;
 
 class Scripts {
 	public function setup() {
@@ -27,10 +28,16 @@ class Scripts {
 	}
 
 	public function adminScripts() {
-		wp_enqueue_script( 'appstore-admin-script', APPSTORE_DIST_URL . 'admin-dashboard.js', array( 'jquery' ), APPSTORE_VERSION );
+		if ( get_admin_page_parent() == 'appstore' ) {
+			wp_enqueue_script( 'appstore-admin-script', APPSTORE_DIST_URL . 'admin-dashboard.js', array( 'jquery' ), APPSTORE_VERSION );
+		}
 	}
 
 	public function frontendScripts() {
-
+		if ( FrontendDashboard::is_dashboard() ) {
+			wp_enqueue_script( 'appstore-frontend-dashboard-script', APPSTORE_DIST_URL . 'frontend-dashboard.js', array( 'jquery' ), APPSTORE_VERSION, true );
+		} else {
+			wp_enqueue_script( 'appstore-frontend-script', APPSTORE_DIST_URL . 'admin-dashboard.js', array( 'jquery' ), APPSTORE_VERSION );
+		}
 	}
 }
