@@ -13,8 +13,8 @@
 
 add_action( 'plugins_loaded', function(){
 	// Define Commonly used constants
-	$data = get_plugin_data( __FILE__ );
-	define( 'APPSTORE_VERSION', $data['Version'] );
+	// $data = get_plugin_data( __FILE__ );
+	define( 'APPSTORE_VERSION', '1.0.0' );
 	define( 'APPSTORE_FILE', __FILE__ );
 	define( 'APPSTORE_DIR', __DIR__ . DIRECTORY_SEPARATOR );
 	define( 'APPSTORE_URL', plugin_dir_url( __FILE__ ) );
