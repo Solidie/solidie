@@ -35,7 +35,7 @@ class Init {
 		( new RestAPI() )->setup();
 		
 		// Register plugin updater (Registered app name, app main file, parent menu for license page, continous update check)
-		new Updater( 'appstore-test', APPSTORE_FILE, 'appstore' );
+		// new Updater( 'appstore-test', APPSTORE_FILE, 'appstore' );
 	}
 
 	/**
