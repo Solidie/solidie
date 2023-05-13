@@ -95,15 +95,15 @@ const Sidebar = ({ sidebarOpen }) => {
               <Link to={href} key={idx}>
                 <div
                   className={
-                    "flex items-center gap-3 w-max h-max font-semibold text-sm cursor-pointer " +
+                    "flex items-center gap-3 w-max h-max font-semibold text-sm active:animate-ping cursor-pointer " +
                     (active
                       ? "bg-tertiary text-lightest-version "
                       : " text-tertiary font-bold  ") +
                     (sidebarOpen
                       ? " rounded-full py-3 px-8 "
                       : " rounded-full py-3 px-6 ") +
-                    (sidebarOpen && active ? "shadow-md shadow-tertiary" : "") +
-                    (!sidebarOpen && active ? "shadow-sm shadow-tertiary" : "")
+                    (sidebarOpen && active ? "shadow-md shadow-tertiary/60 " : "") +
+                    (!sidebarOpen && active ? "shadow-sm shadow-tertiary/60" : "")
                   }
                 >
                   {icon}

@@ -6,7 +6,7 @@ export default function Layout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
   return (
-    <div className="bg-primary h-screen w-full !min-h-max flex flex-col overflow-y-clip">
+    <div className="bg-primary text-tertiary h-screen w-full !min-h-max flex flex-col overflow-y-clip">
       <Topbar {...{ sidebarOpen, setSidebarOpen }} />
       <div className="flex flex-grow w-full overflow-clip">
         <Sidebar {...{ sidebarOpen }} />
