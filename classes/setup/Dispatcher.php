@@ -5,9 +5,11 @@ namespace AppStore\Setup;
 use AppStore\Helpers\Nonce;
 use AppStore\Models\AdminSetting;
 use AppStore\Models\Apps as AppModel;
+use AppStore\Models\Release;
 use AppStore\Models\Store;
 
 class Dispatcher {
+	
 	// To Do: Secure all the endpoint after MVP implementation
 	private static $endpoints = array(
 		'get_store_app_list',
@@ -19,8 +21,6 @@ class Dispatcher {
 	);
 
 	function setup() {
-		$this->model = new \stdClass();
-
 		foreach ( self::$endpoints as $endpoint ) {
 			add_action( 'wp_ajax_' . $endpoint, function() use($endpoint) {
 				$this->dispatch($endpoint);
@@ -123,7 +123,38 @@ class Dispatcher {
 	 * @return void
 	 */
 	private function push_version_release() {
+		// Check if main three parameter received
+		if ( empty( $_POST['version'] ) || empty( $_POST['changelog'] ) || empty( $_POST['app_id'] ) ) {
+			wp_send_json_error( array( 'message' => _x( 'Required release data missing!', 'appstore', 'appstore' ) ) );
+			exit;
+		}
+
+		// File is required for new release, release id will be falsy if it is new release.
+		if ( empty( $_POST['release_id'] ) ) {
+			if ( empty( $_FILES['file'] ) || ! empty( $_FILES['file']['error'] ) ) {
+				wp_send_json_error( array( 'message' => _x( 'Valid file is required for new release!', 'appstore', 'appstore' ) ) );
+				exit;
+			}
+		}
+
+		// To Do: Check if current user can create/update release for the app
+
+		$error_message = Release::pushRelease(
+			array(
+				'version'    => $_POST['version'],
+				'changelog'  => $_POST['changelog'],
+				'app_id'     => $_POST['app_id'],
+				'release_id' => ! empty( $_POST['release_id'] ) ? (int) $_POST['release_id'] : 0,
+				'file'       => ! empty( $_FILES['file'] ) ? $_FILES['file'] : null
+			)
+		);
+
+		if ( empty( $error_message ) ) {
+			wp_send_json_success();
+		} else {
+			wp_send_json_error( array( 'message' => $error_message ) );
+		}
 		
-		wp_send_json_success();
+		exit;
 	}
 }

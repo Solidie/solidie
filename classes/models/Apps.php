@@ -158,6 +158,26 @@ class Apps extends Base{
 
 		return ( $app && is_object( $app ) ) ? $app : null;
 	}
+	
+	/**
+	 * Get app by WooCommerce app id
+	 *
+	 * @param integer $app_id
+	 * @return object|null
+	 */
+	public static function getAppByID( int $app_id ) {
+		global $wpdb;
+		$app = $wpdb->get_row(
+			$wpdb->prepare(
+				"SELECT app.*, product.post_title AS app_title FROM " . self::table( 'apps' ) . " app 
+				INNER JOIN {$wpdb->posts} product ON app.product_id=product.ID 
+				WHERE app.app_id=%d",
+				$app_id
+			)
+		);
+
+		return ( $app && is_object( $app ) ) ? $app : null;
+	}
 
 	/**
 	 * Get app id associated with woocommerce product post name.

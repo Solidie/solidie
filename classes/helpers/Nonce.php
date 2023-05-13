@@ -24,7 +24,7 @@ class Nonce {
 		$matched     = $nonce_value && wp_verify_nonce( $nonce_value, self::$action );
 
 		if ( ! $matched ) {
-			wp_send_json_error( array( 'message' => __( 'Nonce not matched. Action failed!', 'appstore' ) ) );
+			wp_send_json_error( array( 'message' => _x( 'Session expired! Please reload the page and try again.', 'appstore', 'appstore' ) ) );
 			exit;
 		}
 

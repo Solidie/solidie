@@ -250,8 +250,8 @@ class RestAPI extends Base {
 			exit;
 		}
 
-		$file_name   = basename( $release->file_path ? $release->file_path : $release->file_url );
 		$file_source = $release->file_path ?? $release->file_url;
+		$file_name   = $release->release_title . '.' . pathinfo( basename( $file_source ), PATHINFO_EXTENSION );
 		if ( ! $file_source ) {
 			wp_send_json_error( array( 'message' => _x( 'Something went wrong. Release file not found.', 'appstore', 'appstore' ) ) );
 			exit;
