@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { MdSwitchAccount, MdInventory } from "react-icons/md";
-import { Link, useLocation } from "@reach/router";
+import { Link, useLocation } from "react-router-dom";
 import {
   CustomersIcon,
   ReportIcon,
@@ -17,17 +17,17 @@ const Sidebar = ({ sidebarOpen }) => {
         groupName: "Dashboard",
         navigation: [
           {
-            href: "purchased-apps",
+            href: "dashboard/purchased-apps",
             text: "Purchased Apps",
             icon: <PurchasedProductsIcon />,
           },
           {
-            href: "subscriptions",
+            href: "dashboard/subscriptions",
             text: "Subscriptions",
             icon: <SubscriptionIcon />,
           },
           {
-            href: "my-account",
+            href: "dashboard/my-account",
             text: "My Account",
             icon: <MdSwitchAccount className="text-2xl" />,
           },
@@ -37,22 +37,22 @@ const Sidebar = ({ sidebarOpen }) => {
         groupName: "Company Name",
         navigation: [
           {
-            href: "inventory",
+            href: "dashboard/inventory",
             text: "Inventory",
             icon: <MdInventory className="text-2xl" />,
           },
           {
-            href: "sales",
+            href: "dashboard/sales",
             text: "Sales",
             icon: <SalesIcon />,
           },
           {
-            href: "customers",
+            href: "dashboard/customers",
             text: "Customers",
             icon: <CustomersIcon />,
           },
           {
-            href: "reports",
+            href: "dashboard/reports",
             text: "Reports",
             icon: <ReportIcon />,
           },
@@ -83,8 +83,13 @@ const Sidebar = ({ sidebarOpen }) => {
           )}
           {navigation.map(({ text, icon, href }, idx) => {
             let active =
-              location.pathname === `/dashboard/${href}/` ||
-              location.pathname === `/dashboard/${href}`;
+              location.pathname === `/${href}/` ||
+              location.pathname === `/${href}`;
+            console.log({
+              active,
+              location:location.pathname,
+              href
+            })
 
             return (
               <Link to={href} key={idx}>

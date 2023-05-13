@@ -9,4 +9,7 @@
     html {
         @apply theme-light;
     }
+    div[atteribute=tabindex] {
+        @apply bg-green-400;
+    }
 }

@@ -5,7 +5,6 @@ import Inventory from "./Inventory.jsx";
 import Sales from "./Sales.jsx";
 import Customers from "./Customers.jsx";
 import Reports from "./Reports.jsx";
-import NotFound from "./NotFound.jsx";
 
 export {
     PurchasedApps,
@@ -15,5 +14,4 @@ export {
     Sales,
     Customers,
     Reports,
-    NotFound,
 }

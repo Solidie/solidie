@@ -1,30 +1,28 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
-import { Router } from "@reach/router";
 import { getElementDataSet } from "../utilities/helpers.jsx";
 import "./style.css";
-import Layout from "./layout.jsx";
-import { PurchasedApps, NotFound, Subscriptions, MyAccount, Inventory, Sales, Customers, Reports } from "./pages";
-import { Redirect } from "@reach/router";
+import { BrowserRouter } from "react-router-dom";
+import { ElementProps } from "./contexts/index.js";
+import Layout from "./layout/index.jsx";
+import AppRoutes from "./routes/index.jsx";
 
 // Fahad: Use React for all the dashboard pages
 
 function Dashboard(props) {
+  const [elementProps, setElementProps] = useState({});
+
+  useEffect(() => {
+    setElementProps(props);
+  }, []);
   return (
-    <Router>
-      <Redirect from="dashboard" to="purchased-apps" />
-      <Layout path="dashboard" {...{ props }}>
-        <PurchasedApps path="purchased-apps" />
-        <Subscriptions path="subscriptions" />
-        <MyAccount path="my-account" />
-        <Inventory path="inventory" />
-        <Sales path="sales" />
-        <Customers path="customers" />
-        <Reports path="reports" />
-        <NotFound default />
-      </Layout>
-      <NotFound default />
-    </Router>
+    <BrowserRouter>
+      <ElementProps.Provider value={[elementProps, setElementProps]}>
+        <Layout>
+          <AppRoutes />
+        </Layout>
+      </ElementProps.Provider>
+    </BrowserRouter>
   );
 }
 
