@@ -2,6 +2,7 @@
 <html>
 	<head>
 		<?php wp_head(); ?>
+		<script src="https://cdn.tailwindcss.com"></script>
 	</head>
 	<body>
 		<!-- Fahad: Use raw HTML in this page -->
