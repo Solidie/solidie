@@ -1,6 +1,6 @@
 import React from 'react'
-import { Button } from "../components/common/index.js"
-import InventoryTable from '../components/inventory/table.jsx'
+import { Button } from "../../components/common/index.js"
+import InventoryTable from '../../components/inventory/table.jsx'
 
 const Inventory = () => {
   return (

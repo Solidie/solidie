@@ -65,8 +65,8 @@ const Sidebar = ({ sidebarOpen }) => {
   return (
     <div
       className={
-        "flex flex-col px-5 py-4 w-max " +
-        (sidebarOpen ? " gap-4 min-h-full min-w-max overflow-y-auto " : " gap-5 ")
+        "flex flex-col px-5 py-4 w-max transition-all delay-1000 " +
+        (sidebarOpen ? " gap-4 min-h-full min-w-max overflow-y-auto bg-primary  absolute md:relative left-0 " : " gap-5  hidden sm:flex ")
       }
     >
       {groupedNavigation.map(({ groupName, navigation }, idx) => (
@@ -82,14 +82,7 @@ const Sidebar = ({ sidebarOpen }) => {
             <></>
           )}
           {navigation.map(({ text, icon, href }, idx) => {
-            let active =
-              location.pathname === `/${href}/` ||
-              location.pathname === `/${href}`;
-            console.log({
-              active,
-              location:location.pathname,
-              href
-            })
+            let active = location.pathname.includes(href);
 
             return (
               <Link to={href} key={idx}>

@@ -8,6 +8,7 @@ import {
   Reports,
   Sales,
   Subscriptions,
+  InventoryReleaseManagment
 } from "../pages";
 
 const AppRoutes = () => {
@@ -17,6 +18,7 @@ const AppRoutes = () => {
       <Route path="dashboard/subscriptions" element={<Subscriptions />} />
       <Route path="dashboard/my-account" element={<MyAccount />} />
       <Route path="dashboard/inventory" element={<Inventory />} />
+      <Route path="dashboard/inventory/:id/release-management"  element={<InventoryReleaseManagment />} />
       <Route path="dashboard/sales" element={<Sales />} />
       <Route path="dashboard/customers" element={<Customers />} />
       <Route path="dashboard/reports" element={<Reports />} />

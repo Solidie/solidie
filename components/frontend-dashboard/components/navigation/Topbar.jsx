@@ -20,7 +20,7 @@ const Topbar = ({ sidebarOpen, setSidebarOpen, frontendDashboardData }) => {
           />
         </div>
       </div>
-      <div className="flex-grow w-full flex justify-end items-center px-4">
+      <div className="flex-grow w-full flex justify-end items-center px-4 ">
         <UserProfile {...{ frontendDashboardData }} />
       </div>
     </div>
