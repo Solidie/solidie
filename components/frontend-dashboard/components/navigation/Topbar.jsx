@@ -4,7 +4,7 @@ import UserProfile from "./UserProfile.jsx";
 
 const Topbar = ({ sidebarOpen, setSidebarOpen, frontendDashboardData }) => {
   return (
-    <div className="h-max py flex justify-between items-center border-b-2 border-white">
+    <div className="h-max py flex justify-between items-center border-b border-white">
       <div className="w-max py-4 px-6 flex justify-between items-center gap-4">
         <div
           onClick={() => setSidebarOpen(!sidebarOpen)}
