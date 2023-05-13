@@ -6,18 +6,55 @@ use AppStore\Base;
 
 class Release extends Base {
 	/**
+	 * Mime types that can be enabled in setting
+	 *
+	 * @var array
+	 */
+	public static $mimes = array(
+		'zip' => 'application/zip',
+		'apk' => 'application/vnd.android.package-archive', 
+		'exe' => 'application/x-msdownload', 
+		'msi' => 'application/x-msi',
+		'deb' => 'application/x-debian-package',
+		'rpm' => 'application/x-rpm',
+		'pkg' => 'application/octet-stream',
+		'dmg' => 'application/x-apple-diskimage',
+	);
+
+	/**
+	 * Mime types that are enabled by default
+	 *
+	 * @var array
+	 */
+	public static $default_mimes = array( 'zip' );
+
+	/**
+	 * Release file indentifier meta key
+	 *
+	 * @var string
+	 */
+	public static $release_meta_key = 'appstore_is_release_file';
+
+	/**
+	 * Option key to set specific mime type to upload release files
+	 *
+	 * @var string
+	 */
+	public static $mime_option_key = 'appstore_allowed_mime_types';
+
+	/**
 	 * Specify where to store release files
 	 *
 	 * @var string
 	 */
-	private static $custom_dir = 'appstore-releases';
+	public static $custom_dir = 'appstore-releases';
 
 	/**
 	 * Replacable file id to make available in upload_dir hook callback
 	 *
 	 * @var int
 	 */
-	private static $app_id = 0;
+	public static $app_id = 0;
 
 	/**
 	 * Alter upload directory by hook
@@ -27,7 +64,7 @@ class Release extends Base {
 	 */
 	public static function custom_upload_directory( $upload ) {
 		// Define the new upload directory
-		$upload_dir = '/uploads/' . self::$custom_dir . '/' . self::$app_id;
+		$upload_dir = '/' . self::$custom_dir . '/' . self::$app_id;
 
 		// Get the current upload directory path and URL
 		$upload_path = $upload['basedir'] . $upload_dir;
@@ -39,6 +76,42 @@ class Release extends Base {
 		$upload['subdir'] = $upload_dir;
 
 		return $upload;
+	}
+	
+	/**
+	 * Add support for release file types
+	 *
+	 * @param array $mimes
+	 * @return array
+	 */
+	public static function upload_mimes( $existing_mimes ) {
+		// Get enabled mimes from settings
+		$mimes = get_option( self::$mime_option_key );
+		if ( empty( $mimes ) || ! is_array( $mimes ) ) {
+			// Set default if settings is not saved yet
+			$mimes = self::$default_mimes;
+		}
+
+		// Get all allowed types
+		$allowed_types = self::getAllowedMimes();
+
+		// Loop through setting mimes and set to alter if it is still available in allowed types
+		foreach ( $mimes as $mime ) {
+			if ( isset( $allowed_types[ $mime ] ) ) {
+				$existing_mimes[ $mime ] = $allowed_types[ $mime ];
+			}
+		}
+		
+    	return $existing_mimes;
+	}
+
+	/**
+	 * Get allowed mime types
+	 *
+	 * @return array
+	 */
+	public static function getAllowedMimes() {
+		return apply_filters( 'appstore_allowed_mime_types', self::$mimes );
 	}
 
 	/**
@@ -86,14 +159,19 @@ class Release extends Base {
 		// Create necessary directory if not created already
 		self::createUploadDir( $app_id );
 
-		// Alter upload directory to custom one for release upload
+		// Add filters
 		add_filter( 'upload_dir', array( __CLASS__, 'custom_upload_directory' ) );
+		add_filter( 'upload_mimes', array( __CLASS__, 'upload_mimes' ) );
 
 		// Set the upload directory
 		$upload_dir = wp_upload_dir()['path'];
-		$file_name  = Licensing::generateRandomString( 7 ) . '-' . str_replace( '.', '', (string) microtime( true ) ) . '.' . pathinfo( $file['name'], PATHINFO_EXTENSION );
+		$file_title = preg_replace( '/-+/', '-', str_replace( ' ', '', $file_title ) );
+		$file_name  = $file_title . '.' . pathinfo( $file['name'], PATHINFO_EXTENSION );
 		$file_path  = $upload_dir . '/' . $file_name;
-		$upload     = wp_handle_upload( $file, array( 'test_form' => false ) );
+
+		// Alter the name and handle upload
+		$file['name'] = $file_name;
+		$upload       = wp_handle_upload( $file, array( 'test_form' => false ) );
 
 		if ( isset( $upload['file'] ) ) {
 			// Create a post for the file
@@ -110,13 +188,15 @@ class Release extends Base {
 			// Generate meta data for the file
 			$attachment_data = wp_generate_attachment_metadata( $attachment_id, $file_path );
 			wp_update_attachment_metadata( $attachment_id, $attachment_data );
+			update_post_meta( $attachment_id, self::$release_meta_key, true );
 		} else {
 			// Error uploading the file
-			error_log( var_export( $upload['error'], true ) ) ;
+			error_log( __FILE__ . ' ' . __LINE__ . ' ' . var_export( $upload['error'], true ) ) ;
 		}
 
-		// Remove divertion after upload done
+		// Remove filters
 		remove_filter( 'upload_dir', array( __CLASS__, 'custom_upload_directory' ) );
+		remove_filter( 'upload_mimes', array( __CLASS__, 'upload_mimes' ) );
 
 		return $attachment_id;
 	}
@@ -127,7 +207,7 @@ class Release extends Base {
 	 * @param int|array $release_ids Release ID or array of release IDs
 	 * @return void
 	 */
-	public static function deleteFile( $release_ids ) {
+	private static function deleteFile( $release_ids ) {
 		if ( ! is_array( $release_ids ) ) {
 			$release_ids = array( $release_ids );
 		}
@@ -162,33 +242,37 @@ class Release extends Base {
 			return _x( 'App not found to release', 'appstore', 'appstore' );
 		}
 		
+		$release = array(
+			'version'   => $data['version'],
+			'changelog' => $data['changelog'],
+			'app_id'    => $data['app_id'],
+		);
+
 		global $wpdb;
 
 		// Process file if exists.
 		if ( ! empty( $data['file'] ) ) {
-			// Upload new one
-			$file_title = $app->app_title . ' - ' . $data['version'];
-			$file_id    = self::uploadFile( $data['app_id'], $data['file'], $file_title );
-
-			if ( ! $file_id ) {
-				return _x( 'Error in file saving!', 'appstore', 'appstore' );
-			}
-
 			// Delete old one
 			if ( ! empty( $data['release_id'] ) ) {
 				self::deleteFile( $data['release_id'] );
 			}
 
+			// Upload new one
+			$file_id = self::uploadFile( $data['app_id'], $data['file'], $app->app_title . ' - ' . $data['version'] );
+			if ( ! $file_id ) {
+				return _x( 'Error in file saving!', 'appstore', 'appstore' );
+			}
+
 			// Link new one to the release
-			$data['file_id'] = $file_id;
+			$release['file_id'] = $file_id;
 		}
 
 		if ( empty( $data['release_id'] ) ) {
-			$wpdb->insert( self::table( 'releases' ), $data );
+			$wpdb->insert( self::table( 'releases' ), $release );
 		} else {
 			$wpdb->update(
 				self::table( 'releases' ),
-				$data,
+				$release,
 				array(
 					'release_id' => $data['release_id']
 				)
@@ -211,11 +295,12 @@ class Release extends Base {
 		$offset         = $limit * ( $page - 1 );
 		$version_clause = $version ? " AND version=" . esc_sql( $version ) : '';
 
-		// To Do: Get product title as release title instead of file title.
 		$releases = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT release.*, file.post_name AS release_title, UNIX_TIMESTAMP(release.release_date) as release_unix_timestamp FROM ".self::table( 'releases' )." release
-				INNER JOIN {$wpdb->posts} file ON release.file_id=file.ID
+				"SELECT release.*, product.post_title AS app_name, UNIX_TIMESTAMP(release.release_date) as release_unix_timestamp 
+				FROM ".self::table( 'releases' )." release
+				INNER JOIN ".self::table('apps')." app ON app.app_id=release.app_id
+				INNER JOIN {$wpdb->posts} product ON app.product_id=product.ID
 				WHERE release.app_id=%d ".$version_clause." ORDER BY release.release_date DESC LIMIT %d, %d",
 				$app_id,
 				$offset,

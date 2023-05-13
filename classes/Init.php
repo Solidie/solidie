@@ -7,6 +7,7 @@ use AppStore\Setup\Scripts;
 use AppStore\Setup\AdminPage;
 use AppStore\Setup\Utilities;
 use AppStore\Setup\FrontendDashboard;
+use AppStore\Setup\Media;
 use AppStore\Setup\RestAPI;
 use AppStore\Setup\WooCommerce;
 use AppStore\Setup\WooCommerceSubscription;
@@ -31,6 +32,7 @@ class Init {
 		( new WooCommerce() )->setup();
 		( new WooCommerceSubscription() )->setup();
 		( new RestAPI() )->setup();
+		( new Media() )->setup();
 		
 		// Register plugin updater (Registered app name, app main file, parent menu for license page, continous update check)
 		new Updater( 'appstore-test', APPSTORE_FILE, 'appstore' );

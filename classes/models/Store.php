@@ -191,7 +191,7 @@ class Store extends Base{
 
 		$apps = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT product.post_title AS app_name, product.ID as product_id, app.app_id, app.status AS app_status
+				"SELECT product.post_title AS app_name, product.ID as product_id, app.app_id, product.post_status AS app_status
 				FROM {$wpdb->posts} product INNER JOIN " . self::table( 'apps' ) . " app ON product.ID=app.product_id
 				WHERE app.store_id=%d",
 				$store_id

@@ -5,7 +5,7 @@ import { AppList } from './app-list.jsx';
 
 function Release(props) {
 	const {release_id, app_id} = props;
-	const [state, setState] = useState({app_id});
+	const [state, setState] = useState({app_id, release_id});
 
 	const release=()=>{
 		console.log(state);
@@ -48,6 +48,6 @@ export function Inventory(props) {
 	return <div>
 		{/* <AppEditor store_id={store_id} onComplete={getApps}/>
 		<AppList apps={state.apps}/> */}
-		<Release app_id={7}/>
+		<Release app_id={7} release_id={2}/>
 	</div>
 }
