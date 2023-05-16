@@ -38,11 +38,12 @@ export const ReleaseManagementTable = () => {
       columns={columns}
       data={data}
       state={{ density: "compact" }}
+      enableTopToolbar={false}
       muiTopToolbarProps={{ className: "!bg-lightest-version" }}
       muiBottomToolbarProps={{ className: "!bg-lightest-version" }}
       muiTableBodyCellProps={{ className: "!text-tertiary !bg-lightest-version " }}
-      muiTableHeadCellProps={{ className: "!text-tertiary !bg-lightest-version " }}
-      muiTablePaperProps={{ className: " !rounded-2xl !bg-lightest-version overflow-hidden px-6 " }}
+      muiTableHeadCellProps={{ className: "!text-tertiary !bg-lightest-version font-black " }}
+      muiTablePaperProps={{ className: " !shadow-none !rounded-2xl !bg-lightest-version overflow-hidden px-6 pt-4" }}
       enableRowNumbers
     />
   );

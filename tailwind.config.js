@@ -1,4 +1,5 @@
 const { createThemes } = require('tw-colors');
+const { theme } = require('./theme');
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -7,16 +8,22 @@ module.exports = {
     extend: {},
   },
   plugins: [
-    createThemes({
-      light: {
-        primary: "#E5ECF2",
-        tertiary: "#091E42",
-        "content-bg": "#EFF1FC",
-        "lightest-version": "#F6F7FD"
-      }
-    }),
+    createThemes(theme),
     // Initialize with default values (see options below)
     require("tailwindcss-radix")(),
+    require("daisyui"),
   ],
+  daisyui: {
+    theme: [
+      {
+        light: {
+          primary: "#E5ECF2",
+          secondary: "#091E42",
+          accent: "#EFF1FC",
+          neutral: "#F6F7FD"
+        }
+      }
+    ]
+  }
 }
 

@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
-import { getElementDataSet } from "../utilities/helpers.jsx";
-import "./style.css";
+import "./styles/index.css";
+
 import { BrowserRouter } from "react-router-dom";
+import { getElementDataSet } from "../utilities/helpers.jsx";
+
 import { ElementProps } from "./contexts/index.js";
 import Layout from "./layout/index.jsx";
 import AppRoutes from "./routes/index.jsx";
+import { ConfigProvider } from "antd";
 
 // Fahad: Use React for all the dashboard pages
 

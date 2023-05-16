@@ -16,10 +16,8 @@ const InventoryReleaseManagment = (params) => {
             Back
           </button>
         </Link>
-        <h1 className="text-3xl font-bold">Release Managment</h1>
+        <h1 className="text-3xl font-bold">Edit Application</h1>
       </div>
-      {/* Apps Table */}
-      <ReleaseManagmentTable />
       <ApplicationVersionForm />
     </div>
   );

@@ -1,6 +1,5 @@
 import React from "react";
-import ReleaseManagmentTable from "../../components/inventory/ReleaseManagementTable.jsx";
-import ApplicationVersionForm from "../../components/inventory/ApplicationVersionForm.jsx";
+import AddApplicationForm from "../../components/inventory/AddApplicationForm.jsx";
 import { Link } from "react-router-dom";
 import { ArrowLeftIcon } from "@radix-ui/react-icons";
 
@@ -16,11 +15,9 @@ const InventoryReleaseManagment = (params) => {
             Back
           </button>
         </Link>
-        <h1 className="text-3xl font-bold">Release Managment</h1>
+        <h1 className="text-3xl font-bold">Add Application</h1>
       </div>
-      {/* Apps Table */}
-      <ReleaseManagmentTable />
-      <ApplicationVersionForm />
+      <AddApplicationForm />
     </div>
   );
 };
