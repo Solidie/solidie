@@ -43,7 +43,7 @@ export const ReleaseManagementTable = () => {
       muiBottomToolbarProps={{ className: "!bg-lightest-version" }}
       muiTableBodyCellProps={{ className: "!text-tertiary !bg-lightest-version " }}
       muiTableHeadCellProps={{ className: "!text-tertiary !bg-lightest-version font-black " }}
-      muiTablePaperProps={{ className: " !shadow-none !rounded-2xl !bg-lightest-version overflow-hidden px-6 pt-4" }}
+      muiTablePaperProps={{ className: " z-10 !shadow-none !rounded-2xl !bg-lightest-version overflow-hidden px-6 pt-4" }}
       enableRowNumbers
     />
   );

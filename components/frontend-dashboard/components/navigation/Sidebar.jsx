@@ -8,7 +8,7 @@ import {
   SubscriptionIcon,
   PurchasedProductsIcon,
 } from "./icons";
-import { Tooltip } from "../common";
+import { Tooltip } from "../ui";
 
 const Sidebar = ({ sidebarOpen }) => {
   const location = useLocation();
@@ -66,9 +66,9 @@ const Sidebar = ({ sidebarOpen }) => {
   return (
     <div
       className={
-        "z-10 flex flex-col px-5 py-4 w-full md:w-max transition-all  " +
+        "z-10 flex flex-col px-5 py-4 w-full md:w-max min-h-max h-full transition-all  " +
         (sidebarOpen
-          ? " gap-4 min-h-full min-w-max overflow-y-auto bg-primary  fixed left-0 xl:relative "
+          ? " gap-4  min-w-max overflow-y-auto bg-primary  fixed left-0 xl:relative "
           : " gap-5  hidden sm:flex ")
       }
     >

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { message, Modal, Upload } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
+import { message, Modal, Upload, Button } from "antd";
+import { PlusOutlined, UploadOutlined } from "@ant-design/icons";
+
 
 const UploadImage = React.forwardRef(({}, ref) => {
   const [fileList, setFileList] = useState([]);
@@ -69,13 +70,21 @@ const UploadImage = React.forwardRef(({}, ref) => {
     },
     fileList,
     onChange: ({ fileList: newFileList }) => setFileList(newFileList),
-    listType: "picture-card",
+    listType: "picture",
     onPreview: handlePreview,
+    maxCount: 1,
   };
 
   return (
     <>
-      <Upload {...props} ref={ref} >{fileList.length >= 8 ? null : uploadButton}</Upload>
+      <Upload
+        {...props}
+        ref={ref}
+        className="!w-full sm:!w-max !flex !flex-wrap sm:!justify-center !space-y-3 sm:!space-y-0 sm:!space-x-4"
+      >
+        <Button className="py-3 px-7 rounded-full bg-primary text-tertiary font-bold hover:!text-tertiary hover:shadow-lg shadow-tertiary/60 border-transparent !border-2 hover:!border-solid hover:!border-2 hover:!border-tertiary h-max" icon={<UploadOutlined />}>Upload (Max: 1)</Button>
+        {/* {fileList.length >= 8 ? null : uploadButton} */}
+      </Upload>
       <Modal
         open={previewOpen}
         title={previewTitle}
@@ -97,3 +106,4 @@ const getBase64 = (file) =>
     reader.onload = () => resolve(reader.result);
     reader.onerror = (error) => reject(error);
   });
+

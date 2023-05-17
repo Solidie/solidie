@@ -3,7 +3,6 @@ import { ElementProps } from "../../contexts";
 
 const UserProfile = () => {
   const [elementProps] = useContext(ElementProps);
-  console.log(elementProps);
 
   return (
     <div className="w-max py-1 px-3 flex justify-between items-center gap-3 cursor-pointer">

@@ -6,10 +6,6 @@ const ScrollAreaDemo = ({
   scrollAreaRootClassName,
   scrollAreaViewportClassName,
 }) => {
-  console.log(
-  scrollAreaRootClassName,
-  scrollAreaViewportClassName
-  )
   return (
     <ScrollArea.Root
       className={

@@ -1,7 +1,6 @@
 import React from "react";
 import * as Form from "@radix-ui/react-form";
-import { Select } from "../common";
-import { Input, Textarea, DatePicker } from "../ui";
+import { Input, Textarea, DatePicker, Select } from "../ui";
 
 const selectFieldItemsList = [
   "Apple",
@@ -15,7 +14,7 @@ const selectFieldDefaultValue = "blueberry";
 const selectFieldAriaLabel = "Food";
 
 const FormDemo = () => (
-  <div className=" flex flex-col gap-5">
+  <div className="z-20 flex flex-col gap-5">
     <Form.Root className=" bg-lightest-version p-4 rounded-2xl shadow-md flex flex-col gap-3">
       <div className="flex justify-between gap-4 flex-wrap sm:flex-nowrap w-full h-full">
         <div className="flex gap-4 flex-wrap w-full">
@@ -32,7 +31,7 @@ const FormDemo = () => (
                 Please provide a valid email
               </Form.Message>
             </div>
-            <Form.Control asChild className="w-full">
+            <Form.Control asChild className="w-full z-20">
               <Select
                 ariaLabel={selectFieldAriaLabel}
                 defaultValue={selectFieldDefaultValue}
@@ -156,7 +155,7 @@ const FormDemo = () => (
         </Form.Field>
       </div>
       <Form.Submit asChild>
-        <button className="Button mt-2">Create / Edit Applications</button>
+        <button className="Button mt-2">Create / Update Version Release </button>
       </Form.Submit>
     </Form.Root>
   </div>
