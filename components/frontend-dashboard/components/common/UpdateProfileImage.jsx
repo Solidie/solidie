@@ -1,17 +1,10 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { message, Modal, Upload, Button } from "antd";
 import { PlusOutlined, UploadOutlined } from "@ant-design/icons";
 import "../../styles/UpdateProfileImage.css";
 
 const UploadProfileImage = React.forwardRef(({}, ref) => {
-  const [fileList, setFileList] = useState([
-    {
-      uid: '-1',
-      name: 'image.png',
-      status: 'done',
-      url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-    },
-  ]);
+  const [fileList, setFileList] = useState([]);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
@@ -76,11 +69,30 @@ const UploadProfileImage = React.forwardRef(({}, ref) => {
       return false;
     },
     fileList,
-    onChange: ({ fileList: newFileList }) => setFileList(newFileList),
+    onChange: ({ fileList: newFileList }) => {
+      setFileList(newFileList);
+    },
     listType: "picture",
     onPreview: handlePreview,
     maxCount: 1,
   };
+
+  useEffect(() => {
+    if (fileList.length) {
+      console.log(fileList[0].thumbUrl);
+      let preview = document.querySelector("img#userProfileIMG");
+      userProfileIMG;
+      let reader = new FileReader();
+
+      reader.onloadend = function () {
+        preview.src = reader.result;
+      };
+
+      if (fileList[0]?.originFileObj) {
+        reader.readAsDataURL(fileList[0]?.originFileObj);
+      }
+    }
+  }, [fileList]);
 
   return (
     <>
@@ -89,7 +101,12 @@ const UploadProfileImage = React.forwardRef(({}, ref) => {
         ref={ref}
         className="!max-w-full !w-full !justify-center !bg-none !border-transparent !items-center !flex !flex-col !gap-4 sm:!justify-center "
       >
-        <Button className="py-2 px-7 rounded-lg bg-primary text-tertiary font-bold hover:!text-tertiary shadow-md hover:shadow-tertiary !border-2 hover:!border-solid hover:!border-2 !border-tertiary/60 hover:!border-tertiary h-max" icon={<UploadOutlined />}>Upload</Button>
+        <Button
+          className="py-2 px-7 rounded-lg bg-primary text-tertiary font-bold hover:!text-tertiary shadow-md hover:shadow-tertiary !border-2 hover:!border-solid hover:!border-2 !border-tertiary/60 hover:!border-tertiary h-max"
+          icon={<UploadOutlined />}
+        >
+          Upload
+        </Button>
       </Upload>
       <Modal
         open={previewOpen}
@@ -112,4 +129,3 @@ const getBase64 = (file) =>
     reader.onload = () => resolve(reader.result);
     reader.onerror = (error) => reject(error);
   });
-

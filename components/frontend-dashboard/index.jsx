@@ -5,25 +5,30 @@ import "./styles/index.css";
 import { BrowserRouter } from "react-router-dom";
 import { getElementDataSet } from "../utilities/helpers.jsx";
 
-import { ElementProps } from "./contexts/index.js";
+import { ElementProps, UserProfileUrl } from "./contexts/index.js";
 import Layout from "./layout/index.jsx";
 import AppRoutes from "./routes/index.jsx";
-import { ConfigProvider } from "antd";
 
 // Fahad: Use React for all the dashboard pages
 
 function Dashboard(props) {
   const [elementProps, setElementProps] = useState({});
+  const [userProfileUrl, setUserProfileUrl] = useState("");
 
   useEffect(() => {
     setElementProps(props);
+    if (props?.frontendDashboardData?.avatar_url) {
+      setUserProfileUrl(props?.frontendDashboardData?.avatar_url);
+    }
   }, []);
   return (
     <BrowserRouter>
       <ElementProps.Provider value={[elementProps, setElementProps]}>
-        <Layout>
-          <AppRoutes />
-        </Layout>
+        <UserProfileUrl.Provider value={[userProfileUrl, setUserProfileUrl]}>
+          <Layout>
+            <AppRoutes />
+          </Layout>
+        </UserProfileUrl.Provider>
       </ElementProps.Provider>
     </BrowserRouter>
   );

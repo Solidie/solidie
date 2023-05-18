@@ -1,8 +1,9 @@
 import React, { useContext } from "react";
-import { ElementProps } from "../../contexts";
+import { UserProfileUrl } from "../../contexts";
 
 const UserProfile = () => {
-  const [elementProps] = useContext(ElementProps);
+  const [userProfileUrl] = useContext(UserProfileUrl);
+  console.log({userProfileUrl})
 
   return (
     <div className="w-max py-1 px-3 flex justify-between items-center gap-3 cursor-pointer">
@@ -11,8 +12,9 @@ const UserProfile = () => {
       </pre>
       <div className="">
         <img
-          className="w-10 object-contain rounded-lg"
-          src={elementProps?.frontendDashboardData?.avatar_url ?? ""}
+          id="userProfileIMG"
+          className="w-8 object-contain rounded-lg shadow-lg shadow-tertiary/40"
+          src={userProfileUrl}
           alt=""
         />
       </div>
