@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { message, Modal, Upload, Button } from "antd";
 import { PlusOutlined, UploadOutlined } from "@ant-design/icons";
-
+import "../../styles/UpdateProfileImage.css";
 
 const UploadProfileImage = React.forwardRef(({}, ref) => {
   const [fileList, setFileList] = useState([

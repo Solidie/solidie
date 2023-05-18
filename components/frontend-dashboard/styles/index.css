@@ -44,8 +44,5 @@
 .ant-upload-list-item {
   @apply transition-all delay-150 !rounded-full !mt-0 !px-4 !border-2 !border-dashed !border-tertiary/60 !bg-primary hover:!shadow-lg hover:!shadow-tertiary hover:!border-tertiary !shadow-tertiary/60;
 }
-.ant-upload-list,
-.ant-upload-list-picture,
-.ant-upload-wrapper {
-  @apply w-full;
-}
+
+

@@ -79,10 +79,15 @@ const UploadImage = React.forwardRef(({}, ref) => {
       <Upload
         {...props}
         ref={ref}
-        className="!w-full sm:!w-max !flex !flex-wrap sm:!justify-center !space-y-3 sm:!space-y-0 sm:!space-x-4"
+        className="!w-full [&_.ant-upload-list-picture]:!w-max !flex !flex-wrap  !space-y-3 sm:!space-y-0 sm:!space-x-4"
+        
       >
-        <Button className="py-3 px-7 rounded-full bg-primary text-tertiary font-bold hover:!text-tertiary hover:shadow-lg shadow-tertiary/60 border-transparent !border-2 hover:!border-solid hover:!border-2 hover:!border-tertiary h-max" icon={<UploadOutlined />}>Upload (Max: 1)</Button>
-        {/* {fileList.length >= 8 ? null : uploadButton} */}
+        <Button
+          className="py-3 px-7 rounded-full bg-primary text-tertiary font-bold hover:!text-tertiary hover:shadow-lg shadow-tertiary/60 border-transparent !border-2 hover:!border-solid hover:!border-2 hover:!border-tertiary h-max"
+          icon={<UploadOutlined />}
+        >
+          Upload (Max: 1)
+        </Button>
       </Upload>
       <Modal
         open={previewOpen}
@@ -105,4 +110,3 @@ const getBase64 = (file) =>
     reader.onload = () => resolve(reader.result);
     reader.onerror = (error) => reject(error);
   });
-
