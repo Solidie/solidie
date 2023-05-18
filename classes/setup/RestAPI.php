@@ -10,7 +10,6 @@ use Solidie\AppStore\Models\Release;
 
 class RestAPI extends Main {
 	const API_PATH               = '/appstore/api';
-	const NONCE_ACTION           = 'app_store_download';
 	const DOWNLOAD_LINK_VALIDITY = 720; // in minutes. 12 hours here as WordPress normally checks for updates every 12 hours.
 
 	private static $required_fields = array(
