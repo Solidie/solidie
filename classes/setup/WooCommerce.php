@@ -1,11 +1,11 @@
 <?php
 
-namespace AppStore\Setup;
+namespace Solidie\AppStore\Setup;
 
-use AppStore\Models\Apps;
+use Solidie\AppStore\Models\Apps;
 
 class WooCommerce {
-	public function setup() {
+	public function __construct() {
 		add_action( 'woocommerce_order_status_completed', array( $this, 'on_product_purchase' ) );
 		add_action( 'admin_notices', array( $this, 'show_wc_editor_warning' ) );
 	}

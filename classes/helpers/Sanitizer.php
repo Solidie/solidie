@@ -1,6 +1,6 @@
 <?php
 
-namespace AppStore\Helpers;
+namespace Solidie\AppStore\Helpers;
 
 class Sanitizer {
 	public static function sanitizeTextRecursive() {

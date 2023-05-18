@@ -1,10 +1,10 @@
 <?php
 
-namespace AppStore\Models;
+namespace Solidie\AppStore\Models;
 
-use AppStore\Base;
+use Solidie\AppStore\Main;
 
-class Store extends Base{
+class Store extends Main{
 
 	/**
 	 * Available store keeper roles

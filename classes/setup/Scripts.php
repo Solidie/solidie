@@ -1,11 +1,12 @@
 <?php
 
-namespace AppStore\Setup;
+namespace Solidie\AppStore\Setup;
 
-use AppStore\Helpers\Nonce;
+use Solidie\AppStore\Helpers\Nonce;
+use Solidie\AppStore\Main;
 
-class Scripts {
-	public function setup() {
+class Scripts extends Main {
+	public function __construct() {
 		add_action( 'admin_enqueue_scripts', array( $this, 'commonScripts' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'commonScripts' ) );
 
@@ -27,7 +28,7 @@ class Scripts {
 	}
 
 	public function adminScripts() {
-		wp_enqueue_script( 'appstore-admin-script', APPSTORE_DIST_URL . 'admin-dashboard.js', array( 'jquery' ), APPSTORE_VERSION );
+		wp_enqueue_script( 'appstore-admin-script', self::$configs->dist_url . 'admin-dashboard.js', array( 'jquery' ), self::$configs->version );
 	}
 
 	public function frontendScripts() {

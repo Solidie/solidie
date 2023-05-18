@@ -1,12 +1,12 @@
 <?php
 
-namespace AppStore\Setup;
+namespace Solidie\AppStore\Setup;
 
-use AppStore\Base;
-use AppStore\Models\Apps;
+use Solidie\AppStore\Main;
+use Solidie\AppStore\Models\Apps;
 
-class WooCommerceSubscription extends Base {
-	public function setup() {
+class WooCommerceSubscription extends Main {
+	public function __construct() {
 		add_filter( 'woocommerce_subscription_periods', array( $this, 'custom_subscription_periods' ), 10, 2 );
 		add_filter( 'woocommerce_subscription_lengths', array( $this, 'sub_length' ), 10, 2 );
 		add_action( 'woocommerce_subscription_renewal_payment_complete', array( $this, 'renewal_complete' ) );

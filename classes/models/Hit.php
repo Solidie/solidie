@@ -1,10 +1,10 @@
 <?php
 
-namespace AppStore\Models;
+namespace Solidie\AppStore\Models;
 
-use AppStore\Base;
+use Solidie\AppStore\Main;
 
-class Hit extends Base {
+class Hit extends Main {
 	/**
 	 * Register hits
 	 *

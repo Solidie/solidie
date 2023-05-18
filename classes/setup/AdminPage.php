@@ -1,18 +1,13 @@
 <?php
 
-namespace AppStore\Setup;
+namespace Solidie\AppStore\Setup;
 
-use AppStore\Models\AdminSetting;
-use AppStore\Models\Page as PageModel;
+use Solidie\AppStore\Models\AdminSetting;
+use Solidie\AppStore\Models\Page as PageModel;
 
 class AdminPage {
-	private $page;
 
 	function __construct() {
-		$this->page = new PageModel();
-	}
-
-	public function setup() {
 		add_action( 'admin_menu', array( $this, 'registerMenu' ) );
 	}
 
@@ -57,7 +52,7 @@ class AdminPage {
 	 * @return void
 	 */
 	public function settingPage() {
-		$pages    = $this->page->getPageList();
+		$pages    = PageModel::getPageList();
 		$settings = (object)AdminSetting::get();
 
 		echo '<div class="wrap" id="AppStore_AdminSettings" 

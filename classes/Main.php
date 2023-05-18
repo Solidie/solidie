@@ -1,16 +1,64 @@
 <?php
 
-namespace AppStore;
+namespace Solidie\AppStore;
 
-use AppStore\Models\AdminSetting;
+use Solidie\AppStore\Setup\Dispatcher;
+use Solidie\AppStore\Setup\Scripts;
+use Solidie\AppStore\Setup\AdminPage;
+use Solidie\AppStore\Setup\Utilities;
+use Solidie\AppStore\Setup\FrontendDashboard;
+use Solidie\AppStore\Setup\Media;
+use Solidie\AppStore\Setup\RestAPI;
+use Solidie\AppStore\Setup\WooCommerce;
+use Solidie\AppStore\Setup\WooCommerceSubscription;
+use Solidie\AppStore\Models\AdminSetting;
 
-class Base {
+use Solidie\SalesReporter\Report;
+use Solidie\Updater\Updater;
+
+class Main {
+	/**
+	 * Configs array
+	 *
+	 * @var object
+	 */
+	protected static $configs;
+
+	/**
+	 * Initialize Plugin
+	 * 
+	 * @param object $configs
+	 * 
+	 * @return void
+	 */
+	public function init( object $configs ) {
+		// Store configs in runtime static property
+		self::$configs = $configs;
+		
+		// Core Modules
+		new Utilities();
+		new Dispatcher();
+		new Scripts();
+		new AdminPage();
+		new FrontendDashboard();
+		new WooCommerce();
+		new WooCommerceSubscription();
+		new RestAPI();
+		new Media();
+
+		// Register sales reporter to solidie website
+		new Report();
+		
+		// Register plugin updater (Registered app name, app main file, parent menu for license page, continous update check)
+		new Updater( 'appstore-test', self::$configs->file, 'appstore' );
+	}
+
 	/**
 	 * App variations blueprint
 	 *
 	 * @return array
 	 */
-	public static function getVariationBluePrint() {
+	protected static function getVariationBluePrint() {
 		$variations =  array(
 			'unlimited' => array(
 				'license_key_limit' => null,
@@ -62,7 +110,7 @@ class Base {
 		return $new_array;
 	}
 
-	public static function getSubscriptionBlueprint( int $number ) {
+	protected static function getSubscriptionBlueprint( int $number ) {
 		return array(
 			'day' => array(
 				'days'      => 1,
@@ -105,12 +153,12 @@ class Base {
 		);
 	}
 
-	public static function table( string $table_name ) {
+	protected static function table( string $table_name ) {
 		global $wpdb;
-		return $wpdb->prefix . APPSTORE_DB_PREFIX . $table_name;
+		return $wpdb->prefix . self::$configs->db_prefix . $table_name;
 	}
 
-	public static function getSiteCommissionRate() {
+	protected static function getSiteCommissionRate() {
 		return AdminSetting::get( 'site_commision_rate', 0 );
 	}
 }

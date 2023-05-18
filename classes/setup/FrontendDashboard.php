@@ -1,13 +1,14 @@
 <?php
 
-namespace AppStore\Setup;
+namespace Solidie\AppStore\Setup;
 
-use AppStore\Models\AdminSetting;
-use AppStore\Models\FrontendDashboard as FrontendDashboardModel;
-use AppStore\Models\Store;
+use Solidie\AppStore\Main;
+use Solidie\AppStore\Models\AdminSetting;
+use Solidie\AppStore\Models\FrontendDashboard as FrontendDashboardModel;
+use Solidie\AppStore\Models\Store;
 
-class FrontendDashboard {
-	public function setup() {
+class FrontendDashboard extends Main {
+	public function __construct() {
 		add_action( 'generate_rewrite_rules', array( $this, 'add_rewrite_rules' ) );
 		add_action( 'wp', array( $this, 'support_dashboard_sub_page' ) );
 		add_filter( 'page_template', array( $this, 'force_template_for_dashboard' ) );
@@ -26,7 +27,7 @@ class FrontendDashboard {
 		}
 
 		$permalink = get_permalink( get_the_ID() );
-		$url_path  = parse_url( APPSTORE_CURRENT_URL, PHP_URL_PATH );
+		$url_path  = parse_url( self::$configs->current_url, PHP_URL_PATH );
 		$page_path = parse_url( $permalink, PHP_URL_PATH );
 		$sub_pages = array();
 		
@@ -79,7 +80,7 @@ class FrontendDashboard {
 	 */
 	public function force_template_for_dashboard( $template ) {
 		if ( is_page() && get_the_ID() == AdminSetting::get( 'dashboard_page_id' ) ) {
-			$template = APPSTORE_DIR . 'templates/frontend-dashboard.php';
+			$template = self::$configs->dir . 'templates/frontend-dashboard.php';
 		}
 
 		return $template;

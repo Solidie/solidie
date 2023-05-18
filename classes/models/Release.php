@@ -1,10 +1,10 @@
 <?php
 
-namespace AppStore\Models;
+namespace Solidie\AppStore\Models;
 
-use AppStore\Base;
+use Solidie\AppStore\Main;
 
-class Release extends Base {
+class Release extends Main {
 	/**
 	 * Mime types that can be enabled in setting
 	 *
