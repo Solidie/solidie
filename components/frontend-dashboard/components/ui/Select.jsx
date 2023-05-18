@@ -9,19 +9,41 @@ import React from "react";
 
 const Select = React.forwardRef(
   (
-    { placeholder, disableItemsList, defaultValue, ariaLabel, itemsList, onChange,value },
+    {
+      placeholder,
+      disableItemsList,
+      defaultValue,
+      ariaLabel,
+      itemsList,
+      onChange,
+      value,
+    },
     forwardRef
   ) => {
+    console.log(
+      (value === "") === (defaultValue === undefined) ||
+        value === "" ||
+        defaultValue === undefined,
+      "text"
+    );
     return (
-      <SelectPrimitive.Root {...{ defaultValue }} value={value} onValueChange={onChange} >
+      <SelectPrimitive.Root
+        {...{ defaultValue }}
+        value={value}
+        onValueChange={onChange}
+      >
         <SelectPrimitive.Trigger asChild aria-label={ariaLabel}>
           <div className="Input flex justify-between items-center">
-            {defaultValue ? (
-              <SelectPrimitive.Value aria-valuetext={value}>{
-                itemsList[value]
-              }</SelectPrimitive.Value>
+            {(value === "") === (defaultValue === undefined) ||
+            value === "" ||
+            defaultValue === undefined ? (
+              <SelectPrimitive.Value placeholder={placeholder}>
+                {placeholder}
+              </SelectPrimitive.Value>
             ) : (
-              <SelectPrimitive.Value placeholder={placeholder} />
+              <SelectPrimitive.Value aria-valuetext={value}>
+                {itemsList[value]}
+              </SelectPrimitive.Value>
             )}
             <SelectPrimitive.Icon className="ml-2">
               <ChevronDownIcon />

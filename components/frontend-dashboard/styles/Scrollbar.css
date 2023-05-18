@@ -16,7 +16,8 @@
 .ScrollAreaViewport > div {
   height: 100%;
   width: 100%;
-  display: block !important;
+  display: flex !important;
+  justify-content: center !important;
 }
 
 .ScrollAreaScrollbar {

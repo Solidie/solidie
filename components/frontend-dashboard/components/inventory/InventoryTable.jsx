@@ -5,32 +5,21 @@ import { AlertDialog } from "../common";
 const InventoryTable = () => {
   return (
     <div className="flex flex-col w-full gap-4 min-h-max">
-      <Row />
-      <Row />
-      <Row />
-      <Row />
-      <Row />
-      <Row />
-      <Row />
-      <Row />
-      <Row />
-      <Row />
-      <Row />
-      <Row />
-      <Row />
-      <Row />
-      <Row />
-      <Row />
+      {Array(20)
+        .fill(undefined)
+        .map((item, idx) => (
+          <Row key={idx} idx={idx} />
+        ))}
     </div>
   );
 };
 
 export default InventoryTable;
 
-const Row = () => {
+const Row = ({ idx }) => {
   return (
     <div className="flex-wrap gap-5 text-base flex items-center justify-between w-full bg-white rounded-lg px-4 py-4 shadow-md transition-all delay-75 hover:shadow-lg">
-      <img src="https://img.logoipsum.com/250.svg" alt="" />
+      <img src={`https://img.logoipsum.com/${220 + idx}.svg`} className="w-32 max-h-10" alt="" />
       <div className="">
         Name: <span className="font-bold">AppName</span>
       </div>

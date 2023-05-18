@@ -6,6 +6,7 @@ import Tooltip from "./Tooltip.jsx";
 import UploadImage from "./UploadImage.jsx";
 import MultiSelect from "./MultiSelect.jsx";
 import ComboBox from "./ComboBox.jsx";
+import AccordionInner from "./AccordionInner.jsx";
 
 export {
   Input,
@@ -16,4 +17,5 @@ export {
   Tooltip,
   MultiSelect,
   ComboBox,
+  AccordionInner,
 };

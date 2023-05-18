@@ -14,9 +14,9 @@ const Topbar = ({ sidebarOpen, setSidebarOpen, frontendDashboardData }) => {
         </div>
         <div className="h-max w-max select-none">
           <img
-            src="https://img.logoipsum.com/288.svg"
-            className="select-none w-max h-8 object-contain"
-            alt="Logo"
+            src={`https://img.logoipsum.com/${233 + Math.floor(Math.random() * (43 - 33 + 1))}.svg`}
+            className="w-32 max-h-8 select-none object-contain"
+            alt=""
           />
         </div>
       </div>

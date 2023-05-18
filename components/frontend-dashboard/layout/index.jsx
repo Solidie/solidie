@@ -19,8 +19,8 @@ export default function Layout({ children }) {
         <Scrollbar scrollAreaRootClassName="bg-primary z-10 w-max !min-w-max h-full border-r border-tertiary/10 " scrollAreaViewportClassName="w-max [_div]:!w-max [_div]:!min-w-max">
           <Sidebar {...{ sidebarOpen, setSidebarOpen }} />
         </Scrollbar>
-        <Scrollbar>
-          <div className={"p-7 pb-10 min-h-max h-max w-full " + (sidebarOpen ? " hidden sm:block " : "  ")}>
+        <Scrollbar scrollAreaViewportClassName={" w-full"}>
+          <div className={"p-7 pb-10 max-w-screen-xl  min-h-max h-max w-full " + (sidebarOpen ? " hidden sm:block " : "  ")}>
             {children}
           </div>
         </Scrollbar>
