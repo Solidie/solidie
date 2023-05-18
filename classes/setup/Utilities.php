@@ -1,9 +1,9 @@
 <?php
 
-namespace AppStore\Setup;
+namespace Solidie\AppStore\Setup;
 
 class Utilities {
-	public function setup() {
+	public function __construct() {
 		add_filter( 'clean_url', array( $this, 'clean_url' ) );
 	}
 

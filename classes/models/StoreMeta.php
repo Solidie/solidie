@@ -1,11 +1,11 @@
 <?php
 
-namespace AppStore\Models;
+namespace Solidie\AppStore\Models;
 
-use AppStore\Base;
 use Error;
+use Solidie\AppStore\Main;
 
-class StoreMeta extends Base {
+class StoreMeta extends Main {
 	/**
 	 * Add meta for store
 	 *

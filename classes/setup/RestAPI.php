@@ -1,14 +1,14 @@
 <?php
 
-namespace AppStore\Setup;
+namespace Solidie\AppStore\Setup;
 
-use AppStore\Base;
-use AppStore\Models\Apps;
-use AppStore\Models\Hit;
-use AppStore\Models\Licensing;
-use AppStore\Models\Release;
+use Solidie\AppStore\Main;
+use Solidie\AppStore\Models\Apps;
+use Solidie\AppStore\Models\Hit;
+use Solidie\AppStore\Models\Licensing;
+use Solidie\AppStore\Models\Release;
 
-class RestAPI extends Base {
+class RestAPI extends Main {
 	const API_PATH               = '/appstore/api';
 	const NONCE_ACTION           = 'app_store_download';
 	const DOWNLOAD_LINK_VALIDITY = 720; // in minutes. 12 hours here as WordPress normally checks for updates every 12 hours.
@@ -20,13 +20,13 @@ class RestAPI extends Base {
 		'action'
 	);
 
-	public function setup() {
+	public function __construct() {
 		add_action( 'init', array( $this, 'add_license_api' ) );
 	}
 	
 	public function add_license_api() {
 		// Check if it is api request
-		$url         = explode( '?', APPSTORE_CURRENT_URL );
+		$url         = explode( '?', self::$configs->current_url );
 		$current_url = trim( $url[0], '/' );
 		if ( get_home_url() . self::API_PATH !== $current_url ) {
 			return;

@@ -1,10 +1,10 @@
 <?php
 
-namespace AppStore\Models;
+namespace Solidie\AppStore\Models;
 
-use AppStore\Base;
+use Solidie\AppStore\Main;
 
-class Licensing extends Base{
+class Licensing extends Main{
 	/**
 	 * Generate random string
 	 *

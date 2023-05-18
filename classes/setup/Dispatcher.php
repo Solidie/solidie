@@ -1,12 +1,12 @@
 <?php
 
-namespace AppStore\Setup;
+namespace Solidie\AppStore\Setup;
 
-use AppStore\Helpers\Nonce;
-use AppStore\Models\AdminSetting;
-use AppStore\Models\Apps as AppModel;
-use AppStore\Models\Release;
-use AppStore\Models\Store;
+use Solidie\AppStore\Helpers\Nonce;
+use Solidie\AppStore\Models\AdminSetting;
+use Solidie\AppStore\Models\Apps as AppModel;
+use Solidie\AppStore\Models\Release;
+use Solidie\AppStore\Models\Store;
 
 class Dispatcher {
 	
@@ -20,7 +20,7 @@ class Dispatcher {
 		'push_version_release'
 	);
 
-	function setup() {
+	function __construct() {
 		foreach ( self::$endpoints as $endpoint ) {
 			add_action( 'wp_ajax_' . $endpoint, function() use($endpoint) {
 				$this->dispatch($endpoint);

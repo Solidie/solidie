@@ -1,11 +1,11 @@
 <?php
 
-namespace AppStore\Setup;
+namespace Solidie\AppStore\Setup;
 
-use AppStore\Models\Release;
+use Solidie\AppStore\Models\Release;
 
 class Media {
-	public function setup() {
+	public function __construct() {
 		add_action( 'pre_get_posts', array( $this, 'hide_media_by_meta_key' ) );
 	}
 

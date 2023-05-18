@@ -1,0 +1,18 @@
+{
+    "name": "solidie/appstore",
+    "description": "App Saling plugin for WordPress",
+    "autoload": {
+        "psr-4": {
+            "Solidie\\AppStore\\": "classes/",
+            "Solidie\\SalesReporter\\": "SalesReporter/",
+            "Solidie\\Updater\\": "Updater/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Solidie",
+            "email": "solidie.com@gmail.com"
+        }
+    ],
+    "require": {}
+}

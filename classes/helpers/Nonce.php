@@ -1,6 +1,6 @@
 <?php
 
-namespace AppStore\Helpers;
+namespace Solidie\AppStore\Helpers;
 
 class Nonce {
 	private static $name = '_appstore_nonce_name';
