@@ -26,18 +26,20 @@ export const CustomersTable = () => {
     <MaterialReactTable
       columns={columns}
       data={data}
-      state={{ density: "compact" }}
-      muiTopToolbarProps={{ className: "!bg-brand-white" }}
-      muiBottomToolbarProps={{ className: "!bg-brand-white" }}
+      // state={{ density: "compact" }}
+      muiTopToolbarProps={{ className: " [&>*:nth-child(3)>*:nth-child(2)]:!bg-lightest-version [&>*:nth-child(3)>*:nth-child(2)]:!px-2 [&>*:nth-child(3)>*:nth-child(2)]:!shadow-sm [&>*:nth-child(3)>*:nth-child(2)]:hover:!shadow-lg !mb-1 [&>*:nth-child(3)>*:nth-child(2)]:!rounded-xl !shadow-none !bg-transparent  " }}
+      muiBottomToolbarProps={{ className: " [&>*:nth-child(1)>*:nth-child(2)]:!bg-lightest-version [&>*:nth-child(1)>*:nth-child(2)]:!px-2 [&>*:nth-child(1)>*:nth-child(2)]:!rounded-xl !shadow-none !bg-transparent  " }}
+      muiTableProps={{ className: "py-5 !border !mb-2 !border-white !bg-brand-white " }}
+      muiTableBodyRowProps={{ className: " group " }}
       muiTableBodyCellProps={{
-        className: "!text-tertiary !bg-brand-white ",
+        className: "!border !text-tertiary group-hover:!bg-lightest-version/60 !bg-brand-white ",
       }}
       muiTableHeadCellProps={{
-        className: "!text-tertiary !bg-brand-white font-black ",
+        className: " !text-tertiary !bg-transparent font-black ",
       }}
       muiTablePaperProps={{
         className:
-          " z-10 shadow-lg shadow-tertiary !rounded-2xl !bg-brand-white overflow-hidden px-6 pt-4",
+          " px-2 !shadow-none !bg-transparent overflow-hidden [&>*:nth-child(2)]:!overflow-x-auto [&>*:nth-child(2)]:!bg-transparent [&>*:nth-child(2)]:!outline-white [&>*:nth-child(2)]:!outline [&>*:nth-child(2)]:!overflow-clip [&>*:nth-child(2)]:!rounded-lg",
       }}
       enableRowNumbers
       muiTableDetailPanelProps={{

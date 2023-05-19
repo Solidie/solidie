@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 
 const Sales = () => {
   return (
-    <div className="flex flex-col gap-4 w-full h-full">
+    <div className="flex flex-col w-full h-full">
       {/* Header */}
       <div className="flex justify-between items-center w-full">
         <h1 className="text-3xl font-bold">Sales</h1>

@@ -1,8 +1,11 @@
 import React from 'react'
+import { Chart } from "../components/common"
 
 const Reports = () => {
   return (
-    <div>Reports</div>
+    <div>
+      <Chart />
+    </div>
   )
 }
 
