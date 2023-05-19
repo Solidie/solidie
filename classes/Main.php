@@ -50,7 +50,7 @@ class Main {
 		new Report( $configs );
 		
 		// Register plugin updater (Registered app name, app main file, parent menu for license page, continous update check bool)
-		new Updater( self::$configs->app_name, self::$configs->file, 'appstore' );
+		new Updater( $configs );
 	}
 
 	/**

@@ -18,16 +18,18 @@ add_action( 'plugins_loaded', function(){
 	global $wpdb;
 
 	$payload = array(
-		'app_name'      => 'appstore',
-		'db_prefix'     => 'appstore_',
-		'linked_table'  => $wpdb->prefix . 'appstore_apps',
-		'linked_column' => 'product_id',
-		'version'       => '1.0.0',
-		'file'          => __FILE__,
-		'dir'           => __DIR__,
-		'url'           => plugin_dir_url( __FILE__ ),
-		'dist_url'      => plugin_dir_url( __FILE__ ) . '/dist/',
-		'current_url'   => "http".((!empty($_SERVER['HTTPS'])&&$_SERVER['HTTPS']!='off')?'s':'').'://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']
+		'app_name'       => 'appstore',
+		'db_prefix'      => 'appstore_',
+		'root_menu_slug' => 'appstore',
+		'is_free'        => false,
+		'linked_table'   => $wpdb->prefix . 'appstore_apps',
+		'linked_column'  => 'product_id',
+		'version'        => '1.0.0',
+		'file'           => __FILE__,
+		'dir'            => __DIR__,
+		'url'            => plugin_dir_url( __FILE__ ),
+		'dist_url'       => plugin_dir_url( __FILE__ ) . '/dist/',
+		'current_url'    => "http".((!empty($_SERVER['HTTPS'])&&$_SERVER['HTTPS']!='off')?'s':'').'://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']
 	);
 
 	(new Solidie\AppStore\Main())->init( (object) $payload );

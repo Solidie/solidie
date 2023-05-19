@@ -23,7 +23,7 @@ class Licensing extends Main{
 	/**
 	 * Return encrypted license key
 	 *
-	 * @param integer $sale_id
+	 * @param string $sale_id
 	 * @return string
 	 */
 	public static function encrypt( string $string ) {
@@ -38,7 +38,7 @@ class Licensing extends Main{
 	 * Return parsed sale id from license key
 	 *
 	 * @param string $license_key
-	 * @return int|null
+	 * @return string|null
 	 */
 	public static function decrypt( string $license_key ) {
 		$data      = base64_decode($license_key);
