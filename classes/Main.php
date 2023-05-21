@@ -2,6 +2,7 @@
 
 namespace Solidie\AppStore;
 
+use Solidie\AppStore\Helpers\Crypto;
 use Solidie\AppStore\Setup\Dispatcher;
 use Solidie\AppStore\Setup\Scripts;
 use Solidie\AppStore\Setup\AdminPage;
@@ -34,6 +35,7 @@ class Main {
 	public function init( object $configs ) {
 		// Store configs in runtime static property
 		self::$configs = $configs;
+		self::$configs->crypto = Crypto::class;
 		
 		// Core Modules
 		new Utilities();
