@@ -2,55 +2,10 @@
 
 namespace Solidie\AppStore\Models;
 
+use Solidie\AppStore\Helpers\Crypto;
 use Solidie\AppStore\Main;
 
 class Licensing extends Main{
-	/**
-	 * Generate random string
-	 *
-	 * @param integer $length
-	 * @return string
-	 */
-	public static function generateRandomString( $length = 3 ) {
-		$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-		$randomString = '';
-		for ($i = 0; $i < $length; $i++) {
-			$randomString .= $characters[rand(0, strlen($characters) - 1)];
-		}
-		return $randomString;
-	}
-
-	/**
-	 * Return encrypted license key
-	 *
-	 * @param string $sale_id
-	 * @return string
-	 */
-	public static function encrypt( string $string ) {
-		$string = $string . '-' . self::generateRandomString();
-		$salt   = openssl_random_pseudo_bytes(16); // Generate a 16-byte salt
-		$key    = openssl_pbkdf2('sha256', $salt, 32, 10000, 'sha256'); // Derive a 32-byte encryption key from the password and salt
-		$cipher = openssl_encrypt($string, 'AES-256-CBC', $key, OPENSSL_RAW_DATA, str_repeat("\0", 16)); // Encrypt the string with AES-256-CBC
-		return base64_encode($salt . $cipher); // Combine the salt and ciphertext and encode as base64
-	}
-
-	/**
-	 * Return parsed sale id from license key
-	 *
-	 * @param string $license_key
-	 * @return string|null
-	 */
-	public static function decrypt( string $license_key ) {
-		$data      = base64_decode($license_key);
-		$salt      = substr($data, 0, 16); // Extract the salt from the encoded string
-		$cipher    = substr($data, 16);
-		$key       = openssl_pbkdf2('sha256', $salt, 32, 10000, 'sha256'); // Derive the decryption key from the password and salt
-		$decrypted = openssl_decrypt($cipher, 'AES-256-CBC', $key, OPENSSL_RAW_DATA, str_repeat("\0", 16)); // Decrypt the ciphertext with AES-256-CBC
-		$decrypted = explode('-', $decrypted);
-		$count     = count( $decrypted );
-		return $count > 1 ? implode( '-', array_slice( $decrypted, 0, $count-1 ) ) : null;
-	}
-
 	/**
 	 * Generate license keys for app sale
 	 *
@@ -76,7 +31,7 @@ class Licensing extends Main{
 		for( $i = 0; $i < $limit; $i++ ) {
 			$license_key = array(
 				'sale_id'     => $sale_id,
-				'license_key' => self::encrypt( (int) $sale_id ),
+				'license_key' => Crypto::encrypt( (int) $sale_id ),
 			);
 
 			$wpdb->insert(
@@ -124,7 +79,7 @@ class Licensing extends Main{
 	 */
 	public static function getLicenseInfo( string $license_key, int $app_id, $endpoint = null ) {
 		// Check if there is any sale associated with the license key.
-		$sale_id  = self::decrypt( $license_key );
+		$sale_id  = Crypto::decrypt( $license_key );
 		$licenses = $sale_id ? self::getLicenseKeys( (int) $sale_id, $app_id, $endpoint ) : array();
 
 		foreach ( $licenses as $license ) {
