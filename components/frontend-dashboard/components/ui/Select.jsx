@@ -20,23 +20,15 @@ const Select = React.forwardRef(
     },
     forwardRef
   ) => {
-    console.log(
-      (value === "") === (defaultValue === undefined) ||
-        value === "" ||
-        defaultValue === undefined,
-      "text"
-    );
     return (
       <SelectPrimitive.Root
         {...{ defaultValue }}
-        value={value}
+        // value={value}
         onValueChange={onChange}
       >
         <SelectPrimitive.Trigger asChild aria-label={ariaLabel}>
           <div className="Input flex justify-between items-center">
-            {(value === "") === (defaultValue === undefined) ||
-            value === "" ||
-            defaultValue === undefined ? (
+            {value === "" ? (
               <SelectPrimitive.Value placeholder={placeholder}>
                 {placeholder}
               </SelectPrimitive.Value>

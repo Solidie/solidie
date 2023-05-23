@@ -1,8 +1,9 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import MaterialReactTable from "material-react-table";
 import CustomerSubscriptionHistoryTable from "./CustomerSubscriptionHistoryTable.jsx";
 
 export const CustomersTable = () => {
+  const [ tableDensity, setTableDensity ] = useState("compact")
   const columns = useMemo(
     //column definitions...
     () => [
@@ -26,7 +27,8 @@ export const CustomersTable = () => {
     <MaterialReactTable
       columns={columns}
       data={data}
-      // state={{ density: "compact" }}
+      onDensityChange={(d) => setTableDensity(d)}
+      state={{ density: tableDensity }}
       muiTopToolbarProps={{ className: " [&>*:nth-child(3)>*:nth-child(2)]:!bg-lightest-version [&>*:nth-child(3)>*:nth-child(2)]:!px-2 [&>*:nth-child(3)>*:nth-child(2)]:!shadow-sm [&>*:nth-child(3)>*:nth-child(2)]:hover:!shadow-lg !mb-1 [&>*:nth-child(3)>*:nth-child(2)]:!rounded-xl !shadow-none !bg-transparent  " }}
       muiBottomToolbarProps={{ className: " [&>*:nth-child(1)>*:nth-child(2)]:!bg-lightest-version [&>*:nth-child(1)>*:nth-child(2)]:!px-2 [&>*:nth-child(1)>*:nth-child(2)]:!rounded-xl !shadow-none !bg-transparent  " }}
       muiTableProps={{ className: "py-5 !border !mb-2 !border-white !bg-brand-white " }}

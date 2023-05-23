@@ -2,6 +2,7 @@ import React from "react";
 import * as Form from "@radix-ui/react-form";
 import { Input, Textarea } from "../ui";
 import UploadProfileImage from "../common/UpdateProfileImage.jsx";
+import InputPassword from "../ui/Password.jsx";
 
 const FormDemo = () => (
   <>
@@ -106,7 +107,7 @@ const FormDemo = () => (
             </Form.Message>
           </div>
           <Form.Control asChild className="w-full">
-            <Input type="text" placeholder="Current Password ..." required />
+            <InputPassword placeholder="Current Password ..." required />
           </Form.Control>
         </Form.Field>
         <div className="flex justify-between items-center space-y-3 sm:space-y-0 h-max flex-wrap sm:flex-nowrap max-w-full w-auto">
@@ -121,7 +122,7 @@ const FormDemo = () => (
               </Form.Message>
             </div>
             <Form.Control asChild className="w-full">
-              <Input type="text" placeholder="New Password ..." required />
+              <InputPassword placeholder="New Password ..." required />
             </Form.Control>
           </Form.Field>
 
@@ -136,7 +137,7 @@ const FormDemo = () => (
               </Form.Message>
             </div>
             <Form.Control asChild className="w-full">
-              <Input type="text" placeholder="Confirm Password ..." required />
+              <InputPassword placeholder="Confirm Password ..." required />
             </Form.Control>
           </Form.Field>
         </div>
