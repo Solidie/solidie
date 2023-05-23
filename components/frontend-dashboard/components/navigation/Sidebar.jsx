@@ -68,7 +68,7 @@ const Sidebar = ({ sidebarOpen }) => {
       className={
         "z-10 flex flex-col px-5 py-4 w-full md:w-max min-h-max h-full transition-all  " +
         (sidebarOpen
-          ? " gap-4  min-w-max overflow-y-auto bg-primary  fixed left-0 xl:relative "
+          ? " gap-4  min-w-max overflow-y-auto  fixed left-0 xl:relative "
           : " gap-5  hidden sm:flex ")
       }
     >
