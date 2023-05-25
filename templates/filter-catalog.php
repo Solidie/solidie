@@ -61,7 +61,8 @@
                     </div>
                 </div>
                 <div class="hidden border-t border-tertiary/20 py-10" id="filters-pannel">
-                    <div class="max-w-7xl mx-auto grid grid-cols-3 gap-x-4 px-4 text-sm sm:px-6 md:gap-6 lg:px-8">
+                    <div
+                        class="max-w-7xl mx-auto grid grid-cols-2 lg:grid-cols-3 gap-4 px-4 text-sm sm:px-6 md:gap-6 lg:px-8">
                         <div class="grid grid-cols-1 gap-y-10 auto-rows-min md:grid-cols-2 md:gap-x-6">
                             <fieldset>
                                 <legend class="block font-medium">Category</legend>
