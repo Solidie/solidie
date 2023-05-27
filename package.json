@@ -75,6 +75,7 @@
 		"postcss-preset-env": "^8.3.2",
 		"react-icons": "^4.8.0",
 		"style-loader": "^3.3.2",
+		"tailwind-scrollbar": "^3.0.4",
 		"tw-colors": "^1.2.6",
 		"webpack": "^5.82.1",
 		"webpack-cli": "^5.1.1",

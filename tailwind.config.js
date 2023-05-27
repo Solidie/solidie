@@ -12,6 +12,7 @@ module.exports = {
     // Initialize with default values (see options below)
     require("tailwindcss-radix")(),
     require("daisyui"),
+    require('tailwind-scrollbar'),
   ],
   daisyui: {
     theme: [

@@ -6,17 +6,17 @@ import { Scrollbar } from "../components/common";
 export default function Layout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
-  useLayoutEffect(() => {
-    if(window.innerWidth < 640) {
+  useEffect(() => {
+    if(window.innerWidth < 1040) {
       setSidebarOpen(false)
     }
-  }, [])
+  },[window.innerWidth])
 
   return (
     <div className="bg-content-bg text-tertiary w-full !min-h-max !h-full flex flex-col overflow-y-clip">
       <Topbar {...{ sidebarOpen, setSidebarOpen }} />
       <div className="  flex flex-grow w-full min-h-max h-full overflow-clip">
-        <Scrollbar scrollAreaRootClassName="bg-brand-white z-10 w-max !min-w-max h-full border-r border-brand-white " scrollAreaViewportClassName="w-max [_div]:!w-max [_div]:!min-w-max">
+        <Scrollbar scrollAreaRootClassName="bg-brand-white z-10 w-max !min-w-max h-full border-r border-brand-white " scrollAreaViewportClassName="bg-brand-white w-max [_div]:!w-max [_div]:!min-w-max">
           <Sidebar {...{ sidebarOpen, setSidebarOpen }} />
         </Scrollbar>
         <Scrollbar scrollAreaViewportClassName={" w-full"}>
