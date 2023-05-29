@@ -1,9 +1,9 @@
 {
-    "name": "solidie/appstore",
+    "name": "solidie/solidie",
     "description": "App Saling plugin for WordPress",
     "autoload": {
         "psr-4": {
-            "Solidie\\AppStore\\": "classes/",
+            "Solidie\\Store\\": "classes/",
             "Solidie\\SalesReporter\\": "SalesReporter/",
             "Solidie\\Updater\\": "Updater/"
         }

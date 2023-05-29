@@ -1,9 +1,9 @@
 <?php
 
-namespace Solidie\AppStore\Setup;
+namespace Solidie\Store\Setup;
 
-use Solidie\AppStore\Main;
-use Solidie\AppStore\Models\Apps;
+use Solidie\Store\Main;
+use Solidie\Store\Models\Apps;
 
 class WooCommerceSubscription extends Main {
 	public function __construct() {

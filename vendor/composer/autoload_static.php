@@ -10,8 +10,8 @@ class ComposerStaticInita040c23b1a02cee972dcca2bc48bc9d3
         'S' => 
         array (
             'Solidie\\Updater\\' => 16,
+            'Solidie\\Store\\' => 14,
             'Solidie\\SalesReporter\\' => 22,
-            'Solidie\\AppStore\\' => 17,
         ),
     );
 
@@ -20,13 +20,13 @@ class ComposerStaticInita040c23b1a02cee972dcca2bc48bc9d3
         array (
             0 => __DIR__ . '/../..' . '/Updater',
         ),
+        'Solidie\\Store\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/classes',
+        ),
         'Solidie\\SalesReporter\\' => 
         array (
             0 => __DIR__ . '/../..' . '/SalesReporter',
-        ),
-        'Solidie\\AppStore\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/classes',
         ),
     );
 

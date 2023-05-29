@@ -5,7 +5,7 @@ import { SettingPage } from './settings/settings.jsx';
 
 
 window.addEventListener('DOMContentLoaded', ()=>{
-	let dashboard = document.getElementById('AppStore_AdminSettings');
+	let dashboard = document.getElementById('Solidie_AdminSettings');
 	if ( dashboard ) {
 		ReactDOM.createRoot( dashboard ).render( <SettingPage {...getElementDataSet(dashboard)}/> );
 	}

@@ -1,11 +1,12 @@
 <?php
 
-namespace Solidie\AppStore\Setup;
+namespace Solidie\Store\Setup;
 
-use Solidie\AppStore\Models\AdminSetting;
-use Solidie\AppStore\Models\Page as PageModel;
+use Solidie\Store\Main;
+use Solidie\Store\Models\AdminSetting;
+use Solidie\Store\Models\Page as PageModel;
 
-class AdminPage {
+class AdminPage extends Main {
 
 	function __construct() {
 		add_action( 'admin_menu', array( $this, 'registerMenu' ) );
@@ -19,16 +20,16 @@ class AdminPage {
 	public function registerMenu() {
 		// Main page
 		add_menu_page(
-			__( 'AppStore', 'appstore' ),
-			__( 'AppStore', 'appstore' ),
+			__( 'Solidie', 'solidie' ),
+			__( 'Solidie', 'solidie' ),
 			'administrator',
-			'appstore',
+			self::$configs->root_menu_slug,
 			array( $this, 'mainPage' )
 		);
 
 		// Setting page
 		add_submenu_page( 
-			'appstore', 
+			self::$configs->root_menu_slug, 
 			__( 'Settings', 'tutor' ),
 			 __( 'Settings', 'tutor' ), 
 			 'administrator', 
@@ -55,7 +56,7 @@ class AdminPage {
 		$pages    = PageModel::getPageList();
 		$settings = (object)AdminSetting::get();
 
-		echo '<div class="wrap" id="AppStore_AdminSettings" 
+		echo '<div class="wrap" id="Solidie_AdminSettings" 
 				   data-pages="' . esc_attr( json_encode( $pages ) ) . '" 
 				   data-saved-settings="' . esc_attr( json_encode( $settings ) ) . '"></div>';
 	}

@@ -7,8 +7,8 @@ import './style.scss';
 
 const menu_map_blueprint = [
 	{
-		label: 'Purchased Apps',
-		slug: 'apps',
+		label: 'Purchased Items',
+		slug: 'items',
 		icon: 'fas fa-cog',
 	},
 	{
@@ -233,14 +233,14 @@ function D(props) {
 				<div className="sidenav__profile-avatar" style={{backgroundImage: 'url('+avatar_url+')'}}></div>
 				<div className="sidenav__profile-title text-light">John Doe</div>
 			</div>
-			<div className="row-appstore row--align-v-center row--align-h-center">
+			<div className="row-solidie row--align-v-center row--align-h-center">
 				<ul className="navList">
 					{state.menu_map.map(menu=>{
 						let {children=[], url, slug} = menu;
 						let is_active = state.expanded_menu==slug || current_url==url || current_url.indexOf(url)===0;
 
 						return <li key={slug}>
-							<div className={"navList__subheading row-appstore row--align-v-center"+(!children.length ? ' singular' : '')+(is_active ? ' navList__subheading--open' : '')} onClick={()=>setState({...state, expanded_menu: state.expanded_menu==slug ? null : slug})}>
+							<div className={"navList__subheading row-solidie row--align-v-center"+(!children.length ? ' singular' : '')+(is_active ? ' navList__subheading--open' : '')} onClick={()=>setState({...state, expanded_menu: state.expanded_menu==slug ? null : slug})}>
 								<a href={children.length ? '#' : url} onClick={e=>children.length ? e.preventDefault() : 0}>
 									<span className="navList__subheading-icon"><i className={menu.icon}></i></span>
 									<span className="navList__subheading-title">{menu.label}</span>
@@ -275,7 +275,7 @@ function D(props) {
 	</div>
 }
 
-let dashboard = document.getElementById('AppStore_Dashboard');
+let dashboard = document.getElementById('Solidie_Dashboard');
 if ( dashboard ) {
 	ReactDOM.createRoot( dashboard ).render( <D {...getElementDataSet(dashboard)}/> );
 }

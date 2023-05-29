@@ -7,7 +7,7 @@ export function DashboardIndex(props) {
 	return <div>
 		<h3>App Stores</h3>
 		{
-			!stores.length && <p>You have no stores. Create one to sell apps.</p> || 
+			!stores.length && <p>You have no stores. Create one to sell items.</p> || 
 			<div>
 				{stores.map(store=>{
 					let {name, slug} = store;

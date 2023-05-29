@@ -1,19 +1,19 @@
 <?php return array(
     'root' => array(
-        'name' => 'solidie/appstore',
+        'name' => 'solidie/solidie',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => '8e650b116fe3b1f9c5fc6e4592b573d2ccbc3a98',
+        'reference' => '818e47d238c34e18df6b1b81bba45fb6247f056f',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
         'dev' => true,
     ),
     'versions' => array(
-        'solidie/appstore' => array(
+        'solidie/solidie' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => '8e650b116fe3b1f9c5fc6e4592b573d2ccbc3a98',
+            'reference' => '818e47d238c34e18df6b1b81bba45fb6247f056f',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

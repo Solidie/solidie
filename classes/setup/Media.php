@@ -1,8 +1,8 @@
 <?php
 
-namespace Solidie\AppStore\Setup;
+namespace Solidie\Store\Setup;
 
-use Solidie\AppStore\Models\Release;
+use Solidie\Store\Models\Release;
 
 class Media {
 	public function __construct() {

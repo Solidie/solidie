@@ -7,6 +7,6 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Solidie\\Updater\\' => array($baseDir . '/Updater'),
+    'Solidie\\Store\\' => array($baseDir . '/classes'),
     'Solidie\\SalesReporter\\' => array($baseDir . '/SalesReporter'),
-    'Solidie\\AppStore\\' => array($baseDir . '/classes'),
 );

@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import { request } from "../../../../../utilities/request.jsx";
 
 export function ReleaseManager(props) {
-	const {app_id, onBack} = props;
+	const {item_id, onBack} = props;
 	const [state, setState] = useState({releases:[], release_form:{}});
 
 	const getReleases=()=>{
-		request('get_app_release_history', {app_id}, response=>{
+		request('get_item_release_history', {item_id}, response=>{
 			let {success, data:{releases=[]}} = response;
 
 			setState({releases});
@@ -35,7 +35,7 @@ export function ReleaseManager(props) {
 		let payload = new FormData();
 		payload.append('version', version);
 		payload.append('changelog', changelog);
-		payload.append('app_file', file, file.name);
+		payload.append('item_file', file, file.name);
 
 		request('push_version_release', payload, response=>{
 			let {success, data} = response;

@@ -1,18 +1,18 @@
 <?php
 
-namespace Solidie\AppStore\Setup;
+namespace Solidie\Store\Setup;
 
-use Solidie\AppStore\Main;
-use Solidie\AppStore\Models\AdminSetting;
-use Solidie\AppStore\Models\FrontendDashboard as FrontendDashboardModel;
-use Solidie\AppStore\Models\Store;
+use Solidie\Store\Main;
+use Solidie\Store\Models\AdminSetting;
+use Solidie\Store\Models\FrontendDashboard as FrontendDashboardModel;
+use Solidie\Store\Models\Store;
 
 class FrontendDashboard extends Main {
 	public function __construct() {
 		add_action( 'generate_rewrite_rules', array( $this, 'add_rewrite_rules' ) );
 		add_action( 'wp', array( $this, 'support_dashboard_sub_page' ) );
 		add_filter( 'page_template', array( $this, 'force_template_for_dashboard' ) );
-		add_filter( 'appstore_frontend_dashboard_data', array( $this, 'appstore_frontend_dashboard_data' ) );
+		add_filter( 'solidie_frontend_dashboard_data', array( $this, 'solidie_frontend_dashboard_data' ) );
 	}
 
 	/**
@@ -44,10 +44,10 @@ class FrontendDashboard extends Main {
 		$wp_query->set( 'pagename', basename( $page_path ) ); 
 
 		if ( count( $sub_pages ) === 1 ) {
-			$wp_query->set( 'appstore_dashboard_page', $sub_pages[0] );
+			$wp_query->set( 'solidie_dashboard_page', $sub_pages[0] );
 		} else if( count( $sub_pages ) === 3 && $sub_pages[0] === 'store' ) {
-			$wp_query->set( 'appstore_dashboard_store', $sub_pages[1] );
-			$wp_query->set( 'appstore_dashboard_store_sub_page', $sub_pages[2] );
+			$wp_query->set( 'solidie_dashboard_store', $sub_pages[1] );
+			$wp_query->set( 'solidie_dashboard_store_sub_page', $sub_pages[2] );
 		}
 	}
 
@@ -65,8 +65,8 @@ class FrontendDashboard extends Main {
 		$page_name = get_post_field( 'post_name', $page_id );
 
 		$new_rules = array( 
-			"({$page_name})/(.+?)/?$" => 'index.php?pagename=' . $wp_rewrite->preg_index( 1 ) . '&appstore_dashboard_page=' . $wp_rewrite->preg_index( 2 ),
-			"({$page_name})/(store)/(.+?)/(.+?)/?$" => 'index.php?pagename=' . $wp_rewrite->preg_index( 1 ) . '&appstore_dashboard_store=' . $wp_rewrite->preg_index( 3 ) . '&appstore_dashboard_store_sub_page=' . $wp_rewrite->preg_index( 4 )
+			"({$page_name})/(.+?)/?$" => 'index.php?pagename=' . $wp_rewrite->preg_index( 1 ) . '&solidie_dashboard_page=' . $wp_rewrite->preg_index( 2 ),
+			"({$page_name})/(store)/(.+?)/(.+?)/?$" => 'index.php?pagename=' . $wp_rewrite->preg_index( 1 ) . '&solidie_dashboard_store=' . $wp_rewrite->preg_index( 3 ) . '&solidie_dashboard_store_sub_page=' . $wp_rewrite->preg_index( 4 )
 		);
 
 		$wp_rewrite->rules = $new_rules + $wp_rewrite->rules;
@@ -92,7 +92,7 @@ class FrontendDashboard extends Main {
 	 * @param array $data
 	 * @return array
 	 */
-	public function appstore_frontend_dashboard_data( array $data ) {
+	public function solidie_frontend_dashboard_data( array $data ) {
 		if ( ! is_array( $data ) ) {
 			$data = array();
 		}

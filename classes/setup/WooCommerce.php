@@ -1,8 +1,8 @@
 <?php
 
-namespace Solidie\AppStore\Setup;
+namespace Solidie\Store\Setup;
 
-use Solidie\AppStore\Models\Apps;
+use Solidie\Store\Models\Apps;
 
 class WooCommerce {
 	public function __construct() {
@@ -11,7 +11,7 @@ class WooCommerce {
 	}
 
 	public function on_product_purchase( $order_id ) {
-		// Process app purchase
+		// Process item purchase
 		Apps::processPurchase( $order_id );
 	}
 
@@ -21,7 +21,7 @@ class WooCommerce {
 		}
 
 		$class = 'notice notice-error';
-		$message = _x('This product has been created programmatically. So you are not supposed to do edit in Product Data section if you don\'t know the exact result.', 'appstore', 'appstore' );
+		$message = _x('This product has been created programmatically. So you are not supposed to do edit in Product Data section if you don\'t know the exact result.', 'solidie', 'solidie' );
 
 		printf('<div class="%1$s"><p style="color:#aa0000;font-weight:bold;">%2$s</p></div>', esc_attr($class), $message);
 	}
