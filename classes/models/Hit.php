@@ -1,8 +1,8 @@
 <?php
 
-namespace Solidie\AppStore\Models;
+namespace Solidie\Store\Models;
 
-use Solidie\AppStore\Main;
+use Solidie\Store\Main;
 
 class Hit extends Main {
 	/**

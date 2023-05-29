@@ -4,8 +4,8 @@ import { AppEditor } from './editor.jsx';
 import { AppList } from './app-list.jsx';
 
 function Release(props) {
-	const {release_id, app_id} = props;
-	const [state, setState] = useState({app_id, release_id});
+	const {release_id, item_id} = props;
+	const [state, setState] = useState({item_id, release_id});
 
 	const release=()=>{
 		console.log(state);
@@ -25,19 +25,19 @@ function Release(props) {
 export function Inventory(props) {
 	let {store_id} = props;
 	const [state, setState] = useState({
-		apps: [], 
+		items: [], 
 		loading: true, 
 	});
 
 	const getApps=()=>{
 		setState({loading: true});
 		
-		request('get_store_app_list', {store_id}, function(response){
-			let {success, data:{apps=[]}} = response;
+		request('get_store_item_list', {store_id}, function(response){
+			let {success, data:{items=[]}} = response;
 
-			console.log(apps);
+			console.log(items);
 
-			setState({loading: true, apps});
+			setState({loading: true, items});
 		});
 	}
 
@@ -47,7 +47,7 @@ export function Inventory(props) {
 
 	return <div>
 		{/* <AppEditor store_id={store_id} onComplete={getApps}/>
-		<AppList apps={state.apps}/> */}
-		<Release app_id={7} release_id={2}/>
+		<AppList items={state.items}/> */}
+		<Release item_id={7} release_id={2}/>
 	</div>
 }

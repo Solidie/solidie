@@ -1,6 +1,6 @@
 <?php
 
-namespace Solidie\AppStore\Helpers;
+namespace Solidie\Store\Helpers;
 
 class _String {
 	/**

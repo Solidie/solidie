@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 import { ReleaseManager } from "./release-manager/release.jsx";
 
 export function AppList(props) {
-	const [state, setState] = useState({opened_app_id: null});
-	const {apps=[]} = props;
+	const [state, setState] = useState({opened_item_id: null});
+	const {items=[]} = props;
 	
 	return <div>
 		{
-			state.opened_app_id && 
-			<ReleaseManager app_id={state.opened_app_id} onBack={()=>setState({opened_app_id: null})}/> || 
+			state.opened_item_id && 
+			<ReleaseManager item_id={state.opened_item_id} onBack={()=>setState({opened_item_id: null})}/> || 
 			<table className="table">
 				<thead>
 					<tr>
@@ -17,11 +17,11 @@ export function AppList(props) {
 					</tr>
 				</thead>
 				<tbody>
-					{apps.map(app=>{
-						let {app_name, app_status, app_id} = app;
-						return <tr key={app_id} onClick={()=>setState({opened_app_id: app_id})}>
-							<td>{app_name}</td>
-							<td>{app_status}</td>
+					{items.map(item=>{
+						let {item_name, item_status, item_id} = item;
+						return <tr key={item_id} onClick={()=>setState({opened_item_id: item_id})}>
+							<td>{item_name}</td>
+							<td>{item_status}</td>
 						</tr>
 					})}
 				</tbody>

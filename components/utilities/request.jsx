@@ -10,7 +10,7 @@ export function request(action, payload={}, callback, progressCallback) {
    		processData:false,
 	}
 
-	let {name: nonce_name, action: nonce_action} = window.AppStore.nonce;
+	let {name: nonce_name, action: nonce_action} = window.Solidie.nonce;
 
 	// Create form data if it is not already, but has file inside
 	if ( ! ( payload instanceof FormData ) ) {
@@ -56,7 +56,7 @@ export function request(action, payload={}, callback, progressCallback) {
 	}
 
 	window.jQuery.ajax({
-		url: window.AppStore.ajax_url,
+		url: window.Solidie.ajax_url,
 		type: 'POST',
 		data: payload,
 		...modifer,

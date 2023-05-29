@@ -1,19 +1,20 @@
 <?php
 
-namespace Solidie\AppStore\Setup;
+namespace Solidie\Store\Setup;
 
-use Solidie\AppStore\Main;
-use Solidie\AppStore\Models\Apps;
-use Solidie\AppStore\Models\Hit;
-use Solidie\AppStore\Models\Licensing;
-use Solidie\AppStore\Models\Release;
+use Solidie\Store\Helpers\Crypto;
+use Solidie\Store\Main;
+use Solidie\Store\Models\Apps;
+use Solidie\Store\Models\Hit;
+use Solidie\Store\Models\Licensing;
+use Solidie\Store\Models\Release;
 
 class RestAPI extends Main {
-	const API_PATH               = '/appstore/api';
+	const API_PATH               = '/solidie/api';
 	const DOWNLOAD_LINK_VALIDITY = 720; // in minutes. 12 hours here as WordPress normally checks for updates every 12 hours.
 
 	private static $required_fields = array(
-		'app_name',
+		'item_name',
 		'license_key',
 		'endpoint',
 		'action'
@@ -65,7 +66,7 @@ class RestAPI extends Main {
 
 		// Now process free-update-check
 		if ( $_POST['action'] == 'update-check-free' ) {
-			$this->update_check_free( $_POST['app_name'] );
+			$this->update_check_free( $_POST['item_name'] );
 			exit;
 		}
 
@@ -83,20 +84,20 @@ class RestAPI extends Main {
 				break;
 
 			default :
-				wp_send_json_error( array( 'message' => _x( 'Invalid action!', 'appstore', 'appstore' ) ) );
+				wp_send_json_error( array( 'message' => _x( 'Invalid action!', 'solidie', 'solidie' ) ) );
 				exit;
 		}
 	}
 
 	private function getLicenseData() {
-		$app_id       = Apps::getAppIdByProductPostName( $_POST['app_name'] );
-		$license_info = $app_id ? Licensing::getLicenseInfo( $_POST['license_key'], $app_id ) : null;
+		$item_id      = Apps::getAppIdByProductPostName( $_POST['item_name'] );
+		$license_info = $item_id ? Licensing::getLicenseInfo( $_POST['license_key'], $item_id ) : null;
 
-		// If no license found, then it is either malformed or maybe app id is not same for the license
+		// If no license found, then it is either malformed or maybe item id is not same for the license
 		if ( ! is_array( $license_info ) || empty( $license_info ) ) {
 			wp_send_json_error(
 				array( 
-					'message'   => _x( 'Invalid License Key', 'appstore', 'appstore' ),
+					'message'   => _x( 'Invalid License Key', 'solidie', 'solidie' ),
 					'activated' => false
 				) 
 			);
@@ -107,7 +108,7 @@ class RestAPI extends Main {
 		if ( $_POST['action'] == 'activate-license' && null !== $license_info['endpoint'] && $_POST['endpoint'] !== $license_info['endpoint']) {
 			wp_send_json_error(
 				array(
-					'message'   => _x( 'The license key is in use somewhere else already.', 'appstore', 'appstore' ),
+					'message'   => _x( 'The license key is in use somewhere else already.', 'solidie', 'solidie' ),
 					'activated' => false
 				)
 			);
@@ -118,7 +119,7 @@ class RestAPI extends Main {
 		if ( $_POST['action'] !== 'activate-license' && $license_info['endpoint'] !== $_POST['endpoint'] ) {
 			wp_send_json_error(
 				array( 
-					'message'   => _x( 'The license key is not associated with your endpoint.', 'appstore', 'appstore' ), 
+					'message'   => _x( 'The license key is not associated with your endpoint.', 'solidie', 'solidie' ), 
 					'activated' => false
 				)
 			);
@@ -138,7 +139,7 @@ class RestAPI extends Main {
 		global $wpdb;
 
 		if ( $license['endpoint'] === $_POST['endpoint'] ) {
-			$message = _x( 'The license is activated already', 'appstore', 'appstore' );
+			$message = _x( 'The license is activated already', 'solidie', 'solidie' );
 		} else {
 			$wpdb->update(
 				self::table( 'license_keys' ),
@@ -146,7 +147,7 @@ class RestAPI extends Main {
 				array( 'license_id' => $license['license_id'] )
 			);
 		
-			$message = _x( 'License activated succefully', 'appstore', 'appstore' );
+			$message = _x( 'License activated succefully', 'solidie', 'solidie' );
 			Hit::registerHit( 'activate-license', null, $license['license_id'], $_POST['endpoint'] );
 		}
 		
@@ -165,13 +166,13 @@ class RestAPI extends Main {
 	}
 
 	/**
-	 * Update check for app
+	 * Update check for item
 	 *
 	 * @param array $license
 	 * @return void
 	 */
 	private function update_check( array $license ) {
-		$release = Release::getRelease( $license['app_id'] );
+		$release = Release::getRelease( $license['item_id'] );
 		if ( ! $release ) {
 			wp_send_json_error( array( 'message' => _x( 'No release found.' ) ) );
 			exit;
@@ -181,13 +182,13 @@ class RestAPI extends Main {
 
 		wp_send_json_success(
 			array(
-				'app_url'           => $release->app_url,
+				'item_url'           => $release->item_url,
 				'version'           => $release->version,
 				'host_version'		=> array(),
 				'release_datetime'  => $release->release_date,
 				'release_timestamp' => $release->release_unix_timestamp,
 				'changelog'         => $release->changelog,
-				'download_url'      => get_home_url() . self::API_PATH . '/?download=' . urlencode( Licensing::encrypt( $release->app_id . ' ' . ( $license['license_id'] ?? 0 ) . ' ' . time() . ' ' . $_POST['endpoint'] ) ), // License id null means it's free app
+				'download_url'      => get_home_url() . self::API_PATH . '/?download=' . urlencode( Crypto::encrypt( $release->item_id . ' ' . ( $license['license_id'] ?? 0 ) . ' ' . time() . ' ' . $_POST['endpoint'] ) ), // License id null means it's free item
 			)
 		);
 		
@@ -197,20 +198,20 @@ class RestAPI extends Main {
 	/**
 	 * Check update for free product
 	 *
-	 * @param string $app_name
+	 * @param string $item_name
 	 * @param string $endpoint
 	 * @return void
 	 */
-	private function update_check_free( string $app_name ) {
+	private function update_check_free( string $item_name ) {
 
-		if ( ! Apps::isAppFree( $app_name ) ) {
-			wp_send_json_error( array( 'message' => _x( 'The app you\'ve requested update for is not free. Please correct your credentials and try again.', 'appstore', 'appstore' ) ) );
+		if ( ! Apps::isAppFree( $item_name ) ) {
+			wp_send_json_error( array( 'message' => _x( 'The item you\'ve requested update for is not free. Please correct your credentials and try again.', 'solidie', 'solidie' ) ) );
 			exit;
 		}
 
 		$this->update_check(
 			array(
-				'app_id' => Apps::getAppIdByProductPostName( $app_name ),
+				'item_id' => Apps::getAppIdByProductPostName( $item_name ),
 				'license_id' => null, // Means free app
 			)
 		);
@@ -218,45 +219,45 @@ class RestAPI extends Main {
 
 	private function update_download() {
 
-		$parse = Licensing::decrypt( $_GET['download'] );
+		$parse = Crypto::decrypt( $_GET['download'] );
 		$parse = $parse ? explode( ' ', $parse ) : array();
 
 		// Exit if the token is malformed
 		if ( count( $parse ) !== 4 || ! is_numeric( $parse[0] ) || ! is_numeric( $parse[1] ) || ! is_numeric( $parse[2] ) ) {
-			wp_send_json_error( array( 'message' => _x( 'Invalid Request', 'appstore', 'appstore' ) ) );
+			wp_send_json_error( array( 'message' => _x( 'Invalid Request', 'solidie', 'solidie' ) ) );
 			exit;
 		}
 
-		$app_id     = (int) $parse[0];
-		$license_id = (int) $parse[1]; // 0 means free app
+		$item_id    = (int) $parse[0];
+		$license_id = (int) $parse[1]; // 0 means free item
 		$token_time = (int) $parse[2];
 		$endpoint   = $parse[3];
 
 		// Exit if link is older than defined time
 		if ( $token_time < time() - ( self::DOWNLOAD_LINK_VALIDITY * 60 ) ) {
-			wp_send_json_error( array( 'message' => sprintf( _x( 'Download link expired as it is older than %d minutes.', 'appstore', 'appstore' ), self::DOWNLOAD_LINK_VALIDITY ) ) );
+			wp_send_json_error( array( 'message' => sprintf( _x( 'Download link expired as it is older than %d minutes.', 'solidie', 'solidie' ), self::DOWNLOAD_LINK_VALIDITY ) ) );
 			exit;
 		}
 
-		if ( ! $license_id && ! Apps::isAppFree( $app_id ) ) {
-			wp_send_json_error( array( 'message' => _x( 'Sorry! The app is no more free to download. You need to activate license first.', 'appstore', 'appstore' ) ) );
+		if ( ! $license_id && ! Apps::isAppFree( $item_id ) ) {
+			wp_send_json_error( array( 'message' => _x( 'Sorry! The item is no more free to download. You need to activate license first.', 'solidie', 'solidie' ) ) );
 			exit;
 		}
 
-		$release = Release::getRelease( $app_id );
+		$release = Release::getRelease( $item_id );
 		if ( ! $release ) {
-			wp_send_json_error( array( 'message' => _x( 'Something went wrong. No release found for this app.', 'appstore', 'appstore' ) ) );
+			wp_send_json_error( array( 'message' => _x( 'Something went wrong. No release found for this item.', 'solidie', 'solidie' ) ) );
 			exit;
 		}
 
 		$file_source = $release->file_path ?? $release->file_url;
-		$file_name   = $release->app_name . ' - ' . $release->version . '.' . pathinfo( basename( $file_source ), PATHINFO_EXTENSION );
+		$file_name   = $release->item_name . ' - ' . $release->version . '.' . pathinfo( basename( $file_source ), PATHINFO_EXTENSION );
 		if ( ! $file_source ) {
-			wp_send_json_error( array( 'message' => _x( 'Something went wrong. Release file not found.', 'appstore', 'appstore' ) ) );
+			wp_send_json_error( array( 'message' => _x( 'Something went wrong. Release file not found.', 'solidie', 'solidie' ) ) );
 			exit;
 		}
 
-		// License id 0 means it's free app
+		// License id 0 means it's free item
 		Hit::registerHit( 'update-download', $release->release_id, ($license_id===0 ? null : $license_id), $endpoint );
 		
 		nocache_headers();

@@ -1,9 +1,9 @@
 <?php
 
-namespace Solidie\AppStore\Models;
+namespace Solidie\Store\Models;
 
 use Error;
-use Solidie\AppStore\Main;
+use Solidie\Store\Main;
 
 class StoreMeta extends Main {
 	/**

@@ -1,6 +1,6 @@
 <?php
 
-namespace Solidie\AppStore\Models;
+namespace Solidie\Store\Models;
 
 class AdminSetting {
 	/**
@@ -8,7 +8,7 @@ class AdminSetting {
 	 *
 	 * @var string
 	 */
-	private static $name = '_app_store_admin_settings';
+	private static $name = '_item_store_admin_settings';
 
 	/**
 	 * Save admin settings
@@ -28,7 +28,7 @@ class AdminSetting {
 	}
 
 	/**
-	 * Get AppStore option
+	 * Get Solidie option
 	 *
 	 * @param string|null $key
 	 * @param string|int|array|bool|null $default

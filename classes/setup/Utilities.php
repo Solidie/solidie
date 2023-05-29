@@ -1,6 +1,6 @@
 <?php
 
-namespace Solidie\AppStore\Setup;
+namespace Solidie\Store\Setup;
 
 class Utilities {
 	public function __construct() {

@@ -1,8 +1,8 @@
 <?php
 
-namespace Solidie\AppStore\Models;
+namespace Solidie\Store\Models;
 
-use Solidie\AppStore\Main;
+use Solidie\Store\Main;
 
 class Store extends Main{
 
@@ -180,7 +180,7 @@ class Store extends Main{
 	}
 
 	/**
-	 * Returns apps in store
+	 * Returns items in store
 	 *
 	 * @param integer $store_id
 	 * @param integer $user_id
@@ -189,16 +189,16 @@ class Store extends Main{
 	public static function getApps( int $store_id ) {
 		global $wpdb;
 
-		$apps = $wpdb->get_results(
+		$items = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT product.post_title AS app_name, product.ID as product_id, app.app_id, product.post_status AS app_status
-				FROM {$wpdb->posts} product INNER JOIN " . self::table( 'apps' ) . " app ON product.ID=app.product_id
-				WHERE app.store_id=%d",
+				"SELECT product.post_title AS item_name, product.ID as product_id, item.item_id, product.post_status AS item_status
+				FROM {$wpdb->posts} product INNER JOIN " . self::table( 'items' ) . " item ON product.ID=item.product_id
+				WHERE item.store_id=%d",
 				$store_id
 			),
 			ARRAY_A
 		);
 		
-		return $apps;
+		return $items;
 	}
 }

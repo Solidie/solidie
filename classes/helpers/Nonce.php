@@ -1,10 +1,10 @@
 <?php
 
-namespace Solidie\AppStore\Helpers;
+namespace Solidie\Store\Helpers;
 
 class Nonce {
-	private static $name = '_appstore_nonce_name';
-	private static $action = '_appstore_nonce_action';
+	private static $name = '_solidie_nonce_name';
+	private static $action = '_solidie_nonce_action';
 
 	public static function generate() {
 		return array( 
@@ -24,7 +24,7 @@ class Nonce {
 		$matched     = $nonce_value && wp_verify_nonce( $nonce_value, self::$action );
 
 		if ( ! $matched ) {
-			wp_send_json_error( array( 'message' => _x( 'Session expired! Please reload the page and try again.', 'appstore', 'appstore' ) ) );
+			wp_send_json_error( array( 'message' => _x( 'Session expired! Please reload the page and try again.', 'solidie', 'solidie' ) ) );
 			exit;
 		}
 

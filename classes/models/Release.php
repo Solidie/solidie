@@ -1,8 +1,8 @@
 <?php
 
-namespace Solidie\AppStore\Models;
+namespace Solidie\Store\Models;
 
-use Solidie\AppStore\Main;
+use Solidie\Store\Main;
 
 class Release extends Main {
 	/**
@@ -33,28 +33,28 @@ class Release extends Main {
 	 *
 	 * @var string
 	 */
-	public static $release_meta_key = 'appstore_is_release_file';
+	public static $release_meta_key = 'solidie_is_release_file';
 
 	/**
 	 * Option key to set specific mime type to upload release files
 	 *
 	 * @var string
 	 */
-	public static $mime_option_key = 'appstore_allowed_mime_types';
+	public static $mime_option_key = 'solidie_allowed_mime_types';
 
 	/**
 	 * Specify where to store release files
 	 *
 	 * @var string
 	 */
-	public static $custom_dir = 'appstore-releases';
+	public static $custom_dir = 'solidie-releases';
 
 	/**
 	 * Replacable file id to make available in upload_dir hook callback
 	 *
 	 * @var int
 	 */
-	public static $app_id = 0;
+	public static $item_id = 0;
 
 	/**
 	 * Alter upload directory by hook
@@ -64,7 +64,7 @@ class Release extends Main {
 	 */
 	public static function custom_upload_directory( $upload ) {
 		// Define the new upload directory
-		$upload_dir = '/' . self::$custom_dir . '/' . self::$app_id;
+		$upload_dir = '/' . self::$custom_dir . '/' . self::$item_id;
 
 		// Get the current upload directory path and URL
 		$upload_path = $upload['basedir'] . $upload_dir;
@@ -111,21 +111,21 @@ class Release extends Main {
 	 * @return array
 	 */
 	public static function getAllowedMimes() {
-		return apply_filters( 'appstore_allowed_mime_types', self::$mimes );
+		return apply_filters( 'solidie_allowed_mime_types', self::$mimes );
 	}
 
 	/**
 	 * Create custom directory for release files
 	 *
-	 * @param int $app_id
+	 * @param int $item_id
 	 * @return void
 	 */
-	private static function createUploadDir( $app_id ) {
+	private static function createUploadDir( $item_id ) {
 		
 		$wp_upload_dir = wp_upload_dir(); // Get the path and URL of the wp-uploads directory
 
 		// Create the full path of the custom directory
-		$custom_dir_path = $wp_upload_dir['basedir'] . '/' . self::$custom_dir . '/' . $app_id;
+		$custom_dir_path = $wp_upload_dir['basedir'] . '/' . self::$custom_dir . '/' . $item_id;
 		$htaccess_path   = $wp_upload_dir['basedir'] . '/' . self::$custom_dir . '/.htaccess';
 
 		// Create the directory if it doesn't exist
@@ -138,26 +138,26 @@ class Release extends Main {
 			file_put_contents( $htaccess_path, 'deny from all' );
 		}
 
-		// To Do: Add restriction for nginx too
+		// To Do: nginx doesn't restrict per directory, rather show instruction in dashboard how to restrict directory.
 	}
 
 	/**
 	 * Process upload of a file using native WP methods
 	 *
-	 * @param int $app_id
+	 * @param int $item_id
 	 * @param array $file
 	 * @param string $file_title
 	 * @return void
 	 */
-	private static function uploadFile( $app_id, array $file, string $file_title ) {
+	private static function uploadFile( $item_id, array $file, string $file_title ) {
 		// Store to make available in upload_dir hook handler
-		self::$app_id = $app_id;
+		self::$item_id = $item_id;
 
 		// File id place holder
 		$attachment_id = null;
 
 		// Create necessary directory if not created already
-		self::createUploadDir( $app_id );
+		self::createUploadDir( $item_id );
 
 		// Add filters
 		add_filter( 'upload_dir', array( __CLASS__, 'custom_upload_directory' ) );
@@ -237,15 +237,15 @@ class Release extends Main {
 	 * @return mixed
 	 */
 	public static function pushRelease( array $data ) {
-		$app = Apps::getAppByID( $data['app_id'] );
-		if ( empty( $app ) ) {
-			return _x( 'App not found to release', 'appstore', 'appstore' );
+		$item = Apps::getAppByID( $data['item_id'] );
+		if ( empty( $item ) ) {
+			return _x( 'App not found to release', 'solidie', 'solidie' );
 		}
 		
 		$release = array(
 			'version'   => $data['version'],
 			'changelog' => $data['changelog'],
-			'app_id'    => $data['app_id'],
+			'item_id'    => $data['item_id'],
 		);
 
 		global $wpdb;
@@ -258,9 +258,9 @@ class Release extends Main {
 			}
 
 			// Upload new one
-			$file_id = self::uploadFile( $data['app_id'], $data['file'], $app->app_title . ' - ' . $data['version'] );
+			$file_id = self::uploadFile( $data['item_id'], $data['file'], $item->item_title . ' - ' . $data['version'] );
 			if ( ! $file_id ) {
-				return _x( 'Error in file saving!', 'appstore', 'appstore' );
+				return _x( 'Error in file saving!', 'solidie', 'solidie' );
 			}
 
 			// Link new one to the release
@@ -283,13 +283,13 @@ class Release extends Main {
 	/**
 	 * Get release history. No matter what the defined version is, the order will be latest first. 
 	 *
-	 * @param integer $app_id
+	 * @param integer $item_id
 	 * @param integer|null $page
 	 * @param integer|null $limit
 	 * @param string|null $version
 	 * @return array
 	 */
-	public static function getReleases( int $app_id, int $page = 1, int $limit = 20, string $version = null ) {
+	public static function getReleases( int $item_id, int $page = 1, int $limit = 20, string $version = null ) {
 		global $wpdb;
 
 		$offset         = $limit * ( $page - 1 );
@@ -297,12 +297,12 @@ class Release extends Main {
 
 		$releases = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT release.*, product.post_title AS app_name, UNIX_TIMESTAMP(release.release_date) as release_unix_timestamp 
+				"SELECT release.*, product.post_title AS item_name, UNIX_TIMESTAMP(release.release_date) as release_unix_timestamp 
 				FROM ".self::table( 'releases' )." release
-				INNER JOIN ".self::table('apps')." app ON app.app_id=release.app_id
-				INNER JOIN {$wpdb->posts} product ON app.product_id=product.ID
-				WHERE release.app_id=%d ".$version_clause." ORDER BY release.release_date DESC LIMIT %d, %d",
-				$app_id,
+				INNER JOIN ".self::table('items')." item ON item.item_id=release.item_id
+				INNER JOIN {$wpdb->posts} product ON item.product_id=product.ID
+				WHERE release.item_id=%d ".$version_clause." ORDER BY release.release_date DESC LIMIT %d, %d",
+				$item_id,
 				$offset,
 				$limit
 			)
@@ -323,7 +323,7 @@ class Release extends Main {
 			$release->file_url  = $file_url;
 			$release->file_path = $file_path ? $file_path : null;
 			$release->mime_type = get_post_mime_type( $release->file_id );
-			$release->app_url   = get_permalink( $release->app_id );
+			$release->item_url  = get_permalink( $release->item_id );
 			
 			// Store the release in the new array
 			$new_array[] = $release;
@@ -335,12 +335,12 @@ class Release extends Main {
 	/**
 	 * Undocumented function
 	 *
-	 * @param integer $app_id
+	 * @param integer $item_id
 	 * @param string|null $version
 	 * @return object
 	 */
-	public static function getRelease( int $app_id, string $version = null ) {
-		$relases = self::getReleases( $app_id, 1, 1, $version );
+	public static function getRelease( int $item_id, string $version = null ) {
+		$relases = self::getReleases( $item_id, 1, 1, $version );
 		return ( is_array( $relases ) && ! empty( $relases ) ) ? $relases[0] : null;
 	}
 }

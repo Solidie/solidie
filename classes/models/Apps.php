@@ -1,22 +1,22 @@
 <?php
 
-namespace Solidie\AppStore\Models;
+namespace Solidie\Store\Models;
 
-use Solidie\AppStore\Main;
+use Solidie\Store\Main;
 
 class Apps extends Main{
 	/**
-	 * Licensing variation key for apps
+	 * Licensing variation key for items
 	 */
 	const LICENSING_VARIATION = 'licensing-variation';
 
 	/**
 	 * Free product identifer meta key
 	 */
-	const FREE_META_KEY = 'appstore_app_is_free';
+	const FREE_META_KEY = 'solidie_item_is_free';
 	
 	/**
-	 * Get app list that is accessible by a user. 
+	 * Get item list that is accessible by a user. 
 	 *
 	 * @param int $user_id
 	 * @return array
@@ -26,18 +26,18 @@ class Apps extends Main{
 	}
 
 	/**
-	 * Get associated product id by app id
+	 * Get associated product id by item id
 	 *
-	 * @param integer $app_id
+	 * @param integer $item_id
 	 * @return int
 	 */
-	public static function getProductID( int $app_id ) {
+	public static function getProductID( int $item_id ) {
 		global $wpdb;
 
 		$id = $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT product_id FROM " . self::table( 'apps' ) . " WHERE app_id=%d",
-				$app_id
+				"SELECT product_id FROM " . self::table( 'items' ) . " WHERE item_id=%d",
+				$item_id
 			)
 		);
 
@@ -45,27 +45,27 @@ class Apps extends Main{
 	}
 
 	/**
-	 * Create or update app
+	 * Create or update item
 	 *
-	 * @param array $app_data
+	 * @param array $item_data
 	 * @param int $store_id
 	 * @return int
 	 */
-	public static function updateApp( int $store_id, array $app_data ) {
-		$app = array();
+	public static function updateApp( int $store_id, array $item_data ) {
+		$item = array();
 
-		$app['app_id']     = ! empty( $app_data['app_id'] ) ? $app_data['app_id'] : 0;
-		$app['product_id'] = ! empty( $app_data['app_id'] ) ? self::getProductID( $app['app_id'] ) : 0;
-		$app['app_name']   = ! empty( $app_data['app_name'] ) ? $app_data['app_name'] : 'Untitled App';
+		$item['item_id']    = ! empty( $item_data['item_id'] ) ? $item_data['item_id'] : 0;
+		$item['product_id'] = ! empty( $item_data['item_id'] ) ? self::getProductID( $item['item_id'] ) : 0;
+		$item['item_name']  = ! empty( $item_data['item_name'] ) ? $item_data['item_name'] : 'Untitled App';
 
 		// Sync core product first
-		$product_id = self::syncProduct( $app, $store_id );
+		$product_id = self::syncProduct( $item, $store_id );
 		if ( empty( $product_id ) ) {
 			return false;
 		}
 
 		// Update product id as it might've been created newly
-		$app['product_id'] = $product_id;
+		$item['product_id'] = $product_id;
 		
 		// To Do: Sync variations and other stuffs
 	}
@@ -73,28 +73,28 @@ class Apps extends Main{
 	/**
 	 * Sync product core
 	 *
-	 * @param array $app
+	 * @param array $item
 	 * @param integer $store_id
 	 * @return int
 	 */
-	private static function syncProduct( array $app, int $store_id ) {
+	private static function syncProduct( array $item, int $store_id ) {
 
 		// Update existing product info id exists
 		// To Do: Check if the propduct is in the store actually
-		if ( ! empty( $app['app_id'] ) ) {
+		if ( ! empty( $item['item_id'] ) ) {
 			wp_update_post(
 				array(
-					'ID' => $app['product_id'],
-					'post_title' => $app['app_name']
+					'ID'         => $item['product_id'],
+					'post_title' => $item['item_name']
 				)
 			);
 			
-			return $app['product_id'];
+			return $item['product_id'];
 		} 
 		
 		// Create new product
 		$product = new \WC_Product_Simple();
-		$product->set_name( $app['app_name'] );
+		$product->set_name( $item['item_name'] );
 		// $product->set_slug( 'medium-size-wizard-hat-in-new-york' );
 		$product->set_regular_price( 500.00 ); // in current shop currency
 		$product->set_short_description( '<p>Here it is... A WIZARD HAT!</p><p>Only here and now.</p>' );
@@ -107,10 +107,10 @@ class Apps extends Main{
 		// Return the new ID
 		$product_id = $product->get_id();
 
-		// Create AppStore entry
+		// Create Solidie entry
 		global $wpdb;
 		$wpdb->insert( 
-			self::table( 'apps' ), 
+			self::table( 'items' ), 
 			array(
 				'product_id' => $product_id,
 				'store_id'   => $store_id
@@ -134,53 +134,53 @@ class Apps extends Main{
 	/**
 	 * Get release log
 	 *
-	 * @param integer $app_id
+	 * @param integer $item_id
 	 * @return array
 	 */
-	public static function getReleases( int $app_id) {
+	public static function getReleases( int $item_id) {
 		return array();
 	}
 
 	/**
-	 * Get linked app id by WooCommerce product id
+	 * Get linked item id by WooCommerce product id
 	 *
 	 * @param integer $product_id
 	 * @return object|null
 	 */
 	public static function getAppByProductId( int $product_id ) {
 		global $wpdb;
-		$app = $wpdb->get_row(
+		$item = $wpdb->get_row(
 			$wpdb->prepare(
-				"SELECT * FROM " . self::table( 'apps' ) . " WHERE product_id=%d",
+				"SELECT * FROM " . self::table( 'items' ) . " WHERE product_id=%d",
 				$product_id
 			)
 		);
 
-		return ( $app && is_object( $app ) ) ? $app : null;
+		return ( $item && is_object( $item ) ) ? $item : null;
 	}
 	
 	/**
-	 * Get app by WooCommerce app id
+	 * Get item by item id
 	 *
-	 * @param integer $app_id
+	 * @param integer $item_id
 	 * @return object|null
 	 */
-	public static function getAppByID( int $app_id ) {
+	public static function getAppByID( int $item_id ) {
 		global $wpdb;
-		$app = $wpdb->get_row(
+		$item = $wpdb->get_row(
 			$wpdb->prepare(
-				"SELECT app.*, product.post_title AS app_title FROM " . self::table( 'apps' ) . " app 
-				INNER JOIN {$wpdb->posts} product ON app.product_id=product.ID 
-				WHERE app.app_id=%d",
-				$app_id
+				"SELECT item.*, product.post_title AS item_title FROM " . self::table( 'items' ) . " item 
+				INNER JOIN {$wpdb->posts} product ON item.product_id=product.ID 
+				WHERE item.item_id=%d",
+				$item_id
 			)
 		);
 
-		return ( $app && is_object( $app ) ) ? $app : null;
+		return ( $item && is_object( $item ) ) ? $item : null;
 	}
 
 	/**
-	 * Get app id associated with woocommerce product post name.
+	 * Get item id associated with woocommerce product post name.
 	 *
 	 * @param string $post_name
 	 * @return int|null
@@ -188,37 +188,37 @@ class Apps extends Main{
 	public static function getAppIdByProductPostName( string $post_name ) {
 		global $wpdb;
 
-		$app_id = $wpdb->get_var(
+		$item_id = $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT app.app_id FROM ".self::table('apps')." app INNER JOIN {$wpdb->posts} product ON app.product_id=product.ID WHERE product.post_type='product' AND product.post_name=%s LIMIT 1",
+				"SELECT item.item_id FROM ".self::table('items')." item INNER JOIN {$wpdb->posts} product ON item.product_id=product.ID WHERE product.post_type='product' AND product.post_name=%s LIMIT 1",
 				$post_name
 			)
 		);
 
-		return $app_id ? $app_id : null;
+		return $item_id ? $item_id : null;
 	}
 
 	/**
-	 * Check if a product is appstore app
+	 * Check if a product is solidie item
 	 *
 	 * @param string|int $product_id_or_name
 	 * @return boolean
 	 */
 	public static function isProductApp( $product_id_or_name ) {
 		$product_id = is_numeric( $product_id_or_name ) ? $product_id_or_name : self::getAppIdByProductPostName( $product_id_or_name );
-		$app = self::getAppByProductId( $product_id );
-		return $app !== null;
+		$item = self::getAppByProductId( $product_id );
+		return $item !== null;
 	}
 
 	/**
-	 * Check if an associated app is free or not
+	 * Check if an associated item is free or not
 	 *
-	 * @param int|string $app_id_or_name
+	 * @param int|string $item_id_or_name
 	 * @return boolean
 	 */
-	public static function isAppFree( $app_id_or_name ) {
-		$app_id = is_numeric( $app_id_or_name ) ? $app_id_or_name : self::getAppIdByProductPostName( $app_id_or_name );
-		$product_id = self::getProductID( $app_id );
+	public static function isAppFree( $item_id_or_name ) {
+		$item_id = is_numeric( $item_id_or_name ) ? $item_id_or_name : self::getAppIdByProductPostName( $item_id_or_name );
+		$product_id = self::getProductID( $item_id );
 		return get_post_meta( $product_id, self::FREE_META_KEY, true ) == true;
 	}
 
@@ -243,7 +243,7 @@ class Apps extends Main{
 	}
 
 	/**
-	 * Link apps to customer after order complete
+	 * Link items to customer after order complete
 	 *
 	 * @param integer $order_id
 	 * @return void
@@ -257,40 +257,40 @@ class Apps extends Main{
 		global $wpdb;
 		$order               = wc_get_order( $order_id );
 		$order_complete_date = $order->get_date_completed();
-		$apps                = self::getAppsFromOrder( $order_id );
+		$items               = self::getAppsFromOrder( $order_id );
 		$commission_rate     = self::getSiteCommissionRate();
 
-		foreach ( $apps as $app ) {
+		foreach ( $items as $item ) {
 			// Skip if already added
-			if ( self::getPurchaseByOrderVariation( $order_id, $app['variation_id'] ) ) {
+			if ( self::getPurchaseByOrderVariation( $order_id, $item['variation_id'] ) ) {
 				continue;
 			}
 
 			// Calculate commission
-			$sale_price   = (int)$app['sale_price'];
+			$sale_price   = (int)$item['sale_price'];
 			$commission   = ( $commission_rate / 100 ) * $sale_price;
 
 			// Variation validity
-			$expires_on  = $app['licensing']['validity_days'] ? ( new \DateTime( $order_complete_date ) )->modify('+'.$app['licensing']['validity_days'].' days')->format('Y-m-d') : null;
+			$expires_on  = $item['licensing']['validity_days'] ? ( new \DateTime( $order_complete_date ) )->modify('+'.$item['licensing']['validity_days'].' days')->format('Y-m-d') : null;
 			
-			// Insert the app in the sales table
+			// Insert the item in the sales table
 			$wpdb->insert(
 				self::table( 'sales' ),
 				array(
-					'app_id'             => $app['app_id'],
+					'item_id'            => $item['item_id'],
 					'customer_id'		 => wc_get_order( $order_id )->get_customer_id(),
 					'order_id'           => $order_id,
-					'variation_id'       => $app['variation_id'],
-					'sale_price'         => $app['sale_price'],
+					'variation_id'       => $item['variation_id'],
+					'sale_price'         => $item['sale_price'],
 					'commission'         => $commission,
 					'commission_rate'    => $commission_rate,
-					'license_key_limit'  => $app['licensing']['license_key_limit'],
+					'license_key_limit'  => $item['licensing']['license_key_limit'],
 					'license_expires_on' => $expires_on,
 				)
 			);
 
 			// Generate license keys
-			Licensing::generateLicenseKeys( $wpdb->insert_id, $app['licensing']['license_key_limit'] );
+			Licensing::generateLicenseKeys( $wpdb->insert_id, $item['licensing']['license_key_limit'] );
 		}
 	}
 
@@ -303,19 +303,19 @@ class Apps extends Main{
 	public static function processSubscriptionRenewal( $subscription ) {
 		global $wpdb;
 		
-		$apps  = self::filterAppsFromOrderItems( $subscription->get_items() );
+		$items  = self::filterAppsFromOrderItems( $subscription->get_items() );
 
-		foreach ( $apps as $app ) {
+		foreach ( $items as $item ) {
 			// Don't update if validity is null which means lifetime license
-			if ( ! $app['licensing']['validity_days'] ) {
+			if ( ! $item['licensing']['validity_days'] ) {
 				continue;
 			}
 
 			$wpdb->query(
 				$wpdb->prepare(
-					"UPDATE ".self::table( 'sales' )." SET license_expires_on=DATE_ADD(license_expires_on, INTERVAL %d DAY) WHERE app_id=%d AND license_expires_on IS NOT NULL",
-					$app['licensing']['validity_days'],
-					$app['app_id']
+					"UPDATE ".self::table( 'sales' )." SET license_expires_on=DATE_ADD(license_expires_on, INTERVAL %d DAY) WHERE item_id=%d AND license_expires_on IS NOT NULL",
+					$item['licensing']['validity_days'],
+					$item['item_id']
 				)
 			);
 		}
@@ -334,7 +334,7 @@ class Apps extends Main{
 	}
 
 	/**
-	 * Return only purchased app info from a mixed cart
+	 * Return only purchased item info from a mixed cart
 	 *
 	 * @param integer $order_id
 	 * @return array
@@ -345,38 +345,38 @@ class Apps extends Main{
 	}
 
 	/**
-	 * Filter apps from order items
+	 * Filter items from order items
 	 *
 	 * @param array $items
 	 * @return array
 	 */
 	public static function filterAppsFromOrderItems( array $items ) {
-		$apps  = array();
+		$items  = array();
 		foreach ( $items as $item ) {
 			$product_type = $item->get_product()->get_type();
 			$product_id   = $item->get_product_id();
 			$variation_id = $item->get_variation_id();
 			$variation    = new \WC_Product_Variation( $variation_id );
-			$app          = self::getAppByProductId( $product_id );
+			$item          = self::getAppByProductId( $product_id );
 			$var_info     = self::getVariationInfo( $variation );
 
-			// Skip non-app products or unsupported variation.
-			if ( ! $app || ! in_array( $product_type, array( 'subscription_variation', 'variation' ) )  || ! $var_info ) {
+			// Skip non-item products or unsupported variation.
+			if ( ! $item || ! in_array( $product_type, array( 'subscription_variation', 'variation' ) )  || ! $var_info ) {
 				continue;
 			}
 
 			// To Do: Get sale price in USD currency
-			$apps[] = array(
+			$items[] = array(
 				'item'			 => $item,
 				'product_id'     => $product_id,
-				'app_id'         => $app->app_id,
+				'item_id'        => $item->item_id,
 				'variation_id'   => $variation_id,
 				'licensing'      => $var_info,
 				'sale_price'     => $variation->get_sale_price(),
 			);
 		}
 
-		return $apps;
+		return $items;
 	}
 
 	/**

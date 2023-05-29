@@ -1,9 +1,9 @@
 <?php
 
-namespace Solidie\AppStore\Setup;
+namespace Solidie\Store\Setup;
 
-use Solidie\AppStore\Helpers\Nonce;
-use Solidie\AppStore\Main;
+use Solidie\Store\Helpers\Nonce;
+use Solidie\Store\Main;
 
 class Scripts extends Main {
 	public function __construct() {
@@ -20,15 +20,15 @@ class Scripts extends Main {
 			'nonce'    => Nonce::generate()
 		);
 
-		return apply_filters( 'appstore_script_data', $data );
+		return apply_filters( 'solidie_script_data', $data );
 	}
 
 	public function commonScripts() {
-		wp_add_inline_script( 'jquery', 'window.AppStore = ' . json_encode( $this->getAppData() ), 'before' );
+		wp_add_inline_script( 'jquery', 'window.Solidie = ' . json_encode( $this->getAppData() ), 'before' );
 	}
 
 	public function adminScripts() {
-		wp_enqueue_script( 'appstore-admin-script', self::$configs->dist_url . 'admin-dashboard.js', array( 'jquery' ), self::$configs->version );
+		wp_enqueue_script( 'solidie-admin-script', self::$configs->dist_url . 'admin-dashboard.js', array( 'jquery' ), self::$configs->version );
 	}
 
 	public function frontendScripts() {

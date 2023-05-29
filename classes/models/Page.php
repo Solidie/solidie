@@ -1,6 +1,6 @@
 <?php
 
-namespace Solidie\AppStore\Models;
+namespace Solidie\Store\Models;
 
 class Page {
 	public static function getPageList() {

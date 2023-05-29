@@ -7,7 +7,7 @@ html, body {
   font-family: "Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif
 }
 
-#AppStore_Dashboard{
+#Solidie_Dashboard{
 	// Sass tils
 	$color-fiord: #394263; // sidenav bg & dark text
 	$color-white: #FFF; // card bg
@@ -52,7 +52,7 @@ html, body {
 		font-weight: bold;
 	}
 
-	.row-appstore {
+	.row-solidie {
 		display: flex;
 
 		&--align-v-center {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Solidie\AppStore\Models;
+namespace Solidie\Store\Models;
 
 class FrontendDashboard{
 	public static function getPageID() {
