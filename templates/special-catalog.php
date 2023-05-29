@@ -22,7 +22,7 @@
     </script>
 </head>
 
-<body class="w-full h-full bg-primary text-tertiary flex justify-center">
+<body class="w-full h-full bg-content-bg text-tertiary flex justify-center">
     <!-- Fahad: Use raw HTML in this page -->
 
     <!-- Start Single Product Coding Here -->
