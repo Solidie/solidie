@@ -79,7 +79,7 @@ class FrontendDashboard extends Main {
 	 * @return string
 	 */
 	public function force_template_for_dashboard( $template ) {
-		if ( is_page() && get_the_ID() == AdminSetting::get( 'dashboard_page_id' ) ) {
+		if ( FrontendDashboardModel::is_dashboard() ) {
 			$template = self::$configs->dir . 'templates/frontend-dashboard.php';
 		}
 

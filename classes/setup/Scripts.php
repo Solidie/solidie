@@ -4,6 +4,7 @@ namespace Solidie\Store\Setup;
 
 use Solidie\Store\Helpers\Nonce;
 use Solidie\Store\Main;
+use Solidie\Store\Models\FrontendDashboard;
 
 class Scripts extends Main {
 	public function __construct() {
@@ -28,10 +29,16 @@ class Scripts extends Main {
 	}
 
 	public function adminScripts() {
-		wp_enqueue_script( 'solidie-admin-script', self::$configs->dist_url . 'admin-dashboard.js', array( 'jquery' ), self::$configs->version );
+		if ( get_admin_page_parent() == self::$configs->root_menu_slug  ) {
+			wp_enqueue_script( 'solidie-admin-script', self::$configs->dist_url . 'admin-dashboard.js', array( 'jquery' ), self::$configs->version );
+		}
 	}
 
 	public function frontendScripts() {
-
+		if ( FrontendDashboard::is_dashboard() ) {
+			wp_enqueue_script( 'appstore-frontend-dashboard-script', self::$configs->dist_url . 'frontend-dashboard.js', array( 'jquery' ), self::$configs->version, true );
+		} else {
+			wp_enqueue_script( 'appstore-frontend-script', self::$configs->dist_url . 'admin-dashboard.js', array( 'jquery' ), self::$configs->version );
+		}
 	}
 }

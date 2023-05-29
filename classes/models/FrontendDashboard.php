@@ -7,6 +7,10 @@ class FrontendDashboard{
 		return AdminSetting::get( 'dashboard_page_id' );
 	}
 
+	public static function is_dashboard() {
+		return is_page() && get_the_ID() == self::getPageID();
+	}
+
 	/**
 	 * Generate dashboard URL for specific path
 	 *

@@ -18,6 +18,11 @@ module.exports = (env, options) => {
 				{
 					test: /\.(s(a|c)ss)$/,
 					use: ['style-loader','css-loader', 'sass-loader']
+				},
+				{
+					test: /\.css$/i,
+					include: path.resolve(__dirname, './'),
+					use: ['style-loader', 'css-loader', 'postcss-loader'],
 				}
 			],
 		},

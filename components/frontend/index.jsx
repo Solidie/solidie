@@ -6,4 +6,3 @@ function Gallery() {
 		This is item gallery
 	</div>
 }
-
