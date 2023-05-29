@@ -44,7 +44,7 @@ class AdminPage extends Main {
 	 * @return void
 	 */
 	public function mainPage() {
-		?>This is content<?php
+		?>This is main page content<?php
 	}
 	
 	/**

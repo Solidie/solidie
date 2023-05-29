@@ -15,7 +15,6 @@
 require_once __DIR__ . '/vendor/autoload.php';
 
 add_action( 'plugins_loaded', function(){
-	global $wpdb;
 
 	$payload = array(
 		'item_name'      => 'appstore',

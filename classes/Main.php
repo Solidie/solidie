@@ -15,6 +15,7 @@ use Solidie\Store\Setup\WooCommerceSubscription;
 use Solidie\Store\Models\AdminSetting;
 
 use Solidie\SalesReporter\Report;
+use Solidie\Store\Setup\SingleProduct;
 use Solidie\Updater\Updater;
 
 class Main {
@@ -49,6 +50,7 @@ class Main {
 		new FrontendDashboard();
 		new WooCommerce();
 		new WooCommerceSubscription();
+		new SingleProduct();
 		new RestAPI();
 		new Media();
 
