@@ -9,6 +9,7 @@ import {
   PurchasedProductsIcon,
 } from "./icons";
 import { Tooltip } from "../ui";
+import { cn } from "../../lib/utils";
 
 const Sidebar = ({ sidebarOpen }) => {
   const location = useLocation();
@@ -66,12 +67,12 @@ const Sidebar = ({ sidebarOpen }) => {
   return (
     <>
       <div
-        className={
-          " bg-grainy-texture z-10 flex scrollbar-track-transparent flex-col px-5 py-4 w-full md:w-max min-h-max h-full transition-all  " +
-          (sidebarOpen
+        className={cn(
+          " z-10 flex scrollbar-track-transparent flex-col px-5 py-4 w-full md:w-max min-h-max h-full transition-all  ",
+          sidebarOpen
             ? " gap-4  min-w-max  sticky left-0 xl:relative "
-            : " gap-5  hidden sm:flex ")
-        }
+            : " gap-5  hidden sm:flex "
+        )}
       >
         {groupedNavigation.map(({ groupName, navigation }, idx) => (
           <div
