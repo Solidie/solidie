@@ -1,18 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import * as Form from "@radix-ui/react-form";
-import { Input, UploadImage, Select, MultiSelect } from "../ui";
+import { Input, UploadImage, Select, MultiSelect, Checkbox } from "../ui";
 
-const selectFieldItemsList = [
-  "Unpublished",
-  "Published",
-];
+const selectFieldItemsList = ["Unpublished", "Published"];
 const selectFieldDisableItemsList = [];
 const selectFieldAriaLabel = "Application Status";
 
-const FormDemo = () => (
-  <>
-    <Form.Root className=" min-h-max bg-lightest-version p-4 rounded-2xl shadow-md flex flex-col gap-3">
-      <div className="flex gap-4 flex-wrap w-full">
+const FormDemo = () => {
+  const [plan, setPlan] = useState([]);
+
+  return (
+    <>
+      <Form.Root className=" min-h-max bg-tertiary/20 -lightest-version p-4 rounded-2xl shadow-md flex flex-col gap-3">
+        <div className="flex gap-4 flex-wrap w-full">
           <Form.Field
             name="appName"
             className="flex flex-col gap-1 w-full sm:max-w-xs min-w-full  sm:min-w-max"
@@ -68,28 +68,35 @@ const FormDemo = () => (
             {/* </Form.Control> */}
           </Form.Field>
           <Form.Field
-            name="plansForApps"
-            className="flex flex-col gap-1 sm:max-w-full w-max"
+            name="banner"
+            className="flex flex-col gap-1 w-full  sm:max-w-xs min-w-full  sm:min-w-max"
           >
             <div className="flex items-base justify-between">
-              <Form.Label className="Label">Plans For App</Form.Label>
+              <Form.Label className="Label">Banner</Form.Label>
               <Form.Message match="valueMissing" className="FieldMessage">
                 Please enter your email
               </Form.Message>
-              <Form.Message match="typeMismatch" className="FieldMessage">
-                Please provide a valid email
-              </Form.Message>
             </div>
             {/* <Form.Control asChild={false} className="w-full"> */}
-            <MultiSelect />
+            <UploadImage />
             {/* </Form.Control> */}
           </Form.Field>
         </div>
-      <Form.Submit asChild>
-        <button className="Button mt-2">Submit</button>
-      </Form.Submit>
-    </Form.Root>
-  </>
-);
+        <Form.Field
+            name="plansForApps"
+            className="flex flex-col gap-1 sm:max- w-xs min-w-full  sm:min  -w-max"
+          >
+            <div className="flex items-base justify-between">
+              <Form.Label className="Label">Plans For App</Form.Label>
+            </div>
+            <Checkbox  />
+          </Form.Field>
+        <Form.Submit asChild>
+          <button className="Button mt-2">Submit</button>
+        </Form.Submit>
+      </Form.Root>
+    </>
+  );
+};
 
 export default FormDemo;

@@ -6,7 +6,7 @@ import InputPassword from "../ui/Password.jsx";
 
 const FormDemo = () => (
   <>
-    <Form.Root className=" min-h-max bg-lightest-version p-4 rounded-2xl shadow-md flex flex-col gap-3">
+    <Form.Root className=" min-h-max bg-tertiary/20 lightest-version p-4 rounded-2xl shadow-md flex flex-col gap-3">
       <div className="flex justify-between flex-wrap sm:flex-nowrap gap-4 max-w-full">
         <div className="flex flex-col gap-y-4 flex-wrap max-w-2xl w-auto">
           <div className="flex flex-wrap justify-between items-center gap-4 h-max max-w-full w-auto">

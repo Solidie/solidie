@@ -33,12 +33,9 @@ export default SubscriptionTable;
 
 const Row = ({ idx }) => {
   return (
-    <div className="flex-grow flex-wrap gap-5 text-base flex items-center justify-between w-full bg-white rounded-lg px-4 py-4 transition-all delay-75 ">
+    <div className="flex-grow flex-wrap gap-5 text-base flex items-center justify-between w-full bg-tertiary/10 rounded-lg px-4 py-4 transition-all delay-75 ">
       <div className="flex gap-4 items-center">
         <img src={`https://img.logoipsum.com/${ 220 + idx  }.svg`} className="w-32 max-h-10" alt="" />
-        <div className="bg-primary p-2 rounded-md text-xs font-bold">
-          Expired
-        </div>
       </div>
       <div className="">
         Plan: <span className="font-bold">Individual (Lifetime) ...</span>

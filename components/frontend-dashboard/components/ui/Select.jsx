@@ -17,6 +17,7 @@ const Select = React.forwardRef(
       itemsList,
       onChange,
       value,
+      className
     },
     forwardRef
   ) => {
@@ -27,7 +28,7 @@ const Select = React.forwardRef(
         onValueChange={onChange}
       >
         <SelectPrimitive.Trigger asChild aria-label={ariaLabel}>
-          <div className="Input flex justify-between items-center">
+          <div className={clsx("Input flex justify-between items-center", className)}>
             {value === "" ? (
               <SelectPrimitive.Value placeholder={placeholder}>
                 {placeholder}
@@ -57,7 +58,7 @@ const Select = React.forwardRef(
                   key={`${f}-${i}`}
                   value={f.toLowerCase()}
                   className={clsx(
-                    "relative flex items-center px-8 py-2 rounded-md text-sm text-tertiary font-bold dark:text-tertiary/30 focus:bg-lightest-version dark:focus:bg-tertiary/90",
+                    "relative flex items-center px-8 py-2 rounded-md text-sm text-tertiary font-bold dark:text-tertiary/30 focus:bg-tertiary/20 dark:focus:bg-tertiary/90",
                     "radix-disabled:opacity-50",
                     "focus:outline-none select-none"
                   )}

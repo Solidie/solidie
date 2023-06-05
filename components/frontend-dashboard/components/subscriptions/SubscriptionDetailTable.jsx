@@ -24,7 +24,7 @@ export const SubscriptionDetailTable = () => {
         header: "Status",
         size: 20,
         Cell: ({ cell }) => {
-            return <div className="!bg-tertiary text-lightest-version rounded-lg px-2 py-1 shadow-md w-max">{cell.getValue()}</div>
+            return <div className="!bg-tertiary text-primary rounded-lg px-2 py-1 shadow-md w-max">{cell.getValue()}</div>
         }
       },
     ],
@@ -38,17 +38,17 @@ export const SubscriptionDetailTable = () => {
       data={data}
       state={{ density: "compact" }}
       enableTopToolbar={false}
-      muiTopToolbarProps={{ className: "!bg-lightest-version" }}
-      muiBottomToolbarProps={{ className: "!bg-lightest-version" }}
+      muiTopToolbarProps={{ className: "!bg-primary" }}
+      muiBottomToolbarProps={{ className: "!bg-primary" }}
       muiTableBodyCellProps={{
-        className: "!text-tertiary !bg-lightest-version ",
+        className: "!text-tertiary !bg-primary ",
       }}
       muiTableHeadCellProps={{
-        className: "!text-tertiary !bg-lightest-version font-black ",
+        className: "!text-tertiary !bg-primary font-black ",
       }}
       muiTablePaperProps={{
         className:
-          " z-10 !shadow-none !rounded-2xl !bg-lightest-version overflow-hidden px-6 pt-4",
+          " z-10 !shadow-none !rounded-2xl !bg-primary overflow-hidden px-6 pt-4",
       }}
       enableRowNumbers
     />

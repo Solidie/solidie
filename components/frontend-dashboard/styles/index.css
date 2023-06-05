@@ -73,3 +73,7 @@
       ),
     #f6f7fd;
 }
+
+.bg-grainy-texture {
+  background: url("../assets/BackgroundNoice.svg");
+}
