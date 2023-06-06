@@ -19,6 +19,7 @@ const InventoryReleaseManagment = (params) => {
       </div>
       {/* Apps Table */}
       <div className="bg-tertiary/20 p-2 space-y-4 rounded-lg">
+        <h2 className="font-bold px-2">Recent Release, Application</h2>
         <ReleaseManagmentTable />
       </div>
       <ApplicationVersionForm />

@@ -31,7 +31,7 @@ const Reports = () => {
       <div className="flex justify-between items-center w-full">
         <h1 className="text-3xl font-bold">Reports</h1>
       </div>
-      <div className="text-tertiary grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+      <div className="bg-tertiary/20 text-tertiary grid md:grid-cols-2 lg:grid-cols-3 gap-5">
         <div className="border border-tertiary/60 border-dashed rounded-md p-2 flex-grow">
           <div className="flex flex-col justify-between reports-green-card-gradient rounded-md h-28 w-full shadow-lg px-5 py-3">
             <div className="font-bold">

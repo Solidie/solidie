@@ -1,13 +1,31 @@
 import React, { useState } from "react";
 import * as Form from "@radix-ui/react-form";
-import { Input, UploadImage, Select, MultiSelect, Checkbox } from "../ui";
+import { Input, UploadImage, Select } from "../ui";
+import PlansManagement from './PlansManagement.jsx';
 
 const selectFieldItemsList = ["Unpublished", "Published"];
 const selectFieldDisableItemsList = [];
 const selectFieldAriaLabel = "Application Status";
 
+
 const FormDemo = () => {
-  const [plan, setPlan] = useState([]);
+  const [plansDetail, setPlansDetail] = useState([
+    {
+      name: "Startup",
+      cost: 0,
+      selected: true,
+    },
+    {
+      name: "Business",
+      cost: 0,
+      selected: false,
+    },
+    {
+      name: "Enterprise",
+      cost: 0,
+      selected: true,
+    },
+  ]);
 
   return (
     <>
@@ -87,9 +105,9 @@ const FormDemo = () => {
             className="flex flex-col gap-1 sm:max- w-xs min-w-full  sm:min  -w-max"
           >
             <div className="flex items-base justify-between">
-              <Form.Label className="Label">Plans For App</Form.Label>
+              <Form.Label className="Label">Plans For App <pre className="text-tertiary/60">Select a Box that you want to use!</pre></Form.Label>
             </div>
-            <Checkbox  />
+            <PlansManagement {...{ plansDetail }}  />
           </Form.Field>
         <Form.Submit asChild>
           <button className="Button mt-2">Submit</button>

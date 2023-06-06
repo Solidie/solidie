@@ -1,24 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { cn } from "../../lib/utils";
 
-export default function Example() {
-  const [plans, setPlans] = useState([
-    {
-      name: "Startup",
-      cost: 0,
-      selected: true,
-    },
-    {
-      name: "Business",
-      cost: 0,
-      selected: false,
-    },
-    {
-      name: "Enterprise",
-      cost: 0,
-      selected: true,
-    },
-  ]);
+export default function Example({ plansDetail }) {
+  const [plans, setPlans] = useState(plansDetail);
 
   useEffect(() => {
     console.log(plans);
@@ -35,7 +19,7 @@ export default function Example() {
               className={cn(
                 plan.selected
                   ? "bg-tertiary text-white"
-                  : "bg-primary",
+                  : "bg-primary opacity-80",
                 "flex flex-col rounded-lg px-5 py-4 shadow-md focus:outline-none w-full space-y-1 max-w-sm"
               )}
             >

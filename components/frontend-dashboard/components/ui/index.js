@@ -7,7 +7,6 @@ import UploadImage from "./UploadImage.jsx";
 import MultiSelect from "./MultiSelect.jsx";
 import ComboBox from "./ComboBox.jsx";
 import AccordionInner from "./AccordionInner.jsx";
-import Checkbox from "./Checkbox.jsx";
 
 export {
   Input,
@@ -19,5 +18,4 @@ export {
   MultiSelect,
   ComboBox,
   AccordionInner,
-  Checkbox
 };

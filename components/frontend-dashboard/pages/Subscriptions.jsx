@@ -1,6 +1,7 @@
 import React from 'react'
 import SubscriptionsTable from '../components/subscriptions/subscriptionsTable.jsx'
 import { Link } from 'react-router-dom'
+import { PlusIcon } from '@heroicons/react/24/solid'
 
 const Subscriptions = () => {
   return (
@@ -8,7 +9,7 @@ const Subscriptions = () => {
       {/* Header */}
       <div className="flex justify-between items-center w-full">
         <h1 className="text-3xl font-bold">Subscriptions</h1>
-        <Link to="add" ><div className='Button'>Add New</div></Link>
+        <Link to="add" ><div className='Button flex'>Add New <PlusIcon className="h-4 w-4" /></div></Link>
       </div>
       {/* Apps Table */}
       <SubscriptionsTable />
