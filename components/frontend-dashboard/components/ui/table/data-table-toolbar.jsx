@@ -48,7 +48,7 @@ export function DataTableToolbar({ table, columns }) {
   return (
     <div className="flex items-center justify-between">
       <div className="flex flex-1 items-center space-x-2">
-        <div className="border flex flex-col gap-1 sm:flex-row bg-primary rounded-full p-1">
+        <div className="border flex flex-col gap-1 sm:flex-row bg-primary rounded-full p-1 w-full md:w-auto">
           <input
             type="text"
             placeholder={`${selectedColumn}...`}
@@ -66,7 +66,7 @@ export function DataTableToolbar({ table, columns }) {
                 )
                 ?.setFilterValue(event.target.value)
             }
-            className="h-8 w-[150px] lg:w-[250px] focus:border-tertiary bg-transparent text-tertiary rounded-full focus:ring-transparent"
+            className="h-8 w-full sm:w-[150px] lg:w-[250px] focus:border-tertiary bg-transparent text-tertiary rounded-full focus:ring-transparent"
           />
           <Select
             ariaLabel={"column-to-filter"}
