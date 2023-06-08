@@ -15,19 +15,19 @@ const Accordion = ({ header, content, idx }) => {
             "group",
             "radix-state-open:rounded-t-lg radix-state-closed:rounded-lg",
             "focus:outline-none",
-            "inline-flex w-full items-center px-4 py-2 text-left dark:bg-gray-800"
+            "inline-flex w-full items-center px-4 py-2 text-left"
           )}
         >
           {header}
           <ChevronDownIcon
             className={clsx(
-              "ml-2 h-5 w-5 shrink-0 text-gray-700 ease-in-out dark:text-gray-400",
+              "ml-2 h-5 w-5 shrink-0 text-gray-700 ease-in-out",
               "group-radix-state-open:rotate-180 group-radix-state-open:duration-300"
             )}
           />
         </AccordionPrimitive.Trigger>
       </AccordionPrimitive.Header>
-      <AccordionPrimitive.Content className="pt-1 w-full rounded-b-lg px-4 pb-3 dark:bg-gray-800">
+      <AccordionPrimitive.Content className="pt-1 w-full rounded-b-lg px-4 pb-3">
         {content}
       </AccordionPrimitive.Content>
     </AccordionPrimitive.Item>

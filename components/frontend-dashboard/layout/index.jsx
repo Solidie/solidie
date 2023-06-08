@@ -13,7 +13,7 @@ export default function Layout({ children }) {
   },[window.innerWidth])
 
   return (
-    <div className="bg-content-bg text-tertiary w-full !min-h-max !h-full flex flex-col overflow-y-clip">
+    <div className="theme-light bg-content-bg text-tertiary w-full !min-h-max !h-full flex flex-col overflow-y-clip">
       <Topbar {...{ sidebarOpen, setSidebarOpen }} />
       <div className="  flex flex-grow w-full min-h-max h-full overflow-clip">
         <Scrollbar scrollAreaRootClassName="bg-brand-white z-10 w-max !min-w-max h-full borde r-r border-tertiary/20 shadow-xl" scrollAreaViewportClassName="bg-brand-white w-max [_div]:!w-max [_div]:!min-w-max">

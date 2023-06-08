@@ -1,7 +1,40 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import MaterialReactTable from "material-react-table";
 
 export const SubscriptionDetailTable = () => {
+  const [data, setData] = useState([
+    {
+      webSites: "http://localhost/tutor-test",
+      licenseKey: "1597A-4123 ..... 8NSCK-943",
+      expires: "Never",
+      status: "Revoked",
+    },
+    {
+      webSites: "http://localhost/tutor-test",
+      licenseKey: "1597A-4123 ..... 8NSCK-943",
+      expires: "Never",
+      status: "Revoked",
+    },
+    {
+      webSites: "http://localhost/tutor-test",
+      licenseKey: "1597A-4123 ..... 8NSCK-943",
+      expires: "Never",
+      status: "Revoked",
+    },
+    {
+      webSites: "http://localhost/tutor-test",
+      licenseKey: "1597A-4123 ..... 8NSCK-943",
+      expires: "Never",
+      status: "Revoked",
+    },
+    {
+      webSites: "http://localhost/tutor-test",
+      licenseKey: "1597A-4123 ..... 8NSCK-943",
+      expires: "Never",
+      status: "Revoked",
+    },
+  ]) 
+
   const columns = useMemo(
     //column definitions...
     () => [
@@ -56,36 +89,3 @@ export const SubscriptionDetailTable = () => {
 };
 
 export default SubscriptionDetailTable;
-
-export const data = [
-  {
-    webSites: "http://localhost/tutor-test",
-    licenseKey: "1597A-4123 ..... 8NSCK-943",
-    expires: "Never",
-    status: "Revoked",
-  },
-  {
-    webSites: "http://localhost/tutor-test",
-    licenseKey: "1597A-4123 ..... 8NSCK-943",
-    expires: "Never",
-    status: "Revoked",
-  },
-  {
-    webSites: "http://localhost/tutor-test",
-    licenseKey: "1597A-4123 ..... 8NSCK-943",
-    expires: "Never",
-    status: "Revoked",
-  },
-  {
-    webSites: "http://localhost/tutor-test",
-    licenseKey: "1597A-4123 ..... 8NSCK-943",
-    expires: "Never",
-    status: "Revoked",
-  },
-  {
-    webSites: "http://localhost/tutor-test",
-    licenseKey: "1597A-4123 ..... 8NSCK-943",
-    expires: "Never",
-    status: "Revoked",
-  },
-];

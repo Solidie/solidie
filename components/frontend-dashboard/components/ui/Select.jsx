@@ -1,3 +1,4 @@
+import React from "react";
 import {
   CheckIcon,
   ChevronDownIcon,
@@ -5,7 +6,6 @@ import {
 } from "@radix-ui/react-icons";
 import * as SelectPrimitive from "@radix-ui/react-select";
 import { clsx } from "clsx";
-import React from "react";
 
 const Select = React.forwardRef(
   (
@@ -16,26 +16,28 @@ const Select = React.forwardRef(
       ariaLabel,
       itemsList,
       onChange,
-      value,
-      className
+      className,
+      ...props
     },
     forwardRef
   ) => {
     return (
       <SelectPrimitive.Root
         {...{ defaultValue }}
-        // value={value}
+        {
+          ...props
+        }
         onValueChange={onChange}
       >
         <SelectPrimitive.Trigger asChild aria-label={ariaLabel}>
           <div className={clsx("Input flex justify-between items-center", className)}>
-            {value === "" ? (
+            {props?.value === "" ? (
               <SelectPrimitive.Value placeholder={placeholder}>
                 {placeholder}
               </SelectPrimitive.Value>
             ) : (
-              <SelectPrimitive.Value aria-valuetext={value}>
-                {itemsList[value]}
+              <SelectPrimitive.Value aria-valuetext={props?.value}>
+                {props?.value}
               </SelectPrimitive.Value>
             )}
             <SelectPrimitive.Icon className="ml-2">
@@ -47,10 +49,10 @@ const Select = React.forwardRef(
           ref={forwardRef}
           className="shadow-lg shadow-tertiary/60 rounded-lg border-2 border-tertiary"
         >
-          <SelectPrimitive.ScrollUpButton className="flex items-center justify-center text-tertiary font-bold dark:text-tertiary/30">
+          <SelectPrimitive.ScrollUpButton className="flex items-center justify-center text-tertiary font-bold ">
             <ChevronUpIcon />
           </SelectPrimitive.ScrollUpButton>
-          <SelectPrimitive.Viewport className="bg-primary dark:bg-tertiary/80 p-2 rounded-lg shadow-lg">
+          <SelectPrimitive.Viewport className="bg-primary p-2 rounded-lg shadow-lg">
             <SelectPrimitive.Group>
               {itemsList.map((f, i) => (
                 <SelectPrimitive.Item
@@ -58,7 +60,7 @@ const Select = React.forwardRef(
                   key={`${f}-${i}`}
                   value={f.toLowerCase()}
                   className={clsx(
-                    "relative flex items-center px-8 py-2 rounded-md text-sm text-tertiary font-bold dark:text-tertiary/30 focus:bg-tertiary/20 dark:focus:bg-tertiary/90",
+                    "relative flex items-center px-8 py-2 rounded-md text-sm text-tertiary font-bold  focus:bg-tertiary/20",
                     "radix-disabled:opacity-50",
                     "focus:outline-none select-none"
                   )}
@@ -71,7 +73,7 @@ const Select = React.forwardRef(
               ))}
             </SelectPrimitive.Group>
           </SelectPrimitive.Viewport>
-          <SelectPrimitive.ScrollDownButton className="flex items-center justify-center text-tertiary/70 dark:text-tertiary/30">
+          <SelectPrimitive.ScrollDownButton className="flex items-center justify-center text-tertiary/70 ">
             <ChevronDownIcon />
           </SelectPrimitive.ScrollDownButton>
         </SelectPrimitive.Content>

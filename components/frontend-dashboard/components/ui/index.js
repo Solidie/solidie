@@ -7,6 +7,10 @@ import UploadImage from "./UploadImage.jsx";
 import MultiSelect from "./MultiSelect.jsx";
 import ComboBox from "./ComboBox.jsx";
 import AccordionInner from "./AccordionInner.jsx";
+import Checkbox from "./checkbox.jsx";
+import Badge from "./badge.jsx";
+import Separator from "./separator.jsx"
+import Button from "./button.jsx"
 
 export {
   Input,
@@ -18,4 +22,8 @@ export {
   MultiSelect,
   ComboBox,
   AccordionInner,
+  Checkbox,
+  Badge,
+  Separator,
+  Button,
 };

@@ -1,22 +1,19 @@
-import React from "react"
-
-import { cn } from "@/lib/utils"
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { cn } from "../../lib/utils";
 
 const Table = React.forwardRef(({ className, ...props }, ref) => (
-  <div className="w-full overflow-auto">
+  <div className="w-full overflow-auto border">
     <table
       ref={ref}
       className={cn("w-full caption-bottom text-sm", className)}
       {...props}
     />
   </div>
-))
-Table.displayName = "Table"
+));
 
 const TableHeader = React.forwardRef(({ className, ...props }, ref) => (
   <thead ref={ref} className={cn("[&_tr]:border-b", className)} {...props} />
-))
-TableHeader.displayName = "TableHeader"
+));
 
 const TableBody = React.forwardRef(({ className, ...props }, ref) => (
   <tbody
@@ -24,8 +21,7 @@ const TableBody = React.forwardRef(({ className, ...props }, ref) => (
     className={cn("[&_tr:last-child]:border-0", className)}
     {...props}
   />
-))
-TableBody.displayName = "TableBody"
+));
 
 const TableFooter = React.forwardRef(({ className, ...props }, ref) => (
   <tfoot
@@ -33,20 +29,65 @@ const TableFooter = React.forwardRef(({ className, ...props }, ref) => (
     className={cn("bg-primary font-medium text-primary-foreground", className)}
     {...props}
   />
-))
-TableFooter.displayName = "TableFooter"
+));
 
-const TableRow = React.forwardRef(({ className, ...props }, ref) => (
-  <tr
-    ref={ref}
-    className={cn(
-      "border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted",
-      className
-    )}
-    {...props}
-  />
-))
-TableRow.displayName = "TableRow"
+const TableRow = ({
+  table,
+  DetailPanel,
+  row,
+  header = false,
+  className,
+  ...props
+}) => {
+  const [width, setWidth] = useState(0)
+  const [expandable, setExpandable] = useState(false);
+  const ref = useRef();
+  if (header) {
+    return (
+      <tr
+        ref={ref}
+        className={cn(
+          "border-b  transition-colors border-tertiary hover:bg-muted/50 data-[state=selected]:bg-muted",
+          className
+        )}
+        {...props}
+      />
+    );
+  }
+  useEffect(() => {
+    if (width !==ref.current?.clientWidth ) {
+      setWidth(ref.current?.clientWidth)
+    }
+  // console.log(ref.current?.offsetWidth, ref.current)
+
+  }, [ref.current?.clientWidth, ref.current?.offsetWidth])
+  // console.log(ref.current?.offsetWidth)
+   
+  return (
+    <>
+      <tr
+        ref={ref}
+        onClick={() => setExpandable(!expandable)}
+        className={cn(
+          "border-b transition-colors hover:bg-tertiary/20 data-[state=selected]:bg-muted",
+          (row.index + 1) % table.getState().pagination.pageSize === 0 && row.index !== 0 ? " border-transparent " : " border-tertiary",
+          className
+        )}
+        {...props}
+      />
+      <tr className={cn(expandable ? " block " : "hidden", "w-full")}>
+        <td className="!max-w-0">
+          <div
+            className="p-4 [&>div]:bg-transparent shadow-inner shadow-tertiary/20"
+            style={{ width: width ?? "auto" }}
+          >
+            <DetailPanel row={row} />
+          </div>
+        </td>
+      </tr>
+    </>
+  );
+};
 
 const TableHead = React.forwardRef(({ className, ...props }, ref) => (
   <th
@@ -57,8 +98,7 @@ const TableHead = React.forwardRef(({ className, ...props }, ref) => (
     )}
     {...props}
   />
-))
-TableHead.displayName = "TableHead"
+));
 
 const TableCell = React.forwardRef(({ className, ...props }, ref) => (
   <td
@@ -66,8 +106,7 @@ const TableCell = React.forwardRef(({ className, ...props }, ref) => (
     className={cn("p-4 align-middle [&:has([role=checkbox])]:pr-0", className)}
     {...props}
   />
-))
-TableCell.displayName = "TableCell"
+));
 
 const TableCaption = React.forwardRef(({ className, ...props }, ref) => (
   <caption
@@ -75,8 +114,7 @@ const TableCaption = React.forwardRef(({ className, ...props }, ref) => (
     className={cn("mt-4 text-sm text-muted-foreground", className)}
     {...props}
   />
-))
-TableCaption.displayName = "TableCaption"
+));
 
 export {
   Table,
@@ -87,4 +125,4 @@ export {
   TableRow,
   TableCell,
   TableCaption,
-}
+};

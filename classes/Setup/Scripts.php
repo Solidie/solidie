@@ -29,6 +29,8 @@ class Scripts {
 
 	public function adminScripts() {
 		if ( get_admin_page_parent() == 'appstore' ) {
+			$deee = APPSTORE_DIST_URL;
+			echo "<script>console.log('hi, $deee');</script>";
 			wp_enqueue_script( 'appstore-admin-script', APPSTORE_DIST_URL . 'admin-dashboard.js', array( 'jquery' ), APPSTORE_VERSION );
 		}
 	}

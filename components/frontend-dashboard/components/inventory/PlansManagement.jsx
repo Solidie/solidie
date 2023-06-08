@@ -8,6 +8,16 @@ export default function Example({ plansDetail }) {
     console.log(plans);
   }, [plans]);
 
+  const changePlan = (idx) => {
+    setPlans(
+      plans.flatMap((_plan, _idx) => ({
+        name: _plan.name,
+        cost: _plan.cost,
+        selected: idx === _idx ? !_plan.selected : _plan.selected,
+      }))
+    );
+  }
+
   return (
     <div className="w-full">
       <div className=" w-full m ax-w-md">
@@ -17,23 +27,22 @@ export default function Example({ plansDetail }) {
             <div
               key={plan.name}
               className={cn(
-                plan.selected
-                  ? "bg-tertiary text-white"
-                  : "bg-primary opacity-80",
-                "flex flex-col rounded-lg px-5 py-4 shadow-md focus:outline-none w-full space-y-1 max-w-sm"
+                "relative bg-transparent flex flex-col rounded-lg px-5 py-4 shadow-md focus:outline-none w-full space-y-1 max-w-sm"
               )}
             >
-              <div
-                onClick={() => {
-                  setPlans(
-                    plans.flatMap((_plan, _idx) => ({
-                      name: _plan.name,
-                      cost: _plan.cost,
-                      selected: idx === _idx ? !_plan.selected : _plan.selected,
-                    }))
-                  );
-                }}
-                className="cursor-pointer flex w-full items-center justify-between"
+              <button 
+                type="button"
+                onClick={() => changePlan(idx)} aria-hidden="true"
+                className={cn(
+                  plan.selected
+                    ? "bg-tertiary text-white"
+                    : "bg-primary opacity-80",
+                  "block absolute inset-0 shadow-lg rounded-lg")}>
+              </button>
+              <button
+                onClick={() => changePlan(idx)}
+                type="button"
+                className="z-10 cursor-pointer flex w-full items-center justify-between"
               >
                 <div className="flex items-center">
                   <div className="text-sm">
@@ -47,22 +56,22 @@ export default function Example({ plansDetail }) {
                     </p>
                   </div>
                 </div>
-                <button className="shrink-0 text-white">
+                <div className="shrink-0 text-white">
                   <CheckIcon className="h-6 w-6" selected={plan.selected} />
-                </button>
-              </div>
+                </div>
+              </button>
 
               <span
                 className={cn(
                   plan.selected ? "text-sky-100" : "text-gray-500",
-                  "inline"
+                  "inline z-10"
                 )}
               >
-                <div>
+                <div className="flex flex-col items">
                   <label
                     htmlFor={plan.name}
                     className={cn(
-                      "block text-xs font-medium ",
+                      "text-xs font-medium ",
                       plan.selected ? "text-primary" : ""
                     )}
                   >
