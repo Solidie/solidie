@@ -27,7 +27,7 @@ export default function Example({ plansDetail }) {
             <div
               key={plan.name}
               className={cn(
-                "relative bg-transparent flex flex-col rounded-lg px-5 py-4 shadow-md focus:outline-none w-full space-y-1 max-w-sm"
+                "relative bg-transparent flex flex-col rounded-lg px-5 py-4 shadow-md focus:outline-none w-full space-y-1 max-w-sm lg:max-w-fit"
               )}
             >
               <button 

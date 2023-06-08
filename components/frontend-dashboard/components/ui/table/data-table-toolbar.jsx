@@ -7,17 +7,43 @@ export function DataTableToolbar({ table, columns }) {
   const [selectedColumn, setSelectedColumn] = useState(
     columns[0].accessorKey ?? ""
   );
-  const columnNames = columns
-    .filter(({ accessorKey }) => accessorKey)
-    .flatMap(({ accessorKey }) => accessorKey);
+  const [columnNamesObj, setColumnNamesObj] = useState([]);
+  const [columnNames, setColumnNames] = useState([]);
   console.log(columnNames, table.getAllColumns());
   const isFiltered =
     table.getPreFilteredRowModel().rows.length >
     table.getFilteredRowModel().rows.length;
 
   useEffect(() => {
-    setSelectedColumn(columnNames[0]);
+    console.log(
+      table.getAllColumns(),
+      table
+        .getAllColumns()
+        .filter(({ id }) => id)
+        .map(({ columnDef }) => ({
+          accessorKey: columnDef.accessorKey,
+          header: columnDef.header,
+        }))
+    );
+    setColumnNamesObj(
+      table
+        .getAllColumns()
+        .filter(({ id }) => id)
+        .map(({ columnDef }) => ({
+          accessorKey: columnDef.accessorKey,
+          header: columnDef.header,
+        }))
+    );
   }, []);
+  useEffect(() => {
+    setColumnNames(
+      // console.log(
+      columnNamesObj.map(({ header }) => header)
+    );
+  }, [columnNamesObj.length]);
+  useEffect(() => {
+    setSelectedColumn(columnNames[0]?.toLowerCase());
+  }, [columnNames.length]);
 
   return (
     <div className="flex items-center justify-between">
@@ -25,22 +51,32 @@ export function DataTableToolbar({ table, columns }) {
         <div className="border flex flex-col gap-1 sm:flex-row bg-primary rounded-full p-1">
           <input
             type="text"
-            placeholder="Filter tasks..."
-            value={table.getColumn(selectedColumn)?.getFilterValue() ?? ""}
+            placeholder={`${selectedColumn}...`}
+            value={
+              table
+                .getColumn(
+                  columnNamesObj.filter(({ header }) => columnNames[0] === header)[0]?.accessorKey 
+                )
+                ?.getFilterValue() ?? ""
+            }
             onChange={(event) =>
               table
-                .getColumn(selectedColumn)
+                .getColumn(
+                  columnNamesObj.filter(({ header }) => columnNames[0] === header)[0]?.accessorKey
+                )
                 ?.setFilterValue(event.target.value)
             }
             className="h-8 w-[150px] lg:w-[250px] focus:border-tertiary bg-transparent text-tertiary rounded-full focus:ring-transparent"
           />
           <Select
             ariaLabel={"column-to-filter"}
-            defaultValue={columnNames[0]}
+            defaultValue={columnNames[0]?.toLowerCase()}
             disableItemsList={[]}
             itemsList={columnNames ?? []}
             value={selectedColumn}
-            className={"py-1 hover:!border-tertiary/20 hover:!shadow-transparent"}
+            className={
+              "py-1 hover:!border-tertiary/20 hover:!shadow-transparent"
+            }
             onChange={(value) => {
               setSelectedColumn(value);
             }}

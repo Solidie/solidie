@@ -2,6 +2,7 @@ import React, { useEffect, useLayoutEffect, useState } from "react";
 import Topbar from "../components/navigation/Topbar.jsx";
 import Sidebar from "../components/navigation/Sidebar.jsx";
 import { Scrollbar } from "../components/common";
+import { cn } from "../lib/utils.js";
 
 export default function Layout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -15,8 +16,12 @@ export default function Layout({ children }) {
   return (
     <div className="theme-light bg-content-bg text-tertiary w-full !min-h-max !h-full flex flex-col overflow-y-clip">
       <Topbar {...{ sidebarOpen, setSidebarOpen }} />
-      <div className="  flex flex-grow w-full min-h-max h-full overflow-clip">
-        <Scrollbar scrollAreaRootClassName="bg-brand-white z-10 w-max !min-w-max h-full borde r-r border-tertiary/20 shadow-xl" scrollAreaViewportClassName="bg-brand-white w-max [_div]:!w-max [_div]:!min-w-max">
+      <div className=" relative flex flex-grow w-full min-h-max h-full overflow-clip">
+        <Scrollbar scrollAreaRootClassName={cn(
+                    sidebarOpen
+                    ? " !sticky lg:!sticky sm:!absolute sm:inset-0 left-0 "
+                    : " hidden lg:flex ",
+          "bg-brand-white z-50 w-max !min-w-max h-full md:shadow-xl ")} scrollAreaViewportClassName="bg-brand-white w-max [_div]:!w-max [_div]:!min-w-max">
           <Sidebar {...{ sidebarOpen, setSidebarOpen }} />
         </Scrollbar>
         <Scrollbar scrollAreaViewportClassName={" w-full"}>

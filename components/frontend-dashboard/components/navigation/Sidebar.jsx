@@ -68,10 +68,10 @@ const Sidebar = ({ sidebarOpen }) => {
     <>
       <div
         className={cn(
-          " z-10 flex scrollbar-track-transparent flex-col px-5 py-4 w-full md:w-max min-h-max h-full transition-all  ",
+          " z-50 flex scrollbar-track-transparent flex-col px-5 py-4 w-full md:w-max min-h-max h-full transition-all  ",
           sidebarOpen
-            ? " gap-4  min-w-max  sticky left-0 xl:relative "
-            : " gap-5  hidden sm:flex "
+            ? " gap-4  min-w-max s ticky sm:a bsolute sm:i nset-0 l eft-0 "
+            : " gap-5  hidden lg:flex "
         )}
       >
         {groupedNavigation.map(({ groupName, navigation }, idx) => (
