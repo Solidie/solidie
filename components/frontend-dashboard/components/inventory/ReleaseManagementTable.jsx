@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import MaterialReactTable from 'material-react-table';
+import {DataTable} from "../ui/table/data-table.jsx";
 
 export const ReleaseManagementTable = () => {
   const columns = useMemo(
@@ -16,8 +16,8 @@ export const ReleaseManagementTable = () => {
       {
         accessorKey: 'download',
         header: 'Download',
-        Cell: ({cell}) => {
-          return <a className="underline cursor-pointer">{cell.getValue()}</a>
+        cell: ({row}) => {
+          return <a className="underline cursor-pointer">{row.getValue("download")}</a>
         }
       },
       {
@@ -34,24 +34,10 @@ export const ReleaseManagementTable = () => {
   );
 
   return (
-    <MaterialReactTable
-      columns={columns}
+    <DataTable
       data={data}
-      state={{ density: "compact" }}
-      enableTopToolbar={false}
-      muiTopToolbarProps={{ className: "!bg-primary" }}
-      muiBottomToolbarProps={{ className: "!bg-primary" }}
-      muiTableBodyCellProps={{
-        className: "!text-tertiary !bg-primary ",
-      }}
-      muiTableHeadCellProps={{
-        className: "!text-tertiary !bg-primary font-black ",
-      }}
-      muiTablePaperProps={{
-        className:
-          " z-10 !shadow-none !rounded-2xl !bg-primary overflow-hidden px-6 pt-4",
-      }}
-      enableRowNumbers
+      columns={columns}
+      enableToolbar={false}
     />
   );
 };

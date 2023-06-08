@@ -42,7 +42,7 @@ const TableRow = ({
   const [width, setWidth] = useState(0)
   const [expandable, setExpandable] = useState(false);
   const ref = useRef();
-  if (header) {
+  if (header || !DetailPanel) {
     return (
       <tr
         ref={ref}

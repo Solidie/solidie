@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import MaterialReactTable from "material-react-table";
+import {DataTable} from "../ui/table/data-table.jsx";
 
 export const CustomersSubscriptionsLicenseTable = () => {
   const columns = useMemo(
@@ -33,24 +33,10 @@ export const CustomersSubscriptionsLicenseTable = () => {
   );
 
   return (
-    <MaterialReactTable
-      columns={columns}
+    <DataTable
       data={data}
-      state={{ density: "compact" }}
-      enableTopToolbar={false}
-      muiTopToolbarProps={{ className: "!bg-lightest-version" }}
-      muiBottomToolbarProps={{ className: "!bg-lightest-version" }}
-      muiTableBodyCellProps={{
-        className: "!text-tertiary !bg-lightest-version ",
-      }}
-      muiTableHeadCellProps={{
-        className: "!text-tertiary !bg-lightest-version font-black ",
-      }}
-      muiTablePaperProps={{
-        className:
-          " z-10 !shadow-none !rounded-2xl !bg-lightest-version overflow-hidden px-6 pt-4",
-      }}
-      enableRowNumbers
+      columns={columns}
+      enableToolbar={false}
     />
   );
 };

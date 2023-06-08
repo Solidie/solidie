@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react";
-import MaterialReactTable from "material-react-table";
+import { DataTable } from "../ui/table/data-table.jsx";
 
 export const SubscriptionDetailTable = () => {
   const [data, setData] = useState([
@@ -66,24 +66,10 @@ export const SubscriptionDetailTable = () => {
   );
 
   return (
-    <MaterialReactTable
-      columns={columns}
+    <DataTable
       data={data}
-      state={{ density: "compact" }}
-      enableTopToolbar={false}
-      muiTopToolbarProps={{ className: "!bg-primary" }}
-      muiBottomToolbarProps={{ className: "!bg-primary" }}
-      muiTableBodyCellProps={{
-        className: "!text-tertiary !bg-primary ",
-      }}
-      muiTableHeadCellProps={{
-        className: "!text-tertiary !bg-primary font-black ",
-      }}
-      muiTablePaperProps={{
-        className:
-          " z-10 !shadow-none !rounded-2xl !bg-primary overflow-hidden px-6 pt-4",
-      }}
-      enableRowNumbers
+      columns={columns}
+      enableToolbar={false}
     />
   );
 };
