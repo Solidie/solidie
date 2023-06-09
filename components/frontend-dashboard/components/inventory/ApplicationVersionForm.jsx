@@ -15,7 +15,7 @@ const selectFieldAriaLabel = "Food";
 
 const FormDemo = () => (
   <div className="z-20 flex flex-col gap-5">
-    <Form.Root className=" bg-lightest-version p-4 rounded-2xl shadow-md flex flex-col gap-3">
+    <Form.Root className=" bg-tertiary/20 -lightest-version p-4 rounded-2xl shadow-md flex flex-col gap-3">
       <div className="flex justify-between gap-4 flex-wrap sm:flex-nowrap w-full h-full">
         <div className="flex gap-4 flex-wrap w-full">
           <Form.Field
