@@ -93,7 +93,7 @@ const Reports = () => {
           </div>
           <div
             ref={leftref}
-            className="py-2 flex items-center w-full sm:px-4 bg-brand-white rounded-xl shadow-lg"
+            className="py-2 flex items-center w-full sm:px-4 bg-lightest-version/60 rounded-xl shadow-lg"
           >
             <ApexChart {...{ width: leftWidth, height: areaChartHeight }} />
           </div>
@@ -104,7 +104,7 @@ const Reports = () => {
           </div>
           <div
             ref={rightref}
-            className="h-max w-full px-4 bg-brand-white rounded-xl shadow-lg"
+            className="h-max w-full px-4 bg-lightest-version/60 rounded-xl shadow-lg"
           >
             <div className="pt-6 px-4">
               <div className="text-lg">This Week Statistics</div>

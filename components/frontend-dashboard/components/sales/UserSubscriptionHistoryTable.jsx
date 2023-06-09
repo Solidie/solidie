@@ -6,9 +6,9 @@ import clsx from "clsx";
 import SalesSubscriptionsLicenseTable from "./SalesSubscriptionsLicenseTable.jsx";
 
 
-const UserSubscriptionHistoryTable = () => {
+const UserSubscriptionHistoryTable = React.forwardRef((props, ref) => {
   return (
-    <div className=" flex flex-col w-full gap-4 min-h-max bg-primary">
+    <div ref={ref} className=" flex flex-col w-full gap-4 min-h-max bg-primary">
       <AccordionPrimitive.Root
         type="single"
         defaultValue="item-1"
@@ -27,7 +27,7 @@ const UserSubscriptionHistoryTable = () => {
       </AccordionPrimitive.Root>
     </div>
   );
-};
+});
 
 export default UserSubscriptionHistoryTable;
 

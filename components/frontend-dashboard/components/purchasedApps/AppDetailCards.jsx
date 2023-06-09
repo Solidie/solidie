@@ -26,7 +26,7 @@ const AppDetailCard = ({ idx }) => {
   const [selectedVersion, setSelectedVersion] = useState("");
 
   return (
-    <div className="flex flex-col items-center gap-8 bg-lightest-version text-tertiary p-6 w-max h-max rounded-2xl shadow-lg">
+    <div className="flex flex-col items-center gap-8 bg-tertiary/20 text-tertiary p-6 w-max h-max rounded-2xl shadow-lg hover:shadow-tertiary/60 border-4 border-tertiary/20">
       <div className="self-start bg-primary px-2 py-1 uppercase rounded-md text-xs font-bold">
         v 1.0.6
       </div>
@@ -36,12 +36,13 @@ const AppDetailCard = ({ idx }) => {
           <div className="font-black text-xl">Application Name</div>
           <div className="italic">Teams (LifeTime)</div>
         </div>
-        <div className="flex flex-col items-center gap-y-5 px-10">
+        <div className="flex flex-col items-center gap-y-5 px-10 ">
           <button className="Button flex items-center gap-x-2">
             Download {selectedVersion === "" ? "Latest" : selectedVersion}
             <DownloadIcon />
           </button>
           <Select
+            className="shadow-lg"
             value={selectedVersion}
             onChange={(e) => {
               setSelectedVersion(e);

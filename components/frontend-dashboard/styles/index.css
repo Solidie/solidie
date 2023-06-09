@@ -29,7 +29,7 @@
     @apply !border-tertiary !shadow-md !shadow-tertiary/30;
   }
   .Input:focus {
-    @apply !border-tertiary !shadow-lg !shadow-tertiary/60 !outline-none;
+    @apply !border-tertiary !shadow-lg !shadow-tertiary/60 !outline-none !ring-tertiary/30 !ring-2;
   }
   .Textarea {
     @apply transition-all delay-150 !border-2 !font-bold !bg-primary !rounded-xl !px-4 !py-3 !text-sm hover:!outline-2 !outline-tertiary focus:!shadow-lg !shadow-tertiary;
@@ -58,18 +58,55 @@
 
 .reports-blue-card-gradient {
   background: radial-gradient(
-        53.33% 53.33% at 51.85% 62.5%,
-        #8bbfe4 41.67%,
-        #bbd2e2 100%
-      ),
+      53.33% 53.33% at 51.85% 62.5%,
+      #8bbfe4 41.67%,
+      #bbd2e2 100%
+    ),
     #a0d1f4;
 }
 
 .reports-white-card-gradient {
   background: radial-gradient(
-        53.33% 53.33% at 51.85% 62.5%,
-        #e5ecf2 32.81%,
-        #ffffff 100%
-      ),
+      53.33% 53.33% at 51.85% 62.5%,
+      #e5ecf2 32.81%,
+      #ffffff 100%
+    ),
     #f6f7fd;
+}
+
+.bg-grainy-texture {
+  background: url("../assets/BackgroundNoice.svg");
+}
+
+:root {
+  --background: 0 0% 100%;
+  --foreground: 222.2 47.4% 11.2%;
+
+  --muted: 210 40% 96.1%;
+  --muted-foreground: 215.4 16.3% 46.9%;
+
+  --popover: 0 0% 100%;
+  --popover-foreground: 222.2 47.4% 11.2%;
+
+  --border: 214.3 31.8% 91.4%;
+  --input: 214.3 31.8% 91.4%;
+
+  --card: 0 0% 100%;
+  --card-foreground: 222.2 47.4% 11.2%;
+
+  --primary: 222.2 47.4% 11.2%;
+  --primary-foreground: 210 40% 98%;
+
+  --secondary: 210 40% 96.1%;
+  --secondary-foreground: 222.2 47.4% 11.2%;
+
+  --accent: 210 40% 96.1%;
+  --accent-foreground: 222.2 47.4% 11.2%;
+
+  --destructive: 0 100% 50%;
+  --destructive-foreground: 210 40% 98%;
+
+  --ring: 215 20.2% 65.1%;
+
+  --radius: 0.5rem;
 }

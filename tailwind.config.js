@@ -13,6 +13,7 @@ module.exports = {
     require("tailwindcss-radix")(),
     require("daisyui"),
     require('tailwind-scrollbar'),
+    require("@tailwindcss/forms")
   ],
   daisyui: {
     theme: [
