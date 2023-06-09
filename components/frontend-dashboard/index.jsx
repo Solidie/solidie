@@ -35,7 +35,7 @@ function Dashboard(props) {
   );
 }
 
-let dashboard = document.getElementById("AppStore_Dashboard");
+let dashboard = document.getElementById("Solidie_Dashboard");
 if (dashboard) {
   ReactDOM.createRoot(dashboard).render(
     <Dashboard {...getElementDataSet(dashboard)} />

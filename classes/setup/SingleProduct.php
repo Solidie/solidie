@@ -5,7 +5,7 @@ namespace Solidie\Store\Setup;
 use Solidie\Store\Main;
 
 class SingleProduct extends Main {
-	public function setup() {
+	function __construct() {
 		add_filter( 'single_template', array( $this, 'product_template' ) );
 		add_filter( 'page_template', array( $this, 'catalog' ) );
 	}
