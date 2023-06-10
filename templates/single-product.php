@@ -58,10 +58,10 @@
             <img src="https://img.logoipsum.com/285.svg" className="w-36 h-20" alt="" />
             <div class="flex justify-between gap-5">
                 <a
-                    class="active:animate-bounce active:text-brand-tertiary text-sm select-none bg-tertiary text-brand-tertiary font-semibold py-3 px-6 rounded-full shadow-lg">See
+                    class="active:animate-bounce active:text-tertiary text-sm select-none bg-tertiary/90 text-brand-tertiary font-semibold py-3 px-6 rounded-full shadow-lg ring-2 ring-tertiary/10">See
                     How It Works</a>
                 <a
-                    class="active:animate-bounce active:text-tertiary text-sm select-none text-tertiary bg-brand-tertiary font-semibold py-3 px-6 rounded-full shadow-lg">See
+                    class="active:animate-bounce active:text-tertiary text-sm select-none text-tertiary bg-tertiary/10 font-semibold py-3 px-6 rounded-full shadow-lg">See
                     Live Preview</a>
             </div>
         </div>
@@ -427,8 +427,8 @@
                     </div>
                     
 </div>
-    <div class="swiper-button-next"></div>
-    <div class="swiper-button-prev"></div>
+    <div class="swiper-button-next text-tertiary"></div>
+    <div class="swiper-button-prev text-tertiary"></div>
   </div>
 
 
