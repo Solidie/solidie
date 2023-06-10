@@ -656,7 +656,7 @@
                                         <div class="flex items-center text-base sm:text-sm">
                                             <input id="compatible-with-0" name="compatible-with[]" value="block-editor"
                                                 type="checkbox"
-                                                class="flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-indigo-600 focus:ring-indigo-500">
+                                                class="flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60">
                                             <label for="compatible-with-0" class="ml-3 min-w-0 flex-1 text-tertiary/60">
                                                 Block
                                                 Editor
@@ -666,7 +666,7 @@
                                         <div class="flex items-center text-base sm:text-sm">
                                             <input id="compatible-with-1" name="compatible-with[]" value="woocommerce"
                                                 type="checkbox"
-                                                class="flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-indigo-600 focus:ring-indigo-500">
+                                                class="flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60">
                                             <label for="compatible-with-1" class="ml-3 min-w-0 flex-1 text-tertiary/60">
                                                 WooCommerce
                                             </label>
@@ -675,7 +675,7 @@
                                         <div class="flex items-center text-base sm:text-sm">
                                             <input id="compatible-with-2" name="compatible-with[]" value="elementor-pro"
                                                 type="checkbox"
-                                                class="flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-indigo-600 focus:ring-indigo-500">
+                                                class="flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60">
                                             <label for="compatible-with-2" class="ml-3 min-w-0 flex-1 text-tertiary/60">
                                                 Elementor Pro
                                             </label>
@@ -684,7 +684,7 @@
                                         <div class="flex items-center text-base sm:text-sm">
                                             <input id="compatible-with-3" name="compatible-with[]" value="elementor"
                                                 type="checkbox"
-                                                class="flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-indigo-600 focus:ring-indigo-500">
+                                                class="flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60">
                                             <label for="compatible-with-3" class="ml-3 min-w-0 flex-1 text-tertiary/60">
                                                 Elementor
                                             </label>
@@ -692,7 +692,7 @@
                                         <div class="flex items-center text-base sm:text-sm">
                                             <input id="compatible-with-4" name="compatible-with[]" value="bootstrap"
                                                 type="checkbox"
-                                                class="flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-indigo-600 focus:ring-indigo-500">
+                                                class="flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60">
                                             <label for="compatible-with-4" class="ml-3 min-w-0 flex-1 text-tertiary/60">
                                                 Bootstrap
                                             </label>
@@ -740,14 +740,14 @@
                                     <div class="pt-6 space-y-6 sm:space-y-4">
                                         <div class="flex items-center text-base sm:text-sm">
                                             <input id="sales-0" name="sales[]" value="no-sales" type="checkbox"
-                                                class="flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-indigo-600 focus:ring-indigo-500">
+                                                class="flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60">
                                             <label for="sales-0" class="ml-3 min-w-0 flex-1 text-tertiary/60"> No Sales
                                             </label>
                                         </div>
 
                                         <div class="flex items-center text-base sm:text-sm">
                                             <input id="sales-1" name="sales[]" value="low" type="checkbox"
-                                                class="flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-indigo-600 focus:ring-indigo-500"
+                                                class="flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60"
                                                 checked>
                                             <label for="sales-1" class="ml-3 min-w-0 flex-1 text-tertiary/60"> Low
                                             </label>
@@ -755,21 +755,21 @@
 
                                         <div class="flex items-center text-base sm:text-sm">
                                             <input id="sales-2" name="sales[]" value="medium" type="checkbox"
-                                                class="flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-indigo-600 focus:ring-indigo-500">
+                                                class="flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60">
                                             <label for="sales-2" class="ml-3 min-w-0 flex-1 text-tertiary/60"> Medium
                                             </label>
                                         </div>
 
                                         <div class="flex items-center text-base sm:text-sm">
                                             <input id="sales-3" name="sales[]" value="high" type="checkbox"
-                                                class="flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-indigo-600 focus:ring-indigo-500">
+                                                class="flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60">
                                             <label for="sales-3" class="ml-3 min-w-0 flex-1 text-tertiary/60"> High
                                             </label>
                                         </div>
 
                                         <div class="flex items-center text-base sm:text-sm">
                                             <input id="sales-4" name="sales[]" value="top-sellers" type="checkbox"
-                                                class="flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-indigo-600 focus:ring-indigo-500">
+                                                class="flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60">
                                             <label for="sales-4" class="ml-3 min-w-0 flex-1 text-tertiary/60"> Top
                                                 Sellers
                                             </label>
@@ -817,14 +817,14 @@
                                     <div class="pt-6 space-y-6 sm:space-y-4">
                                         <div class="flex items-center">
                                             <input id="show-all" name="rating" type="radio" checked
-                                                class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-tertiary/30">
+                                                class="focus:ring-tertiary/60 h-4 w-4 text-tertiary border-tertiary/30">
                                             <label for="show-all" class="ml-3 block text-sm text-tertiary/70"> Show All
                                             </label>
                                         </div>
 
                                         <div class="flex items-center">
                                             <input id="one-star-and-higher" name="rating" type="radio"
-                                                class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-tertiary/30">
+                                                class="focus:ring-tertiary/60 h-4 w-4 text-tertiary border-tertiary/30">
                                             <label for="one-star-and-higher"
                                                 class="ml-3 block text-sm text-tertiary/70"> 1
                                                 Star and Higher</label>
@@ -832,7 +832,7 @@
 
                                         <div class="flex items-center">
                                             <input id="two-star-and-higher" name="rating" type="radio"
-                                                class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-tertiary/30">
+                                                class="focus:ring-tertiary/60 h-4 w-4 text-tertiary border-tertiary/30">
                                             <label for="two-star-and-higher"
                                                 class="ml-3 block text-sm text-tertiary/70"> 2
                                                 Star and Higher</label>
@@ -840,7 +840,7 @@
 
                                         <div class="flex items-center">
                                             <input id="three-star-and-higher" name="rating" type="radio"
-                                                class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-tertiary/30">
+                                                class="focus:ring-tertiary/60 h-4 w-4 text-tertiary border-tertiary/30">
                                             <label for="three-star-and-higher"
                                                 class="ml-3 block text-sm text-tertiary/70"> 3
                                                 Star and Higher</label>
@@ -848,7 +848,7 @@
 
                                         <div class="flex items-center">
                                             <input id="four-star-and-higher" name="rating" type="radio"
-                                                class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-tertiary/30">
+                                                class="focus:ring-tertiary/60 h-4 w-4 text-tertiary border-tertiary/30">
                                             <label for="four-star-and-higher"
                                                 class="ml-3 block text-sm text-tertiary/70"> 4
                                                 Star and Higher</label>
@@ -856,7 +856,7 @@
 
                                         <div class="flex items-center">
                                             <input id="five-star-and-higher" name="rating" type="radio"
-                                                class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-tertiary/30">
+                                                class="focus:ring-tertiary/60 h-4 w-4 text-tertiary border-tertiary/30">
                                             <label for="five-star-and-higher"
                                                 class="ml-3 block text-sm text-tertiary/70"> 5
                                                 Star and Higher</label>
@@ -904,14 +904,14 @@
                                     <div class="pt-6 space-y-6 sm:pt-4 sm:space-y-4">
                                         <div class="flex items-center">
                                             <input id="any-date" name="date-added" type="radio" checked
-                                                class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-tertiary/30">
+                                                class="focus:ring-tertiary/60 h-4 w-4 text-tertiary border-tertiary/30">
                                             <label for="any-date" class="ml-3 block text-sm text-tertiary/70"> Any date
                                             </label>
                                         </div>
 
                                         <div class="flex items-center">
                                             <input id="in-the-last-year" name="date-added" type="radio"
-                                                class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-tertiary/30">
+                                                class="focus:ring-tertiary/60 h-4 w-4 text-tertiary border-tertiary/30">
                                             <label for="in-the-last-year" class="ml-3 block text-sm text-tertiary/70">
                                                 In the
                                                 last year</label>
@@ -919,7 +919,7 @@
 
                                         <div class="flex items-center">
                                             <input id="in-the-last-month" name="date-added" type="radio"
-                                                class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-tertiary/30">
+                                                class="focus:ring-tertiary/60 h-4 w-4 text-tertiary border-tertiary/30">
                                             <label for="in-the-last-month" class="ml-3 block text-sm text-tertiary/70">
                                                 In the
                                                 last month</label>
@@ -968,7 +968,7 @@
                                     <div class="pt-6 space-y-6 sm:space-y-4">
                                     <div class="flex items-center text-base sm:text-sm">
                                         <input id="on-sale-0" name="on-sale[]" value="true" type="checkbox"
-                                            class="flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-indigo-600 focus:ring-indigo-500">
+                                            class="flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60">
                                         <label for="on-sale-0" class="ml-3 min-w-0 flex-1 text-tertiary/60"> Yes
                                         </label>
                                     </div>
