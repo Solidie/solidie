@@ -11,7 +11,7 @@ import {
 import { Tooltip } from "../ui";
 import { cn } from "../../lib/utils";
 
-const Sidebar = ({ sidebarOpen }) => {
+const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
   const location = useLocation();
   const groupedNavigation = useMemo(
     () => [
@@ -90,8 +90,8 @@ const Sidebar = ({ sidebarOpen }) => {
               let active = location.pathname.includes(href);
 
               return (
-                <Link to={href} key={idx}>
-                  <Tooltip {...{ text }}>
+                <Tooltip key={idx} {...{ text }}>
+                  <Link to={href} onClick={() => (window.innerWidth < 1040) ? setSidebarOpen(!sidebarOpen) : ""}>
                     <div
                       className={
                         "flex items-center gap-3 w-max h-max font-semibold text-sm active:animate-ping cursor-pointer " +
@@ -112,8 +112,8 @@ const Sidebar = ({ sidebarOpen }) => {
                       {icon}
                       {sidebarOpen ? text : ""}
                     </div>
-                  </Tooltip>
-                </Link>
+                  </Link>
+                </Tooltip>
               );
             })}
           </div>
