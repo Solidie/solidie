@@ -211,6 +211,19 @@ class Apps extends Main{
 	}
 
 	/**
+	 * Get permalink as per content type
+	 *
+	 * @param int $id
+	 * @return string
+	 */
+	public static function getPermalink( $id ) {
+		$item         = self::getAppByProductId( $id );
+		$post_name    = get_post_field( 'post_name', $id );
+		$base_slug    = AdminSetting::get( 'contents.' . $item->item_type . '.slug' );
+		return get_home_url() . '/' . trim( $base_slug, '/' ) . '/' . $post_name . '/';
+	}
+
+	/**
 	 * Check if an associated item is free or not
 	 *
 	 * @param int|string $item_id_or_name

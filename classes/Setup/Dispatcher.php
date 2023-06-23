@@ -61,8 +61,18 @@ class Dispatcher {
 	 * @return void
 	 */
 	private function save_admin_settings() {
-		AdminSetting::save( $_POST );
-		wp_send_json_success();
+		if ( empty( $_POST['solidie_settings'] ) || ! is_array( $_POST['solidie_settings'] ) ) {
+			wp_send_json_error( array( 'message' => __( 'Invalid Payload!', 'solidie' ) ) );
+
+		} else {
+			$saved = AdminSetting::save( $_POST['solidie_settings'] );
+			if ( $saved === true ) {
+				wp_send_json_success( array( 'message' => __( 'Settings Saved Successfully!', 'solidie' ) ) );
+			} else {
+				wp_send_json_error( array( 'message' => __( 'Could not save settings!', 'solidie' ) ) );
+			}
+		}
+		exit;
 	}
 
 	/**
