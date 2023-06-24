@@ -59,7 +59,15 @@
 		}
 		
 		if ( count( $sub_pages ) === 1 ) {
-			// Single product page itself
+			query_posts( 
+				array(
+					'post_type' => 'product',
+					'post_status' => 'publish',
+					'p' => $content->product_id,
+				)
+			);
+
+			the_post();
 			require Main::$configs->dir . 'templates/single-product.php';
 		} else {
 			// Single product tutorial page, supports unlimited sub path. For now show 404.
