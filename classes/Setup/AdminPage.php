@@ -153,7 +153,7 @@ class AdminPage extends Main {
 		}
 
 		$permalink = Apps::getPermalink( $product_id );
-		var_dump( $permalink );
+		wp_safe_redirect( $permalink, 301 );
 		exit;
 	}
 }

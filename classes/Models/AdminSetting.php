@@ -20,6 +20,27 @@ class AdminSetting extends Main{
 	private static $manifest = null;
 
 	/**
+	 * Type cast as expected
+	 *
+	 * @param array $arr
+	 * @return array
+	 */
+	private static function typeCast( $arr ) {
+		foreach ( $arr as $index => $value ) {
+			if( is_array( $value ) ) {
+				$arr[ $index ] = self::typeCast( $value );
+
+			} else if( $value === 'true' ) {
+				$arr[ $index ] = true;
+
+			} else if( $value === 'false' ) {
+				$arr[ $index ] = false;
+			}
+		}
+		return $arr;
+	}
+
+	/**
 	 * Save admin settings
 	 *
 	 * @param array $settings
@@ -30,6 +51,7 @@ class AdminSetting extends Main{
 			return false;
 		}
 
+		$settings = self::typeCast( is_array( $settings ) ? $settings : array() );
 		$settings = array_replace_recursive( self::get(), $settings );
 
 		update_option( self::$name, $settings );

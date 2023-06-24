@@ -1,8 +1,25 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { getElementDataSet } from '../utilities/helpers.jsx';
+import { SignleApp } from './single-app/index.jsx';
+import { Catalog } from './catalog/index.jsx';
 
-function Gallery() {
-	return <div>
-		This is item gallery
-	</div>
+import './style.css';
+
+function Singular() {
+	return <SignleApp/>
+}
+
+const single = document.getElementById('Solidie_Single_Content');
+if(single) {
+	ReactDOM.createRoot(single).render(
+		<Singular {...getElementDataSet(single)} />
+	);
+}
+
+const catalog = document.getElementById('Solidie_Catalog');
+if(catalog){
+	ReactDOM.createRoot(catalog).render(
+		<Catalog {...getElementDataSet(Catalog)} />
+	);
 }

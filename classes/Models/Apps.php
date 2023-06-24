@@ -205,9 +205,32 @@ class Apps extends Main{
 	 * @return boolean
 	 */
 	public static function isProductApp( $product_id_or_name ) {
-		$product_id = is_numeric( $product_id_or_name ) ? $product_id_or_name : self::getAppIdByProductPostName( $product_id_or_name );
-		$item = self::getAppByProductId( $product_id );
-		return $item !== null;
+		return self::getAppByProduct( $product_id_or_name ) !== null;
+	}
+
+	public function isContentTypeEnabled() {
+		
+	}
+
+	/**
+	 * Get App by product id and post name.
+	 * 
+	 * @param string|int $product_id_or_name
+	 *
+	 * @return object|null
+	 */
+	public static function getAppByProduct( $product_id ) {
+		if ( ! is_numeric( $product_id ) ) {
+			$product = get_page_by_path( $product_id, OBJECT, 'product' );
+
+			if ( empty( $product ) ) {
+				return null;
+			}
+
+			$product_id = $product->ID;
+		}
+
+		return self::getAppByProductId( $product_id );
 	}
 
 	/**
@@ -370,7 +393,7 @@ class Apps extends Main{
 			$product_id   = $item->get_product_id();
 			$variation_id = $item->get_variation_id();
 			$variation    = new \WC_Product_Variation( $variation_id );
-			$item          = self::getAppByProductId( $product_id );
+			$item         = self::getAppByProductId( $product_id );
 			$var_info     = self::getVariationInfo( $variation );
 
 			// Skip non-item products or unsupported variation.
