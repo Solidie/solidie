@@ -9,6 +9,7 @@ import Layout from "./layout/index.jsx";
 import AppRoutes from "./routes/index.jsx";
 
 import "./styles/index.css";
+import { ContextFrontendDashboard } from "../utilities/contexts.jsx";
 
 // Fahad: Use React for all the dashboard pages
 
@@ -22,22 +23,23 @@ function Dashboard(props) {
       setUserProfileUrl(props?.frontendDashboardData?.avatar_url);
     }
   }, []);
-  return (
-    <BrowserRouter>
-      <ElementProps.Provider value={[elementProps, setElementProps]}>
-        <UserProfileUrl.Provider value={[userProfileUrl, setUserProfileUrl]}>
-          <Layout>
-            <AppRoutes />
-          </Layout>
-        </UserProfileUrl.Provider>
-      </ElementProps.Provider>
-    </BrowserRouter>
-  );
+
+  return <BrowserRouter>
+		<ContextFrontendDashboard.Provider value={props.frontendDashboardData}>
+			<ElementProps.Provider value={[elementProps, setElementProps]}>
+				<UserProfileUrl.Provider value={[userProfileUrl, setUserProfileUrl]}>
+					<Layout>
+						<AppRoutes />
+					</Layout>
+				</UserProfileUrl.Provider>
+			</ElementProps.Provider>
+		</ContextFrontendDashboard.Provider>
+	</BrowserRouter>
 }
 
 let dashboard = document.getElementById("Solidie_Dashboard");
 if (dashboard) {
-  ReactDOM.createRoot(dashboard).render(
-    <Dashboard {...getElementDataSet(dashboard)} />
-  );
+	ReactDOM.createRoot(dashboard).render(
+		<Dashboard {...getElementDataSet(dashboard)} />
+	);
 }

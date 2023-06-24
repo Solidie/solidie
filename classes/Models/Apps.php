@@ -438,4 +438,45 @@ class Apps extends Main{
 
 		return null;
 	}
+
+	/**
+	 * Provide necessary data to render a single content
+	 *
+	 * @param int $product_id
+	 * @return array
+	 */
+	public static function getSingleContentData( $product_id ) {
+		$data = array();
+
+		/* $data['logo_url']       = get_the_post_thumbnail_url( $product_id );
+		$data['content_title']  = get_post_field( 'post_title', $product_id );
+		$data['demo_video_url'] = get_post_meta( $product_id, 'content_demo_url', true );
+		$data['demo_url']       = get_post_meta( $product_id, 'content_demo_url', true ); */
+
+		return $data;
+	}
+
+	/**
+	 * Returns items in store
+	 *
+	 * @param integer $store_id
+	 * @param integer $user_id
+	 * @return array
+	 */
+	public static function getContentListings( $args ) {
+		
+
+		global $wpdb;
+		$items = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT product.post_title AS item_name, product.ID as product_id, item.item_id, product.post_status AS item_status
+				FROM {$wpdb->posts} product INNER JOIN " . self::table( 'items' ) . " item ON product.ID=item.product_id
+				WHERE item.store_id=%d",
+				$store_id
+			),
+			ARRAY_A
+		);
+		
+		return $items;
+	}
 }

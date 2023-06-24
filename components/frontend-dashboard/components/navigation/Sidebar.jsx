@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useContext, useMemo } from "react";
 import { MdSwitchAccount, MdInventory } from "react-icons/md";
 import { Link, useLocation } from "react-router-dom";
 import {
@@ -10,59 +10,65 @@ import {
 } from "./icons";
 import { Tooltip } from "../ui";
 import { cn } from "../../lib/utils";
+import { ContextFrontendDashboard } from "../../../utilities/contexts.jsx";
 
 const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
-  const location = useLocation();
-  const groupedNavigation = useMemo(
-    () => [
-      {
-        groupName: "Dashboard",
-        navigation: [
-          {
-            href: "dashboard/purchased-apps",
-            text: "Purchased Apps",
-            icon: <PurchasedProductsIcon />,
-          },
-          {
-            href: "dashboard/subscriptions",
-            text: "Subscriptions",
-            icon: <SubscriptionIcon />,
-          },
-          {
-            href: "dashboard/my-account",
-            text: "My Account",
-            icon: <MdSwitchAccount className="text-2xl" />,
-          },
-        ],
-      },
-      {
-        groupName: "Company Name",
-        navigation: [
-          {
-            href: "dashboard/inventory",
-            text: "Inventory",
-            icon: <MdInventory className="text-2xl" />,
-          },
-          {
-            href: "dashboard/sales",
-            text: "Sales",
-            icon: <SalesIcon />,
-          },
-          {
-            href: "dashboard/customers",
-            text: "Customers",
-            icon: <CustomersIcon />,
-          },
-          {
-            href: "dashboard/reports",
-            text: "Reports",
-            icon: <ReportIcon />,
-          },
-        ],
-      },
-    ],
-    []
-  );
+		
+	const {stores=[]} = useContext(ContextFrontendDashboard);
+	const location = useLocation();
+	const groupedNavigation = useMemo(
+		() => [
+			{
+				groupName: "Dashboard",
+				navigation: [
+				{
+					href: "dashboard/purchased-apps",
+					text: "Purchased Apps",
+					icon: <PurchasedProductsIcon />,
+				},
+				{
+					href: "dashboard/subscriptions",
+					text: "Subscriptions",
+					icon: <SubscriptionIcon />,
+				},
+				{
+					href: "dashboard/my-account",
+					text: "My Account",
+					icon: <MdSwitchAccount className="text-2xl" />,
+				},
+				],
+			},
+			...stores.map(store=>{
+				let {store_slug, store_name} = store;
+				return {
+					groupName: store_name,
+					navigation: [
+						{
+							href: `dashboard/store/${store_slug}/inventory`,
+							text: "Inventory",
+							icon: <MdInventory className="text-2xl" />,
+						},
+						{
+							href: `dashboard/store/${store_slug}/sales`,
+							text: "Sales",
+							icon: <SalesIcon />,
+						},
+						{
+							href: `dashboard/store/${store_slug}/customers`,
+							text: "Customers",
+							icon: <CustomersIcon />,
+						},
+						{
+							href: `dashboard/store/${store_slug}/reports`,
+							text: "Reports",
+							icon: <ReportIcon />,
+						},
+					],
+				}
+			})
+		],
+		[]
+	);
 
   return (
     <>

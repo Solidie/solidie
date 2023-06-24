@@ -4,7 +4,8 @@
 	use Solidie\Store\Main;
 	use Solidie\Store\Models\AdminSetting;
 	use Solidie\Store\Models\Apps;
-	use Solidie\Store\Setup\AdminPage;
+use Solidie\Store\Models\FrontendDashboard;
+use Solidie\Store\Setup\AdminPage;
 
 	function load_404( $message = '' ) {
 		$template = locate_template( '404.php' );
@@ -31,6 +32,7 @@
 
 	// Now load content
 	if ( AdminSetting::get( 'dashboard.slug' ) == $page ) {
+		$dashboard_data = FrontendDashboard::getDashboardData();
 		require Main::$configs->dir . 'templates/frontend-dashboard.php';
 
 	} else if ( AdminSetting::get( 'catalog.slug' ) == $page ) {
@@ -59,15 +61,18 @@
 		}
 		
 		if ( count( $sub_pages ) === 1 ) {
+			// Pretend like it's native single product page
 			query_posts( 
 				array(
-					'post_type' => 'product',
+					'post_type'   => 'product',
 					'post_status' => 'publish',
-					'p' => $content->product_id,
+					'p'           => $content->product_id,
 				)
 			);
-
 			the_post();
+
+			// Get the component data
+			$content_data = Apps::getSingleContentData( get_the_ID() );
 			require Main::$configs->dir . 'templates/single-product.php';
 		} else {
 			// Single product tutorial page, supports unlimited sub path. For now show 404.
