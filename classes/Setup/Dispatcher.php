@@ -12,7 +12,7 @@ class Dispatcher {
 	
 	// To Do: Secure all the endpoint after MVP implementation
 	private static $endpoints = array(
-		'get_store_item_list',
+		'solidie_get_content_list',
 		'save_admin_settings',
 		'create_store',
 		'create_or_update_item',
@@ -48,10 +48,8 @@ class Dispatcher {
 		}
 	}
 
-	private function get_store_item_list() {
-		$store_id = (int) $_POST['store_id'];
-		$item_list = Store::getApps( $store_id );
-
+	private function solidie_get_content_list() {
+		$item_list = AppModel::getContentListings( $_POST );
 		wp_send_json_success( array( 'items' => $item_list ) );
 	}
 

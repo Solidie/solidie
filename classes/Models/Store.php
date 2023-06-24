@@ -176,29 +176,6 @@ class Store extends Main{
 			$stores[ $index ]['store_url'] = self::getStoreURL( $store['store_slug'] );
 		}
 
-		return $stores;
-	}
-
-	/**
-	 * Returns items in store
-	 *
-	 * @param integer $store_id
-	 * @param integer $user_id
-	 * @return array
-	 */
-	public static function getApps( int $store_id ) {
-		global $wpdb;
-
-		$items = $wpdb->get_results(
-			$wpdb->prepare(
-				"SELECT product.post_title AS item_name, product.ID as product_id, item.item_id, product.post_status AS item_status
-				FROM {$wpdb->posts} product INNER JOIN " . self::table( 'items' ) . " item ON product.ID=item.product_id
-				WHERE item.store_id=%d",
-				$store_id
-			),
-			ARRAY_A
-		);
-		
-		return $items;
+		return array_values( $stores );
 	}
 }

@@ -47,7 +47,6 @@ class Main {
 		new Dispatcher();
 		new Scripts();
 		new AdminPage();
-		new FrontendDashboard();
 		new WooCommerce();
 		new WooCommerceSubscription();
 		new SingleProduct();
