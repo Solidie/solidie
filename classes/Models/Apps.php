@@ -147,8 +147,8 @@ class Apps extends Main{
 	 * @param integer $item_id
 	 * @return object|null
 	 */
-	public static function getContentByContentID( int $item_id, $field = null ) {
-		return self::getContentByField( 'item_id', $item_id, $field );
+	public static function getContentByContentID( int $item_id, $field = null, $public_only = true ) {
+		return self::getContentByField( 'item_id', $item_id, $field, $public_only );
 	}
 
 	/**
@@ -159,13 +159,23 @@ class Apps extends Main{
 	 * 
 	 * @return object|null
 	 */
-	public static function getContentByField( string $field_name, $field_value, $field = null ) {
+	public static function getContentByField( string $field_name, $field_value, $field = null, $public_only = true ) {
+		// Post creator user can preview own product regardless of post status.
+		$current_user_id = get_current_user_id();
+		$status_clause   = $public_only ? ' AND (product.post_status="publish" OR product.post_author=' . $current_user_id . ') ' : '';
+
+		// Admin and editor also can visit products no matter what the status is. Other users can only if the product is public.
+		if ( User::hasUserRole( array( 'administrator', 'editor' ), $current_user_id ) ) {
+			$status_clause = '';
+		}
+
 		global $wpdb;
 		$item = $wpdb->get_row(
 			$wpdb->prepare(
 				"SELECT item.*, product.post_title AS content_title FROM " . self::table( 'items' ) . " item 
 				INNER JOIN {$wpdb->posts} product ON item.product_id=product.ID 
-				WHERE item." . $field_name . "=%s",
+				INNER JOIN {$wpdb->users} author ON product.post_author=author.ID
+				WHERE item." . $field_name . "=%s" . $status_clause,
 				$field_value
 			)
 		);
@@ -214,7 +224,7 @@ class Apps extends Main{
 	 *
 	 * @return object|int|string|null
 	 */
-	public static function getContentByProduct( $product_id, $field = null ) {
+	public static function getContentByProduct( $product_id, $field = null, $public_only = true ) {
 		if ( ! is_numeric( $product_id ) ) {
 			$product = get_page_by_path( $product_id, OBJECT, 'product' );
 
@@ -225,7 +235,7 @@ class Apps extends Main{
 			$product_id = $product->ID;
 		}
 
-		return self::getContentByField( 'product_id', $product_id, $field );
+		return self::getContentByField( 'product_id', $product_id, $field, $public_only );
 	}
 
 	/**

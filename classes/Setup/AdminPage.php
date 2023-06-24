@@ -6,6 +6,7 @@ use Solidie\Store\Main;
 use Solidie\Store\Models\AdminSetting;
 use Solidie\Store\Models\Apps;
 use Solidie\Store\Models\Page as PageModel;
+use Solidie\Store\Setup\AdminPage as SetupAdminPage;
 
 class AdminPage extends Main {
 
@@ -23,6 +24,7 @@ class AdminPage extends Main {
 		add_filter( 'query_vars', array( $this, 'register_pagename' ) );
 		add_filter( 'template_include', array( $this, 'register_template' ) );
 		add_action( 'wp', array( $this, 'recirect_product' ) );
+		add_filter( 'post_type_link', array( $this, 'modify_wc_product_permalink' ), 10, 4 );
 	}
 
 	/**
@@ -148,12 +150,28 @@ class AdminPage extends Main {
 	public function recirect_product() {
 		$product_id = get_the_ID();
 
-		if ( is_admin() || ! is_singular() || ! Apps::isContentEnabled( Apps::getContentByProduct( $product_id, 'item_id' ) ) ) {
+		if ( is_admin() || ! is_single() || ! empty( get_query_var( SetupAdminPage::$pagename_key ) ) || ! Apps::isContentEnabled( Apps::getContentByProduct( $product_id, 'item_id' ) ) ) {
 			return;
 		}
 
 		$permalink = Apps::getPermalink( $product_id );
 		wp_safe_redirect( $permalink, 301 );
 		exit;
+	}
+
+	/**
+	 * Modify WC product permalink to Solidie way
+	 *
+	 * @param string $permalink
+	 * @param object $post
+	 * 
+	 * @return string
+	 */
+	public function modify_wc_product_permalink( $permalink, $post ) {
+		if ( is_archive() && $post->post_type === 'product' && Apps::isProductContent( $post->ID ) ) {
+			$permalink = Apps::getPermalink( $post->ID );
+		}
+
+		return $permalink;
 	}
 }
