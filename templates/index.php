@@ -1,8 +1,21 @@
 <?php
+	namespace Solidie\Store\TemplateLoader;
 
 	use Solidie\Store\Main;
 	use Solidie\Store\Models\AdminSetting;
+	use Solidie\Store\Models\Apps;
 	use Solidie\Store\Setup\AdminPage;
+
+	function load_404( $message = '' ) {
+		$template = locate_template( '404.php' );
+		if ( empty( $template ) ) {
+			$template = Main::$configs->dir . 'templates/404.php';
+		}
+
+		status_header( 404, $message );
+		require $template;
+		exit;
+	}
 
 	$page           = get_query_var( AdminPage::$pagename_key );
 	$parsed         = parse_url( Main::$configs->current_url );
@@ -10,13 +23,12 @@
 	$projected_path = get_home_url() . '/' . $page;
 
 	if ( strpos( $url_path, $projected_path ) !== 0 ) {
-		var_dump( $url_path, $projected_path );
-		echo 'Invalid Page';
-		return;
+		load_404( 'Invalid Projected Path' );
 	}
 
-	$sub_pages = array_filter(explode( '/', trim( trim( str_replace( $projected_path, '', $url_path ), '/' ) ) ) );
-	
+	$sub_pages         = array_filter(explode( '/', trim( trim( str_replace( $projected_path, '', $url_path ), '/' ) ) ) );
+	$content_post_name = $sub_pages[0] ?? null;
+
 	// Now load content
 	if ( AdminSetting::get( 'dashboard.slug' ) == $page ) {
 		require Main::$configs->dir . 'templates/frontend-dashboard.php';
@@ -25,21 +37,35 @@
 		require Main::$configs->dir . 'templates/filter-catalog.php';
 
 	} else {
-		$template = null;
-		$contents = AdminSetting::get( 'contents' );
+		// This block means it is single product page
+		$manifests = AdminSetting::get( 'contents' );
+		$content  = Apps::getAppByProduct( $content_post_name );
 
-		// Loop through contents
-		foreach ( $contents as $content ) {
-			if ( $content['slug'] == $page ) {
-				$template = Main::$configs->dir . 'templates/single-product.php';
+		// Check if the content exists
+		if ( empty( $content ) ) {
+			load_404( 'Content Not Found ' );
+		}
+
+		// Loop through contents to check if the base slug is okay
+		foreach ( $manifests as $type => $manifest ) {
+			if ( $manifest['slug'] == $page ) {
+				// Redirect to appropriate base slug if malformed
+				if ( $content->item_type !== $type ) {
+					var_dump($content->item_type, $type);
+					exit;
+					wp_safe_redirect( get_home_url() . '/' . $content->item_type . '/' . implode( '/', $sub_pages ) . '/' . ( $parsed['query'] ? '?'.$parsed['query'] : '' ), 301 );
+					exit;
+				}
 				break;
 			}
 		}
 		
-		if ( $template ) {
-			require $template;
+		if ( count( $sub_pages ) === 1 ) {
+			// Single product page itself
+			require Main::$configs->dir . 'templates/single-product.php';
 		} else {
-			echo 'Invalid Request!';
+			// Single product tutorial page, supports unlimited sub path. For now show 404.
+			load_404( 'Tutorial Block To Be Added' );
 		}
-	}
+	} 
 ?>
