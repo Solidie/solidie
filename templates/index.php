@@ -39,7 +39,7 @@
 	} else {
 		// This block means it is single product page
 		$manifests = AdminSetting::get( 'contents' );
-		$content  = Apps::getAppByProduct( $content_post_name );
+		$content  = Apps::getContentByProduct( $content_post_name );
 
 		// Check if the content exists
 		if ( empty( $content ) ) {
@@ -50,10 +50,8 @@
 		foreach ( $manifests as $type => $manifest ) {
 			if ( $manifest['slug'] == $page ) {
 				// Redirect to appropriate base slug if malformed
-				if ( $content->item_type !== $type ) {
-					var_dump($content->item_type, $type);
-					exit;
-					wp_safe_redirect( get_home_url() . '/' . $content->item_type . '/' . implode( '/', $sub_pages ) . '/' . ( $parsed['query'] ? '?'.$parsed['query'] : '' ), 301 );
+				if ( $content->content_type !== $type ) {
+					wp_safe_redirect( get_home_url() . '/' . $content->content_type . '/' . implode( '/', $sub_pages ) . '/' . ( $parsed['query'] ? '?'.$parsed['query'] : '' ), 301 );
 					exit;
 				}
 				break;

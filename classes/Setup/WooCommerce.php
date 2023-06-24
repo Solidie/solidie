@@ -16,7 +16,7 @@ class WooCommerce {
 	}
 
 	public function show_wc_editor_warning() {
-		if ( ! is_admin() || ! isset( $_GET['post'], $_GET['action'] ) || $_GET['action'] !== 'edit' || ! Apps::isProductApp( (int) $_GET['post'] ) ) {
+		if ( ! is_admin() || ! isset( $_GET['post'], $_GET['action'] ) || $_GET['action'] !== 'edit' || ! Apps::isProductContent( (int) $_GET['post'] ) ) {
 			return;
 		}
 

@@ -90,7 +90,7 @@ class RestAPI extends Main {
 	}
 
 	private function getLicenseData() {
-		$item_id      = Apps::getAppIdByProductPostName( $_POST['item_name'] );
+		$item_id      = Apps::getContentByProduct( $_POST['item_name'], 'item_id' );
 		$license_info = $item_id ? Licensing::getLicenseInfo( $_POST['license_key'], $item_id ) : null;
 
 		// If no license found, then it is either malformed or maybe item id is not same for the license
@@ -204,14 +204,14 @@ class RestAPI extends Main {
 	 */
 	private function update_check_free( string $item_name ) {
 
-		if ( ! Apps::isAppFree( $item_name ) ) {
+		if ( ! Apps::isContentFree( $item_name ) ) {
 			wp_send_json_error( array( 'message' => _x( 'The item you\'ve requested update for is not free. Please correct your credentials and try again.', 'solidie', 'solidie' ) ) );
 			exit;
 		}
 
 		$this->update_check(
 			array(
-				'item_id' => Apps::getAppIdByProductPostName( $item_name ),
+				'item_id' => Apps::getContentByProduct( $item_name, 'item_id' ),
 				'license_id' => null, // Means free app
 			)
 		);
@@ -239,7 +239,7 @@ class RestAPI extends Main {
 			exit;
 		}
 
-		if ( ! $license_id && ! Apps::isAppFree( $item_id ) ) {
+		if ( ! $license_id && ! Apps::isContentFree( $item_id ) ) {
 			wp_send_json_error( array( 'message' => _x( 'Sorry! The item is no more free to download. You need to activate license first.', 'solidie', 'solidie' ) ) );
 			exit;
 		}

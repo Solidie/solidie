@@ -148,7 +148,7 @@ class AdminPage extends Main {
 	public function recirect_product() {
 		$product_id = get_the_ID();
 
-		if ( is_admin() || ! is_singular() || ! Apps::isProductApp( $product_id ) ) {
+		if ( is_admin() || ! is_singular() || ! Apps::isContentEnabled( Apps::getContentByProduct( $product_id, 'item_id' ) ) ) {
 			return;
 		}
 

@@ -142,60 +142,37 @@ class Apps extends Main{
 	}
 
 	/**
-	 * Get linked item id by WooCommerce product id
-	 *
-	 * @param integer $product_id
-	 * @return object|null
-	 */
-	public static function getAppByProductId( int $product_id ) {
-		global $wpdb;
-		$item = $wpdb->get_row(
-			$wpdb->prepare(
-				"SELECT * FROM " . self::table( 'items' ) . " WHERE product_id=%d",
-				$product_id
-			)
-		);
-
-		return ( $item && is_object( $item ) ) ? $item : null;
-	}
-	
-	/**
 	 * Get item by item id
 	 *
 	 * @param integer $item_id
 	 * @return object|null
 	 */
-	public static function getAppByID( int $item_id ) {
-		global $wpdb;
-		$item = $wpdb->get_row(
-			$wpdb->prepare(
-				"SELECT item.*, product.post_title AS item_title FROM " . self::table( 'items' ) . " item 
-				INNER JOIN {$wpdb->posts} product ON item.product_id=product.ID 
-				WHERE item.item_id=%d",
-				$item_id
-			)
-		);
-
-		return ( $item && is_object( $item ) ) ? $item : null;
+	public static function getContentByContentID( int $item_id, $field = null ) {
+		return self::getContentByField( 'item_id', $item_id, $field );
 	}
 
 	/**
-	 * Get item id associated with woocommerce product post name.
+	 * Get item by field
 	 *
-	 * @param string $post_name
-	 * @return int|null
+	 * @param string $field_name
+	 * @param string|integer $field_value
+	 * 
+	 * @return object|null
 	 */
-	public static function getAppIdByProductPostName( string $post_name ) {
+	public static function getContentByField( string $field_name, $field_value, $field = null ) {
 		global $wpdb;
-
-		$item_id = $wpdb->get_var(
+		$item = $wpdb->get_row(
 			$wpdb->prepare(
-				"SELECT item.item_id FROM ".self::table('items')." item INNER JOIN {$wpdb->posts} product ON item.product_id=product.ID WHERE product.post_type='product' AND product.post_name=%s LIMIT 1",
-				$post_name
+				"SELECT item.*, product.post_title AS content_title FROM " . self::table( 'items' ) . " item 
+				INNER JOIN {$wpdb->posts} product ON item.product_id=product.ID 
+				WHERE item." . $field_name . "=%s",
+				$field_value
 			)
 		);
 
-		return $item_id ? $item_id : null;
+		$content = ( $item && is_object( $item ) ) ? $item : null;
+
+		return $content ? ( $field ? $content->$field ?? null : $content ) : null;
 	}
 
 	/**
@@ -204,12 +181,30 @@ class Apps extends Main{
 	 * @param string|int $product_id_or_name
 	 * @return boolean
 	 */
-	public static function isProductApp( $product_id_or_name ) {
-		return self::getAppByProduct( $product_id_or_name ) !== null;
+	public static function isProductContent( $product_id_or_name ) {
+		return self::getContentByProduct( $product_id_or_name ) !== null;
 	}
 
-	public function isContentTypeEnabled() {
-		
+	/**
+	 * Check if a content is enabled by content ID
+	 *
+	 * @param object|int $content_id Content object or content id
+	 * 
+	 * @return boolean
+	 */
+	public static function isContentEnabled( $content_id ) {
+		$content = is_object( $content_id ) ? $content_id : self::getContentByContentID( $content_id );
+		return ! empty( $content ) ? self::isContentTypeEnabled( $content->content_type ) : false;
+	}
+
+	/**
+	 * Content type check if enabled
+	 *
+	 * @param string $content_type
+	 * @return boolean
+	 */
+	public static function isContentTypeEnabled( $content_type ) {
+		return AdminSetting::get( 'contents.' . $content_type . '.enable' );
 	}
 
 	/**
@@ -217,9 +212,9 @@ class Apps extends Main{
 	 * 
 	 * @param string|int $product_id_or_name
 	 *
-	 * @return object|null
+	 * @return object|int|string|null
 	 */
-	public static function getAppByProduct( $product_id ) {
+	public static function getContentByProduct( $product_id, $field = null ) {
 		if ( ! is_numeric( $product_id ) ) {
 			$product = get_page_by_path( $product_id, OBJECT, 'product' );
 
@@ -230,31 +225,31 @@ class Apps extends Main{
 			$product_id = $product->ID;
 		}
 
-		return self::getAppByProductId( $product_id );
+		return self::getContentByField( 'product_id', $product_id, $field );
 	}
 
 	/**
-	 * Get permalink as per content type
+	 * Get permalink by product id as per content type
 	 *
-	 * @param int $id
+	 * @param int $product_id
 	 * @return string
 	 */
-	public static function getPermalink( $id ) {
-		$item         = self::getAppByProductId( $id );
-		$post_name    = get_post_field( 'post_name', $id );
-		$base_slug    = AdminSetting::get( 'contents.' . $item->item_type . '.slug' );
+	public static function getPermalink( $product_id ) {
+		$item         = self::getContentByProduct( $product_id );
+		$post_name    = get_post_field( 'post_name', $product_id );
+		$base_slug    = AdminSetting::get( 'contents.' . $item->content_type . '.slug' );
 		return get_home_url() . '/' . trim( $base_slug, '/' ) . '/' . $post_name . '/';
 	}
 
 	/**
 	 * Check if an associated item is free or not
 	 *
-	 * @param int|string $item_id_or_name
+	 * @param int|string $item_id_or_name Item ID if numeric, otherwise product post name.
+	 * 
 	 * @return boolean
 	 */
-	public static function isAppFree( $item_id_or_name ) {
-		$item_id = is_numeric( $item_id_or_name ) ? $item_id_or_name : self::getAppIdByProductPostName( $item_id_or_name );
-		$product_id = self::getProductID( $item_id );
+	public static function isContentFree( $item_id_or_name ) {
+		$product_id = is_numeric( $item_id_or_name ) ? self::getContentByContentID( $item_id_or_name, 'product_id' ) : self::getContentByProduct( $item_id_or_name, 'product_id' );
 		return get_post_meta( $product_id, self::FREE_META_KEY, true ) == true;
 	}
 
@@ -293,7 +288,7 @@ class Apps extends Main{
 		global $wpdb;
 		$order               = wc_get_order( $order_id );
 		$order_complete_date = $order->get_date_completed();
-		$items               = self::getAppsFromOrder( $order_id );
+		$items               = self::getContentsFromOrder( $order_id );
 		$commission_rate     = self::getSiteCommissionRate();
 
 		foreach ( $items as $item ) {
@@ -339,7 +334,7 @@ class Apps extends Main{
 	public static function processSubscriptionRenewal( $subscription ) {
 		global $wpdb;
 		
-		$items  = self::filterAppsFromOrderItems( $subscription->get_items() );
+		$items  = self::filterContentsFromOrderItems( $subscription->get_items() );
 
 		foreach ( $items as $item ) {
 			// Don't update if validity is null which means lifetime license
@@ -375,9 +370,9 @@ class Apps extends Main{
 	 * @param integer $order_id
 	 * @return array
 	 */
-	public static function getAppsFromOrder( int $order_id ) {
+	public static function getContentsFromOrder( int $order_id ) {
 		$order = wc_get_order( $order_id ); 
-		return self::filterAppsFromOrderItems( $order->get_items() );
+		return self::filterContentsFromOrderItems( $order->get_items() );
 	}
 
 	/**
@@ -386,14 +381,14 @@ class Apps extends Main{
 	 * @param array $items
 	 * @return array
 	 */
-	public static function filterAppsFromOrderItems( array $items ) {
+	public static function filterContentsFromOrderItems( array $items ) {
 		$items  = array();
 		foreach ( $items as $item ) {
 			$product_type = $item->get_product()->get_type();
 			$product_id   = $item->get_product_id();
 			$variation_id = $item->get_variation_id();
 			$variation    = new \WC_Product_Variation( $variation_id );
-			$item         = self::getAppByProductId( $product_id );
+			$item         = self::getContentByProduct( $product_id );
 			$var_info     = self::getVariationInfo( $variation );
 
 			// Skip non-item products or unsupported variation.
