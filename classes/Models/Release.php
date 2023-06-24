@@ -237,7 +237,7 @@ class Release extends Main {
 	 * @return mixed
 	 */
 	public static function pushRelease( array $data ) {
-		$item = Apps::getAppByID( $data['item_id'] );
+		$item = Apps::getContentByContentID( $data['item_id'] );
 		if ( empty( $item ) ) {
 			return _x( 'App not found to release', 'solidie', 'solidie' );
 		}
@@ -258,7 +258,7 @@ class Release extends Main {
 			}
 
 			// Upload new one
-			$file_id = self::uploadFile( $data['item_id'], $data['file'], $item->item_title . ' - ' . $data['version'] );
+			$file_id = self::uploadFile( $data['item_id'], $data['file'], $item->content_title . ' - ' . $data['version'] );
 			if ( ! $file_id ) {
 				return _x( 'Error in file saving!', 'solidie', 'solidie' );
 			}
