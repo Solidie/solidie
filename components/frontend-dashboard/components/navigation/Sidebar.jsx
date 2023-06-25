@@ -11,6 +11,7 @@ import {
 import { Tooltip } from "../ui";
 import { cn } from "../../lib/utils";
 import { ContextFrontendDashboard } from "../../../utilities/contexts.jsx";
+import { getDashboardPath } from "../../../utilities/helpers.jsx";
 
 const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
 		
@@ -22,17 +23,17 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
 				groupName: "Dashboard",
 				navigation: [
 				{
-					href: "dashboard/purchased-apps",
+					href: getDashboardPath('purchased-apps'),
 					text: "Purchased Apps",
 					icon: <PurchasedProductsIcon />,
 				},
 				{
-					href: "dashboard/subscriptions",
+					href: getDashboardPath('subscriptions'),
 					text: "Subscriptions",
 					icon: <SubscriptionIcon />,
 				},
 				{
-					href: "dashboard/my-account",
+					href: getDashboardPath('my-account'),
 					text: "My Account",
 					icon: <MdSwitchAccount className="text-2xl" />,
 				},
@@ -44,22 +45,22 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
 					groupName: store_name,
 					navigation: [
 						{
-							href: `dashboard/store/${store_slug}/inventory`,
+							href: getDashboardPath(`store/${store_slug}/inventory`),
 							text: "Inventory",
 							icon: <MdInventory className="text-2xl" />,
 						},
 						{
-							href: `dashboard/store/${store_slug}/sales`,
+							href: getDashboardPath(`store/${store_slug}/sales`),
 							text: "Sales",
 							icon: <SalesIcon />,
 						},
 						{
-							href: `dashboard/store/${store_slug}/customers`,
+							href: getDashboardPath(`store/${store_slug}/customers`),
 							text: "Customers",
 							icon: <CustomersIcon />,
 						},
 						{
-							href: `dashboard/store/${store_slug}/reports`,
+							href: getDashboardPath(`store/${store_slug}/reports`),
 							text: "Reports",
 							icon: <ReportIcon />,
 						},

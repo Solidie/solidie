@@ -25,16 +25,7 @@ class FrontendDashboard{
 	 * @return array
 	 */
 	public static function getDashboardData() {
-		$contents = AdminSetting::get( 'contents' );
-		$enableds = array();
-		foreach ( $contents as $type => $manifest ) {
-			if ( $manifest['enable'] ?? false ) {
-				$enableds[ $type ] = $manifest;
-			}
-		}
-		
 		$data = array(
-			'enabled_contents' => $enableds,
 			'stores'           => Store::getStoresForKeeper( get_current_user_id() ),
 			'avatar_url'       => get_avatar_url( get_current_user_id(), array( 'size'=> 120 ) )
 		);

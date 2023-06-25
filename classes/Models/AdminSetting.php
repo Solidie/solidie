@@ -54,7 +54,7 @@ class AdminSetting extends Main{
 		$settings = self::typeCast( is_array( $settings ) ? $settings : array() );
 		$settings = array_replace_recursive( self::get(), $settings );
 
-		update_option( self::$name, $settings );
+		update_option( self::$name, $settings, true );
 		do_action( 'solidie_settings_updated' );
 		return true;
 	}
