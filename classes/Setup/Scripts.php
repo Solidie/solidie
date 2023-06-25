@@ -4,6 +4,7 @@ namespace Solidie\Store\Setup;
 
 use Solidie\Store\Helpers\Nonce;
 use Solidie\Store\Main;
+use Solidie\Store\Models\AdminSetting;
 use Solidie\Store\Models\FrontendDashboard;
 
 class Scripts extends Main {
@@ -17,8 +18,15 @@ class Scripts extends Main {
 
 	public function getAppData() {
 		$data = array(
-			'ajax_url' => admin_url( 'admin-ajax.php' ),
-			'nonce'    => Nonce::generate()
+			'ajax_url'  => admin_url( 'admin-ajax.php' ),
+			'home_url'  => get_home_url(),
+			'home_path' => rtrim( parse_url( get_home_url() )['path'] ?? '/', '/' ) . '/',
+			'nonce'     => Nonce::generate(),
+			'manifest'  => array(
+				'cotnents'  => AdminSetting::get( 'contents' ),
+				'dashboard' => AdminSetting::get( 'dashboard' ),
+				'catalog'   => AdminSetting::get( 'catalog' ),
+			) 
 		);
 
 		return apply_filters( 'solidie_script_data', $data );
