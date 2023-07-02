@@ -180,7 +180,7 @@ class Contents extends Main{
 			)
 		);
 
-		$content = ( $content && is_object( $content ) ) ? $content : null;
+		$content = ( $content && is_object( $content ) ) ? self::assignContentMeta( $content ) : null;
 
 		return $content ? ( $field ? $content->$field ?? null : $content ) : null;
 	}
@@ -465,26 +465,51 @@ class Contents extends Main{
 	 */
 	public static function getContents( array $args ) {
 		// Prepare arguments
-		$store_id     = $args['store_id'] ?? null;
+		$store_slug   = $args['store_slug'] ?? null;
 		$content_type = $args['content_type'] ?? null;
-		$page         = $args['page'] ?? 1;
-		$limit        = $args['limit'] ?? 15;
+		$page         = absint( $args['page'] ?? 1 );
+		$limit        = absint( $args['limit'] ?? 15 );
 
-		$type_clause  = $content_type ? " AND content.content_type='" . esc_sql( $content_type ) . "'" : '';
-		$store_clause = $store_id ? " AND  content.store_id='" . esc_sql( $store_id ) . "'" : '';
-
+		$store_clause  = $store_slug ? " AND  store.slug='" . esc_sql( $store_slug ) . "'" : '';
+		$type_clause   = $content_type ? " AND content.content_type='" . esc_sql( $content_type ) . "'" : '';
+		$limit_clause  = " LIMIT " . $limit;
+		$offset_clause = " OFFSET " . ( absint( $page - 1 ) * $limit );
 		
 		global $wpdb;
 		$contents = $wpdb->get_results(
-			$wpdb->prepare(
-				"SELECT product.post_title AS content_name, product.ID as product_id, content.content_id, product.post_status AS content_status
-				FROM {$wpdb->posts} product INNER JOIN " . self::table( 'contents' ) . " content ON product.ID=content.product_id
-				WHERE content.store_id=%d",
-				$store_id
-			),
-			ARRAY_A
+			"SELECT product.post_title AS content_name, product.ID as product_id, content.content_id, product.post_status AS content_status
+			FROM {$wpdb->posts} product 
+				INNER JOIN " . self::table( 'contents' ) . " content ON product.ID=content.product_id 
+				INNER JOIN " . self::table( 'stores' ) . " store ON content.store_id=store.store_id
+			WHERE 1=1 " . $store_clause . $type_clause . $limit_clause . $offset_clause,
 		);
-		
-		return $contents;
+
+		return self::assignContentMeta( $contents );
+	}
+
+	/**
+	 * Undocumented function
+	 *
+	 * @param array|object $content
+	 * @param array $meta_array
+	 * @return array|object
+	 */
+	public static function assignContentMeta( $contents, $meta_array = array( 'logo_url' ) ) {
+		// Support both list and single content
+		if ( $was_single = ! is_array( $contents ) ) {
+			$contents = array( $contents );
+		}
+
+		foreach ( $meta_array as $meta ) {
+			switch ( $meta ) {
+				case 'logo_url' :
+					foreach ( $contents as $index => $content ) {
+						$contents[ $index ]->logo_url = get_the_post_thumbnail_url( $content->product_id );
+					}
+					break;
+			}
+		}
+
+		return $was_single ? $contents[0] : $contents;
 	}
 }

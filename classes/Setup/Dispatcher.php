@@ -3,6 +3,7 @@
 namespace Solidie\Store\Setup;
 
 use Solidie\Store\Helpers\Nonce;
+use Solidie\Store\Main;
 use Solidie\Store\Models\AdminSetting;
 use Solidie\Store\Models\Contents as ContentModel;
 use Solidie\Store\Models\Release;
@@ -12,7 +13,7 @@ class Dispatcher {
 	
 	// To Do: Secure all the endpoint after MVP implementation
 	private static $endpoints = array(
-		'solidie_get_content_list',
+		'get_content_list',
 		'save_admin_settings',
 		'create_store',
 		'create_or_update_content',
@@ -22,7 +23,7 @@ class Dispatcher {
 
 	function __construct() {
 		foreach ( self::$endpoints as $endpoint ) {
-			add_action( 'wp_ajax_' . $endpoint, function() use($endpoint) {
+			add_action( 'wp_ajax_' . Main::$configs->content_name . '_' . $endpoint, function() use($endpoint) {
 				$this->dispatch($endpoint);
 			} );
 		}
@@ -45,10 +46,16 @@ class Dispatcher {
 			$this->$endpoint();
 		} else {
 			wp_send_json_error( array( 'message' => 'Invalid Endpoint' ) );
+			exit;
 		}
 	}
 
-	private function solidie_get_content_list() {
+	/**
+	 * Provide content list for various area like dashboard, catalog and so on.
+	 *
+	 * @return void
+	 */
+	private function get_content_list() {
 		$content_list = ContentModel::getContents( $_POST );
 		wp_send_json_success( array( 'contents' => $content_list ) );
 	}

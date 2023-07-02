@@ -167,13 +167,12 @@ class Store extends Main{
 		$stores = $wpdb->get_results(
 			"SELECT store_id, name AS store_name, slug AS store_slug 
 			FROM " . self::table( 'stores' ) . "
-			WHERE store_id IN(".implode( ',', $store_ids ).")",
-			ARRAY_A
+			WHERE store_id IN(".implode( ',', $store_ids ).")"
 		);
 
 		// Loop through stores and assign more meta data like store URL, logo information, cover informarion etc.
 		foreach ( $stores as $index => $store ) {
-			$stores[ $index ]['store_url'] = self::getStoreURL( $store['store_slug'] );
+			$stores[ $index ]->store_url = self::getStoreURL( $store->store_slug );
 		}
 
 		return array_values( $stores );
