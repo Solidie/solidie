@@ -331,7 +331,7 @@
                                         </svg>
                                     </summary>
                                     <div class="pl-1 max-w-full">
-                                        <div class="border-l pl-2 max-w-full">
+                                        <div class="border-l border-l-tertiary pl-2 max-w-full">
 
                                             <details
                                                 class="group max-w-full w-full cursor-pointer self-stretch inline-block [&[open]>summary>svg]:translate-y-1 [&[open]>summary>svg]:rotate-0 ">
@@ -347,7 +347,7 @@
                                                     </svg>
                                                 </summary>
                                                 <div class="pl-1">
-                                                    <div class="border-l pl-2">
+                                                    <div class="border-l border-l-tertiary pl-2">
 
                                                         <details
                                                             class="group max-w-full w-full cursor-pointer self-stretch inline-block [&[open]>summary>svg]:translate-y-1 [&[open]>summary>svg]:rotate-0 ">
@@ -364,7 +364,7 @@
                                                                 </svg>
                                                             </summary>
                                                             <div class="pl-1">
-                                                                <div class="border-l pl-2">
+                                                                <div class="border-l border-l-tertiary pl-2">
 
                                                                     <details
                                                                         class="group max-w-full w-full cursor-pointer self-stretch inline-block [&[open]>summary>svg]:translate-y-1 [&[open]>summary>svg]:rotate-0 ">
@@ -381,7 +381,7 @@
                                                                             </svg>
                                                                         </summary>
                                                                         <div class="pl-1">
-                                                                            <div class="border-l pl-2">
+                                                                            <div class="border-l border-l-tertiary pl-2">
 
                                                                                 <details
                                                                                     class="group max-w-full w-full cursor-pointer self-stretch inline-block [&[open]>summary>svg]:translate-y-1 [&[open]>summary>svg]:rotate-0 ">
@@ -399,7 +399,7 @@
                                                                                         </svg>
                                                                                     </summary>
                                                                                     <div class="pl-1">
-                                                                                        <div class="border-l pl-2">
+                                                                                        <div class="border-l border-l-tertiary pl-2">
 
                                                                                             <details
                                                                                                 class="group max-w-full w-full cursor-pointer self-stretch inline-block [&[open]>summary>svg]:translate-y-1 [&[open]>summary>svg]:rotate-0 ">
@@ -419,7 +419,7 @@
                                                                                                 </summary>
                                                                                                 <div class="pl-1">
                                                                                                     <div
-                                                                                                        class="border-l pl-2">
+                                                                                                        class="border-l border-l-tertiary pl-2">
 
 
                                                                                                     </div>
@@ -461,7 +461,7 @@
                                                     </svg>
                                                 </summary>
                                                 <div class="pl-1">
-                                                    <div class="border-l pl-2">
+                                                    <div class="border-l border-l-tertiary pl-2">
 
                                                         <details
                                                             class="group max-w-full w-full cursor-pointer self-stretch inline-block [&[open]>summary>svg]:translate-y-1 [&[open]>summary>svg]:rotate-0 ">
@@ -478,7 +478,7 @@
                                                                 </svg>
                                                             </summary>
                                                             <div class="pl-1">
-                                                                <div class="border-l pl-2">
+                                                                <div class="border-l border-l-tertiary pl-2">
 
                                                                     <details
                                                                         class="group max-w-full w-full cursor-pointer self-stretch inline-block [&[open]>summary>svg]:translate-y-1 [&[open]>summary>svg]:rotate-0 ">
@@ -495,7 +495,7 @@
                                                                             </svg>
                                                                         </summary>
                                                                         <div class="pl-1">
-                                                                            <div class="border-l pl-2">
+                                                                            <div class="border-l border-l-tertiary pl-2">
 
                                                                                 <details
                                                                                     class="group max-w-full w-full cursor-pointer self-stretch inline-block [&[open]>summary>svg]:translate-y-1 [&[open]>summary>svg]:rotate-0 ">
@@ -513,7 +513,7 @@
                                                                                         </svg>
                                                                                     </summary>
                                                                                     <div class="pl-1">
-                                                                                        <div class="border-l pl-2">
+                                                                                        <div class="border-l border-l-tertiary pl-2">
 
                                                                                             <details
                                                                                                 class="group max-w-full w-full cursor-pointer self-stretch inline-block [&[open]>summary>svg]:translate-y-1 [&[open]>summary>svg]:rotate-0 ">
@@ -533,7 +533,7 @@
                                                                                                 </summary>
                                                                                                 <div class="pl-1">
                                                                                                     <div
-                                                                                                        class="border-l pl-2">
+                                                                                                        class="border-l border-l-tertiary pl-2">
 
 
                                                                                                     </div>
