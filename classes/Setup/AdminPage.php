@@ -4,7 +4,7 @@ namespace Solidie\Store\Setup;
 
 use Solidie\Store\Main;
 use Solidie\Store\Models\AdminSetting;
-use Solidie\Store\Models\Apps;
+use Solidie\Store\Models\Contents;
 use Solidie\Store\Models\Page as PageModel;
 use Solidie\Store\Setup\AdminPage as SetupAdminPage;
 
@@ -150,11 +150,11 @@ class AdminPage extends Main {
 	public function recirect_product() {
 		$product_id = get_the_ID();
 
-		if ( is_admin() || ! is_single() || ! empty( get_query_var( SetupAdminPage::$pagename_key ) ) || ! Apps::isContentEnabled( Apps::getContentByProduct( $product_id, 'item_id' ) ) ) {
+		if ( is_admin() || ! is_single() || ! empty( get_query_var( SetupAdminPage::$pagename_key ) ) || ! Contents::isContentEnabled( Contents::getContentByProduct( $product_id, 'content_id' ) ) ) {
 			return;
 		}
 
-		$permalink = Apps::getPermalink( $product_id );
+		$permalink = Contents::getPermalink( $product_id );
 		wp_safe_redirect( $permalink, 301 );
 		exit;
 	}
@@ -168,8 +168,8 @@ class AdminPage extends Main {
 	 * @return string
 	 */
 	public function modify_wc_product_permalink( $permalink, $post ) {
-		if ( is_archive() && $post->post_type === 'product' && Apps::isProductContent( $post->ID ) ) {
-			$permalink = Apps::getPermalink( $post->ID );
+		if ( is_archive() && $post->post_type === 'product' && Contents::isProductContent( $post->ID ) ) {
+			$permalink = Contents::getPermalink( $post->ID );
 		}
 
 		return $permalink;

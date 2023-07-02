@@ -54,7 +54,7 @@ class Release extends Main {
 	 *
 	 * @var int
 	 */
-	public static $item_id = 0;
+	public static $content_id = 0;
 
 	/**
 	 * Alter upload directory by hook
@@ -64,7 +64,7 @@ class Release extends Main {
 	 */
 	public static function custom_upload_directory( $upload ) {
 		// Define the new upload directory
-		$upload_dir = '/' . self::$custom_dir . '/' . self::$item_id;
+		$upload_dir = '/' . self::$custom_dir . '/' . self::$content_id;
 
 		// Get the current upload directory path and URL
 		$upload_path = $upload['basedir'] . $upload_dir;
@@ -117,15 +117,15 @@ class Release extends Main {
 	/**
 	 * Create custom directory for release files
 	 *
-	 * @param int $item_id
+	 * @param int $content_id
 	 * @return void
 	 */
-	private static function createUploadDir( $item_id ) {
+	private static function createUploadDir( $content_id ) {
 		
 		$wp_upload_dir = wp_upload_dir(); // Get the path and URL of the wp-uploads directory
 
 		// Create the full path of the custom directory
-		$custom_dir_path = $wp_upload_dir['basedir'] . '/' . self::$custom_dir . '/' . $item_id;
+		$custom_dir_path = $wp_upload_dir['basedir'] . '/' . self::$custom_dir . '/' . $content_id;
 		$htaccess_path   = $wp_upload_dir['basedir'] . '/' . self::$custom_dir . '/.htaccess';
 
 		// Create the directory if it doesn't exist
@@ -144,20 +144,20 @@ class Release extends Main {
 	/**
 	 * Process upload of a file using native WP methods
 	 *
-	 * @param int $item_id
+	 * @param int $content_id
 	 * @param array $file
 	 * @param string $file_title
 	 * @return void
 	 */
-	private static function uploadFile( $item_id, array $file, string $file_title ) {
+	private static function uploadFile( $content_id, array $file, string $file_title ) {
 		// Store to make available in upload_dir hook handler
-		self::$item_id = $item_id;
+		self::$content_id = $content_id;
 
 		// File id place holder
 		$attachment_id = null;
 
 		// Create necessary directory if not created already
-		self::createUploadDir( $item_id );
+		self::createUploadDir( $content_id );
 
 		// Add filters
 		add_filter( 'upload_dir', array( __CLASS__, 'custom_upload_directory' ) );
@@ -237,15 +237,15 @@ class Release extends Main {
 	 * @return mixed
 	 */
 	public static function pushRelease( array $data ) {
-		$item = Apps::getContentByContentID( $data['item_id'] );
-		if ( empty( $item ) ) {
-			return _x( 'App not found to release', 'solidie', 'solidie' );
+		$content = Contents::getContentByContentID( $data['content_id'] );
+		if ( empty( $content ) ) {
+			return _x( 'Content not found to release', 'solidie', 'solidie' );
 		}
 		
 		$release = array(
 			'version'   => $data['version'],
 			'changelog' => $data['changelog'],
-			'item_id'    => $data['item_id'],
+			'content_id'    => $data['content_id'],
 		);
 
 		global $wpdb;
@@ -258,7 +258,7 @@ class Release extends Main {
 			}
 
 			// Upload new one
-			$file_id = self::uploadFile( $data['item_id'], $data['file'], $item->content_title . ' - ' . $data['version'] );
+			$file_id = self::uploadFile( $data['content_id'], $data['file'], $content->content_title . ' - ' . $data['version'] );
 			if ( ! $file_id ) {
 				return _x( 'Error in file saving!', 'solidie', 'solidie' );
 			}
@@ -283,13 +283,13 @@ class Release extends Main {
 	/**
 	 * Get release history. No matter what the defined version is, the order will be latest first. 
 	 *
-	 * @param integer $item_id
+	 * @param integer $content_id
 	 * @param integer|null $page
 	 * @param integer|null $limit
 	 * @param string|null $version
 	 * @return array
 	 */
-	public static function getReleases( int $item_id, int $page = 1, int $limit = 20, string $version = null ) {
+	public static function getReleases( int $content_id, int $page = 1, int $limit = 20, string $version = null ) {
 		global $wpdb;
 
 		$offset         = $limit * ( $page - 1 );
@@ -297,12 +297,12 @@ class Release extends Main {
 
 		$releases = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT release.*, product.post_title AS item_name, UNIX_TIMESTAMP(release.release_date) as release_unix_timestamp 
+				"SELECT release.*, product.post_title AS content_name, UNIX_TIMESTAMP(release.release_date) as release_unix_timestamp 
 				FROM ".self::table( 'releases' )." release
-				INNER JOIN ".self::table('items')." item ON item.item_id=release.item_id
-				INNER JOIN {$wpdb->posts} product ON item.product_id=product.ID
-				WHERE release.item_id=%d ".$version_clause." ORDER BY release.release_date DESC LIMIT %d, %d",
-				$item_id,
+				INNER JOIN ".self::table('contents')." content ON content.content_id=release.content_id
+				INNER JOIN {$wpdb->posts} product ON content.product_id=product.ID
+				WHERE release.content_id=%d ".$version_clause." ORDER BY release.release_date DESC LIMIT %d, %d",
+				$content_id,
 				$offset,
 				$limit
 			)
@@ -323,7 +323,7 @@ class Release extends Main {
 			$release->file_url  = $file_url;
 			$release->file_path = $file_path ? $file_path : null;
 			$release->mime_type = get_post_mime_type( $release->file_id );
-			$release->item_url  = get_permalink( $release->item_id );
+			$release->content_url  = get_permalink( $release->content_id );
 			
 			// Store the release in the new array
 			$new_array[] = $release;
@@ -335,12 +335,12 @@ class Release extends Main {
 	/**
 	 * Undocumented function
 	 *
-	 * @param integer $item_id
+	 * @param integer $content_id
 	 * @param string|null $version
 	 * @return object
 	 */
-	public static function getRelease( int $item_id, string $version = null ) {
-		$relases = self::getReleases( $item_id, 1, 1, $version );
+	public static function getRelease( int $content_id, string $version = null ) {
+		$relases = self::getReleases( $content_id, 1, 1, $version );
 		return ( is_array( $relases ) && ! empty( $relases ) ) ? $relases[0] : null;
 	}
 }

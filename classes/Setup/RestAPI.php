@@ -4,7 +4,7 @@ namespace Solidie\Store\Setup;
 
 use Solidie\Store\Helpers\Crypto;
 use Solidie\Store\Main;
-use Solidie\Store\Models\Apps;
+use Solidie\Store\Models\Contents;
 use Solidie\Store\Models\Hit;
 use Solidie\Store\Models\Licensing;
 use Solidie\Store\Models\Release;
@@ -14,7 +14,7 @@ class RestAPI extends Main {
 	const DOWNLOAD_LINK_VALIDITY = 720; // in minutes. 12 hours here as WordPress normally checks for updates every 12 hours.
 
 	private static $required_fields = array(
-		'item_name',
+		'content_name',
 		'license_key',
 		'endpoint',
 		'action'
@@ -66,7 +66,7 @@ class RestAPI extends Main {
 
 		// Now process free-update-check
 		if ( $_POST['action'] == 'update-check-free' ) {
-			$this->update_check_free( $_POST['item_name'] );
+			$this->update_check_free( $_POST['content_name'] );
 			exit;
 		}
 
@@ -90,10 +90,10 @@ class RestAPI extends Main {
 	}
 
 	private function getLicenseData() {
-		$item_id      = Apps::getContentByProduct( $_POST['item_name'], 'item_id' );
-		$license_info = $item_id ? Licensing::getLicenseInfo( $_POST['license_key'], $item_id ) : null;
+		$content_id   = Contents::getContentByProduct( $_POST['content_name'], 'content_id' );
+		$license_info = $content_id ? Licensing::getLicenseInfo( $_POST['license_key'], $content_id ) : null;
 
-		// If no license found, then it is either malformed or maybe item id is not same for the license
+		// If no license found, then it is either malformed or maybe content id is not same for the license
 		if ( ! is_array( $license_info ) || empty( $license_info ) ) {
 			wp_send_json_error(
 				array( 
@@ -166,13 +166,13 @@ class RestAPI extends Main {
 	}
 
 	/**
-	 * Update check for item
+	 * Update check for content
 	 *
 	 * @param array $license
 	 * @return void
 	 */
 	private function update_check( array $license ) {
-		$release = Release::getRelease( $license['item_id'] );
+		$release = Release::getRelease( $license['content_id'] );
 		if ( ! $release ) {
 			wp_send_json_error( array( 'message' => _x( 'No release found.' ) ) );
 			exit;
@@ -182,13 +182,13 @@ class RestAPI extends Main {
 
 		wp_send_json_success(
 			array(
-				'item_url'           => $release->item_url,
+				'content_url'           => $release->content_url,
 				'version'           => $release->version,
 				'host_version'		=> array(),
 				'release_datetime'  => $release->release_date,
 				'release_timestamp' => $release->release_unix_timestamp,
 				'changelog'         => $release->changelog,
-				'download_url'      => get_home_url() . self::API_PATH . '/?download=' . urlencode( Crypto::encrypt( $release->item_id . ' ' . ( $license['license_id'] ?? 0 ) . ' ' . time() . ' ' . $_POST['endpoint'] ) ), // License id null means it's free item
+				'download_url'      => get_home_url() . self::API_PATH . '/?download=' . urlencode( Crypto::encrypt( $release->content_id . ' ' . ( $license['license_id'] ?? 0 ) . ' ' . time() . ' ' . $_POST['endpoint'] ) ), // License id null means it's free
 			)
 		);
 		
@@ -198,20 +198,20 @@ class RestAPI extends Main {
 	/**
 	 * Check update for free product
 	 *
-	 * @param string $item_name
+	 * @param string $content_name
 	 * @param string $endpoint
 	 * @return void
 	 */
-	private function update_check_free( string $item_name ) {
+	private function update_check_free( string $content_name ) {
 
-		if ( ! Apps::isContentFree( $item_name ) ) {
-			wp_send_json_error( array( 'message' => _x( 'The item you\'ve requested update for is not free. Please correct your credentials and try again.', 'solidie', 'solidie' ) ) );
+		if ( ! Contents::isContentFree( $content_name ) ) {
+			wp_send_json_error( array( 'message' => _x( 'The content you\'ve requested update for is not free. Please correct your credentials and try again.', 'solidie', 'solidie' ) ) );
 			exit;
 		}
 
 		$this->update_check(
 			array(
-				'item_id' => Apps::getContentByProduct( $item_name, 'item_id' ),
+				'content_id' => Contents::getContentByProduct( $content_name, 'content_id' ),
 				'license_id' => null, // Means free app
 			)
 		);
@@ -228,8 +228,8 @@ class RestAPI extends Main {
 			exit;
 		}
 
-		$item_id    = (int) $parse[0];
-		$license_id = (int) $parse[1]; // 0 means free item
+		$content_id    = (int) $parse[0];
+		$license_id = (int) $parse[1]; // 0 means free
 		$token_time = (int) $parse[2];
 		$endpoint   = $parse[3];
 
@@ -239,25 +239,25 @@ class RestAPI extends Main {
 			exit;
 		}
 
-		if ( ! $license_id && ! Apps::isContentFree( $item_id ) ) {
-			wp_send_json_error( array( 'message' => _x( 'Sorry! The item is no more free to download. You need to activate license first.', 'solidie', 'solidie' ) ) );
+		if ( ! $license_id && ! Contents::isContentFree( $content_id ) ) {
+			wp_send_json_error( array( 'message' => _x( 'Sorry! It\'s no more free to download. You need to activate license first.', 'solidie', 'solidie' ) ) );
 			exit;
 		}
 
-		$release = Release::getRelease( $item_id );
+		$release = Release::getRelease( $content_id );
 		if ( ! $release ) {
-			wp_send_json_error( array( 'message' => _x( 'Something went wrong. No release found for this item.', 'solidie', 'solidie' ) ) );
+			wp_send_json_error( array( 'message' => _x( 'Something went wrong. No release found.', 'solidie', 'solidie' ) ) );
 			exit;
 		}
 
 		$file_source = $release->file_path ?? $release->file_url;
-		$file_name   = $release->item_name . ' - ' . $release->version . '.' . pathinfo( basename( $file_source ), PATHINFO_EXTENSION );
+		$file_name   = $release->content_name . ' - ' . $release->version . '.' . pathinfo( basename( $file_source ), PATHINFO_EXTENSION );
 		if ( ! $file_source ) {
 			wp_send_json_error( array( 'message' => _x( 'Something went wrong. Release file not found.', 'solidie', 'solidie' ) ) );
 			exit;
 		}
 
-		// License id 0 means it's free item
+		// License id 0 means it's free
 		Hit::registerHit( 'update-download', $release->release_id, ($license_id===0 ? null : $license_id), $endpoint );
 		
 		nocache_headers();

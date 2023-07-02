@@ -2,7 +2,7 @@
 
 namespace Solidie\Store\Setup;
 
-use Solidie\Store\Models\Apps;
+use Solidie\Store\Models\Contents;
 
 class WooCommerce {
 	public function __construct() {
@@ -11,12 +11,12 @@ class WooCommerce {
 	}
 
 	public function on_product_purchase( $order_id ) {
-		// Process item purchase
-		Apps::processPurchase( $order_id );
+		// Process purchase
+		Contents::processPurchase( $order_id );
 	}
 
 	public function show_wc_editor_warning() {
-		if ( ! is_admin() || ! isset( $_GET['post'], $_GET['action'] ) || $_GET['action'] !== 'edit' || ! Apps::isProductContent( (int) $_GET['post'] ) ) {
+		if ( ! is_admin() || ! isset( $_GET['post'], $_GET['action'] ) || $_GET['action'] !== 'edit' || ! Contents::isProductContent( (int) $_GET['post'] ) ) {
 			return;
 		}
 

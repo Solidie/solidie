@@ -3,7 +3,7 @@
 namespace Solidie\Store\Setup;
 
 use Solidie\Store\Main;
-use Solidie\Store\Models\Apps;
+use Solidie\Store\Models\Contents;
 
 class WooCommerceSubscription extends Main {
 	public function __construct() {
@@ -62,10 +62,10 @@ class WooCommerceSubscription extends Main {
 	}
 
 	public function renewal_complete( $subscription ) {
-		Apps::processSubscriptionRenewal( $subscription );
+		Contents::processSubscriptionRenewal( $subscription );
 	}
 
 	public function alter_billing_period( $subscription ) {
-		Apps::supportCustomPeriodForSubscription( $subscription );
+		Contents::supportCustomPeriodForSubscription( $subscription );
 	}
 }

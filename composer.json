@@ -1,6 +1,6 @@
 {
     "name": "solidie/solidie",
-    "description": "App Saling plugin for WordPress",
+    "description": "Digital content selling plugin for WordPress",
     "autoload": {
         "psr-4": {
             "Solidie\\Store\\": "classes/",
