@@ -18,11 +18,12 @@ class Scripts extends Main {
 
 	public function getContentData() {
 		$data = array(
-			'ajax_url'  => admin_url( 'admin-ajax.php' ),
-			'home_url'  => get_home_url(),
-			'home_path' => rtrim( parse_url( get_home_url() )['path'] ?? '/', '/' ) . '/',
-			'nonce'     => Nonce::generate(),
-			'manifest'  => array(
+			'ajax_url'     => admin_url( 'admin-ajax.php' ),
+			'home_url'     => get_home_url(),
+			'home_path'    => rtrim( parse_url( get_home_url() )['path'] ?? '/', '/' ) . '/',
+			'content_name' => self::$configs->content_name,
+			'nonce'        => Nonce::generate(),
+			'manifest'     => array(
 				'cotnents'  => AdminSetting::get( 'contents' ),
 				'dashboard' => AdminSetting::get( 'dashboard' ),
 				'catalog'   => AdminSetting::get( 'catalog' ),

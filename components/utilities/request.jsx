@@ -43,15 +43,17 @@ export function request(action, payload={}, callback, progressCallback) {
 		}
 	}
 
+	let action_prefixed = window.Solidie.content_name + '_' + action;
+	
 	if ( payload instanceof FormData ) {
 		payload.append(nonce_name, nonce_action);
-		payload.append('action', action);
+		payload.append('action', action_prefixed);
 	} else {
 		modifer = {};
 		payload = {
 			...payload, 
 			[nonce_name]: nonce_action,
-			action
+			action: action_prefixed
 		};
 	}
 

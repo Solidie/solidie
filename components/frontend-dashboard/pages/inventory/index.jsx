@@ -15,6 +15,7 @@ const Inventory = (props) => {
 			store_slug,
 			content_type: 'app',
 			page: 1,
+			limit: 15,
 			search: null
 		}
 	});
@@ -25,16 +26,19 @@ const Inventory = (props) => {
 			loading: true
 		});
 
-		request( 'solidie_get_content_list', state.filters, response=>{
+		request( 'get_content_list', state.filters, response=>{
+			let {contents=[]} = response?.data || {};
+
 			setState({
 				...state,
+				contents,
 				loading: false
 			});
 		} );
 	}
 
 	useEffect(()=>{
-		// fetchContents();
+		fetchContents();
 	}, []);
 
 	return <div className="flex flex-col gap-4 w-full h-full">
