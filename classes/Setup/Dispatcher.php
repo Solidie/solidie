@@ -49,7 +49,7 @@ class Dispatcher {
 	}
 
 	private function solidie_get_content_list() {
-		$item_list = AppModel::getContentListings( $_POST );
+		$item_list = AppModel::getContents( $_POST );
 		wp_send_json_success( array( 'items' => $item_list ) );
 	}
 
