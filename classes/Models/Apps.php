@@ -463,9 +463,8 @@ class Apps extends Main{
 	 * @param integer $user_id
 	 * @return array
 	 */
-	public static function getContentListings( $args ) {
+	public static function getContents( $args ) {
 		
-
 		global $wpdb;
 		$items = $wpdb->get_results(
 			$wpdb->prepare(
