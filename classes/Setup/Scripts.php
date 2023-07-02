@@ -16,7 +16,7 @@ class Scripts extends Main {
 		add_action( 'wp_enqueue_scripts', array( $this, 'frontendScripts' ) );
 	}
 
-	public function getAppData() {
+	public function getContentData() {
 		$data = array(
 			'ajax_url'  => admin_url( 'admin-ajax.php' ),
 			'home_url'  => get_home_url(),
@@ -33,7 +33,7 @@ class Scripts extends Main {
 	}
 
 	public function commonScripts() {
-		wp_add_inline_script( 'jquery', 'window.Solidie = ' . json_encode( $this->getAppData() ), 'before' );
+		wp_add_inline_script( 'jquery', 'window.Solidie = ' . json_encode( $this->getContentData() ), 'before' );
 	}
 
 	public function adminScripts() {

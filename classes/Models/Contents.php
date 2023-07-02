@@ -4,40 +4,40 @@ namespace Solidie\Store\Models;
 
 use Solidie\Store\Main;
 
-class Apps extends Main{
+class Contents extends Main{
 	/**
-	 * Licensing variation key for items
+	 * Licensing variation key for contents
 	 */
 	const LICENSING_VARIATION = 'licensing-variation';
 
 	/**
 	 * Free product identifer meta key
 	 */
-	const FREE_META_KEY = 'solidie_item_is_free';
+	const FREE_META_KEY = 'solidie_content_is_free';
 	
 	/**
-	 * Get item list that is accessible by a user. 
+	 * Get content list that is accessible by a user. 
 	 *
 	 * @param int $user_id
 	 * @return array
 	 */
-	public static function getAppListForUser( $user_id ) {
+	public static function getContentListForUser( $user_id ) {
 		return array();
 	}
 
 	/**
-	 * Get associated product id by item id
+	 * Get associated product id by content id
 	 *
-	 * @param integer $item_id
+	 * @param integer $content_id
 	 * @return int
 	 */
-	public static function getProductID( int $item_id ) {
+	public static function getProductID( int $content_id ) {
 		global $wpdb;
 
 		$id = $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT product_id FROM " . self::table( 'items' ) . " WHERE item_id=%d",
-				$item_id
+				"SELECT product_id FROM " . self::table( 'contents' ) . " WHERE content_id=%d",
+				$content_id
 			)
 		);
 
@@ -45,27 +45,27 @@ class Apps extends Main{
 	}
 
 	/**
-	 * Create or update item
+	 * Create or update content
 	 *
-	 * @param array $item_data
+	 * @param array $content_data
 	 * @param int $store_id
 	 * @return int
 	 */
-	public static function updateApp( int $store_id, array $item_data ) {
-		$item = array();
+	public static function updateContent( int $store_id, array $content_data ) {
+		$content = array();
 
-		$item['item_id']    = ! empty( $item_data['item_id'] ) ? $item_data['item_id'] : 0;
-		$item['product_id'] = ! empty( $item_data['item_id'] ) ? self::getProductID( $item['item_id'] ) : 0;
-		$item['item_name']  = ! empty( $item_data['item_name'] ) ? $item_data['item_name'] : 'Untitled App';
+		$content['content_id']    = ! empty( $content_data['content_id'] ) ? $content_data['content_id'] : 0;
+		$content['product_id'] = ! empty( $content_data['content_id'] ) ? self::getProductID( $content['content_id'] ) : 0;
+		$content['content_name']  = ! empty( $content_data['content_name'] ) ? $content_data['content_name'] : 'Untitled Content';
 
 		// Sync core product first
-		$product_id = self::syncProduct( $item, $store_id );
+		$product_id = self::syncProduct( $content, $store_id );
 		if ( empty( $product_id ) ) {
 			return false;
 		}
 
 		// Update product id as it might've been created newly
-		$item['product_id'] = $product_id;
+		$content['product_id'] = $product_id;
 		
 		// To Do: Sync variations and other stuffs
 	}
@@ -73,28 +73,28 @@ class Apps extends Main{
 	/**
 	 * Sync product core
 	 *
-	 * @param array $item
+	 * @param array $content
 	 * @param integer $store_id
 	 * @return int
 	 */
-	private static function syncProduct( array $item, int $store_id ) {
+	private static function syncProduct( array $content, int $store_id ) {
 
 		// Update existing product info id exists
 		// To Do: Check if the propduct is in the store actually
-		if ( ! empty( $item['item_id'] ) ) {
+		if ( ! empty( $content['content_id'] ) ) {
 			wp_update_post(
 				array(
-					'ID'         => $item['product_id'],
-					'post_title' => $item['item_name']
+					'ID'         => $content['product_id'],
+					'post_title' => $content['content_name']
 				)
 			);
 			
-			return $item['product_id'];
+			return $content['product_id'];
 		} 
 		
 		// Create new product
 		$product = new \WC_Product_Simple();
-		$product->set_name( $item['item_name'] );
+		$product->set_name( $content['content_name'] );
 		// $product->set_slug( 'medium-size-wizard-hat-in-new-york' );
 		$product->set_regular_price( 500.00 ); // in current shop currency
 		$product->set_short_description( '<p>Here it is... A WIZARD HAT!</p><p>Only here and now.</p>' );
@@ -110,7 +110,7 @@ class Apps extends Main{
 		// Create Solidie entry
 		global $wpdb;
 		$wpdb->insert( 
-			self::table( 'items' ), 
+			self::table( 'contents' ), 
 			array(
 				'product_id' => $product_id,
 				'store_id'   => $store_id
@@ -134,25 +134,25 @@ class Apps extends Main{
 	/**
 	 * Get release log
 	 *
-	 * @param integer $item_id
+	 * @param integer $content_id
 	 * @return array
 	 */
-	public static function getReleases( int $item_id) {
+	public static function getReleases( int $content_id) {
 		return array();
 	}
 
 	/**
-	 * Get item by item id
+	 * Get content by content id
 	 *
-	 * @param integer $item_id
+	 * @param integer $content_id
 	 * @return object|null
 	 */
-	public static function getContentByContentID( int $item_id, $field = null, $public_only = true ) {
-		return self::getContentByField( 'item_id', $item_id, $field, $public_only );
+	public static function getContentByContentID( int $content_id, $field = null, $public_only = true ) {
+		return self::getContentByField( 'content_id', $content_id, $field, $public_only );
 	}
 
 	/**
-	 * Get item by field
+	 * Get content by field
 	 *
 	 * @param string $field_name
 	 * @param string|integer $field_value
@@ -170,23 +170,23 @@ class Apps extends Main{
 		}
 
 		global $wpdb;
-		$item = $wpdb->get_row(
+		$content = $wpdb->get_row(
 			$wpdb->prepare(
-				"SELECT item.*, product.post_title AS content_title FROM " . self::table( 'items' ) . " item 
-				INNER JOIN {$wpdb->posts} product ON item.product_id=product.ID 
+				"SELECT content.*, product.post_title AS content_title FROM " . self::table( 'contents' ) . " content 
+				INNER JOIN {$wpdb->posts} product ON content.product_id=product.ID 
 				INNER JOIN {$wpdb->users} author ON product.post_author=author.ID
-				WHERE item." . $field_name . "=%s" . $status_clause,
+				WHERE content." . $field_name . "=%s" . $status_clause,
 				$field_value
 			)
 		);
 
-		$content = ( $item && is_object( $item ) ) ? $item : null;
+		$content = ( $content && is_object( $content ) ) ? $content : null;
 
 		return $content ? ( $field ? $content->$field ?? null : $content ) : null;
 	}
 
 	/**
-	 * Check if a product is solidie item
+	 * Check if a product is solidie content
 	 *
 	 * @param string|int $product_id_or_name
 	 * @return boolean
@@ -218,7 +218,7 @@ class Apps extends Main{
 	}
 
 	/**
-	 * Get App by product id and post name.
+	 * Get Content by product id and post name.
 	 * 
 	 * @param string|int $product_id_or_name
 	 *
@@ -245,21 +245,21 @@ class Apps extends Main{
 	 * @return string
 	 */
 	public static function getPermalink( $product_id ) {
-		$item         = self::getContentByProduct( $product_id );
+		$content         = self::getContentByProduct( $product_id );
 		$post_name    = get_post_field( 'post_name', $product_id );
-		$base_slug    = AdminSetting::get( 'contents.' . $item->content_type . '.slug' );
+		$base_slug    = AdminSetting::get( 'contents.' . $content->content_type . '.slug' );
 		return get_home_url() . '/' . trim( $base_slug, '/' ) . '/' . $post_name . '/';
 	}
 
 	/**
-	 * Check if an associated item is free or not
+	 * Check if an associated content is free or not
 	 *
-	 * @param int|string $item_id_or_name Item ID if numeric, otherwise product post name.
+	 * @param int|string $content_id_or_name ID if numeric, otherwise product post name.
 	 * 
 	 * @return boolean
 	 */
-	public static function isContentFree( $item_id_or_name ) {
-		$product_id = is_numeric( $item_id_or_name ) ? self::getContentByContentID( $item_id_or_name, 'product_id' ) : self::getContentByProduct( $item_id_or_name, 'product_id' );
+	public static function isContentFree( $content_id_or_name ) {
+		$product_id = is_numeric( $content_id_or_name ) ? self::getContentByContentID( $content_id_or_name, 'product_id' ) : self::getContentByProduct( $content_id_or_name, 'product_id' );
 		return get_post_meta( $product_id, self::FREE_META_KEY, true ) == true;
 	}
 
@@ -284,7 +284,7 @@ class Apps extends Main{
 	}
 
 	/**
-	 * Link items to customer after order complete
+	 * Link contents to customer after order complete
 	 *
 	 * @param integer $order_id
 	 * @return void
@@ -298,40 +298,40 @@ class Apps extends Main{
 		global $wpdb;
 		$order               = wc_get_order( $order_id );
 		$order_complete_date = $order->get_date_completed();
-		$items               = self::getContentsFromOrder( $order_id );
+		$contents               = self::getContentsFromOrder( $order_id );
 		$commission_rate     = self::getSiteCommissionRate();
 
-		foreach ( $items as $item ) {
+		foreach ( $contents as $content ) {
 			// Skip if already added
-			if ( self::getPurchaseByOrderVariation( $order_id, $item['variation_id'] ) ) {
+			if ( self::getPurchaseByOrderVariation( $order_id, $content['variation_id'] ) ) {
 				continue;
 			}
 
 			// Calculate commission
-			$sale_price   = (int)$item['sale_price'];
+			$sale_price   = (int)$content['sale_price'];
 			$commission   = ( $commission_rate / 100 ) * $sale_price;
 
 			// Variation validity
-			$expires_on  = $item['licensing']['validity_days'] ? ( new \DateTime( $order_complete_date ) )->modify('+'.$item['licensing']['validity_days'].' days')->format('Y-m-d') : null;
+			$expires_on  = $content['licensing']['validity_days'] ? ( new \DateTime( $order_complete_date ) )->modify('+'.$content['licensing']['validity_days'].' days')->format('Y-m-d') : null;
 			
-			// Insert the item in the sales table
+			// Insert the content in the sales table
 			$wpdb->insert(
 				self::table( 'sales' ),
 				array(
-					'item_id'            => $item['item_id'],
+					'content_id'            => $content['content_id'],
 					'customer_id'		 => wc_get_order( $order_id )->get_customer_id(),
 					'order_id'           => $order_id,
-					'variation_id'       => $item['variation_id'],
-					'sale_price'         => $item['sale_price'],
+					'variation_id'       => $content['variation_id'],
+					'sale_price'         => $content['sale_price'],
 					'commission'         => $commission,
 					'commission_rate'    => $commission_rate,
-					'license_key_limit'  => $item['licensing']['license_key_limit'],
+					'license_key_limit'  => $content['licensing']['license_key_limit'],
 					'license_expires_on' => $expires_on,
 				)
 			);
 
 			// Generate license keys
-			Licensing::generateLicenseKeys( $wpdb->insert_id, $item['licensing']['license_key_limit'] );
+			Licensing::generateLicenseKeys( $wpdb->insert_id, $content['licensing']['license_key_limit'] );
 		}
 	}
 
@@ -344,19 +344,19 @@ class Apps extends Main{
 	public static function processSubscriptionRenewal( $subscription ) {
 		global $wpdb;
 		
-		$items  = self::filterContentsFromOrderItems( $subscription->get_items() );
+		$contents  = self::filterContentsFromOrderItems( $subscription->get_items() );
 
-		foreach ( $items as $item ) {
+		foreach ( $contents as $content ) {
 			// Don't update if validity is null which means lifetime license
-			if ( ! $item['licensing']['validity_days'] ) {
+			if ( ! $content['licensing']['validity_days'] ) {
 				continue;
 			}
 
 			$wpdb->query(
 				$wpdb->prepare(
-					"UPDATE ".self::table( 'sales' )." SET license_expires_on=DATE_ADD(license_expires_on, INTERVAL %d DAY) WHERE item_id=%d AND license_expires_on IS NOT NULL",
-					$item['licensing']['validity_days'],
-					$item['item_id']
+					"UPDATE ".self::table( 'sales' )." SET license_expires_on=DATE_ADD(license_expires_on, INTERVAL %d DAY) WHERE content_id=%d AND license_expires_on IS NOT NULL",
+					$content['licensing']['validity_days'],
+					$content['content_id']
 				)
 			);
 		}
@@ -375,7 +375,7 @@ class Apps extends Main{
 	}
 
 	/**
-	 * Return only purchased item info from a mixed cart
+	 * Return only purchased content info from a mixed cart
 	 *
 	 * @param integer $order_id
 	 * @return array
@@ -386,38 +386,38 @@ class Apps extends Main{
 	}
 
 	/**
-	 * Filter items from order items
+	 * Filter contents from order contents
 	 *
-	 * @param array $items
+	 * @param array $contents
 	 * @return array
 	 */
-	public static function filterContentsFromOrderItems( array $items ) {
-		$items  = array();
-		foreach ( $items as $item ) {
-			$product_type = $item->get_product()->get_type();
-			$product_id   = $item->get_product_id();
-			$variation_id = $item->get_variation_id();
+	public static function filterContentsFromOrderItems( array $contents ) {
+		$contents  = array();
+		foreach ( $contents as $content ) {
+			$product_type = $content->get_product()->get_type();
+			$product_id   = $content->get_product_id();
+			$variation_id = $content->get_variation_id();
 			$variation    = new \WC_Product_Variation( $variation_id );
-			$item         = self::getContentByProduct( $product_id );
+			$content         = self::getContentByProduct( $product_id );
 			$var_info     = self::getVariationInfo( $variation );
 
-			// Skip non-item products or unsupported variation.
-			if ( ! $item || ! in_array( $product_type, array( 'subscription_variation', 'variation' ) )  || ! $var_info ) {
+			// Skip non-content products or unsupported variation.
+			if ( ! $content || ! in_array( $product_type, array( 'subscription_variation', 'variation' ) )  || ! $var_info ) {
 				continue;
 			}
 
 			// To Do: Get sale price in USD currency
-			$items[] = array(
-				'item'			 => $item,
+			$contents[] = array(
+				'content'			 => $content,
 				'product_id'     => $product_id,
-				'item_id'        => $item->item_id,
+				'content_id'        => $content->content_id,
 				'variation_id'   => $variation_id,
 				'licensing'      => $var_info,
 				'sale_price'     => $variation->get_sale_price(),
 			);
 		}
 
-		return $items;
+		return $contents;
 	}
 
 	/**
@@ -457,25 +457,34 @@ class Apps extends Main{
 	}
 
 	/**
-	 * Returns items in store
+	 * Returns contents in store
 	 *
 	 * @param integer $store_id
 	 * @param integer $user_id
 	 * @return array
 	 */
-	public static function getContents( $args ) {
+	public static function getContents( array $args ) {
+		// Prepare arguments
+		$store_id     = $args['store_id'] ?? null;
+		$content_type = $args['content_type'] ?? null;
+		$page         = $args['page'] ?? 1;
+		$limit        = $args['limit'] ?? 15;
+
+		$type_clause  = $content_type ? " AND content.content_type='" . esc_sql( $content_type ) . "'" : '';
+		$store_clause = $store_id ? " AND  content.store_id='" . esc_sql( $store_id ) . "'" : '';
+
 		
 		global $wpdb;
-		$items = $wpdb->get_results(
+		$contents = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT product.post_title AS item_name, product.ID as product_id, item.item_id, product.post_status AS item_status
-				FROM {$wpdb->posts} product INNER JOIN " . self::table( 'items' ) . " item ON product.ID=item.product_id
-				WHERE item.store_id=%d",
+				"SELECT product.post_title AS content_name, product.ID as product_id, content.content_id, product.post_status AS content_status
+				FROM {$wpdb->posts} product INNER JOIN " . self::table( 'contents' ) . " content ON product.ID=content.product_id
+				WHERE content.store_id=%d",
 				$store_id
 			),
 			ARRAY_A
 		);
 		
-		return $items;
+		return $contents;
 	}
 }

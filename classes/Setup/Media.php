@@ -10,7 +10,7 @@ class Media {
 	}
 
 	public function hide_media_by_meta_key( $query ) {
-		// Only modify the query for media items
+		// Only modify the query for media contents
 		if ( is_admin() && $query->query['post_type'] == 'attachment' ) {
 			$meta_query = $query->get('meta_query');
 			if ( ! is_array( $meta_query ) ) {
@@ -19,7 +19,7 @@ class Media {
 			
 			$meta_query[] = array(
 				'key'     => Release::$release_meta_key,
-				'compare' => 'NOT EXISTS', // Hide release media items
+				'compare' => 'NOT EXISTS', // Hide release media contents
 			);
 
 			$query->set('meta_query', $meta_query);

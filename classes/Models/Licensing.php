@@ -7,7 +7,7 @@ use Solidie\Store\Main;
 
 class Licensing extends Main{
 	/**
-	 * Generate license keys for item sale
+	 * Generate license keys for content sale
 	 *
 	 * @param integer $sale_id
 	 * @param integer $limit
@@ -45,23 +45,23 @@ class Licensing extends Main{
 	 * Get license keys
 	 *
 	 * @param integer $sale_id
-	 * @param integer|null $item_id
+	 * @param integer|null $content_id
 	 * @param string|null $endpoint
 	 * 
 	 * @return array
 	 */
-	public static function getLicenseKeys( int $sale_id, $item_id = null, $endpoint = null ) {
+	public static function getLicenseKeys( int $sale_id, $content_id = null, $endpoint = null ) {
 		global $wpdb;
 
-		$item_clause     = null !== $item_id ? " AND sale.item_id=" . $item_id : '';
+		$content_clause     = null !== $content_id ? " AND sale.content_id=" . $content_id : '';
 		$endpoint_clause = null !== $endpoint ? " AND license.endpoint='".esc_sql( $endpoint )."'" : '';
 
 		$keys = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT license.*, sale.license_expires_on, sale.item_id, sale.variation_id, sale.customer_id
+				"SELECT license.*, sale.license_expires_on, sale.content_id, sale.variation_id, sale.customer_id
 				FROM ".self::table( 'license_keys' )." license 
 				INNER JOIN ".self::table( 'sales' )." sale ON sale.sale_id=license.sale_id
-				WHERE license.sale_id=%d" . $item_clause . $endpoint_clause,
+				WHERE license.sale_id=%d" . $content_clause . $endpoint_clause,
 				$sale_id
 			)
 		);
@@ -73,30 +73,30 @@ class Licensing extends Main{
 	 * Get license info
 	 *
 	 * @param string $license_key
-	 * @param integer $item_id
+	 * @param integer $content_id
 	 * @param string $endpoint
 	 * @return array
 	 */
-	public static function getLicenseInfo( string $license_key, int $item_id, $endpoint = null ) {
+	public static function getLicenseInfo( string $license_key, int $content_id, $endpoint = null ) {
 		// Check if there is any sale associated with the license key.
 		$sale_id  = Crypto::decrypt( $license_key );
-		$licenses = $sale_id ? self::getLicenseKeys( (int) $sale_id, $item_id, $endpoint ) : array();
+		$licenses = $sale_id ? self::getLicenseKeys( (int) $sale_id, $content_id, $endpoint ) : array();
 
 		foreach ( $licenses as $license ) {
 			if ( $license->license_key !== $license_key ) {
 				continue;
 			}
 
-			$var_info = Apps::getVariationInfo( new \WC_Product_Variation( (int) $license->variation_id ) );
+			$var_info = Contents::getVariationInfo( new \WC_Product_Variation( (int) $license->variation_id ) );
 			$customer = get_userdata( $license->customer_id );
 			$data     = array();
 
-			$data['item_id']       = (int) $license->item_id;
+			$data['content_id']       = (int) $license->content_id;
 			$data['license_id']    = (int) $license->license_id;
 			$data['license_key']   = $license_key;
 			$data['endpoint']      = $license->endpoint;
 			$data['expires_on']    = $license->license_expires_on;
-			$data['item_name']      = get_the_title( Apps::getProductID( $license->item_id ) );
+			$data['content_name']      = get_the_title( Contents::getProductID( $license->content_id ) );
 			$data['plan_name']     = $var_info['label'];
 			$data['customer_id']   = $license->customer_id;
 			$data['licensee_name'] = $customer ? $customer->display_name : '(Customer Not Found)';

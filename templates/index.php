@@ -3,7 +3,7 @@
 
 	use Solidie\Store\Main;
 	use Solidie\Store\Models\AdminSetting;
-	use Solidie\Store\Models\Apps;
+	use Solidie\Store\Models\Contents;
 use Solidie\Store\Models\FrontendDashboard;
 use Solidie\Store\Setup\AdminPage;
 
@@ -41,7 +41,7 @@ use Solidie\Store\Setup\AdminPage;
 	} else {
 		// This block means it is single product page
 		$manifests = AdminSetting::get( 'contents' );
-		$content  = Apps::getContentByProduct( $content_post_name );
+		$content  = Contents::getContentByProduct( $content_post_name );
 
 		// Check if the content exists
 		if ( empty( $content ) ) {
@@ -72,7 +72,7 @@ use Solidie\Store\Setup\AdminPage;
 			the_post();
 
 			// Get the component data
-			$content_data = Apps::getSingleContentData( get_the_ID() );
+			$content_data = Contents::getSingleContentData( get_the_ID() );
 			require Main::$configs->dir . 'templates/single-product.php';
 		} else {
 			// Single product tutorial page, supports unlimited sub path. For now show 404.

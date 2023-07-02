@@ -4,7 +4,7 @@ namespace Solidie\Store\Setup;
 
 use Solidie\Store\Helpers\Nonce;
 use Solidie\Store\Models\AdminSetting;
-use Solidie\Store\Models\Apps as AppModel;
+use Solidie\Store\Models\Contents as ContentModel;
 use Solidie\Store\Models\Release;
 use Solidie\Store\Models\Store;
 
@@ -15,8 +15,8 @@ class Dispatcher {
 		'solidie_get_content_list',
 		'save_admin_settings',
 		'create_store',
-		'create_or_update_item',
-		'get_item_release_history',
+		'create_or_update_content',
+		'get_content_release_history',
 		'push_version_release'
 	);
 
@@ -49,8 +49,8 @@ class Dispatcher {
 	}
 
 	private function solidie_get_content_list() {
-		$item_list = AppModel::getContents( $_POST );
-		wp_send_json_success( array( 'items' => $item_list ) );
+		$content_list = ContentModel::getContents( $_POST );
+		wp_send_json_success( array( 'contents' => $content_list ) );
 	}
 
 	/**
@@ -94,34 +94,34 @@ class Dispatcher {
 	}
 
 	/**
-	 * Create or update item from frontend dashboard
+	 * Create or update content from frontend dashboard
 	 *
 	 * @return void
 	 */
-	private function create_or_update_item() {
-		$item_data = $_POST['item_data'];
+	private function create_or_update_content() {
+		$content_data = $_POST['content_data'];
 		$store_id = (int)$_POST['store_id'];
 		$user_id = get_current_user_id();
 
 		if ( ! Store::hasKeeperRole( $store_id, $user_id, array( 'admin', 'editor' ) ) ) {
-			wp_send_json_error( array( 'message' => 'You are not allowed to manage item in the store' ) );
+			wp_send_json_error( array( 'message' => 'You are not allowed to manage content in the store' ) );
 			exit;
 		}
 		
 		// To Do: Check if the product is in the store actually
 
-		AppModel::updateApp( $store_id, $item_data );
+		ContentModel::updateContent( $store_id, $content_data );
 
 		wp_send_json_success();
 	}
 
 	/**
-	 * Get item release history
+	 * Get content release history
 	 *
 	 * @return void
 	 */
-	private function get_item_release_history() {
-		$releases = AppModel::getReleases( (int) $_POST['item_id'] );
+	private function get_content_release_history() {
+		$releases = ContentModel::getReleases( (int) $_POST['content_id'] );
 		wp_send_json_success( array( 'releases' => $releases ) );
 	}
 
@@ -132,7 +132,7 @@ class Dispatcher {
 	 */
 	private function push_version_release() {
 		// Check if main three parameter received
-		if ( empty( $_POST['version'] ) || empty( $_POST['changelog'] ) || empty( $_POST['item_id'] ) ) {
+		if ( empty( $_POST['version'] ) || empty( $_POST['changelog'] ) || empty( $_POST['content_id'] ) ) {
 			wp_send_json_error( array( 'message' => _x( 'Required release data missing!', 'solidie', 'solidie' ) ) );
 			exit;
 		}
@@ -145,13 +145,13 @@ class Dispatcher {
 			}
 		}
 
-		// To Do: Check if current user can create/update release for the item
+		// To Do: Check if current user can create/update release for the content
 
 		$error_message = Release::pushRelease(
 			array(
 				'version'    => $_POST['version'],
 				'changelog'  => $_POST['changelog'],
-				'item_id'    => $_POST['item_id'],
+				'content_id'    => $_POST['content_id'],
 				'release_id' => ! empty( $_POST['release_id'] ) ? (int) $_POST['release_id'] : 0,
 				'file'       => ! empty( $_FILES['file'] ) ? $_FILES['file'] : null
 			)

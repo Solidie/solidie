@@ -56,7 +56,7 @@ class Main {
 		// Register sales reporter to solidie website
 		new Report( $configs );
 		
-		// Register plugin updater (Registered item name, item main file, parent menu for license page, continous update check bool)
+		// Register plugin updater (Registered content name, content main file, parent menu for license page, continous update check bool)
 		new Updater( $configs );
 	}
 
