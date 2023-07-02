@@ -213,9 +213,9 @@
     }
 </style>
 
-<body class="w-full h-full bg-primary  flex justify-center relative">
+<body class="w-full h-full bg-primary text-sm flex justify-center relative">
     <?php
-    $svgIcon = '<svg class="fill-current h-4 w-4 transform transition duration-150 ease-in-out" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+    $svgIcon = '<svg class="fill-current h-2 w-4 transform transition duration-150 ease-in-out" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
         <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
       </svg>';
 
@@ -229,7 +229,7 @@
             <img src="https://img.logoipsum.com/285.svg" class="logo w-[143.80px] h-[45px] relative" />
             <input class="menu-btn" type="checkbox" id="menu-btn" />
             <label class="menu-icon" for="menu-btn"><span class="navicon"></span></label>
-            <ul
+            <ul id="navbar-menu"
                 class="menu w-full rounded-2xl bg-white/20 md:bg-transparent shadow-lg md:shadow-none !py-2 md:py-0 divide-y-2 md:divide-y-0 ">
                 <li class="menu-li w-full flex justify-center items-center h-max py-2"><a class="menu-a" href="#work">
                         <div class="group inline-block">
@@ -303,1129 +303,307 @@
 
         <div class="flex flex-col lg:flex-row w-full lg:h-full lg:pb-4">
             <div
-                class="Frame874 !z-0 sticky top-0 bg-white bg-opacity-30 lg:w-max w-full h-max lg:h-full [overflow:unset;] self-stretch py-[1px] rounded-lg shadow justify-start items-start gap-2.5 flex flex-row lg:flex-col">
+                class=" Frame874 !z-0 sticky top-0 bg-white bg-opacity-30 lg:w-max w-full h-max lg:h-full [overflow:unset;] self-stretch py-[1px] rounded-lg shadow justify-start items-start gap-2.5 hidden md:flex flex-row lg:flex-col">
                 <div class="w-full lg:!w-max lg:h-full !overflow-y-auto"
                     style="height: 100%; padding-top: 1px; padding-bottom: 1px; box-shadow: 0px 4px 6px -2px rgba(0, 0, 0, 0.05); border-radius: 15px; justify-content: flex-start; align-items: flex-start; gap: 10px; display: inline-flex;">
-                    <div class="w-full lg:w-max !h-max lg:h-full flex items-center justify-center flex-row lg:flex-col lg:gap-4"
-                        style="padding-left: 16px; padding-right: 16px; padding-top: 10px; padding-bottom: 10px; ">
+                    <div id="sidebar" class="w-full lg:w-max h-full flex justify-center flex-col gap-4"
+                        style="padding-left: 5px; padding-right: 5px; padding-top: 10px; padding-bottom: 10px; ">
                         <h2 class="pr-2 !text-lg lg:self-end lg:pl-32"
                             style="color: #0F172A; font-size: 14px;  font-style: italic; font-weight: 700; line-height: 20px; word-wrap: break-word">
                             Doc.</h2>
-                        <div class="w-full lg:w-full lg:h-full overflow-x-auto thin-scroll-width ">
-                            <div class="w-max !h-max lg:w-full lg:!h-full lg:overflow-y-auto flex items-center justify-center flex-row lg:flex-col gap-6 px-2 py-3 lg:py-0">
+                        <div class="w-full h-full overflow-x-auto thin-scroll-width ">
+                            <div class="w-full !h-full overflow-y-hidden flex flex-col py-0">
 
-                                <div
-                                    style="align-self: stretch; height: max-content; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 10px; display: flex">
-                                    <div
-                                        style="align-self: stretch; flex: 1 1 0; justify-content: flex-start; align-items: center; gap: 4px; display: inline-flex">
-                                        <div class="w-max"
-                                            style="color: #0F172A; font-size: 14px;  font-weight: 500; line-height: 20px; word-wrap: break-word">
-                                            Getting Started</div>
-                                    </div>
-                                </div>
-                                <div
-                                    style="align-self: stretch; height: max-content; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 10px; display: flex">
-                                    <div
-                                        style="align-self: stretch; flex: 1 1 0; justify-content: flex-start; align-items: center; gap: 4px; display: inline-flex">
-                                        <div class="w-max"
-                                            style="color: #0F172A; font-size: 14px;  font-weight: 500; line-height: 20px; word-wrap: break-word">
-                                            Initial Setup</div>
-                                    </div>
+                                <div class="p-2 w-full hover:bg-tertiary/5 rounded-lg cursor-pointer">Getting Started
                                 </div>
 
-                                <div class="group inline-block w-full ">
-                                    <button aria-haspopup="true" aria-controls="menu"
-                                        class="outline-none focus:outline-none rounded-sm flex justify-between items-center min-w-32">
-                                        <span
-                                            class="pr-1 flex-1 text-slate-900 text-[14px] font-medium leading-tight">Dropdown</span>
-                                        <span>
-                                            <svg class="fill-current h-4 w-4 transform group-hover:-rotate-180 transition duration-150 ease-in-out"
-                                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                                <path
-                                                    d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                                            </svg>
-                                        </span>
-                                    </button>
-                                    <ul id="menu" aria-hidden="true"
-                                        class="z-50 bg-gray-100 rounded-md shadow border border-slate-200 transform scale-0 group-hover:scale-100 absolute transition duration-150 ease-in-out origin-top min-w-32 space-y-2 p-3">
-                                        <li class="dropdown-li rounded-sm px-3 py-1 hover:bg-gray-100 text-sm ">
-                                            Programming
-                                        </li>
-                                        <li class="dropdown-li rounded-sm px-3 py-1 hover:bg-gray-100 text-sm">DevOps
-                                        </li>
-                                        <li class="dropdown-li rounded-sm relative px-3 py-1 hover:bg-gray-100">
-                                            <button aria-haspopup="true" aria-controls="menu-lang"
-                                                class="dropdown-button w-full text-left flex items-center outline-none focus:outline-none">
-                                                <span class=" dropdown-span pr-1 flex-1 text-sm">Langauges</span>
-                                                <span class="dropdown-span mr-auto">
-                                                    <svg class="dropdown-svg fill-current h-4 w-4 transition duration-150 ease-in-out"
+                                <details id="doc-accordian"
+                                    class="group w-full lg:!max-w-[15rem] lg:w-60 cursor-pointer self-stretch inline-block [&[open]>summary>svg]:translate-y-1 [&[open]>summary]:bg-blue-300/60 [&[open]>summary]:text-tertiary [&[open]>summary]:shadow-sm [&[open]>summary>svg]:rotate-0 ">
+                                    <summary
+                                        class="w-full justify-between items-center p-2 hover:bg-tertiary/5 rounded-lg cursor-pointer flex gap-2">
+                                        <div class="w-full max-w-full">Getting
+                                            Components
+                                        </div>
+                                        <svg class="fill-current -rotate-90 h-4 w-4 transform transition duration-150 ease-in-out"
+                                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                            <path
+                                                d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                                        </svg>
+                                    </summary>
+                                    <div class="pl-1 max-w-full">
+                                        <div class="border-l pl-2 max-w-full">
+
+                                            <details
+                                                class="group max-w-full w-full cursor-pointer self-stretch inline-block [&[open]>summary>svg]:translate-y-1 [&[open]>summary>svg]:rotate-0 ">
+                                                <summary
+                                                    class="w-full max-w-full justify-between items-center p-2 hover:bg-tertiary/5 rounded-lg cursor-pointer flex gap-2">
+                                                    <div class="w-full max-w-full">Getting
+                                                        Components
+                                                    </div>
+                                                    <svg class="fill-current -rotate-90 h-4 w-4 transform transition duration-150 ease-in-out"
                                                         xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                                                         <path
                                                             d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
                                                     </svg>
-                                                </span>
-                                            </button>
-                                            <ul id="menu-lang" aria-hidden="true"
-                                                class="dropdown-ul bg-gray-100 rounded-md shadow border border-slate-200 transform absolute transition duration-150 ease-in-out origin-top min-w-32 space-y-2 p-3">
-                                                <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">Javascript
-                                                </li>
-                                                <li
-                                                    class="dropdown dropdown-li rounded-sm relative px-3 py-1 hover:bg-gray-100">
-                                                    <button aria-haspopup="true" aria-controls="menu-lang-python"
-                                                        class="dropdown-button w-full text-left flex items-center outline-none focus:outline-none">
-                                                        <span class="dropdown-span pr-1 flex-1 text-sm">Python</span>
-                                                        <span class="dropdown-span mr-auto">
-                                                            <svg class="dropdown-svg fill-current h-4 w-4 transition duration-150 ease-in-out"
-                                                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                                                <path
-                                                                    d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                                                            </svg>
-                                                        </span>
-                                                    </button>
-                                                    <ul id="menu-lang-python" aria-hidden="true"
-                                                        class="dropdown-ul group-hover:z-10 bg-gray-100 rounded-md shadow border border-slate-200 absolute top-0 right-0 transition duration-150 ease-in-out origin-top-left space-y-2 min-w-32 p-3">
-                                                        <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">2.7
-                                                        </li>
-                                                        <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">3+
-                                                        </li>
-                                                    </ul>
-                                                </li>
-                                                <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">Go</li>
-                                                <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">Rust</li>
-                                            </ul>
-                                        </li>
-                                        <li class="dropdown-li rounded-sm px-3 py-1 hover:bg-gray-100 text-sm">Testing
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="group inline-block w-full ">
-                                    <button aria-haspopup="true" aria-controls="menu"
-                                        class="outline-none focus:outline-none rounded-sm flex justify-between items-center min-w-32">
-                                        <span
-                                            class="pr-1 flex-1 text-slate-900 text-[14px] font-medium leading-tight">Dropdown</span>
-                                        <span>
-                                            <svg class="fill-current h-4 w-4 transform group-hover:-rotate-180 transition duration-150 ease-in-out"
-                                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                                <path
-                                                    d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                                            </svg>
-                                        </span>
-                                    </button>
-                                    <ul id="menu" aria-hidden="true"
-                                        class="z-50 bg-gray-100 rounded-md shadow border border-slate-200 transform scale-0 group-hover:scale-100 absolute transition duration-150 ease-in-out origin-top min-w-32 space-y-2 p-3">
-                                        <li class="dropdown-li rounded-sm px-3 py-1 hover:bg-gray-100 text-sm ">
-                                            Programming
-                                        </li>
-                                        <li class="dropdown-li rounded-sm px-3 py-1 hover:bg-gray-100 text-sm">DevOps
-                                        </li>
-                                        <li class="dropdown-li rounded-sm relative px-3 py-1 hover:bg-gray-100">
-                                            <button aria-haspopup="true" aria-controls="menu-lang"
-                                                class="dropdown-button w-full text-left flex items-center outline-none focus:outline-none">
-                                                <span class=" dropdown-span pr-1 flex-1 text-sm">Langauges</span>
-                                                <span class="dropdown-span mr-auto">
-                                                    <svg class="dropdown-svg fill-current h-4 w-4 transition duration-150 ease-in-out"
+                                                </summary>
+                                                <div class="pl-1">
+                                                    <div class="border-l pl-2">
+
+                                                        <details
+                                                            class="group max-w-full w-full cursor-pointer self-stretch inline-block [&[open]>summary>svg]:translate-y-1 [&[open]>summary>svg]:rotate-0 ">
+                                                            <summary
+                                                                class="w-full max-w-full justify-between items-center p-2 hover:bg-tertiary/5 rounded-lg cursor-pointer flex gap-2">
+                                                                <div class="w-full max-w-full">Getting
+                                                                    Components
+                                                                </div>
+                                                                <svg class="fill-current -rotate-90 h-4 w-4 transform transition duration-150 ease-in-out"
+                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                    viewBox="0 0 20 20">
+                                                                    <path
+                                                                        d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                                                                </svg>
+                                                            </summary>
+                                                            <div class="pl-1">
+                                                                <div class="border-l pl-2">
+
+                                                                    <details
+                                                                        class="group max-w-full w-full cursor-pointer self-stretch inline-block [&[open]>summary>svg]:translate-y-1 [&[open]>summary>svg]:rotate-0 ">
+                                                                        <summary
+                                                                            class="w-full max-w-full justify-between items-center p-2 hover:bg-tertiary/5 rounded-lg cursor-pointer flex gap-2">
+                                                                            <div class="w-full max-w-full">Getting
+                                                                                Components
+                                                                            </div>
+                                                                            <svg class="fill-current -rotate-90 h-4 w-4 transform transition duration-150 ease-in-out"
+                                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                                viewBox="0 0 20 20">
+                                                                                <path
+                                                                                    d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                                                                            </svg>
+                                                                        </summary>
+                                                                        <div class="pl-1">
+                                                                            <div class="border-l pl-2">
+
+                                                                                <details
+                                                                                    class="group max-w-full w-full cursor-pointer self-stretch inline-block [&[open]>summary>svg]:translate-y-1 [&[open]>summary>svg]:rotate-0 ">
+                                                                                    <summary
+                                                                                        class="w-full max-w-full justify-between items-center p-2 hover:bg-tertiary/5 rounded-lg cursor-pointer flex gap-2">
+                                                                                        <div class="w-full max-w-full">
+                                                                                            Getting
+                                                                                            Components
+                                                                                        </div>
+                                                                                        <svg class="fill-current -rotate-90 h-4 w-4 transform transition duration-150 ease-in-out"
+                                                                                            xmlns="http://www.w3.org/2000/svg"
+                                                                                            viewBox="0 0 20 20">
+                                                                                            <path
+                                                                                                d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                                                                                        </svg>
+                                                                                    </summary>
+                                                                                    <div class="pl-1">
+                                                                                        <div class="border-l pl-2">
+
+                                                                                            <details
+                                                                                                class="group max-w-full w-full cursor-pointer self-stretch inline-block [&[open]>summary>svg]:translate-y-1 [&[open]>summary>svg]:rotate-0 ">
+                                                                                                <summary
+                                                                                                    class="w-full max-w-full justify-between items-center p-2 hover:bg-tertiary/5 rounded-lg cursor-pointer flex gap-2">
+                                                                                                    <div
+                                                                                                        class="w-full max-w-full">
+                                                                                                        Getting
+                                                                                                        Components
+                                                                                                    </div>
+                                                                                                    <svg class="fill-current -rotate-90 h-4 w-4 transform transition duration-150 ease-in-out"
+                                                                                                        xmlns="http://www.w3.org/2000/svg"
+                                                                                                        viewBox="0 0 20 20">
+                                                                                                        <path
+                                                                                                            d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                                                                                                    </svg>
+                                                                                                </summary>
+                                                                                                <div class="pl-1">
+                                                                                                    <div
+                                                                                                        class="border-l pl-2">
+
+
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </details>
+
+
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </details>
+
+
+                                                                            </div>
+                                                                        </div>
+                                                                    </details>
+
+
+                                                                </div>
+                                                            </div>
+                                                        </details>
+
+
+                                                    </div>
+                                                </div>
+                                            </details>
+
+
+                                            <details
+                                                class="group max-w-full w-full cursor-pointer self-stretch inline-block [&[open]>summary>svg]:translate-y-1 [&[open]>summary>svg]:rotate-0 ">
+                                                <summary
+                                                    class="w-full max-w-full justify-between items-center p-2 hover:bg-tertiary/5 rounded-lg cursor-pointer flex gap-2">
+                                                    <div class="w-full max-w-full">Getting
+                                                        Components
+                                                    </div>
+                                                    <svg class="fill-current -rotate-90 h-4 w-4 transform transition duration-150 ease-in-out"
                                                         xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                                                         <path
                                                             d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
                                                     </svg>
-                                                </span>
-                                            </button>
-                                            <ul id="menu-lang" aria-hidden="true"
-                                                class="dropdown-ul bg-gray-100 rounded-md shadow border border-slate-200 transform absolute transition duration-150 ease-in-out origin-top min-w-32 space-y-2 p-3">
-                                                <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">Javascript
-                                                </li>
-                                                <li
-                                                    class="dropdown dropdown-li rounded-sm relative px-3 py-1 hover:bg-gray-100">
-                                                    <button aria-haspopup="true" aria-controls="menu-lang-python"
-                                                        class="dropdown-button w-full text-left flex items-center outline-none focus:outline-none">
-                                                        <span class="dropdown-span pr-1 flex-1 text-sm">Python</span>
-                                                        <span class="dropdown-span mr-auto">
-                                                            <svg class="dropdown-svg fill-current h-4 w-4 transition duration-150 ease-in-out"
-                                                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                                                <path
-                                                                    d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                                                            </svg>
-                                                        </span>
-                                                    </button>
-                                                    <ul id="menu-lang-python" aria-hidden="true"
-                                                        class="dropdown-ul group-hover:z-10 bg-gray-100 rounded-md shadow border border-slate-200 absolute top-0 right-0 transition duration-150 ease-in-out origin-top-left space-y-2 min-w-32 p-3">
-                                                        <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">2.7
-                                                        </li>
-                                                        <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">3+
-                                                        </li>
-                                                    </ul>
-                                                </li>
-                                                <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">Go</li>
-                                                <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">Rust</li>
-                                            </ul>
-                                        </li>
-                                        <li class="dropdown-li rounded-sm px-3 py-1 hover:bg-gray-100 text-sm">Testing
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="group inline-block w-full ">
-                                    <button aria-haspopup="true" aria-controls="menu"
-                                        class="outline-none focus:outline-none rounded-sm flex justify-between items-center min-w-32">
-                                        <span
-                                            class="pr-1 flex-1 text-slate-900 text-[14px] font-medium leading-tight">Dropdown</span>
-                                        <span>
-                                            <svg class="fill-current h-4 w-4 transform group-hover:-rotate-180 transition duration-150 ease-in-out"
-                                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                                <path
-                                                    d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                                            </svg>
-                                        </span>
-                                    </button>
-                                    <ul id="menu" aria-hidden="true"
-                                        class="z-50 bg-gray-100 rounded-md shadow border border-slate-200 transform scale-0 group-hover:scale-100 absolute transition duration-150 ease-in-out origin-top min-w-32 space-y-2 p-3">
-                                        <li class="dropdown-li rounded-sm px-3 py-1 hover:bg-gray-100 text-sm ">
-                                            Programming
-                                        </li>
-                                        <li class="dropdown-li rounded-sm px-3 py-1 hover:bg-gray-100 text-sm">DevOps
-                                        </li>
-                                        <li class="dropdown-li rounded-sm relative px-3 py-1 hover:bg-gray-100">
-                                            <button aria-haspopup="true" aria-controls="menu-lang"
-                                                class="dropdown-button w-full text-left flex items-center outline-none focus:outline-none">
-                                                <span class=" dropdown-span pr-1 flex-1 text-sm">Langauges</span>
-                                                <span class="dropdown-span mr-auto">
-                                                    <svg class="dropdown-svg fill-current h-4 w-4 transition duration-150 ease-in-out"
-                                                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                                        <path
-                                                            d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                                                    </svg>
-                                                </span>
-                                            </button>
-                                            <ul id="menu-lang" aria-hidden="true"
-                                                class="dropdown-ul bg-gray-100 rounded-md shadow border border-slate-200 transform absolute transition duration-150 ease-in-out origin-top min-w-32 space-y-2 p-3">
-                                                <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">Javascript
-                                                </li>
-                                                <li
-                                                    class="dropdown dropdown-li rounded-sm relative px-3 py-1 hover:bg-gray-100">
-                                                    <button aria-haspopup="true" aria-controls="menu-lang-python"
-                                                        class="dropdown-button w-full text-left flex items-center outline-none focus:outline-none">
-                                                        <span class="dropdown-span pr-1 flex-1 text-sm">Python</span>
-                                                        <span class="dropdown-span mr-auto">
-                                                            <svg class="dropdown-svg fill-current h-4 w-4 transition duration-150 ease-in-out"
-                                                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                                                <path
-                                                                    d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                                                            </svg>
-                                                        </span>
-                                                    </button>
-                                                    <ul id="menu-lang-python" aria-hidden="true"
-                                                        class="dropdown-ul group-hover:z-10 bg-gray-100 rounded-md shadow border border-slate-200 absolute top-0 right-0 transition duration-150 ease-in-out origin-top-left space-y-2 min-w-32 p-3">
-                                                        <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">2.7
-                                                        </li>
-                                                        <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">3+
-                                                        </li>
-                                                    </ul>
-                                                </li>
-                                                <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">Go</li>
-                                                <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">Rust</li>
-                                            </ul>
-                                        </li>
-                                        <li class="dropdown-li rounded-sm px-3 py-1 hover:bg-gray-100 text-sm">Testing
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="group inline-block w-full ">
-                                    <button aria-haspopup="true" aria-controls="menu"
-                                        class="outline-none focus:outline-none rounded-sm flex justify-between items-center min-w-32">
-                                        <span
-                                            class="pr-1 flex-1 text-slate-900 text-[14px] font-medium leading-tight">Dropdown</span>
-                                        <span>
-                                            <svg class="fill-current h-4 w-4 transform group-hover:-rotate-180 transition duration-150 ease-in-out"
-                                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                                <path
-                                                    d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                                            </svg>
-                                        </span>
-                                    </button>
-                                    <ul id="menu" aria-hidden="true"
-                                        class="z-50 bg-gray-100 rounded-md shadow border border-slate-200 transform scale-0 group-hover:scale-100 absolute transition duration-150 ease-in-out origin-top min-w-32 space-y-2 p-3">
-                                        <li class="dropdown-li rounded-sm px-3 py-1 hover:bg-gray-100 text-sm ">
-                                            Programming
-                                        </li>
-                                        <li class="dropdown-li rounded-sm px-3 py-1 hover:bg-gray-100 text-sm">DevOps
-                                        </li>
-                                        <li class="dropdown-li rounded-sm relative px-3 py-1 hover:bg-gray-100">
-                                            <button aria-haspopup="true" aria-controls="menu-lang"
-                                                class="dropdown-button w-full text-left flex items-center outline-none focus:outline-none">
-                                                <span class=" dropdown-span pr-1 flex-1 text-sm">Langauges</span>
-                                                <span class="dropdown-span mr-auto">
-                                                    <svg class="dropdown-svg fill-current h-4 w-4 transition duration-150 ease-in-out"
-                                                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                                        <path
-                                                            d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                                                    </svg>
-                                                </span>
-                                            </button>
-                                            <ul id="menu-lang" aria-hidden="true"
-                                                class="dropdown-ul bg-gray-100 rounded-md shadow border border-slate-200 transform absolute transition duration-150 ease-in-out origin-top min-w-32 space-y-2 p-3">
-                                                <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">Javascript
-                                                </li>
-                                                <li
-                                                    class="dropdown dropdown-li rounded-sm relative px-3 py-1 hover:bg-gray-100">
-                                                    <button aria-haspopup="true" aria-controls="menu-lang-python"
-                                                        class="dropdown-button w-full text-left flex items-center outline-none focus:outline-none">
-                                                        <span class="dropdown-span pr-1 flex-1 text-sm">Python</span>
-                                                        <span class="dropdown-span mr-auto">
-                                                            <svg class="dropdown-svg fill-current h-4 w-4 transition duration-150 ease-in-out"
-                                                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                                                <path
-                                                                    d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                                                            </svg>
-                                                        </span>
-                                                    </button>
-                                                    <ul id="menu-lang-python" aria-hidden="true"
-                                                        class="dropdown-ul group-hover:z-10 bg-gray-100 rounded-md shadow border border-slate-200 absolute top-0 right-0 transition duration-150 ease-in-out origin-top-left space-y-2 min-w-32 p-3">
-                                                        <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">2.7
-                                                        </li>
-                                                        <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">3+
-                                                        </li>
-                                                    </ul>
-                                                </li>
-                                                <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">Go</li>
-                                                <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">Rust</li>
-                                            </ul>
-                                        </li>
-                                        <li class="dropdown-li rounded-sm px-3 py-1 hover:bg-gray-100 text-sm">Testing
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="group inline-block w-full ">
-                                    <button aria-haspopup="true" aria-controls="menu"
-                                        class="outline-none focus:outline-none rounded-sm flex justify-between items-center min-w-32">
-                                        <span
-                                            class="pr-1 flex-1 text-slate-900 text-[14px] font-medium leading-tight">Dropdown</span>
-                                        <span>
-                                            <svg class="fill-current h-4 w-4 transform group-hover:-rotate-180 transition duration-150 ease-in-out"
-                                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                                <path
-                                                    d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                                            </svg>
-                                        </span>
-                                    </button>
-                                    <ul id="menu" aria-hidden="true"
-                                        class="z-50 bg-gray-100 rounded-md shadow border border-slate-200 transform scale-0 group-hover:scale-100 absolute transition duration-150 ease-in-out origin-top min-w-32 space-y-2 p-3">
-                                        <li class="dropdown-li rounded-sm px-3 py-1 hover:bg-gray-100 text-sm ">
-                                            Programming
-                                        </li>
-                                        <li class="dropdown-li rounded-sm px-3 py-1 hover:bg-gray-100 text-sm">DevOps
-                                        </li>
-                                        <li class="dropdown-li rounded-sm relative px-3 py-1 hover:bg-gray-100">
-                                            <button aria-haspopup="true" aria-controls="menu-lang"
-                                                class="dropdown-button w-full text-left flex items-center outline-none focus:outline-none">
-                                                <span class=" dropdown-span pr-1 flex-1 text-sm">Langauges</span>
-                                                <span class="dropdown-span mr-auto">
-                                                    <svg class="dropdown-svg fill-current h-4 w-4 transition duration-150 ease-in-out"
-                                                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                                        <path
-                                                            d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                                                    </svg>
-                                                </span>
-                                            </button>
-                                            <ul id="menu-lang" aria-hidden="true"
-                                                class="dropdown-ul bg-gray-100 rounded-md shadow border border-slate-200 transform absolute transition duration-150 ease-in-out origin-top min-w-32 space-y-2 p-3">
-                                                <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">Javascript
-                                                </li>
-                                                <li
-                                                    class="dropdown dropdown-li rounded-sm relative px-3 py-1 hover:bg-gray-100">
-                                                    <button aria-haspopup="true" aria-controls="menu-lang-python"
-                                                        class="dropdown-button w-full text-left flex items-center outline-none focus:outline-none">
-                                                        <span class="dropdown-span pr-1 flex-1 text-sm">Python</span>
-                                                        <span class="dropdown-span mr-auto">
-                                                            <svg class="dropdown-svg fill-current h-4 w-4 transition duration-150 ease-in-out"
-                                                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                                                <path
-                                                                    d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                                                            </svg>
-                                                        </span>
-                                                    </button>
-                                                    <ul id="menu-lang-python" aria-hidden="true"
-                                                        class="dropdown-ul group-hover:z-10 bg-gray-100 rounded-md shadow border border-slate-200 absolute top-0 right-0 transition duration-150 ease-in-out origin-top-left space-y-2 min-w-32 p-3">
-                                                        <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">2.7
-                                                        </li>
-                                                        <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">3+
-                                                        </li>
-                                                    </ul>
-                                                </li>
-                                                <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">Go</li>
-                                                <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">Rust</li>
-                                            </ul>
-                                        </li>
-                                        <li class="dropdown-li rounded-sm px-3 py-1 hover:bg-gray-100 text-sm">Testing
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="group inline-block w-full ">
-                                    <button aria-haspopup="true" aria-controls="menu"
-                                        class="outline-none focus:outline-none rounded-sm flex justify-between items-center min-w-32">
-                                        <span
-                                            class="pr-1 flex-1 text-slate-900 text-[14px] font-medium leading-tight">Dropdown</span>
-                                        <span>
-                                            <svg class="fill-current h-4 w-4 transform group-hover:-rotate-180 transition duration-150 ease-in-out"
-                                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                                <path
-                                                    d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                                            </svg>
-                                        </span>
-                                    </button>
-                                    <ul id="menu" aria-hidden="true"
-                                        class="z-50 bg-gray-100 rounded-md shadow border border-slate-200 transform scale-0 group-hover:scale-100 absolute transition duration-150 ease-in-out origin-top min-w-32 space-y-2 p-3">
-                                        <li class="dropdown-li rounded-sm px-3 py-1 hover:bg-gray-100 text-sm ">
-                                            Programming
-                                        </li>
-                                        <li class="dropdown-li rounded-sm px-3 py-1 hover:bg-gray-100 text-sm">DevOps
-                                        </li>
-                                        <li class="dropdown-li rounded-sm relative px-3 py-1 hover:bg-gray-100">
-                                            <button aria-haspopup="true" aria-controls="menu-lang"
-                                                class="dropdown-button w-full text-left flex items-center outline-none focus:outline-none">
-                                                <span class=" dropdown-span pr-1 flex-1 text-sm">Langauges</span>
-                                                <span class="dropdown-span mr-auto">
-                                                    <svg class="dropdown-svg fill-current h-4 w-4 transition duration-150 ease-in-out"
-                                                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                                        <path
-                                                            d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                                                    </svg>
-                                                </span>
-                                            </button>
-                                            <ul id="menu-lang" aria-hidden="true"
-                                                class="dropdown-ul bg-gray-100 rounded-md shadow border border-slate-200 transform absolute transition duration-150 ease-in-out origin-top min-w-32 space-y-2 p-3">
-                                                <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">Javascript
-                                                </li>
-                                                <li
-                                                    class="dropdown dropdown-li rounded-sm relative px-3 py-1 hover:bg-gray-100">
-                                                    <button aria-haspopup="true" aria-controls="menu-lang-python"
-                                                        class="dropdown-button w-full text-left flex items-center outline-none focus:outline-none">
-                                                        <span class="dropdown-span pr-1 flex-1 text-sm">Python</span>
-                                                        <span class="dropdown-span mr-auto">
-                                                            <svg class="dropdown-svg fill-current h-4 w-4 transition duration-150 ease-in-out"
-                                                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                                                <path
-                                                                    d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                                                            </svg>
-                                                        </span>
-                                                    </button>
-                                                    <ul id="menu-lang-python" aria-hidden="true"
-                                                        class="dropdown-ul group-hover:z-10 bg-gray-100 rounded-md shadow border border-slate-200 absolute top-0 right-0 transition duration-150 ease-in-out origin-top-left space-y-2 min-w-32 p-3">
-                                                        <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">2.7
-                                                        </li>
-                                                        <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">3+
-                                                        </li>
-                                                    </ul>
-                                                </li>
-                                                <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">Go</li>
-                                                <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">Rust</li>
-                                            </ul>
-                                        </li>
-                                        <li class="dropdown-li rounded-sm px-3 py-1 hover:bg-gray-100 text-sm">Testing
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="group inline-block w-full ">
-                                    <button aria-haspopup="true" aria-controls="menu"
-                                        class="outline-none focus:outline-none rounded-sm flex justify-between items-center min-w-32">
-                                        <span
-                                            class="pr-1 flex-1 text-slate-900 text-[14px] font-medium leading-tight">Dropdown</span>
-                                        <span>
-                                            <svg class="fill-current h-4 w-4 transform group-hover:-rotate-180 transition duration-150 ease-in-out"
-                                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                                <path
-                                                    d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                                            </svg>
-                                        </span>
-                                    </button>
-                                    <ul id="menu" aria-hidden="true"
-                                        class="z-50 bg-gray-100 rounded-md shadow border border-slate-200 transform scale-0 group-hover:scale-100 absolute transition duration-150 ease-in-out origin-top min-w-32 space-y-2 p-3">
-                                        <li class="dropdown-li rounded-sm px-3 py-1 hover:bg-gray-100 text-sm ">
-                                            Programming
-                                        </li>
-                                        <li class="dropdown-li rounded-sm px-3 py-1 hover:bg-gray-100 text-sm">DevOps
-                                        </li>
-                                        <li class="dropdown-li rounded-sm relative px-3 py-1 hover:bg-gray-100">
-                                            <button aria-haspopup="true" aria-controls="menu-lang"
-                                                class="dropdown-button w-full text-left flex items-center outline-none focus:outline-none">
-                                                <span class=" dropdown-span pr-1 flex-1 text-sm">Langauges</span>
-                                                <span class="dropdown-span mr-auto">
-                                                    <svg class="dropdown-svg fill-current h-4 w-4 transition duration-150 ease-in-out"
-                                                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                                        <path
-                                                            d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                                                    </svg>
-                                                </span>
-                                            </button>
-                                            <ul id="menu-lang" aria-hidden="true"
-                                                class="dropdown-ul bg-gray-100 rounded-md shadow border border-slate-200 transform absolute transition duration-150 ease-in-out origin-top min-w-32 space-y-2 p-3">
-                                                <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">Javascript
-                                                </li>
-                                                <li
-                                                    class="dropdown dropdown-li rounded-sm relative px-3 py-1 hover:bg-gray-100">
-                                                    <button aria-haspopup="true" aria-controls="menu-lang-python"
-                                                        class="dropdown-button w-full text-left flex items-center outline-none focus:outline-none">
-                                                        <span class="dropdown-span pr-1 flex-1 text-sm">Python</span>
-                                                        <span class="dropdown-span mr-auto">
-                                                            <svg class="dropdown-svg fill-current h-4 w-4 transition duration-150 ease-in-out"
-                                                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                                                <path
-                                                                    d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                                                            </svg>
-                                                        </span>
-                                                    </button>
-                                                    <ul id="menu-lang-python" aria-hidden="true"
-                                                        class="dropdown-ul group-hover:z-10 bg-gray-100 rounded-md shadow border border-slate-200 absolute top-0 right-0 transition duration-150 ease-in-out origin-top-left space-y-2 min-w-32 p-3">
-                                                        <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">2.7
-                                                        </li>
-                                                        <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">3+
-                                                        </li>
-                                                    </ul>
-                                                </li>
-                                                <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">Go</li>
-                                                <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">Rust</li>
-                                            </ul>
-                                        </li>
-                                        <li class="dropdown-li rounded-sm px-3 py-1 hover:bg-gray-100 text-sm">Testing
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="group inline-block w-full ">
-                                    <button aria-haspopup="true" aria-controls="menu"
-                                        class="outline-none focus:outline-none rounded-sm flex justify-between items-center min-w-32">
-                                        <span
-                                            class="pr-1 flex-1 text-slate-900 text-[14px] font-medium leading-tight">Dropdown</span>
-                                        <span>
-                                            <svg class="fill-current h-4 w-4 transform group-hover:-rotate-180 transition duration-150 ease-in-out"
-                                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                                <path
-                                                    d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                                            </svg>
-                                        </span>
-                                    </button>
-                                    <ul id="menu" aria-hidden="true"
-                                        class="z-50 bg-gray-100 rounded-md shadow border border-slate-200 transform scale-0 group-hover:scale-100 absolute transition duration-150 ease-in-out origin-top min-w-32 space-y-2 p-3">
-                                        <li class="dropdown-li rounded-sm px-3 py-1 hover:bg-gray-100 text-sm ">
-                                            Programming
-                                        </li>
-                                        <li class="dropdown-li rounded-sm px-3 py-1 hover:bg-gray-100 text-sm">DevOps
-                                        </li>
-                                        <li class="dropdown-li rounded-sm relative px-3 py-1 hover:bg-gray-100">
-                                            <button aria-haspopup="true" aria-controls="menu-lang"
-                                                class="dropdown-button w-full text-left flex items-center outline-none focus:outline-none">
-                                                <span class=" dropdown-span pr-1 flex-1 text-sm">Langauges</span>
-                                                <span class="dropdown-span mr-auto">
-                                                    <svg class="dropdown-svg fill-current h-4 w-4 transition duration-150 ease-in-out"
-                                                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                                        <path
-                                                            d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                                                    </svg>
-                                                </span>
-                                            </button>
-                                            <ul id="menu-lang" aria-hidden="true"
-                                                class="dropdown-ul bg-gray-100 rounded-md shadow border border-slate-200 transform absolute transition duration-150 ease-in-out origin-top min-w-32 space-y-2 p-3">
-                                                <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">Javascript
-                                                </li>
-                                                <li
-                                                    class="dropdown dropdown-li rounded-sm relative px-3 py-1 hover:bg-gray-100">
-                                                    <button aria-haspopup="true" aria-controls="menu-lang-python"
-                                                        class="dropdown-button w-full text-left flex items-center outline-none focus:outline-none">
-                                                        <span class="dropdown-span pr-1 flex-1 text-sm">Python</span>
-                                                        <span class="dropdown-span mr-auto">
-                                                            <svg class="dropdown-svg fill-current h-4 w-4 transition duration-150 ease-in-out"
-                                                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                                                <path
-                                                                    d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                                                            </svg>
-                                                        </span>
-                                                    </button>
-                                                    <ul id="menu-lang-python" aria-hidden="true"
-                                                        class="dropdown-ul group-hover:z-10 bg-gray-100 rounded-md shadow border border-slate-200 absolute top-0 right-0 transition duration-150 ease-in-out origin-top-left space-y-2 min-w-32 p-3">
-                                                        <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">2.7
-                                                        </li>
-                                                        <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">3+
-                                                        </li>
-                                                    </ul>
-                                                </li>
-                                                <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">Go</li>
-                                                <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">Rust</li>
-                                            </ul>
-                                        </li>
-                                        <li class="dropdown-li rounded-sm px-3 py-1 hover:bg-gray-100 text-sm">Testing
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="group inline-block w-full ">
-                                    <button aria-haspopup="true" aria-controls="menu"
-                                        class="outline-none focus:outline-none rounded-sm flex justify-between items-center min-w-32">
-                                        <span
-                                            class="pr-1 flex-1 text-slate-900 text-[14px] font-medium leading-tight">Dropdown</span>
-                                        <span>
-                                            <svg class="fill-current h-4 w-4 transform group-hover:-rotate-180 transition duration-150 ease-in-out"
-                                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                                <path
-                                                    d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                                            </svg>
-                                        </span>
-                                    </button>
-                                    <ul id="menu" aria-hidden="true"
-                                        class="z-50 bg-gray-100 rounded-md shadow border border-slate-200 transform scale-0 group-hover:scale-100 absolute transition duration-150 ease-in-out origin-top min-w-32 space-y-2 p-3">
-                                        <li class="dropdown-li rounded-sm px-3 py-1 hover:bg-gray-100 text-sm ">
-                                            Programming
-                                        </li>
-                                        <li class="dropdown-li rounded-sm px-3 py-1 hover:bg-gray-100 text-sm">DevOps
-                                        </li>
-                                        <li class="dropdown-li rounded-sm relative px-3 py-1 hover:bg-gray-100">
-                                            <button aria-haspopup="true" aria-controls="menu-lang"
-                                                class="dropdown-button w-full text-left flex items-center outline-none focus:outline-none">
-                                                <span class=" dropdown-span pr-1 flex-1 text-sm">Langauges</span>
-                                                <span class="dropdown-span mr-auto">
-                                                    <svg class="dropdown-svg fill-current h-4 w-4 transition duration-150 ease-in-out"
-                                                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                                        <path
-                                                            d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                                                    </svg>
-                                                </span>
-                                            </button>
-                                            <ul id="menu-lang" aria-hidden="true"
-                                                class="dropdown-ul bg-gray-100 rounded-md shadow border border-slate-200 transform absolute transition duration-150 ease-in-out origin-top min-w-32 space-y-2 p-3">
-                                                <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">Javascript
-                                                </li>
-                                                <li
-                                                    class="dropdown dropdown-li rounded-sm relative px-3 py-1 hover:bg-gray-100">
-                                                    <button aria-haspopup="true" aria-controls="menu-lang-python"
-                                                        class="dropdown-button w-full text-left flex items-center outline-none focus:outline-none">
-                                                        <span class="dropdown-span pr-1 flex-1 text-sm">Python</span>
-                                                        <span class="dropdown-span mr-auto">
-                                                            <svg class="dropdown-svg fill-current h-4 w-4 transition duration-150 ease-in-out"
-                                                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                                                <path
-                                                                    d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                                                            </svg>
-                                                        </span>
-                                                    </button>
-                                                    <ul id="menu-lang-python" aria-hidden="true"
-                                                        class="dropdown-ul group-hover:z-10 bg-gray-100 rounded-md shadow border border-slate-200 absolute top-0 right-0 transition duration-150 ease-in-out origin-top-left space-y-2 min-w-32 p-3">
-                                                        <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">2.7
-                                                        </li>
-                                                        <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">3+
-                                                        </li>
-                                                    </ul>
-                                                </li>
-                                                <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">Go</li>
-                                                <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">Rust</li>
-                                            </ul>
-                                        </li>
-                                        <li class="dropdown-li rounded-sm px-3 py-1 hover:bg-gray-100 text-sm">Testing
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="group inline-block w-full ">
-                                    <button aria-haspopup="true" aria-controls="menu"
-                                        class="outline-none focus:outline-none rounded-sm flex justify-between items-center min-w-32">
-                                        <span
-                                            class="pr-1 flex-1 text-slate-900 text-[14px] font-medium leading-tight">Dropdown</span>
-                                        <span>
-                                            <svg class="fill-current h-4 w-4 transform group-hover:-rotate-180 transition duration-150 ease-in-out"
-                                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                                <path
-                                                    d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                                            </svg>
-                                        </span>
-                                    </button>
-                                    <ul id="menu" aria-hidden="true"
-                                        class="z-50 bg-gray-100 rounded-md shadow border border-slate-200 transform scale-0 group-hover:scale-100 absolute transition duration-150 ease-in-out origin-top min-w-32 space-y-2 p-3">
-                                        <li class="dropdown-li rounded-sm px-3 py-1 hover:bg-gray-100 text-sm ">
-                                            Programming
-                                        </li>
-                                        <li class="dropdown-li rounded-sm px-3 py-1 hover:bg-gray-100 text-sm">DevOps
-                                        </li>
-                                        <li class="dropdown-li rounded-sm relative px-3 py-1 hover:bg-gray-100">
-                                            <button aria-haspopup="true" aria-controls="menu-lang"
-                                                class="dropdown-button w-full text-left flex items-center outline-none focus:outline-none">
-                                                <span class=" dropdown-span pr-1 flex-1 text-sm">Langauges</span>
-                                                <span class="dropdown-span mr-auto">
-                                                    <svg class="dropdown-svg fill-current h-4 w-4 transition duration-150 ease-in-out"
-                                                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                                        <path
-                                                            d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                                                    </svg>
-                                                </span>
-                                            </button>
-                                            <ul id="menu-lang" aria-hidden="true"
-                                                class="dropdown-ul bg-gray-100 rounded-md shadow border border-slate-200 transform absolute transition duration-150 ease-in-out origin-top min-w-32 space-y-2 p-3">
-                                                <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">Javascript
-                                                </li>
-                                                <li
-                                                    class="dropdown dropdown-li rounded-sm relative px-3 py-1 hover:bg-gray-100">
-                                                    <button aria-haspopup="true" aria-controls="menu-lang-python"
-                                                        class="dropdown-button w-full text-left flex items-center outline-none focus:outline-none">
-                                                        <span class="dropdown-span pr-1 flex-1 text-sm">Python</span>
-                                                        <span class="dropdown-span mr-auto">
-                                                            <svg class="dropdown-svg fill-current h-4 w-4 transition duration-150 ease-in-out"
-                                                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                                                <path
-                                                                    d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                                                            </svg>
-                                                        </span>
-                                                    </button>
-                                                    <ul id="menu-lang-python" aria-hidden="true"
-                                                        class="dropdown-ul group-hover:z-10 bg-gray-100 rounded-md shadow border border-slate-200 absolute top-0 right-0 transition duration-150 ease-in-out origin-top-left space-y-2 min-w-32 p-3">
-                                                        <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">2.7
-                                                        </li>
-                                                        <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">3+
-                                                        </li>
-                                                    </ul>
-                                                </li>
-                                                <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">Go</li>
-                                                <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">Rust</li>
-                                            </ul>
-                                        </li>
-                                        <li class="dropdown-li rounded-sm px-3 py-1 hover:bg-gray-100 text-sm">Testing
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="group inline-block w-full ">
-                                    <button aria-haspopup="true" aria-controls="menu"
-                                        class="outline-none focus:outline-none rounded-sm flex justify-between items-center min-w-32">
-                                        <span
-                                            class="pr-1 flex-1 text-slate-900 text-[14px] font-medium leading-tight">Dropdown</span>
-                                        <span>
-                                            <svg class="fill-current h-4 w-4 transform group-hover:-rotate-180 transition duration-150 ease-in-out"
-                                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                                <path
-                                                    d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                                            </svg>
-                                        </span>
-                                    </button>
-                                    <ul id="menu" aria-hidden="true"
-                                        class="z-50 bg-gray-100 rounded-md shadow border border-slate-200 transform scale-0 group-hover:scale-100 absolute transition duration-150 ease-in-out origin-top min-w-32 space-y-2 p-3">
-                                        <li class="dropdown-li rounded-sm px-3 py-1 hover:bg-gray-100 text-sm ">
-                                            Programming
-                                        </li>
-                                        <li class="dropdown-li rounded-sm px-3 py-1 hover:bg-gray-100 text-sm">DevOps
-                                        </li>
-                                        <li class="dropdown-li rounded-sm relative px-3 py-1 hover:bg-gray-100">
-                                            <button aria-haspopup="true" aria-controls="menu-lang"
-                                                class="dropdown-button w-full text-left flex items-center outline-none focus:outline-none">
-                                                <span class=" dropdown-span pr-1 flex-1 text-sm">Langauges</span>
-                                                <span class="dropdown-span mr-auto">
-                                                    <svg class="dropdown-svg fill-current h-4 w-4 transition duration-150 ease-in-out"
-                                                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                                        <path
-                                                            d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                                                    </svg>
-                                                </span>
-                                            </button>
-                                            <ul id="menu-lang" aria-hidden="true"
-                                                class="dropdown-ul bg-gray-100 rounded-md shadow border border-slate-200 transform absolute transition duration-150 ease-in-out origin-top min-w-32 space-y-2 p-3">
-                                                <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">Javascript
-                                                </li>
-                                                <li
-                                                    class="dropdown dropdown-li rounded-sm relative px-3 py-1 hover:bg-gray-100">
-                                                    <button aria-haspopup="true" aria-controls="menu-lang-python"
-                                                        class="dropdown-button w-full text-left flex items-center outline-none focus:outline-none">
-                                                        <span class="dropdown-span pr-1 flex-1 text-sm">Python</span>
-                                                        <span class="dropdown-span mr-auto">
-                                                            <svg class="dropdown-svg fill-current h-4 w-4 transition duration-150 ease-in-out"
-                                                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                                                <path
-                                                                    d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                                                            </svg>
-                                                        </span>
-                                                    </button>
-                                                    <ul id="menu-lang-python" aria-hidden="true"
-                                                        class="dropdown-ul group-hover:z-10 bg-gray-100 rounded-md shadow border border-slate-200 absolute top-0 right-0 transition duration-150 ease-in-out origin-top-left space-y-2 min-w-32 p-3">
-                                                        <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">2.7
-                                                        </li>
-                                                        <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">3+
-                                                        </li>
-                                                    </ul>
-                                                </li>
-                                                <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">Go</li>
-                                                <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">Rust</li>
-                                            </ul>
-                                        </li>
-                                        <li class="dropdown-li rounded-sm px-3 py-1 hover:bg-gray-100 text-sm">Testing
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="group inline-block w-full ">
-                                    <button aria-haspopup="true" aria-controls="menu"
-                                        class="outline-none focus:outline-none rounded-sm flex justify-between items-center min-w-32">
-                                        <span
-                                            class="pr-1 flex-1 text-slate-900 text-[14px] font-medium leading-tight">Dropdown</span>
-                                        <span>
-                                            <svg class="fill-current h-4 w-4 transform group-hover:-rotate-180 transition duration-150 ease-in-out"
-                                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                                <path
-                                                    d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                                            </svg>
-                                        </span>
-                                    </button>
-                                    <ul id="menu" aria-hidden="true"
-                                        class="z-50 bg-gray-100 rounded-md shadow border border-slate-200 transform scale-0 group-hover:scale-100 absolute transition duration-150 ease-in-out origin-top min-w-32 space-y-2 p-3">
-                                        <li class="dropdown-li rounded-sm px-3 py-1 hover:bg-gray-100 text-sm ">
-                                            Programming
-                                        </li>
-                                        <li class="dropdown-li rounded-sm px-3 py-1 hover:bg-gray-100 text-sm">DevOps
-                                        </li>
-                                        <li class="dropdown-li rounded-sm relative px-3 py-1 hover:bg-gray-100">
-                                            <button aria-haspopup="true" aria-controls="menu-lang"
-                                                class="dropdown-button w-full text-left flex items-center outline-none focus:outline-none">
-                                                <span class=" dropdown-span pr-1 flex-1 text-sm">Langauges</span>
-                                                <span class="dropdown-span mr-auto">
-                                                    <svg class="dropdown-svg fill-current h-4 w-4 transition duration-150 ease-in-out"
-                                                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                                        <path
-                                                            d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                                                    </svg>
-                                                </span>
-                                            </button>
-                                            <ul id="menu-lang" aria-hidden="true"
-                                                class="dropdown-ul bg-gray-100 rounded-md shadow border border-slate-200 transform absolute transition duration-150 ease-in-out origin-top min-w-32 space-y-2 p-3">
-                                                <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">Javascript
-                                                </li>
-                                                <li
-                                                    class="dropdown dropdown-li rounded-sm relative px-3 py-1 hover:bg-gray-100">
-                                                    <button aria-haspopup="true" aria-controls="menu-lang-python"
-                                                        class="dropdown-button w-full text-left flex items-center outline-none focus:outline-none">
-                                                        <span class="dropdown-span pr-1 flex-1 text-sm">Python</span>
-                                                        <span class="dropdown-span mr-auto">
-                                                            <svg class="dropdown-svg fill-current h-4 w-4 transition duration-150 ease-in-out"
-                                                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                                                <path
-                                                                    d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                                                            </svg>
-                                                        </span>
-                                                    </button>
-                                                    <ul id="menu-lang-python" aria-hidden="true"
-                                                        class="dropdown-ul group-hover:z-10 bg-gray-100 rounded-md shadow border border-slate-200 absolute top-0 right-0 transition duration-150 ease-in-out origin-top-left space-y-2 min-w-32 p-3">
-                                                        <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">2.7
-                                                        </li>
-                                                        <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">3+
-                                                        </li>
-                                                    </ul>
-                                                </li>
-                                                <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">Go</li>
-                                                <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">Rust</li>
-                                            </ul>
-                                        </li>
-                                        <li class="dropdown-li rounded-sm px-3 py-1 hover:bg-gray-100 text-sm">Testing
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="group inline-block w-full ">
-                                    <button aria-haspopup="true" aria-controls="menu"
-                                        class="outline-none focus:outline-none rounded-sm flex justify-between items-center min-w-32">
-                                        <span
-                                            class="pr-1 flex-1 text-slate-900 text-[14px] font-medium leading-tight">Dropdown</span>
-                                        <span>
-                                            <svg class="fill-current h-4 w-4 transform group-hover:-rotate-180 transition duration-150 ease-in-out"
-                                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                                <path
-                                                    d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                                            </svg>
-                                        </span>
-                                    </button>
-                                    <ul id="menu" aria-hidden="true"
-                                        class="z-50 bg-gray-100 rounded-md shadow border border-slate-200 transform scale-0 group-hover:scale-100 absolute transition duration-150 ease-in-out origin-top min-w-32 space-y-2 p-3">
-                                        <li class="dropdown-li rounded-sm px-3 py-1 hover:bg-gray-100 text-sm ">
-                                            Programming
-                                        </li>
-                                        <li class="dropdown-li rounded-sm px-3 py-1 hover:bg-gray-100 text-sm">DevOps
-                                        </li>
-                                        <li class="dropdown-li rounded-sm relative px-3 py-1 hover:bg-gray-100">
-                                            <button aria-haspopup="true" aria-controls="menu-lang"
-                                                class="dropdown-button w-full text-left flex items-center outline-none focus:outline-none">
-                                                <span class=" dropdown-span pr-1 flex-1 text-sm">Langauges</span>
-                                                <span class="dropdown-span mr-auto">
-                                                    <svg class="dropdown-svg fill-current h-4 w-4 transition duration-150 ease-in-out"
-                                                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                                        <path
-                                                            d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                                                    </svg>
-                                                </span>
-                                            </button>
-                                            <ul id="menu-lang" aria-hidden="true"
-                                                class="dropdown-ul bg-gray-100 rounded-md shadow border border-slate-200 transform absolute transition duration-150 ease-in-out origin-top min-w-32 space-y-2 p-3">
-                                                <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">Javascript
-                                                </li>
-                                                <li
-                                                    class="dropdown dropdown-li rounded-sm relative px-3 py-1 hover:bg-gray-100">
-                                                    <button aria-haspopup="true" aria-controls="menu-lang-python"
-                                                        class="dropdown-button w-full text-left flex items-center outline-none focus:outline-none">
-                                                        <span class="dropdown-span pr-1 flex-1 text-sm">Python</span>
-                                                        <span class="dropdown-span mr-auto">
-                                                            <svg class="dropdown-svg fill-current h-4 w-4 transition duration-150 ease-in-out"
-                                                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                                                <path
-                                                                    d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                                                            </svg>
-                                                        </span>
-                                                    </button>
-                                                    <ul id="menu-lang-python" aria-hidden="true"
-                                                        class="dropdown-ul group-hover:z-10 bg-gray-100 rounded-md shadow border border-slate-200 absolute top-0 right-0 transition duration-150 ease-in-out origin-top-left space-y-2 min-w-32 p-3">
-                                                        <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">2.7
-                                                        </li>
-                                                        <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">3+
-                                                        </li>
-                                                    </ul>
-                                                </li>
-                                                <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">Go</li>
-                                                <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">Rust</li>
-                                            </ul>
-                                        </li>
-                                        <li class="dropdown-li rounded-sm px-3 py-1 hover:bg-gray-100 text-sm">Testing
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="group inline-block w-full ">
-                                    <button aria-haspopup="true" aria-controls="menu"
-                                        class="outline-none focus:outline-none rounded-sm flex justify-between items-center min-w-32">
-                                        <span
-                                            class="pr-1 flex-1 text-slate-900 text-[14px] font-medium leading-tight">Dropdown</span>
-                                        <span>
-                                            <svg class="fill-current h-4 w-4 transform group-hover:-rotate-180 transition duration-150 ease-in-out"
-                                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                                <path
-                                                    d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                                            </svg>
-                                        </span>
-                                    </button>
-                                    <ul id="menu" aria-hidden="true"
-                                        class="z-50 bg-gray-100 rounded-md shadow border border-slate-200 transform scale-0 group-hover:scale-100 absolute transition duration-150 ease-in-out origin-top min-w-32 space-y-2 p-3">
-                                        <li class="dropdown-li rounded-sm px-3 py-1 hover:bg-gray-100 text-sm ">
-                                            Programming
-                                        </li>
-                                        <li class="dropdown-li rounded-sm px-3 py-1 hover:bg-gray-100 text-sm">DevOps
-                                        </li>
-                                        <li class="dropdown-li rounded-sm relative px-3 py-1 hover:bg-gray-100">
-                                            <button aria-haspopup="true" aria-controls="menu-lang"
-                                                class="dropdown-button w-full text-left flex items-center outline-none focus:outline-none">
-                                                <span class=" dropdown-span pr-1 flex-1 text-sm">Langauges</span>
-                                                <span class="dropdown-span mr-auto">
-                                                    <svg class="dropdown-svg fill-current h-4 w-4 transition duration-150 ease-in-out"
-                                                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                                        <path
-                                                            d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                                                    </svg>
-                                                </span>
-                                            </button>
-                                            <ul id="menu-lang" aria-hidden="true"
-                                                class="dropdown-ul bg-gray-100 rounded-md shadow border border-slate-200 transform absolute transition duration-150 ease-in-out origin-top min-w-32 space-y-2 p-3">
-                                                <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">Javascript
-                                                </li>
-                                                <li
-                                                    class="dropdown dropdown-li rounded-sm relative px-3 py-1 hover:bg-gray-100">
-                                                    <button aria-haspopup="true" aria-controls="menu-lang-python"
-                                                        class="dropdown-button w-full text-left flex items-center outline-none focus:outline-none">
-                                                        <span class="dropdown-span pr-1 flex-1 text-sm">Python</span>
-                                                        <span class="dropdown-span mr-auto">
-                                                            <svg class="dropdown-svg fill-current h-4 w-4 transition duration-150 ease-in-out"
-                                                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                                                <path
-                                                                    d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                                                            </svg>
-                                                        </span>
-                                                    </button>
-                                                    <ul id="menu-lang-python" aria-hidden="true"
-                                                        class="dropdown-ul group-hover:z-10 bg-gray-100 rounded-md shadow border border-slate-200 absolute top-0 right-0 transition duration-150 ease-in-out origin-top-left space-y-2 min-w-32 p-3">
-                                                        <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">2.7
-                                                        </li>
-                                                        <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">3+
-                                                        </li>
-                                                    </ul>
-                                                </li>
-                                                <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">Go</li>
-                                                <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">Rust</li>
-                                            </ul>
-                                        </li>
-                                        <li class="dropdown-li rounded-sm px-3 py-1 hover:bg-gray-100 text-sm">Testing
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="group inline-block w-full ">
-                                    <button aria-haspopup="true" aria-controls="menu"
-                                        class="outline-none focus:outline-none rounded-sm flex justify-between items-center min-w-32">
-                                        <span
-                                            class="pr-1 flex-1 text-slate-900 text-[14px] font-medium leading-tight">Dropdown</span>
-                                        <span>
-                                            <svg class="fill-current h-4 w-4 transform group-hover:-rotate-180 transition duration-150 ease-in-out"
-                                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                                <path
-                                                    d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                                            </svg>
-                                        </span>
-                                    </button>
-                                    <ul id="menu" aria-hidden="true"
-                                        class="z-50 bg-gray-100 rounded-md shadow border border-slate-200 transform scale-0 group-hover:scale-100 absolute transition duration-150 ease-in-out origin-top min-w-32 space-y-2 p-3">
-                                        <li class="dropdown-li rounded-sm px-3 py-1 hover:bg-gray-100 text-sm ">
-                                            Programming
-                                        </li>
-                                        <li class="dropdown-li rounded-sm px-3 py-1 hover:bg-gray-100 text-sm">DevOps
-                                        </li>
-                                        <li class="dropdown-li rounded-sm relative px-3 py-1 hover:bg-gray-100">
-                                            <button aria-haspopup="true" aria-controls="menu-lang"
-                                                class="dropdown-button w-full text-left flex items-center outline-none focus:outline-none">
-                                                <span class=" dropdown-span pr-1 flex-1 text-sm">Langauges</span>
-                                                <span class="dropdown-span mr-auto">
-                                                    <svg class="dropdown-svg fill-current h-4 w-4 transition duration-150 ease-in-out"
-                                                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                                        <path
-                                                            d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                                                    </svg>
-                                                </span>
-                                            </button>
-                                            <ul id="menu-lang" aria-hidden="true"
-                                                class="dropdown-ul bg-gray-100 rounded-md shadow border border-slate-200 transform absolute transition duration-150 ease-in-out origin-top min-w-32 space-y-2 p-3">
-                                                <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">Javascript
-                                                </li>
-                                                <li
-                                                    class="dropdown dropdown-li rounded-sm relative px-3 py-1 hover:bg-gray-100">
-                                                    <button aria-haspopup="true" aria-controls="menu-lang-python"
-                                                        class="dropdown-button w-full text-left flex items-center outline-none focus:outline-none">
-                                                        <span class="dropdown-span pr-1 flex-1 text-sm">Python</span>
-                                                        <span class="dropdown-span mr-auto">
-                                                            <svg class="dropdown-svg fill-current h-4 w-4 transition duration-150 ease-in-out"
-                                                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                                                <path
-                                                                    d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                                                            </svg>
-                                                        </span>
-                                                    </button>
-                                                    <ul id="menu-lang-python" aria-hidden="true"
-                                                        class="dropdown-ul group-hover:z-10 bg-gray-100 rounded-md shadow border border-slate-200 absolute top-0 right-0 transition duration-150 ease-in-out origin-top-left space-y-2 min-w-32 p-3">
-                                                        <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">2.7
-                                                        </li>
-                                                        <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">3+
-                                                        </li>
-                                                    </ul>
-                                                </li>
-                                                <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">Go</li>
-                                                <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">Rust</li>
-                                            </ul>
-                                        </li>
-                                        <li class="dropdown-li rounded-sm px-3 py-1 hover:bg-gray-100 text-sm">Testing
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="group inline-block w-full ">
-                                    <button aria-haspopup="true" aria-controls="menu"
-                                        class="outline-none focus:outline-none rounded-sm flex justify-between items-center min-w-32">
-                                        <span
-                                            class="pr-1 flex-1 text-slate-900 text-[14px] font-medium leading-tight">Dropdown</span>
-                                        <span>
-                                            <svg class="fill-current h-4 w-4 transform group-hover:-rotate-180 transition duration-150 ease-in-out"
-                                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                                <path
-                                                    d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                                            </svg>
-                                        </span>
-                                    </button>
-                                    <ul id="menu" aria-hidden="true"
-                                        class="z-50 bg-gray-100 rounded-md shadow border border-slate-200 transform scale-0 group-hover:scale-100 absolute transition duration-150 ease-in-out origin-top min-w-32 space-y-2 p-3">
-                                        <li class="dropdown-li rounded-sm px-3 py-1 hover:bg-gray-100 text-sm ">
-                                            Programming
-                                        </li>
-                                        <li class="dropdown-li rounded-sm px-3 py-1 hover:bg-gray-100 text-sm">DevOps
-                                        </li>
-                                        <li class="dropdown-li rounded-sm relative px-3 py-1 hover:bg-gray-100">
-                                            <button aria-haspopup="true" aria-controls="menu-lang"
-                                                class="dropdown-button w-full text-left flex items-center outline-none focus:outline-none">
-                                                <span class=" dropdown-span pr-1 flex-1 text-sm">Langauges</span>
-                                                <span class="dropdown-span mr-auto">
-                                                    <svg class="dropdown-svg fill-current h-4 w-4 transition duration-150 ease-in-out"
-                                                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                                        <path
-                                                            d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                                                    </svg>
-                                                </span>
-                                            </button>
-                                            <ul id="menu-lang" aria-hidden="true"
-                                                class="dropdown-ul bg-gray-100 rounded-md shadow border border-slate-200 transform absolute transition duration-150 ease-in-out origin-top min-w-32 space-y-2 p-3">
-                                                <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">Javascript
-                                                </li>
-                                                <li
-                                                    class="dropdown dropdown-li rounded-sm relative px-3 py-1 hover:bg-gray-100">
-                                                    <button aria-haspopup="true" aria-controls="menu-lang-python"
-                                                        class="dropdown-button w-full text-left flex items-center outline-none focus:outline-none">
-                                                        <span class="dropdown-span pr-1 flex-1 text-sm">Python</span>
-                                                        <span class="dropdown-span mr-auto">
-                                                            <svg class="dropdown-svg fill-current h-4 w-4 transition duration-150 ease-in-out"
-                                                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                                                <path
-                                                                    d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                                                            </svg>
-                                                        </span>
-                                                    </button>
-                                                    <ul id="menu-lang-python" aria-hidden="true"
-                                                        class="dropdown-ul group-hover:z-10 bg-gray-100 rounded-md shadow border border-slate-200 absolute top-0 right-0 transition duration-150 ease-in-out origin-top-left space-y-2 min-w-32 p-3">
-                                                        <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">2.7
-                                                        </li>
-                                                        <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">3+
-                                                        </li>
-                                                    </ul>
-                                                </li>
-                                                <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">Go</li>
-                                                <li class="dropdown-li px-3 py-1 hover:bg-gray-100 text-sm">Rust</li>
-                                            </ul>
-                                        </li>
-                                        <li class="dropdown-li rounded-sm px-3 py-1 hover:bg-gray-100 text-sm">Testing
-                                        </li>
-                                    </ul>
-                                </div>
+                                                </summary>
+                                                <div class="pl-1">
+                                                    <div class="border-l pl-2">
+
+                                                        <details
+                                                            class="group max-w-full w-full cursor-pointer self-stretch inline-block [&[open]>summary>svg]:translate-y-1 [&[open]>summary>svg]:rotate-0 ">
+                                                            <summary
+                                                                class="w-full max-w-full justify-between items-center p-2 hover:bg-tertiary/5 rounded-lg cursor-pointer flex gap-2">
+                                                                <div class="w-full max-w-full">Getting
+                                                                    Components
+                                                                </div>
+                                                                <svg class="fill-current -rotate-90 h-4 w-4 transform transition duration-150 ease-in-out"
+                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                    viewBox="0 0 20 20">
+                                                                    <path
+                                                                        d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                                                                </svg>
+                                                            </summary>
+                                                            <div class="pl-1">
+                                                                <div class="border-l pl-2">
+
+                                                                    <details
+                                                                        class="group max-w-full w-full cursor-pointer self-stretch inline-block [&[open]>summary>svg]:translate-y-1 [&[open]>summary>svg]:rotate-0 ">
+                                                                        <summary
+                                                                            class="w-full max-w-full justify-between items-center p-2 hover:bg-tertiary/5 rounded-lg cursor-pointer flex gap-2">
+                                                                            <div class="w-full max-w-full">Getting
+                                                                                Components
+                                                                            </div>
+                                                                            <svg class="fill-current -rotate-90 h-4 w-4 transform transition duration-150 ease-in-out"
+                                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                                viewBox="0 0 20 20">
+                                                                                <path
+                                                                                    d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                                                                            </svg>
+                                                                        </summary>
+                                                                        <div class="pl-1">
+                                                                            <div class="border-l pl-2">
+
+                                                                                <details
+                                                                                    class="group max-w-full w-full cursor-pointer self-stretch inline-block [&[open]>summary>svg]:translate-y-1 [&[open]>summary>svg]:rotate-0 ">
+                                                                                    <summary
+                                                                                        class="w-full max-w-full justify-between items-center p-2 hover:bg-tertiary/5 rounded-lg cursor-pointer flex gap-2">
+                                                                                        <div class="w-full max-w-full">
+                                                                                            Getting
+                                                                                            Components
+                                                                                        </div>
+                                                                                        <svg class="fill-current -rotate-90 h-4 w-4 transform transition duration-150 ease-in-out"
+                                                                                            xmlns="http://www.w3.org/2000/svg"
+                                                                                            viewBox="0 0 20 20">
+                                                                                            <path
+                                                                                                d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                                                                                        </svg>
+                                                                                    </summary>
+                                                                                    <div class="pl-1">
+                                                                                        <div class="border-l pl-2">
+
+                                                                                            <details
+                                                                                                class="group max-w-full w-full cursor-pointer self-stretch inline-block [&[open]>summary>svg]:translate-y-1 [&[open]>summary>svg]:rotate-0 ">
+                                                                                                <summary
+                                                                                                    class="w-full max-w-full justify-between items-center p-2 hover:bg-tertiary/5 rounded-lg cursor-pointer flex gap-2">
+                                                                                                    <div
+                                                                                                        class="w-full max-w-full">
+                                                                                                        Getting
+                                                                                                        Components
+                                                                                                    </div>
+                                                                                                    <svg class="fill-current -rotate-90 h-4 w-4 transform transition duration-150 ease-in-out"
+                                                                                                        xmlns="http://www.w3.org/2000/svg"
+                                                                                                        viewBox="0 0 20 20">
+                                                                                                        <path
+                                                                                                            d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                                                                                                    </svg>
+                                                                                                </summary>
+                                                                                                <div class="pl-1">
+                                                                                                    <div
+                                                                                                        class="border-l pl-2">
+
+
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </details>
+
+
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </details>
+
+
+                                                                            </div>
+                                                                        </div>
+                                                                    </details>
+
+
+                                                                </div>
+                                                            </div>
+                                                        </details>
+
+
+                                                    </div>
+                                                </div>
+                                            </details>
+
+
+
+                                        </div>
+                                    </div>
+                                </details>
+
 
                             </div>
                         </div>
-                    </div>
 
-                </div>
-            </div>
+                        <script>// Get references to the source and destination divs
+                            const sidebar = document.getElementById('sidebar');
+                            const navbarMenu = document.getElementById('navbar-menu');
+                            const originalParent = sidebar.parentNode;
 
-            <div class="Frame875 pt-0 justify-start items-start gap-2.5 inline-flex flex-col w-full h-full ">
-                <div
-                    class="Frame875 xl:px-[30px] lg:px-[30px] py-5 justify-start items-start gap-2.5 flex w-full min-h-full">
-                    <details class="group inline-block [&[open]>summary::before]:content-[url('<?php global $accordianToggleIcon;
-                    echo $accordianToggleIcon; ?>')] [&[open]>summary::before]:rotate-180 ">
-                        <summary class="before:content-[url('<?php global $accordianToggleIcon;
-                        echo $accordianToggleIcon; ?>')]"
-                            style="align-self: stretch; height: 36px; padding-top: 8px; padding-bottom: 8px; border-radius: 6px; display: flex;">
-                            <div
-                                style="align-self: stretch; flex: 1 1 0; justify-content: flex-start; align-items: center; gap: 4px; display: inline-flex">
-                                <div
-                                    style="color: #0F172A; font-size: 14px;  font-weight: 500; line-height: 20px; word-wrap: break-word">
-                                    Components</div>
-                            </div>
-                        </summary>
-                        <div class=""
-                            style="padding-left: 5px; justify-content: flex-start;  align-items: flex-start; gap: 10px; display: inline-flex">
-                            <div
-                                style="margin-left: 2px; padding-left: 16px;   flex-direction: column; justify-content: flex-start; align-items: flex-start; display: inline-flex">
-                                <div
-                                    style="flex-direction: column; justify-content: flex-start; align-items: flex-start; display: flex">
-                                    <details class="group inline-block [&[open]>summary::before]:content-[url('<?php global $accordianToggleIcon;
-                                    echo $accordianToggleIcon; ?>')] [&[open]>summary::before]:rotate-180 ">
-                                        <summary class="before:content-[url('<?php global $accordianToggleIcon;
-                                        echo $accordianToggleIcon; ?>')]"
-                                            style="align-self: stretch; height: 36px; padding-top: 8px; padding-bottom: 8px; border-radius: 6px; display: flex;">
-                                            <div
-                                                style="align-self: stretch; flex: 1 1 0; justify-content: flex-start; align-items: center; gap: 4px; display: inline-flex">
-                                                <div
-                                                    style="color: #0F172A; font-size: 14px;  font-weight: 500; line-height: 20px; word-wrap: break-word">
-                                                    Components</div>
-                                            </div>
-                                        </summary>
-                                        <div class="">something</div>
-                                    </details>
-                                </div>
-                            </div>
-                        </div>
-                    </details>
-                </div>
-            </div>
+                            function moveSidebarToNavbar() {
+                                if (window.innerWidth <= 784) {
+                                    const detachedDiv = originalParent.removeChild(sidebar);
+                                    navbarMenu.appendChild(detachedDiv);
+                                } else {
+                                    const detachedDiv = navbarMenu.removeChild(sidebar);
+                                    originalParent.appendChild(detachedDiv);
+                                }
+                            }
 
-        </div>
-    </div>
-    <?php wp_footer(); ?>
+                            window.addEventListener('resize', moveSidebarToNavbar);
+                        </script>
+
+                        <!-- Remove this script, It's just for div clone instead of messy copy paste -->
+                        <script>const parentAccordion = document.getElementById('doc-accordian');
+                            const replicationCount = 10;
+
+                            if (parentAccordion) {
+                                for (let i = 0; i < replicationCount; i++) {
+                                    // Clone the parent accordion element
+                                    const clonedAccordion = parentAccordion.cloneNode(true);
+
+                                    // Append the cloned accordion to its parent div
+                                    parentAccordion.parentNode.appendChild(clonedAccordion);
+                                }
+                            }
+                        </script>
+
+                        <?php wp_footer(); ?>
 </body>
 
 </html>
