@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useResizeDetector } from "react-resize-detector";
-import { ApexChart, BarChart } from "../components/common";
-import { MoneyBag, Wallet, WidthdrawBalance } from "../components/common/icons";
+import { ApexChart, BarChart } from "../../utilities/commons";
+import { MoneyBag, Wallet, WidthdrawBalance } from "../../utilities/commons/icons";
 
 const Reports = () => {
   const [uniqueVistor, setUniqueVistor] = useState("Month");

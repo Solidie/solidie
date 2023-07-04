@@ -4,7 +4,11 @@ import { getElementDataSet } from '../utilities/helpers.jsx';
 import { SignleApp } from './single-app/index.jsx';
 import { Catalog } from './catalog/index.jsx';
 
-import './style.css';
+// import './style.css';
+import '../libraries/tailwind.scss';
+import style from './s.module.scss';
+
+console.log(style);
 
 function Singular() {
 	return <SignleApp/>

@@ -2,7 +2,7 @@
 <html data-theme="light" class="w-full h-full">
 
 <head>
-    <?php wp_head(); ?>
+    <?php // wp_head(); ?>
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script>
     <script>
         /** @type {import('tailwindcss').Config} */
@@ -623,7 +623,7 @@
         }
     </script>
 
-    <?php wp_footer(); ?>
+    <?php // wp_footer(); ?>
 </body>
 
 </html>

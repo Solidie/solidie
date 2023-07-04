@@ -1,5 +1,5 @@
 import React from "react";
-import AddApplicationForm from "../../components/inventory/AddApplicationForm.jsx";
+import AddApplicationForm from "./segments/AddApplicationForm.jsx";
 import { Link } from "react-router-dom";
 import { ArrowLeftIcon } from "@radix-ui/react-icons";
 import { getDashboardPath } from "../../../utilities/helpers.jsx";
