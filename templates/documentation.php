@@ -67,7 +67,6 @@
 
     .header {
         background-color: #fff;
-        position: fixed;
         width: 100%;
         z-index: 3;
     }
@@ -190,7 +189,7 @@
 
     /* 48em = 768px */
 
-    @media (min-width: 48em) {
+    @media (min-width: 1024px) {
         .header .menu-li {
             float: left;
         }
@@ -223,9 +222,8 @@
     $accordianToggleIcon = 'data:image/svg+xml;base64,' . $base64Icon; ?>
 
     <div
-        class="px-5 lg:px-10 Documentation w-full h-full flex-col justify-start items-start flex max-w-screen-2xl mx-auto">
-        <header
-            class="Frame873 sticky top-0 self-stretch py-3.5 gap-2.5 grid grid-cols-2 auto-rows-auto bg-primary/40 header">
+        class="px-5 lg:px-10 Documentation w-full max-h-screen h-full flex-col justify-start items-start flex max-w-screen-2xl mx-auto">
+        <header class="Frame873 py-3.5 gap-2.5 grid grid-cols-2 auto-rows-auto bg-primary/40 header h-max">
             <img src="https://img.logoipsum.com/285.svg" class="logo w-[143.80px] h-[45px] relative" />
             <input class="menu-btn" type="checkbox" id="menu-btn" />
             <label class="menu-icon" for="menu-btn"><span class="navicon"></span></label>
@@ -301,18 +299,18 @@
             </ul>
         </header>
 
-        <div class="flex flex-col lg:flex-row w-full lg:h-full lg:pb-4">
+        <div class="flex flex-col lg:flex-row w-full flex-grow lg:h-auto overflow-clip lg:pb-4">
             <div
-                class=" Frame874 !z-0 sticky top-0 bg-white bg-opacity-30 lg:w-max w-full h-max lg:h-full [overflow:unset;] self-stretch py-[1px] rounded-lg shadow justify-start items-start gap-2.5 hidden md:flex flex-row lg:flex-col">
-                <div class="w-full lg:!w-max lg:h-full !overflow-y-auto"
-                    style="height: 100%; padding-top: 1px; padding-bottom: 1px; box-shadow: 0px 4px 6px -2px rgba(0, 0, 0, 0.05); border-radius: 15px; justify-content: flex-start; align-items: flex-start; gap: 10px; display: inline-flex;">
-                    <div id="sidebar" class="w-full lg:w-max h-full flex justify-center flex-col gap-4"
+                class=" Frame874 !z-0 bg-white bg-opacity-30 lg:w-max w-full h-max lg:h-full [overflow:unset;] self-stretch py-[1px] rounded-lg shadow justify-start items-start gap-2.5 hidden md:flex flex-row lg:flex-col">
+                <div class="w-full lg:!w-max h-full !overflow-y-auto"
+                    style="padding-top: 1px; padding-bottom: 1px; box-shadow: 0px 4px 6px -2px rgba(0, 0, 0, 0.05); border-radius: 15px; justify-content: flex-start; align-items: flex-start; gap: 10px; display: inline-flex;">
+                    <div id="sidebar" class="w-full lg:w-max h-max flex justify-center flex-col gap-4"
                         style="padding-left: 5px; padding-right: 5px; padding-top: 10px; padding-bottom: 10px; ">
                         <h2 class="pr-2 !text-lg lg:self-end lg:pl-32"
                             style="color: #0F172A; font-size: 14px;  font-style: italic; font-weight: 700; line-height: 20px; word-wrap: break-word">
                             Doc.</h2>
-                        <div class="w-full h-full overflow-x-auto thin-scroll-width ">
-                            <div class="w-full !h-full overflow-y-hidden flex flex-col py-0">
+                        <div class="w-full h-full thin-scroll-width ">
+                            <div class="w-full !h-full flex flex-col py-0">
 
                                 <div class="p-2 w-full hover:bg-tertiary/5 rounded-lg cursor-pointer">Getting Started
                                 </div>
@@ -381,7 +379,8 @@
                                                                             </svg>
                                                                         </summary>
                                                                         <div class="pl-1">
-                                                                            <div class="border-l border-l-tertiary pl-2">
+                                                                            <div
+                                                                                class="border-l border-l-tertiary pl-2">
 
                                                                                 <details
                                                                                     class="group max-w-full w-full cursor-pointer self-stretch inline-block [&[open]>summary>svg]:translate-y-1 [&[open]>summary>svg]:rotate-0 ">
@@ -399,7 +398,8 @@
                                                                                         </svg>
                                                                                     </summary>
                                                                                     <div class="pl-1">
-                                                                                        <div class="border-l border-l-tertiary pl-2">
+                                                                                        <div
+                                                                                            class="border-l border-l-tertiary pl-2">
 
                                                                                             <details
                                                                                                 class="group max-w-full w-full cursor-pointer self-stretch inline-block [&[open]>summary>svg]:translate-y-1 [&[open]>summary>svg]:rotate-0 ">
@@ -495,7 +495,8 @@
                                                                             </svg>
                                                                         </summary>
                                                                         <div class="pl-1">
-                                                                            <div class="border-l border-l-tertiary pl-2">
+                                                                            <div
+                                                                                class="border-l border-l-tertiary pl-2">
 
                                                                                 <details
                                                                                     class="group max-w-full w-full cursor-pointer self-stretch inline-block [&[open]>summary>svg]:translate-y-1 [&[open]>summary>svg]:rotate-0 ">
@@ -513,7 +514,8 @@
                                                                                         </svg>
                                                                                     </summary>
                                                                                     <div class="pl-1">
-                                                                                        <div class="border-l border-l-tertiary pl-2">
+                                                                                        <div
+                                                                                            class="border-l border-l-tertiary pl-2">
 
                                                                                             <details
                                                                                                 class="group max-w-full w-full cursor-pointer self-stretch inline-block [&[open]>summary>svg]:translate-y-1 [&[open]>summary>svg]:rotate-0 ">
@@ -569,41 +571,59 @@
 
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-                        <script>// Get references to the source and destination divs
-                            const sidebar = document.getElementById('sidebar');
-                            const navbarMenu = document.getElementById('navbar-menu');
-                            const originalParent = sidebar.parentNode;
+    <script>const sidebar = document.getElementById('sidebar');
+        const navbarMenu = document.getElementById('navbar-menu');
+        const originalParent = sidebar.parentNode;
 
-                            function moveSidebarToNavbar() {
-                                if (window.innerWidth <= 784) {
-                                    const detachedDiv = originalParent.removeChild(sidebar);
-                                    navbarMenu.appendChild(detachedDiv);
-                                } else {
-                                    const detachedDiv = navbarMenu.removeChild(sidebar);
-                                    originalParent.appendChild(detachedDiv);
-                                }
-                            }
+        function moveSidebarToNavbar() {
+            try {
+                if (window.innerWidth <= 1024) {
+                    if (originalParent.contains(sidebar)) {
+                        const detachedDiv = originalParent.removeChild(sidebar);
+                        navbarMenu.appendChild(detachedDiv);
+                    } else if (!navbarMenu.contains(sidebar)) {
+                        navbarMenu.appendChild(sidebar);
+                    }
+                } else {
+                    if (navbarMenu.contains(sidebar)) {
+                        const detachedDiv = navbarMenu.removeChild(sidebar);
+                        originalParent.appendChild(detachedDiv);
+                    } else if (!originalParent.contains(sidebar)) {
+                        originalParent.appendChild(sidebar);
+                    }
+                }
+            } catch (error) {
+                console.error('An error occurred while moving the sidebar:', error);
+                // Handle the error gracefully, e.g., display an error message or fallback behavior
+            }
+        }
 
-                            window.addEventListener('resize', moveSidebarToNavbar);
-                        </script>
+        window.addEventListener('resize', moveSidebarToNavbar);
 
-                        <!-- Remove this script, It's just for div clone instead of messy copy paste -->
-                        <script>const parentAccordion = document.getElementById('doc-accordian');
-                            const replicationCount = 10;
+    </script>
 
-                            if (parentAccordion) {
-                                for (let i = 0; i < replicationCount; i++) {
-                                    // Clone the parent accordion element
-                                    const clonedAccordion = parentAccordion.cloneNode(true);
+    <!-- Remove this script, It's just for div clone instead of messy copy paste -->
+    <script>const parentAccordion = document.getElementById('doc-accordian');
+        const replicationCount = 20;
 
-                                    // Append the cloned accordion to its parent div
-                                    parentAccordion.parentNode.appendChild(clonedAccordion);
-                                }
-                            }
-                        </script>
+        if (parentAccordion) {
+            for (let i = 0; i < replicationCount; i++) {
+                // Clone the parent accordion element
+                const clonedAccordion = parentAccordion.cloneNode(true);
 
-                        <?php wp_footer(); ?>
+                // Append the cloned accordion to its parent div
+                parentAccordion.parentNode.appendChild(clonedAccordion);
+            }
+        }
+    </script>
+
+    <?php wp_footer(); ?>
 </body>
 
 </html>
