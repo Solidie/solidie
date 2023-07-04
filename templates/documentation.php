@@ -213,14 +213,6 @@
 </style>
 
 <body class="w-full h-full bg-primary text-sm flex justify-center relative">
-    <?php
-    $svgIcon = '<svg class="fill-current h-2 w-4 transform transition duration-150 ease-in-out" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-        <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-      </svg>';
-
-    $base64Icon = base64_encode($svgIcon);
-    $accordianToggleIcon = 'data:image/svg+xml;base64,' . $base64Icon; ?>
-
     <div
         class="px-5 lg:px-10 Documentation w-full max-h-screen h-full flex-col justify-start items-start flex max-w-screen-2xl mx-auto">
         <header class="Frame873 py-3.5 gap-2.5 grid grid-cols-2 auto-rows-auto bg-primary/40 header h-max">
@@ -301,7 +293,7 @@
 
         <div class="flex flex-col lg:flex-row w-full flex-grow lg:h-auto overflow-clip lg:pb-4">
             <div
-                class=" Frame874 !z-0 bg-white bg-opacity-30 lg:w-max w-full h-max lg:h-full [overflow:unset;] self-stretch py-[1px] rounded-lg shadow justify-start items-start gap-2.5 hidden md:flex flex-row lg:flex-col">
+                class=" Frame874 !z-0 bg-white bg-opacity-30 lg:w-max w-full h-max lg:h-full [overflow:unset;] self-stretch py-[1px] rounded-lg shadow justify-start items-start gap-2.5 hidden lg:flex flex-row lg:flex-col">
                 <div class="w-full lg:!w-max h-full !overflow-y-auto"
                     style="padding-top: 1px; padding-bottom: 1px; box-shadow: 0px 4px 6px -2px rgba(0, 0, 0, 0.05); border-radius: 15px; justify-content: flex-start; align-items: flex-start; gap: 10px; display: inline-flex;">
                     <div id="sidebar" class="w-full lg:w-max h-max flex justify-center flex-col gap-4"
@@ -573,6 +565,37 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            <!-- % Content Area You can remove the inner content whenever you want % -->
+            <div class="overflow-y-auto grow max-w-full prose sm:px-4">
+                <h1>Why do we use it?</h1>
+                It is a long established fact that a reader will be distracted by the readable content of a page when
+                looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution
+                of letters, as opposed to using 'Content here, content here', making it look like readable English. Many
+                desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a
+                search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have
+                evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).
+                <h1>Why do we use it?</h1>
+                It is a long established fact that a reader will be distracted by the readable content of a page when
+                looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution
+                of letters, as opposed to using 'Content here, content here', making it look like readable English. Many
+                desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a
+                search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have
+                evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).
+                <h1>Why do we use it?</h1>
+                It is a long established fact that a reader will be distracted by the readable content of a page when
+                looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution
+                of letters, as opposed to using 'Content here, content here', making it look like readable English. Many
+                desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a
+                search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have
+                evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).
+                <h1>Why do we use it?</h1>
+                It is a long established fact that a reader will be distracted by the readable content of a page when
+                looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution
+                of letters, as opposed to using 'Content here, content here', making it look like readable English. Many
+                desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a
+                search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have
+                evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).
             </div>
         </div>
     </div>
