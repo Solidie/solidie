@@ -4,9 +4,10 @@
 	"description": "",
 	"main": "index.js",
 	"scripts": {
-		"build": "webpack --env=build --mode=production",
-		"build-dev": "webpack --mode=development",
-		"watch": "webpack --watch --mode=development",
+		"prepare" : "npx tailwindcss build -o ./components/libraries/tailwind.scss && node ./builders/prepare.js",
+		"build": "npm run prepare && webpack --env=build --mode=production",
+		"build-dev": "npm run prepare && webpack --mode=development",
+		"watch": "npm run prepare && webpack --watch --mode=development",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"keywords": [],
@@ -79,10 +80,11 @@
 	},
 	"devDependencies": {
 		"css-loader": "^6.7.3",
-		"postcss": "^8.4.23",
+		"postcss": "^8.4.24",
 		"postcss-loader": "^7.3.0",
-		"postcss-preset-env": "^8.3.2",
+		"postcss-preset-env": "^8.5.1",
 		"react-icons": "^4.8.0",
+		"sass-color-helpers": "^2.1.1",
 		"style-loader": "^3.3.2",
 		"tailwind-scrollbar": "^3.0.4",
 		"tw-colors": "^1.2.6",

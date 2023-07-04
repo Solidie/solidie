@@ -1,8 +1,8 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
-import Topbar from "../components/navigation/Topbar.jsx";
-import Sidebar from "../components/navigation/Sidebar.jsx";
-import { Scrollbar } from "../components/common";
-import { cn } from "../lib/utils.js";
+import Topbar from "../navigation/Topbar.jsx";
+import Sidebar from "../navigation/Sidebar.jsx";
+import { Scrollbar } from "../../utilities/commons";
+import { cn } from "../../utilities/helpers.jsx";
 
 export default function Layout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(true);
