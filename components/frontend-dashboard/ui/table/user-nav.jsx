@@ -21,7 +21,7 @@ export function UserNav() {
         <Button variant="ghost" className={"relative h-8 w-8 rounded-full".classNames()}>
           <Avatar className={"h-9 w-9".classNames()}>
             <AvatarImage
-              id="userProfileIMG"
+              id={"userProfileIMG".idNames()}
               // className={"w-8 object-contain rounded-lg shadow-lg shadow-tertiary/40".classNames()}
               src={null}
               alt="@Solidie"

@@ -10,7 +10,7 @@ const UserProfile = () => {
       </pre>
       <div className="">
         <img
-          id="userProfileIMG"
+          id={"userProfileIMG".idNames()}
           className={"w-8 object-contain rounded-lg shadow-lg shadow-tertiary/40".classNames()}
           src={null}
           alt=""
