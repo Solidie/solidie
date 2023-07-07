@@ -25,7 +25,7 @@ export default function ComboBox({ selected, setSelected, listItems, setQuery, q
             onChange={(event) => setQuery(event.target.value)}
           />
           <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2">
-            <ChevronUpDownIcon className="h-5 w-5" aria-hidden="true" />
+            <ChevronUpDownIcon className={"h-5 w-5".classNames()} aria-hidden="true" />
           </Combobox.Button>
         </div>
         <Transition
@@ -68,7 +68,7 @@ export default function ComboBox({ selected, setSelected, listItems, setQuery, q
                             active ? "text-tertiary" : "text-tertiary"
                           }`}
                         >
-                          <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                          <CheckIcon className={"h-5 w-5".classNames()} aria-hidden="true" />
                         </span>
                       ) : null}
                     </>
