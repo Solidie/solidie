@@ -9,8 +9,8 @@ export function MountPoint(props){
 			return this.split(' ').map(c=>c.trim()).filter(c=>c).map(c=>(style || tw)[c] || c).join(' ') + ' ' + append_raw;
 		}
 
-		String.prototype.idNames = function(style) {
-			return this.classNames(style); // Because both uses same style object.
+		String.prototype.idNames = function(style, append_raw='') {
+			return this.classNames(style, append_raw); // Because both uses same style object. Added two to avoid confusion.
 		}
 		
 		setReady(true);
