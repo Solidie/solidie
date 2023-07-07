@@ -3,7 +3,6 @@ const { theme } = require('./theme');
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  mode: 'jit',
   content: ["./components/**/**/**/*.{php,js,jsx}"],
   theme: {
     extend: {},
