@@ -17,9 +17,9 @@ const MultiSelect = ({}) => {
   const [error, setError] = useState("");
 
   return (
-    <div className="flex flex-col gap-5 bg-primary text-tertiary p-3 Input hover:!border-tertiary/60 hover:!border-dashed !rounded-lg max-w-full">
+    <div className={"flex flex-col gap-5 bg-primary text-tertiary p-3 Input hover:!border-tertiary/60 hover:!border-dashed !rounded-lg max-w-full".classNames()}>
       {selectedItems.length ? (
-        <div className="flex gap-5 flex-wrap w-full">
+        <div className={"flex gap-5 flex-wrap w-full".classNames()}>
           {selectedItems?.map((props, idx) => (
             <ChipItem key={idx} name={props?.name} />
           ))}
@@ -28,12 +28,12 @@ const MultiSelect = ({}) => {
         ""
       )}
       <div className="">
-        <div className="font-bold text-tertiary flex gap-4">
+        <div className={"font-bold text-tertiary flex gap-4".classNames()}>
           Select from default available plans!
         </div>
-        {error !== "" ? <div className="text-red-900">*{error}</div> : ""}
+        {error !== "" ? <div className={"text-red-900".classNames()}>*{error}</div> : ""}
       </div>
-      <div className="w-max flex flex-wrap space-y-4 sm:space-y-0 sm:space-x-4 items-center">
+      <div className={"w-max flex flex-wrap space-y-4 sm:space-y-0 sm:space-x-4 items-center".classNames()}>
         <ComboBox
           selected={selected}
           setSelected={setSelected}
@@ -57,7 +57,7 @@ const MultiSelect = ({}) => {
               );
             }
           }}
-          className="border-2 border-tertiary/60 hover:border-tertiary border-dashed hover:shadow-lg p-2 px-6 rounded-full cursor-default select-none"
+          className={"border-2 border-tertiary/60 hover:border-tertiary border-dashed hover:shadow-lg p-2 px-6 rounded-full cursor-default select-none".classNames()}
         >
           Add
         </div>
@@ -79,7 +79,7 @@ const ChipItem = ({ name }) => {
     >
       Cost:
       <Input
-        className=" !border-2 underline !border-tertiary text-center !rounded-md p-1 max-w-[4rem] "
+        className={" !border-2 underline !border-tertiary text-center !rounded-md p-1 max-w-[4rem] ".classNames()}
         defaultValue="5"
         type="number"
       />

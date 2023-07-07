@@ -10,7 +10,7 @@ const DialogPortal = ({
   ...props
 }) => (
   <Dialog className={cn(className)} {...props}>
-    <div className="fixed inset-0 z-50 flex items-start justify-center sm:items-center">
+    <div className={"fixed inset-0 z-50 flex items-start justify-center sm:items-center".classNames()}>
       {children}
     </div>
   </Dialog>
@@ -39,9 +39,9 @@ const DialogContent = React.forwardRef(({ className, children, ...props }, ref) 
       {...props}
     >
       {children}
-      <Close className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
-        <X className="h-4 w-4" />
-        <span className="sr-only">Close</span>
+      <Close className={"absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground".classNames()}>
+        <X className={"h-4 w-4".classNames()} />
+        <span className={"sr-only".classNames()}>Close</span>
       </Close>
     </Content>
   </DialogPortal>

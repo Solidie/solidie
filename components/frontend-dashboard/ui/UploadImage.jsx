@@ -79,11 +79,11 @@ const UploadImage = React.forwardRef(({}, ref) => {
       <Upload
         {...props}
         ref={ref}
-        className="!w-full [&_.ant-upload-list-picture]:!w-max !flex !flex-wrap  !space-y-3 sm:!space-y-0 sm:!space-x-4"
+        className={"!w-full [&_.ant-upload-list-picture]:!w-max !flex !flex-wrap  !space-y-3 sm:!space-y-0 sm:!space-x-4".classNames()}
         
       >
         <Button
-          className="py-3 px-7 rounded-full bg-primary text-tertiary font-bold hover:!text-tertiary hover:shadow-lg shadow-tertiary/60 border-transparent !border-2 hover:!border-solid hover:!border-2 hover:!border-tertiary h-max"
+          className={"py-3 px-7 rounded-full bg-primary text-tertiary font-bold hover:!text-tertiary hover:shadow-lg shadow-tertiary/60 border-transparent !border-2 hover:!border-solid hover:!border-2 hover:!border-tertiary h-max".classNames()}
           icon={<UploadOutlined />}
         >
           Upload (Max: 1)

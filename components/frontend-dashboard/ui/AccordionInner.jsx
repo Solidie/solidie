@@ -7,9 +7,9 @@ const Accordion = ({ header, content, idx }) => {
   return (
     <AccordionPrimitive.Item
       value={`item-${idx + 1}`}
-      className="rounded-lg focus-within:ring focus-within:ring-tertiary focus-within:ring-opacity-75 focus:outline-none w-full hover:shadow-lg shadow-md space-y-2 bg-tertiary/20"
+      className={"rounded-lg focus-within:ring focus-within:ring-tertiary focus-within:ring-opacity-75 focus:outline-none w-full hover:shadow-lg shadow-md space-y-2 bg-tertiary/20".classNames()}
     >
-      <AccordionPrimitive.Header className="w-full shadow-lg">
+      <AccordionPrimitive.Header className={"w-full shadow-lg".classNames()}>
         <AccordionPrimitive.Trigger
           className={clsx(
             "group",
@@ -27,7 +27,7 @@ const Accordion = ({ header, content, idx }) => {
           />
         </AccordionPrimitive.Trigger>
       </AccordionPrimitive.Header>
-      <AccordionPrimitive.Content className="pt-1 w-full rounded-b-lg px-4 pb-3">
+      <AccordionPrimitive.Content className={"pt-1 w-full rounded-b-lg px-4 pb-3".classNames()}>
         {content}
       </AccordionPrimitive.Content>
     </AccordionPrimitive.Item>

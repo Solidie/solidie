@@ -34,7 +34,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
 				{
 					href: getDashboardPath('my-account'),
 					text: "My Account",
-					icon: <MdSwitchAccount className="text-2xl" />,
+					icon: <MdSwitchAccount className={"text-2xl".classNames()} />,
 				},
 				],
 			},
@@ -46,7 +46,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
 						{
 							href: getDashboardPath(`store/${store_slug}/inventory`),
 							text: "Inventory",
-							icon: <MdInventory className="text-2xl" />,
+							icon: <MdInventory className={"text-2xl".classNames()} />,
 						},
 						{
 							href: getDashboardPath(`store/${store_slug}/sales`),
@@ -86,7 +86,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
             key={idx}
           >
             {sidebarOpen ? (
-              <pre className="text-xs font-semibold py-4 text-tertiary px-2">
+              <pre className={"text-xs font-semibold py-4 text-tertiary px-2".classNames()}>
                 {groupName}
               </pre>
             ) : (

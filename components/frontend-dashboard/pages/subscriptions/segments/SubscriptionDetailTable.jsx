@@ -57,7 +57,7 @@ export const SubscriptionDetailTable = () => {
         header: "Status",
         size: 20,
         Cell: ({ cell }) => {
-            return <div className="!bg-tertiary text-primary rounded-lg px-2 py-1 shadow-md w-max">{cell.getValue()}</div>
+            return <div className={"!bg-tertiary text-primary rounded-lg px-2 py-1 shadow-md w-max".classNames()}>{cell.getValue()}</div>
         }
       },
     ],

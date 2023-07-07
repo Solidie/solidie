@@ -21,8 +21,8 @@ const Tooltip = ({ children, text }) => {
             "shadow-lg shadow-tertiary/60 "
           )}
         >
-          <TooltipPrimitive.Arrow className="fill-current text-white dark:text-gray-800" />
-          <span className=" shadow-lg  block font-black text-xs leading-none text-gray-700 dark:text-gray-100">
+          <TooltipPrimitive.Arrow className={"fill-current text-white dark:text-gray-800".classNames()} />
+          <span className={" shadow-lg  block font-black text-xs leading-none text-gray-700 dark:text-gray-100".classNames()}>
             {text}
           </span>
         </TooltipPrimitive.Content>

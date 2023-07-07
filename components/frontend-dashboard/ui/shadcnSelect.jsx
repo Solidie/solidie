@@ -16,7 +16,7 @@ const SelectTrigger = React.forwardRef(({ className, children, ...props }, ref) 
   >
     {children}
     <Icon asChild>
-      <ChevronDown className="h-4 w-4 opacity-50" />
+      <ChevronDown className={"h-4 w-4 opacity-50".classNames()} />
     </Icon>
   </Trigger>
 ))
@@ -63,9 +63,9 @@ const SelectItem = React.forwardRef(({ className, children, ...props }, ref) => 
     )}
     {...props}
   >
-    <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
+    <span className={"absolute left-2 flex h-3.5 w-3.5 items-center justify-center".classNames()}>
       <ItemIndicator>
-        <Check className="h-4 w-4" />
+        <Check className={"h-4 w-4".classNames()} />
       </ItemIndicator>
     </span>
 

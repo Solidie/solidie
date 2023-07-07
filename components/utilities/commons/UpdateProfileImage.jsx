@@ -99,10 +99,10 @@ const UploadProfileImage = React.forwardRef(({}, ref) => {
       <Upload
         {...props}
         ref={ref}
-        className="!max-w-full !w-full !justify-center !bg-none !border-transparent !items-center !flex !flex-col !gap-4 sm:!justify-center "
+        className={"!max-w-full !w-full !justify-center !bg-none !border-transparent !items-center !flex !flex-col !gap-4 sm:!justify-center ".classNames()}
       >
         <Button
-          className="py-2 px-7 rounded-lg bg-primary text-tertiary font-bold hover:!text-tertiary shadow-md hover:shadow-tertiary !border-2 hover:!border-solid hover:!border-2 !border-tertiary/60 hover:!border-tertiary h-max"
+          className={"py-2 px-7 rounded-lg bg-primary text-tertiary font-bold hover:!text-tertiary shadow-md hover:shadow-tertiary !border-2 hover:!border-solid hover:!border-2 !border-tertiary/60 hover:!border-tertiary h-max".classNames()}
           icon={<UploadOutlined />}
         >
           Upload

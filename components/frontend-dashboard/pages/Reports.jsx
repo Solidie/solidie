@@ -26,53 +26,53 @@ const Reports = () => {
   }, [rightHeight]);
 
   return (
-    <div className="flex flex-col w-full h-full space-y-5">
+    <div className={"flex flex-col w-full h-full space-y-5".classNames()}>
       {/* Header */}
-      <div className="flex justify-between items-center w-full">
-        <h1 className="text-3xl font-bold">Reports</h1>
+      <div className={"flex justify-between items-center w-full".classNames()}>
+        <h1 className={"text-3xl font-bold".classNames()}>Reports</h1>
       </div>
-      <div className="text-tertiary grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-        <div className="border border-tertiary/60 border-dashed rounded-md p-2 flex-grow">
-          <div className="flex flex-col justify-between reports-green-card-gradient rounded-md h-28 w-full shadow-lg px-5 py-3">
-            <div className="font-bold">
-              <div className="text-xs">Current Available</div>
-              <div className="text-sm font-black">Balance to Withdraw</div>
+      <div className={"text-tertiary grid md:grid-cols-2 lg:grid-cols-3 gap-5".classNames()}>
+        <div className={"border border-tertiary/60 border-dashed rounded-md p-2 flex-grow".classNames()}>
+          <div className={"flex flex-col justify-between reports-green-card-gradient rounded-md h-28 w-full shadow-lg px-5 py-3".classNames()}>
+            <div className={"font-bold".classNames()}>
+              <div className={"text-xs".classNames()}>Current Available</div>
+              <div className={"text-sm font-black".classNames()}>Balance to Withdraw</div>
             </div>
-            <div className="w-full flex justify-between">
+            <div className={"w-full flex justify-between".classNames()}>
               <WidthdrawBalance width={30} height={30} />
-              <div className="text-3xl font-black">$100</div>
+              <div className={"text-3xl font-black".classNames()}>$100</div>
             </div>
           </div>
         </div>
-        <div className="border border-tertiary/60 border-dashed rounded-md p-2 flex-grow">
-          <div className="flex flex-col justify-between reports-blue-card-gradient rounded-md h-28 w-full shadow-lg  px-5 py-3">
-            <div className="font-bold">
-              <div className="text-sm font-black">Total Earning</div>
+        <div className={"border border-tertiary/60 border-dashed rounded-md p-2 flex-grow".classNames()}>
+          <div className={"flex flex-col justify-between reports-blue-card-gradient rounded-md h-28 w-full shadow-lg  px-5 py-3".classNames()}>
+            <div className={"font-bold".classNames()}>
+              <div className={"text-sm font-black".classNames()}>Total Earning</div>
             </div>
-            <div className="w-full flex justify-between">
+            <div className={"w-full flex justify-between".classNames()}>
               <Wallet width={33} height={38} />
-              <div className="text-3xl font-black">$100</div>
+              <div className={"text-3xl font-black".classNames()}>$100</div>
             </div>
           </div>
         </div>
-        <div className="md:col-span-3 lg:col-span-1 border border-tertiary/60 border-dashed rounded-md p-2 flex-grow">
-          <div className="flex flex-col justify-between reports-white-card-gradient rounded-md h-28 w-full shadow-lg  px-5 py-3">
-            <div className="font-bold">
-              <div className="text-xs">Pending Earning To Be</div>
-              <div className="text-sm font-black">Available to Withdraw</div>
+        <div className={"md:col-span-3 lg:col-span-1 border border-tertiary/60 border-dashed rounded-md p-2 flex-grow".classNames()}>
+          <div className={"flex flex-col justify-between reports-white-card-gradient rounded-md h-28 w-full shadow-lg  px-5 py-3".classNames()}>
+            <div className={"font-bold".classNames()}>
+              <div className={"text-xs".classNames()}>Pending Earning To Be</div>
+              <div className={"text-sm font-black".classNames()}>Available to Withdraw</div>
             </div>
-            <div className="w-full flex justify-between">
+            <div className={"w-full flex justify-between".classNames()}>
               <MoneyBag width={30} height={30} />
-              <div className="text-3xl font-black">$100</div>
+              <div className={"text-3xl font-black".classNames()}>$100</div>
             </div>
           </div>
         </div>
       </div>
-      <div className="max-h-max w-full flex flex-col lg:flex-row justify-between gap-5">
-        <div className="flex flex-col w-full lg:w-[60%]">
-          <div className="flex justify-between py-4">
-            <div className="text-xl font-bold">Unique Visitor</div>
-            <div className="text-tertiary flex rounded-xl">
+      <div className={"max-h-max w-full flex flex-col lg:flex-row justify-between gap-5".classNames()}>
+        <div className={"flex flex-col w-full lg:w-[60%]".classNames()}>
+          <div className={"flex justify-between py-4".classNames()}>
+            <div className={"text-xl font-bold".classNames()}>Unique Visitor</div>
+            <div className={"text-tertiary flex rounded-xl".classNames()}>
               {["Month", "Week"].map((item, idx) => (
                 <div
                   key={idx}
@@ -93,22 +93,22 @@ const Reports = () => {
           </div>
           <div
             ref={leftref}
-            className="py-2 flex items-center w-full sm:px-4 bg-lightest-version/60 rounded-xl shadow-lg"
+            className={"py-2 flex items-center w-full sm:px-4 bg-lightest-version/60 rounded-xl shadow-lg".classNames()}
           >
             <ApexChart {...{ width: leftWidth, height: areaChartHeight }} />
           </div>
         </div>
-        <div className="flex flex-col w-full lg:w-[37%]">
-          <div className="w-full flex justify-between py-4">
-            <div className="text-xl font-bold">Income Overview</div>
+        <div className={"flex flex-col w-full lg:w-[37%]".classNames()}>
+          <div className={"w-full flex justify-between py-4".classNames()}>
+            <div className={"text-xl font-bold".classNames()}>Income Overview</div>
           </div>
           <div
             ref={rightref}
-            className="h-max w-full px-4 bg-lightest-version/60 rounded-xl shadow-lg"
+            className={"h-max w-full px-4 bg-lightest-version/60 rounded-xl shadow-lg".classNames()}
           >
-            <div className="pt-6 px-4">
-              <div className="text-lg">This Week Statistics</div>
-              <div className="text-4xl font-bold">$7,650</div>
+            <div className={"pt-6 px-4".classNames()}>
+              <div className={"text-lg".classNames()}>This Week Statistics</div>
+              <div className={"text-4xl font-bold".classNames()}>$7,650</div>
             </div>
             <BarChart {...{ width: rightWidth }} />
           </div>

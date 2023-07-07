@@ -29,29 +29,29 @@ export function DataTableRowActions({
       <DropdownMenuTrigger asChild>
         <Button
           variant="ghost"
-          className="flex h-8 w-8 p-0 data-[state=open]:bg-muted"
+          className={"flex h-8 w-8 p-0 data-[state=open]:bg-muted".classNames()}
         >
-          <MoreHorizontal className="h-4 w-4" />
-          <span className="sr-only">Open menu</span>
+          <MoreHorizontal className={"h-4 w-4".classNames()} />
+          <span className={"sr-only".classNames()}>Open menu</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-[160px]">
+      <DropdownMenuContent align="end" className={"w-[160px]".classNames()}>
         <DropdownMenuItem>
-          <Pen className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+          <Pen className={"mr-2 h-3.5 w-3.5 text-muted-foreground/70".classNames()} />
           Edit
         </DropdownMenuItem>
         <DropdownMenuItem>
-          <Copy className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+          <Copy className={"mr-2 h-3.5 w-3.5 text-muted-foreground/70".classNames()} />
           Make a copy
         </DropdownMenuItem>
         <DropdownMenuItem>
-          <Star className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+          <Star className={"mr-2 h-3.5 w-3.5 text-muted-foreground/70".classNames()} />
           Favorite
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuSub>
           <DropdownMenuSubTrigger>
-            <Tags className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+            <Tags className={"mr-2 h-3.5 w-3.5 text-muted-foreground/70".classNames()} />
             Labels
           </DropdownMenuSubTrigger>
           <DropdownMenuSubContent>
@@ -66,7 +66,7 @@ export function DataTableRowActions({
         </DropdownMenuSub>
         <DropdownMenuSeparator />
         <DropdownMenuItem>
-          <Trash className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+          <Trash className={"mr-2 h-3.5 w-3.5 text-muted-foreground/70".classNames()} />
           Delete
           <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
         </DropdownMenuItem>

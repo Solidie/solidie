@@ -41,10 +41,10 @@ const Inventory = (props) => {
 		fetchContents();
 	}, []);
 
-	return <div className="flex flex-col gap-4 w-full h-full">
-		<div className="flex justify-between items-center w-full">
-			<h1 className="text-3xl font-bold">Inventory</h1>
-			<Link to="add" ><div className='Button flex'>Add New <PlusIcon className="h-4 w-4" /></div></Link>
+	return <div className={"flex flex-col gap-4 w-full h-full".classNames()}>
+		<div className={"flex justify-between items-center w-full".classNames()}>
+			<h1 className={"text-3xl font-bold".classNames()}>Inventory</h1>
+			<Link to="add" ><div className='Button flex'>Add New <PlusIcon className={"h-4 w-4".classNames()} /></div></Link>
 		</div>
 
 		<InventoryTable contents={state.contents}/>

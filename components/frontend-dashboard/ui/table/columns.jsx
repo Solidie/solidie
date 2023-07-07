@@ -12,7 +12,7 @@ export const columns = [
   //       checked={table.getIsAllPageRowsSelected()}
   //       onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
   //       aria-label="Select all"
-  //       className="translate-y-[2px]"
+  //       className={"translate-y-[2px]".classNames()}
   //     />
   //   ),
   //   cell: ({ row }) => (
@@ -20,7 +20,7 @@ export const columns = [
   //       checked={row.getIsSelected()}
   //       onCheckedChange={(value) => row.toggleSelected(!!value)}
   //       aria-label="Select row"
-  //       className="translate-y-[2px]"
+  //       className={"translate-y-[2px]".classNames()}
   //     />
   //   ),
   //   enableSorting: false,
@@ -31,7 +31,7 @@ export const columns = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Task" />
     ),
-    cell: ({ row }) => <div className="w-[80px]">{row.getValue("id")}</div>,
+    cell: ({ row }) => <div className={"w-[80px]".classNames()}>{row.getValue("id")}</div>,
     enableSorting: false,
     enableHiding: false,
   },
@@ -44,9 +44,9 @@ export const columns = [
       const label = labels.find((label) => label.value === row.original.label)
 
       return (
-        <div className="flex space-x-2">
+        <div className={"flex space-x-2".classNames()}>
           {label && <Badge variant="outline">{label.label}</Badge>}
-          <span className="max-w-[500px] truncate font-medium">
+          <span className={"max-w-[500px] truncate font-medium".classNames()}>
             {row.getValue("title")}
           </span>
         </div>
@@ -68,9 +68,9 @@ export const columns = [
       }
 
       return (
-        <div className="flex w-[100px] items-center">
+        <div className={"flex w-[100px] items-center".classNames()}>
           {status.icon && (
-            <status.icon className="mr-2 h-4 w-4 text-muted-foreground" />
+            <status.icon className={"mr-2 h-4 w-4 text-muted-foreground".classNames()} />
           )}
           <span>{status.label}</span>
         </div>
@@ -95,9 +95,9 @@ export const columns = [
       }
 
       return (
-        <div className="flex items-center">
+        <div className={"flex items-center".classNames()}>
           {priority.icon && (
-            <priority.icon className="mr-2 h-4 w-4 text-muted-foreground" />
+            <priority.icon className={"mr-2 h-4 w-4 text-muted-foreground".classNames()} />
           )}
           <span>{priority.label}</span>
         </div>

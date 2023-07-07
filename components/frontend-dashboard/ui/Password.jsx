@@ -17,9 +17,9 @@ const InputPassword = React.forwardRef(({ className, ...props }, ref) => {
         ref={ref}
       />
       {type === "password" ? (
-        <EyeClosedIcon className="cursor-pointer -ml-8" onClick={() => setType("text")} />
+        <EyeClosedIcon className={"cursor-pointer -ml-8".classNames()} onClick={() => setType("text")} />
       ) : (
-        <EyeOpenIcon className="cursor-pointer -ml-8" onClick={() => setType("password")} />
+        <EyeOpenIcon className={"cursor-pointer -ml-8".classNames()} onClick={() => setType("password")} />
       )}
     </div>
   );

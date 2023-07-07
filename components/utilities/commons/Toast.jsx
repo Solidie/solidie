@@ -10,7 +10,7 @@ const Toast = () => {
   return (
     <ToastPrimitive.Provider swipeDirection={isMd ? "right" : "down"}>
       <button
-        className="Button"
+        className={"Button".classNames()}
         onClick={() => {
           if (open) {
             setOpen(false);
@@ -40,24 +40,24 @@ const Toast = () => {
           "focus:outline-none focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75"
         )}
       >
-        <div className="flex">
-          <div className="w-0 flex-1 flex items-center pl-5 py-4">
-            <div className="w-full radix">
-              <ToastPrimitive.Title className="text-sm font-medium text-gray-900 dark:text-gray-100">
+        <div className={"flex".classNames()}>
+          <div className={"w-0 flex-1 flex items-center pl-5 py-4".classNames()}>
+            <div className={"w-full radix".classNames()}>
+              <ToastPrimitive.Title className={"text-sm font-medium text-gray-900 dark:text-gray-100".classNames()}>
                 Pull Request Review
               </ToastPrimitive.Title>
-              <ToastPrimitive.Description className="mt-1 text-sm text-gray-700 dark:text-gray-400">
+              <ToastPrimitive.Description className={"mt-1 text-sm text-gray-700 dark:text-gray-400".classNames()}>
                 Someone requested your review on{" "}
-                <span className="font-medium">repository/branch</span>
+                <span className={"font-medium".classNames()}>repository/branch</span>
               </ToastPrimitive.Description>
             </div>
           </div>
-          <div className="flex">
-            <div className="flex flex-col px-3 py-2 space-y-1">
-              <div className="h-0 flex-1 flex">
+          <div className={"flex".classNames()}>
+            <div className={"flex flex-col px-3 py-2 space-y-1".classNames()}>
+              <div className={"h-0 flex-1 flex".classNames()}>
                 <ToastPrimitive.Action
                   altText="view now"
-                  className="w-full border border-transparent rounded-lg px-3 py-2 flex items-center justify-center text-sm font-medium text-purple-600 dark:text-purple-500 hover:bg-gray-50 dark:hover:bg-gray-900 focus:z-10 focus:outline-none focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75"
+                  className={"w-full border border-transparent rounded-lg px-3 py-2 flex items-center justify-center text-sm font-medium text-purple-600 dark:text-purple-500 hover:bg-gray-50 dark:hover:bg-gray-900 focus:z-10 focus:outline-none focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75".classNames()}
                   onClick={(e) => {
                     e.preventDefault();
                     window.open("https://github.com");
@@ -66,8 +66,8 @@ const Toast = () => {
                   Review
                 </ToastPrimitive.Action>
               </div>
-              <div className="h-0 flex-1 flex">
-                <ToastPrimitive.Close className="w-full border border-transparent rounded-lg px-3 py-2 flex items-center justify-center text-sm font-medium text-gray-700 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-900 focus:z-10 focus:outline-none focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75">
+              <div className={"h-0 flex-1 flex".classNames()}>
+                <ToastPrimitive.Close className={"w-full border border-transparent rounded-lg px-3 py-2 flex items-center justify-center text-sm font-medium text-gray-700 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-900 focus:z-10 focus:outline-none focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75".classNames()}>
                   Dismiss
                 </ToastPrimitive.Close>
               </div>

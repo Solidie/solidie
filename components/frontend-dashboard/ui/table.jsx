@@ -2,7 +2,7 @@ import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { cn } from "../../utilities/helpers.jsx";
 
 const Table = React.forwardRef(({ className, ...props }, ref) => (
-  <div className="w-full overflow-auto border">
+  <div className={"w-full overflow-auto border".classNames()}>
     <table
       ref={ref}
       className={cn("w-full caption-bottom text-sm", className)}
@@ -76,9 +76,9 @@ const TableRow = ({
         {...props}
       />
       <tr className={cn(expandable ? " block " : "hidden", "w-full")}>
-        <td className="!max-w-0">
+        <td className={"!max-w-0".classNames()}>
           <div
-            className="p-4 [&>div]:bg-transparent shadow-inner shadow-tertiary/20"
+            className={"p-4 [&>div]:bg-transparent shadow-inner shadow-tertiary/20".classNames()}
             style={{ width: width ?? "auto" }}
           >
             <DetailPanel row={row} />

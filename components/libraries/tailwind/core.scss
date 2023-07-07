@@ -3,12 +3,6 @@
 @tailwind utilities;
 
 @layer components {
-  html,
-  body,
-  #Solidie_Single_Content,
-  #Solidie_Catalog {
-    @apply h-full w-full;
-  }
   html {
     @apply theme-light;
   }

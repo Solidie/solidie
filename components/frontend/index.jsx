@@ -12,7 +12,9 @@ function Singular() {
 const single = document.getElementById('Solidie_Single_Content');
 if(single) {
 	ReactDOM.createRoot(single).render(
-		<Singular {...getElementDataSet(single)} />
+		<MountPoint>
+			<Singular {...getElementDataSet(single)} />
+		</MountPoint>
 	);
 }
 

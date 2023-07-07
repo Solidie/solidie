@@ -40,19 +40,19 @@ const Select = React.forwardRef(
                 {props?.value}
               </SelectPrimitive.Value>
             )}
-            <SelectPrimitive.Icon className="ml-2">
+            <SelectPrimitive.Icon className={"ml-2".classNames()}>
               <ChevronDownIcon />
             </SelectPrimitive.Icon>
           </div>
         </SelectPrimitive.Trigger>
         <SelectPrimitive.Content
           ref={forwardRef}
-          className="shadow-lg shadow-tertiary/60 rounded-lg border-2 border-tertiary"
+          className={"shadow-lg shadow-tertiary/60 rounded-lg border-2 border-tertiary".classNames()}
         >
-          <SelectPrimitive.ScrollUpButton className="flex items-center justify-center text-tertiary font-bold ">
+          <SelectPrimitive.ScrollUpButton className={"flex items-center justify-center text-tertiary font-bold ".classNames()}>
             <ChevronUpIcon />
           </SelectPrimitive.ScrollUpButton>
-          <SelectPrimitive.Viewport className="bg-primary p-2 rounded-lg shadow-lg">
+          <SelectPrimitive.Viewport className={"bg-primary p-2 rounded-lg shadow-lg".classNames()}>
             <SelectPrimitive.Group>
               {itemsList.map((f, i) => (
                 <SelectPrimitive.Item
@@ -66,14 +66,14 @@ const Select = React.forwardRef(
                   )}
                 >
                   <SelectPrimitive.ItemText>{f}</SelectPrimitive.ItemText>
-                  <SelectPrimitive.ItemIndicator className="absolute left-2 inline-flex items-center">
+                  <SelectPrimitive.ItemIndicator className={"absolute left-2 inline-flex items-center".classNames()}>
                     <CheckIcon />
                   </SelectPrimitive.ItemIndicator>
                 </SelectPrimitive.Item>
               ))}
             </SelectPrimitive.Group>
           </SelectPrimitive.Viewport>
-          <SelectPrimitive.ScrollDownButton className="flex items-center justify-center text-tertiary/70 ">
+          <SelectPrimitive.ScrollDownButton className={"flex items-center justify-center text-tertiary/70 ".classNames()}>
             <ChevronDownIcon />
           </SelectPrimitive.ScrollDownButton>
         </SelectPrimitive.Content>

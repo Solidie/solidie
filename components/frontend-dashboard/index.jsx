@@ -9,6 +9,7 @@ import AppRoutes from "./routes/index.jsx";
 
 import "./styles/index.css";
 import { ContextFrontendDashboard } from "../utilities/contexts.jsx";
+import { MountPoint } from "../utilities/mountpoint.jsx";
 
 function Dashboard(props) {
   return <BrowserRouter>
@@ -23,6 +24,8 @@ function Dashboard(props) {
 let dashboard = document.getElementById("Solidie_Dashboard");
 if (dashboard) {
 	ReactDOM.createRoot(dashboard).render(
-		<Dashboard {...getElementDataSet(dashboard)} />
+		<MountPoint>
+			<Dashboard {...getElementDataSet(dashboard)} />
+		</MountPoint>
 	);
 }
