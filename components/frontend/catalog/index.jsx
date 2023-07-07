@@ -90,41 +90,41 @@ export function Catalog() {
 								</span>
 								</button>
 							</h3>
-							<div className={"pt-6".classNames()} id="filter-section-mobile-0">
+							<div className={"pt-6".classNames()} id={"filter-section-mobile-0".idNames()}>
 								<div className={"space-y-6".classNames()}>
 								<div className={"flex items-center".classNames()}>
-									<input id="filter-mobile-color-0" name="color[]" value="white" type="checkbox"
+									<input id={"filter-mobile-color-0".idNames()} name="color[]" value="white" type="checkbox"
 										className={"h-4 w-4 border-gray-300 rounded text-tertiary focus:ring-tertiary/60".classNames()}/>
 									<label for="filter-mobile-color-0" className={"ml-3 min-w-0 flex-1 text-gray-500".classNames()}>
 									White </label>
 								</div>
 								<div className={"flex items-center".classNames()}>
-									<input id="filter-mobile-color-1" name="color[]" value="beige" type="checkbox"
+									<input id={"filter-mobile-color-1".idNames()} name="color[]" value="beige" type="checkbox"
 										className={"h-4 w-4 border-gray-300 rounded text-tertiary focus:ring-tertiary/60".classNames()}/>
 									<label for="filter-mobile-color-1" className={"ml-3 min-w-0 flex-1 text-gray-500".classNames()}>
 									Beige </label>
 								</div>
 								<div className={"flex items-center".classNames()}>
-									<input id="filter-mobile-color-2" name="color[]" value="blue" type="checkbox"
+									<input id={"filter-mobile-color-2".idNames()} name="color[]" value="blue" type="checkbox"
 										checked
 										className={"h-4 w-4 border-gray-300 rounded text-tertiary focus:ring-tertiary/60".classNames()}/>
 									<label for="filter-mobile-color-2" className={"ml-3 min-w-0 flex-1 text-gray-500".classNames()}>
 									Blue </label>
 								</div>
 								<div className={"flex items-center".classNames()}>
-									<input id="filter-mobile-color-3" name="color[]" value="brown" type="checkbox"
+									<input id={"filter-mobile-color-3".idNames()} name="color[]" value="brown" type="checkbox"
 										className={"h-4 w-4 border-gray-300 rounded text-tertiary focus:ring-tertiary/60".classNames()}/>
 									<label for="filter-mobile-color-3" className={"ml-3 min-w-0 flex-1 text-gray-500".classNames()}>
 									Brown </label>
 								</div>
 								<div className={"flex items-center".classNames()}>
-									<input id="filter-mobile-color-4" name="color[]" value="green" type="checkbox"
+									<input id={"filter-mobile-color-4".idNames()} name="color[]" value="green" type="checkbox"
 										className={"h-4 w-4 border-gray-300 rounded text-tertiary focus:ring-tertiary/60".classNames()}/>
 									<label for="filter-mobile-color-4" className={"ml-3 min-w-0 flex-1 text-gray-500".classNames()}>
 									Green </label>
 								</div>
 								<div className={"flex items-center".classNames()}>
-									<input id="filter-mobile-color-5" name="color[]" value="purple" type="checkbox"
+									<input id={"filter-mobile-color-5".idNames()} name="color[]" value="purple" type="checkbox"
 										className={"h-4 w-4 border-gray-300 rounded text-tertiary focus:ring-tertiary/60".classNames()}/>
 									<label for="filter-mobile-color-5" className={"ml-3 min-w-0 flex-1 text-gray-500".classNames()}>
 									Purple </label>
@@ -154,38 +154,38 @@ export function Catalog() {
 								</span>
 								</button>
 							</h3>
-							<div className={"pt-6".classNames()} id="filter-section-mobile-1">
+							<div className={"pt-6".classNames()} id={"filter-section-mobile-1".idNames()}>
 								<div className={"space-y-6".classNames()}>
 								<div className={"flex items-center".classNames()}>
-									<input id="filter-mobile-category-0" name="category[]" value="new-arrivals"
+									<input id={"filter-mobile-category-0".idNames()} name="category[]" value="new-arrivals"
 										type="checkbox"
 										className={"h-4 w-4 border-gray-300 rounded text-tertiary focus:ring-tertiary/60".classNames()}/>
 									<label for="filter-mobile-category-0" className={"ml-3 min-w-0 flex-1 text-gray-500".classNames()}>
 									New Arrivals </label>
 								</div>
 								<div className={"flex items-center".classNames()}>
-									<input id="filter-mobile-category-1" name="category[]" value="sale"
+									<input id={"filter-mobile-category-1".idNames()} name="category[]" value="sale"
 										type="checkbox"
 										className={"h-4 w-4 border-gray-300 rounded text-tertiary focus:ring-tertiary/60".classNames()}/>
 									<label for="filter-mobile-category-1" className={"ml-3 min-w-0 flex-1 text-gray-500".classNames()}>
 									Sale </label>
 								</div>
 								<div className={"flex items-center".classNames()}>
-									<input id="filter-mobile-category-2" name="category[]" value="travel"
+									<input id={"filter-mobile-category-2".idNames()} name="category[]" value="travel"
 										type="checkbox" checked
 										className={"h-4 w-4 border-gray-300 rounded text-tertiary focus:ring-tertiary/60".classNames()}/>
 									<label for="filter-mobile-category-2" className={"ml-3 min-w-0 flex-1 text-gray-500".classNames()}>
 									Travel </label>
 								</div>
 								<div className={"flex items-center".classNames()}>
-									<input id="filter-mobile-category-3" name="category[]" value="organization"
+									<input id={"filter-mobile-category-3".idNames()} name="category[]" value="organization"
 										type="checkbox"
 										className={"h-4 w-4 border-gray-300 rounded text-tertiary focus:ring-tertiary/60".classNames()}/>
 									<label for="filter-mobile-category-3" className={"ml-3 min-w-0 flex-1 text-gray-500".classNames()}>
 									Organization </label>
 								</div>
 								<div className={"flex items-center".classNames()}>
-									<input id="filter-mobile-category-4" name="category[]" value="accessories"
+									<input id={"filter-mobile-category-4".idNames()} name="category[]" value="accessories"
 										type="checkbox"
 										className={"h-4 w-4 border-gray-300 rounded text-tertiary focus:ring-tertiary/60".classNames()}/>
 									<label for="filter-mobile-category-4" className={"ml-3 min-w-0 flex-1 text-gray-500".classNames()}>
@@ -216,40 +216,40 @@ export function Catalog() {
 								</span>
 								</button>
 							</h3>
-							<div className={"pt-6".classNames()} id="filter-section-mobile-2">
+							<div className={"pt-6".classNames()} id={"filter-section-mobile-2".idNames()}>
 								<div className={"space-y-6".classNames()}>
 								<div className={"flex items-center".classNames()}>
-									<input id="filter-mobile-size-0" name="size[]" value="2l" type="checkbox"
+									<input id={"filter-mobile-size-0".idNames()} name="size[]" value="2l" type="checkbox"
 										className={"h-4 w-4 border-gray-300 rounded text-tertiary focus:ring-tertiary/60".classNames()}/>
 									<label for="filter-mobile-size-0" className={"ml-3 min-w-0 flex-1 text-gray-500".classNames()}> 2L
 									</label>
 								</div>
 								<div className={"flex items-center".classNames()}>
-									<input id="filter-mobile-size-1" name="size[]" value="6l" type="checkbox"
+									<input id={"filter-mobile-size-1".idNames()} name="size[]" value="6l" type="checkbox"
 										className={"h-4 w-4 border-gray-300 rounded text-tertiary focus:ring-tertiary/60".classNames()}/>
 									<label for="filter-mobile-size-1" className={"ml-3 min-w-0 flex-1 text-gray-500".classNames()}> 6L
 									</label>
 								</div>
 								<div className={"flex items-center".classNames()}>
-									<input id="filter-mobile-size-2" name="size[]" value="12l" type="checkbox"
+									<input id={"filter-mobile-size-2".idNames()} name="size[]" value="12l" type="checkbox"
 										className={"h-4 w-4 border-gray-300 rounded text-tertiary focus:ring-tertiary/60".classNames()}/>
 									<label for="filter-mobile-size-2" className={"ml-3 min-w-0 flex-1 text-gray-500".classNames()}> 12L
 									</label>
 								</div>
 								<div className={"flex items-center".classNames()}>
-									<input id="filter-mobile-size-3" name="size[]" value="18l" type="checkbox"
+									<input id={"filter-mobile-size-3".idNames()} name="size[]" value="18l" type="checkbox"
 										className={"h-4 w-4 border-gray-300 rounded text-tertiary focus:ring-tertiary/60".classNames()}/>
 									<label for="filter-mobile-size-3" className={"ml-3 min-w-0 flex-1 text-gray-500".classNames()}> 18L
 									</label>
 								</div>
 								<div className={"flex items-center".classNames()}>
-									<input id="filter-mobile-size-4" name="size[]" value="20l" type="checkbox"
+									<input id={"filter-mobile-size-4".idNames()} name="size[]" value="20l" type="checkbox"
 										className={"h-4 w-4 border-gray-300 rounded text-tertiary focus:ring-tertiary/60".classNames()}/>
 									<label for="filter-mobile-size-4" className={"ml-3 min-w-0 flex-1 text-gray-500".classNames()}> 20L
 									</label>
 								</div>
 								<div className={"flex items-center".classNames()}>
-									<input id="filter-mobile-size-5" name="size[]" value="40l" type="checkbox"
+									<input id={"filter-mobile-size-5".idNames()} name="size[]" value="40l" type="checkbox"
 										checked
 										className={"h-4 w-4 border-gray-300 rounded text-tertiary focus:ring-tertiary/60".classNames()}/>
 									<label for="filter-mobile-size-5" className={"ml-3 min-w-0 flex-1 text-gray-500".classNames()}> 40L
@@ -269,7 +269,7 @@ export function Catalog() {
 							<div>
 								<button type="button"
 								className={"group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900".classNames()}
-								id="menu-button" aria-expanded="false" aria-haspopup="true">
+								id={"menu-button".idNames()} aria-expanded="false" aria-haspopup="true">
 								Sort
 								<svg className={"flex-shrink-0 -mr-1 ml-1 h-5 w-5 text-gray-400 group-hover:text-gray-500".classNames()}
 									xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
@@ -284,15 +284,15 @@ export function Catalog() {
 								role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
 								<div className={"py-1".classNames()} role="none">
 								<a href="#" className={"font-medium text-gray-900 block px-4 py-2 text-sm".classNames()}
-									role="menuitem" tabindex="-1" id="menu-item-0"> Most Popular </a>
+									role="menuitem" tabindex="-1" id={"menu-item-0".idNames()}> Most Popular </a>
 								<a href="#" className={"text-gray-500 block px-4 py-2 text-sm".classNames()} role="menuitem"
-									tabindex="-1" id="menu-item-1"> Best Rating </a>
+									tabindex="-1" id={"menu-item-1".idNames()}> Best Rating </a>
 								<a href="#" className={"text-gray-500 block px-4 py-2 text-sm".classNames()} role="menuitem"
-									tabindex="-1" id="menu-item-2"> Newest </a>
+									tabindex="-1" id={"menu-item-2".idNames()}> Newest </a>
 								<a href="#" className={"text-gray-500 block px-4 py-2 text-sm".classNames()} role="menuitem"
-									tabindex="-1" id="menu-item-3"> Price: Low to High </a>
+									tabindex="-1" id={"menu-item-3".idNames()}> Price: Low to High </a>
 								<a href="#" className={"text-gray-500 block px-4 py-2 text-sm".classNames()} role="menuitem"
-									tabindex="-1" id="menu-item-4"> Price: High to Low </a>
+									tabindex="-1" id={"menu-item-4".idNames()}> Price: High to Low </a>
 								</div>
 							</div>
 						</div>
@@ -316,7 +316,7 @@ export function Catalog() {
 					</div>
 					</div>
 					<section aria-labelledby="products-heading" className={"pt-6 pb-24".classNames()}>
-					<h2 id="products-heading" className={"sr-only".classNames()}>Products</h2>
+					<h2 id={"products-heading".idNames()} className={"sr-only".classNames()}>Products</h2>
 					<div className={"grid grid-cols-1 lg:grid-cols-4 gap-x-8 gap-y-10".classNames()}>
 						<form className={"hidden lg:block".classNames()}>
 							<h3 className={"sr-only".classNames()}>Categories</h3>
@@ -363,41 +363,41 @@ export function Catalog() {
 								</h3>
 								<div className={"pt-6 space-y-6 sm:space-y-4".classNames()}>
 									<div className={"flex items-center text-base sm:text-sm".classNames()}>
-										<input id="category-0" name="wordpress[]" value="0" type="checkbox"
+										<input id={"category-0".idNames()} name="wordpress[]" value="0" type="checkbox"
 											className={"flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60".classNames()}/>
 										<label for="category-0" className={"ml-3 min-w-0 flex-1 text-tertiary/80".classNames()}>
 										Wordpress
 										</label>
 									</div>
 									<div className={"flex items-center text-base sm:text-sm".classNames()}>
-										<input id="category-1" name="forms[]" value="25" type="checkbox"
+										<input id={"category-1".idNames()} name="forms[]" value="25" type="checkbox"
 											className={"flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60".classNames()}/>
 										<label for="category-1" className={"ml-3 min-w-0 flex-1 text-tertiary/80".classNames()}> Forms
 										</label>
 									</div>
 									<div className={"flex items-center text-base sm:text-sm".classNames()}>
-										<input id="category-2" name="ecommerce[]" value="50" type="checkbox"
+										<input id={"category-2".idNames()} name="ecommerce[]" value="50" type="checkbox"
 											className={"flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60".classNames()}/>
 										<label for="category-2" className={"ml-3 min-w-0 flex-1 text-tertiary/80".classNames()}>
 										eCommerce
 										</label>
 									</div>
 									<div className={"flex items-center text-base sm:text-sm".classNames()}>
-										<input id="category-3" name="add-ons[]" value="75" type="checkbox"
+										<input id={"category-3".idNames()} name="add-ons[]" value="75" type="checkbox"
 											className={"flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60".classNames()}/>
 										<label for="category-3" className={"ml-3 min-w-0 flex-1 text-tertiary/80".classNames()}> Add
 										Ons
 										</label>
 									</div>
 									<div className={"flex items-center text-base sm:text-sm".classNames()}>
-										<input id="category-4" name="calendars[]" value="white" type="checkbox"
+										<input id={"category-4".idNames()} name="calendars[]" value="white" type="checkbox"
 											className={"flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60".classNames()}/>
 										<label for="category-4" className={"ml-3 min-w-0 flex-1 text-tertiary/80".classNames()}>
 										Calendars
 										</label>
 									</div>
 									<div className={"flex items-center text-base sm:text-sm".classNames()}>
-										<input id="category-5" name="interface-elements[]" value="beige"
+										<input id={"category-5".idNames()} name="interface-elements[]" value="beige"
 											type="checkbox"
 											className={"flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60".classNames()}/>
 										<label for="category-5" className={"ml-3 min-w-0 flex-1 text-tertiary/80".classNames()}>
@@ -406,7 +406,7 @@ export function Catalog() {
 										</label>
 									</div>
 									<div className={"flex items-center text-base sm:text-sm".classNames()}>
-										<input id="category-6" name="news-letters[]" value="blue" type="checkbox"
+										<input id={"category-6".idNames()} name="news-letters[]" value="blue" type="checkbox"
 											className={"flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60".classNames()}
 											checked={true}/>
 										<label for="category-6" className={"ml-3 min-w-0 flex-1 text-tertiary/80".classNames()}> News
@@ -441,25 +441,25 @@ export function Catalog() {
 								</h3>
 								<div className={"pt-6 space-y-6 sm:space-y-4".classNames()}>
 									<div className={"flex items-center text-base sm:text-sm".classNames()}>
-										<input id="price-0" name="price[]" value="0" type="checkbox"
+										<input id={"price-0".idNames()} name="price[]" value="0" type="checkbox"
 											className={"flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60".classNames()}/>
 										<label for="price-0" className={"ml-3 min-w-0 flex-1 text-tertiary/60".classNames()}> $0 - $25
 										</label>
 									</div>
 									<div className={"flex items-center text-base sm:text-sm".classNames()}>
-										<input id="price-1" name="price[]" value="25" type="checkbox"
+										<input id={"price-1".idNames()} name="price[]" value="25" type="checkbox"
 											className={"flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60".classNames()}/>
 										<label for="price-1" className={"ml-3 min-w-0 flex-1 text-tertiary/60".classNames()}> $25 - $50
 										</label>
 									</div>
 									<div className={"flex items-center text-base sm:text-sm".classNames()}>
-										<input id="price-2" name="price[]" value="50" type="checkbox"
+										<input id={"price-2".idNames()} name="price[]" value="50" type="checkbox"
 											className={"flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60".classNames()}/>
 										<label for="price-2" className={"ml-3 min-w-0 flex-1 text-tertiary/60".classNames()}> $50 - $75
 										</label>
 									</div>
 									<div className={"flex items-center text-base sm:text-sm".classNames()}>
-										<input id="price-3" name="price[]" value="75" type="checkbox"
+										<input id={"price-3".idNames()} name="price[]" value="75" type="checkbox"
 											className={"flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60".classNames()}/>
 										<label for="price-3" className={"ml-3 min-w-0 flex-1 text-tertiary/60".classNames()}> $75+
 										</label>
@@ -492,7 +492,7 @@ export function Catalog() {
 								</h3>
 								<div className={"pt-6 space-y-6 sm:space-y-4".classNames()}>
 									<div className={"flex items-center text-base sm:text-sm".classNames()}>
-										<input id="compatible-with-0" name="compatible-with[]" value="block-editor"
+										<input id={"compatible-with-0".idNames()} name="compatible-with[]" value="block-editor"
 											type="checkbox"
 											className={"flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60".classNames()}/>
 										<label for="compatible-with-0" className={"ml-3 min-w-0 flex-1 text-tertiary/60".classNames()}>
@@ -501,7 +501,7 @@ export function Catalog() {
 										</label>
 									</div>
 									<div className={"flex items-center text-base sm:text-sm".classNames()}>
-										<input id="compatible-with-1" name="compatible-with[]" value="woocommerce"
+										<input id={"compatible-with-1".idNames()} name="compatible-with[]" value="woocommerce"
 											type="checkbox"
 											className={"flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60".classNames()}/>
 										<label for="compatible-with-1" className={"ml-3 min-w-0 flex-1 text-tertiary/60".classNames()}>
@@ -509,7 +509,7 @@ export function Catalog() {
 										</label>
 									</div>
 									<div className={"flex items-center text-base sm:text-sm".classNames()}>
-										<input id="compatible-with-2" name="compatible-with[]" value="elementor-pro"
+										<input id={"compatible-with-2".idNames()} name="compatible-with[]" value="elementor-pro"
 											type="checkbox"
 											className={"flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60".classNames()}/>
 										<label for="compatible-with-2" className={"ml-3 min-w-0 flex-1 text-tertiary/60".classNames()}>
@@ -517,7 +517,7 @@ export function Catalog() {
 										</label>
 									</div>
 									<div className={"flex items-center text-base sm:text-sm".classNames()}>
-										<input id="compatible-with-3" name="compatible-with[]" value="elementor"
+										<input id={"compatible-with-3".idNames()} name="compatible-with[]" value="elementor"
 											type="checkbox"
 											className={"flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60".classNames()}/>
 										<label for="compatible-with-3" className={"ml-3 min-w-0 flex-1 text-tertiary/60".classNames()}>
@@ -525,7 +525,7 @@ export function Catalog() {
 										</label>
 									</div>
 									<div className={"flex items-center text-base sm:text-sm".classNames()}>
-										<input id="compatible-with-4" name="compatible-with[]" value="bootstrap"
+										<input id={"compatible-with-4".idNames()} name="compatible-with[]" value="bootstrap"
 											type="checkbox"
 											className={"flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60".classNames()}/>
 										<label for="compatible-with-4" className={"ml-3 min-w-0 flex-1 text-tertiary/60".classNames()}>
@@ -560,32 +560,32 @@ export function Catalog() {
 								</h3>
 								<div className={"pt-6 space-y-6 sm:space-y-4".classNames()}>
 									<div className={"flex items-center text-base sm:text-sm".classNames()}>
-										<input id="sales-0" name="sales[]" value="no-sales" type="checkbox"
+										<input id={"sales-0".idNames()} name="sales[]" value="no-sales" type="checkbox"
 											className={"flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60".classNames()}/>
 										<label for="sales-0" className={"ml-3 min-w-0 flex-1 text-tertiary/60".classNames()}> No Sales
 										</label>
 									</div>
 									<div className={"flex items-center text-base sm:text-sm".classNames()}>
-										<input id="sales-1" name="sales[]" value="low" type="checkbox"
+										<input id={"sales-1".idNames()} name="sales[]" value="low" type="checkbox"
 											className={"flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60".classNames()}
 											checked={true}/>
 										<label for="sales-1" className={"ml-3 min-w-0 flex-1 text-tertiary/60".classNames()}> Low
 										</label>
 									</div>
 									<div className={"flex items-center text-base sm:text-sm".classNames()}>
-										<input id="sales-2" name="sales[]" value="medium" type="checkbox"
+										<input id={"sales-2".idNames()} name="sales[]" value="medium" type="checkbox"
 											className={"flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60".classNames()}/>
 										<label for="sales-2" className={"ml-3 min-w-0 flex-1 text-tertiary/60".classNames()}> Medium
 										</label>
 									</div>
 									<div className={"flex items-center text-base sm:text-sm".classNames()}>
-										<input id="sales-3" name="sales[]" value="high" type="checkbox"
+										<input id={"sales-3".idNames()} name="sales[]" value="high" type="checkbox"
 											className={"flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60".classNames()}/>
 										<label for="sales-3" className={"ml-3 min-w-0 flex-1 text-tertiary/60".classNames()}> High
 										</label>
 									</div>
 									<div className={"flex items-center text-base sm:text-sm".classNames()}>
-										<input id="sales-4" name="sales[]" value="top-sellers" type="checkbox"
+										<input id={"sales-4".idNames()} name="sales[]" value="top-sellers" type="checkbox"
 											className={"flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60".classNames()}/>
 										<label for="sales-4" className={"ml-3 min-w-0 flex-1 text-tertiary/60".classNames()}> Top
 										Sellers
@@ -619,41 +619,41 @@ export function Catalog() {
 								</h3>
 								<div className={"pt-6 space-y-6 sm:space-y-4".classNames()}>
 									<div className={"flex items-center".classNames()}>
-										<input id="show-all" name="rating" type="radio" checked
+										<input id={"show-all".idNames()} name="rating" type="radio" checked
 											className={"focus:ring-tertiary/60 h-4 w-4 text-tertiary border-tertiary/30".classNames()}/>
 										<label for="show-all" className={"ml-3 block text-sm text-tertiary/70".classNames()}> Show All
 										</label>
 									</div>
 									<div className={"flex items-center".classNames()}>
-										<input id="one-star-and-higher" name="rating" type="radio"
+										<input id={"one-star-and-higher".idNames()} name="rating" type="radio"
 											className={"focus:ring-tertiary/60 h-4 w-4 text-tertiary border-tertiary/30".classNames()}/>
 										<label for="one-star-and-higher"
 											className={"ml-3 block text-sm text-tertiary/70".classNames()}> 1
 										Star and Higher</label>
 									</div>
 									<div className={"flex items-center".classNames()}>
-										<input id="two-star-and-higher" name="rating" type="radio"
+										<input id={"two-star-and-higher".idNames()} name="rating" type="radio"
 											className={"focus:ring-tertiary/60 h-4 w-4 text-tertiary border-tertiary/30".classNames()}/>
 										<label for="two-star-and-higher"
 											className={"ml-3 block text-sm text-tertiary/70".classNames()}> 2
 										Star and Higher</label>
 									</div>
 									<div className={"flex items-center".classNames()}>
-										<input id="three-star-and-higher" name="rating" type="radio"
+										<input id={"three-star-and-higher".idNames()} name="rating" type="radio"
 											className={"focus:ring-tertiary/60 h-4 w-4 text-tertiary border-tertiary/30".classNames()}/>
 										<label for="three-star-and-higher"
 											className={"ml-3 block text-sm text-tertiary/70".classNames()}> 3
 										Star and Higher</label>
 									</div>
 									<div className={"flex items-center".classNames()}>
-										<input id="four-star-and-higher" name="rating" type="radio"
+										<input id={"four-star-and-higher".idNames()} name="rating" type="radio"
 											className={"focus:ring-tertiary/60 h-4 w-4 text-tertiary border-tertiary/30".classNames()}/>
 										<label for="four-star-and-higher"
 											className={"ml-3 block text-sm text-tertiary/70".classNames()}> 4
 										Star and Higher</label>
 									</div>
 									<div className={"flex items-center".classNames()}>
-										<input id="five-star-and-higher" name="rating" type="radio"
+										<input id={"five-star-and-higher".idNames()} name="rating" type="radio"
 											className={"focus:ring-tertiary/60 h-4 w-4 text-tertiary border-tertiary/30".classNames()}/>
 										<label for="five-star-and-higher"
 											className={"ml-3 block text-sm text-tertiary/70".classNames()}> 5
@@ -687,20 +687,20 @@ export function Catalog() {
 								</h3>
 								<div className={"pt-6 space-y-6 sm:pt-4 sm:space-y-4".classNames()}>
 									<div className={"flex items-center".classNames()}>
-										<input id="any-date" name="date-added" type="radio" checked
+										<input id={"any-date".idNames()} name="date-added" type="radio" checked
 											className={"focus:ring-tertiary/60 h-4 w-4 text-tertiary border-tertiary/30".classNames()}/>
 										<label for="any-date" className={"ml-3 block text-sm text-tertiary/70".classNames()}> Any date
 										</label>
 									</div>
 									<div className={"flex items-center".classNames()}>
-										<input id="in-the-last-year" name="date-added" type="radio"
+										<input id={"in-the-last-year".idNames()} name="date-added" type="radio"
 											className={"focus:ring-tertiary/60 h-4 w-4 text-tertiary border-tertiary/30".classNames()}/>
 										<label for="in-the-last-year" className={"ml-3 block text-sm text-tertiary/70".classNames()}>
 										In the
 										last year</label>
 									</div>
 									<div className={"flex items-center".classNames()}>
-										<input id="in-the-last-month" name="date-added" type="radio"
+										<input id={"in-the-last-month".idNames()} name="date-added" type="radio"
 											className={"focus:ring-tertiary/60 h-4 w-4 text-tertiary border-tertiary/30".classNames()}/>
 										<label for="in-the-last-month" className={"ml-3 block text-sm text-tertiary/70".classNames()}>
 										In the
@@ -734,7 +734,7 @@ export function Catalog() {
 								</h3>
 								<div className={"pt-6 space-y-6 sm:space-y-4".classNames()}>
 									<div className={"flex items-center text-base sm:text-sm".classNames()}>
-										<input id="on-sale-0" name="on-sale[]" value="true" type="checkbox"
+										<input id={"on-sale-0".idNames()} name="on-sale[]" value="true" type="checkbox"
 											className={"flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60".classNames()}/>
 										<label for="on-sale-0" className={"ml-3 min-w-0 flex-1 text-tertiary/60".classNames()}> Yes
 										</label>
