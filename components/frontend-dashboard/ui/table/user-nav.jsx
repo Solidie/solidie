@@ -18,11 +18,11 @@ export function UserNav() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-          <Avatar className="h-9 w-9">
+        <Button variant="ghost" className={"relative h-8 w-8 rounded-full".classNames()}>
+          <Avatar className={"h-9 w-9".classNames()}>
             <AvatarImage
               id="userProfileIMG"
-              // className="w-8 object-contain rounded-lg shadow-lg shadow-tertiary/40"
+              // className={"w-8 object-contain rounded-lg shadow-lg shadow-tertiary/40".classNames()}
               src={null}
               alt="@Solidie"
             />
@@ -30,11 +30,11 @@ export function UserNav() {
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56" align="end" forceMount>
-        <DropdownMenuLabel className="font-normal">
-          <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">Solidie</p>
-            <p className="text-xs leading-none text-muted-foreground">
+      <DropdownMenuContent className={"w-56".classNames()} align="end" forceMount>
+        <DropdownMenuLabel className={"font-normal".classNames()}>
+          <div className={"flex flex-col space-y-1".classNames()}>
+            <p className={"text-sm font-medium leading-none".classNames()}>Solidie</p>
+            <p className={"text-xs leading-none text-muted-foreground".classNames()}>
               s@solidie.com
             </p>
           </div>
@@ -42,28 +42,28 @@ export function UserNav() {
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem>
-            <User className="mr-2 h-4 w-4" />
+            <User className={"mr-2 h-4 w-4".classNames()} />
             <span>Profile</span>
             <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
           </DropdownMenuItem>
           {/* <DropdownMenuItem>
-            <CreditCard className="mr-2 h-4 w-4" />
+            <CreditCard className={"mr-2 h-4 w-4".classNames()} />
             <span>Billing</span>
             <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
           </DropdownMenuItem>
           <DropdownMenuItem>
-            <Settings className="mr-2 h-4 w-4" />
+            <Settings className={"mr-2 h-4 w-4".classNames()} />
             <span>Settings</span>
             <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
           </DropdownMenuItem>
           <DropdownMenuItem>
-            <PlusCircle className="mr-2 h-4 w-4" />
+            <PlusCircle className={"mr-2 h-4 w-4".classNames()} />
             <span>New Team</span>
           </DropdownMenuItem> */}
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem>
-          <LogOut className="mr-2 h-4 w-4" />
+          <LogOut className={"mr-2 h-4 w-4".classNames()} />
           <span>Log out</span>
           <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
         </DropdownMenuItem>

@@ -17,7 +17,7 @@ export const ReleaseManagementTable = () => {
         accessorKey: 'download',
         header: 'Download',
         cell: ({row}) => {
-          return <a className="underline cursor-pointer">{row.getValue("download")}</a>
+          return <a className={"underline cursor-pointer".classNames()}>{row.getValue("download")}</a>
         }
       },
       {

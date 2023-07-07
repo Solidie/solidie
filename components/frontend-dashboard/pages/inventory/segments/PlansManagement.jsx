@@ -19,10 +19,10 @@ export default function Example({ plansDetail }) {
   }
 
   return (
-    <div className="w-full">
-      <div className=" w-full m ax-w-md">
-        <label className="sr-only">Server size</label>
-        <div className="gap-2 flex flex-wrap">
+    <div className={"w-full".classNames()}>
+      <div className={" w-full m ax-w-md".classNames()}>
+        <label className={"sr-only".classNames()}>Server size</label>
+        <div className={"gap-2 flex flex-wrap".classNames()}>
           {plans.map((plan, idx) => (
             <div
               key={plan.name}
@@ -42,10 +42,10 @@ export default function Example({ plansDetail }) {
               <button
                 onClick={() => changePlan(idx)}
                 type="button"
-                className="z-10 cursor-pointer flex w-full items-center justify-between"
+                className={"z-10 cursor-pointer flex w-full items-center justify-between".classNames()}
               >
-                <div className="flex items-center">
-                  <div className="text-sm">
+                <div className={"flex items-center".classNames()}>
+                  <div className={"text-sm".classNames()}>
                     <p
                       className={cn(
                         plan.selected ? "text-white" : "text-gray-900",
@@ -56,8 +56,8 @@ export default function Example({ plansDetail }) {
                     </p>
                   </div>
                 </div>
-                <div className="shrink-0 text-white">
-                  <CheckIcon className="h-6 w-6" selected={plan.selected} />
+                <div className={"shrink-0 text-white".classNames()}>
+                  <CheckIcon className={"h-6 w-6".classNames()} selected={plan.selected} />
                 </div>
               </button>
 
@@ -67,7 +67,7 @@ export default function Example({ plansDetail }) {
                   "inline z-10"
                 )}
               >
-                <div className="flex flex-col items">
+                <div className={"flex flex-col items".classNames()}>
                   <label
                     htmlFor={plan.name}
                     className={cn(
@@ -77,9 +77,9 @@ export default function Example({ plansDetail }) {
                   >
                     Pricing
                   </label>
-                  <div className="mt-1 relative rounded-md shadow-sm">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <span className="text-gray-500 sm:text-sm"> $ </span>
+                  <div className={"mt-1 relative rounded-md shadow-sm".classNames()}>
+                    <div className={"absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none".classNames()}>
+                      <span className={"text-gray-500 sm:text-sm".classNames()}> $ </span>
                     </div>
                     <input
                       type="number"
@@ -105,9 +105,9 @@ export default function Example({ plansDetail }) {
                       }
                       aria-describedby="price-currency"
                     />
-                    <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                    <div className={"absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none".classNames()}>
                       <span
-                        className="text-gray-500 sm:text-sm"
+                        className={"text-gray-500 sm:text-sm".classNames()}
                         id="price-currency"
                       >
                         {" "}

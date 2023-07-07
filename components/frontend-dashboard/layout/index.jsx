@@ -14,14 +14,14 @@ export default function Layout({ children }) {
   },[window.innerWidth])
 
   return (
-    <div className="theme-light bg-content-bg text-tertiary w-full !min-h-max !h-full flex flex-col overflow-y-clip">
+    <div className={"theme-light bg-content-bg text-tertiary w-full !min-h-max !h-full flex flex-col overflow-y-clip".classNames()}>
       <Topbar {...{ sidebarOpen, setSidebarOpen }} />
-      <div className=" relative flex flex-grow w-full min-h-max h-full overflow-clip">
+      <div className={" relative flex flex-grow w-full min-h-max h-full overflow-clip".classNames()}>
         <Scrollbar scrollAreaRootClassName={cn(
                     sidebarOpen
                     ? " !sticky lg:!sticky sm:!absolute sm:inset-0 left-0 "
                     : " hidden lg:flex ",
-          "bg-brand-white z-50 w-max !min-w-max h-full md:shadow-xl ")} scrollAreaViewportClassName="bg-brand-white w-max [_div]:!w-max [_div]:!min-w-max">
+          "bg-brand-white z-50 w-max !min-w-max h-full md:shadow-xl ")} scrollAreaViewportclassName={"bg-brand-white w-max [_div]:!w-max [_div]:!min-w-max".classNames()}>
           <Sidebar {...{ sidebarOpen, setSidebarOpen }} />
         </Scrollbar>
         <Scrollbar scrollAreaViewportClassName={" w-full"}>

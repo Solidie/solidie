@@ -46,9 +46,9 @@ export function DataTableToolbar({ table, columns }) {
   }, [columnNames.length]);
 
   return (
-    <div className="flex items-center justify-between">
-      <div className="flex flex-1 items-center space-x-2">
-        <div className="border flex flex-col gap-1 sm:flex-row bg-primary rounded-full p-1 w-full md:w-auto">
+    <div className={"flex items-center justify-between".classNames()}>
+      <div className={"flex flex-1 items-center space-x-2".classNames()}>
+        <div className={"border flex flex-col gap-1 sm:flex-row bg-primary rounded-full p-1 w-full md:w-auto".classNames()}>
           <input
             type="text"
             placeholder={`${selectedColumn}...`}
@@ -66,7 +66,7 @@ export function DataTableToolbar({ table, columns }) {
                 )
                 ?.setFilterValue(event.target.value)
             }
-            className="h-8 w-full sm:w-[150px] lg:w-[250px] focus:border-tertiary bg-transparent text-tertiary rounded-full focus:ring-transparent"
+            className={"h-8 w-full sm:w-[150px] lg:w-[250px] focus:border-tertiary bg-transparent text-tertiary rounded-full focus:ring-transparent".classNames()}
           />
           <Select
             ariaLabel={"column-to-filter"}
@@ -86,10 +86,10 @@ export function DataTableToolbar({ table, columns }) {
           <Button
             variant="ghost"
             onClick={() => table.resetColumnFilters()}
-            className="h-8 px-2 lg:px-3"
+            className={"h-8 px-2 lg:px-3".classNames()}
           >
             Reset
-            <X className="ml-2 h-4 w-4" />
+            <X className={"ml-2 h-4 w-4".classNames()} />
           </Button>
         )}
       </div>

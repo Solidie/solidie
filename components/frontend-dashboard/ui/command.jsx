@@ -19,8 +19,8 @@ const Command = React.forwardRef(({ className, ...props }, ref) => (
 const CommandDialog = ({ children, ...props }) => {
   return (
     <Dialog {...props}>
-      <DialogContent className="overflow-hidden p-0 shadow-2xl">
-        <Command className="[&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-muted-foreground [&_[cmdk-group]:not([hidden])_~[cmdk-group]]:pt-0 [&_[cmdk-group]]:px-2 [&_[cmdk-input-wrapper]_svg]:h-5 [&_[cmdk-input-wrapper]_svg]:w-5 [&_[cmdk-input]]:h-12 [&_[cmdk-item]]:px-2 [&_[cmdk-item]]:py-3 [&_[cmdk-item]_svg]:h-5 [&_[cmdk-item]_svg]:w-5">
+      <DialogContent className={"overflow-hidden p-0 shadow-2xl".classNames()}>
+        <Command className={"[&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-muted-foreground [&_[cmdk-group]:not([hidden])_~[cmdk-group]]:pt-0 [&_[cmdk-group]]:px-2 [&_[cmdk-input-wrapper]_svg]:h-5 [&_[cmdk-input-wrapper]_svg]:w-5 [&_[cmdk-input]]:h-12 [&_[cmdk-item]]:px-2 [&_[cmdk-item]]:py-3 [&_[cmdk-item]_svg]:h-5 [&_[cmdk-item]_svg]:w-5".classNames()}>
           {children}
         </Command>
       </DialogContent>
@@ -29,8 +29,8 @@ const CommandDialog = ({ children, ...props }) => {
 }
 
 const CommandInput = React.forwardRef(({ className, ...props }, ref) => (
-  <div className="flex items-center border-b px-3" cmdk-input-wrapper="">
-    <Search className="mr-2 h-4 w-4 shrink-0 opacity-50" />
+  <div className={"flex items-center border-b px-3".classNames()} cmdk-input-wrapper="">
+    <Search className={"mr-2 h-4 w-4 shrink-0 opacity-50".classNames()} />
     <CommandPrimitive.Input
       ref={ref}
       className={cn(
@@ -53,7 +53,7 @@ const CommandList = React.forwardRef(({ className, ...props }, ref) => (
 const CommandEmpty = React.forwardRef((props, ref) => (
   <CommandPrimitive.Empty
     ref={ref}
-    className="py-6 text-center text-sm"
+    className={"py-6 text-center text-sm".classNames()}
     {...props}
   />
 ))

@@ -18,18 +18,18 @@ const ScrollAreaDemo = ({
         {children}
       </ScrollArea.Viewport>
       <ScrollArea.Scrollbar
-        className="ScrollAreaScrollbar"
+        className={"ScrollAreaScrollbar".classNames()}
         orientation="vertical"
       >
-        <ScrollArea.Thumb className="ScrollAreaThumb" />
+        <ScrollArea.Thumb className={"ScrollAreaThumb".classNames()} />
       </ScrollArea.Scrollbar>
       <ScrollArea.Scrollbar
-        className="ScrollAreaScrollbar"
+        className={"ScrollAreaScrollbar".classNames()}
         orientation="horizontal"
       >
-        <ScrollArea.Thumb className="ScrollAreaThumb" />
+        <ScrollArea.Thumb className={"ScrollAreaThumb".classNames()} />
       </ScrollArea.Scrollbar>
-      <ScrollArea.Corner className="ScrollAreaCorner" />
+      <ScrollArea.Corner className={"ScrollAreaCorner".classNames()} />
     </ScrollArea.Root>
   );
 };

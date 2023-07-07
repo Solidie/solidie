@@ -16,15 +16,15 @@ export default function ComboBox({ selected, setSelected, listItems, setQuery, q
 
   return (
     <Combobox value={selected} onChange={setSelected}>
-      <div className=" relative">
-        <div className="relative w-full cursor-default rounded-lg text-left sm:text-sm !text-primary ">
+      <div className={" relative".classNames()}>
+        <div className={"relative w-full cursor-default rounded-lg text-left sm:text-sm !text-primary ".classNames()}>
           <Combobox.Input
-            className="w-full !border-transparent text-sm font-bold leading-5 Input !pr-10 focus:!shadow-tertiary/60 focus:!shadow-lg focus:!border-2 border-solid focus:!border-lightest-version !bg-tertiary !text-primary"
+            className={"w-full !border-transparent text-sm font-bold leading-5 Input !pr-10 focus:!shadow-tertiary/60 focus:!shadow-lg focus:!border-2 border-solid focus:!border-lightest-version !bg-tertiary !text-primary".classNames()}
             displayValue={(item) => item.name}
             placeholder="Search here!..."
             onChange={(event) => setQuery(event.target.value)}
           />
-          <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2">
+          <Combobox.Button className={"absolute inset-y-0 right-0 flex items-center pr-2".classNames()}>
             <ChevronUpDownIcon className={"h-5 w-5".classNames()} aria-hidden="true" />
           </Combobox.Button>
         </div>
@@ -35,9 +35,9 @@ export default function ComboBox({ selected, setSelected, listItems, setQuery, q
           leaveTo="opacity-0"
           afterLeave={() => setQuery("")}
         >
-          <Combobox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-primary py-1 text-base shadow-lg shadow-tertiary/30 border-2 border-tertiary sm:text-sm">
+          <Combobox.Options className={"absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-primary py-1 text-base shadow-lg shadow-tertiary/30 border-2 border-tertiary sm:text-sm".classNames()}>
             {filteredListItems.length === 0 && query !== "" ? (
-              <div className="relative cursor-default select-none py-2 px-4 text-tertiary">
+              <div className={"relative cursor-default select-none py-2 px-4 text-tertiary".classNames()}>
                 Nothing found.
               </div>
             ) : (

@@ -51,10 +51,10 @@ export function DataTable({ columns, data, renderDetailPanel, enableToolbar= tru
   });
 
   return (
-    <div className="space-y-4">
+    <div className={"space-y-4".classNames()}>
       {enableToolbar && <DataTableToolbar table={table} columns={columns} />}
-      <div className="rounded-md border shadow-lg shadow-tertiary/40">
-        <Table className="bg-tertiary/10">
+      <div className={"rounded-md border shadow-lg shadow-tertiary/40".classNames()}>
+        <Table className={"bg-tertiary/10".classNames()}>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow table={table} header={true} key={headerGroup.id}>
@@ -97,7 +97,7 @@ export function DataTable({ columns, data, renderDetailPanel, enableToolbar= tru
               <TableRow>
                 <TableCell
                   colSpan={columns.length}
-                  className="h-24 text-center"
+                  className={"h-24 text-center".classNames()}
                 >
                   No results.
                 </TableCell>

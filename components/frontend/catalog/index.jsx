@@ -51,7 +51,7 @@ export function Catalog() {
 						</button>
 					</div>
 					<form className={"mt-4 border-t border-gray-200".classNames()}>
-						<h3 className="sr-only">Categories</h3>
+						<h3 className={"sr-only".classNames()}>Categories</h3>
 						<ul role="list" className={"font-medium text-gray-900 px-2 py-3".classNames()}>
 							<li>
 								<a href="#" className={"block px-2 py-3".classNames()}> Totes </a>
@@ -92,41 +92,41 @@ export function Catalog() {
 							</h3>
 							<div className={"pt-6".classNames()} id="filter-section-mobile-0">
 								<div className={"space-y-6".classNames()}>
-								<div className="flex items-center">
+								<div className={"flex items-center".classNames()}>
 									<input id="filter-mobile-color-0" name="color[]" value="white" type="checkbox"
-										className="h-4 w-4 border-gray-300 rounded text-tertiary focus:ring-tertiary/60"/>
-									<label for="filter-mobile-color-0" className="ml-3 min-w-0 flex-1 text-gray-500">
+										className={"h-4 w-4 border-gray-300 rounded text-tertiary focus:ring-tertiary/60".classNames()}/>
+									<label for="filter-mobile-color-0" className={"ml-3 min-w-0 flex-1 text-gray-500".classNames()}>
 									White </label>
 								</div>
-								<div className="flex items-center">
+								<div className={"flex items-center".classNames()}>
 									<input id="filter-mobile-color-1" name="color[]" value="beige" type="checkbox"
-										className="h-4 w-4 border-gray-300 rounded text-tertiary focus:ring-tertiary/60"/>
-									<label for="filter-mobile-color-1" className="ml-3 min-w-0 flex-1 text-gray-500">
+										className={"h-4 w-4 border-gray-300 rounded text-tertiary focus:ring-tertiary/60".classNames()}/>
+									<label for="filter-mobile-color-1" className={"ml-3 min-w-0 flex-1 text-gray-500".classNames()}>
 									Beige </label>
 								</div>
-								<div className="flex items-center">
+								<div className={"flex items-center".classNames()}>
 									<input id="filter-mobile-color-2" name="color[]" value="blue" type="checkbox"
 										checked
-										className="h-4 w-4 border-gray-300 rounded text-tertiary focus:ring-tertiary/60"/>
-									<label for="filter-mobile-color-2" className="ml-3 min-w-0 flex-1 text-gray-500">
+										className={"h-4 w-4 border-gray-300 rounded text-tertiary focus:ring-tertiary/60".classNames()}/>
+									<label for="filter-mobile-color-2" className={"ml-3 min-w-0 flex-1 text-gray-500".classNames()}>
 									Blue </label>
 								</div>
-								<div className="flex items-center">
+								<div className={"flex items-center".classNames()}>
 									<input id="filter-mobile-color-3" name="color[]" value="brown" type="checkbox"
-										className="h-4 w-4 border-gray-300 rounded text-tertiary focus:ring-tertiary/60"/>
-									<label for="filter-mobile-color-3" className="ml-3 min-w-0 flex-1 text-gray-500">
+										className={"h-4 w-4 border-gray-300 rounded text-tertiary focus:ring-tertiary/60".classNames()}/>
+									<label for="filter-mobile-color-3" className={"ml-3 min-w-0 flex-1 text-gray-500".classNames()}>
 									Brown </label>
 								</div>
-								<div className="flex items-center">
+								<div className={"flex items-center".classNames()}>
 									<input id="filter-mobile-color-4" name="color[]" value="green" type="checkbox"
-										className="h-4 w-4 border-gray-300 rounded text-tertiary focus:ring-tertiary/60"/>
-									<label for="filter-mobile-color-4" className="ml-3 min-w-0 flex-1 text-gray-500">
+										className={"h-4 w-4 border-gray-300 rounded text-tertiary focus:ring-tertiary/60".classNames()}/>
+									<label for="filter-mobile-color-4" className={"ml-3 min-w-0 flex-1 text-gray-500".classNames()}>
 									Green </label>
 								</div>
-								<div className="flex items-center">
+								<div className={"flex items-center".classNames()}>
 									<input id="filter-mobile-color-5" name="color[]" value="purple" type="checkbox"
-										className="h-4 w-4 border-gray-300 rounded text-tertiary focus:ring-tertiary/60"/>
-									<label for="filter-mobile-color-5" className="ml-3 min-w-0 flex-1 text-gray-500">
+										className={"h-4 w-4 border-gray-300 rounded text-tertiary focus:ring-tertiary/60".classNames()}/>
+									<label for="filter-mobile-color-5" className={"ml-3 min-w-0 flex-1 text-gray-500".classNames()}>
 									Purple </label>
 								</div>
 								</div>
@@ -156,39 +156,39 @@ export function Catalog() {
 							</h3>
 							<div className={"pt-6".classNames()} id="filter-section-mobile-1">
 								<div className={"space-y-6".classNames()}>
-								<div className="flex items-center">
+								<div className={"flex items-center".classNames()}>
 									<input id="filter-mobile-category-0" name="category[]" value="new-arrivals"
 										type="checkbox"
-										className="h-4 w-4 border-gray-300 rounded text-tertiary focus:ring-tertiary/60"/>
-									<label for="filter-mobile-category-0" className="ml-3 min-w-0 flex-1 text-gray-500">
+										className={"h-4 w-4 border-gray-300 rounded text-tertiary focus:ring-tertiary/60".classNames()}/>
+									<label for="filter-mobile-category-0" className={"ml-3 min-w-0 flex-1 text-gray-500".classNames()}>
 									New Arrivals </label>
 								</div>
-								<div className="flex items-center">
+								<div className={"flex items-center".classNames()}>
 									<input id="filter-mobile-category-1" name="category[]" value="sale"
 										type="checkbox"
-										className="h-4 w-4 border-gray-300 rounded text-tertiary focus:ring-tertiary/60"/>
-									<label for="filter-mobile-category-1" className="ml-3 min-w-0 flex-1 text-gray-500">
+										className={"h-4 w-4 border-gray-300 rounded text-tertiary focus:ring-tertiary/60".classNames()}/>
+									<label for="filter-mobile-category-1" className={"ml-3 min-w-0 flex-1 text-gray-500".classNames()}>
 									Sale </label>
 								</div>
-								<div className="flex items-center">
+								<div className={"flex items-center".classNames()}>
 									<input id="filter-mobile-category-2" name="category[]" value="travel"
 										type="checkbox" checked
-										className="h-4 w-4 border-gray-300 rounded text-tertiary focus:ring-tertiary/60"/>
-									<label for="filter-mobile-category-2" className="ml-3 min-w-0 flex-1 text-gray-500">
+										className={"h-4 w-4 border-gray-300 rounded text-tertiary focus:ring-tertiary/60".classNames()}/>
+									<label for="filter-mobile-category-2" className={"ml-3 min-w-0 flex-1 text-gray-500".classNames()}>
 									Travel </label>
 								</div>
-								<div className="flex items-center">
+								<div className={"flex items-center".classNames()}>
 									<input id="filter-mobile-category-3" name="category[]" value="organization"
 										type="checkbox"
-										className="h-4 w-4 border-gray-300 rounded text-tertiary focus:ring-tertiary/60"/>
-									<label for="filter-mobile-category-3" className="ml-3 min-w-0 flex-1 text-gray-500">
+										className={"h-4 w-4 border-gray-300 rounded text-tertiary focus:ring-tertiary/60".classNames()}/>
+									<label for="filter-mobile-category-3" className={"ml-3 min-w-0 flex-1 text-gray-500".classNames()}>
 									Organization </label>
 								</div>
-								<div className="flex items-center">
+								<div className={"flex items-center".classNames()}>
 									<input id="filter-mobile-category-4" name="category[]" value="accessories"
 										type="checkbox"
-										className="h-4 w-4 border-gray-300 rounded text-tertiary focus:ring-tertiary/60"/>
-									<label for="filter-mobile-category-4" className="ml-3 min-w-0 flex-1 text-gray-500">
+										className={"h-4 w-4 border-gray-300 rounded text-tertiary focus:ring-tertiary/60".classNames()}/>
+									<label for="filter-mobile-category-4" className={"ml-3 min-w-0 flex-1 text-gray-500".classNames()}>
 									Accessories </label>
 								</div>
 								</div>
@@ -218,41 +218,41 @@ export function Catalog() {
 							</h3>
 							<div className={"pt-6".classNames()} id="filter-section-mobile-2">
 								<div className={"space-y-6".classNames()}>
-								<div className="flex items-center">
+								<div className={"flex items-center".classNames()}>
 									<input id="filter-mobile-size-0" name="size[]" value="2l" type="checkbox"
-										className="h-4 w-4 border-gray-300 rounded text-tertiary focus:ring-tertiary/60"/>
-									<label for="filter-mobile-size-0" className="ml-3 min-w-0 flex-1 text-gray-500"> 2L
+										className={"h-4 w-4 border-gray-300 rounded text-tertiary focus:ring-tertiary/60".classNames()}/>
+									<label for="filter-mobile-size-0" className={"ml-3 min-w-0 flex-1 text-gray-500".classNames()}> 2L
 									</label>
 								</div>
-								<div className="flex items-center">
+								<div className={"flex items-center".classNames()}>
 									<input id="filter-mobile-size-1" name="size[]" value="6l" type="checkbox"
-										className="h-4 w-4 border-gray-300 rounded text-tertiary focus:ring-tertiary/60"/>
-									<label for="filter-mobile-size-1" className="ml-3 min-w-0 flex-1 text-gray-500"> 6L
+										className={"h-4 w-4 border-gray-300 rounded text-tertiary focus:ring-tertiary/60".classNames()}/>
+									<label for="filter-mobile-size-1" className={"ml-3 min-w-0 flex-1 text-gray-500".classNames()}> 6L
 									</label>
 								</div>
-								<div className="flex items-center">
+								<div className={"flex items-center".classNames()}>
 									<input id="filter-mobile-size-2" name="size[]" value="12l" type="checkbox"
-										className="h-4 w-4 border-gray-300 rounded text-tertiary focus:ring-tertiary/60"/>
-									<label for="filter-mobile-size-2" className="ml-3 min-w-0 flex-1 text-gray-500"> 12L
+										className={"h-4 w-4 border-gray-300 rounded text-tertiary focus:ring-tertiary/60".classNames()}/>
+									<label for="filter-mobile-size-2" className={"ml-3 min-w-0 flex-1 text-gray-500".classNames()}> 12L
 									</label>
 								</div>
-								<div className="flex items-center">
+								<div className={"flex items-center".classNames()}>
 									<input id="filter-mobile-size-3" name="size[]" value="18l" type="checkbox"
-										className="h-4 w-4 border-gray-300 rounded text-tertiary focus:ring-tertiary/60"/>
-									<label for="filter-mobile-size-3" className="ml-3 min-w-0 flex-1 text-gray-500"> 18L
+										className={"h-4 w-4 border-gray-300 rounded text-tertiary focus:ring-tertiary/60".classNames()}/>
+									<label for="filter-mobile-size-3" className={"ml-3 min-w-0 flex-1 text-gray-500".classNames()}> 18L
 									</label>
 								</div>
-								<div className="flex items-center">
+								<div className={"flex items-center".classNames()}>
 									<input id="filter-mobile-size-4" name="size[]" value="20l" type="checkbox"
-										className="h-4 w-4 border-gray-300 rounded text-tertiary focus:ring-tertiary/60"/>
-									<label for="filter-mobile-size-4" className="ml-3 min-w-0 flex-1 text-gray-500"> 20L
+										className={"h-4 w-4 border-gray-300 rounded text-tertiary focus:ring-tertiary/60".classNames()}/>
+									<label for="filter-mobile-size-4" className={"ml-3 min-w-0 flex-1 text-gray-500".classNames()}> 20L
 									</label>
 								</div>
-								<div className="flex items-center">
+								<div className={"flex items-center".classNames()}>
 									<input id="filter-mobile-size-5" name="size[]" value="40l" type="checkbox"
 										checked
-										className="h-4 w-4 border-gray-300 rounded text-tertiary focus:ring-tertiary/60"/>
-									<label for="filter-mobile-size-5" className="ml-3 min-w-0 flex-1 text-gray-500"> 40L
+										className={"h-4 w-4 border-gray-300 rounded text-tertiary focus:ring-tertiary/60".classNames()}/>
+									<label for="filter-mobile-size-5" className={"ml-3 min-w-0 flex-1 text-gray-500".classNames()}> 40L
 									</label>
 								</div>
 								</div>
@@ -261,17 +261,17 @@ export function Catalog() {
 					</form>
 					</div>
 				</div>
-				<main className=" mx-auto px-4 sm:px-6 lg:px-8">
-					<div className="relative z-10 flex items-baseline justify-between pt-24 pb-6 border-b border-gray-200">
-					<h1 className="text-4xl font-extrabold tracking-tight text-gray-900">New Arrivals</h1>
-					<div className="flex items-center">
-						<div className="relative inline-block text-left">
+				<main className={" mx-auto px-4 sm:px-6 lg:px-8".classNames()}>
+					<div className={"relative z-10 flex items-baseline justify-between pt-24 pb-6 border-b border-gray-200".classNames()}>
+					<h1 className={"text-4xl font-extrabold tracking-tight text-gray-900".classNames()}>New Arrivals</h1>
+					<div className={"flex items-center".classNames()}>
+						<div className={"relative inline-block text-left".classNames()}>
 							<div>
 								<button type="button"
-								className="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900"
+								className={"group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900".classNames()}
 								id="menu-button" aria-expanded="false" aria-haspopup="true">
 								Sort
-								<svg className="flex-shrink-0 -mr-1 ml-1 h-5 w-5 text-gray-400 group-hover:text-gray-500"
+								<svg className={"flex-shrink-0 -mr-1 ml-1 h-5 w-5 text-gray-400 group-hover:text-gray-500".classNames()}
 									xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
 									aria-hidden="true">
 									<path fillRule="evenodd"
@@ -280,33 +280,33 @@ export function Catalog() {
 								</svg>
 								</button>
 							</div>
-							<div className="origin-top-right absolute right-0 mt-2 w-40 rounded-md shadow-lg shadow-tertiary/60 bg-primary ring-1 ring-black ring-opacity-5 focus:outline-none"
+							<div className={"origin-top-right absolute right-0 mt-2 w-40 rounded-md shadow-lg shadow-tertiary/60 bg-primary ring-1 ring-black ring-opacity-5 focus:outline-none".classNames()}
 								role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
-								<div className="py-1" role="none">
-								<a href="#" className="font-medium text-gray-900 block px-4 py-2 text-sm"
+								<div className={"py-1".classNames()} role="none">
+								<a href="#" className={"font-medium text-gray-900 block px-4 py-2 text-sm".classNames()}
 									role="menuitem" tabindex="-1" id="menu-item-0"> Most Popular </a>
-								<a href="#" className="text-gray-500 block px-4 py-2 text-sm" role="menuitem"
+								<a href="#" className={"text-gray-500 block px-4 py-2 text-sm".classNames()} role="menuitem"
 									tabindex="-1" id="menu-item-1"> Best Rating </a>
-								<a href="#" className="text-gray-500 block px-4 py-2 text-sm" role="menuitem"
+								<a href="#" className={"text-gray-500 block px-4 py-2 text-sm".classNames()} role="menuitem"
 									tabindex="-1" id="menu-item-2"> Newest </a>
-								<a href="#" className="text-gray-500 block px-4 py-2 text-sm" role="menuitem"
+								<a href="#" className={"text-gray-500 block px-4 py-2 text-sm".classNames()} role="menuitem"
 									tabindex="-1" id="menu-item-3"> Price: Low to High </a>
-								<a href="#" className="text-gray-500 block px-4 py-2 text-sm" role="menuitem"
+								<a href="#" className={"text-gray-500 block px-4 py-2 text-sm".classNames()} role="menuitem"
 									tabindex="-1" id="menu-item-4"> Price: High to Low </a>
 								</div>
 							</div>
 						</div>
-						<button type="button" className="p-2 -m-2 ml-5 sm:ml-7 text-gray-400 hover:text-gray-500">
-							<span className="sr-only">View grid</span>
-							<svg className="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+						<button type="button" className={"p-2 -m-2 ml-5 sm:ml-7 text-gray-400 hover:text-gray-500".classNames()}>
+							<span className={"sr-only".classNames()}>View grid</span>
+							<svg className={"w-5 h-5".classNames()} aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
 								viewBox="0 0 20 20" fill="currentColor">
 								<path
 								d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
 							</svg>
 						</button>
-						<button type="button" className="p-2 -m-2 ml-4 sm:ml-6 text-gray-400 hover:text-gray-500 lg:hidden">
-							<span className="sr-only">Filters</span>
-							<svg className="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+						<button type="button" className={"p-2 -m-2 ml-4 sm:ml-6 text-gray-400 hover:text-gray-500 lg:hidden".classNames()}>
+							<span className={"sr-only".classNames()}>Filters</span>
+							<svg className={"w-5 h-5".classNames()} aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
 								viewBox="0 0 20 20" fill="currentColor">
 								<path fillRule="evenodd"
 								d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z"
@@ -315,13 +315,13 @@ export function Catalog() {
 						</button>
 					</div>
 					</div>
-					<section aria-labelledby="products-heading" className="pt-6 pb-24">
-					<h2 id="products-heading" className="sr-only">Products</h2>
-					<div className="grid grid-cols-1 lg:grid-cols-4 gap-x-8 gap-y-10">
-						<form className="hidden lg:block">
-							<h3 className="sr-only">Categories</h3>
+					<section aria-labelledby="products-heading" className={"pt-6 pb-24".classNames()}>
+					<h2 id="products-heading" className={"sr-only".classNames()}>Products</h2>
+					<div className={"grid grid-cols-1 lg:grid-cols-4 gap-x-8 gap-y-10".classNames()}>
+						<form className={"hidden lg:block".classNames()}>
+							<h3 className={"sr-only".classNames()}>Categories</h3>
 							<ul role="list"
-								className="text-sm font-medium text-gray-900 space-y-4 pb-6 border-b border-gray-200">
+								className={"text-sm font-medium text-gray-900 space-y-4 pb-6 border-b border-gray-200".classNames()}>
 								<li>
 								<a href="#"> Totes </a>
 								</li>
@@ -338,11 +338,11 @@ export function Catalog() {
 								<a href="#"> Laptop Sleeves </a>
 								</li>
 							</ul>
-							<div className="border-b border-gray-200 py-6">
+							<div className={"border-b border-gray-200 py-6".classNames()}>
 								<fieldset>
-								<h3 className="-my-3 flow-root">
+								<h3 className={"-my-3 flow-root".classNames()}>
 									<button type="button"
-										className="py-3 bg-transparent w-full flex items-center justify-between text-sm text-gray-400 hover:text-gray-500"
+										className={"py-3 bg-transparent w-full flex items-center justify-between text-sm text-gray-400 hover:text-gray-500".classNames()}
 										aria-controls="filter-section-1" aria-expanded="false">
 										<legend className={"font-medium text-gray-900".classNames()}> Category </legend>
 										<span className={"ml-6 flex items-center".classNames()}>
@@ -361,66 +361,66 @@ export function Catalog() {
 										</span>
 									</button>
 								</h3>
-								<div className="pt-6 space-y-6 sm:space-y-4">
-									<div className="flex items-center text-base sm:text-sm">
+								<div className={"pt-6 space-y-6 sm:space-y-4".classNames()}>
+									<div className={"flex items-center text-base sm:text-sm".classNames()}>
 										<input id="category-0" name="wordpress[]" value="0" type="checkbox"
-											className="flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60"/>
-										<label for="category-0" className="ml-3 min-w-0 flex-1 text-tertiary/80">
+											className={"flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60".classNames()}/>
+										<label for="category-0" className={"ml-3 min-w-0 flex-1 text-tertiary/80".classNames()}>
 										Wordpress
 										</label>
 									</div>
-									<div className="flex items-center text-base sm:text-sm">
+									<div className={"flex items-center text-base sm:text-sm".classNames()}>
 										<input id="category-1" name="forms[]" value="25" type="checkbox"
-											className="flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60"/>
-										<label for="category-1" className="ml-3 min-w-0 flex-1 text-tertiary/80"> Forms
+											className={"flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60".classNames()}/>
+										<label for="category-1" className={"ml-3 min-w-0 flex-1 text-tertiary/80".classNames()}> Forms
 										</label>
 									</div>
-									<div className="flex items-center text-base sm:text-sm">
+									<div className={"flex items-center text-base sm:text-sm".classNames()}>
 										<input id="category-2" name="ecommerce[]" value="50" type="checkbox"
-											className="flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60"/>
-										<label for="category-2" className="ml-3 min-w-0 flex-1 text-tertiary/80">
+											className={"flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60".classNames()}/>
+										<label for="category-2" className={"ml-3 min-w-0 flex-1 text-tertiary/80".classNames()}>
 										eCommerce
 										</label>
 									</div>
-									<div className="flex items-center text-base sm:text-sm">
+									<div className={"flex items-center text-base sm:text-sm".classNames()}>
 										<input id="category-3" name="add-ons[]" value="75" type="checkbox"
-											className="flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60"/>
-										<label for="category-3" className="ml-3 min-w-0 flex-1 text-tertiary/80"> Add
+											className={"flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60".classNames()}/>
+										<label for="category-3" className={"ml-3 min-w-0 flex-1 text-tertiary/80".classNames()}> Add
 										Ons
 										</label>
 									</div>
-									<div className="flex items-center text-base sm:text-sm">
+									<div className={"flex items-center text-base sm:text-sm".classNames()}>
 										<input id="category-4" name="calendars[]" value="white" type="checkbox"
-											className="flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60"/>
-										<label for="category-4" className="ml-3 min-w-0 flex-1 text-tertiary/80">
+											className={"flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60".classNames()}/>
+										<label for="category-4" className={"ml-3 min-w-0 flex-1 text-tertiary/80".classNames()}>
 										Calendars
 										</label>
 									</div>
-									<div className="flex items-center text-base sm:text-sm">
+									<div className={"flex items-center text-base sm:text-sm".classNames()}>
 										<input id="category-5" name="interface-elements[]" value="beige"
 											type="checkbox"
-											className="flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60"/>
-										<label for="category-5" className="ml-3 min-w-0 flex-1 text-tertiary/80">
+											className={"flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60".classNames()}/>
+										<label for="category-5" className={"ml-3 min-w-0 flex-1 text-tertiary/80".classNames()}>
 										Interface
 										Elements
 										</label>
 									</div>
-									<div className="flex items-center text-base sm:text-sm">
+									<div className={"flex items-center text-base sm:text-sm".classNames()}>
 										<input id="category-6" name="news-letters[]" value="blue" type="checkbox"
-											className="flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60"
+											className={"flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60".classNames()}
 											checked={true}/>
-										<label for="category-6" className="ml-3 min-w-0 flex-1 text-tertiary/80"> News
+										<label for="category-6" className={"ml-3 min-w-0 flex-1 text-tertiary/80".classNames()}> News
 										letters
 										</label>
 									</div>
 								</div>
 								</fieldset>
 							</div>
-							<div className="border-b border-gray-200 py-6">
+							<div className={"border-b border-gray-200 py-6".classNames()}>
 								<fieldset>
-								<h3 className="-my-3 flow-root">
+								<h3 className={"-my-3 flow-root".classNames()}>
 									<button type="button"
-										className="py-3 bg-transparent w-full flex items-center justify-between text-sm text-gray-400 hover:text-gray-500"
+										className={"py-3 bg-transparent w-full flex items-center justify-between text-sm text-gray-400 hover:text-gray-500".classNames()}
 										aria-controls="filter-section-1" aria-expanded="false">
 										<legend className={"font-medium text-gray-900".classNames()}> Pricing </legend>
 										<span className={"ml-6 flex items-center".classNames()}>
@@ -439,39 +439,39 @@ export function Catalog() {
 										</span>
 									</button>
 								</h3>
-								<div className="pt-6 space-y-6 sm:space-y-4">
-									<div className="flex items-center text-base sm:text-sm">
+								<div className={"pt-6 space-y-6 sm:space-y-4".classNames()}>
+									<div className={"flex items-center text-base sm:text-sm".classNames()}>
 										<input id="price-0" name="price[]" value="0" type="checkbox"
-											className="flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60"/>
-										<label for="price-0" className="ml-3 min-w-0 flex-1 text-tertiary/60"> $0 - $25
+											className={"flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60".classNames()}/>
+										<label for="price-0" className={"ml-3 min-w-0 flex-1 text-tertiary/60".classNames()}> $0 - $25
 										</label>
 									</div>
-									<div className="flex items-center text-base sm:text-sm">
+									<div className={"flex items-center text-base sm:text-sm".classNames()}>
 										<input id="price-1" name="price[]" value="25" type="checkbox"
-											className="flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60"/>
-										<label for="price-1" className="ml-3 min-w-0 flex-1 text-tertiary/60"> $25 - $50
+											className={"flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60".classNames()}/>
+										<label for="price-1" className={"ml-3 min-w-0 flex-1 text-tertiary/60".classNames()}> $25 - $50
 										</label>
 									</div>
-									<div className="flex items-center text-base sm:text-sm">
+									<div className={"flex items-center text-base sm:text-sm".classNames()}>
 										<input id="price-2" name="price[]" value="50" type="checkbox"
-											className="flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60"/>
-										<label for="price-2" className="ml-3 min-w-0 flex-1 text-tertiary/60"> $50 - $75
+											className={"flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60".classNames()}/>
+										<label for="price-2" className={"ml-3 min-w-0 flex-1 text-tertiary/60".classNames()}> $50 - $75
 										</label>
 									</div>
-									<div className="flex items-center text-base sm:text-sm">
+									<div className={"flex items-center text-base sm:text-sm".classNames()}>
 										<input id="price-3" name="price[]" value="75" type="checkbox"
-											className="flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60"/>
-										<label for="price-3" className="ml-3 min-w-0 flex-1 text-tertiary/60"> $75+
+											className={"flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60".classNames()}/>
+										<label for="price-3" className={"ml-3 min-w-0 flex-1 text-tertiary/60".classNames()}> $75+
 										</label>
 									</div>
 								</div>
 								</fieldset>
 							</div>
-							<div className="border-b border-gray-200 py-6">
+							<div className={"border-b border-gray-200 py-6".classNames()}>
 								<fieldset>
-								<h3 className="-my-3 flow-root">
+								<h3 className={"-my-3 flow-root".classNames()}>
 									<button type="button"
-										className="py-3 bg-transparent w-full flex items-center justify-between text-sm text-gray-400 hover:text-gray-500"
+										className={"py-3 bg-transparent w-full flex items-center justify-between text-sm text-gray-400 hover:text-gray-500".classNames()}
 										aria-controls="filter-section-1" aria-expanded="false">
 										<legend className={"font-medium text-gray-900".classNames()}> Compatible With </legend>
 										<span className={"ml-6 flex items-center".classNames()}>
@@ -490,56 +490,56 @@ export function Catalog() {
 										</span>
 									</button>
 								</h3>
-								<div className="pt-6 space-y-6 sm:space-y-4">
-									<div className="flex items-center text-base sm:text-sm">
+								<div className={"pt-6 space-y-6 sm:space-y-4".classNames()}>
+									<div className={"flex items-center text-base sm:text-sm".classNames()}>
 										<input id="compatible-with-0" name="compatible-with[]" value="block-editor"
 											type="checkbox"
-											className="flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60"/>
-										<label for="compatible-with-0" className="ml-3 min-w-0 flex-1 text-tertiary/60">
+											className={"flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60".classNames()}/>
+										<label for="compatible-with-0" className={"ml-3 min-w-0 flex-1 text-tertiary/60".classNames()}>
 										Block
 										Editor
 										</label>
 									</div>
-									<div className="flex items-center text-base sm:text-sm">
+									<div className={"flex items-center text-base sm:text-sm".classNames()}>
 										<input id="compatible-with-1" name="compatible-with[]" value="woocommerce"
 											type="checkbox"
-											className="flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60"/>
-										<label for="compatible-with-1" className="ml-3 min-w-0 flex-1 text-tertiary/60">
+											className={"flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60".classNames()}/>
+										<label for="compatible-with-1" className={"ml-3 min-w-0 flex-1 text-tertiary/60".classNames()}>
 										WooCommerce
 										</label>
 									</div>
-									<div className="flex items-center text-base sm:text-sm">
+									<div className={"flex items-center text-base sm:text-sm".classNames()}>
 										<input id="compatible-with-2" name="compatible-with[]" value="elementor-pro"
 											type="checkbox"
-											className="flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60"/>
-										<label for="compatible-with-2" className="ml-3 min-w-0 flex-1 text-tertiary/60">
+											className={"flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60".classNames()}/>
+										<label for="compatible-with-2" className={"ml-3 min-w-0 flex-1 text-tertiary/60".classNames()}>
 										Elementor Pro
 										</label>
 									</div>
-									<div className="flex items-center text-base sm:text-sm">
+									<div className={"flex items-center text-base sm:text-sm".classNames()}>
 										<input id="compatible-with-3" name="compatible-with[]" value="elementor"
 											type="checkbox"
-											className="flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60"/>
-										<label for="compatible-with-3" className="ml-3 min-w-0 flex-1 text-tertiary/60">
+											className={"flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60".classNames()}/>
+										<label for="compatible-with-3" className={"ml-3 min-w-0 flex-1 text-tertiary/60".classNames()}>
 										Elementor
 										</label>
 									</div>
-									<div className="flex items-center text-base sm:text-sm">
+									<div className={"flex items-center text-base sm:text-sm".classNames()}>
 										<input id="compatible-with-4" name="compatible-with[]" value="bootstrap"
 											type="checkbox"
-											className="flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60"/>
-										<label for="compatible-with-4" className="ml-3 min-w-0 flex-1 text-tertiary/60">
+											className={"flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60".classNames()}/>
+										<label for="compatible-with-4" className={"ml-3 min-w-0 flex-1 text-tertiary/60".classNames()}>
 										Bootstrap
 										</label>
 									</div>
 								</div>
 								</fieldset>
 							</div>
-							<div className="border-b border-gray-200 py-6">
+							<div className={"border-b border-gray-200 py-6".classNames()}>
 								<fieldset>
-								<h3 className="-my-3 flow-root">
+								<h3 className={"-my-3 flow-root".classNames()}>
 									<button type="button"
-										className="py-3 bg-transparent w-full flex items-center justify-between text-sm text-gray-400 hover:text-gray-500"
+										className={"py-3 bg-transparent w-full flex items-center justify-between text-sm text-gray-400 hover:text-gray-500".classNames()}
 										aria-controls="filter-section-1" aria-expanded="false">
 										<legend className={"font-medium text-gray-900".classNames()}>Sales</legend>
 										<span className={"ml-6 flex items-center".classNames()}>
@@ -558,47 +558,47 @@ export function Catalog() {
 										</span>
 									</button>
 								</h3>
-								<div className="pt-6 space-y-6 sm:space-y-4">
-									<div className="flex items-center text-base sm:text-sm">
+								<div className={"pt-6 space-y-6 sm:space-y-4".classNames()}>
+									<div className={"flex items-center text-base sm:text-sm".classNames()}>
 										<input id="sales-0" name="sales[]" value="no-sales" type="checkbox"
-											className="flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60"/>
-										<label for="sales-0" className="ml-3 min-w-0 flex-1 text-tertiary/60"> No Sales
+											className={"flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60".classNames()}/>
+										<label for="sales-0" className={"ml-3 min-w-0 flex-1 text-tertiary/60".classNames()}> No Sales
 										</label>
 									</div>
-									<div className="flex items-center text-base sm:text-sm">
+									<div className={"flex items-center text-base sm:text-sm".classNames()}>
 										<input id="sales-1" name="sales[]" value="low" type="checkbox"
-											className="flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60"
+											className={"flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60".classNames()}
 											checked={true}/>
-										<label for="sales-1" className="ml-3 min-w-0 flex-1 text-tertiary/60"> Low
+										<label for="sales-1" className={"ml-3 min-w-0 flex-1 text-tertiary/60".classNames()}> Low
 										</label>
 									</div>
-									<div className="flex items-center text-base sm:text-sm">
+									<div className={"flex items-center text-base sm:text-sm".classNames()}>
 										<input id="sales-2" name="sales[]" value="medium" type="checkbox"
-											className="flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60"/>
-										<label for="sales-2" className="ml-3 min-w-0 flex-1 text-tertiary/60"> Medium
+											className={"flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60".classNames()}/>
+										<label for="sales-2" className={"ml-3 min-w-0 flex-1 text-tertiary/60".classNames()}> Medium
 										</label>
 									</div>
-									<div className="flex items-center text-base sm:text-sm">
+									<div className={"flex items-center text-base sm:text-sm".classNames()}>
 										<input id="sales-3" name="sales[]" value="high" type="checkbox"
-											className="flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60"/>
-										<label for="sales-3" className="ml-3 min-w-0 flex-1 text-tertiary/60"> High
+											className={"flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60".classNames()}/>
+										<label for="sales-3" className={"ml-3 min-w-0 flex-1 text-tertiary/60".classNames()}> High
 										</label>
 									</div>
-									<div className="flex items-center text-base sm:text-sm">
+									<div className={"flex items-center text-base sm:text-sm".classNames()}>
 										<input id="sales-4" name="sales[]" value="top-sellers" type="checkbox"
-											className="flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60"/>
-										<label for="sales-4" className="ml-3 min-w-0 flex-1 text-tertiary/60"> Top
+											className={"flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60".classNames()}/>
+										<label for="sales-4" className={"ml-3 min-w-0 flex-1 text-tertiary/60".classNames()}> Top
 										Sellers
 										</label>
 									</div>
 								</div>
 								</fieldset>
 							</div>
-							<div className="border-b border-gray-200 py-6">
+							<div className={"border-b border-gray-200 py-6".classNames()}>
 								<fieldset>
-								<h3 className="-my-3 flow-root">
+								<h3 className={"-my-3 flow-root".classNames()}>
 									<button type="button"
-										className="py-3 bg-transparent w-full flex items-center justify-between text-sm text-gray-400 hover:text-gray-500"
+										className={"py-3 bg-transparent w-full flex items-center justify-between text-sm text-gray-400 hover:text-gray-500".classNames()}
 										aria-controls="filter-section-1" aria-expanded="false">
 										<legend className={"font-medium text-gray-900".classNames()}>Rating</legend>
 										<span className={"ml-6 flex items-center".classNames()}>
@@ -617,56 +617,56 @@ export function Catalog() {
 										</span>
 									</button>
 								</h3>
-								<div className="pt-6 space-y-6 sm:space-y-4">
-									<div className="flex items-center">
+								<div className={"pt-6 space-y-6 sm:space-y-4".classNames()}>
+									<div className={"flex items-center".classNames()}>
 										<input id="show-all" name="rating" type="radio" checked
-											className="focus:ring-tertiary/60 h-4 w-4 text-tertiary border-tertiary/30"/>
-										<label for="show-all" className="ml-3 block text-sm text-tertiary/70"> Show All
+											className={"focus:ring-tertiary/60 h-4 w-4 text-tertiary border-tertiary/30".classNames()}/>
+										<label for="show-all" className={"ml-3 block text-sm text-tertiary/70".classNames()}> Show All
 										</label>
 									</div>
-									<div className="flex items-center">
+									<div className={"flex items-center".classNames()}>
 										<input id="one-star-and-higher" name="rating" type="radio"
-											className="focus:ring-tertiary/60 h-4 w-4 text-tertiary border-tertiary/30"/>
+											className={"focus:ring-tertiary/60 h-4 w-4 text-tertiary border-tertiary/30".classNames()}/>
 										<label for="one-star-and-higher"
-											className="ml-3 block text-sm text-tertiary/70"> 1
+											className={"ml-3 block text-sm text-tertiary/70".classNames()}> 1
 										Star and Higher</label>
 									</div>
-									<div className="flex items-center">
+									<div className={"flex items-center".classNames()}>
 										<input id="two-star-and-higher" name="rating" type="radio"
-											className="focus:ring-tertiary/60 h-4 w-4 text-tertiary border-tertiary/30"/>
+											className={"focus:ring-tertiary/60 h-4 w-4 text-tertiary border-tertiary/30".classNames()}/>
 										<label for="two-star-and-higher"
-											className="ml-3 block text-sm text-tertiary/70"> 2
+											className={"ml-3 block text-sm text-tertiary/70".classNames()}> 2
 										Star and Higher</label>
 									</div>
-									<div className="flex items-center">
+									<div className={"flex items-center".classNames()}>
 										<input id="three-star-and-higher" name="rating" type="radio"
-											className="focus:ring-tertiary/60 h-4 w-4 text-tertiary border-tertiary/30"/>
+											className={"focus:ring-tertiary/60 h-4 w-4 text-tertiary border-tertiary/30".classNames()}/>
 										<label for="three-star-and-higher"
-											className="ml-3 block text-sm text-tertiary/70"> 3
+											className={"ml-3 block text-sm text-tertiary/70".classNames()}> 3
 										Star and Higher</label>
 									</div>
-									<div className="flex items-center">
+									<div className={"flex items-center".classNames()}>
 										<input id="four-star-and-higher" name="rating" type="radio"
-											className="focus:ring-tertiary/60 h-4 w-4 text-tertiary border-tertiary/30"/>
+											className={"focus:ring-tertiary/60 h-4 w-4 text-tertiary border-tertiary/30".classNames()}/>
 										<label for="four-star-and-higher"
-											className="ml-3 block text-sm text-tertiary/70"> 4
+											className={"ml-3 block text-sm text-tertiary/70".classNames()}> 4
 										Star and Higher</label>
 									</div>
-									<div className="flex items-center">
+									<div className={"flex items-center".classNames()}>
 										<input id="five-star-and-higher" name="rating" type="radio"
-											className="focus:ring-tertiary/60 h-4 w-4 text-tertiary border-tertiary/30"/>
+											className={"focus:ring-tertiary/60 h-4 w-4 text-tertiary border-tertiary/30".classNames()}/>
 										<label for="five-star-and-higher"
-											className="ml-3 block text-sm text-tertiary/70"> 5
+											className={"ml-3 block text-sm text-tertiary/70".classNames()}> 5
 										Star and Higher</label>
 									</div>
 								</div>
 								</fieldset>
 							</div>
-							<div className="border-b border-gray-200 py-6">
+							<div className={"border-b border-gray-200 py-6".classNames()}>
 								<fieldset>
-								<h3 className="-my-3 flow-root">
+								<h3 className={"-my-3 flow-root".classNames()}>
 									<button type="button"
-										className="py-3 bg-transparent w-full flex items-center justify-between text-sm text-gray-400 hover:text-gray-500"
+										className={"py-3 bg-transparent w-full flex items-center justify-between text-sm text-gray-400 hover:text-gray-500".classNames()}
 										aria-controls="filter-section-1" aria-expanded="false">
 										<legend className={"font-medium text-gray-900".classNames()}>Date Added</legend>
 										<span className={"ml-6 flex items-center".classNames()}>
@@ -685,35 +685,35 @@ export function Catalog() {
 										</span>
 									</button>
 								</h3>
-								<div className="pt-6 space-y-6 sm:pt-4 sm:space-y-4">
-									<div className="flex items-center">
+								<div className={"pt-6 space-y-6 sm:pt-4 sm:space-y-4".classNames()}>
+									<div className={"flex items-center".classNames()}>
 										<input id="any-date" name="date-added" type="radio" checked
-											className="focus:ring-tertiary/60 h-4 w-4 text-tertiary border-tertiary/30"/>
-										<label for="any-date" className="ml-3 block text-sm text-tertiary/70"> Any date
+											className={"focus:ring-tertiary/60 h-4 w-4 text-tertiary border-tertiary/30".classNames()}/>
+										<label for="any-date" className={"ml-3 block text-sm text-tertiary/70".classNames()}> Any date
 										</label>
 									</div>
-									<div className="flex items-center">
+									<div className={"flex items-center".classNames()}>
 										<input id="in-the-last-year" name="date-added" type="radio"
-											className="focus:ring-tertiary/60 h-4 w-4 text-tertiary border-tertiary/30"/>
-										<label for="in-the-last-year" className="ml-3 block text-sm text-tertiary/70">
+											className={"focus:ring-tertiary/60 h-4 w-4 text-tertiary border-tertiary/30".classNames()}/>
+										<label for="in-the-last-year" className={"ml-3 block text-sm text-tertiary/70".classNames()}>
 										In the
 										last year</label>
 									</div>
-									<div className="flex items-center">
+									<div className={"flex items-center".classNames()}>
 										<input id="in-the-last-month" name="date-added" type="radio"
-											className="focus:ring-tertiary/60 h-4 w-4 text-tertiary border-tertiary/30"/>
-										<label for="in-the-last-month" className="ml-3 block text-sm text-tertiary/70">
+											className={"focus:ring-tertiary/60 h-4 w-4 text-tertiary border-tertiary/30".classNames()}/>
+										<label for="in-the-last-month" className={"ml-3 block text-sm text-tertiary/70".classNames()}>
 										In the
 										last month</label>
 									</div>
 								</div>
 								</fieldset>
 							</div>
-							<div className="border-b border-gray-200 py-6">
+							<div className={"border-b border-gray-200 py-6".classNames()}>
 								<fieldset>
-								<h3 className="-my-3 flow-root">
+								<h3 className={"-my-3 flow-root".classNames()}>
 									<button type="button"
-										className="py-3 bg-transparent w-full flex items-center justify-between text-sm text-gray-400 hover:text-gray-500"
+										className={"py-3 bg-transparent w-full flex items-center justify-between text-sm text-gray-400 hover:text-gray-500".classNames()}
 										aria-controls="filter-section-1" aria-expanded="false">
 										<legend className={"font-medium text-gray-900".classNames()}> On Sale </legend>
 										<span className={"ml-6 flex items-center".classNames()}>
@@ -732,222 +732,222 @@ export function Catalog() {
 										</span>
 									</button>
 								</h3>
-								<div className="pt-6 space-y-6 sm:space-y-4">
-									<div className="flex items-center text-base sm:text-sm">
+								<div className={"pt-6 space-y-6 sm:space-y-4".classNames()}>
+									<div className={"flex items-center text-base sm:text-sm".classNames()}>
 										<input id="on-sale-0" name="on-sale[]" value="true" type="checkbox"
-											className="flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60"/>
-										<label for="on-sale-0" className="ml-3 min-w-0 flex-1 text-tertiary/60"> Yes
+											className={"flex-shrink-0 h-4 w-4 border-tertiary/30 rounded text-tertiary focus:ring-tertiary/60".classNames()}/>
+										<label for="on-sale-0" className={"ml-3 min-w-0 flex-1 text-tertiary/60".classNames()}> Yes
 										</label>
 									</div>
 								</div>
 								</fieldset>
 							</div>
 						</form>
-						<div className="lg:col-span-3">
-							<div className="border-4 border-dashed border-gray-200 rounded-lg h-96 lg:h-full p-10">
-								<div className="grid md:grid-cols-2 xl:grid-cols-2 gap-10 place-items-center">
+						<div className={"lg:col-span-3".classNames()}>
+							<div className={"border-4 border-dashed border-gray-200 rounded-lg h-96 lg:h-full p-10".classNames()}>
+								<div className={"grid md:grid-cols-2 xl:grid-cols-2 gap-10 place-items-center".classNames()}>
 								<div
-									className=" h-max bg-brand-white hover:shadow-xl hover:shadow-tertiary/30 max-w-sm p-6 rounded-xl space-y-4 flex flex-col justify-between">
+									className={" h-max bg-brand-white hover:shadow-xl hover:shadow-tertiary/30 max-w-sm p-6 rounded-xl space-y-4 flex flex-col justify-between".classNames()}>
 									<div >
-										<img src="https://img.logoipsum.com/285.svg" className="w-36 h-10" alt="" />
+										<img src="https://img.logoipsum.com/285.svg" className={"w-36 h-10".classNames()} alt="" />
 									</div>
-									<div className="flex w-full justify-between">
-										<div className="flex flex-col justify-between">
-											<span className="font-bold text-lg">Company Name</span>
-											<pre className="italic text-xs">by "Person Name"</pre>
+									<div className={"flex w-full justify-between".classNames()}>
+										<div className={"flex flex-col justify-between".classNames()}>
+											<span className={"font-bold text-lg".classNames()}>Company Name</span>
+											<pre className={"italic text-xs".classNames()}>by "Person Name"</pre>
 										</div>
 										<div
-											className="flex items-center gap-5 border border-dashed border-tertiary rounded-lg h-max py-1 px-4">
-											<span className="text-xs">Price</span>
-											<span className=" font-bold">$20</span>
+											className={"flex items-center gap-5 border border-dashed border-tertiary rounded-lg h-max py-1 px-4".classNames()}>
+											<span className={"text-xs".classNames()}>Price</span>
+											<span className={" font-bold".classNames()}>$20</span>
 										</div>
 									</div>
-									<div className="text-lg italic h-12">SUB TAG LINE, that has some features. some
+									<div className={"text-lg italic h-12".classNames()}>SUB TAG LINE, that has some features. some
 										features!
 									</div>
-									<div className="italic">
-										<span className="font-bold ">Software Version:</span>
+									<div className={"italic".classNames()}>
+										<span className={"font-bold ".classNames()}>Software Version:</span>
 										<span >App 4.9.x - 5.2.x, other</span>
 									</div>
-									<div className="space-y-2">
-										<div className="font-bold">File Type Included:</div>
-										<div className="flex flex-wrap gap-4">
-											<div className="bg-primary w-max rounded-md text-sm px-3">HTML</div>
-											<div className="bg-primary w-max rounded-md text-sm px-3">HTML</div>
-											<div className="bg-primary w-max rounded-md text-sm px-3">HTML</div>
-											<div className="bg-primary w-max rounded-md text-sm px-3">HTML</div>
+									<div className={"space-y-2".classNames()}>
+										<div className={"font-bold".classNames()}>File Type Included:</div>
+										<div className={"flex flex-wrap gap-4".classNames()}>
+											<div className={"bg-primary w-max rounded-md text-sm px-3".classNames()}>HTML</div>
+											<div className={"bg-primary w-max rounded-md text-sm px-3".classNames()}>HTML</div>
+											<div className={"bg-primary w-max rounded-md text-sm px-3".classNames()}>HTML</div>
+											<div className={"bg-primary w-max rounded-md text-sm px-3".classNames()}>HTML</div>
 										</div>
 									</div>
-									<div className="flex gap-3 pt-3">
+									<div className={"flex gap-3 pt-3".classNames()}>
 										<button
-											className="hover:shadow-lg bg-tertiary text-brand-white px-6 py-2 rounded-md font-bold">Buy
+											className={"hover:shadow-lg bg-tertiary text-brand-white px-6 py-2 rounded-md font-bold".classNames()}>Buy
 										Now</button>
 										<button
-											className="hover:shadow-lg bg-primary border-2 border-tertiary px-6 py-2 rounded-md  font-bold">Live
+											className={"hover:shadow-lg bg-primary border-2 border-tertiary px-6 py-2 rounded-md  font-bold".classNames()}>Live
 										Preview</button>
 									</div>
 								</div>
 								<div
-									className="bg-brand-white hover:shadow-xl hover:shadow-tertiary/30 max-w-sm p-6 rounded-xl space-y-4 flex flex-col justify-between">
+									className={"bg-brand-white hover:shadow-xl hover:shadow-tertiary/30 max-w-sm p-6 rounded-xl space-y-4 flex flex-col justify-between".classNames()}>
 									<div >
-										<img src="https://img.logoipsum.com/285.svg" className="w-36 h-10" alt="" />
+										<img src="https://img.logoipsum.com/285.svg" className={"w-36 h-10".classNames()} alt="" />
 									</div>
-									<div className="flex w-full justify-between">
-										<div className="flex flex-col justify-between">
-											<span className="font-bold text-lg">Company Name</span>
-											<pre className="italic text-xs">by "Person Name"</pre>
+									<div className={"flex w-full justify-between".classNames()}>
+										<div className={"flex flex-col justify-between".classNames()}>
+											<span className={"font-bold text-lg".classNames()}>Company Name</span>
+											<pre className={"italic text-xs".classNames()}>by "Person Name"</pre>
 										</div>
 										<div
-											className="flex items-center gap-5 border border-dashed border-tertiary rounded-lg h-max py-1 px-4">
-											<span className="text-xs">Price</span>
-											<span className=" font-bold">$20</span>
+											className={"flex items-center gap-5 border border-dashed border-tertiary rounded-lg h-max py-1 px-4".classNames()}>
+											<span className={"text-xs".classNames()}>Price</span>
+											<span className={" font-bold".classNames()}>$20</span>
 										</div>
 									</div>
-									<div className="text-lg italic h-12">SUB TAG LINE, that has some features. some
+									<div className={"text-lg italic h-12".classNames()}>SUB TAG LINE, that has some features. some
 										features!
 									</div>
-									<div className="italic">
-										<span className="font-bold ">Software Version:</span>
+									<div className={"italic".classNames()}>
+										<span className={"font-bold ".classNames()}>Software Version:</span>
 										<span >App 4.9.x - 5.2.x, other</span>
 									</div>
-									<div className="space-y-2">
-										<div className="font-bold">File Type Included:</div>
-										<div className="flex flex-wrap gap-4">
-											<div className="bg-primary w-max rounded-md text-sm px-3">HTML</div>
-											<div className="bg-primary w-max rounded-md text-sm px-3">HTML</div>
-											<div className="bg-primary w-max rounded-md text-sm px-3">HTML</div>
-											<div className="bg-primary w-max rounded-md text-sm px-3">HTML</div>
+									<div className={"space-y-2".classNames()}>
+										<div className={"font-bold".classNames()}>File Type Included:</div>
+										<div className={"flex flex-wrap gap-4".classNames()}>
+											<div className={"bg-primary w-max rounded-md text-sm px-3".classNames()}>HTML</div>
+											<div className={"bg-primary w-max rounded-md text-sm px-3".classNames()}>HTML</div>
+											<div className={"bg-primary w-max rounded-md text-sm px-3".classNames()}>HTML</div>
+											<div className={"bg-primary w-max rounded-md text-sm px-3".classNames()}>HTML</div>
 										</div>
 									</div>
-									<div className="flex gap-3 pt-3">
+									<div className={"flex gap-3 pt-3".classNames()}>
 										<button
-											className="hover:shadow-lg bg-tertiary text-brand-white px-6 py-2 rounded-md font-bold">Buy
+											className={"hover:shadow-lg bg-tertiary text-brand-white px-6 py-2 rounded-md font-bold".classNames()}>Buy
 										Now</button>
 										<button
-											className="hover:shadow-lg bg-primary border-2 border-tertiary px-6 py-2 rounded-md  font-bold">Live
+											className={"hover:shadow-lg bg-primary border-2 border-tertiary px-6 py-2 rounded-md  font-bold".classNames()}>Live
 										Preview</button>
 									</div>
 								</div>
 								<div
-									className="bg-brand-white hover:shadow-xl hover:shadow-tertiary/30 max-w-sm p-6 rounded-xl space-y-4 flex flex-col justify-between">
+									className={"bg-brand-white hover:shadow-xl hover:shadow-tertiary/30 max-w-sm p-6 rounded-xl space-y-4 flex flex-col justify-between".classNames()}>
 									<div >
-										<img src="https://img.logoipsum.com/285.svg" className="w-36 h-10" alt="" />
+										<img src="https://img.logoipsum.com/285.svg" className={"w-36 h-10".classNames()} alt="" />
 									</div>
-									<div className="flex w-full justify-between">
-										<div className="flex flex-col justify-between">
-											<span className="font-bold text-lg">Company Name</span>
-											<pre className="italic text-xs">by "Person Name"</pre>
+									<div className={"flex w-full justify-between".classNames()}>
+										<div className={"flex flex-col justify-between".classNames()}>
+											<span className={"font-bold text-lg".classNames()}>Company Name</span>
+											<pre className={"italic text-xs".classNames()}>by "Person Name"</pre>
 										</div>
 										<div
-											className="flex items-center gap-5 border border-dashed border-tertiary rounded-lg h-max py-1 px-4">
-											<span className="text-xs">Price</span>
-											<span className=" font-bold">$20</span>
+											className={"flex items-center gap-5 border border-dashed border-tertiary rounded-lg h-max py-1 px-4".classNames()}>
+											<span className={"text-xs".classNames()}>Price</span>
+											<span className={" font-bold".classNames()}>$20</span>
 										</div>
 									</div>
-									<div className="text-lg italic h-12">SUB TAG LINE, that has some features. some
+									<div className={"text-lg italic h-12".classNames()}>SUB TAG LINE, that has some features. some
 										features!
 									</div>
-									<div className="italic">
-										<span className="font-bold ">Software Version:</span>
+									<div className={"italic".classNames()}>
+										<span className={"font-bold ".classNames()}>Software Version:</span>
 										<span >App 4.9.x - 5.2.x, other</span>
 									</div>
-									<div className="space-y-2">
-										<div className="font-bold">File Type Included:</div>
-										<div className="flex flex-wrap gap-4">
-											<div className="bg-primary w-max rounded-md text-sm px-3">HTML</div>
-											<div className="bg-primary w-max rounded-md text-sm px-3">HTML</div>
-											<div className="bg-primary w-max rounded-md text-sm px-3">HTML</div>
-											<div className="bg-primary w-max rounded-md text-sm px-3">HTML</div>
+									<div className={"space-y-2".classNames()}>
+										<div className={"font-bold".classNames()}>File Type Included:</div>
+										<div className={"flex flex-wrap gap-4".classNames()}>
+											<div className={"bg-primary w-max rounded-md text-sm px-3".classNames()}>HTML</div>
+											<div className={"bg-primary w-max rounded-md text-sm px-3".classNames()}>HTML</div>
+											<div className={"bg-primary w-max rounded-md text-sm px-3".classNames()}>HTML</div>
+											<div className={"bg-primary w-max rounded-md text-sm px-3".classNames()}>HTML</div>
 										</div>
 									</div>
-									<div className="flex gap-3 pt-3">
+									<div className={"flex gap-3 pt-3".classNames()}>
 										<button
-											className="hover:shadow-lg bg-tertiary text-brand-white px-6 py-2 rounded-md font-bold">Buy
+											className={"hover:shadow-lg bg-tertiary text-brand-white px-6 py-2 rounded-md font-bold".classNames()}>Buy
 										Now</button>
 										<button
-											className="hover:shadow-lg bg-primary border-2 border-tertiary px-6 py-2 rounded-md  font-bold">Live
+											className={"hover:shadow-lg bg-primary border-2 border-tertiary px-6 py-2 rounded-md  font-bold".classNames()}>Live
 										Preview</button>
 									</div>
 								</div>
 								<div
-									className="bg-brand-white hover:shadow-xl hover:shadow-tertiary/30 max-w-sm p-6 rounded-xl space-y-4 flex flex-col justify-between">
+									className={"bg-brand-white hover:shadow-xl hover:shadow-tertiary/30 max-w-sm p-6 rounded-xl space-y-4 flex flex-col justify-between".classNames()}>
 									<div >
-										<img src="https://img.logoipsum.com/285.svg" className="w-36 h-10" alt="" />
+										<img src="https://img.logoipsum.com/285.svg" className={"w-36 h-10".classNames()} alt="" />
 									</div>
-									<div className="flex w-full justify-between">
-										<div className="flex flex-col justify-between">
-											<span className="font-bold text-lg">Company Name</span>
-											<pre className="italic text-xs">by "Person Name"</pre>
+									<div className={"flex w-full justify-between".classNames()}>
+										<div className={"flex flex-col justify-between".classNames()}>
+											<span className={"font-bold text-lg".classNames()}>Company Name</span>
+											<pre className={"italic text-xs".classNames()}>by "Person Name"</pre>
 										</div>
 										<div
-											className="flex items-center gap-5 border border-dashed border-tertiary rounded-lg h-max py-1 px-4">
-											<span className="text-xs">Price</span>
-											<span className=" font-bold">$20</span>
+											className={"flex items-center gap-5 border border-dashed border-tertiary rounded-lg h-max py-1 px-4".classNames()}>
+											<span className={"text-xs".classNames()}>Price</span>
+											<span className={" font-bold".classNames()}>$20</span>
 										</div>
 									</div>
-									<div className="text-lg italic h-12">SUB TAG LINE, that has some features. some
+									<div className={"text-lg italic h-12".classNames()}>SUB TAG LINE, that has some features. some
 										features!
 									</div>
-									<div className="italic">
-										<span className="font-bold ">Software Version:</span>
+									<div className={"italic".classNames()}>
+										<span className={"font-bold ".classNames()}>Software Version:</span>
 										<span >App 4.9.x - 5.2.x, other</span>
 									</div>
-									<div className="space-y-2">
-										<div className="font-bold">File Type Included:</div>
-										<div className="flex flex-wrap gap-4">
-											<div className="bg-primary w-max rounded-md text-sm px-3">HTML</div>
-											<div className="bg-primary w-max rounded-md text-sm px-3">HTML</div>
-											<div className="bg-primary w-max rounded-md text-sm px-3">HTML</div>
-											<div className="bg-primary w-max rounded-md text-sm px-3">HTML</div>
+									<div className={"space-y-2".classNames()}>
+										<div className={"font-bold".classNames()}>File Type Included:</div>
+										<div className={"flex flex-wrap gap-4".classNames()}>
+											<div className={"bg-primary w-max rounded-md text-sm px-3".classNames()}>HTML</div>
+											<div className={"bg-primary w-max rounded-md text-sm px-3".classNames()}>HTML</div>
+											<div className={"bg-primary w-max rounded-md text-sm px-3".classNames()}>HTML</div>
+											<div className={"bg-primary w-max rounded-md text-sm px-3".classNames()}>HTML</div>
 										</div>
 									</div>
-									<div className="flex gap-3 pt-3">
+									<div className={"flex gap-3 pt-3".classNames()}>
 										<button
-											className="hover:shadow-lg bg-tertiary text-brand-white px-6 py-2 rounded-md font-bold">Buy
+											className={"hover:shadow-lg bg-tertiary text-brand-white px-6 py-2 rounded-md font-bold".classNames()}>Buy
 										Now</button>
 										<button
-											className="hover:shadow-lg bg-primary border-2 border-tertiary px-6 py-2 rounded-md  font-bold">Live
+											className={"hover:shadow-lg bg-primary border-2 border-tertiary px-6 py-2 rounded-md  font-bold".classNames()}>Live
 										Preview</button>
 									</div>
 								</div>
 								<div
-									className="bg-brand-white hover:shadow-xl hover:shadow-tertiary/30 max-w-sm p-6 rounded-xl space-y-4 flex flex-col justify-between">
+									className={"bg-brand-white hover:shadow-xl hover:shadow-tertiary/30 max-w-sm p-6 rounded-xl space-y-4 flex flex-col justify-between".classNames()}>
 									<div >
-										<img src="https://img.logoipsum.com/285.svg" className="w-36 h-10" alt="" />
+										<img src="https://img.logoipsum.com/285.svg" className={"w-36 h-10".classNames()} alt="" />
 									</div>
-									<div className="flex w-full justify-between">
-										<div className="flex flex-col justify-between">
-											<span className="font-bold text-lg">Company Name</span>
-											<pre className="italic text-xs">by "Person Name"</pre>
+									<div className={"flex w-full justify-between".classNames()}>
+										<div className={"flex flex-col justify-between".classNames()}>
+											<span className={"font-bold text-lg".classNames()}>Company Name</span>
+											<pre className={"italic text-xs".classNames()}>by "Person Name"</pre>
 										</div>
 										<div
-											className="flex items-center gap-5 border border-dashed border-tertiary rounded-lg h-max py-1 px-4">
-											<span className="text-xs">Price</span>
-											<span className=" font-bold">$20</span>
+											className={"flex items-center gap-5 border border-dashed border-tertiary rounded-lg h-max py-1 px-4".classNames()}>
+											<span className={"text-xs".classNames()}>Price</span>
+											<span className={" font-bold".classNames()}>$20</span>
 										</div>
 									</div>
-									<div className="text-lg italic h-12">SUB TAG LINE, that has some features. some
+									<div className={"text-lg italic h-12".classNames()}>SUB TAG LINE, that has some features. some
 										features!
 									</div>
-									<div className="italic">
-										<span className="font-bold ">Software Version:</span>
+									<div className={"italic".classNames()}>
+										<span className={"font-bold ".classNames()}>Software Version:</span>
 										<span >App 4.9.x - 5.2.x, other</span>
 									</div>
-									<div className="space-y-2">
-										<div className="font-bold">File Type Included:</div>
-										<div className="flex flex-wrap gap-4">
-											<div className="bg-primary w-max rounded-md text-sm px-3">HTML</div>
-											<div className="bg-primary w-max rounded-md text-sm px-3">HTML</div>
-											<div className="bg-primary w-max rounded-md text-sm px-3">HTML</div>
-											<div className="bg-primary w-max rounded-md text-sm px-3">HTML</div>
+									<div className={"space-y-2".classNames()}>
+										<div className={"font-bold".classNames()}>File Type Included:</div>
+										<div className={"flex flex-wrap gap-4".classNames()}>
+											<div className={"bg-primary w-max rounded-md text-sm px-3".classNames()}>HTML</div>
+											<div className={"bg-primary w-max rounded-md text-sm px-3".classNames()}>HTML</div>
+											<div className={"bg-primary w-max rounded-md text-sm px-3".classNames()}>HTML</div>
+											<div className={"bg-primary w-max rounded-md text-sm px-3".classNames()}>HTML</div>
 										</div>
 									</div>
-									<div className="flex gap-3 pt-3">
+									<div className={"flex gap-3 pt-3".classNames()}>
 										<button
-											className="hover:shadow-lg bg-tertiary text-brand-white px-6 py-2 rounded-md font-bold">Buy
+											className={"hover:shadow-lg bg-tertiary text-brand-white px-6 py-2 rounded-md font-bold".classNames()}>Buy
 										Now</button>
 										<button
-											className="hover:shadow-lg bg-primary border-2 border-tertiary px-6 py-2 rounded-md  font-bold">Live
+											className={"hover:shadow-lg bg-primary border-2 border-tertiary px-6 py-2 rounded-md  font-bold".classNames()}>Live
 										Preview</button>
 									</div>
 								</div>

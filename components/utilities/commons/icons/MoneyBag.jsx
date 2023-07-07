@@ -5,7 +5,7 @@ const MoneyBagIcon = (props) => (
     width={800}
     height={800}
     aria-hidden="true"
-    className="iconify iconify--emojione-monotone"
+    className={"iconify iconify--emojione-monotone".classNames()}
     viewBox="0 0 64 64"
     {...props}
   >

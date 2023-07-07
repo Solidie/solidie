@@ -6,7 +6,7 @@ function ReleaseManagment() {
       xmlns="http://www.w3.org/2000/svg"
       width="20"
       height="20"
-      className="cursor-pointer"
+      className={"cursor-pointer".classNames()}
       viewBox="0 0 18 18"
     >
       <path

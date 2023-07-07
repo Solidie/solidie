@@ -25,7 +25,7 @@ const AlertDialog = ({ children, btnColor }) => {
           >
             <AlertDialogPrimitive.Overlay
               forceMount
-              className="fixed inset-0 z-20 bg-black/50"
+              className={"fixed inset-0 z-20 bg-black/50".classNames()}
             />
           </Transition.Child>
           <Transition.Child
@@ -47,14 +47,14 @@ const AlertDialog = ({ children, btnColor }) => {
                 `focus:outline-none focus-visible:ring ${styles["focus-visible:ring-color-500"]} focus-visible:ring-opacity-75`
               )}
             >
-              <AlertDialogPrimitive.Title className=" font-medium text-gray-900 dark:text-gray-100">
+              <AlertDialogPrimitive.Title className={" font-medium text-gray-900 dark:text-gray-100".classNames()}>
                 Are you absolutely sure?
               </AlertDialogPrimitive.Title>
-              <AlertDialogPrimitive.Description className="mt-2 text-sm font-normal text-gray-700 dark:text-gray-400">
+              <AlertDialogPrimitive.Description className={"mt-2 text-sm font-normal text-gray-700 dark:text-gray-400".classNames()}>
                 This action cannot be undone. This will permanently delete your
                 account and remove your data from our servers.
               </AlertDialogPrimitive.Description>
-              <div className="mt-4 flex justify-end space-x-2">
+              <div className={"mt-4 flex justify-end space-x-2".classNames()}>
                 <AlertDialogPrimitive.Cancel
                   className={clsx(
                     "inline-flex select-none justify-center rounded-md px-4 py-2 text-sm font-medium",
