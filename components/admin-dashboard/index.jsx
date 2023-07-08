@@ -8,6 +8,10 @@ import { MountPoint } from '../utilities/mountpoint.jsx';
 window.addEventListener('DOMContentLoaded', ()=>{
 	let dashboard = document.getElementById('Solidie_AdminSettings');
 	if ( dashboard ) {
-		ReactDOM.createRoot( dashboard ).render( <MountPoint> <SettingPage {...getElementDataSet(dashboard)}/> </MountPoint>);
+		ReactDOM.createRoot( dashboard ).render( 
+			<MountPoint element={dashboard}>
+				<SettingPage {...getElementDataSet(dashboard)}/>
+			</MountPoint>
+		);
 	}
 });
