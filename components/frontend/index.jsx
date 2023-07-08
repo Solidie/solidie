@@ -12,7 +12,7 @@ function Singular() {
 const single = document.getElementById('Solidie_Single_Content');
 if(single) {
 	ReactDOM.createRoot(single).render(
-		<MountPoint>
+		<MountPoint element={single}>
 			<Singular {...getElementDataSet(single)} />
 		</MountPoint>
 	);
@@ -21,7 +21,7 @@ if(single) {
 const catalog = document.getElementById('Solidie_Catalog');
 if(catalog){
 	ReactDOM.createRoot(catalog).render(
-		<MountPoint>
+		<MountPoint element={catalog}>
 			<Catalog {...getElementDataSet(Catalog)} />
 		</MountPoint>
 	);
