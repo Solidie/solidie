@@ -14,7 +14,7 @@ var patch_codes = `
 }
 `;
 
-var tw_path = path.resolve( __dirname, '../components/libraries/tailwind/build.module.scss' );
+var tw_path = path.resolve( __dirname, '../components/sass/tailwind/build.scss' );
 var tw_codes = patch_codes + fs.readFileSync( tw_path ).toString();
 
 fs.writeFileSync( tw_path, tw_codes );

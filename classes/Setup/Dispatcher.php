@@ -17,8 +17,8 @@ class Dispatcher {
 		'save_admin_settings',
 		'create_store',
 		'create_or_update_content',
-		'get_content_release_history',
-		'push_version_release'
+		'fetch_releases',
+		'version_release'
 	);
 
 	function __construct() {
@@ -127,7 +127,7 @@ class Dispatcher {
 	 *
 	 * @return void
 	 */
-	private function get_content_release_history() {
+	private function fetch_releases() {
 		$releases = ContentModel::getReleases( (int) $_POST['content_id'] );
 		wp_send_json_success( array( 'releases' => $releases ) );
 	}
@@ -137,7 +137,7 @@ class Dispatcher {
 	 *
 	 * @return void
 	 */
-	private function push_version_release() {
+	private function version_release() {
 		// Check if main three parameter received
 		if ( empty( $_POST['version'] ) || empty( $_POST['changelog'] ) || empty( $_POST['content_id'] ) ) {
 			wp_send_json_error( array( 'message' => _x( 'Required release data missing!', 'solidie', 'solidie' ) ) );

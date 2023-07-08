@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { getElementDataSet } from '../utilities/helpers.jsx';
 import { SignleApp } from './single-app/index.jsx';
 import { Catalog } from './catalog/index.jsx';
-import { MountPoint } from '../utilities/mountpoint.jsx';
+import { MountPoint } from '../utilities/templates.jsx';
 
 function Singular() {
 	return <SignleApp/>

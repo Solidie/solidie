@@ -6,7 +6,7 @@ import { getElementDataSet } from "../utilities/helpers.jsx";
 
 import "./styles/index.css";
 import { ContextFrontendDashboard } from "../utilities/contexts.jsx";
-import { MountPoint } from "../utilities/mountpoint.jsx";
+import { MountPoint } from "../utilities/templates.jsx";
 
 import {
   Customers,
@@ -26,6 +26,7 @@ import Topbar from "./navigation/Topbar.jsx";
 import Sidebar from "./navigation/Sidebar.jsx";
 import { Scrollbar } from "../utilities/commons";
 import { cn } from "../utilities/helpers.jsx";
+import { VersionReleaseForm } from "./pages/inventory/segments/ApplicationVersionForm.jsx";
 
 function DashboardLayout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -68,8 +69,9 @@ function Dashboard(props) {
 					<Route path={getDashboardPath('my-account')} element={<MyAccount />} />
 
 					<Route path={getDashboardPath("store/:store_slug/inventory")} element={<Inventory />} />
-					<Route path={getDashboardPath("store/:store_slug/inventory/:id/release-management")} element={<InventoryReleaseManagment />} />
-					<Route path={getDashboardPath("store/:store_slug/inventory/:id/edit")} element={<InventoryEditApplication />} />
+					<Route path={getDashboardPath("store/:store_slug/inventory/:content_id/release-management")} element={<InventoryReleaseManagment />} />
+					<Route path={getDashboardPath("store/:store_slug/inventory/:content_id/release-management/new")} element={<VersionReleaseForm />} />
+					<Route path={getDashboardPath("store/:store_slug/inventory/:content_id/edit/:release_id")} element={<InventoryEditApplication />} />
 					<Route path={getDashboardPath("store/:store_slug/inventory/add")} element={<InventoryAddApplication />} />
 					<Route path={getDashboardPath("store/:store_slug/sales")} element={<Sales />} />
 					<Route path={getDashboardPath("store/:store_slug/customers")} element={<Customers />} />

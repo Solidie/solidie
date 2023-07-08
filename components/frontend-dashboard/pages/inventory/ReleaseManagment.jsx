@@ -1,6 +1,5 @@
 import React from "react";
-import ReleaseManagmentTable from "./segments/ReleaseManagementTable.jsx";
-import ApplicationVersionForm from "./segments/ApplicationVersionForm.jsx";
+import {ReleaseManagementTable} from "./segments/ReleaseManagementTable.jsx";
 import { Link } from "react-router-dom";
 import { ArrowLeftIcon } from "@radix-ui/react-icons";
 import { getDashboardPath } from "../../../utilities/helpers.jsx";
@@ -19,11 +18,11 @@ const InventoryReleaseManagment = (params) => {
 			
 			<div className={"flex justify-between items-center w-full".classNames()}>
 				<h1 className={"text-3xl font-bold".classNames()}>Releases</h1>
-				<Link to="add" ><div className='Button flex'>New Release <PlusIcon className={"h-4 w-4".classNames()} /></div></Link>
+				<Link to="new" ><div className='Button flex'>New Release <PlusIcon className={"h-4 w-4".classNames()} /></div></Link>
 			</div>
 		</div>
 
-		<ReleaseManagmentTable />
+		<ReleaseManagementTable />
     </div>
 };
 

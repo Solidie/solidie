@@ -1,0 +1,42 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  html {
+    @apply theme-light;
+  }
+  .Button {
+    @apply bg-tertiary text-primary font-bold text-sm px-8 py-3 h-max sm:w-max rounded-full shadow-md shadow-tertiary/60 active:animate-ping active:animate-bounce;
+  }
+  .Label {
+    @apply text-xs font-bold text-tertiary uppercase;
+  }
+  .FieldMessage {
+    @apply text-sm font-bold text-red-400;
+  }
+  .Input {
+    @apply transition-all delay-150 !border-2 !border-transparent font-bold !bg-primary !rounded-full px-4 py-3 text-sm;
+  }
+  .Input:hover {
+    @apply !border-tertiary !shadow-md !shadow-tertiary/30;
+  }
+  .Input:focus {
+    @apply !border-tertiary !shadow-lg !shadow-tertiary/60 !outline-none !ring-tertiary/30 !ring-2;
+  }
+  .Textarea {
+    @apply transition-all delay-150 !border-2 !font-bold !bg-primary !rounded-xl !px-4 !py-3 !text-sm hover:!outline-2 !outline-tertiary focus:!shadow-lg !shadow-tertiary;
+  }
+  .Textarea:hover {
+    @apply !border-tertiary !shadow-md !shadow-tertiary/30;
+  }
+  .Textarea:focus {
+    @apply !border-tertiary !shadow-lg !shadow-tertiary/60 !outline-none;
+  }
+  .MuiTablePagination-selectLabel {
+    @apply !font-black;
+  }
+}
+.ant-upload-list-item {
+  @apply transition-all delay-150 !rounded-full !mt-0 !px-4 !border-2 !border-dashed !border-tertiary/60 !bg-primary hover:!shadow-lg hover:!shadow-tertiary hover:!border-tertiary !shadow-tertiary/60;
+}

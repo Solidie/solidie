@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { getElementDataSet } from '../utilities/helpers.jsx';
 import { SettingPage } from './settings/settings.jsx';
-import { MountPoint } from '../utilities/mountpoint.jsx';
+import { MountPoint } from '../utilities/templates.jsx';
 
 
 window.addEventListener('DOMContentLoaded', ()=>{

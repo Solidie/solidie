@@ -4,7 +4,7 @@
 	"description": "",
 	"main": "index.js",
 	"scripts": {
-		"prepare": "npx tailwindcss build ./components/libraries/tailwind/core.scss -o ./components/libraries/tailwind/build.module.scss && node ./builders/prepare.js",
+		"prepare": "npx tailwindcss build ./components/sass/tailwind/core.scss -o ./components/sass/tailwind/build.scss && node ./builders/prepare.js",
 		"build": "npm run prepare && webpack --env=build --mode=production",
 		"build-dev": "npm run prepare && webpack --mode=development",
 		"watch": "npm run prepare && webpack --watch --mode=development",
