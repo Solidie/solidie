@@ -138,7 +138,17 @@ class Contents extends Main{
 	 * @return array
 	 */
 	public static function getReleases( int $content_id) {
-		return array();
+		global $wpdb;
+		$releases = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT * FROM " . self::table( 'releases' ) . " WHERE content_id=%d ORDER BY release_date DESC",
+				$content_id
+			)
+		);
+
+		// To Do: Assign download links
+
+		return $releases;
 	}
 
 	/**

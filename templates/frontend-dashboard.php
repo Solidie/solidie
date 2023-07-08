@@ -4,7 +4,7 @@
 		<?php wp_head(); ?>
 	</head>
 	<body>
-		<div id="Solidie_Dashboard" data-frontend-dashboard-data="<?php echo esc_attr( json_encode( $dashboard_data ) ); ?>"></div>
+		<div id="Solidie_Dashboard" class="h-full w-full" data-frontend-dashboard-data="<?php echo esc_attr( json_encode( $dashboard_data ) ); ?>"></div>
 		<?php wp_footer(); ?>
 	</body>
 </html>
