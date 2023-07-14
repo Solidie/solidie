@@ -80,12 +80,10 @@ const UploadProfileImage = React.forwardRef(({}, ref) => {
   useEffect(() => {
     if (fileList.length) {
       console.log(fileList[0].thumbUrl);
-      let preview = document.querySelector("img#userProfileIMG");
-      userProfileIMG;
       let reader = new FileReader();
 
       reader.onloadend = function () {
-        preview.src = reader.result;
+		// To Do: Show avatar instantly in the top bar or where user card is
       };
 
       if (fileList[0]?.originFileObj) {

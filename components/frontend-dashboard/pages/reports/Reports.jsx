@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useResizeDetector } from "react-resize-detector";
-import { ApexChart, BarChart } from "../../utilities/commons";
-import { MoneyBag, Wallet, WidthdrawBalance } from "../../utilities/commons/icons";
+import { ApexChart, BarChart } from "../../../utilities/commons";
+import { MoneyBag, Wallet, WidthdrawBalance } from "../../../utilities/commons/icons";
+
+import style from './style.module.scss';
 
 const Reports = () => {
   const [uniqueVistor, setUniqueVistor] = useState("Month");
@@ -33,7 +35,7 @@ const Reports = () => {
       </div>
       <div className={"text-tertiary grid md:grid-cols-2 lg:grid-cols-3 gap-5".classNames()}>
         <div className={"border border-tertiary/60 border-dashed rounded-md p-2 flex-grow".classNames()}>
-          <div className={"flex flex-col justify-between reports-green-card-gradient rounded-md h-28 w-full shadow-lg px-5 py-3".classNames()}>
+          <div className={"flex flex-col justify-between rounded-md h-28 w-full shadow-lg px-5 py-3".classNames() + ' ' + 'reports-green-card-gradient'.classNames(style)}>
             <div className={"font-bold".classNames()}>
               <div className={"text-xs".classNames()}>Current Available</div>
               <div className={"text-sm font-black".classNames()}>Balance to Withdraw</div>
@@ -45,7 +47,7 @@ const Reports = () => {
           </div>
         </div>
         <div className={"border border-tertiary/60 border-dashed rounded-md p-2 flex-grow".classNames()}>
-          <div className={"flex flex-col justify-between reports-blue-card-gradient rounded-md h-28 w-full shadow-lg  px-5 py-3".classNames()}>
+          <div className={"flex flex-col justify-between rounded-md h-28 w-full shadow-lg  px-5 py-3".classNames() + ' ' + 'reports-blue-card-gradient'.classNames(style)}>
             <div className={"font-bold".classNames()}>
               <div className={"text-sm font-black".classNames()}>Total Earning</div>
             </div>
@@ -56,7 +58,7 @@ const Reports = () => {
           </div>
         </div>
         <div className={"md:col-span-3 lg:col-span-1 border border-tertiary/60 border-dashed rounded-md p-2 flex-grow".classNames()}>
-          <div className={"flex flex-col justify-between reports-white-card-gradient rounded-md h-28 w-full shadow-lg  px-5 py-3".classNames()}>
+          <div className={"flex flex-col justify-between rounded-md h-28 w-full shadow-lg  px-5 py-3".classNames() + ' ' + 'reports-white-card-gradient'.classNames(style)}>
             <div className={"font-bold".classNames()}>
               <div className={"text-xs".classNames()}>Pending Earning To Be</div>
               <div className={"text-sm font-black".classNames()}>Available to Withdraw</div>

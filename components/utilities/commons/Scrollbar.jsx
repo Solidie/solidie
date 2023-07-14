@@ -9,7 +9,7 @@ const ScrollAreaDemo = ({
   return (
     <ScrollArea.Root
       className={
-        `ScrollAreaRoot w-full h-full min-h-max ${scrollAreaRootClassName ?? ""}` 
+        `ScrollAreaRoot w-full h-full min-h-max`.classNames(null, scrollAreaRootClassName ?? "")
       }
     >
       <ScrollArea.Viewport
