@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import style_library from '../sass/index.module.scss';
 
+console.log(style_library);
+
 export function MountPoint(props){
 	const [ready, setReady] = useState(false);
 
@@ -9,7 +11,30 @@ export function MountPoint(props){
 			if ( append_raw ) {
 				append_raw = ' ' + append_raw;
 			}
-			return this.split(' ').map(c=>c.trim()).filter(c=>c).map(c=>(style || style_library)[c] || c).join(' ') + append_raw;
+
+			let dump = '';
+
+			let cls = this.split(' '); 		// Split multiples by space
+			cls     = cls.map(c=>c.trim()); // Trim leading and trailing slashes
+			cls     = cls.filter(c=>c); 	// Remove empty strings
+
+			// Apply dynamic classes
+			cls = cls.map(c=>{
+				let class_name = (style || style_library)[c];
+
+				if ( ! class_name ) {
+					dump += ' ' + c;
+					// console.error('Orphan class/id: ' + c);
+				}
+
+				return class_name || c;
+			});
+
+			if ( dump ) {
+				console.error(dump);
+			}
+			
+			return cls.join(' ') + append_raw; // Join back to single string and include raw. Then return.
 		}
 
 		String.prototype.idNames = function(style, append_raw='') {
@@ -25,9 +50,4 @@ export function MountPoint(props){
 	}, []);
 
 	return ready ? props.children : null;
-}
-
-export function Anchor(props) {
-	let {href} = props;
-	
 }

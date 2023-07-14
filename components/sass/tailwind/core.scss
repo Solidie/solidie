@@ -3,6 +3,9 @@
 @tailwind utilities;
 
 @layer components {
+  #Solidie_Dashboard {
+    @apply h-full w-full;
+  }
   html {
     @apply theme-light;
   }
@@ -39,4 +42,10 @@
 }
 .ant-upload-list-item {
   @apply transition-all delay-150 !rounded-full !mt-0 !px-4 !border-2 !border-dashed !border-tertiary/60 !bg-primary hover:!shadow-lg hover:!shadow-tertiary hover:!border-tertiary !shadow-tertiary/60;
+}
+
+
+/* Some class not generating from TW. Write here. Maybe we can fix natively from TW later. */
+.bg-muted{
+	background-color: gray;
 }

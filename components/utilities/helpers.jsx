@@ -33,3 +33,5 @@ export const getDashboardPath=(rel_path, append_slash=true)=>{
 	const slash = append_slash ? (rel_path.indexOf( '/' ) === 0 ? '' : '/') : '';
 	return home_path + dashboard_slug + slash + rel_path;
 }
+
+export const goBack=()=>window.history.back();

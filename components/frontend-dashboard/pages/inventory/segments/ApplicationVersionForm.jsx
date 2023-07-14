@@ -3,6 +3,8 @@ import * as Form from "@radix-ui/react-form";
 import { Input, Textarea } from "../../../ui";
 import { request } from "../../../../utilities/request.jsx";
 import { useParams } from "react-router-dom";
+import { goBack } from "../../../../utilities/helpers.jsx";
+import { ArrowLeftIcon } from "@radix-ui/react-icons";
 
 export function VersionReleaseForm() {
 	const {content_id, release_id} = useParams();
@@ -30,6 +32,9 @@ export function VersionReleaseForm() {
 	}
 
   	return <div className={"z-20 flex flex-col gap-5".classNames()}>
+		<button onClick={goBack} className={"flex gap-2 justify-around items-center w-max bg-primary hover:bg-primary/70 focus:text-green-900 focus:outline-green-900 text-tertiary font-bold text-sm px-6 py-2 rounded-full shadow-xl active:animate-bounce shadow-primary border border-tertiary/5 cursor-pointer".classNames()}>
+			<ArrowLeftIcon /> Back
+		</button>
 		<Form.Root className={" bg-tertiary/20 -lightest-version p-4 rounded-2xl shadow-md flex flex-col gap-3".classNames()}>
 			<div className={"flex justify-between gap-4 flex-wrap sm:flex-nowrap w-full h-full".classNames()}>
 				<div className={"flex gap-4 flex-wrap w-full".classNames()}>

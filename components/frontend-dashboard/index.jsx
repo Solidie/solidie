@@ -4,7 +4,7 @@ import ReactDOM from "react-dom/client";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { getElementDataSet } from "../utilities/helpers.jsx";
 
-import "./styles/index.css";
+import './style.scss';
 import { ContextFrontendDashboard } from "../utilities/contexts.jsx";
 import { MountPoint } from "../utilities/templates.jsx";
 
@@ -16,7 +16,6 @@ import {
   Reports,
   Sales,
   Subscriptions,
-  InventoryReleaseManagment,
   InventoryEditApplication,
   InventoryAddApplication,
 } from "./pages";
@@ -27,6 +26,7 @@ import Sidebar from "./navigation/Sidebar.jsx";
 import { Scrollbar } from "../utilities/commons";
 import { cn } from "../utilities/helpers.jsx";
 import { VersionReleaseForm } from "./pages/inventory/segments/ApplicationVersionForm.jsx";
+import { InventoryReleaseManagment } from "./pages/inventory/segments/Releases.jsx";
 
 function DashboardLayout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(true);

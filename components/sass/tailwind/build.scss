@@ -1980,6 +1980,57 @@ select {
   }
 }
 
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--rounded-box, 1rem);
+}
+
+.card:focus {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+.card figure {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card.image-full {
+  display: grid;
+}
+
+.card.image-full:before {
+  position: relative;
+  content: "";
+  z-index: 10;
+  --tw-bg-opacity: 1;
+  background-color: hsl(var(--n) / var(--tw-bg-opacity));
+  opacity: 0.75;
+  border-radius: var(--rounded-box, 1rem);
+}
+
+.card.image-full:before,
+    .card.image-full > * {
+  grid-column-start: 1;
+  grid-row-start: 1;
+}
+
+.card.image-full > figure img {
+  height: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+
+.card.image-full > .card-body {
+  position: relative;
+  z-index: 20;
+  --tw-text-opacity: 1;
+  color: hsl(var(--nc) / var(--tw-text-opacity));
+}
+
 .checkbox {
   flex-shrink: 0;
   --chkbg: var(--bc);
@@ -2489,6 +2540,44 @@ select {
   100% {
     transform: scale(1);
   }
+}
+
+.card :where(figure:first-child) {
+  overflow: hidden;
+  border-start-start-radius: inherit;
+  border-start-end-radius: inherit;
+  border-end-start-radius: unset;
+  border-end-end-radius: unset;
+}
+
+.card :where(figure:last-child) {
+  overflow: hidden;
+  border-start-start-radius: unset;
+  border-start-end-radius: unset;
+  border-end-start-radius: inherit;
+  border-end-end-radius: inherit;
+}
+
+.card:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
+.card.bordered {
+  border-width: 1px;
+  --tw-border-opacity: 1;
+  border-color: hsl(var(--b2, var(--b1)) / var(--tw-border-opacity));
+}
+
+.card.compact .card-body {
+  padding: 1rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.card.image-full :where(figure) {
+  overflow: hidden;
+  border-radius: inherit;
 }
 
 .checkbox:focus-visible {
@@ -3281,6 +3370,11 @@ select {
   box-shadow: 0 0 0 2px hsl(var(--b1));
 }
 
+#Solidie_Dashboard {
+  height: 100%;
+  width: 100%;
+}
+
 html {
   --twc-primary: 207.70000000000005 33.3% 92.4%;
   --twc-tertiary: 217.89999999999998 76% 14.7%;
@@ -3490,6 +3584,10 @@ html {
 
 .\!sticky {
   position: sticky !important;
+}
+
+.sticky {
+  position: sticky;
 }
 
 .inset-0 {
@@ -5324,6 +5422,10 @@ html {
   --tw-shadow: var(--tw-shadow-colored) !important;
 }
 
+.bg-muted{
+  background-color: gray;
+}
+
 .btn-outline .active\:outline:active.badge {
   --tw-border-opacity: 1;
   border-color: hsl(var(--nf, var(--n)) / var(--tw-border-opacity));
@@ -5871,6 +5973,10 @@ html {
 @media (min-width: 640px) {
   .sm\:\!absolute {
     position: absolute !important;
+  }
+
+  .sm\:absolute {
+    position: absolute;
   }
 
   .sm\:inset-0 {
