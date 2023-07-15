@@ -22,47 +22,134 @@ import {
 import { getDashboardPath } from "../utilities/helpers.jsx";
 
 import Topbar from "./navigation/Topbar.jsx";
-import Sidebar from "./navigation/Sidebar.jsx";
-import { Scrollbar } from "../utilities/commons";
-import { cn } from "../utilities/helpers.jsx";
+import Sidebar from "./navigation/sidebar/Sidebar.jsx";
 import { VersionReleaseForm } from "./pages/inventory/segments/ApplicationVersionForm.jsx";
 import { InventoryReleaseManagment } from "./pages/inventory/segments/Releases.jsx";
 
-function DashboardLayout({ children }) {
-  const [sidebarOpen, setSidebarOpen] = useState(true);
-  
-  useEffect(() => {
-    if(window.innerWidth < 1040) {
-      setSidebarOpen(false)
-    }
-  },[window.innerWidth])
+import layout from './layout.module.scss';
 
-  return (
-    <div className={"theme-light bg-content-bg text-tertiary w-full !min-h-max !h-full flex flex-col overflow-y-clip".classNames()}>
-      <Topbar {...{ sidebarOpen, setSidebarOpen }} />
-      <div className={" relative flex flex-grow w-full min-h-max h-full overflow-clip".classNames()}>
-        <Scrollbar scrollAreaRootClassName={cn(
-                    sidebarOpen
-                    ? " !sticky lg:!sticky sm:!absolute sm:inset-0 left-0 "
-                    : " hidden lg:flex ",
-          "bg-brand-white z-50 w-max !min-w-max h-full md:shadow-xl ")} scrollAreaViewportclassName={"bg-brand-white w-max [_div]:!w-max [_div]:!min-w-max".classNames()}>
-          <Sidebar {...{ sidebarOpen, setSidebarOpen }} />
-        </Scrollbar>
-        <Scrollbar scrollAreaViewportClassName={" w-full"}>
-          <div className={"p-7 pb-10 pt-4 max-w-screen-xl  min-h-max h-max w-full " + (sidebarOpen ? " hidden sm:block " : "  ")}>
-            {children}
-          </div>
-        </Scrollbar>
-      </div>
-    </div>
-  );
+/* Dashboard Adopted from https://codepen.io/trooperandz/pen/EOgJvg */
+
+function D(props) {
+	const [state, setState] = useState({
+		active_slug: null,
+		expanded_menu: null,
+		sidebar_open: false,
+		is_mobile_view: window.innerWidth <= 767,
+		sidebar_open: window.location.href.endsWith('#navigation')
+	});
+
+	const $ = window.jQuery;
+	let {avatar_url} = props.frontendDashboardData || {};
+
+	const setTemplate=()=>{
+		/* Scripts for css grid dashboard */
+
+		setSidenavListeners();
+
+		function toggleClass(el, className) {
+			if (el.hasClass(className)) {
+				el.removeClass(className);
+			} else {
+				el.addClass(className);
+			}
+		}
+		
+		// Sidenav list sliding functionality
+		function setSidenavListeners() {
+			const subHeadings = $('.'+'navList__subheading'.classNames(layout));
+			const SUBHEADING_OPEN_CLASS = 'navList__subheading--open'.classNames(layout);
+			const SUBLIST_HIDDEN_CLASS = 'subList--hidden'.classNames(layout);
+
+			subHeadings.each((i, subHeadingEl) => {
+				$(subHeadingEl).on('click', (e) => {
+					const subListEl = $(subHeadingEl).siblings();
+
+					// Add/remove selected styles to list category heading
+					if (subHeadingEl) {
+						toggleClass($(subHeadingEl), SUBHEADING_OPEN_CLASS);
+					}
+
+					// Reveal/hide the sublist
+					if (subListEl && subListEl.length === 1) {
+						toggleClass($(subListEl), SUBLIST_HIDDEN_CLASS);
+					}
+				});
+			});
+		}
+	}
+
+	const openSidebar=()=>{
+		setState({
+			...state,
+			sidebar_open: true
+		});
+		window.history.pushState({}, '', '#navigation');
+	}
+
+	const sidebarListeners=()=>{
+		setState({
+			...state,
+			sidebar_open: window.location.href.endsWith('#navigation')
+		});
+	}
+
+	useEffect(()=>{
+		setTemplate();
+		window.addEventListener('popstate', sidebarListeners);
+		window.addEventListener('resize', ()=>{
+			setState({
+				...state,
+				sidebar_open: false,
+				is_mobile_view: window.innerWidth <= 767
+			})
+		})
+	}, []);
+
+	let should_open = !state.is_mobile_view || state.sidebar_open;
+	let sidebar_class = ('sidenav' + (should_open ? ' sidenav--active' : '')).classNames(layout);
+	let grid_class = ('grid' + (should_open ? ' grid--noscroll' : '')).classNames(layout);
+
+	return <div className={grid_class}>
+		<header className={"header".classNames(layout)}>
+			<Topbar>
+				{state.is_mobile_view && <i className="fas fa-bars header__menu" onClick={openSidebar}></i> || null}
+			</Topbar>
+		</header>
+
+		<aside className={sidebar_class}>
+			{/* <div className={"sidenav__brand".classNames(layout)}>
+				<i className="fas fa-feather-alt sidenav__brand-icon"></i>
+				<a className={"sidenav__brand-link".classNames(layout)} href="#">App<span className={"text-light".classNames(layout)}>Pro</span></a>
+				<i className="fas fa-times sidenav__brand-close"></i>
+			</div> */}
+			<div className={"sidenav__profile".classNames(layout)}>
+				<div className={"sidenav__profile-avatar".classNames(layout)} style={{backgroundImage: 'url('+avatar_url+')'}}></div>
+				<div className={"sidenav__profile-title text-light".classNames(layout)}>John Doe</div>
+			</div>
+			<div className={"row-appstore row--align-v-center row--align-h-center".classNames(layout)}>
+				<Sidebar/>
+			</div>
+		</aside>
+
+		<main className={"main".classNames(layout)}>
+			{props.children}
+		</main>
+
+		<footer className={"footer".classNames(layout)}>
+			<p><span className={"footer__copyright".classNames(layout)}>&copy;</span> 2018 MTH</p>
+			<p>Crafted with <i className="fas fa-heart footer__icon"></i> by <a href="https://www.linkedin.com/in/matt-holland/" target="_blank" className="footer__signature">Matt H</a></p>
+		</footer>
+		
+		{should_open && state.is_mobile_view && <div className={"sidebar-underlay".classNames(layout)} onClick={()=>window.history.back()}></div> || null}
+	</div>
 }
 
 
 function Dashboard(props) {
   return <BrowserRouter>
 		<ContextFrontendDashboard.Provider value={props.frontendDashboardData}>
-			<DashboardLayout>
+			<D>
 				<Routes>
 					<Route path={getDashboardPath('purchased-apps')} element={<PurchasedApps />} />
 					<Route path={getDashboardPath('subscriptions')} element={<Subscriptions />} />
@@ -81,7 +168,7 @@ function Dashboard(props) {
 					<Route path={getDashboardPath("*")} element={<Navigate to="purchased-apps" replace />} />
 					<Route path={getDashboardPath("", false)} element={<Navigate to="purchased-apps" replace />} />
 				</Routes>
-			</DashboardLayout>
+			</D>
 		</ContextFrontendDashboard.Provider>
 	</BrowserRouter>
 }

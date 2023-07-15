@@ -6,6 +6,8 @@ import { useParams } from "react-router-dom";
 import { goBack } from "../../../../utilities/helpers.jsx";
 import { ArrowLeftIcon } from "@radix-ui/react-icons";
 
+import bs from '../../../../sass/bootstrap.module.scss';
+
 export function VersionReleaseForm() {
 	const {content_id, release_id} = useParams();
 	const [state, setState] = useState({values:{}});
@@ -35,51 +37,55 @@ export function VersionReleaseForm() {
 		<button onClick={goBack} className={"flex gap-2 justify-around items-center w-max bg-primary hover:bg-primary/70 focus:text-green-900 focus:outline-green-900 text-tertiary font-bold text-sm px-6 py-2 rounded-full shadow-xl active:animate-bounce shadow-primary border border-tertiary/5 cursor-pointer".classNames()}>
 			<ArrowLeftIcon /> Back
 		</button>
-		<Form.Root className={" bg-tertiary/20 -lightest-version p-4 rounded-2xl shadow-md flex flex-col gap-3".classNames()}>
-			<div className={"flex justify-between gap-4 flex-wrap sm:flex-nowrap w-full h-full".classNames()}>
-				<div className={"flex gap-4 flex-wrap w-full".classNames()}>
-					<Form.Field name="upload-application-zip-file" className={"flex flex-col gap-1 w-full sm:max-w-xs".classNames()}>
-						<div className={"flex items-base justify-between".classNames()}>
-							<Form.Label className={"Label".classNames()}>
-								Upload Application Zip File
-							</Form.Label>
-							<Form.Message match="valueMissing" className={"FieldMessage".classNames()}>
-								Please upload one
-							</Form.Message>
-						</div>
-						<Form.Control asChild className={"w-full".classNames()}>
-							<Input type="file" name="file" onChange={onChange}/>
-						</Form.Control>
-					</Form.Field>
+		<div className={"row".classNames(bs)}>
+			<div className={"col-xs-12 col-sm-12 col-md-8 col-lg-6".classNames(bs)}>
+				<Form.Root className={" bg-tertiary/20 -lightest-version p-4 rounded-2xl shadow-md flex flex-col gap-3".classNames()}>
+					<div className={"flex justify-between gap-4 flex-wrap sm:flex-nowrap w-full h-full".classNames()}>
+						<div className={"flex gap-4 flex-wrap w-full".classNames()}>
+							<Form.Field name="upload-application-zip-file" className={"flex flex-col gap-1 w-full sm:max-w-xs".classNames()}>
+								<div className={"flex items-base justify-between".classNames()}>
+									<Form.Label className={"Label".classNames()}>
+										Upload Application Zip File
+									</Form.Label>
+									<Form.Message match="valueMissing" className={"FieldMessage".classNames()}>
+										Please upload one
+									</Form.Message>
+								</div>
+								<Form.Control asChild className={"w-full".classNames()}>
+									<Input type="file" name="file" onChange={onChange}/>
+								</Form.Control>
+							</Form.Field>
 
-					<Form.Field name="version" className={"flex flex-col gap-1 w-full sm:max-w-xs".classNames()}>
-						<div className={"flex items-base justify-between".classNames()}>
-							<Form.Label className={"Label".classNames()}>version</Form.Label>
-							<Form.Message match="valueMissing" className={"FieldMessage".classNames()}>
-								Please enter Version Number
-							</Form.Message>
+							<Form.Field name="version" className={"flex flex-col gap-1 w-full sm:max-w-xs".classNames()}>
+								<div className={"flex items-base justify-between".classNames()}>
+									<Form.Label className={"Label".classNames()}>version</Form.Label>
+									<Form.Message match="valueMissing" className={"FieldMessage".classNames()}>
+										Please enter Version Number
+									</Form.Message>
+								</div>
+								<Form.Control asChild className={"w-full".classNames()}>
+									<Input type="text" placeholder="e.g 1.2.21" name="version" onChange={onChange}/>
+								</Form.Control>
+							</Form.Field>
+			
+							<Form.Field name="change-log" className={"flex flex-col gap-1 w-full sm:max-w-md h-auto".classNames()}>
+								<div className={"flex items-base justify-between".classNames()}>
+									<Form.Label className={"Label".classNames()}>Change Log</Form.Label>
+									<Form.Message match="valueMissing" className={"FieldMessage".classNames()}>
+									Please enter a ChangeLog
+									</Form.Message>
+								</div>
+								<Form.Control asChild className={"w-full h-full".classNames()}>
+									<Textarea className={"h-full min-h-[6rem]".classNames()} placeholder="ChangeLog ..." name="changelog" onChange={onChange}/>
+								</Form.Control>
+							</Form.Field>
 						</div>
-						<Form.Control asChild className={"w-full".classNames()}>
-							<Input type="text" placeholder="e.g 1.2.21" name="version" onChange={onChange}/>
-						</Form.Control>
-					</Form.Field>
-	
-					<Form.Field name="change-log" className={"flex flex-col gap-1 w-full sm:max-w-md h-auto".classNames()}>
-						<div className={"flex items-base justify-between".classNames()}>
-							<Form.Label className={"Label".classNames()}>Change Log</Form.Label>
-							<Form.Message match="valueMissing" className={"FieldMessage".classNames()}>
-							Please enter a ChangeLog
-							</Form.Message>
-						</div>
-						<Form.Control asChild className={"w-full h-full".classNames()}>
-							<Textarea className={"h-full min-h-[6rem]".classNames()} placeholder="ChangeLog ..." name="changelog" onChange={onChange}/>
-						</Form.Control>
-					</Form.Field>
-				</div>
+					</div>
+					<Form.Submit asChild>
+						<button className={"Button mt-2".classNames()} onClick={onSubmit}>Publish</button>
+					</Form.Submit>
+				</Form.Root>
 			</div>
-			<Form.Submit asChild>
-				<button className={"Button mt-2".classNames()} onClick={onSubmit}>Publish</button>
-			</Form.Submit>
-		</Form.Root>
+		</div>
 	</div>
 }
