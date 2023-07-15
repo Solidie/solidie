@@ -162,7 +162,7 @@ class Contents extends Main{
 	}
 
 	/**
-	 * Get content by field
+	 * Get single content by field
 	 *
 	 * @param string $field_name
 	 * @param string|integer $field_value
@@ -182,7 +182,7 @@ class Contents extends Main{
 		global $wpdb;
 		$content = $wpdb->get_row(
 			$wpdb->prepare(
-				"SELECT content.*, product.post_title AS content_title FROM " . self::table( 'contents' ) . " content 
+				"SELECT content.*, product.post_title AS content_title, author.ID as author_id FROM " . self::table( 'contents' ) . " content 
 				INNER JOIN {$wpdb->posts} product ON content.product_id=product.ID 
 				INNER JOIN {$wpdb->users} author ON product.post_author=author.ID
 				WHERE content." . $field_name . "=%s" . $status_clause,
@@ -252,12 +252,14 @@ class Contents extends Main{
 	 * Get permalink by product id as per content type
 	 *
 	 * @param int $product_id
+	 * @param mixed $content_or_type
+	 * 
 	 * @return string
 	 */
-	public static function getPermalink( $product_id ) {
-		$content         = self::getContentByProduct( $product_id );
+	public static function getPermalink( $product_id, $content_type = null ) {
+		$content_type = $content_type ? $content_type : self::getContentByProduct( $product_id )->content_type;
 		$post_name    = get_post_field( 'post_name', $product_id );
-		$base_slug    = AdminSetting::get( 'contents.' . $content->content_type . '.slug' );
+		$base_slug    = AdminSetting::get( 'contents.' . $content_type . '.slug' );
 		return get_home_url() . '/' . trim( $base_slug, '/' ) . '/' . $post_name . '/';
 	}
 
@@ -467,7 +469,7 @@ class Contents extends Main{
 	}
 
 	/**
-	 * Returns contents in store
+	 * Get bulk contents
 	 *
 	 * @param integer $store_id
 	 * @param integer $user_id
@@ -477,21 +479,29 @@ class Contents extends Main{
 		// Prepare arguments
 		$store_slug   = $args['store_slug'] ?? null;
 		$content_type = $args['content_type'] ?? null;
+		$customer_id  = $args['customer_id'] ?? null;
 		$page         = absint( $args['page'] ?? 1 );
 		$limit        = absint( $args['limit'] ?? 15 );
 
 		$store_clause  = $store_slug ? " AND  store.slug='" . esc_sql( $store_slug ) . "'" : '';
 		$type_clause   = $content_type ? " AND content.content_type='" . esc_sql( $content_type ) . "'" : '';
+		$customer_clse = $customer_id ? " AND sale.customer_id=" . $customer_id : '';
 		$limit_clause  = " LIMIT " . $limit;
 		$offset_clause = " OFFSET " . ( absint( $page - 1 ) * $limit );
 		
 		global $wpdb;
 		$contents = $wpdb->get_results(
-			"SELECT product.post_title AS content_name, product.ID as product_id, content.content_id, product.post_status AS content_status
+			"SELECT DISTINCT product.post_title AS content_name, product.ID as product_id, content.content_id, content.content_type, product.post_status AS content_status
 			FROM {$wpdb->posts} product 
 				INNER JOIN " . self::table( 'contents' ) . " content ON product.ID=content.product_id 
 				INNER JOIN " . self::table( 'stores' ) . " store ON content.store_id=store.store_id
-			WHERE 1=1 " . $store_clause . $type_clause . $limit_clause . $offset_clause,
+				LEFT JOIN " . self::table( 'sales' ) . " sale ON content.content_id=sale.content_id
+			WHERE 1=1 " 
+				. $store_clause 
+				. $type_clause 
+				. $customer_clse
+				. $limit_clause 
+				. $offset_clause,
 		);
 
 		return self::assignContentMeta( $contents );
@@ -504,7 +514,7 @@ class Contents extends Main{
 	 * @param array $meta_array
 	 * @return array|object
 	 */
-	public static function assignContentMeta( $contents, $meta_array = array( 'logo_url' ) ) {
+	public static function assignContentMeta( $contents, $meta_array = array( 'content_url', 'logo_url', 'releases' ) ) {
 		// Support both list and single content
 		if ( $was_single = ! is_array( $contents ) ) {
 			$contents = array( $contents );
@@ -512,14 +522,71 @@ class Contents extends Main{
 
 		foreach ( $meta_array as $meta ) {
 			switch ( $meta ) {
+				case 'content_url' :
+					foreach ( $contents as $index => $content ) {
+						$contents[ $index ]->content_url = self::getPermalink( $content->product_id, $content->content_type );
+					}
+					break;
+
 				case 'logo_url' :
 					foreach ( $contents as $index => $content ) {
 						$contents[ $index ]->logo_url = get_the_post_thumbnail_url( $content->product_id );
+					}
+					break;
+
+				case 'releases' :
+					foreach ($contents as $index => $content) {
+						// Release are available for app types only
+						if ( $content->content_type !== 'app' ) {
+							continue;
+						}
+
+						$contents[ $index ]->releases = Release::getReleases( (int)$content->content_id );
 					}
 					break;
 			}
 		}
 
 		return $was_single ? $contents[0] : $contents;
+	}
+
+	/**
+	 * Get relation between an user and a content like author, admin, customer, editor etc.
+	 *
+	 * @param int $content_id
+	 * @param int $user_id
+	 * 
+	 * @return array
+	 */
+	public static function getUserRelationToTheContent( $content_id, $user_id ) {
+		// Admin and editor has always access to edit or download without extra capabilities.
+		$relations = array_intersect( array( 'administrator', 'editor' ), User::getUserRoles( $user_id ) ); 
+		$content   = self::getContentByContentID( $content_id );
+
+		// Check if author
+		if ( $content->author_id == $user_id ) {
+			$relations[] = 'author';
+		}
+
+		// Check if it is customer
+		if ( Sale::hasCustomerPurchase( $content_id, $user_id ) ) {
+			$relations[] = 'customer';
+		}
+
+		return $relations;
+	}
+
+	/**
+	 * Check if a specific user can download a content.
+	 *
+	 * @param int $content_id
+	 * @param int $user_id
+	 * 
+	 * @return bool
+	 */
+	public static function canDownloadByUser( $content_id, $user_id ) {
+		$capables  = array( 'administrator', 'editor', 'author', 'customer' );
+		$relations = self::getUserRelationToTheContent( $content_id, $user_id );
+		return count( array_intersect( $capables, $relations ) ) > 0;
 	}
 }

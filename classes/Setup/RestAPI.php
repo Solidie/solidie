@@ -10,9 +10,14 @@ use Solidie\Store\Models\Licensing;
 use Solidie\Store\Models\Release;
 
 class RestAPI extends Main {
-	const API_PATH               = '/solidie/api';
+	const API_PATH               = '/solidie/api'; // The API entry point 
 	const DOWNLOAD_LINK_VALIDITY = 720; // in minutes. 12 hours here as WordPress normally checks for updates every 12 hours.
 
+	/**
+	 * Required fields for all type of actions like update check, download update etc.
+	 *
+	 * @var array
+	 */
 	private static $required_fields = array(
 		'content_name',
 		'license_key',
@@ -21,9 +26,15 @@ class RestAPI extends Main {
 	);
 
 	public function __construct() {
+		// To Do: Convert static entrypoint to dynamic using setting page value
 		add_action( 'init', array( $this, 'add_license_api' ) );
 	}
 	
+	/**
+	 * The dispatcher to handle different type of actions
+	 *
+	 * @return void
+	 */
 	public function add_license_api() {
 		// Check if it is api request
 		$url         = explode( '?', self::$configs->current_url );
@@ -38,7 +49,7 @@ class RestAPI extends Main {
 			setlocale( LC_ALL, $locale );
 		}
 
-		// Process download if token and download parameter is present
+		// Process download
 		if ( ! empty( $_GET['download'] ) ) {
 			$this->update_download();
 			exit;
@@ -172,7 +183,7 @@ class RestAPI extends Main {
 	 * @return void
 	 */
 	private function update_check( array $license ) {
-		$release = Release::getRelease( $license['content_id'] );
+		$release = Release::getRelease( $license['content_id'], null, $license['license_id'] ?? 0, $_POST['endpoint'] );
 		if ( ! $release ) {
 			wp_send_json_error( array( 'message' => _x( 'No release found.' ) ) );
 			exit;
@@ -182,13 +193,13 @@ class RestAPI extends Main {
 
 		wp_send_json_success(
 			array(
-				'content_url'           => $release->content_url,
+				'content_url'       => $release->content_url,
 				'version'           => $release->version,
 				'host_version'		=> array(),
 				'release_datetime'  => $release->release_date,
 				'release_timestamp' => $release->release_unix_timestamp,
 				'changelog'         => $release->changelog,
-				'download_url'      => get_home_url() . self::API_PATH . '/?download=' . urlencode( Crypto::encrypt( $release->content_id . ' ' . ( $license['license_id'] ?? 0 ) . ' ' . time() . ' ' . $_POST['endpoint'] ) ), // License id null means it's free
+				'download_url'      => $release->download_url,
 			)
 		);
 		
@@ -217,21 +228,32 @@ class RestAPI extends Main {
 		);
 	}
 
+	/**
+	 * Download file using token as authenticator.
+	 * There's no license key check in here as it is checked critically when generating the download url with token.
+	 *
+	 * @return void
+	 */
 	private function update_download() {
 
 		$parse = Crypto::decrypt( $_GET['download'] );
 		$parse = $parse ? explode( ' ', $parse ) : array();
+		$parse = array_map( 'trim', $parse );
+		$parse = array_filter( $parse, function( $s ) {
+			return ! ( $s === '' );
+		} );
 
 		// Exit if the token is malformed
-		if ( count( $parse ) !== 4 || ! is_numeric( $parse[0] ) || ! is_numeric( $parse[1] ) || ! is_numeric( $parse[2] ) ) {
+		if ( count( $parse ) !== 5 || ! is_numeric( $parse[0] ) || ! is_numeric( $parse[1] ) || ! is_numeric( $parse[2] ) ) {
 			wp_send_json_error( array( 'message' => _x( 'Invalid Request', 'solidie', 'solidie' ) ) );
 			exit;
 		}
 
-		$content_id    = (int) $parse[0];
-		$license_id = (int) $parse[1]; // 0 means free
+		$content_id = (int) $parse[0];
+		$license_id = (int) $parse[1]; // 0 means it is free content or authenticated download.
 		$token_time = (int) $parse[2];
 		$endpoint   = $parse[3];
+		$version    = $parse[4];
 
 		// Exit if link is older than defined time
 		if ( $token_time < time() - ( self::DOWNLOAD_LINK_VALIDITY * 60 ) ) {
@@ -239,25 +261,28 @@ class RestAPI extends Main {
 			exit;
 		}
 
-		if ( ! $license_id && ! Contents::isContentFree( $content_id ) ) {
-			wp_send_json_error( array( 'message' => _x( 'Sorry! It\'s no more free to download. You need to activate license first.', 'solidie', 'solidie' ) ) );
+		// Exit if license id is not 0 (that indecates free or authenticated download) and also the content is not free, and not even the user is authenticated.
+		if ( empty( $license_id ) && ! Contents::isContentFree( $content_id ) && ! Contents::canDownloadByUser( $content_id, get_current_user_id() ) ) {
+			wp_send_json_error( array( 'message' => _x( 'Sorry! You are not allowed to download.', 'solidie', 'solidie' ) ) );
 			exit;
 		}
 
-		$release = Release::getRelease( $content_id );
+		// Exit if the release is no more though the earlier checks passed.
+		$release = Release::getRelease( $content_id, $version, $license_id, $endpoint );
 		if ( ! $release ) {
-			wp_send_json_error( array( 'message' => _x( 'Something went wrong. No release found.', 'solidie', 'solidie' ) ) );
+			wp_send_json_error( array( 'message' => _x( 'No release found.', 'solidie', 'solidie' ) ) );
 			exit;
 		}
 
+		// If file path exists, it means the file resides in the server itself. Otherwise the remote cloud server url will be available.
 		$file_source = $release->file_path ?? $release->file_url;
 		$file_name   = $release->content_name . ' - ' . $release->version . '.' . pathinfo( basename( $file_source ), PATHINFO_EXTENSION );
 		if ( ! $file_source ) {
-			wp_send_json_error( array( 'message' => _x( 'Something went wrong. Release file not found.', 'solidie', 'solidie' ) ) );
+			wp_send_json_error( array( 'message' => _x( 'Release file not found.', 'solidie', 'solidie' ) ) );
 			exit;
 		}
 
-		// License id 0 means it's free
+		// Register download counter. BTW, license id 0 means it's free.
 		Hit::registerHit( 'update-download', $release->release_id, ($license_id===0 ? null : $license_id), $endpoint );
 		
 		nocache_headers();

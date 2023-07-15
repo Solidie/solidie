@@ -11,7 +11,7 @@ const Select = React.forwardRef(
   (
     {
       placeholder,
-      disableItemsList,
+      disableItemsList=[],
       defaultValue,
       ariaLabel,
       itemsList,

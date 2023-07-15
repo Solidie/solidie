@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import * as Form from "@radix-ui/react-form";
 import { Input, Textarea } from "../../../ui";
 import { request } from "../../../../utilities/request.jsx";
@@ -10,7 +10,7 @@ import bs from '../../../../sass/bootstrap.module.scss';
 
 export function VersionReleaseForm() {
 	const {content_id, release_id} = useParams();
-	const [state, setState] = useState({values:{}});
+	const [state, setState] = useState({values:{}, release:{}, loading: false});
 	
 	// To Do: Add file type validation
 
@@ -26,6 +26,15 @@ export function VersionReleaseForm() {
 		});
 	}
 
+	const getRelease=()=>{
+		setState({...state, loading: true});
+
+		request('get_single_release', {release_id}, resp=>{
+			let {release} = resp?.data || {};
+
+		});
+	}
+
 	const onSubmit=(e)=>{
 		e.preventDefault();
 		request('version_release', {...state.values, content_id, release_id}, resp=>{
@@ -33,10 +42,16 @@ export function VersionReleaseForm() {
 		});
 	}
 
+	useEffect(()=>{
+		getRelease();
+	}, []);
+	
+
   	return <div className={"z-20 flex flex-col gap-5".classNames()}>
 		<button onClick={goBack} className={"flex gap-2 justify-around items-center w-max bg-primary hover:bg-primary/70 focus:text-green-900 focus:outline-green-900 text-tertiary font-bold text-sm px-6 py-2 rounded-full shadow-xl active:animate-bounce shadow-primary border border-tertiary/5 cursor-pointer".classNames()}>
 			<ArrowLeftIcon /> Back
 		</button>
+		<h3>{state.release.content_name} - <strong>{state.release.version}</strong></h3>
 		<div className={"row".classNames(bs)}>
 			<div className={"col-xs-12 col-sm-12 col-md-8 col-lg-6".classNames(bs)}>
 				<Form.Root className={" bg-tertiary/20 -lightest-version p-4 rounded-2xl shadow-md flex flex-col gap-3".classNames()}>
@@ -64,7 +79,7 @@ export function VersionReleaseForm() {
 									</Form.Message>
 								</div>
 								<Form.Control asChild className={"w-full".classNames()}>
-									<Input type="text" placeholder="e.g 1.2.21" name="version" onChange={onChange}/>
+									<Input type="text" placeholder="e.g 1.2.21" name="version" onChange={onChange} defaultValue={state.release.version}/>
 								</Form.Control>
 							</Form.Field>
 			
@@ -76,13 +91,15 @@ export function VersionReleaseForm() {
 									</Form.Message>
 								</div>
 								<Form.Control asChild className={"w-full h-full".classNames()}>
-									<Textarea className={"h-full min-h-[6rem]".classNames()} placeholder="ChangeLog ..." name="changelog" onChange={onChange}/>
+									<Textarea className={"h-full min-h-[6rem]".classNames()} placeholder="ChangeLog ..." name="changelog" onChange={onChange}>{state.release.changelog}</Textarea>
 								</Form.Control>
 							</Form.Field>
 						</div>
 					</div>
 					<Form.Submit asChild>
-						<button className={"Button mt-2".classNames()} onClick={onSubmit}>Publish</button>
+						<button className={"Button mt-2".classNames()} onClick={onSubmit}>
+							{release_id ? 'Update' : 'Submit'}
+						</button>
 					</Form.Submit>
 				</Form.Root>
 			</div>
