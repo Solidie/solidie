@@ -18,7 +18,8 @@ class Dispatcher {
 		'create_store',
 		'create_or_update_content',
 		'fetch_releases',
-		'version_release'
+		'version_release',
+		'get_purchased_contents',
 	);
 
 	function __construct() {
@@ -171,5 +172,15 @@ class Dispatcher {
 		}
 		
 		exit;
+	}
+
+	/**
+	 * Get purchased content list for personal dashboard
+	 *
+	 * @return void
+	 */
+	public function get_purchased_contents() {
+		$content_list = ContentModel::getContents( array_merge( $_POST, array( 'customer_id' => get_current_user_id() ) )  );
+		wp_send_json_success( array( 'contents' => $content_list ) );
 	}
 }

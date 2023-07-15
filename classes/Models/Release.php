@@ -2,7 +2,9 @@
 
 namespace Solidie\Store\Models;
 
+use Solidie\Store\Helpers\Crypto;
 use Solidie\Store\Main;
+use Solidie\Store\Setup\RestAPI;
 
 class Release extends Main {
 	/**
@@ -289,19 +291,19 @@ class Release extends Main {
 	 * @param string|null $version
 	 * @return array
 	 */
-	public static function getReleases( int $content_id, int $page = 1, int $limit = 20, string $version = null ) {
+	public static function getReleases( int $content_id, int $page = 1, int $limit = 20, string $version = null, $license_id = 0, $endpoint = 'N/A' ) {
 		global $wpdb;
 
 		$offset         = $limit * ( $page - 1 );
-		$version_clause = $version ? " AND version=" . esc_sql( $version ) : '';
+		$version_clause = $version ? " AND version='" . esc_sql( $version ) . "'" : '';
 
 		$releases = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT release.*, product.post_title AS content_name, UNIX_TIMESTAMP(release.release_date) as release_unix_timestamp 
-				FROM ".self::table( 'releases' )." release
-				INNER JOIN ".self::table('contents')." content ON content.content_id=release.content_id
+				"SELECT _release.*, product.post_title AS content_name, UNIX_TIMESTAMP(_release.release_date) as release_unix_timestamp, content.product_id, content.content_type
+				FROM ".self::table( 'releases' )." _release
+				INNER JOIN ".self::table('contents')." content ON content.content_id=_release.content_id
 				INNER JOIN {$wpdb->posts} product ON content.product_id=product.ID
-				WHERE release.content_id=%d ".$version_clause." ORDER BY release.release_date DESC LIMIT %d, %d",
+				WHERE _release.content_id=%d ".$version_clause." ORDER BY _release.release_date DESC LIMIT %d, %d",
 				$content_id,
 				$offset,
 				$limit
@@ -316,14 +318,16 @@ class Release extends Main {
 			$file_path = get_attached_file( $release->file_id );
 
 			// To Do: Check if the file really exists in file system or cloud
+			// To Do: Remove file_path and absolute url from response. Rather use a proxy url for direct download in dashboard.
 			if ( ! $file_url ) {
 				continue;
 			}
 
-			$release->file_url  = $file_url;
-			$release->file_path = $file_path ? $file_path : null;
-			$release->mime_type = get_post_mime_type( $release->file_id );
-			$release->content_url  = get_permalink( $release->content_id );
+			$release->download_url = get_home_url() . RestAPI::API_PATH . '/?download=' . urlencode( Crypto::encrypt( $release->content_id . ' ' . $license_id . ' ' . time() . ' ' . $endpoint . ' ' . $release->version ) ); // License id null means it's free
+			$release->file_url     = $file_url;
+			$release->file_path    = $file_path ? $file_path : null;
+			$release->mime_type    = get_post_mime_type( $release->file_id );
+			$release->content_url  = Contents::getPermalink( $release->product_id, $release->content_type );
 			
 			// Store the release in the new array
 			$new_array[] = $release;
@@ -333,14 +337,14 @@ class Release extends Main {
 	} 
 
 	/**
-	 * Undocumented function
+	 * Get a single release. Latest one will be returned if version is not specified.
 	 *
 	 * @param integer $content_id
 	 * @param string|null $version
 	 * @return object
 	 */
-	public static function getRelease( int $content_id, string $version = null ) {
-		$relases = self::getReleases( $content_id, 1, 1, $version );
+	public static function getRelease( int $content_id, string $version = null, $license_id = 0, $endpoint = 'N/A' ) {
+		$relases = self::getReleases( $content_id, 1, 1, $version, $license_id, $endpoint );
 		return ( is_array( $relases ) && ! empty( $relases ) ) ? $relases[0] : null;
 	}
 }
