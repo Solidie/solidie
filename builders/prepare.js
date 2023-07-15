@@ -14,6 +14,8 @@ var patch_codes = `
 }
 `;
 
+// Global tag selectors must be removed from bootstrap and tailwaind built file manually, to protect other styles
+
 var tw_path = path.resolve( __dirname, '../components/sass/tailwind/build.scss' );
 var tw_codes = patch_codes + fs.readFileSync( tw_path ).toString();
 
