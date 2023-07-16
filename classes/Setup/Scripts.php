@@ -7,6 +7,11 @@ use Solidie\Store\Main;
 use Solidie\Store\Models\AdminSetting;
 use Solidie\Store\Models\FrontendDashboard;
 
+// To Do: Load frontend scripts only in catalog and single content page when not in development mode
+// To Do: Load frontend dashboard script only in the dashboard
+// To Do: Load backend dashboard script only in solidie backend pages
+// To Do: Pass sales data to solidie (if the plan is reveneue share) from only JS as it is encoded and hard to reverse engineer. TBD how to get the data in JS first.
+
 class Scripts extends Main {
 	public function __construct() {
 		add_action( 'admin_enqueue_scripts', array( $this, 'commonScripts' ) );
