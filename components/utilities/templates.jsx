@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import style_library from '../sass/index.module.scss';
-
-console.log(style_library);
+import fa from '../sass/fontawesome/css/all.module.scss';
 
 export function MountPoint(props){
 	const [ready, setReady] = useState(false);
@@ -41,6 +40,10 @@ export function MountPoint(props){
 			return this.classNames(style, append_raw); // Because both uses same style object. Added two to avoid confusion.
 		}
 
+		String.prototype.fontAwesome = function() {
+			return this.classNames(fa);
+		}
+
 		if ( props.element ) {
 			props.element.className = (props.element.className || '').classNames();
 			props.element.id = (props.element.id || '').idNames();
@@ -50,4 +53,29 @@ export function MountPoint(props){
 	}, []);
 
 	return ready ? props.children : null;
+}
+
+export function FAList() {
+	const variants = ['fa', 'fa-classic', 'fa-sharp', 'fas', 'fa-solid', 'far', 'fa-regular', 'fab', 'fa-brands'];
+
+	return <table style={{width: '100%', border: '1px solid gray', borderCollapse: 'collapse'}}>
+		<tbody>
+			{Object.keys(fa).map(cls=>{
+				return variants.indexOf(cls)>-1 ? null : <tr>
+					<td key={cls}>
+						{variants.map(v=>{
+							return <div key={v+'_'+cls}>
+								<span style={{display: 'inline-block', width: '30px'}}>
+									<i className={fa[v]+' '+fa[cls]}></i>
+								</span>
+								<span>
+									{v} {cls}
+								</span>
+							</div>
+						})}
+					</td>
+				</tr>
+			})}
+		</tbody>
+	</table>
 }
