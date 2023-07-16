@@ -64,7 +64,7 @@ class AdminSetting extends Main{
 		// Get all from saved one
 		$options = get_option( self::$name, array() );
 		$options = is_array( $options ) ? $options : array();
-		$options = array_replace_recursive( Manifest::getManifest(), $options );
+		$options = array_replace_recursive( Manifest::getManifest()['settings'], $options );
 		
 		// Return all options, maybe for settings page
 		if ( null === $key ) {

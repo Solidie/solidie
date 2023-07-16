@@ -96,11 +96,8 @@ class AdminPage extends Main {
 	 * @return void
 	 */
 	public function settingPage() {
-		// $pages    = PageModel::getPageList();
-		$settings = (object)AdminSetting::get();
-
 		echo '<div class="wrap" id="Solidie_AdminSettings" 
-				   data-saved-settings="' . esc_attr( json_encode( $settings ) ) . '" 
+				   data-saved-settings="' . esc_attr( json_encode( (object)AdminSetting::get() ) ) . '" 
 				   data-manifest="' . esc_attr( json_encode( Manifest::getManifest() ) ) . '"></div>';
 	}
 

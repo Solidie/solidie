@@ -23,7 +23,7 @@ class Scripts extends Main {
 			'home_path'    => rtrim( parse_url( get_home_url() )['path'] ?? '/', '/' ) . '/',
 			'content_name' => self::$configs->content_name,
 			'nonce'        => Nonce::generate(),
-			'manifest'     => array(
+			'settings'     => array(
 				'contents'  => AdminSetting::get( 'contents' ),
 				'dashboard' => AdminSetting::get( 'dashboard' ),
 				'catalog'   => AdminSetting::get( 'catalog' ),
