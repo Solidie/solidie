@@ -29,7 +29,7 @@ export const getElementDataSet = element => {
 }
 
 export const getDashboardPath=(rel_path, append_slash=true)=>{
-	const { home_path, manifest: {dashboard: {slug: dashboard_slug}} } = window.Solidie;
+	const { home_path, settings: {dashboard: {slug: dashboard_slug}} } = window.Solidie;
 	const slash = append_slash ? (rel_path.indexOf( '/' ) === 0 ? '' : '/') : '';
 	return home_path + dashboard_slug + slash + rel_path;
 }

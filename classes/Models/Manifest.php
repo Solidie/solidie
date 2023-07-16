@@ -10,14 +10,20 @@ class Manifest {
 		}
 
 		$manifest = array (
-			'dashboard' => array (
-				'label' => 'Dashboard', 
-				'slug'  => 'dashboard', 
-			), 
-			'catalog' => array ( 
-				'label' => 'Catalog', 
-				'slug'  => 'catalog', 
-			), 
+			'settings' => array(
+				'dashboard' => array (
+					'label' => 'Dashboard', 
+					'slug'  => 'dashboard', 
+				), 
+				'catalog' => array ( 
+					'label' => 'Catalog', 
+					'slug'  => 'catalog', 
+					'full_width' => false, 
+				), 
+				'content' => array ( // For single content page
+					'full_width' => false, 
+				),
+			),
 			'contents' => array ( 
 				'app' => array ( 
 					'label'       => 'App', 
@@ -69,10 +75,18 @@ class Manifest {
 					'plans' => array(),
 				), 
 				'image' => array ( 
-					'label' => 'Image', 
-					'slug' => 'image', 
+					'label'       => 'Image', 
+					'slug'        => 'image', 
 					'description' => 'Different types of images', 
-					'plans' => array(),
+					'plans'       => array(),
+					'catagories'  => array(
+						'photograph'  => 'Photograph',
+						'vector'       => 'Vector',
+						'illustration' => 'Illustration',
+						'ai'           => 'AI',
+						'editorial'    => 'Editorial',
+						'texture'      => 'Texture',
+					)
 				), 
 				'3d' => array ( 
 					'label' => '3D', 
@@ -97,7 +111,7 @@ class Manifest {
 					'slug' => 'font', 
 					'description' => 'Various fonts', 
 					'plans' => array(),
-				), 
+				),
 			), 
 		);
 
@@ -146,6 +160,19 @@ class Manifest {
 			}
 		}
 
+		// Get this through filter for modification by others
+		$manifest = apply_filters( 'solidie_manifest', $manifest );
+
+		// Add the content type array in content settings
+		$manifest['settings']['contents'] = array();
+		foreach ( array_keys( $manifest['contents'] ) as $type ) {
+			$manifest['settings']['contents'][ $type ] = array(
+				'slug'   => $type,
+				'enable' => false
+			);
+		}
+
+		// Finally return the manifest
 		return $manifest;
 	}
 
