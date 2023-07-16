@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { getElementDataSet } from '../utilities/helpers.jsx';
 import { SignleApp } from './single-app/index.jsx';
 import { Catalog } from './catalog/index.jsx';
-import { MountPoint } from '../utilities/templates.jsx';
+import { FAList, MountPoint } from '../utilities/templates.jsx';
 
 function Singular() {
 	return <SignleApp/>
@@ -23,6 +23,15 @@ if(catalog){
 	ReactDOM.createRoot(catalog).render(
 		<MountPoint element={catalog}>
 			<Catalog {...getElementDataSet(Catalog)} />
+		</MountPoint>
+	);
+}
+
+const fa = document.getElementById('solidie_fa_icon_list');
+if(fa){
+	ReactDOM.createRoot(fa).render(
+		<MountPoint element={fa}>
+			<FAList/>
 		</MountPoint>
 	);
 }
