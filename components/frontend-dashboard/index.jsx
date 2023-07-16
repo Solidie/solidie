@@ -12,7 +12,6 @@ import {
   Customers,
   Inventory,
   MyAccount,
-  PurchasedApps,
   Reports,
   Sales,
   Subscriptions,
@@ -25,6 +24,7 @@ import Topbar from "./navigation/Topbar.jsx";
 import Sidebar from "./navigation/sidebar/Sidebar.jsx";
 import { VersionReleaseForm } from "./pages/inventory/segments/ApplicationVersionForm.jsx";
 import { InventoryReleaseManagment } from "./pages/inventory/segments/Releases.jsx";
+import { PurchasedApps } from "./pages/purchases/Purchases.jsx";
 
 import layout from './layout.module.scss';
 
@@ -151,7 +151,7 @@ function Dashboard(props) {
 		<ContextFrontendDashboard.Provider value={props.frontendDashboardData}>
 			<D>
 				<Routes>
-					<Route path={getDashboardPath('purchased-apps')} element={<PurchasedApps />} />
+					<Route path={getDashboardPath('purchased-apps')} element={<PurchasedApps/>} />
 					<Route path={getDashboardPath('subscriptions')} element={<Subscriptions />} />
 					<Route path={getDashboardPath('my-account')} element={<MyAccount />} />
 

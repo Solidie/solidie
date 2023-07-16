@@ -13,13 +13,6 @@ class AdminSetting extends Main{
 	private static $name = 'solidie_store_admin_settings';
 
 	/**
-	 * Manifest cache
-	 *
-	 * @var array
-	 */
-	private static $manifest = null;
-
-	/**
 	 * Type cast as expected
 	 *
 	 * @param array $arr
@@ -67,17 +60,11 @@ class AdminSetting extends Main{
 	 * 
 	 * @return string|int|array|bool|null
 	 */
-	public static function get( $key = null, $default = null ) {
-		if ( null === self::$manifest ) {
-			$manifest       = @json_decode( file_get_contents( self::$configs->dir . 'manifest.json' ), true );
-			self::$manifest = is_array( $manifest ) ? $manifest : array();
-		}
-		
+	public static function get( $key = null, $default = null ) {		
 		// Get all from saved one
 		$options = get_option( self::$name, array() );
 		$options = is_array( $options ) ? $options : array();
-		
-		$options = array_replace_recursive( self::$manifest, $options );
+		$options = array_replace_recursive( Manifest::getManifest(), $options );
 		
 		// Return all options, maybe for settings page
 		if ( null === $key ) {

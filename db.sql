@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jul 02, 2023 at 04:45 PM
+-- Generation Time: Jul 15, 2023 at 06:32 PM
 -- Server version: 8.0.16
 -- PHP Version: 8.0.0
 
@@ -45,7 +45,7 @@ CREATE TABLE `wp_appstore_hits` (
   `license_id` bigint(20) UNSIGNED DEFAULT NULL COMMENT 'Null if downloaded from dashboard or hit by free app',
   `release_id` bigint(20) UNSIGNED DEFAULT NULL COMMENT 'Null if non-download action',
   `action` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'license-activate, update-check or update-download',
-  `endpoint` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL,
+  `endpoint` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL COMMENT 'url, app id, download page name etc.\r\n',
   `ip_address` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   `hit_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

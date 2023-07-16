@@ -410,7 +410,7 @@ class Contents extends Main{
 			$product_id   = $content->get_product_id();
 			$variation_id = $content->get_variation_id();
 			$variation    = new \WC_Product_Variation( $variation_id );
-			$content         = self::getContentByProduct( $product_id );
+			$content      = self::getContentByProduct( $product_id );
 			$var_info     = self::getVariationInfo( $variation );
 
 			// Skip non-content products or unsupported variation.
@@ -435,10 +435,15 @@ class Contents extends Main{
 	/**
 	 * Return variation label
 	 *
-	 * @param \WC_Product_Variation $variation
+	 * @param \WC_Product_Variation|int $variation
 	 * @return array|null
 	 */
-	public static function getVariationInfo( \WC_Product_Variation $variation ) {
+	public static function getVariationInfo( $variation ) {
+		$variation  = is_numeric( $variation ) ? new \WC_Product_Variation( $variation ) : $variation;
+		if ( empty( $variation ) ) {
+			return null;
+		}
+
 		$lincensing = self::getVariationBluePrint();
 		$attributes = $variation->get_attributes();
 
@@ -491,7 +496,7 @@ class Contents extends Main{
 		
 		global $wpdb;
 		$contents = $wpdb->get_results(
-			"SELECT DISTINCT product.post_title AS content_name, product.ID as product_id, content.content_id, content.content_type, product.post_status AS content_status
+			"SELECT DISTINCT product.post_title AS content_name, product.ID as product_id, content.content_id, content.content_type, product.post_status AS content_status, sale.sale_id
 			FROM {$wpdb->posts} product 
 				INNER JOIN " . self::table( 'contents' ) . " content ON product.ID=content.product_id 
 				INNER JOIN " . self::table( 'stores' ) . " store ON content.store_id=store.store_id
@@ -514,7 +519,7 @@ class Contents extends Main{
 	 * @param array $meta_array
 	 * @return array|object
 	 */
-	public static function assignContentMeta( $contents, $meta_array = array( 'content_url', 'logo_url', 'releases' ) ) {
+	public static function assignContentMeta( $contents, $meta_array = array( 'content_url', 'plans', 'logo_url', 'releases' ) ) {
 		// Support both list and single content
 		if ( $was_single = ! is_array( $contents ) ) {
 			$contents = array( $contents );
@@ -543,6 +548,36 @@ class Contents extends Main{
 
 						$contents[ $index ]->releases = Release::getReleases( (int)$content->content_id );
 					}
+					break;
+
+				case 'plans' :
+					// Same content will be available multiple times in the array because of different plans/sale id even though same order. 
+					// We need to merge them here based on unique content ID by adding plan as array.
+					$new_array = array();
+					foreach ( $contents as $index => $content ) {
+						// Check if sales info available
+						if ( empty( $content->sale_id ) ) {
+							continue;
+						}
+
+						// Create placeholder in new array
+						if ( ! isset( $new_array[ $content->content_id ] ) ) {
+							$new_array[ $content->content_id ]        = $content;
+							$new_array[ $content->content_id ]->plans = array();
+						}
+
+						// Add plan to the plan array. Same content may have multiple plan purchased over times.
+						$plan = Sale::getSalePlan( $content->sale_id );
+						if ( ! empty( $plan ) ) {
+							$new_array[ $content->content_id ]->plans[] = $plan;
+						}
+						
+						// Remove the sale ID now as the array is getting consolidated.
+						unset( $new_array[ $content->content_id ]->sale_id );
+					}
+
+					// Finally replace the content array to be returned
+					$contents = array_values( $new_array );
 					break;
 			}
 		}

@@ -5,7 +5,7 @@ import { Select } from "../../ui";
 import { request } from '../../../utilities/request.jsx';
 import bs from '../../../sass/bootstrap.module.scss';
 
-const PurchasedApps = () => {
+export function PurchasedApps(){
 
 	const [state, setState] = useState({contents:[]});
 
@@ -13,7 +13,7 @@ const PurchasedApps = () => {
 		request('get_purchased_contents', {content_type: 'app'}, resp=>{
 			let {contents=[]} = resp?.data || {};
 
-			setState({contents});
+			setState({...state, contents});
 		})
 	}
 
@@ -38,9 +38,10 @@ const PurchasedApps = () => {
 
 		<div className={'row'.classNames(bs)}>
 			{state.contents.map(content => {
-				let {content_id, content_name, plan_name='Test Plan', content_url, logo_url, releases} = content;
+				let {content_id, content_name, plans=[], content_url, logo_url, releases} = content;
 				let latest_release = releases[0];
 				let prev_text = 'Previous Versions';
+				let plan_name = plans.map(plan=>plan.variation?.period_label).filter(l=>l).join(', ');
 
 				return <div key={content_id} className={'col-xs-12 col-sm-12 col-md-6 col-lg-4'.classNames(bs)}>
 					<div className={"bg-tertiary/20 text-tertiary p-6 w-full h-max rounded-2xl shadow-lg hover:shadow-tertiary/60 border-4 border-tertiary/20".classNames()} style={{marginBottom: '30px'}}>
@@ -53,7 +54,9 @@ const PurchasedApps = () => {
 								<div className={"font-black text-xl".classNames()}>
 									<a href={content_url} target='_blank'>{content_name}</a>
 								</div>
-								<div className={"italic".classNames()}>{plan_name}</div>
+								<div className={"italic".classNames()}>
+									{plan_name || <span>&nbsp;</span>}
+								</div>
 							</div>
 							<div className={"flex flex-col items-center gap-y-5 px-10 ".classNames()}>
 								<button className={"Button flex items-center gap-x-2".classNames()} onClick={()=>downloadVersion(releases, latest_release.version)}>
@@ -75,5 +78,3 @@ const PurchasedApps = () => {
 		</div>
 	</div>
 }
-
-export default PurchasedApps
