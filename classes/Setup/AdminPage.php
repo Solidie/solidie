@@ -5,6 +5,7 @@ namespace Solidie\Store\Setup;
 use Solidie\Store\Main;
 use Solidie\Store\Models\AdminSetting;
 use Solidie\Store\Models\Contents;
+use Solidie\Store\Models\Manifest;
 use Solidie\Store\Models\Page as PageModel;
 use Solidie\Store\Setup\AdminPage as SetupAdminPage;
 
@@ -99,7 +100,8 @@ class AdminPage extends Main {
 		$settings = (object)AdminSetting::get();
 
 		echo '<div class="wrap" id="Solidie_AdminSettings" 
-				   data-saved-settings="' . esc_attr( json_encode( $settings ) ) . '"></div>';
+				   data-saved-settings="' . esc_attr( json_encode( $settings ) ) . '" 
+				   data-manifest="' . esc_attr( json_encode( Manifest::getManifest() ) ) . '"></div>';
 	}
 
 	/**

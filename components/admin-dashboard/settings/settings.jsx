@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { request } from '../../utilities/request.jsx';
-import manifest from '../../../manifest.json';
 
 export function SettingPage(props) {
-	const {savedSettings={}} = props;
+	const {savedSettings={}, manifest} = props;
 	const [state, setState] = useState({});
 
 	const saveOptions=()=>{

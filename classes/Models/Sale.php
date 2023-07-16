@@ -2,6 +2,7 @@
 
 namespace Solidie\Store\Models;
 
+use PhpMyAdmin\SqlParser\Context;
 use Solidie\Store\Main;
 
 class Sale extends Main {
@@ -40,5 +41,30 @@ class Sale extends Main {
 		);
 
 		return $has;
+	}
+
+	/**
+	 * Get the plan of a single sale. Note, multiple product 
+	 *
+	 * @param [type] $sale_id
+	 * @return void
+	 */
+	public static function getSalePlan( $sale_id ) {
+		global $wpdb;
+		$sale = $wpdb->get_row(
+			$wpdb->prepare(
+				"SELECT * FROM " . self::table( 'sales' ) . " WHERE sale_id=%d",
+				$sale_id
+			)
+		);
+
+		if ( empty( $sale ) ) {
+			return null;
+		}
+		
+		// Add the plan name
+		$sale->variation = Contents::getVariationInfo( $sale->variation_id );
+
+		return $sale;
 	}
 }

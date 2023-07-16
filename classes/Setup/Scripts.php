@@ -24,10 +24,10 @@ class Scripts extends Main {
 			'content_name' => self::$configs->content_name,
 			'nonce'        => Nonce::generate(),
 			'manifest'     => array(
-				'cotnents'  => AdminSetting::get( 'contents' ),
+				'contents'  => AdminSetting::get( 'contents' ),
 				'dashboard' => AdminSetting::get( 'dashboard' ),
 				'catalog'   => AdminSetting::get( 'catalog' ),
-			) 
+			)
 		);
 
 		return apply_filters( 'solidie_script_data', $data );
