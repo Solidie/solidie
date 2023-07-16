@@ -15,6 +15,7 @@ use Solidie\Store\Setup\WooCommerceSubscription;
 use Solidie\Store\Models\AdminSetting;
 
 use Solidie\SalesReporter\Report;
+use Solidie\Store\Setup\Shortcode;
 use Solidie\Store\Setup\SingleProduct;
 use Solidie\Updater\Updater;
 
@@ -52,6 +53,7 @@ class Main {
 		new SingleProduct();
 		new RestAPI();
 		new Media();
+		new Shortcode();
 
 		// Register sales reporter to solidie website
 		new Report( $configs );
