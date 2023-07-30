@@ -120,7 +120,6 @@ class AdminPage extends Main {
 		$settings = AdminSetting::get();
 		$slugs = array(
 			$settings['dashboard']['slug'],
-			$settings['catalog']['slug'],
 		);
 
 		// Loop through content types and register their slug

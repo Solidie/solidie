@@ -7,7 +7,6 @@ use Solidie\Store\Main;
 class SingleProduct extends Main {
 	function __construct() {
 		add_filter( 'single_template', array( $this, 'product_template' ) );
-		add_filter( 'page_template', array( $this, 'catalog' ) );
 	}
 
 	public function product_template( $template ) {
@@ -15,14 +14,6 @@ class SingleProduct extends Main {
 			$template = self::$configs->dir . 'templates/single-product.php';
 		} 
 		
-		return $template;
-	}
-
-	public function catalog( $template ) {
-		if ( isset( $_GET['catalog'] ) ) {
-			$template = self::$configs->dir . 'templates/'.$_GET['catalog'].'.php';
-		}
-
 		return $template;
 	}
 }

@@ -35,17 +35,26 @@ if ( AdminSetting::get( 'dashboard.slug' ) == $page ) {
 	$dashboard_data = FrontendDashboard::getDashboardData();
 	require Main::$configs->dir . 'templates/frontend-dashboard.php';
 
-} else if ( AdminSetting::get( 'catalog.slug' ) == $page ) {
-	require Main::$configs->dir . 'templates/filter-catalog.php';
-
 } else {
-	// This block means it is single product page
+	// This conditional block means it is either single product page or the catalog
 	$content_settings = AdminSetting::get( 'contents' );
-	$content          = Contents::getContentByProduct( $content_post_name );
+	$content          = $content_post_name ? Contents::getContentByProduct( $content_post_name ) : null;
 
 	// Check if the content exists
 	if ( empty( $content ) ) {
-		load_404( 'Content Not Found ' );
+
+		// It may be catalog page
+		if ( empty( $sub_pages ) ) {
+			// Check if the content type is enabled
+			foreach ( $content_settings as $type => $setting ) {
+				if ( $setting['enable'] == true && $page === $setting['slug'] ) {
+					require Main::$configs->dir . 'templates/catalog.php';
+					return;
+				}
+			}
+		}
+
+		load_404( 'Content Not Found' );
 	}
 
 	// Loop through contents to check if the base slug is okay
@@ -76,6 +85,6 @@ if ( AdminSetting::get( 'dashboard.slug' ) == $page ) {
 		require Main::$configs->dir . 'templates/single-product.php';
 	} else {
 		// Single product tutorial page, supports unlimited sub path. For now show 404.
-		load_404( 'Tutorial Block To Be Added' );
+		load_404( 'Tutorial Logics To Be Added' );
 	}
 } 

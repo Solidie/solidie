@@ -31,7 +31,6 @@ class Scripts extends Main {
 			'settings'     => array(
 				'contents'  => AdminSetting::get( 'contents' ),
 				'dashboard' => AdminSetting::get( 'dashboard' ),
-				'catalog'   => AdminSetting::get( 'catalog' ),
 			)
 		);
 
