@@ -86,14 +86,6 @@ export function SettingPage(props) {
 						<input type="text" defaultValue={savedSettings?.dashboard?.slug} onChange={e=>onChange('dashboard', 'slug', e.currentTarget.value)} className='regular-text'/>
 					</td>
 				</tr>
-				<tr>
-					<th scope='row'>
-						<label>{savedSettings.catalog.label} Base Slug</label>
-					</th>
-					<td>
-						<input type="text" defaultValue={savedSettings?.catalog?.slug} onChange={e=>onChange('catalog', 'slug', e.currentTarget.value)} className='regular-text'/>
-					</td>
-				</tr>
 			</tbody>
 		</table>	
 		<button className='button button-primary' onClick={saveOptions} disabled={!state.changedSettings}>Save</button>

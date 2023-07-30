@@ -1,24 +1,31 @@
 .catalog-root{
-	.search-wrapper {
-		$border: 1px solid rgba(0, 0, 0, .6);
+	.header{
+		&, .search-wrapper, .sort-wrapper{
+			display: flex;
+		}
 
-		display: flex;
-		border-radius: 6px;
-		overflow: hidden;
-		border: $border;
+		.search-wrapper {
+			$border: 1px solid rgba(0, 0, 0, .6);
+			flex: 1;
+			border-radius: 6px;
+			overflow: hidden;
+			border: $border;
 
-		&>div{
-			&:nth-child(1){
-				border-right: $border;
+			&>div{
+				&:nth-child(1){
+					border-right: $border;
 
-				ul{
-					display: none;
+					ul{
+						display: none;
+					}
 				}
-			}
 
-			&:nth-child(2) {
-				flex: 1;
+				// Search input field 
+				&:nth-child(2) {
+					flex: 1;
+				}
 			}
 		}
 	}
+	
 }

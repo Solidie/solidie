@@ -15,11 +15,6 @@ class Manifest {
 					'label' => 'Dashboard', 
 					'slug'  => 'dashboard', 
 				), 
-				'catalog' => array ( 
-					'label' => 'Catalog', 
-					'slug'  => 'catalog', 
-					'full_width' => false, 
-				), 
 				'content' => array ( // For single content page
 					'full_width' => false, 
 				),
@@ -27,7 +22,7 @@ class Manifest {
 			'contents' => array ( 
 				'app' => array ( 
 					'label'       => 'App', 
-					'slug'        => 'app', 
+					'slug'        => 'apps', 
 					'description' => 'Applications for website, android, windows, linux, mac and so on.', 
 					'plans'       => array(
 						'unlimited' => array(
@@ -64,19 +59,19 @@ class Manifest {
 				), 
 				'audio' => array ( 
 					'label'       => 'Audio', 
-					'slug'        => 'audio', 
+					'slug'        => 'audios', 
 					'description' => 'Audio contents like music, podcast and so on.',
 					'plans' => array(),
 				), 
 				'video' => array ( 
 					'label' => 'Video', 
-					'slug' => 'video', 
+					'slug' => 'videos', 
 					'description' => 'Video contents like travel vlog, cinematography, templates and so on.', 
 					'plans' => array(),
 				), 
 				'image' => array ( 
 					'label'       => 'Image', 
-					'slug'        => 'image', 
+					'slug'        => 'images', 
 					'description' => 'Different types of images', 
 					'plans'       => array(),
 					'catagories'  => array(
@@ -96,19 +91,19 @@ class Manifest {
 				), 
 				'document' => array ( 
 					'label' => 'Document', 
-					'slug' => 'document', 
+					'slug' => 'documents', 
 					'description' => 'Ebook, Sheet and other similar documents.', 
 					'plans' => array(),
 				), 
 				'tutorial' => array ( 
 					'label' => 'Tutorial', 
-					'slug' => 'tutorial', 
+					'slug' => 'tutorials', 
 					'description' => 'Tutorial and written documentations.', 
 					'plans' => array(),
 				), 
 				'font' => array ( 
 					'label' => 'Font', 
-					'slug' => 'font', 
+					'slug' => 'fonts', 
 					'description' => 'Various fonts', 
 					'plans' => array(),
 				),

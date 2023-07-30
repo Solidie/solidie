@@ -157,7 +157,7 @@ class Contents extends Main{
 	 * @param integer $content_id
 	 * @return object|null
 	 */
-	public static function getContentByContentID( int $content_id, $field = null, $public_only = true ) {
+	public static function getContentByContentID( $content_id, $field = null, $public_only = true ) {
 		return self::getContentByField( 'content_id', $content_id, $field, $public_only );
 	}
 
@@ -192,7 +192,7 @@ class Contents extends Main{
 
 		$content = ( $content && is_object( $content ) ) ? self::assignContentMeta( $content ) : null;
 
-		return $content ? ( $field ? $content->$field ?? null : $content ) : null;
+		return ! empty( $content ) ? ( $field ? $content->$field ?? null : $content ) : null;
 	}
 
 	/**
@@ -555,15 +555,15 @@ class Contents extends Main{
 					// We need to merge them here based on unique content ID by adding plan as array.
 					$new_array = array();
 					foreach ( $contents as $index => $content ) {
-						// Check if sales info available
-						if ( empty( $content->sale_id ) ) {
-							continue;
-						}
-
 						// Create placeholder in new array
 						if ( ! isset( $new_array[ $content->content_id ] ) ) {
 							$new_array[ $content->content_id ]        = $content;
 							$new_array[ $content->content_id ]->plans = array();
+						}
+
+						// Check if sales info available
+						if ( empty( $content->sale_id ) ) {
+							continue;
 						}
 
 						// Add plan to the plan array. Same content may have multiple plan purchased over times.
