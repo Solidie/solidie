@@ -260,7 +260,7 @@ class Release extends Main {
 			}
 
 			// Upload new one
-			$file_id = self::uploadFile( $data['content_id'], $data['file'], $content->content_title . ' - ' . $data['version'] );
+			$file_id = self::uploadFile( $data['content_id'], $data['file'], $content->content_name . ' - ' . $data['version'] );
 			if ( ! $file_id ) {
 				return _x( 'Error in file saving!', 'solidie', 'solidie' );
 			}

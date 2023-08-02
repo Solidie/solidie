@@ -51,8 +51,6 @@ class Scripts extends Main {
 		if ( FrontendDashboard::is_dashboard() ) {
 			wp_enqueue_script( 'appstore-frontend-dashboard-script', self::$configs->dist_url . 'frontend-dashboard.js', array( 'jquery' ), self::$configs->version, true );
 		} else {
-			wp_enqueue_style( 'appstore-frontend-swipe-script-css', 'https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css' );
-			wp_enqueue_script( 'appstore-frontend-swipe-script', 'https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js' );
 			wp_enqueue_script( 'appstore-frontend-script', self::$configs->dist_url . 'frontend.js', array( 'jquery' ), self::$configs->version, true );
 		}
 	}

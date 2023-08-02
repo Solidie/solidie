@@ -1,6 +1,6 @@
-import React, { Children, useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import React from "react";
+import { Link } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import { ContextCatalogData } from "../../utilities/contexts.jsx";
 
@@ -62,7 +62,7 @@ export function Catalog() {
 					{
 						Object.keys(contents).map(type=>{
 							let {slug} = contents[type];
-							return <Route path={home_path+slug+'/'} element={CatalogVarients[slug] || <span>Component Not Found</span>}/>
+							return <Route path={home_path+':content_type/'} element={CatalogVarients[slug] || <span>Component Not Found</span>}/>
 						})
 					}
 				</Routes>

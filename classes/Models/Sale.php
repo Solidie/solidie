@@ -53,7 +53,9 @@ class Sale extends Main {
 		global $wpdb;
 		$sale = $wpdb->get_row(
 			$wpdb->prepare(
-				"SELECT * FROM " . self::table( 'sales' ) . " WHERE sale_id=%d",
+				"SELECT sale.*, content.content_type FROM " . self::table( 'sales' ) . " sale
+					INNER JOIN " . self::table( 'contents' ) . " content ON sale.content_id=content.content_id
+				WHERE sale.sale_id=%d",
 				$sale_id
 			)
 		);
@@ -63,7 +65,7 @@ class Sale extends Main {
 		}
 		
 		// Add the plan name
-		$sale->variation = Contents::getVariationInfo( $sale->variation_id );
+		$sale->variation = Contents::getVariationInfo( $sale->variation_id, $sale->content_type );
 
 		return $sale;
 	}
