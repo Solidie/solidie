@@ -1,20 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { getElementDataSet } from '../utilities/helpers.jsx';
-import { SignleApp } from './single-app/index.jsx';
 import { Catalog } from './catalog/index.jsx';
 import { FAList, MountPoint } from '../utilities/templates.jsx';
-
-function Singular() {
-	return <SignleApp/>
-}
+import { SingleContent } from './single/index.jsx';
 
 // Render single product/content page
 const single = document.getElementById('Solidie_Single_Content');
 if(single) {
 	ReactDOM.createRoot(single).render(
 		<MountPoint element={single}>
-			<Singular {...getElementDataSet(single)} />
+			<SingleContent {...getElementDataSet(single)} />
 		</MountPoint>
 	);
 }
@@ -29,7 +25,7 @@ if(catalog){
 	);
 }
 
-// Render fa icon list to use in development
+// Render fa icon list to use in development. It will be rendered in shortcode. 
 const fa = document.getElementById('solidie_fa_icon_list');
 if(fa){
 	ReactDOM.createRoot(fa).render(

@@ -4,6 +4,7 @@ namespace Solidie\Store\Setup;
 
 use Solidie\Store\Main;
 use Solidie\Store\Models\Contents;
+use Solidie\Store\Models\Manifest;
 
 class WooCommerceSubscription extends Main {
 	public function __construct() {
@@ -13,9 +14,9 @@ class WooCommerceSubscription extends Main {
 		add_action( 'woocommerce_checkout_subscription_created', array( $this, 'alter_billing_period' ) );
 	}
 
-	// Add custom subscription period
+	// Add custom subscription periods along with some existings provided by WooCommerce
 	function custom_subscription_periods( $periods, $billing_period ) {
-		$custom_periods = self::getSubscriptionBlueprint( $billing_period );
+		$custom_periods = Manifest::getPeriods( $billing_period );
 
 		// Assign customs
 		foreach ( $custom_periods as $key => $subscription ) {
@@ -43,7 +44,7 @@ class WooCommerceSubscription extends Main {
 	}
 
 	public function sub_length( $ranges, $period ) {
-		foreach ( self::getSubscriptionBlueprint( 0 ) as $key => $p ) {
+		foreach ( Manifest::getPeriods( 0 ) as $key => $p ) {
 			if ( isset( $ranges[ $key ] ) ) {
 				continue;
 			}

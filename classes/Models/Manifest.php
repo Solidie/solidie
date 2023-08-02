@@ -75,7 +75,7 @@ class Manifest {
 					'description' => 'Different types of images', 
 					'plans'       => array(),
 					'catagories'  => array(
-						'photograph'  => 'Photograph',
+						'photograph'   => 'Photograph',
 						'vector'       => 'Vector',
 						'illustration' => 'Illustration',
 						'ai'           => 'AI',
@@ -129,10 +129,9 @@ class Manifest {
 
 
 		// Now prepare plans for audio, video, image, 3d, document and font together as these are similar in terms of usage. 
-		// Tutorial doesn't need any plan as it is not normally used outside of the website. 
-		// And the customer will always have access to tutorials once purchased. No matter the author updates the tutorial or not.
+		// Tutorial doesn't need any plan as it is not downloadable or subscription based. It is onetime purchase, lifetime access no matter gets update or not. 
 		// If tutorial is written as part of other contents such as app or video template, then customers don't need to purchase it separately as they've done so for the main content already.
-		// Tutorial can be purchased and showcased separately only and only if it is created independently as not part of other contents.
+		// Tutorial can be purchased and showcased separately only if it is created independently as not part of other contents.
 		$lincensings   = self::getLicensings();
 		$content_types = array_diff( array_keys( $manifest['contents'] ), array( 'app', 'tutorial' ) );
 
@@ -172,13 +171,24 @@ class Manifest {
 	}
 
 	/**
+	 * Get supported plans for specific content type
+	 *
+	 * @param string $content_type
+	 * @return array
+	 */
+	public static function getVariationBluePrint( string $content_type ) {
+		$content = self::getManifest()['contents'][ $content_type ] ?? array();
+		return $content['plans'] ?? array();
+	}
+
+	/**
 	 * Get periods for WooCommerce specific usage
 	 *
 	 * @param integer $number Normally non zero expected, however 0 can be used as placeholder where wcs_label will not be used.
 	 * 
 	 * @return array
 	 */
-	private static function getPeriods( $number = 0 ) {
+	public static function getPeriods( $number = 0 ) {
 		return array(
 			'day' => array(
 				'days'      => 1,

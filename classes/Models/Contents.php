@@ -3,6 +3,7 @@
 namespace Solidie\Store\Models;
 
 use Solidie\Store\Main;
+use Solidie\Store\Helpers\Cast;
 
 class Contents extends Main{
 	/**
@@ -11,19 +12,24 @@ class Contents extends Main{
 	const LICENSING_VARIATION = 'licensing-variation';
 
 	/**
+	 * Meta key for variation enable status indentifier
+	 */
+	const VARATION_ENABLE_KEY = 'solidie-content-variation-enabled';
+
+	/**
+	 * Variation best meta key
+	 */
+	const VARATION_BEST_KEY = 'solidie-content-best-variation';
+
+	/**
+	 * Meta key for variation key features
+	 */
+	const VARATION_FEATURES_KEY = 'solidie-content-key-features';
+
+	/**
 	 * Free product identifer meta key
 	 */
 	const FREE_META_KEY = 'solidie_content_is_free';
-	
-	/**
-	 * Get content list that is accessible by a user. 
-	 *
-	 * @param int $user_id
-	 * @return array
-	 */
-	public static function getContentListForUser( $user_id ) {
-		return array();
-	}
 
 	/**
 	 * Get associated product id by content id
@@ -182,7 +188,7 @@ class Contents extends Main{
 		global $wpdb;
 		$content = $wpdb->get_row(
 			$wpdb->prepare(
-				"SELECT content.*, product.post_title AS content_title, author.ID as author_id FROM " . self::table( 'contents' ) . " content 
+				"SELECT content.*, product.post_title AS content_name, product.post_excerpt as content_excerpt, author.ID as author_id FROM " . self::table( 'contents' ) . " content 
 				INNER JOIN {$wpdb->posts} product ON content.product_id=product.ID 
 				INNER JOIN {$wpdb->users} author ON product.post_author=author.ID
 				WHERE content." . $field_name . "=%s" . $status_clause,
@@ -190,9 +196,14 @@ class Contents extends Main{
 			)
 		);
 
-		$content = ( $content && is_object( $content ) ) ? self::assignContentMeta( $content ) : null;
+		if ( empty( $content ) || ! is_object( $content ) ) {
+			return null;
+		}
 
-		return ! empty( $content ) ? ( $field ? $content->$field ?? null : $content ) : null;
+		// Apply content meta
+		$content = self::assignContentMeta( $content );
+
+		return $field ? ( $content->$field ?? null ) : $content;
 	}
 
 	/**
@@ -310,7 +321,7 @@ class Contents extends Main{
 		global $wpdb;
 		$order               = wc_get_order( $order_id );
 		$order_complete_date = $order->get_date_completed();
-		$contents               = self::getContentsFromOrder( $order_id );
+		$contents            = self::getContentsFromOrder( $order_id );
 		$commission_rate     = self::getSiteCommissionRate();
 
 		foreach ( $contents as $content ) {
@@ -400,32 +411,34 @@ class Contents extends Main{
 	/**
 	 * Filter contents from order contents
 	 *
-	 * @param array $contents
+	 * @param array $contents All the order items from order regardless of solidie or others
 	 * @return array
 	 */
 	public static function filterContentsFromOrderItems( array $contents ) {
 		$contents  = array();
 		foreach ( $contents as $content ) {
+			// Here contents is actually woocommerce order item. 
 			$product_type = $content->get_product()->get_type();
 			$product_id   = $content->get_product_id();
-			$variation_id = $content->get_variation_id();
+			$variation_id = $content->get_variation_id(); // Purchased product variation ID. 
 			$variation    = new \WC_Product_Variation( $variation_id );
 			$content      = self::getContentByProduct( $product_id );
-			$var_info     = self::getVariationInfo( $variation );
+			$var_info     = self::getVariationInfo( $variation, $content->content_type );
 
 			// Skip non-content products or unsupported variation.
+			// We support either variable or variable subscription product
 			if ( ! $content || ! in_array( $product_type, array( 'subscription_variation', 'variation' ) )  || ! $var_info ) {
 				continue;
 			}
 
-			// To Do: Get sale price in USD currency
+			// To Do: Get sale price in USD currency. (In fact TBD what to do.)
 			$contents[] = array(
-				'content'			 => $content,
-				'product_id'     => $product_id,
-				'content_id'        => $content->content_id,
-				'variation_id'   => $variation_id,
-				'licensing'      => $var_info,
-				'sale_price'     => $variation->get_sale_price(),
+				'content'	   => $content,
+				'product_id'   => $product_id,
+				'content_id'   => $content->content_id,
+				'variation_id' => $variation_id,
+				'licensing'    => $var_info,
+				'sale_price'   => $variation->get_sale_price(),
 			);
 		}
 
@@ -438,39 +451,35 @@ class Contents extends Main{
 	 * @param \WC_Product_Variation|int $variation
 	 * @return array|null
 	 */
-	public static function getVariationInfo( $variation ) {
+	public static function getVariationInfo( $variation, $content_type ) {
 		$variation  = is_numeric( $variation ) ? new \WC_Product_Variation( $variation ) : $variation;
 		if ( empty( $variation ) ) {
 			return null;
 		}
 
-		$lincensing = self::getVariationBluePrint();
-		$attributes = $variation->get_attributes();
+		$lincensing   = Manifest::getVariationBluePrint( $content_type );
+		$attributes   = $variation->get_attributes();
+		$variation_id = $variation->get_id();
 
 		if ( isset( $attributes[ self::LICENSING_VARIATION ], $lincensing[ $attributes[ self::LICENSING_VARIATION ] ] ) ) {
-			$data = $lincensing[ $attributes[ self::LICENSING_VARIATION ] ];
-			$data['plan_key'] = $attributes[ self::LICENSING_VARIATION ];
+			$data                   = $lincensing[ $attributes[ self::LICENSING_VARIATION ] ];
+			$data['plan_key']       = $attributes[ self::LICENSING_VARIATION ];
+			$data['price']          = $variation->get_price();
+			$data['regular_price']  = $variation->get_regular_price();
+			$data['sale_price']     = $variation->get_sale_price();
+			$data['variation_id']   = $variation_id;
+			$data['average_rating'] = $variation->get_average_rating();
+			$data['rating_counts']  = $variation->get_rating_counts();
+			$data['rating_count']   = $variation->get_rating_count();
+			$data['review_count']   = $variation->get_review_count();
+			$data['enable']         = (bool) get_post_meta( $variation_id, self::VARATION_ENABLE_KEY, true );
+			$data['is_best']        = (bool) get_post_meta( $variation_id, self::VARATION_BEST_KEY, true );
+			$data['key_features']   = Cast::_array( get_post_meta( $variation_id, self::VARATION_FEATURES_KEY, true ) );
+
 			return $data;
 		}
 
 		return null;
-	}
-
-	/**
-	 * Provide necessary data to render a single content
-	 *
-	 * @param int $product_id
-	 * @return array
-	 */
-	public static function getSingleContentData( $product_id ) {
-		$data = array();
-
-		/* $data['logo_url']       = get_the_post_thumbnail_url( $product_id );
-		$data['content_title']  = get_post_field( 'post_title', $product_id );
-		$data['demo_video_url'] = get_post_meta( $product_id, 'content_demo_url', true );
-		$data['demo_url']       = get_post_meta( $product_id, 'content_demo_url', true ); */
-
-		return $data;
 	}
 
 	/**
@@ -482,11 +491,14 @@ class Contents extends Main{
 	 */
 	public static function getContents( array $args ) {
 		// Prepare arguments
+		$context      = $args['context'] ?? 'catalog';
 		$store_slug   = $args['store_slug'] ?? null;
 		$content_type = $args['content_type'] ?? null;
 		$customer_id  = $args['customer_id'] ?? null;
 		$page         = absint( $args['page'] ?? 1 );
 		$limit        = absint( $args['limit'] ?? 15 );
+
+		// To Do: Validate paramaters for the user as per context. 
 
 		$store_clause  = $store_slug ? " AND  store.slug='" . esc_sql( $store_slug ) . "'" : '';
 		$type_clause   = $content_type ? " AND content.content_type='" . esc_sql( $content_type ) . "'" : '';
@@ -519,7 +531,7 @@ class Contents extends Main{
 	 * @param array $meta_array
 	 * @return array|object
 	 */
-	public static function assignContentMeta( $contents, $meta_array = array( 'content_url', 'plans', 'logo_url', 'releases' ) ) {
+	public static function assignContentMeta( $contents, $meta_array = array( 'content_url', 'plans', 'logo_url', 'releases', 'variations' ) ) {
 		// Support both list and single content
 		if ( $was_single = ! is_array( $contents ) ) {
 			$contents = array( $contents );
@@ -579,10 +591,45 @@ class Contents extends Main{
 					// Finally replace the content array to be returned
 					$contents = array_values( $new_array );
 					break;
+
+				case 'variations' : 
+					foreach ($contents as $index => $content) {
+						$contents[ $index ]->variations = self::getContentVariations( $content );
+					}
+					break;
 			}
 		}
 
 		return $was_single ? $contents[0] : $contents;
+	}
+
+	/**
+	 * Get available variations for the content
+	 *
+	 * @param int $content_id
+	 * @return array
+	 */
+	public static function getContentVariations( $content ) {
+		$product    = wc_get_product( $content->product_id );
+		$_variations = array();
+
+		if ( $product->is_type( 'variable-subscription' ) || $product->is_type( 'variable' ) ) {
+			// Get the variations of the product
+			$variations = $product->get_available_variations();
+
+			// Print or process the variations
+			if ( ! empty( $variations ) ) {
+				// Loop through the variations and store info in the array if available
+				foreach ( $variations as $variation ) {
+					$info = self::getVariationInfo( $variation['variation_id'], $content->content_type );
+					if ( ! empty( $info ) ) {
+						$_variations[] = $info;
+					}
+				}
+			}
+		} 
+		
+		return $_variations;
 	}
 
 	/**
