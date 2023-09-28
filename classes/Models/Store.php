@@ -1,8 +1,8 @@
 <?php
 
-namespace Solidie\Store\Models;
+namespace Solidie\Models;
 
-use Solidie\Store\Main;
+use Solidie\Main;
 
 class Store extends Main{
 
@@ -25,7 +25,7 @@ class Store extends Main{
 		global $wpdb;
 
 		$wpdb->insert( 
-			self::table( 'stores' ), 
+			DB::stores(), 
 			array(
 				'name' => $store_name
 			)
@@ -35,7 +35,7 @@ class Store extends Main{
 
 		// Make the ID slug for now, user can change in dashboard
 		$wpdb->update(
-			self::table( 'stores' ), 
+			DB::stores(), 
 			array( 'slug' => $store_id ), 
 			array( 'store_id' => $store_id )
 		);
@@ -166,7 +166,7 @@ class Store extends Main{
 		// Get store informations using store ids
 		$stores = $wpdb->get_results(
 			"SELECT store_id, name AS store_name, slug AS store_slug 
-			FROM " . self::table( 'stores' ) . "
+			FROM " . DB::stores() . "
 			WHERE store_id IN(".implode( ',', $store_ids ).")"
 		);
 

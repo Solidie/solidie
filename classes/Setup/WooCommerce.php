@@ -1,8 +1,8 @@
 <?php
 
-namespace Solidie\Store\Setup;
+namespace Solidie\Setup;
 
-use Solidie\Store\Models\Contents;
+use Solidie\Models\Contents;
 
 class WooCommerce {
 	public function __construct() {

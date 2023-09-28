@@ -1,9 +1,9 @@
 <?php
 
-namespace Solidie\Store\Models;
+namespace Solidie\Models;
 
-use Solidie\Store\Helpers\Crypto;
-use Solidie\Store\Main;
+use Solidie\Helpers\Crypto;
+use Solidie\Main;
 
 class Licensing extends Main{
 	/**
@@ -35,7 +35,7 @@ class Licensing extends Main{
 			);
 
 			$wpdb->insert(
-				self::table( 'license_keys' ),
+				DB::license_keys(),
 				$license_key
 			);
 		}
@@ -59,9 +59,9 @@ class Licensing extends Main{
 		$keys = $wpdb->get_results(
 			$wpdb->prepare(
 				"SELECT license.*, sale.license_expires_on, sale.content_id, sale.variation_id, sale.customer_id, content.content_type
-				FROM " . self::table( 'license_keys' ) . " license 
-					INNER JOIN " . self::table( 'sales' ) . " sale ON sale.sale_id=license.sale_id
-					INNER JOIN " . self::table( 'contents' ) . " content ON sale.content_id=content.content_id
+				FROM " . DB::license_keys() . " license 
+					INNER JOIN " . DB::sales() . " sale ON sale.sale_id=license.sale_id
+					INNER JOIN " . DB::contents() . " content ON sale.content_id=content.content_id
 					WHERE license.sale_id=%d" . $content_clause . $endpoint_clause,
 				$sale_id
 			)

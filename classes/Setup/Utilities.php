@@ -1,6 +1,6 @@
 <?php
 
-namespace Solidie\Store\Setup;
+namespace Solidie\Setup;
 
 class Utilities {
 	public function __construct() {

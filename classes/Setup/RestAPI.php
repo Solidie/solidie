@@ -1,13 +1,14 @@
 <?php
 
-namespace Solidie\Store\Setup;
+namespace Solidie\Setup;
 
-use Solidie\Store\Helpers\Crypto;
-use Solidie\Store\Main;
-use Solidie\Store\Models\Contents;
-use Solidie\Store\Models\Hit;
-use Solidie\Store\Models\Licensing;
-use Solidie\Store\Models\Release;
+use Solidie\Helpers\Crypto;
+use Solidie\Main;
+use Solidie\Models\Contents;
+use Solidie\Models\DB;
+use Solidie\Models\Hit;
+use Solidie\Models\Licensing;
+use Solidie\Models\Release;
 
 class RestAPI extends Main {
 	const API_PATH               = '/solidie/api'; // The API entry point 
@@ -153,7 +154,7 @@ class RestAPI extends Main {
 			$message = _x( 'The license is activated already', 'solidie', 'solidie' );
 		} else {
 			$wpdb->update(
-				self::table( 'license_keys' ),
+				DB::license_keys(),
 				array( 'endpoint' => $_POST['endpoint'] ),
 				array( 'license_id' => $license['license_id'] )
 			);

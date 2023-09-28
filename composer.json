@@ -1,18 +1,19 @@
 {
     "name": "solidie/solidie",
-    "description": "Digital content selling plugin for WordPress",
+    "license": "gpl-v2",
     "autoload": {
-        "psr-4": {
-            "Solidie\\Store\\": "classes/",
-            "Solidie\\SalesReporter\\": "SalesReporter/",
-            "Solidie\\Updater\\": "Updater/"
-        }
+        "psr-4": {}
     },
-    "authors": [
-        {
-            "name": "Solidie",
-            "email": "solidie.com@gmail.com"
+    "scripts": {
+        "lint": "phpcs --extensions=php -s .",
+        "lint:fix": "phpcbf --extensions=php ."
+    },
+    "require-dev": {
+        "10up/phpcs-composer": "dev-master"
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
         }
-    ],
-    "require": {}
+    }
 }

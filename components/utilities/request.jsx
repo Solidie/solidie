@@ -1,86 +1,99 @@
-export function request(action, payload={}, callback, progressCallback) {
-	if(typeof payload=='function') {
-		callback = payload;
-		payload = {};
-	}
+export function request(action, payload = {}, callback, progressCallback) {
+	// Append action and nonce
+	payload = {
+		...payload,
+		action: window.Solidie.app_name + '_' + action,
+		nonce: window.Solidie.nonce
+	};
 
-	let modifer = {
-		contentType: false,
-        cache: false,
-   		processData:false,
-	}
+	// Build form data
+	const formData = new FormData();
 
-	let {name: nonce_name, action: nonce_action} = window.Solidie.nonce;
+	// Function to flatten nested JSON into a flat object and append files to FormData.
+	function flattenObject(obj, formData, parentKey = '') {
+		// Loop through object
+		for (let key in obj) {
+			// Do not enclose for first level key
+			const _key = parentKey === '' ? key : `${parentKey}[${key}]`;
 
-	// Create form data if it is not already, but has file inside
-	if ( ! ( payload instanceof FormData ) ) {
-
-		// Loop through all values to check if there is file
-		for( let k in payload ) {
-
-			// If a at least single one is file
-			if ( payload[k] instanceof File ) {
-
-				// Create new 
-				let new_payload = new FormData();
-
-				// Loop through values to append in the form data
-				for( let key in payload ) {
-					if ( payload[key] instanceof File ) {
-						// Append file
-						new_payload.append( key, payload[key], payload[key].name );
-					} else {
-						// Append scalar value
-						new_payload.append(key, payload[key]);
+			// Process object even if it is array
+			if (typeof obj[key] === 'object') {
+				// Process if it is array
+				if (Array.isArray(obj[key])) {
+					// Put empty array manually. Otherwise it doesn't get submitted as forEach method doesn't cover it.
+					// The post data should go through castRecursive method in the backend to convert this string array[] to real empty array.
+					if (!obj[key].length) {
+						formData.append(`${_key}`, '[]');
 					}
-				}
 
-				// Replace the payload with the new one
-				payload = new_payload;
-				
-				break;
+					// Loop through array elements
+					obj[key].forEach((item, index) => {
+						// If the element is uploaded file
+						if (item instanceof File) {
+							// Put file object which is an array element
+							formData.append(`${_key}[${index}]`, item, item.name);
+						} else if (!Array.isArray(item) && typeof item !== 'object') {
+							// If it is singular array item
+							formData.append(`${_key}[${index}]`, item);
+						} else {
+							// Run recurson for singular values
+							flattenObject(item, formData, `${_key}[${index}]`);
+						}
+					});
+				} else if (obj[key] instanceof File) {
+					// Process file object
+					formData.append(`${_key}`, obj[key]);
+				} else {
+					// Process singluar elements in the object recursively
+					flattenObject(obj[key], formData, `${_key}`);
+				}
+			} else {
+				// Put non object data directly
+				formData.append(`${_key}`, obj[key]);
 			}
 		}
 	}
 
-	let action_prefixed = window.Solidie.content_name + '_' + action;
-	
-	if ( payload instanceof FormData ) {
-		payload.append(nonce_name, nonce_action);
-		payload.append('action', action_prefixed);
-	} else {
-		modifer = {};
-		payload = {
-			...payload, 
-			[nonce_name]: nonce_action,
-			action: action_prefixed
-		};
-	}
+	// Flatten the nested JSON and append files to FormData
+	flattenObject(payload, formData);
 
 	window.jQuery.ajax({
-		url: window.Solidie.ajax_url,
+		url: window.Solidie.ajaxurl,
 		type: 'POST',
-		data: payload,
-		...modifer,
-		success: function(response) {
-			if ( typeof callback == 'function' ) {
-				callback(response);
+		data: formData,
+		contentType: false,
+		cache: false,
+		processData: false,
+		success: function (response) {
+			if (typeof callback == 'function') {
+				callback({
+					...response,
+					success: response.success || false,
+					data: response.data || {}
+				});
 			}
 		},
-		error: function() {
-
+		error: function () {
+			callback({
+				success: false,
+				data: {}
+			});
 		},
-		xhr: function() {
+		xhr: function () {
 			var xhr = new window.XMLHttpRequest();
-			xhr.upload.addEventListener("progress", function(evt) {
-				if (evt.lengthComputable) {
-					var percentComplete = (evt.loaded / evt.total) * 100;
-					if(typeof progressCallback=='function') {
-						progressCallback(percentComplete);
+			xhr.upload.addEventListener(
+				'progress',
+				function (evt) {
+					if (evt.lengthComputable) {
+						var percentComplete = (evt.loaded / evt.total) * 100;
+						if (typeof progressCallback == 'function') {
+							progressCallback(percentComplete);
+						}
 					}
-				}
-			}, false);
+				},
+				false
+			);
 			return xhr;
-		},
+		}
 	});
 }

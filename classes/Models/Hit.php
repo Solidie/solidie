@@ -1,8 +1,8 @@
 <?php
 
-namespace Solidie\Store\Models;
+namespace Solidie\Models;
 
-use Solidie\Store\Main;
+use Solidie\Main;
 
 class Hit extends Main {
 	/**
@@ -16,7 +16,7 @@ class Hit extends Main {
 	public static function registerHit( string $action, $release_id, $license_id, $endpoint ) {
 		global $wpdb;
 		$wpdb->insert(
-			self::table( 'hits' ),
+			DB::hits(),
 			array(
 				'license_id' => $license_id,
 				'release_id' => $release_id,

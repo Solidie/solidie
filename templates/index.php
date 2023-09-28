@@ -1,11 +1,11 @@
 <?php
-namespace Solidie\Store\TemplateLoader;
+namespace Solidie\TemplateLoader;
 
-use Solidie\Store\Main;
-use Solidie\Store\Models\AdminSetting;
-use Solidie\Store\Models\Contents;
-use Solidie\Store\Models\FrontendDashboard;
-use Solidie\Store\Setup\AdminPage;
+use Solidie\Main;
+use Solidie\Models\AdminSetting;
+use Solidie\Models\Contents;
+use Solidie\Models\FrontendDashboard;
+use Solidie\Setup\AdminPage;
 
 function load_404( $message = '' ) {
 	$template = locate_template( '404.php' );

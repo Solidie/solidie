@@ -1,8 +1,8 @@
 <?php
 
-namespace Solidie\Store\Models;
+namespace Solidie\Models;
 
-use Solidie\Store\Main;
+use Solidie\Main;
 
 class AdminSetting extends Main{
 	/**

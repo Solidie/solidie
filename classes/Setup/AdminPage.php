@@ -1,13 +1,13 @@
 <?php
 
-namespace Solidie\Store\Setup;
+namespace Solidie\Setup;
 
-use Solidie\Store\Main;
-use Solidie\Store\Models\AdminSetting;
-use Solidie\Store\Models\Contents;
-use Solidie\Store\Models\Manifest;
-use Solidie\Store\Models\Page as PageModel;
-use Solidie\Store\Setup\AdminPage as SetupAdminPage;
+use Solidie\Main;
+use Solidie\Models\AdminSetting;
+use Solidie\Models\Contents;
+use Solidie\Models\Manifest;
+use Solidie\Models\Page as PageModel;
+use Solidie\Setup\AdminPage as SetupAdminPage;
 
 class AdminPage extends Main {
 

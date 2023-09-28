@@ -1,9 +1,10 @@
 <?php
 
-namespace Solidie\Store\Models;
+namespace Solidie\Models;
 
-use Solidie\Store\Main;
-use Solidie\Store\Helpers\Cast;
+use Solidie\Helpers\_Array;
+use Solidie\Main;
+use Solidie\Helpers\Cast;
 
 class Contents extends Main{
 	/**
@@ -42,7 +43,7 @@ class Contents extends Main{
 
 		$id = $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT product_id FROM " . self::table( 'contents' ) . " WHERE content_id=%d",
+				"SELECT product_id FROM " . DB::contents() . " WHERE content_id=%d",
 				$content_id
 			)
 		);
@@ -116,7 +117,7 @@ class Contents extends Main{
 		// Create Solidie entry
 		global $wpdb;
 		$wpdb->insert( 
-			self::table( 'contents' ), 
+			DB::contents(), 
 			array(
 				'product_id' => $product_id,
 				'store_id'   => $store_id
@@ -147,7 +148,7 @@ class Contents extends Main{
 		global $wpdb;
 		$releases = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT * FROM " . self::table( 'releases' ) . " WHERE content_id=%d ORDER BY release_date DESC",
+				"SELECT * FROM " . DB::releases() . " WHERE content_id=%d ORDER BY release_date DESC",
 				$content_id
 			)
 		);
@@ -181,14 +182,14 @@ class Contents extends Main{
 		$status_clause   = $public_only ? ' AND (product.post_status="publish" OR product.post_author=' . $current_user_id . ') ' : '';
 
 		// Admin and editor also can visit products no matter what the status is. Other users can only if the product is public.
-		if ( User::hasUserRole( array( 'administrator', 'editor' ), $current_user_id ) ) {
+		if ( User::validateRole( $current_user_id, array( 'administrator', 'editor' ) ) ) {
 			$status_clause = '';
 		}
 
 		global $wpdb;
 		$content = $wpdb->get_row(
 			$wpdb->prepare(
-				"SELECT content.*, product.post_title AS content_name, product.post_excerpt as content_excerpt, author.ID as author_id FROM " . self::table( 'contents' ) . " content 
+				"SELECT content.*, product.post_title AS content_name, product.post_excerpt as content_excerpt, author.ID as author_id FROM " . DB::contents() . " content 
 				INNER JOIN {$wpdb->posts} product ON content.product_id=product.ID 
 				INNER JOIN {$wpdb->users} author ON product.post_author=author.ID
 				WHERE content." . $field_name . "=%s" . $status_clause,
@@ -297,7 +298,7 @@ class Contents extends Main{
 		global $wpdb;
 		$purchase = $wpdb->get_row(
 			$wpdb->prepare(
-				"SELECT * FROM " . self::table( 'sales' ) . " WHERE order_id=%d AND variation_id=%d",
+				"SELECT * FROM " . DB::sales() . " WHERE order_id=%d AND variation_id=%d",
 				$order_id,
 				$variation_id
 			)
@@ -313,7 +314,7 @@ class Contents extends Main{
 	 * @return void
 	 */
 	public static function processPurchase( int $order_id ) {
-		// This method is for only initial order. Skip if it is renewal one. 
+		// This method is for only initial order. Skip if it is renewal one. There's another method to process renewal.
 		if ( function_exists( 'wcs_order_contains_renewal' ) && wcs_order_contains_renewal( $order_id ) ) {
 			return;
 		}
@@ -322,7 +323,7 @@ class Contents extends Main{
 		$order               = wc_get_order( $order_id );
 		$order_complete_date = $order->get_date_completed();
 		$contents            = self::getContentsFromOrder( $order_id );
-		$commission_rate     = self::getSiteCommissionRate();
+		$commission_rate     = 0;
 
 		foreach ( $contents as $content ) {
 			// Skip if already added
@@ -339,9 +340,9 @@ class Contents extends Main{
 			
 			// Insert the content in the sales table
 			$wpdb->insert(
-				self::table( 'sales' ),
+				DB::sales(),
 				array(
-					'content_id'            => $content['content_id'],
+					'content_id'         => $content['content_id'],
 					'customer_id'		 => wc_get_order( $order_id )->get_customer_id(),
 					'order_id'           => $order_id,
 					'variation_id'       => $content['variation_id'],
@@ -350,6 +351,7 @@ class Contents extends Main{
 					'commission_rate'    => $commission_rate,
 					'license_key_limit'  => $content['licensing']['license_key_limit'],
 					'license_expires_on' => $expires_on,
+					'sold_at'            => $order_complete_date,
 				)
 			);
 
@@ -377,7 +379,7 @@ class Contents extends Main{
 
 			$wpdb->query(
 				$wpdb->prepare(
-					"UPDATE ".self::table( 'sales' )." SET license_expires_on=DATE_ADD(license_expires_on, INTERVAL %d DAY) WHERE content_id=%d AND license_expires_on IS NOT NULL",
+					"UPDATE ".DB::sales()." SET license_expires_on=DATE_ADD(license_expires_on, INTERVAL %d DAY) WHERE content_id=%d AND license_expires_on IS NOT NULL",
 					$content['licensing']['validity_days'],
 					$content['content_id']
 				)
@@ -474,7 +476,7 @@ class Contents extends Main{
 			$data['review_count']   = $variation->get_review_count();
 			$data['enable']         = (bool) get_post_meta( $variation_id, self::VARATION_ENABLE_KEY, true );
 			$data['is_best']        = (bool) get_post_meta( $variation_id, self::VARATION_BEST_KEY, true );
-			$data['key_features']   = Cast::_array( get_post_meta( $variation_id, self::VARATION_FEATURES_KEY, true ) );
+			$data['key_features']   = _Array::getArray( get_post_meta( $variation_id, self::VARATION_FEATURES_KEY, true ) );
 
 			return $data;
 		}
@@ -510,9 +512,9 @@ class Contents extends Main{
 		$contents = $wpdb->get_results(
 			"SELECT DISTINCT product.post_title AS content_name, product.ID as product_id, content.content_id, content.content_type, product.post_status AS content_status, sale.sale_id
 			FROM {$wpdb->posts} product 
-				INNER JOIN " . self::table( 'contents' ) . " content ON product.ID=content.product_id 
-				INNER JOIN " . self::table( 'stores' ) . " store ON content.store_id=store.store_id
-				LEFT JOIN " . self::table( 'sales' ) . " sale ON content.content_id=sale.content_id
+				INNER JOIN " . DB::contents() . " content ON product.ID=content.product_id 
+				INNER JOIN " . DB::stores() . " store ON content.store_id=store.store_id
+				LEFT JOIN " . DB::sales() . " sale ON content.content_id=sale.content_id
 			WHERE 1=1 " 
 				. $store_clause 
 				. $type_clause 

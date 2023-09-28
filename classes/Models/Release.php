@@ -1,10 +1,10 @@
 <?php
 
-namespace Solidie\Store\Models;
+namespace Solidie\Models;
 
-use Solidie\Store\Helpers\Crypto;
-use Solidie\Store\Main;
-use Solidie\Store\Setup\RestAPI;
+use Solidie\Helpers\Crypto;
+use Solidie\Main;
+use Solidie\Setup\RestAPI;
 
 class Release extends Main {
 	/**
@@ -221,7 +221,7 @@ class Release extends Main {
 
 		global $wpdb;
 		$file_ids = $wpdb->get_col(
-			"SELECT file_id FROM " . self::table( 'releases' ) . " WHERE release_id IN (" . $implodes . ")"
+			"SELECT file_id FROM " . DB::releases() . " WHERE release_id IN (" . $implodes . ")"
 		);
 
 		if ( ! empty( $file_ids ) && is_array( $file_ids ) ) {
@@ -270,10 +270,10 @@ class Release extends Main {
 		}
 
 		if ( empty( $data['release_id'] ) ) {
-			$wpdb->insert( self::table( 'releases' ), $release );
+			$wpdb->insert( DB::releases(), $release );
 		} else {
 			$wpdb->update(
-				self::table( 'releases' ),
+				DB::releases(),
 				$release,
 				array(
 					'release_id' => $data['release_id']
@@ -300,8 +300,8 @@ class Release extends Main {
 		$releases = $wpdb->get_results(
 			$wpdb->prepare(
 				"SELECT _release.*, product.post_title AS content_name, UNIX_TIMESTAMP(_release.release_date) as release_unix_timestamp, content.product_id, content.content_type
-				FROM ".self::table( 'releases' )." _release
-				INNER JOIN ".self::table('contents')." content ON content.content_id=_release.content_id
+				FROM ".DB::releases()." _release
+				INNER JOIN ".DB::contents()." content ON content.content_id=_release.content_id
 				INNER JOIN {$wpdb->posts} product ON content.product_id=product.ID
 				WHERE _release.content_id=%d ".$version_clause." ORDER BY _release.release_date DESC LIMIT %d, %d",
 				$content_id,

@@ -1,8 +1,8 @@
 <?php
 
-namespace Solidie\Store\Setup;
+namespace Solidie\Setup;
 
-use Solidie\Store\Models\Release;
+use Solidie\Models\Release;
 
 class Media {
 	public function __construct() {

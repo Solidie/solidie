@@ -1,8 +1,8 @@
 <?php
 
-namespace Solidie\Store\Models;
+namespace Solidie\Models;
 
-use Solidie\Store\Setup\AdminPage;
+use Solidie\Setup\AdminPage;
 
 class FrontendDashboard{
 	public static function is_dashboard() {

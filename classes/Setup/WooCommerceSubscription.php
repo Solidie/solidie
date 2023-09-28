@@ -1,10 +1,10 @@
 <?php
 
-namespace Solidie\Store\Setup;
+namespace Solidie\Setup;
 
-use Solidie\Store\Main;
-use Solidie\Store\Models\Contents;
-use Solidie\Store\Models\Manifest;
+use Solidie\Main;
+use Solidie\Models\Contents;
+use Solidie\Models\Manifest;
 
 class WooCommerceSubscription extends Main {
 	public function __construct() {

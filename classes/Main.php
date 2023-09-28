@@ -1,20 +1,18 @@
 <?php
 
-namespace Solidie\Store;
+namespace Solidie;
 
-use Solidie\Store\Helpers\Crypto;
-use Solidie\Store\Setup\Dispatcher;
-use Solidie\Store\Setup\Scripts;
-use Solidie\Store\Setup\AdminPage;
-use Solidie\Store\Setup\Utilities;
-use Solidie\Store\Setup\Media;
-use Solidie\Store\Setup\RestAPI;
-use Solidie\Store\Setup\WooCommerce;
-use Solidie\Store\Setup\WooCommerceSubscription;
-use Solidie\Store\Models\AdminSetting;
-
+use Solidie\Helpers\Crypto;
+use Solidie\Setup\Dispatcher;
+use Solidie\Setup\Scripts;
+use Solidie\Setup\AdminPage;
+use Solidie\Setup\Utilities;
+use Solidie\Setup\Media;
+use Solidie\Setup\RestAPI;
+use Solidie\Setup\WooCommerce;
+use Solidie\Setup\WooCommerceSubscription;
+use Solidie\Models\DB;
 use Solidie\SalesReporter\Report;
-use Solidie\Store\Setup\Shortcode;
 use Solidie\Updater\Updater;
 
 class Main {
@@ -36,10 +34,20 @@ class Main {
 
 		// Store configs in runtime static property
 		self::$configs = $configs;
+
+		// Loading Autoloader
+		spl_autoload_register( array( $this, 'loader' ) );
+
+		// Register Activation/Deactivation Hook
+		register_activation_hook( self::$configs->file, array( $this, 'activate' ) );
+		register_deactivation_hook( self::$configs->file, array( $this, 'deactivate' ) );
+
+		// Assign crypto
 		self::$configs->crypto = Crypto::class;
 
 		// Add prefix to linked table
-		self::$configs->linked_table = self::table( $configs->linked_table );
+		$table_name = $configs->linked_table;
+		self::$configs->linked_table = DB::$table_name();
 		
 		// Core Modules
 		new Utilities();
@@ -50,7 +58,6 @@ class Main {
 		new WooCommerceSubscription();
 		new RestAPI();
 		new Media();
-		new Shortcode();
 
 		// Register sales reporter to solidie website
 		new Report( $configs );
@@ -59,12 +66,46 @@ class Main {
 		new Updater( $configs );
 	}
 
-	protected static function table( string $table_name ) {
-		global $wpdb;
-		return $wpdb->prefix . self::$configs->db_prefix . $table_name;
+	/**
+	 * Autload classes
+	 *
+	 * @param string $class_name The class name to load file for
+	 * @return void
+	 */
+	public function loader( $class_name ) {
+		if ( class_exists( $class_name ) ) {
+			return;
+		}
+
+		$class_name = preg_replace(
+			array( '/([a-z])([A-Z])/', '/\\\/' ),
+			array( '$1$2', DIRECTORY_SEPARATOR ),
+			$class_name
+		);
+
+		$class_name = str_replace( 'Solidie' . DIRECTORY_SEPARATOR, 'classes' . DIRECTORY_SEPARATOR, $class_name );
+		$file_name  = self::$configs->dir . $class_name . '.php';
+
+		if ( file_exists( $file_name ) ) {
+			require_once $file_name;
+		}
 	}
 
-	protected static function getSiteCommissionRate() {
-		return AdminSetting::get( 'site_commision_rate', 0 );
+	/**
+	 * Execute activation hook
+	 *
+	 * @return void
+	 */
+	public static function activate() {
+		do_action( 'solidie_activated' );
+	}
+
+	/**
+	 * Execute deactivation hook
+	 *
+	 * @return void
+	 */
+	public static function deactivate() {
+		do_action( 'solidie_deactivated' );
 	}
 }
