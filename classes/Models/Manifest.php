@@ -10,18 +10,19 @@ class Manifest {
 		}
 
 		$manifest = array (
-			'dashboard' => array (
-				'label' => 'Dashboard', 
-				'slug'  => 'dashboard', 
-			), 
-			'catalog' => array ( 
-				'label' => 'Catalog', 
-				'slug'  => 'catalog', 
-			), 
+			'settings' => array(
+				'dashboard' => array (
+					'label' => 'Dashboard', 
+					'slug'  => 'dashboard', 
+				), 
+				'content' => array ( // For single content page
+					'full_width' => false, 
+				),
+			),
 			'contents' => array ( 
 				'app' => array ( 
 					'label'       => 'App', 
-					'slug'        => 'app', 
+					'slug'        => 'apps', 
 					'description' => 'Applications for website, android, windows, linux, mac and so on.', 
 					'plans'       => array(
 						'unlimited' => array(
@@ -58,21 +59,29 @@ class Manifest {
 				), 
 				'audio' => array ( 
 					'label'       => 'Audio', 
-					'slug'        => 'audio', 
+					'slug'        => 'audios', 
 					'description' => 'Audio contents like music, podcast and so on.',
 					'plans' => array(),
 				), 
 				'video' => array ( 
 					'label' => 'Video', 
-					'slug' => 'video', 
+					'slug' => 'videos', 
 					'description' => 'Video contents like travel vlog, cinematography, templates and so on.', 
 					'plans' => array(),
 				), 
 				'image' => array ( 
-					'label' => 'Image', 
-					'slug' => 'image', 
+					'label'       => 'Image', 
+					'slug'        => 'images', 
 					'description' => 'Different types of images', 
-					'plans' => array(),
+					'plans'       => array(),
+					'catagories'  => array(
+						'photograph'   => 'Photograph',
+						'vector'       => 'Vector',
+						'illustration' => 'Illustration',
+						'ai'           => 'AI',
+						'editorial'    => 'Editorial',
+						'texture'      => 'Texture',
+					)
 				), 
 				'3d' => array ( 
 					'label' => '3D', 
@@ -82,22 +91,22 @@ class Manifest {
 				), 
 				'document' => array ( 
 					'label' => 'Document', 
-					'slug' => 'document', 
+					'slug' => 'documents', 
 					'description' => 'Ebook, Sheet and other similar documents.', 
 					'plans' => array(),
 				), 
 				'tutorial' => array ( 
 					'label' => 'Tutorial', 
-					'slug' => 'tutorial', 
+					'slug' => 'tutorials', 
 					'description' => 'Tutorial and written documentations.', 
 					'plans' => array(),
 				), 
 				'font' => array ( 
 					'label' => 'Font', 
-					'slug' => 'font', 
+					'slug' => 'fonts', 
 					'description' => 'Various fonts', 
 					'plans' => array(),
-				), 
+				),
 			), 
 		);
 
@@ -120,10 +129,9 @@ class Manifest {
 
 
 		// Now prepare plans for audio, video, image, 3d, document and font together as these are similar in terms of usage. 
-		// Tutorial doesn't need any plan as it is not normally used outside of the website. 
-		// And the customer will always have access to tutorials once purchased. No matter the author updates the tutorial or not.
+		// Tutorial doesn't need any plan as it is not downloadable or subscription based. It is onetime purchase, lifetime access no matter gets update or not. 
 		// If tutorial is written as part of other contents such as app or video template, then customers don't need to purchase it separately as they've done so for the main content already.
-		// Tutorial can be purchased and showcased separately only and only if it is created independently as not part of other contents.
+		// Tutorial can be purchased and showcased separately only if it is created independently as not part of other contents.
 		$lincensings   = self::getLicensings();
 		$content_types = array_diff( array_keys( $manifest['contents'] ), array( 'app', 'tutorial' ) );
 
@@ -146,7 +154,31 @@ class Manifest {
 			}
 		}
 
+		// Get this through filter for modification by others
+		$manifest = apply_filters( 'solidie_manifest', $manifest );
+
+		// Add the content type array in content settings
+		$manifest['settings']['contents'] = array();
+		foreach ( array_keys( $manifest['contents'] ) as $type ) {
+			$manifest['settings']['contents'][ $type ] = array(
+				'slug'   => $type,
+				'enable' => false
+			);
+		}
+
+		// Finally return the manifest
 		return $manifest;
+	}
+
+	/**
+	 * Get supported plans for specific content type
+	 *
+	 * @param string $content_type
+	 * @return array
+	 */
+	public static function getVariationBluePrint( string $content_type ) {
+		$content = self::getManifest()['contents'][ $content_type ] ?? array();
+		return $content['plans'] ?? array();
 	}
 
 	/**
@@ -156,7 +188,7 @@ class Manifest {
 	 * 
 	 * @return array
 	 */
-	private static function getPeriods( $number = 0 ) {
+	public static function getPeriods( $number = 0 ) {
 		return array(
 			'day' => array(
 				'days'      => 1,

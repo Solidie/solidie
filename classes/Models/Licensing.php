@@ -58,10 +58,11 @@ class Licensing extends Main{
 
 		$keys = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT license.*, sale.license_expires_on, sale.content_id, sale.variation_id, sale.customer_id
-				FROM ".self::table( 'license_keys' )." license 
-				INNER JOIN ".self::table( 'sales' )." sale ON sale.sale_id=license.sale_id
-				WHERE license.sale_id=%d" . $content_clause . $endpoint_clause,
+				"SELECT license.*, sale.license_expires_on, sale.content_id, sale.variation_id, sale.customer_id, content.content_type
+				FROM " . self::table( 'license_keys' ) . " license 
+					INNER JOIN " . self::table( 'sales' ) . " sale ON sale.sale_id=license.sale_id
+					INNER JOIN " . self::table( 'contents' ) . " content ON sale.content_id=content.content_id
+					WHERE license.sale_id=%d" . $content_clause . $endpoint_clause,
 				$sale_id
 			)
 		);
@@ -87,7 +88,7 @@ class Licensing extends Main{
 				continue;
 			}
 
-			$var_info = Contents::getVariationInfo( new \WC_Product_Variation( (int) $license->variation_id ) );
+			$var_info = Contents::getVariationInfo( new \WC_Product_Variation( (int) $license->variation_id ), $license->content_type );
 			$customer = get_userdata( $license->customer_id );
 			$data     = array();
 

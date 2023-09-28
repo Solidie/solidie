@@ -80,18 +80,10 @@ export function SettingPage(props) {
 				</tr>
 				<tr>
 					<th scope='row'>
-						<label>{manifest.dashboard.label} Base Slug</label>
+						<label>{savedSettings.dashboard.label} Base Slug</label>
 					</th>
 					<td>
-						<input type="text" defaultValue={savedSettings?.dashboard?.slug || manifest.dashboard.slug} onChange={e=>onChange('dashboard', 'slug', e.currentTarget.value)} className='regular-text' placeholder={manifest.dashboard.slug}/>
-					</td>
-				</tr>
-				<tr>
-					<th scope='row'>
-						<label>{manifest.catalog.label} Base Slug</label>
-					</th>
-					<td>
-						<input type="text" defaultValue={savedSettings?.catalog?.slug || manifest.catalog.slug} onChange={e=>onChange('catalog', 'slug', e.currentTarget.value)} className='regular-text' placeholder={manifest.dashboard.slug}/>
+						<input type="text" defaultValue={savedSettings?.dashboard?.slug} onChange={e=>onChange('dashboard', 'slug', e.currentTarget.value)} className='regular-text'/>
 					</td>
 				</tr>
 			</tbody>

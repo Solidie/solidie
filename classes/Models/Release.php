@@ -260,7 +260,7 @@ class Release extends Main {
 			}
 
 			// Upload new one
-			$file_id = self::uploadFile( $data['content_id'], $data['file'], $content->content_title . ' - ' . $data['version'] );
+			$file_id = self::uploadFile( $data['content_id'], $data['file'], $content->content_name . ' - ' . $data['version'] );
 			if ( ! $file_id ) {
 				return _x( 'Error in file saving!', 'solidie', 'solidie' );
 			}
@@ -323,7 +323,10 @@ class Release extends Main {
 				continue;
 			}
 
-			$release->download_url = get_home_url() . RestAPI::API_PATH . '/?download=' . urlencode( Crypto::encrypt( $release->content_id . ' ' . $license_id . ' ' . time() . ' ' . $endpoint . ' ' . $release->version ) ); // License id null means it's free
+			// To Do: Ensure version can't contain empty space. Force author to put non-space characters, and also programmatically remove spaces.
+			// To Do: Validate the license id is associated with proper content (if not free) and vailidity is not expired.
+
+			$release->download_url = get_home_url() . RestAPI::API_PATH . '/?download=' . urlencode( Crypto::encrypt( $release->content_id . ' ' . $license_id . ' ' . time() . ' ' . $endpoint . ' ' . $release->version ) ); // Empty license id means it's free t download. It will be checked during download.
 			$release->file_url     = $file_url;
 			$release->file_path    = $file_path ? $file_path : null;
 			$release->mime_type    = get_post_mime_type( $release->file_id );

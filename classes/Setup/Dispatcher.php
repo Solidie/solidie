@@ -20,13 +20,28 @@ class Dispatcher {
 		'fetch_releases',
 		'version_release',
 		'get_purchased_contents',
+		'add_to_cart',
+	);
+
+	// Mark some as nopriv
+	private static $noprivs = array(
+		'get_content_list'
 	);
 
 	function __construct() {
+		// Loop through handlers and register
 		foreach ( self::$endpoints as $endpoint ) {
+			// Register logged in handler first
 			add_action( 'wp_ajax_' . Main::$configs->content_name . '_' . $endpoint, function() use($endpoint) {
 				$this->dispatch($endpoint);
 			} );
+
+			// Register public handlers too if defined so
+			if( in_array( $endpoint, self::$noprivs ) ) {
+				add_action( 'wp_ajax_nopriv_' . Main::$configs->content_name . '_' . $endpoint, function() use($endpoint) {
+					$this->dispatch($endpoint);
+				} );
+			}
 		}
 	}
 
@@ -182,5 +197,31 @@ class Dispatcher {
 	public function get_purchased_contents() {
 		$content_list = ContentModel::getContents( array_merge( $_POST, array( 'customer_id' => get_current_user_id() ) )  );
 		wp_send_json_success( array( 'contents' => $content_list ) );
+	}
+
+	/**
+	 * Add content to cart
+	 *
+	 * @return void
+	 */
+	public function add_to_cart() {
+		$product_id   = $_POST['product_id'];
+		$variation_id = $_POST['variation_id'];
+		$content_id   = $_POST['content_id'];
+
+		if ( ! wc_get_product( $product_id ) ) {
+			wp_send_json_error( array( 'message' => __( 'Product Not Fund!', 'solidie' ) ) );
+			exit;
+		}
+	
+		// Add the product to the cart
+		WC()->cart->add_to_cart( $product_id, 1, $variation_id );
+		wp_send_json_success(
+			array( 
+				'message'  => __( 'Added to cart', 'solidie' ), 
+				'cart_url' => wc_get_cart_url(),
+			)
+		);
+		exit;
 	}
 }
