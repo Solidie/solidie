@@ -2,9 +2,7 @@
 
 namespace Solidie\Models;
 
-use Solidie\Main;
-
-class Store extends Main{
+class Store {
 
 	/**
 	 * Available store keeper roles

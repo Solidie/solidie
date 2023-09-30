@@ -1,5 +1,5 @@
 import style_library from '../styles/index.module.scss';
-import icons from '../icons/solidie/style.module.scss';
+import icons from '../icons/crewhrm/style.module.scss';
 import { is_production } from './helpers.jsx';
 
 String.prototype.classNames = function (style) {
@@ -10,7 +10,7 @@ String.prototype.classNames = function (style) {
 
 	// Apply dynamic classes
 	cls = cls.map((c) => {
-		let source = style || (c.indexOf('s-icon') > -1 ? icons : style_library);
+		let source = style || (c.indexOf('ch-icon') > -1 ? icons : style_library);
 
 		// Log if the class not found
 		if (!source[c]) {

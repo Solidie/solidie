@@ -6,10 +6,9 @@ use Solidie\Main;
 use Solidie\Models\AdminSetting;
 use Solidie\Models\Contents;
 use Solidie\Models\Manifest;
-use Solidie\Models\Page as PageModel;
 use Solidie\Setup\AdminPage as SetupAdminPage;
 
-class AdminPage extends Main {
+class AdminPage {
 
 	/**
 	 * The pagename for Solidie
@@ -49,7 +48,7 @@ class AdminPage extends Main {
 	function register_template( $template ) {
 		if ( get_query_var( self::$pagename_key ) ) {
 			// Load your custom template file here
-			$template = self::$configs->dir . 'templates/index.php';
+			$template = Main::$configs->dir . 'templates/index.php';
 		}
 
 		return $template;
@@ -66,13 +65,13 @@ class AdminPage extends Main {
 			__( 'Solidie', 'solidie' ),
 			__( 'Solidie', 'solidie' ),
 			'administrator',
-			self::$configs->root_menu_slug,
+			Main::$configs->root_menu_slug,
 			array( $this, 'mainPage' )
 		);
 
 		// Setting page
 		add_submenu_page( 
-			self::$configs->root_menu_slug, 
+			Main::$configs->root_menu_slug, 
 			__( 'Settings', 'tutor' ),
 			 __( 'Settings', 'tutor' ), 
 			 'administrator', 

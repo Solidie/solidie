@@ -2,36 +2,15 @@
 
 namespace Solidie\Models;
 
-use Solidie\Main;
+use Solidie\Helpers\_Array;
 
-class AdminSetting extends Main{
+class AdminSetting {
 	/**
 	 * Option name to save as. It will be encoded before save. Site host will be used as salt in disguise mode. 
 	 *
 	 * @var string
 	 */
 	private static $name = 'solidie_store_admin_settings';
-
-	/**
-	 * Type cast as expected
-	 *
-	 * @param array $arr
-	 * @return array
-	 */
-	private static function typeCast( $arr ) {
-		foreach ( $arr as $index => $value ) {
-			if( is_array( $value ) ) {
-				$arr[ $index ] = self::typeCast( $value );
-
-			} else if( $value === 'true' ) {
-				$arr[ $index ] = true;
-
-			} else if( $value === 'false' ) {
-				$arr[ $index ] = false;
-			}
-		}
-		return $arr;
-	}
 
 	/**
 	 * Save admin settings
@@ -44,7 +23,7 @@ class AdminSetting extends Main{
 			return false;
 		}
 
-		$settings = self::typeCast( is_array( $settings ) ? $settings : array() );
+		$settings = _Array::castRecursive( is_array( $settings ) ? $settings : array() );
 		$settings = array_replace_recursive( self::get(), $settings );
 
 		update_option( self::$name, $settings, true );

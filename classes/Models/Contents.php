@@ -3,10 +3,8 @@
 namespace Solidie\Models;
 
 use Solidie\Helpers\_Array;
-use Solidie\Main;
-use Solidie\Helpers\Cast;
 
-class Contents extends Main{
+class Contents {
 	/**
 	 * Licensing variation key for contents
 	 */

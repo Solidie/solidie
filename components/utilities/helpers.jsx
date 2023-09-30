@@ -1,6 +1,6 @@
 import moment, { tz } from 'moment-timezone';
 
-import icons from '../icons/solidie/style.module.scss';
+import icons from '../icons/crewhrm/style.module.scss';
 
 export const patterns = {
 	email: /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/,
@@ -10,9 +10,14 @@ export const patterns = {
 }
 
 export const getDashboardPath=(rel_path, append_slash=true)=>{
-	const { home_path, settings: {dashboard: {slug: dashboard_slug}} } = window.Solidie;
+	const { settings: {dashboard: {slug: dashboard_slug}} } = window.Solidie;
 	const slash = append_slash ? (rel_path.indexOf( '/' ) === 0 ? '' : '/') : '';
-	return home_path + dashboard_slug + slash + rel_path;
+	return getPath( dashboard_slug + slash + rel_path );
+}
+
+export function getPath(path) {
+	let _path = window.Solidie.home_path + path;
+	return _path.replace(/\/+/g, '/');
 }
 
 export function getElementDataSet(element) {

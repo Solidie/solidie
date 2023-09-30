@@ -6,7 +6,7 @@ use Solidie\Helpers\Crypto;
 use Solidie\Main;
 use Solidie\Setup\RestAPI;
 
-class Release extends Main {
+class Release {
 	/**
 	 * Mime types that can be enabled in setting
 	 *

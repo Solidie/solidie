@@ -3,9 +3,8 @@
 namespace Solidie\Models;
 
 use Error;
-use Solidie\Main;
 
-class StoreMeta extends Main {
+class StoreMeta {
 	/**
 	 * Add meta for store
 	 *

@@ -2,9 +2,7 @@
 
 namespace Solidie\Models;
 
-use Solidie\Main;
-
-class Sale extends Main {
+class Sale {
 	/**
 	 * Get single sale by field
 	 *

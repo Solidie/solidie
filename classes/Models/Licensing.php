@@ -3,9 +3,8 @@
 namespace Solidie\Models;
 
 use Solidie\Helpers\Crypto;
-use Solidie\Main;
 
-class Licensing extends Main{
+class Licensing {
 	/**
 	 * Generate license keys for content sale
 	 *

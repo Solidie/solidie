@@ -4,7 +4,7 @@ namespace Solidie\Models;
 
 use Solidie\Main;
 
-class Hit extends Main {
+class Hit {
 	/**
 	 * Register hits
 	 *

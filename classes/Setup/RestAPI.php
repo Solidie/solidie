@@ -10,7 +10,7 @@ use Solidie\Models\Hit;
 use Solidie\Models\Licensing;
 use Solidie\Models\Release;
 
-class RestAPI extends Main {
+class RestAPI {
 	const API_PATH               = '/solidie/api'; // The API entry point 
 	const DOWNLOAD_LINK_VALIDITY = 720; // in minutes. 12 hours here as WordPress normally checks for updates every 12 hours.
 
@@ -38,7 +38,7 @@ class RestAPI extends Main {
 	 */
 	public function add_license_api() {
 		// Check if it is api request
-		$url         = explode( '?', self::$configs->current_url );
+		$url         = explode( '?', Main::$configs->current_url );
 		$current_url = trim( $url[0], '/' );
 		if ( get_home_url() . self::API_PATH !== $current_url ) {
 			return;
