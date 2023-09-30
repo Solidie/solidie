@@ -11,19 +11,18 @@
  * Text Domain: solidie
  */
 
- // Load autoloader
-require_once __DIR__ . '/vendor/autoload.php';
+// Load autoloader
+require_once __DIR__ . '/classes/Main.php';
 
-add_action( 'plugins_loaded', function(){
-
-	$payload = array(
+(new Solidie\Main())->init( 
+	(object) array(
+		'app_name'          => 'appstore',
 		'content_name'      => 'appstore',
 		'content_title'     => 'AppStore',
 		'is_free'           => false,
 		'file'              => __FILE__,
 		'root_menu_slug'    => 'solidie',
 		'continuous_update' => false,
-		
 		'db_prefix'         => 'appstore_',
 		'linked_table'      => 'contents',
 		'linked_column'     => 'product_id',
@@ -32,7 +31,5 @@ add_action( 'plugins_loaded', function(){
 		'url'               => plugin_dir_url( __FILE__ ),
 		'dist_url'          => plugin_dir_url( __FILE__ ) . '/dist/',
 		'current_url'       => "http".((!empty($_SERVER['HTTPS'])&&$_SERVER['HTTPS']!='off')?'s':'').'://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']
-	);
-
-	(new Solidie\Store\Main())->init( (object) $payload );
-} );
+	)
+);

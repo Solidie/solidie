@@ -1,227 +1,112 @@
 <?php
 
-namespace Solidie\Store\Setup;
+namespace Solidie\Setup;
 
-use Solidie\Store\Helpers\Nonce;
-use Solidie\Store\Main;
-use Solidie\Store\Models\AdminSetting;
-use Solidie\Store\Models\Contents as ContentModel;
-use Solidie\Store\Models\Release;
-use Solidie\Store\Models\Store;
+use Error;
+use Solidie\Controllers\ContentController;
+use Solidie\Controllers\SettingsController;
+use Solidie\Controllers\StoreController;
+use Solidie\Helpers\_Array;
+use Solidie\Helpers\_String;
+use Solidie\Main;
+use Solidie\Models\User;
 
+/**
+ * Dispatcher class
+ */
 class Dispatcher {
-	
-	// To Do: Secure all the endpoint after MVP implementation
-	private static $endpoints = array(
-		'get_content_list',
-		'save_admin_settings',
-		'create_store',
-		'create_or_update_content',
-		'fetch_releases',
-		'version_release',
-		'get_purchased_contents',
-		'add_to_cart',
+	/**
+	 * Controlles class array
+	 *
+	 * @var array
+	 */
+	private static $controllers = array(
+		ContentController::class,
+		SettingsController::class,
+		StoreController::class
 	);
 
-	// Mark some as nopriv
-	private static $noprivs = array(
-		'get_content_list'
-	);
+	/**
+	 * Dispatcher registration in constructor
+	 *
+	 * @return void
+	 * @throws Error If there is any duplicate ajax handler across controllers.
+	 */
+	public function __construct() {
+		// Register ajax handlers only if it is ajax call
+		if ( ! wp_doing_ajax() ) {
+			return;
+		}
 
-	function __construct() {
-		// Loop through handlers and register
-		foreach ( self::$endpoints as $endpoint ) {
-			// Register logged in handler first
-			add_action( 'wp_ajax_' . Main::$configs->content_name . '_' . $endpoint, function() use($endpoint) {
-				$this->dispatch($endpoint);
-			} );
+		$registered_methods = array();
 
-			// Register public handlers too if defined so
-			if( in_array( $endpoint, self::$noprivs ) ) {
-				add_action( 'wp_ajax_nopriv_' . Main::$configs->content_name . '_' . $endpoint, function() use($endpoint) {
-					$this->dispatch($endpoint);
-				} );
+		// Loop through controllers classes
+		foreach ( self::$controllers as $class ) {
+
+			// Loop through controller methods in the class
+			foreach ( $class::PREREQUISITES as $method => $prerequisites ) {
+				if ( in_array( $method, $registered_methods, true ) ) {
+					throw new Error( __( 'Duplicate endpoint not possible' ) );
+				}
+
+				$endpoint = _String::camelToSnakeCase( $method );
+
+				// Determine ajax handler types
+				$handlers    = array();
+				$handlers [] = 'wp_ajax_' . Main::$configs->app_name . '_' . $endpoint;
+
+				// Check if norpriv necessary
+				if ( ( $prerequisites['nopriv'] ?? false ) === true ) {
+					$handlers[] = 'wp_ajax_nopriv_' . Main::$configs->app_name . '_' . $endpoint;
+				}
+
+				// Loop through the handlers and register
+				foreach ( $handlers as $handler ) {
+					add_action(
+						$handler,
+						function() use ( $class, $method, $prerequisites ) {
+							$this->dispatch( $class, $method, $prerequisites );
+						}
+					);
+				}
+
+				$registered_methods[] = $method;
 			}
 		}
 	}
 
-	public function dispatch( $endpoint ) {
-		// Verify nonce
-		Nonce::verify();
+	/**
+	 * Dispatch request to target handler after doing verifications
+	 *
+	 * @param string $class         The class to dispatch the request to
+	 * @param string $method        The method of the class to invoke
+	 * @param array  $prerequisites Controller access prerequisites
+	 *
+	 * @return void
+	 */
+	public function dispatch( $class, $method, $prerequisites ) {
+		// Determine post/get data
+		$is_post = isset( $_SERVER['REQUEST_METHOD'] ) ? strtolower( sanitize_text_field( wp_unslash( $_SERVER['REQUEST_METHOD'] ) ) ) === 'post' : null;
+		$data    = $is_post ? $_POST : $_GET; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$data    = _Array::stripslashesRecursive( _Array::getArray( $data ) );
+		$files   = is_array( $_FILES ) ? $_FILES : array();
 
-		// Remove action
-		if ( isset( $_POST['action'] ) ) {
-			unset( $_POST['action'] );
-		}
-		if ( isset( $_GET['action'] ) ) {
-			unset( $_GET['action'] );
+		// Verify nonce first of all
+		$matched = wp_verify_nonce( ( $data['nonce'] ?? '' ), Main::$configs->app_name );
+		if ( ! $matched ) {
+			wp_send_json_error( array( 'message' => __( 'Session Expired! Reloading the page might help resolve.', 'solidie' ) ) );
 		}
 
-		// Now pass to the controller
-		if ( method_exists( $this, $endpoint ) ) {
-			$this->$endpoint();
+		// Verify required user role
+		if ( ! User::validateRole( get_current_user_id(), $prerequisites['role'] ?? array() ) ) {
+			wp_send_json_error( array( 'message' => __( 'Access Denied!', 'solidie' ) ) );
+		}
+
+		// Now pass to the action handler function
+		if ( class_exists( $class ) && method_exists( $class, $method ) ) {
+			$class::$method( $data, $files );
 		} else {
-			wp_send_json_error( array( 'message' => 'Invalid Endpoint' ) );
-			exit;
+			wp_send_json_error( array( 'message' => __( 'Invalid Endpoint!', 'solidie' ) ) );
 		}
-	}
-
-	/**
-	 * Provide content list for various area like dashboard, catalog and so on.
-	 *
-	 * @return void
-	 */
-	private function get_content_list() {
-		$content_list = ContentModel::getContents( $_POST );
-		wp_send_json_success( array( 'contents' => $content_list ) );
-	}
-
-	/**
-	 * Admin Dashboard Settings save
-	 *
-	 * @return void
-	 */
-	private function save_admin_settings() {
-		if ( empty( $_POST['solidie_settings'] ) || ! is_array( $_POST['solidie_settings'] ) ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid Payload!', 'solidie' ) ) );
-
-		} else {
-			$saved = AdminSetting::save( $_POST['solidie_settings'] );
-			if ( $saved === true ) {
-				wp_send_json_success( array( 'message' => __( 'Settings Saved Successfully!', 'solidie' ) ) );
-			} else {
-				wp_send_json_error( array( 'message' => __( 'Could not save settings!', 'solidie' ) ) );
-			}
-		}
-		exit;
-	}
-
-	/**
-	 * Create store
-	 *
-	 * @return void
-	 */
-	private function create_store() {
-		$store_name = sanitize_text_field( $_POST['store_name'] );
-
-		if ( empty( $store_name ) ) {
-			wp_send_json_error( array( 'message' => 'Invalid Store Name' ) );
-			exit;
-		}
-
-		$store_url = Store::createStore( $store_name );
-
-		wp_send_json_success( array(
-			'store_url' => $store_url
-		) );
-	}
-
-	/**
-	 * Create or update content from frontend dashboard
-	 *
-	 * @return void
-	 */
-	private function create_or_update_content() {
-		$content_data = $_POST['content_data'];
-		$store_id = (int)$_POST['store_id'];
-		$user_id = get_current_user_id();
-
-		if ( ! Store::hasKeeperRole( $store_id, $user_id, array( 'admin', 'editor' ) ) ) {
-			wp_send_json_error( array( 'message' => 'You are not allowed to manage content in the store' ) );
-			exit;
-		}
-		
-		// To Do: Check if the product is in the store actually
-
-		ContentModel::updateContent( $store_id, $content_data );
-
-		wp_send_json_success();
-	}
-
-	/**
-	 * Get content release history
-	 *
-	 * @return void
-	 */
-	private function fetch_releases() {
-		$releases = ContentModel::getReleases( (int) $_POST['content_id'] );
-		wp_send_json_success( array( 'releases' => $releases ) );
-	}
-
-	/**
-	 * Create or update version
-	 *
-	 * @return void
-	 */
-	private function version_release() {
-		// Check if main three parameter received
-		if ( empty( $_POST['version'] ) || empty( $_POST['changelog'] ) || empty( $_POST['content_id'] ) ) {
-			wp_send_json_error( array( 'message' => _x( 'Required release data missing!', 'solidie', 'solidie' ) ) );
-			exit;
-		}
-
-		// File is required for new release, release id will be falsy if it is new release.
-		if ( empty( $_POST['release_id'] ) ) {
-			if ( empty( $_FILES['file'] ) || ! empty( $_FILES['file']['error'] ) ) {
-				wp_send_json_error( array( 'message' => _x( 'Valid file is required for new release!', 'solidie', 'solidie' ) ) );
-				exit;
-			}
-		}
-
-		// To Do: Check if current user can create/update release for the content
-
-		$error_message = Release::pushRelease(
-			array(
-				'version'    => $_POST['version'],
-				'changelog'  => $_POST['changelog'],
-				'content_id'    => $_POST['content_id'],
-				'release_id' => ! empty( $_POST['release_id'] ) ? (int) $_POST['release_id'] : 0,
-				'file'       => ! empty( $_FILES['file'] ) ? $_FILES['file'] : null
-			)
-		);
-
-		if ( empty( $error_message ) ) {
-			wp_send_json_success();
-		} else {
-			wp_send_json_error( array( 'message' => $error_message ) );
-		}
-		
-		exit;
-	}
-
-	/**
-	 * Get purchased content list for personal dashboard
-	 *
-	 * @return void
-	 */
-	public function get_purchased_contents() {
-		$content_list = ContentModel::getContents( array_merge( $_POST, array( 'customer_id' => get_current_user_id() ) )  );
-		wp_send_json_success( array( 'contents' => $content_list ) );
-	}
-
-	/**
-	 * Add content to cart
-	 *
-	 * @return void
-	 */
-	public function add_to_cart() {
-		$product_id   = $_POST['product_id'];
-		$variation_id = $_POST['variation_id'];
-		$content_id   = $_POST['content_id'];
-
-		if ( ! wc_get_product( $product_id ) ) {
-			wp_send_json_error( array( 'message' => __( 'Product Not Fund!', 'solidie' ) ) );
-			exit;
-		}
-	
-		// Add the product to the cart
-		WC()->cart->add_to_cart( $product_id, 1, $variation_id );
-		wp_send_json_success(
-			array( 
-				'message'  => __( 'Added to cart', 'solidie' ), 
-				'cart_url' => wc_get_cart_url(),
-			)
-		);
-		exit;
 	}
 }

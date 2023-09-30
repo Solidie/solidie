@@ -1,0 +1,18 @@
+.catalog {
+	.header {
+		
+	}
+
+	.content {
+		display: flex;
+		column-gap: 15px;
+
+		.sidebar {
+			width: 200px;
+		}
+
+		.list {
+			flex: 1;
+		}
+	}
+}

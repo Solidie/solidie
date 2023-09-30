@@ -1,15 +1,16 @@
 <?php
 
-namespace Solidie\Store\Setup;
+namespace Solidie\Setup;
 
-use Solidie\Store\Helpers\Crypto;
-use Solidie\Store\Main;
-use Solidie\Store\Models\Contents;
-use Solidie\Store\Models\Hit;
-use Solidie\Store\Models\Licensing;
-use Solidie\Store\Models\Release;
+use Solidie\Helpers\Crypto;
+use Solidie\Main;
+use Solidie\Models\Contents;
+use Solidie\Models\DB;
+use Solidie\Models\Hit;
+use Solidie\Models\Licensing;
+use Solidie\Models\Release;
 
-class RestAPI extends Main {
+class RestAPI {
 	const API_PATH               = '/solidie/api'; // The API entry point 
 	const DOWNLOAD_LINK_VALIDITY = 720; // in minutes. 12 hours here as WordPress normally checks for updates every 12 hours.
 
@@ -37,7 +38,7 @@ class RestAPI extends Main {
 	 */
 	public function add_license_api() {
 		// Check if it is api request
-		$url         = explode( '?', self::$configs->current_url );
+		$url         = explode( '?', Main::$configs->current_url );
 		$current_url = trim( $url[0], '/' );
 		if ( get_home_url() . self::API_PATH !== $current_url ) {
 			return;
@@ -153,7 +154,7 @@ class RestAPI extends Main {
 			$message = _x( 'The license is activated already', 'solidie', 'solidie' );
 		} else {
 			$wpdb->update(
-				self::table( 'license_keys' ),
+				DB::license_keys(),
 				array( 'endpoint' => $_POST['endpoint'] ),
 				array( 'license_id' => $license['license_id'] )
 			);

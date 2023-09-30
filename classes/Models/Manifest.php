@@ -1,6 +1,6 @@
 <?php
 
-namespace Solidie\Store\Models;
+namespace Solidie\Models;
 
 class Manifest {
 	public static function getManifest() {

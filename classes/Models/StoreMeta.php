@@ -1,11 +1,10 @@
 <?php
 
-namespace Solidie\Store\Models;
+namespace Solidie\Models;
 
 use Error;
-use Solidie\Store\Main;
 
-class StoreMeta extends Main {
+class StoreMeta {
 	/**
 	 * Add meta for store
 	 *
@@ -17,7 +16,7 @@ class StoreMeta extends Main {
 	public static function addStoreMeta( int $store_id, string $key, $value ) {
 		global $wpdb;
 		$wpdb->insert(
-			self::table( 'storemeta' ),
+			DB::storemeta(),
 			array(
 				'store_id'   => $store_id,
 				'meta_key'   => $key,
@@ -43,7 +42,7 @@ class StoreMeta extends Main {
 		
 		} else if ( count( $existing_meta ) === 1 ) {
 			$wpdb->update(
-				self::table( 'storemeta' ),
+				DB::storemeta(),
 				array(
 					'meta_value' => maybe_serialize( $value ),
 				),
@@ -73,7 +72,7 @@ class StoreMeta extends Main {
 
 		$results = $wpdb->get_col(
 			$wpdb->prepare(
-				"SELECT meta_value FROM ".self::table( 'storemeta' )." WHERE store_id=%d AND meta_key=%d " . $limit_clause,
+				"SELECT meta_value FROM ".DB::storemeta()." WHERE store_id=%d AND meta_key=%d " . $limit_clause,
 				$store_id,
 				$key
 			)
@@ -116,7 +115,7 @@ class StoreMeta extends Main {
 		}
 
 		$wpdb->delete(
-			self::table( 'storemeta' ),
+			DB::storemeta(),
 			$where,
 			$format
 		);
@@ -134,7 +133,7 @@ class StoreMeta extends Main {
 
 		$id = $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT store_id FROM ".self::table( 'storemeta' )." WHERE meta_key=%s AND meta_value=%s LIMIT 1",
+				"SELECT store_id FROM ".DB::storemeta()." WHERE meta_key=%s AND meta_value=%s LIMIT 1",
 				$key,
 				maybe_serialize( $value )
 			)

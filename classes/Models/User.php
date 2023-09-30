@@ -1,15 +1,44 @@
-<?php 
+<?php
+/**
+ * User functionalities
+ *
+ * @package solidie
+ */
 
-namespace Solidie\Store\Models;
+namespace Solidie\Models;
 
-class User{
-	public static function getUserRoles( $user_id = null ) {
-		$user = new \WP_User( null === $user_id ? get_current_user_id() : $user_id );
-		return $user->roles ?? array();
+/**
+ * User functions
+ */
+class User {
+
+	/**
+	 * Validate if a user has required role
+	 *
+	 * @param int          $user_id The user ID to validate rule
+	 * @param string|array $role    The rule to match
+	 * @return bool
+	 */
+	public static function validateRole( $user_id, $role ) {
+
+		if ( empty( $role ) ) {
+			return true;
+		}
+
+		$roles          = is_array( $role ) ? $role : array( $role );
+		$assigned_roles = self::getUserRoles( $user_id );
+
+		return count( array_diff( $roles, $assigned_roles ) ) < count( $roles );
 	}
 
-	public static function hasUserRole( $roles, $user_id = null ) {
-		$roles = is_array( $roles ) ? $roles : array( $roles );
-		return count( array_intersect( $roles, self::getUserRoles( $user_id ) ) ) > 0;
+	/**
+	 * Get user roles by user id
+	 *
+	 * @param int $user_id User ID to get roles of
+	 * @return array
+	 */
+	public static function getUserRoles( $user_id ) {
+		$user_data = get_userdata( $user_id );
+		return ( is_object( $user_data ) && ! empty( $user_data->roles ) ) ? $user_data->roles : array();
 	}
 }

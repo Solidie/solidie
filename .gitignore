@@ -1,3 +1,16 @@
 .DS_STORE
 node_modules/
-dist/
+dist/*
+!dist/libraries/
+vendor/
+build/
+*.zip
+languages/
+
+# Cypress
+.wp-env.override.json
+artifacts
+tests/cypress/downloads
+tests/cypress/screenshots
+tests/cypress/videos
+tests/cypress/reports
