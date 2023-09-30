@@ -51,7 +51,7 @@ class DB {
 		return array_map(
 			function ( $query ) use ( $wpdb, $charset_collate ) {
 				// Replace table prefix
-				$query = str_replace( 'wp_crewhrm_', $wpdb->prefix . Main::$configs->db_prefix, $query );
+				$query = str_replace( 'wp_solidie_', $wpdb->prefix . Main::$configs->db_prefix, $query );
 
 				// Replace table configs
 				$query = str_replace( 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci', $charset_collate, $query );
@@ -71,7 +71,7 @@ class DB {
 	 * ---------------------------
 	 * Must have in the SQL
 	 *
-	 * 1. Table prefix: wp_crewhrm_
+	 * 1. Table prefix: wp_solidie_
 	 * 2. ENGINE=InnoDB
 	 * 3. DEFAULT CHARSET=utf8mb4
 	 * 4. COLLATE=utf8mb4_unicode_520_ci

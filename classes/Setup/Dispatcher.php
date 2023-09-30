@@ -94,19 +94,19 @@ class Dispatcher {
 		// Verify nonce first of all
 		$matched = wp_verify_nonce( ( $data['nonce'] ?? '' ), Main::$configs->app_name );
 		if ( ! $matched ) {
-			wp_send_json_error( array( 'message' => __( 'Session Expired! Reloading the page might help resolve.', 'crewhrm' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Session Expired! Reloading the page might help resolve.', 'solidie' ) ) );
 		}
 
 		// Verify required user role
 		if ( ! User::validateRole( get_current_user_id(), $prerequisites['role'] ?? array() ) ) {
-			wp_send_json_error( array( 'message' => __( 'Access Denied!', 'crewhrm' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Access Denied!', 'solidie' ) ) );
 		}
 
 		// Now pass to the action handler function
 		if ( class_exists( $class ) && method_exists( $class, $method ) ) {
 			$class::$method( $data, $files );
 		} else {
-			wp_send_json_error( array( 'message' => __( 'Invalid Endpoint!', 'crewhrm' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Invalid Endpoint!', 'solidie' ) ) );
 		}
 	}
 }

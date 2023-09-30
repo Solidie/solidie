@@ -2,7 +2,7 @@
 /**
  * Color pallete
  *
- * @package crewhrm
+ * @package solidie
  */
 
 namespace Solidie\Helpers;

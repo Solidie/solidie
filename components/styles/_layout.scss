@@ -1,3 +1,5 @@
+@import './mixins';
+
 // Displays
 $displays: 'block', 'flex', 'inline', 'inline-block', 'inline-flex', 'contents', 'none';
 @each $display in $displays {
@@ -92,20 +94,10 @@ $cursors: 'pointer', 'default';
 }
 
 // Vertical alignments
-$v_alignments: 'middle', 'top';
-@each $v_alignment in $v_alignments {
-    .vertical-align-#{$v_alignment} {
-        vertical-align: #{$v_alignment};
-    }
-}
+@include looper('vertical-align', 'middle', 'top');
 
 // Positions
-$positions: 'absolute', 'fixed', 'static', 'relative', 'sticky';
-@each $position in $positions {
-    .position-#{$position} {
-        position: #{$position};
-    }
-}
+@include looper('position', 'absolute', 'fixed', 'static', 'relative', 'sticky');
 
 // Borders
 $borders: 'border', 'border-bottom', 'border-top', 'border-left', 'border-right';
@@ -136,20 +128,13 @@ $borders: 'border', 'border-bottom', 'border-top', 'border-left', 'border-right'
 }
 
 // Flex flows
-$flows: 'column', 'row', 'row-reverse', 'column-reverse';
-@each $flow in $flows {
-    .flex-direction-#{$flow} {
-        flex-direction: #{$flow};
-    }
-}
+@include looper('flex-direction', 'column', 'row', 'row-reverse', 'column-reverse');
 
 // Flex wrap
-$wraps: 'wrap', 'nowrap';
-@each $wrap in $wraps {
-    .flex-wrap-#{$wrap} {
-        flex-wrap: #{$wrap};
-    }
-}
+@include looper('flex-wrap', 'wrap', 'nowrap');
+
+// Background sizes
+@include looper('background-size', 'cover');
 
 // Autos
 $autos: 'width', 'height', 'margin';

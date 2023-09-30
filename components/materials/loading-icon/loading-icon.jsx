@@ -15,7 +15,7 @@ export function LoadingIcon({
     return (
         <Conditional show={show}>
             <div
-                data-crewhrm-selector="loading-icon"
+                data-solidie-selector="loading-icon"
                 className={
                     `${center ? 'd-block text-align-center' : 'd-inline-block'}`.classNames() +
                     className

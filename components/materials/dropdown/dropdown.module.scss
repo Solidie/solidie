@@ -10,7 +10,7 @@
         & > div {
             border: none !important;
             border-radius: 0;
-            border-bottom: 1px solid var(--crewhrm-color-tertiary);
+            border-bottom: 1px solid var(--solidie-color-tertiary);
         }
     }
 
@@ -22,7 +22,7 @@
         &,
         .list-item {
             &:not(:last-child) {
-                border-bottom: 1px solid var(--crewhrm-color-tertiary);
+                border-bottom: 1px solid var(--solidie-color-tertiary);
             }
         }
     }
@@ -30,12 +30,12 @@
     .list-item,
     .add-item {
         &:hover {
-            background-color: var(--crewhrm-color-tertiary);
+            background-color: var(--solidie-color-tertiary);
         }
 
         &.active {
             color: white;
-            background-color: var(--crewhrm-color-primary);
+            background-color: var(--solidie-color-primary);
         }
     }
 }
@@ -52,7 +52,7 @@
         &,
         .list-item {
             &:not(:last-child) {
-                border-bottom: 1px solid var(--crewhrm-color-tertiary);
+                border-bottom: 1px solid var(--solidie-color-tertiary);
             }
         }
     }

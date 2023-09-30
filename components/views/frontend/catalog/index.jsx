@@ -4,14 +4,16 @@ import { BrowserRouter, Route, Routes, useNavigate, useParams } from "react-rout
 import { AppCatalog } from "./app/app.jsx";
 import { DropDown } from "../../../materials/dropdown/dropdown.jsx";
 import { request } from "../../../utilities/request.jsx";
-
-import style from './index.module.scss';
 import { __, getPath } from "../../../utilities/helpers.jsx";
 import { Conditional } from "../../../materials/conditional.jsx";
 import { RadioCheckbox } from "../../../materials/radio-checkbox.jsx";
+import { AudioCatalog } from "./audio/audio.jsx";
+
+import style from './index.module.scss';
 
 const CatalogVarients={
-	app: AppCatalog
+	app: AppCatalog,
+	audio: AudioCatalog
 }
 
 const filters = [
@@ -24,11 +26,11 @@ const filters = [
 				label: 'Cat 1'
 			},
 			{
-				id: 1,
+				id: 2,
 				label: 'Cat 1'
 			},
 			{
-				id: 1,
+				id: 3,
 				label: 'Cat 1'
 			}
 		]
@@ -56,22 +58,34 @@ const filters = [
 function CatalogLayout(props) {
 	const {settings={}} = window.Solidie;
 	const {contents={}} = settings;
-	const {content_type} = useParams();
+	const {content_type_slug} = useParams();
 	const navigate = useNavigate();
 	
+	let content_type;
+	for ( let k in contents ) {
+		if (contents[k].slug===content_type_slug) {
+			content_type = k;
+			break;
+		}
+	}
+
 	const [state, setState] = useState({
 		contents:[], 
 		fetching: false,
 		filters:{
 			page: 1,
-			sort: 'popular',
-			content_type
+			sort: 'popular'
 		}
 	});
 
 	const getContents=()=>{
-		setState({...state, fetching: true});
-		request('get_content_list', state.filters, resp=>{
+
+		setState({
+			...state, 
+			fetching: true
+		});
+
+		request('get_content_list', {...state.filters/* , content_type */}, resp=>{
 			let {contents=[]} = resp?.data || {};
 			setState({...state, fetching: false, contents});
 		});
@@ -79,7 +93,7 @@ function CatalogLayout(props) {
 
 	useEffect(()=>{
 		getContents();
-	}, []);
+	}, [content_type_slug]);
 
 	const CatalogComp = CatalogVarients[content_type];
 
@@ -88,11 +102,12 @@ function CatalogLayout(props) {
 
 			<div>
 				<DropDown
+					value={content_type}
 					onChange={v=>navigate(getPath(v+'/'))}
 					options={Object.keys(contents).map(c=>{
-						let {slug, label} = contents[c];
+						let {label} = contents[c];
 						return {
-							id: slug,
+							id: c,
 							label
 						}
 					})}/>
@@ -111,10 +126,10 @@ function CatalogLayout(props) {
 		
 		<div className={'content'.classNames(style)}>
 			<div className={'sidebar'.classNames(style) + 'position-sticky'.classNames()}>
-				{filters.map(filter=>{
+				{filters.map((filter, i)=>{
 					const {label, options=[], type} = filter;
 
-					return <div className={'margin-bottom-15'.classNames()}>
+					return <div key={i} className={'margin-bottom-15'.classNames()}>
 						<strong className={'d-block font-weight-500 font-size-15'.classNames()}>
 							{label}
 						</strong>
@@ -139,7 +154,7 @@ export function Catalog() {
 
 	return <BrowserRouter>
 		<Routes>
-			<Route path={home_path+':content_type/'} element={<CatalogLayout/>}/>
+			<Route path={home_path+':content_type_slug/'} element={<CatalogLayout/>}/>
 		</Routes>
 	</BrowserRouter>
 }

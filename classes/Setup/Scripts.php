@@ -30,7 +30,7 @@ class Scripts {
 		$dynamic_colors = Colors::getColors();
 		$_colors        = '';
 		foreach ( $dynamic_colors as $name => $code ) {
-			$_colors .= '--crewhrm-color-' . esc_attr( $name ) . ':' . esc_attr( $code ) . ';';
+			$_colors .= '--solidie-color-' . esc_attr( $name ) . ':' . esc_attr( $code ) . ';';
 		}
 		echo '<style>:root{' . $_colors . '}</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 

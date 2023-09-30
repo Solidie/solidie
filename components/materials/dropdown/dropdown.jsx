@@ -16,8 +16,8 @@ function getPopupStyle(classNames) {
     classNames = classNames
         .split(' ')
         .map((c) => c.trim())
-        .filter((c) => c.indexOf('crewhrm-') === 0)
-        .map((c) => c.replace('crewhrm-', ''));
+        .filter((c) => c.indexOf('solidie-') === 0)
+        .map((c) => c.replace('solidie-', ''));
     const styles = {};
 
     for (let i = 0; i < classNames.length; i++) {
@@ -41,7 +41,7 @@ export function DropDown(props) {
         className = '',
         tabindex,
         textClassName = 'font-size-15 font-weight-400 color-text'.classNames(),
-        iconClassName = 'ch-icon ch-icon-arrow-down margin-left-10 font-size-18 color-text-light'.classNames(),
+        iconClassName = 'g-icon g-icon-keyboard_arrow_down margin-left-10 font-size-18 color-text-light'.classNames(),
         position = 'center top',
         placeholder = __('Select'),
         addText,
@@ -103,7 +103,7 @@ export function DropDown(props) {
     };
 
     return (
-        <div data-crewhrm-selector="dropdown" ref={ref}>
+        <div data-solidie-selector="dropdown" ref={ref}>
             <Popup
                 position={position}
                 on="click"
@@ -125,7 +125,7 @@ export function DropDown(props) {
 
                     return (
                         <div
-                            data-crewhrm-selector="dropdown-popup"
+                            data-solidie-selector="dropdown-popup"
                             className={
                                 'select-dropdown-popup'.classNames(style) +
                                 `box-shadow-thick border-radius-10 ${pop_border} b-color-tertiary bg-color-white white-space-nowrap`.classNames()
@@ -152,7 +152,7 @@ export function DropDown(props) {
                                         return (
                                             <div
                                                 key={id}
-                                                data-crewhrm-selector="dropdown-item"
+                                                data-solidie-selector="dropdown-item"
                                                 className={classes.classNames(style) + list_class}
                                                 onClick={() => {
                                                     onChange(id);
@@ -167,7 +167,7 @@ export function DropDown(props) {
 
                             {addText && (
                                 <div
-                                    data-crewhrm-selector="dropdown-item-add"
+                                    data-solidie-selector="dropdown-item-add"
                                     className={'add-item'.classNames(style) + list_class}
                                     style={{ paddingTop: '10px', paddingBottom: '10px' }}
                                     onClick={() => {
@@ -176,7 +176,7 @@ export function DropDown(props) {
                                     }}
                                 >
                                     <i
-                                        className={'ch-icon ch-icon-add-square vertical-align-middle d-inline-block margin-right-10'.classNames()}
+                                        className={'g-icon g-icon-add vertical-align-middle d-inline-block margin-right-10'.classNames()}
                                     ></i>
                                     <span className={'vertical-align-middle'.classNames()}>
                                         {addText}
@@ -212,7 +212,7 @@ export function Options(props) {
             arrow={false}
             trigger={
                 <div
-                    data-crewhrm-selector="options"
+                    data-solidie-selector="options"
                     className={'d-inline-block cursor-pointer'.classNames() + className}
                 >
                     {children}
@@ -222,7 +222,7 @@ export function Options(props) {
             {(close) => {
                 return (
                     <div
-                        data-crewhrm-selector="options-popup"
+                        data-solidie-selector="options-popup"
                         className={
                             'options-popup'.classNames(style) +
                             'box-shadow-thick border-radius-10 border-1-5 b-color-tertiary bg-color-white'.classNames()
@@ -233,7 +233,7 @@ export function Options(props) {
                                 let { id, label, icon } = option;
                                 return (
                                     <div
-                                        data-crewhrm-selector="options-popup-item"
+                                        data-solidie-selector="options-popup-item"
                                         key={id}
                                         className={
                                             'd-flex align-items-center'.classNames() +

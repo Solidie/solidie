@@ -16,11 +16,11 @@ import style from './index.module.scss';
 let popupIdCounter = 0;
 
 const getRootPopup = () => {
-    let PopupRoot = document.getElementById('crewhrm-popup-root');
+    let PopupRoot = document.getElementById('solidie-popup-root');
 
     if (PopupRoot === null) {
         PopupRoot = document.createElement('div');
-        PopupRoot.setAttribute('id', 'crewhrm-popup-root');
+        PopupRoot.setAttribute('id', 'solidie-popup-root');
         document.body.appendChild(PopupRoot);
     }
 
@@ -64,7 +64,7 @@ export const Popup = forwardRef(
         const contentRef = useRef(null);
         const arrowRef = useRef(null);
         const focusedElBeforeOpen = useRef(null);
-        const popupId = useRef(`crewhrm-popup-${++popupIdCounter}`);
+        const popupId = useRef(`solidie-popup-${++popupIdCounter}`);
 
         const isModal = modal ? true : !trigger;
         const timeOut = useRef(0);

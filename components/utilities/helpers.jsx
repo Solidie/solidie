@@ -1,6 +1,6 @@
 import moment, { tz } from 'moment-timezone';
 
-import icons from '../icons/crewhrm/style.module.scss';
+import icons from '../icons/google/style.module.scss';
 
 export const patterns = {
 	email: /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/,
@@ -46,7 +46,7 @@ export function getRandomString() {
 
 export function __(txt) {
 	const { __ } = window.wp?.i18n || {};
-	return typeof __ == 'function' ? __(txt, 'crewhrm') : txt;
+	return typeof __ == 'function' ? __(txt, 'solidie') : txt;
 }
 
 export function sprintf(str, ...params) {
@@ -319,7 +319,7 @@ export function parseParams(searchParam) {
 
 export function storage(name, local = false) {
 	const store = local ? 'localStorage' : 'sessionStorage';
-	const _name = 'crewhrm_' + name;
+	const _name = 'solidie_' + name;
 
 	return {
 		setItem: (value) => {

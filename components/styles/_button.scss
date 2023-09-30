@@ -20,15 +20,15 @@
     line-height: normal;
 
     &.button-primary {
-        background-color: var(--crewhrm-color-primary);
+        background-color: var(--solidie-color-primary);
         color: white;
-        border: 1px solid var(--crewhrm-color-primary);
+        border: 1px solid var(--solidie-color-primary);
 
         // Set light colors if disabled
         &.disabled,
         &:disabled {
-            background-color: var(--crewhrm-color-text-lighter);
-            border-color: var(--crewhrm-color-text-lighter);
+            background-color: var(--solidie-color-text-lighter);
+            border-color: var(--solidie-color-text-lighter);
         }
 
         // Make little bit darker on hover
@@ -43,12 +43,12 @@
         // Hovering outlined button is merely showing the primary button colors. When not hovered, it'll who outlined withour primary background color.
         &:not(:hover) {
             background-color: transparent;
-            color: var(--crewhrm-color-primary);
+            color: var(--solidie-color-primary);
 
             // It's little bit lighter variation for 'back' action buttons
             &.button-outlined-secondary {
-                border-color: var(--crewhrm-color-text-light);
-                color: var(--crewhrm-color-text-light);
+                border-color: var(--solidie-color-text-light);
+                color: var(--solidie-color-text-light);
             }
         }
 
@@ -63,8 +63,8 @@
         &.disabled,
         &:disabled {
             background-color: transparent;
-            border-color: var(--crewhrm-color-text-lighter);
-            color: var(--crewhrm-color-text-lighter);
+            border-color: var(--solidie-color-text-lighter);
+            color: var(--solidie-color-text-lighter);
         }
     }
 
