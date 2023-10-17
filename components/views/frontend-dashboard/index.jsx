@@ -2,8 +2,10 @@ import React, { useEffect, useState, createContext } from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 
-import '../../utilities/prototypes.jsx';
-import { getElementDataSet, getDashboardPath } from "../../utilities/helpers.jsx";
+import 'crewhrm-materials/prototypes.jsx';
+import { getElementDataSet } from "crewhrm-materials/helpers.jsx";
+import { MountPoint } from "crewhrm-materials/mountpoint.jsx";
+
 import Topbar from "./navigation/Topbar.jsx";
 import Sidebar from "./navigation/sidebar/Sidebar.jsx";
 import { VersionReleaseForm } from "./pages/inventory/segments/ApplicationVersionForm.jsx";
@@ -11,16 +13,23 @@ import { InventoryReleaseManagment } from "./pages/inventory/segments/Releases.j
 import { PurchasedApps } from "./pages/purchases/Purchases.jsx";
 import { Sales } from "./pages/sales/Sales.jsx";
 import { Subscriptions } from "./pages/subscriptions/Subscriptions.jsx";
-import { MountPoint } from "../../materials/mountpoint.jsx";
 import { MyAccount } from "./pages/my-account/MyAccount.jsx";
 
-import layout from './style.module.scss';
 import { Inventory } from "./pages/inventory/index.jsx";
 import { EditApplication } from "./pages/inventory/EditApplication.jsx";
 import { AddApplication } from "./pages/inventory/AddApplication.jsx";
 import {Reports} from "./pages/reports/Reports.jsx";
+import { getPath } from "../frontend/catalog/index.jsx";
+
+import layout from './style.module.scss';
 
 export const ContextFrontendDashboard = createContext();
+
+export const getDashboardPath=(rel_path, append_slash=true)=>{
+	const { settings: {dashboard: {slug: dashboard_slug}} } = window.Solidie;
+	const slash = append_slash ? (rel_path.indexOf( '/' ) === 0 ? '' : '/') : '';
+	return getPath( dashboard_slug + slash + rel_path );
+}
 
 /* Dashboard Layout Adopted from https://codepen.io/trooperandz/pen/EOgJvg */
 

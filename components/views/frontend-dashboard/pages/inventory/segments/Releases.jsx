@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { request } from "../../../../../utilities/request.jsx";
+import { request } from "crewhrm-materials/request.jsx";
 
 export function InventoryReleaseManagment() {
 

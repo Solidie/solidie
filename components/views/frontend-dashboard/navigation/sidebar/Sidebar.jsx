@@ -1,8 +1,7 @@
 import React, { useContext, useMemo, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 
-import { getDashboardPath } from "../../../../utilities/helpers.jsx";
-import { ContextFrontendDashboard } from "../../index.jsx";
+import { ContextFrontendDashboard, getDashboardPath } from "../../index.jsx";
 
 import layout from '../../style.module.scss';
 
@@ -10,7 +9,7 @@ const Sidebar = ({ sidebarOpen }) => {
 	const current_url = window.location.href.split('?')[0];
 
 	const [state, setState] = useState({});
-		
+
 	const {stores=[]} = useContext(ContextFrontendDashboard);
 	const location = useLocation();
 	const groupedNavigation = useMemo(

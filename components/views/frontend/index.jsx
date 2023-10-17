@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 
-import '../../utilities/prototypes.jsx';
-import { getElementDataSet } from '../../utilities/helpers.jsx';
+import 'crewhrm-materials/prototypes.jsx';
+import { getElementDataSet } from 'crewhrm-materials/helpers.jsx';
 import { Catalog } from './catalog/index.jsx';
 import { SingleContent } from './single/index.jsx';
-import { MountPoint } from '../../materials/mountpoint.jsx';
+import { MountPoint } from 'crewhrm-materials/mountpoint.jsx';
 
 // Render single product/content page
 const single = document.getElementById('Solidie_Single_Content');

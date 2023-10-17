@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 
-import { request } from "../../../../../utilities/request.jsx";
+import { request } from "crewhrm-materials/request.jsx";
 import { ContextSingleData } from "../../index.jsx";
 
 export function PlanCards(props) {

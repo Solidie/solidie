@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom'
-import { request } from '../../../../utilities/request.jsx';
+import { request } from 'crewhrm-materials/request.jsx';
+
 import { TableStat } from '../../../../materials/table-stat.jsx';
 
 export function Subscriptions () {

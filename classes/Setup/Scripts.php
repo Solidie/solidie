@@ -49,6 +49,7 @@ class Scripts {
 			)
 		);
 		
+		echo '<script>window.CrewPointer="Solidie";</script>';
 		echo '<script>window.Solidie=' . wp_json_encode( $data ) . '</script>';
 	}
 

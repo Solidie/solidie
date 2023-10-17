@@ -9,7 +9,7 @@ export function SignleApp(){
 	return <div className={"w-full h-full text-tertiary flex justify-center".classNames()}>
 		<div className={"appstore-single-product-wrapper h-full w-full flex flex-col justify-between items-center gap-14 py-10".classNames()}>
 			<div className={"flex flex-col items-center justify-center gap-10".classNames()}>
-				<img src={content.logo_url} className={"w-36 h-20".classNames()} alt="" />
+				<img src={content.thumbnail_url} className={"w-36 h-20".classNames()} alt="" />
 				<h3>{content.content_name}</h3>
 				<p className={"px-3 sm:px-0 text-center sm:text-left".classNames()}>
 					{content.content_excerpt}

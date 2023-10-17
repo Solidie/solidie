@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-import { request } from '../../../../utilities/request.jsx';
+import { request } from 'crewhrm-materials/request.jsx';
 
 export function PurchasedApps(){
 
@@ -35,7 +35,7 @@ export function PurchasedApps(){
 
 		<div>
 			{state.contents.map(content => {
-				let {content_id, content_name, plans=[], content_url, logo_url, releases} = content;
+				let {content_id, content_name, plans=[], content_url, thumbnail_url, releases} = content;
 				let latest_release = releases[0];
 				let prev_text = 'Previous Versions';
 				let plan_name = plans.map(plan=>plan.variation?.period_label).filter(l=>l).join(', ');
@@ -46,7 +46,7 @@ export function PurchasedApps(){
 							{latest_release.version}
 						</div>
 						<div className={"flex flex-col items-center gap-y-5".classNames()}>
-							<div style={{width: '60px', height: '60px', backgroundImage: 'url('+logo_url+')', backgroundSize: 'cover', boxShadow: '1px 1px 16px rgba(0, 0, 0, .2)', borderRadius: '6px'}}></div>
+							<div style={{width: '60px', height: '60px', backgroundImage: 'url('+thumbnail_url+')', backgroundSize: 'cover', boxShadow: '1px 1px 16px rgba(0, 0, 0, .2)', borderRadius: '6px'}}></div>
 							<div className={"flex flex-col items-center".classNames()}>
 								<div className={"font-black text-xl".classNames()}>
 									<a href={content_url} target='_blank'>{content_name}</a>

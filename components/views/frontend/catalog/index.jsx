@@ -1,20 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter, Route, Routes, useNavigate, useParams } from "react-router-dom";
 
-import { AppCatalog } from "./app/app.jsx";
-import { DropDown } from "../../../materials/dropdown/dropdown.jsx";
-import { request } from "../../../utilities/request.jsx";
-import { __, getPath } from "../../../utilities/helpers.jsx";
-import { Conditional } from "../../../materials/conditional.jsx";
-import { RadioCheckbox } from "../../../materials/radio-checkbox.jsx";
-import { AudioCatalog } from "./audio/audio.jsx";
+import { DropDown } from "crewhrm-materials/dropdown/dropdown.jsx";
+import { request } from "crewhrm-materials/request.jsx";
+import { __ } from "crewhrm-materials/helpers.jsx";
+import { Conditional } from "crewhrm-materials/conditional.jsx";
+import { RadioCheckbox } from "crewhrm-materials/radio-checkbox.jsx";
+import { ResponsiveLayout } from "crewhrm-materials/responsive-layout.jsx";
+
+import { SingleCard } from "./single-card/single-card.jsx";
 
 import style from './index.module.scss';
-
-const CatalogVarients={
-	app: AppCatalog,
-	audio: AudioCatalog
-}
 
 const filters = [
 	{
@@ -53,7 +49,12 @@ const filters = [
 			}
 		]
 	}
-]
+];
+
+export function getPath(path) {
+	let _path = window.Solidie.home_path + path;
+	return _path.replace(/\/+/g, '/');
+}
 
 function CatalogLayout(props) {
 	const {settings={}} = window.Solidie;
@@ -95,12 +96,9 @@ function CatalogLayout(props) {
 		getContents();
 	}, [content_type_slug]);
 
-	const CatalogComp = CatalogVarients[content_type];
-
 	return <div className={'catalog'.classNames(style)}>
-		<div className={'header'.classNames(style) + 'd-flex align-items-center position-sticky border-1 border-radius-8 b-color-tertiary margin-bottom-15'.classNames()}>
-
-			<div>
+		<div className={'d-flex align-items-center position-sticky border-1 border-radius-8 b-color-tertiary margin-bottom-15'.classNames()}>
+			<div className={'padding-horizontal-15 border-right-1 b-color-tertiary'.classNames()}>
 				<DropDown
 					value={content_type}
 					onChange={v=>navigate(getPath(v+'/'))}
@@ -114,8 +112,8 @@ function CatalogLayout(props) {
 			</div> 
 
 			{/* Search field */}
-			<div className={'flex-1'.classNames()}>
-				<input type='text' className={"text-field-flat".classNames()}/>
+			<div className={'flex-1 padding-horizontal-15'.classNames()}>
+				<input type='text' className={"text-field-flat overflow-hidden text-overflow-ellipsis".classNames()}/>
 			</div>
 
 			{/* Search Button */}
@@ -142,7 +140,13 @@ function CatalogLayout(props) {
 			</div>
 			
 			<div className={'list'.classNames(style)}>
-				{CatalogComp ? <CatalogComp contents={state.contents}/> : <p>Content Not Found</p>}
+				<ResponsiveLayout columnWidth={280}>
+					{state.contents.map(content=>{
+						return <div key={content.content_id}>
+							<SingleCard content_type={content_type} content={content}/>
+						</div> 
+					})}
+				</ResponsiveLayout>
 			</div>
 		</div>
 	</div>

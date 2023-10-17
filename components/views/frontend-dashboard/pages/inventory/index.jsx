@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import InventoryTable from './segments/InventoryTable.jsx';
 import { Link, useParams } from 'react-router-dom'
-import { request } from '../../../../utilities/request.jsx';
+import { request } from 'crewhrm-materials/request.jsx';
 
 export function Inventory(props) {
 	const {store_slug} = useParams();

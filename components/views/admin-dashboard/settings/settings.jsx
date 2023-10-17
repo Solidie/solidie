@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { request } from '../../../utilities/request.jsx';
+import { request } from 'crewhrm-materials/request.jsx';
 
 export function SettingPage(props) {
 	const {savedSettings={}, manifest} = props;

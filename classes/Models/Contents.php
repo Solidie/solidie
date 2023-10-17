@@ -531,7 +531,7 @@ class Contents {
 	 * @param array $meta_array
 	 * @return array|object
 	 */
-	public static function assignContentMeta( $contents, $meta_array = array( 'content_url', 'plans', 'logo_url', 'releases', 'variations' ) ) {
+	public static function assignContentMeta( $contents, $meta_array = array( 'content_url', 'plans', 'thumbnail_url', 'releases', 'variations' ) ) {
 		// Support both list and single content
 		if ( $was_single = ! is_array( $contents ) ) {
 			$contents = array( $contents );
@@ -545,9 +545,9 @@ class Contents {
 					}
 					break;
 
-				case 'logo_url' :
+				case 'thumbnail_url' :
 					foreach ( $contents as $index => $content ) {
-						$contents[ $index ]->logo_url = get_the_post_thumbnail_url( $content->product_id );
+						$contents[ $index ]->thumbnail_url = get_the_post_thumbnail_url( $content->product_id );
 					}
 					break;
 
