@@ -1,0 +1,9 @@
+.single-image {
+	&:not(:hover) {
+		.details {
+			display: none;
+		}
+	}
+	
+	
+}

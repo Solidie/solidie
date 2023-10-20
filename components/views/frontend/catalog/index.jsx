@@ -6,11 +6,72 @@ import { request } from "crewhrm-materials/request.jsx";
 import { __ } from "crewhrm-materials/helpers.jsx";
 import { Conditional } from "crewhrm-materials/conditional.jsx";
 import { RadioCheckbox } from "crewhrm-materials/radio-checkbox.jsx";
-import { ResponsiveLayout } from "crewhrm-materials/responsive-layout.jsx";
 
-import { SingleCard } from "./single-card/single-card.jsx";
+import { Image } from "./image/image.jsx";
+import { Video } from "./video/video.jsx";
+import { Audio } from "./audio/audio.jsx";
 
 import style from './index.module.scss';
+
+const _image = {
+	content_id: 1,
+	preview_url :  "http://localhost:10008/wp-content/uploads/2023/10/pexels-riccardo-bertolo-4245826-scaled.jpg",
+	title :  "Beautiful Sunset",
+	like_count :  150,
+	comment_count :  25,
+	uploader_name :  "JohnDoe123",
+	mime_type: 'image/jpeg',
+	uploader_avatar_url :  "https://example.com/profile_pic1.jpg"
+};
+
+const _video = {
+	content_id: 1,
+	preview_url :  "http://localhost:10008/wp-content/uploads/2023/10/video-1080p.mp4",
+	title :  "Beautiful Sunset",
+	like_count :  150,
+	comment_count :  25,
+	uploader_name :  "JohnDoe123",
+	mime_type: 'video/mp4',
+	uploader_avatar_url :  "https://example.com/profile_pic1.jpg"
+};
+
+const _audio = {
+	content_id: 1,
+	preview_url :  "http://localhost:10008/wp-content/uploads/2023/09/friendly-melody-14015.mp3",
+	title :  "Beautiful Sunset",
+	like_count :  150,
+	comment_count :  25,
+	uploader_name :  "JohnDoe123",
+	mime_type: 'audio/mp3',
+	uploader_avatar_url :  "https://example.com/profile_pic1.jpg"
+};
+
+const content_array = {
+	image: Array(10).fill(_image).map((img, index)=>{
+		return {
+			...img,
+			content_id: img.content_id+index
+		}
+	}),
+	video:  Array(10).fill(_video).map((img, index)=>{
+		return {
+			...img,
+			content_id: img.content_id+index
+		}
+	}),
+	audio:  Array(10).fill(_audio).map((img, index)=>{
+		return {
+			...img,
+			content_id: img.content_id+index
+		}
+	}),
+}
+
+const renderers = {
+	image: Image,
+	video: Video,
+	audi: Audio
+}
 
 const filters = [
 	{
@@ -67,6 +128,8 @@ function CatalogLayout(props) {
 		if (contents[k].slug===content_type_slug) {
 			content_type = k;
 			break;
+		} else {
+			console.log(contents[k].slug, content_type_slug);
 		}
 	}
 
@@ -95,6 +158,8 @@ function CatalogLayout(props) {
 	useEffect(()=>{
 		getContents();
 	}, [content_type_slug]);
+
+	const RenderComp = renderers[content_type];
 
 	return <div className={'catalog'.classNames(style)}>
 		<div className={'d-flex align-items-center position-sticky border-1 border-radius-8 b-color-tertiary margin-bottom-15'.classNames()}>
@@ -140,13 +205,7 @@ function CatalogLayout(props) {
 			</div>
 			
 			<div className={'list'.classNames(style)}>
-				<ResponsiveLayout columnWidth={280}>
-					{state.contents.map(content=>{
-						return <div key={content.content_id}>
-							<SingleCard content_type={content_type} content={content}/>
-						</div> 
-					})}
-				</ResponsiveLayout>
+				{RenderComp ? <RenderComp contents={content_array[content_type]}/> : <>Comp not found for {content_type}</>}
 			</div>
 		</div>
 	</div>
