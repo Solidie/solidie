@@ -3,20 +3,22 @@ import { BrowserRouter, Route, Routes, useNavigate, useParams } from "react-rout
 
 import { DropDown } from "crewhrm-materials/dropdown/dropdown.jsx";
 import { request } from "crewhrm-materials/request.jsx";
-import { __ } from "crewhrm-materials/helpers.jsx";
+import { __, data_pointer } from "crewhrm-materials/helpers.jsx";
 import { Conditional } from "crewhrm-materials/conditional.jsx";
 import { RadioCheckbox } from "crewhrm-materials/radio-checkbox.jsx";
+import { ErrorBoundary } from "crewhrm-materials/error-boundary.jsx";
 
 import { Image } from "./image/image.jsx";
 import { Video } from "./video/video.jsx";
 import { Audio } from "./audio/audio.jsx";
 
 import style from './index.module.scss';
+import { GenericCard } from "./generic-card/generic-card.jsx";
 
 const _image = {
 	content_id: 1,
-	preview_url :  "http://localhost:10008/wp-content/uploads/2023/10/pexels-riccardo-bertolo-4245826-scaled.jpg",
-	title :  "Beautiful Sunset",
+	thumbnail_url :  "http://localhost:10008/wp-content/uploads/2023/10/pexels-riccardo-bertolo-4245826-scaled.jpg",
+	content_title :  "Beautiful Sunset",
 	like_count :  150,
 	comment_count :  25,
 	uploader_name :  "JohnDoe123",
@@ -26,8 +28,8 @@ const _image = {
 
 const _video = {
 	content_id: 1,
-	preview_url :  "http://localhost:10008/wp-content/uploads/2023/10/video-1080p.mp4",
-	title :  "Beautiful Sunset",
+	thumbnail_url :  "http://localhost:10008/wp-content/uploads/2023/10/video-1080p.mp4",
+	content_title :  "Beautiful Sunset",
 	like_count :  150,
 	comment_count :  25,
 	uploader_name :  "JohnDoe123",
@@ -37,8 +39,8 @@ const _video = {
 
 const _audio = {
 	content_id: 1,
-	preview_url :  "http://localhost:10008/wp-content/uploads/2023/09/friendly-melody-14015.mp3",
-	title :  "Beautiful Sunset",
+	thumbnail_url :  "http://localhost:10008/wp-content/uploads/2023/09/friendly-melody-14015.mp3",
+	content_title :  "Beautiful Sunset",
 	like_count :  150,
 	comment_count :  25,
 	uploader_name :  "JohnDoe123",
@@ -47,30 +49,41 @@ const _audio = {
 };
 
 const content_array = {
-	image: Array(10).fill(_image).map((img, index)=>{
+	image: Array(10).fill(_image).map((content, index)=>{
 		return {
-			...img,
-			content_id: img.content_id+index
+			...content,
+			content_id: content.content_id+index
 		}
 	}),
-	video:  Array(10).fill(_video).map((img, index)=>{
+	video:  Array(10).fill(_video).map((content, index)=>{
 		return {
-			...img,
-			content_id: img.content_id+index
+			...content,
+			content_id: content.content_id+index
 		}
 	}),
-	audio:  Array(10).fill(_audio).map((img, index)=>{
+	audio:  Array(10).fill(_audio).map((content, index)=>{
 		return {
-			...img,
-			content_id: img.content_id+index
+			...content,
+			content_id: content.content_id+index
+		}
+	}),
+	app: Array(10).fill(_image).map((content, index)=>{
+		return {
+			...content,
+			content_id: content.content_id+index
 		}
 	}),
 }
 
 const renderers = {
-	image: Image,
 	video: Video,
-	audi: Audio
+	audio: Audio,
+	image: Image,
+
+	app: GenericCard,
+	'3d': GenericCard,
+	document: GenericCard,
+	tutorial: GenericCard
 }
 
 const filters = [
@@ -113,12 +126,12 @@ const filters = [
 ];
 
 export function getPath(path) {
-	let _path = window.Solidie.home_path + path;
+	let _path = window[data_pointer].home_path + path;
 	return _path.replace(/\/+/g, '/');
 }
 
 function CatalogLayout(props) {
-	const {settings={}} = window.Solidie;
+	const {settings={}} = window[data_pointer];
 	const {contents={}} = settings;
 	const {content_type_slug} = useParams();
 	const navigate = useNavigate();
@@ -163,18 +176,20 @@ function CatalogLayout(props) {
 
 	return <div className={'catalog'.classNames(style)}>
 		<div className={'d-flex align-items-center position-sticky border-1 border-radius-8 b-color-tertiary margin-bottom-15'.classNames()}>
-			<div className={'padding-horizontal-15 border-right-1 b-color-tertiary'.classNames()}>
+			<div className={'border-right-1 b-color-tertiary'.classNames()}>
 				<DropDown
 					value={content_type}
 					onChange={v=>navigate(getPath(v+'/'))}
+					variant="borderless"
+					clearable={false}
 					options={Object.keys(contents).map(c=>{
-						let {label} = contents[c];
+						let {label, slug} = contents[c];
 						return {
 							id: c,
-							label
+							label: label || slug
 						}
 					})}/>
-			</div> 
+			</div>
 
 			{/* Search field */}
 			<div className={'flex-1 padding-horizontal-15'.classNames()}>
@@ -182,8 +197,10 @@ function CatalogLayout(props) {
 			</div>
 
 			{/* Search Button */}
-			<div>
-				<button>Search</button>
+			<div className={'align-self-stretch'.classNames()}>
+				<button className={'margin-0 padding-vertical-0 padding-horizontal-30 height-p-100 d-block'.classNames()}>
+					Search
+				</button>
 			</div>
 		</div>
 		
@@ -205,7 +222,13 @@ function CatalogLayout(props) {
 			</div>
 			
 			<div className={'list'.classNames(style)}>
-				{RenderComp ? <RenderComp contents={content_array[content_type]}/> : <>Comp not found for {content_type}</>}
+				{
+					RenderComp ? 
+						<ErrorBoundary>
+							<RenderComp contents={content_array[content_type] || []}/>
+						</ErrorBoundary> : 
+						<>Something went wrong. Renderer component not found.</>
+				}
 			</div>
 		</div>
 	</div>
@@ -213,7 +236,7 @@ function CatalogLayout(props) {
 
 export function Catalog() {
 
-	const {home_path} = window.Solidie;
+	const {home_path} = window[data_pointer];
 
 	return <BrowserRouter>
 		<Routes>

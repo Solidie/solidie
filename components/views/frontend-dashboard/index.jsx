@@ -1,13 +1,12 @@
 import React, { useEffect, useState, createContext } from "react";
-import ReactDOM from "react-dom/client";
+import {createRoot} from "react-dom/client";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 
-import 'crewhrm-materials/prototypes.jsx';
-import { getElementDataSet } from "crewhrm-materials/helpers.jsx";
 import { MountPoint } from "crewhrm-materials/mountpoint.jsx";
+import { data_pointer, getElementDataSet } from "crewhrm-materials/helpers.jsx";
 
-import Topbar from "./navigation/Topbar.jsx";
-import Sidebar from "./navigation/sidebar/Sidebar.jsx";
+import {Topbar} from "./navigation/Topbar.jsx";
+import {Sidebar} from "./navigation/sidebar/Sidebar.jsx";
 import { VersionReleaseForm } from "./pages/inventory/segments/ApplicationVersionForm.jsx";
 import { InventoryReleaseManagment } from "./pages/inventory/segments/Releases.jsx";
 import { PurchasedApps } from "./pages/purchases/Purchases.jsx";
@@ -26,7 +25,7 @@ import layout from './style.module.scss';
 export const ContextFrontendDashboard = createContext();
 
 export const getDashboardPath=(rel_path, append_slash=true)=>{
-	const { settings: {dashboard: {slug: dashboard_slug}} } = window.Solidie;
+	const { settings: {dashboard: {slug: dashboard_slug}} } = window[data_pointer];
 	const slash = append_slash ? (rel_path.indexOf( '/' ) === 0 ? '' : '/') : '';
 	return getPath( dashboard_slug + slash + rel_path );
 }
@@ -177,7 +176,7 @@ function Dashboard(props) {
 
 let dashboard = document.getElementById("Solidie_Dashboard");
 if (dashboard) {
-	ReactDOM.createRoot(dashboard).render(
+	createRoot(dashboard).render(
 		<MountPoint element={dashboard}>
 			<Dashboard {...getElementDataSet(dashboard)} />
 		</MountPoint>

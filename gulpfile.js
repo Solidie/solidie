@@ -19,7 +19,7 @@ var onError = function (err) {
 };
 
 var added_texts = [];
-const regex = /__\('([^']*)'\)/g;
+const regex = /__\(\s*'([^']*)'\s*\)/g;
 const js_files = ['hrm', 'careers', 'settings'].map((f) => 'dist/' + f + '.js:1').join(', ');
 function i18n_makepot(callback, target_dir) {
     const parent_dir = target_dir || __dirname;
@@ -28,8 +28,12 @@ function i18n_makepot(callback, target_dir) {
     // Loop through JS files inside js directory
     fs.readdirSync(parent_dir).forEach(function (file_name) {
         var full_path = parent_dir + '/' + file_name;
-        var stat = fs.lstatSync(full_path);
 
+		if ( full_path.indexOf('node_modules')>-1 || full_path.indexOf('vendor')>-1 ) {
+			return;
+		}
+
+        var stat = fs.lstatSync(full_path);
         if (stat.isDirectory()) {
             i18n_makepot(null, full_path);
             return;

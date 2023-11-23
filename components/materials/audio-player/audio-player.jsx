@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from "react";
 
 import WaveSurfer from './wavesurfer.js';
 
+import style from './player.module.scss';
+
 export function AudioPlayer({content, className}) {
 
 	const waveform_ref = useRef();
@@ -51,12 +53,12 @@ export function AudioPlayer({content, className}) {
 		buildPlayer();
 	}, []);
 
-	return <div className={className}>
+	return <div className={'audio'.classNames(style) + 'padding-15 border-radius-5'.classNames()}>
 		<div ref={waveform_ref}></div>
 		<div className={'d-flex align-items-center'.classNames()}>
 			<div>
 				<i 
-					className={`g-icon ${!state.is_playing ? 'g-icon-play_circle_outline' : 'g-icon-pause_circle_outline'} cursor-pointer font-size-28`.classNames()}
+					className={`ch-icon ${!state.is_playing ? 'ch-icon-play' : 'ch-icon-pause'} cursor-pointer font-size-28`.classNames()}
 					onClick={playPause}
 				></i>
 			</div>

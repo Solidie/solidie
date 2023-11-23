@@ -2,6 +2,7 @@
 
 namespace Solidie;
 
+use Solidie\Helpers\_Array;
 use Solidie\Helpers\Crypto;
 use Solidie\Setup\Dispatcher;
 use Solidie\Setup\Scripts;
@@ -33,10 +34,14 @@ class Main {
 	public function init( object $configs ) {
 
 		// Store configs in runtime static property
-		self::$configs = $configs;
+		self::$configs      = $configs;
+		self::$configs->dir = dirname( $configs->file ) . '/';
 
 		// Loading Autoloader
 		spl_autoload_register( array( $this, 'loader' ) );
+
+		$manifest = _Array::getManifestArray( $configs->file, ARRAY_A );
+		self::$configs = (object) array_merge( $manifest, (array) self::$configs );
 
 		// Register Activation/Deactivation Hook
 		register_activation_hook( self::$configs->file, array( $this, 'activate' ) );
@@ -63,7 +68,7 @@ class Main {
 		new Report( $configs );
 		
 		// Register plugin updater (Registered content name, content main file, parent menu for license page, continous update check bool)
-		new Updater( $configs );
+		// new Updater( $configs );
 	}
 
 	/**

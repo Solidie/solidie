@@ -38,7 +38,7 @@ class Sale {
 
 		global $wpdb;
 		$sales = $wpdb->get_results(
-				"SELECT sale.*, product.post_title AS content_name, _user.user_email AS customer_email FROM " . DB::sales() . " sale
+				"SELECT sale.*, product.post_title AS content_title, _user.user_email AS customer_email FROM " . DB::sales() . " sale
 					INNER JOIN " . DB::contents() . " content ON sale.content_id=content.content_id
 					INNER JOIN {$wpdb->posts} product ON content.product_id=product.ID
 					INNER JOIN " . DB::stores() . " store ON content.store_id=store.store_id

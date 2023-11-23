@@ -34,8 +34,8 @@ export function PlanCards(props) {
 		</div>
 		{content.variations.map(variation=>{
 			let {variation_id, label, period_label, price, key_features=[]} = variation;
-			return <div key={variation_id} className={"h-full flex flex-col justify-between items-center bg-brand-tertiary shadow-lg rounded-3xl px-14 py-8".classNames()}>
-				<div className={"w-full".classNames()}>
+			return <div key={variation_id} className={"height-p-100 flex flex-col justify-between items-center bg-brand-tertiary shadow-lg rounded-3xl px-14 py-8".classNames()}>
+				<div className={"width-p-100".classNames()}>
 					<h3 className={"text-tertiary text-sm font-semibold uppercase tracking-wide".classNames()}>
 						{label}
 					</h3>
@@ -68,7 +68,7 @@ export function PlanCards(props) {
 						</li>
 					})}
 				</ul>
-				<button onClick={()=>addToCart(variation_id)} href="#" className={"bg-tertiary text-brand-tertiary hover:text-tertiary hover:bg-tertiary/5 mt-6 inline-block py-2 px-8 border border-transparent rounded-full shadow-sm text-center text-sm font-medium sm:mt-0 sm:w-auto lg:mt-6 w-full hover:underline hover:decoration-dashed".classNames()}>Get
+				<button onClick={()=>addToCart(variation_id)} href="#" className={"bg-tertiary text-brand-tertiary hover:text-tertiary hover:bg-tertiary/5 mt-6 inline-block py-2 px-8 border border-transparent rounded-full shadow-sm text-center text-sm font-medium sm:mt-0 sm:w-auto lg:mt-6 width-p-100 hover:underline hover:decoration-dashed".classNames()}>Get
 					Add to Cart
 				</button>
 			</div>

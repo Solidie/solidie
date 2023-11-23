@@ -20,7 +20,7 @@ class RestAPI {
 	 * @var array
 	 */
 	private static $required_fields = array(
-		'content_name',
+		'content_uname',
 		'license_key',
 		'endpoint',
 		'action'
@@ -78,7 +78,7 @@ class RestAPI {
 
 		// Now process free-update-check
 		if ( $_POST['action'] == 'update-check-free' ) {
-			$this->update_check_free( $_POST['content_name'] );
+			$this->update_check_free( $_POST['content_uname'] );
 			exit;
 		}
 
@@ -102,7 +102,7 @@ class RestAPI {
 	}
 
 	private function getLicenseData() {
-		$content_id   = Contents::getContentByProduct( $_POST['content_name'], 'content_id' );
+		$content_id   = Contents::getContentByProduct( $_POST['content_uname'], 'content_id' );
 		$license_info = $content_id ? Licensing::getLicenseInfo( $_POST['license_key'], $content_id ) : null;
 
 		// If no license found, then it is either malformed or maybe content id is not same for the license
@@ -210,20 +210,20 @@ class RestAPI {
 	/**
 	 * Check update for free product
 	 *
-	 * @param string $content_name
+	 * @param string $content_uname
 	 * @param string $endpoint
 	 * @return void
 	 */
-	private function update_check_free( string $content_name ) {
+	private function update_check_free( string $content_uname ) {
 
-		if ( ! Contents::isContentFree( $content_name ) ) {
+		if ( ! Contents::isContentFree( $content_uname ) ) {
 			wp_send_json_error( array( 'message' => _x( 'The content you\'ve requested update for is not free. Please correct your credentials and try again.', 'solidie', 'solidie' ) ) );
 			exit;
 		}
 
 		$this->update_check(
 			array(
-				'content_id' => Contents::getContentByProduct( $content_name, 'content_id' ),
+				'content_id' => Contents::getContentByProduct( $content_uname, 'content_id' ),
 				'license_id' => null, // Means free app
 			)
 		);
@@ -277,7 +277,7 @@ class RestAPI {
 
 		// If file path exists, it means the file resides in the server itself. Otherwise the remote cloud server url will be available.
 		$file_source = $release->file_path ?? $release->file_url;
-		$file_name   = $release->content_name . ' - ' . $release->version . '.' . pathinfo( basename( $file_source ), PATHINFO_EXTENSION );
+		$file_name   = $release->content_uname . ' - ' . $release->version . '.' . pathinfo( basename( $file_source ), PATHINFO_EXTENSION );
 		if ( ! $file_source ) {
 			wp_send_json_error( array( 'message' => _x( 'Release file not found.', 'solidie', 'solidie' ) ) );
 			exit;

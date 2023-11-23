@@ -17,19 +17,12 @@ require_once __DIR__ . '/classes/Main.php';
 (new Solidie\Main())->init( 
 	(object) array(
 		'app_name'          => 'appstore',
-		'content_name'      => 'appstore',
-		'content_title'     => 'AppStore',
-		'is_free'           => false,
 		'file'              => __FILE__,
+		'mode'              => 'development',
 		'root_menu_slug'    => 'solidie',
-		'continuous_update' => false,
 		'db_prefix'         => 'appstore_',
 		'linked_table'      => 'contents',
 		'linked_column'     => 'product_id',
-		'version'           => '1.0.0',
-		'dir'               => __DIR__ . '/',
-		'url'               => plugin_dir_url( __FILE__ ),
-		'dist_url'          => plugin_dir_url( __FILE__ ) . '/dist/',
-		'current_url'       => "http".((!empty($_SERVER['HTTPS'])&&$_SERVER['HTTPS']!='off')?'s':'').'://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']
+		'current_url'       => ( is_ssl() ? "https" : "http") . "://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'],
 	)
 );

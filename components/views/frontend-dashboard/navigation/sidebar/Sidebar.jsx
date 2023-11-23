@@ -5,9 +5,8 @@ import { ContextFrontendDashboard, getDashboardPath } from "../../index.jsx";
 
 import layout from '../../style.module.scss';
 
-const Sidebar = ({ sidebarOpen }) => {
+export function Sidebar({ sidebarOpen }) {
 	const current_url = window.location.href.split('?')[0];
-
 	const [state, setState] = useState({});
 
 	const {stores=[]} = useContext(ContextFrontendDashboard);
@@ -86,5 +85,3 @@ const Sidebar = ({ sidebarOpen }) => {
 		})}
 	</ul>
 };
-
-export default Sidebar;

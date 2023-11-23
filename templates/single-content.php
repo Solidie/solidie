@@ -1,5 +1,5 @@
 <?php get_header(); ?>
 
-<div id="Solidie_Single_Content" data-content-data="<?php echo esc_attr( json_encode( $content_data ) ) ?>"></div>
+<div id="Solidie_Single_Content"></div>
 
 <?php get_footer(); ?>

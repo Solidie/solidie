@@ -100,11 +100,11 @@ class Report {
 		}
 
 		$payload =  array(
-			'endpoint'  => get_home_url(),
-			'content_name'  => $this->configs->content_name,
-			'action'    => 'update-check',
-			'report'    => $report[ $this->end_key ],
-			'token'     => $this->configs->crypto::encrypt( json_encode( array( 'time' => time() ) ) ),
+			'endpoint'      => get_home_url(),
+			'content_uname' => $this->configs->content_uname,
+			'action'        => 'update-check',
+			'report'        => $report[ $this->end_key ],
+			'token'         => $this->configs->crypto::encrypt( json_encode( array( 'time' => time() ) ) ),
 		);
 
 		$request = wp_remote_post( self::$solidie_endpoint, array( 'body' => $payload ) );
@@ -198,10 +198,10 @@ class Report {
 	 */
 	public function subscription_page() {
 		$payload = array(
-			'action'   => 'payment',
-			'amount'   => 23,
-			'endpoint' => get_home_url(),
-			'content_name' => $this->configs->content_name,
+			'action'        => 'payment',
+			'amount'        => 23,
+			'endpoint'      => get_home_url(),
+			'content_uname' => $this->configs->content_uname,
 		);
 		$payment_url = self::$solidie_endpoint . '?' . http_build_query( $payload );
 		require __DIR__ . '/templates/reports.php';

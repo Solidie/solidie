@@ -22,8 +22,8 @@ export function Sales() {
 		getSales();
 	}, []);
 
-  	return <div className={"flex flex-col gap-4 w-full h-full".classNames()}>
-		<div className={"flex justify-between items-center w-full".classNames()}>
+  	return <div className={"flex flex-col gap-4 width-p-100 height-p-100".classNames()}>
+		<div className={"flex justify-between items-center width-p-100".classNames()}>
 			<h1 className={"text-3xl font-bold".classNames()}>Sales</h1>
 		</div>
 
@@ -39,10 +39,10 @@ export function Sales() {
 			</thead>
 			<tbody>
 				{state.sales.map(sale=>{
-					let {sale_id, order_id, customer_email, content_name, sale_price, sold_at } = sale;
+					let {sale_id, order_id, customer_email, content_title, sale_price, sold_at } = sale;
 					return <tr key={sale_id}>
 						<td data-th="Order ID">{order_id}</td>
-						<td data-th="Purchased Content">{content_name}</td>
+						<td data-th="Purchased Content">{content_title}</td>
 						<td data-th="Price">${sale_price}</td> {/* To Do: Make symbol dynamic */}
 						<td data-th="Customer Email">{customer_email}</td>
 						<td data-th="Sold Date">{sold_at}</td>

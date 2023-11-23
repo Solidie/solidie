@@ -30,27 +30,31 @@ class Scripts {
 		$dynamic_colors = Colors::getColors();
 		$_colors        = '';
 		foreach ( $dynamic_colors as $name => $code ) {
-			$_colors .= '--solidie-color-' . esc_attr( $name ) . ':' . esc_attr( $code ) . ';';
+			$_colors .= '--crewmat-color-' . esc_attr( $name ) . ':' . esc_attr( $code ) . ';';
 		}
-		echo '<style>:root{' . $_colors . '}</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo '<style>[id^="Solidie_"],#crewhrm-popup-root{' . $_colors . '}</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 		// Load data
 		$data = array(
-			'ajaxurl'      => admin_url( 'admin-ajax.php' ),
-			'home_url'     => get_home_url(),
-			'home_path'    => rtrim( parse_url( get_home_url() )['path'] ?? '/', '/' ) . '/',
-			'content_name' => Main::$configs->content_name,
-			'nonce'        => wp_create_nonce( Main::$configs->app_name ),
-			'colors'       => $dynamic_colors,
-			'app_name'     => Main::$configs->app_name,
-			'settings'     => array(
+			'ajaxurl'     => admin_url( 'admin-ajax.php' ),
+			'home_url'    => get_home_url(),
+			'home_path'   => rtrim( parse_url( get_home_url() )['path'] ?? '/', '/' ) . '/',
+			'app_name'    => Main::$configs->app_name,
+			'nonce'       => wp_create_nonce( Main::$configs->app_name ),
+			'colors'      => $dynamic_colors,
+			'text_domain' => Main::$configs->text_domain,
+			'settings'    => array(
 				'contents'  => AdminSetting::get( 'contents' ),
 				'dashboard' => AdminSetting::get( 'dashboard' ),
 			)
 		);
 		
-		echo '<script>window.CrewPointer="Solidie";</script>';
-		echo '<script>window.Solidie=' . wp_json_encode( $data ) . '</script>';
+		// Determine data pointer
+		$pattern = '/\/([^\/]+)\/wp-content\/(plugins|themes)\/([^\/]+)\/.*/';
+		preg_match( $pattern, Main::$configs->url, $matches );
+		$parsedString = strtolower( "CrewMat_{$matches[1]}_{$matches[3]}" );
+		$parsedString = preg_replace( '/[^a-zA-Z0-9_]/', '', $parsedString );
+		echo '<script>window.' . $parsedString . '=' . wp_json_encode( $data ) . '</script>';
 	}
 
 	public function adminScripts() {

@@ -260,7 +260,7 @@ class Release {
 			}
 
 			// Upload new one
-			$file_id = self::uploadFile( $data['content_id'], $data['file'], $content->content_name . ' - ' . $data['version'] );
+			$file_id = self::uploadFile( $data['content_id'], $data['file'], $content->content_title . ' - ' . $data['version'] );
 			if ( ! $file_id ) {
 				return _x( 'Error in file saving!', 'solidie', 'solidie' );
 			}
@@ -299,7 +299,7 @@ class Release {
 
 		$releases = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT _release.*, product.post_title AS content_name, UNIX_TIMESTAMP(_release.release_date) as release_unix_timestamp, content.product_id, content.content_type
+				"SELECT _release.*, product.post_title AS content_title, UNIX_TIMESTAMP(_release.release_date) as release_unix_timestamp, content.product_id, content.content_type
 				FROM ".DB::releases()." _release
 				INNER JOIN ".DB::contents()." content ON content.content_id=_release.content_id
 				INNER JOIN {$wpdb->posts} product ON content.product_id=product.ID

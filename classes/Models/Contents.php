@@ -61,7 +61,7 @@ class Contents {
 
 		$content['content_id']    = ! empty( $content_data['content_id'] ) ? $content_data['content_id'] : 0;
 		$content['product_id'] = ! empty( $content_data['content_id'] ) ? self::getProductID( $content['content_id'] ) : 0;
-		$content['content_name']  = ! empty( $content_data['content_name'] ) ? $content_data['content_name'] : 'Untitled Content';
+		$content['content_title']  = ! empty( $content_data['content_title'] ) ? $content_data['content_title'] : 'Untitled Content';
 
 		// Sync core product first
 		$product_id = self::syncProduct( $content, $store_id );
@@ -90,7 +90,7 @@ class Contents {
 			wp_update_post(
 				array(
 					'ID'         => $content['product_id'],
-					'post_title' => $content['content_name']
+					'post_title' => $content['content_title']
 				)
 			);
 			
@@ -99,7 +99,7 @@ class Contents {
 		
 		// Create new product
 		$product = new \WC_Product_Simple();
-		$product->set_name( $content['content_name'] );
+		$product->set_name( $content['content_title'] );
 		// $product->set_slug( 'medium-size-wizard-hat-in-new-york' );
 		$product->set_regular_price( 500.00 ); // in current shop currency
 		$product->set_short_description( '<p>Here it is... A WIZARD HAT!</p><p>Only here and now.</p>' );
@@ -187,7 +187,7 @@ class Contents {
 		global $wpdb;
 		$content = $wpdb->get_row(
 			$wpdb->prepare(
-				"SELECT content.*, product.post_title AS content_name, product.post_excerpt as content_excerpt, author.ID as author_id FROM " . DB::contents() . " content 
+				"SELECT content.*, product.post_title AS content_title, product.post_excerpt as content_excerpt, author.ID as author_id FROM " . DB::contents() . " content 
 				INNER JOIN {$wpdb->posts} product ON content.product_id=product.ID 
 				INNER JOIN {$wpdb->users} author ON product.post_author=author.ID
 				WHERE content." . $field_name . "=%s" . $status_clause,
@@ -508,7 +508,7 @@ class Contents {
 		
 		global $wpdb;
 		$contents = $wpdb->get_results(
-			"SELECT DISTINCT product.post_title AS content_name, product.ID as product_id, content.content_id, content.content_type, product.post_status AS content_status, sale.sale_id
+			"SELECT DISTINCT product.post_title AS content_title, product.ID as product_id, content.content_id, content.content_type, product.post_status AS content_status, sale.sale_id
 			FROM {$wpdb->posts} product 
 				INNER JOIN " . DB::contents() . " content ON product.ID=content.product_id 
 				INNER JOIN " . DB::stores() . " store ON content.store_id=store.store_id

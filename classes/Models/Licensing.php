@@ -96,7 +96,7 @@ class Licensing {
 			$data['license_key']   = $license_key;
 			$data['endpoint']      = $license->endpoint;
 			$data['expires_on']    = $license->license_expires_on;
-			$data['content_name']      = get_the_title( Contents::getProductID( $license->content_id ) );
+			$data['content_title']      = get_the_title( Contents::getProductID( $license->content_id ) );
 			$data['plan_name']     = $var_info['label'];
 			$data['customer_id']   = $license->customer_id;
 			$data['licensee_name'] = $customer ? $customer->display_name : '(Customer Not Found)';

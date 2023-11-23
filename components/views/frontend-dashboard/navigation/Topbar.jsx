@@ -1,6 +1,6 @@
 import React from "react";
 
-const Topbar = ({ frontendDashboardData, children }) => {
+export function Topbar({ frontendDashboardData, children }) {
   return (
     <div className={"bg-brand-white h-max py flex justify-between items-center ".classNames()} style={{flex: 1}}>
       <div className={"w-max py-4 px-6 flex justify-between items-center gap-4".classNames()}>
@@ -13,11 +13,9 @@ const Topbar = ({ frontendDashboardData, children }) => {
           />
         </div>
       </div>
-      <div className={"flex-grow w-full flex justify-end items-center sm:px-4 ".classNames()}>
+      <div className={"flex-grow width-p-100 flex justify-end items-center sm:px-4 ".classNames()}>
         User Prof
       </div>
     </div>
   );
 };
-
-export default Topbar;

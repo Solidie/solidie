@@ -39,8 +39,8 @@ export function Inventory(props) {
 		fetchContents();
 	}, []);
 
-	return <div className={"flex flex-col gap-4 w-full h-full".classNames()}>
-		<div className={"flex justify-between items-center w-full".classNames()}>
+	return <div className={"flex flex-col gap-4 width-p-100 height-p-100".classNames()}>
+		<div className={"flex justify-between items-center width-p-100".classNames()}>
 			<h1 className={"text-3xl font-bold".classNames()}>Inventory</h1>
 			<Link to="add" >
 				<div className='Button flex'>

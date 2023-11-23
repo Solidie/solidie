@@ -79,9 +79,6 @@ if ( AdminSetting::get( 'dashboard.slug' ) == $page ) {
 			)
 		);
 		the_post();
-
-		// Get the component data
-		$content_data = Contents::getContentByProduct( get_the_ID() );
 		require Main::$configs->dir . 'templates/single-content.php';
 	} else {
 		// Single product tutorial page, supports unlimited sub path. For now show 404.
