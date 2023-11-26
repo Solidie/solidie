@@ -1,72 +1,66 @@
-import React, { useContext, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 
-import { ContextFrontendDashboard, getDashboardPath } from "../../index.jsx";
+import { getDashboardPath } from "../../index.jsx";
 
 import layout from '../../style.module.scss';
+import style from './sidebar.module.scss';
 
 export function Sidebar({ sidebarOpen }) {
 	const current_url = window.location.href.split('?')[0];
 	const [state, setState] = useState({});
 
-	const {stores=[]} = useContext(ContextFrontendDashboard);
 	const location = useLocation();
 	const groupedNavigation = useMemo(
 		() => [
 			{
 				href: getDashboardPath('purchased-apps'),
 				text: "Purchased Apps",
-				icon: <i className={'s-icon s-icon-purchase'.classNames()}></i>,
+				icon: '',
 			},
 			{
 				href: getDashboardPath('subscriptions'),
 				text: "Subscriptions",
-				icon: <i className={'s-icon s-icon-subscription'.classNames()}></i>,
+				icon: '',
 			},
 			{
 				href: getDashboardPath('my-account'),
 				text: "My Account",
-				icon: <i className={'s-icon s-icon-account'.classNames()}></i>,
+				icon: '',
 			},
-			...stores.map(store=>{
-				let {store_slug, store_name} = store;
-				return {
-					href: '#',
-					text: store_name,
-					children: [
-						{
-							href: getDashboardPath(`store/${store_slug}/inventory`),
-							text: "Inventory",
-							icon: <i className={'s-icon s-icon-inventory'.classNames()}></i>,
-						},
-						{
-							href: getDashboardPath(`store/${store_slug}/sales`),
-							text: "Sales",
-							icon: <i className={'s-icon s-icon-sales'.classNames()}></i>,
-						},
-						{
-							href: getDashboardPath(`store/${store_slug}/reports`),
-							text: "Reports",
-							icon: <i className={'s-icon s-icon-report'.classNames()}></i>,
-						},
-					],
-				}
-			})
+			{
+				href: getDashboardPath(`inventory`),
+				text: "Inventory",
+				icon: 'ch-icon ch-icon-color-swatch'.classNames(),
+			},
+			{
+				href: getDashboardPath(`sales`),
+				text: "Sales",
+				icon: '',
+			},
+			{
+				href: getDashboardPath(`reports`),
+				text: "Reports",
+				icon: '',
+			}
 		],
 		[]
 	);
 
-
-	return <ul className={"navList".classNames(layout)}>
+	return <ul className={"navList".classNames(layout) + 'sidebar'.classNames(style)}>
 		{groupedNavigation.map(menu=>{
-			let {children=[], text: label, href: url, href: slug} = menu;
+			let {children=[], text: label, href: url, href: slug, icon} = menu;
 			let is_active = state.expanded_menu==slug || location.pathname.includes(slug);
 
 			return <li key={slug}>
 				<div className={("navList__subheading row-appstore row--align-v-center"+(!children.length ? ' singular' : '')+(is_active ? ' navList__subheading--open' : '')).classNames(layout)} onClick={()=>setState({...state, expanded_menu: state.expanded_menu==slug ? null : slug})}>
 					<Link to={children.length ? '#' : url} onClick={e=>children.length ? e.preventDefault() : 0}>
-						<span className={"navList__subheading-icon".classNames(layout)}><i className={null}></i></span>
-						<span className={"navList__subheading-title".classNames(layout)}>{label}</span>
+						<span className={"navList__subheading-icon".classNames(layout)}>
+							<i className={icon + 'color-white font-size-20'.classNames()}></i>
+						</span>
+						<span className={"navList__subheading-title".classNames(layout)}>
+							{label}
+						</span>
 					</Link>
 				</div>
 				{

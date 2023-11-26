@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom';
 
 import { request } from 'crewhrm-materials/request.jsx';
 
@@ -7,12 +6,11 @@ import { TableStat } from '../../../../materials/table-stat.jsx';
 
 export function Sales() {
 	const [state, setState] = useState({sales:[], fetching: false});
-	const {store_slug} = useParams();
 
 	const getSales=()=>{
 		setState({...state, fetching: true});
 
-		request('get_sales_data', {store_slug}, resp=>{
+		request('get_sales_data', {}, resp=>{
 			let {sales=[]} = resp?.data || {};
 			setState({...state, sales, fetching: false});
 		})
@@ -39,13 +37,13 @@ export function Sales() {
 			</thead>
 			<tbody>
 				{state.sales.map(sale=>{
-					let {sale_id, order_id, customer_email, content_title, sale_price, sold_at } = sale;
+					let {sale_id, order_id, customer_email, content_title, sale_price, sold_time } = sale;
 					return <tr key={sale_id}>
 						<td data-th="Order ID">{order_id}</td>
 						<td data-th="Purchased Content">{content_title}</td>
 						<td data-th="Price">${sale_price}</td> {/* To Do: Make symbol dynamic */}
 						<td data-th="Customer Email">{customer_email}</td>
-						<td data-th="Sold Date">{sold_at}</td>
+						<td data-th="Sold Date">{sold_time}</td>
 					</tr>
 				})}
 				<TableStat fetching={state.fetching} length={state.sales.length} colSpan={5}/>

@@ -241,13 +241,13 @@ class Release {
 	public static function pushRelease( array $data ) {
 		$content = Contents::getContentByContentID( $data['content_id'] );
 		if ( empty( $content ) ) {
-			return _x( 'Content not found to release', 'solidie', 'solidie' );
+			return __( 'Content not found to release', 'solidie'  );
 		}
 		
 		$release = array(
-			'version'   => $data['version'],
-			'changelog' => $data['changelog'],
-			'content_id'    => $data['content_id'],
+			'version'    => $data['version'],
+			'changelog'  => $data['changelog'],
+			'content_id' => $data['content_id'],
 		);
 
 		global $wpdb;
@@ -262,7 +262,7 @@ class Release {
 			// Upload new one
 			$file_id = self::uploadFile( $data['content_id'], $data['file'], $content->content_title . ' - ' . $data['version'] );
 			if ( ! $file_id ) {
-				return _x( 'Error in file saving!', 'solidie', 'solidie' );
+				return __( 'Error in file saving!', 'solidie'  );
 			}
 
 			// Link new one to the release

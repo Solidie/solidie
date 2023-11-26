@@ -96,7 +96,7 @@ class RestAPI {
 				break;
 
 			default :
-				wp_send_json_error( array( 'message' => _x( 'Invalid action!', 'solidie', 'solidie' ) ) );
+				wp_send_json_error( array( 'message' => __( 'Invalid action!', 'solidie'  ) ) );
 				exit;
 		}
 	}
@@ -109,7 +109,7 @@ class RestAPI {
 		if ( ! is_array( $license_info ) || empty( $license_info ) ) {
 			wp_send_json_error(
 				array( 
-					'message'   => _x( 'Invalid License Key', 'solidie', 'solidie' ),
+					'message'   => __( 'Invalid License Key', 'solidie'  ),
 					'activated' => false
 				) 
 			);
@@ -120,7 +120,7 @@ class RestAPI {
 		if ( $_POST['action'] == 'activate-license' && null !== $license_info['endpoint'] && $_POST['endpoint'] !== $license_info['endpoint']) {
 			wp_send_json_error(
 				array(
-					'message'   => _x( 'The license key is in use somewhere else already.', 'solidie', 'solidie' ),
+					'message'   => __( 'The license key is in use somewhere else already.', 'solidie'  ),
 					'activated' => false
 				)
 			);
@@ -131,7 +131,7 @@ class RestAPI {
 		if ( $_POST['action'] !== 'activate-license' && $license_info['endpoint'] !== $_POST['endpoint'] ) {
 			wp_send_json_error(
 				array( 
-					'message'   => _x( 'The license key is not associated with your endpoint.', 'solidie', 'solidie' ), 
+					'message'   => __( 'The license key is not associated with your endpoint.', 'solidie'  ), 
 					'activated' => false
 				)
 			);
@@ -151,7 +151,7 @@ class RestAPI {
 		global $wpdb;
 
 		if ( $license['endpoint'] === $_POST['endpoint'] ) {
-			$message = _x( 'The license is activated already', 'solidie', 'solidie' );
+			$message = __( 'The license is activated already', 'solidie'  );
 		} else {
 			$wpdb->update(
 				DB::license_keys(),
@@ -159,7 +159,7 @@ class RestAPI {
 				array( 'license_id' => $license['license_id'] )
 			);
 		
-			$message = _x( 'License activated succefully', 'solidie', 'solidie' );
+			$message = __( 'License activated succefully', 'solidie'  );
 			Hit::registerHit( 'activate-license', null, $license['license_id'], $_POST['endpoint'] );
 		}
 		
@@ -186,7 +186,7 @@ class RestAPI {
 	private function update_check( array $license ) {
 		$release = Release::getRelease( $license['content_id'], null, $license['license_id'] ?? 0, $_POST['endpoint'] );
 		if ( ! $release ) {
-			wp_send_json_error( array( 'message' => _x( 'No release found.' ) ) );
+			wp_send_json_error( array( 'message' => __( 'No release found.' ) ) );
 			exit;
 		}
 
@@ -217,7 +217,7 @@ class RestAPI {
 	private function update_check_free( string $content_uname ) {
 
 		if ( ! Contents::isContentFree( $content_uname ) ) {
-			wp_send_json_error( array( 'message' => _x( 'The content you\'ve requested update for is not free. Please correct your credentials and try again.', 'solidie', 'solidie' ) ) );
+			wp_send_json_error( array( 'message' => __( 'The content you\'ve requested update for is not free. Please correct your credentials and try again.', 'solidie'  ) ) );
 			exit;
 		}
 
@@ -246,7 +246,7 @@ class RestAPI {
 
 		// Exit if the token is malformed
 		if ( count( $parse ) !== 5 || ! is_numeric( $parse[0] ) || ! is_numeric( $parse[1] ) || ! is_numeric( $parse[2] ) ) {
-			wp_send_json_error( array( 'message' => _x( 'Invalid Request', 'solidie', 'solidie' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Invalid Request', 'solidie'  ) ) );
 			exit;
 		}
 
@@ -258,20 +258,20 @@ class RestAPI {
 
 		// Exit if link is older than defined time
 		if ( $token_time < time() - ( self::DOWNLOAD_LINK_VALIDITY * 60 ) ) {
-			wp_send_json_error( array( 'message' => sprintf( _x( 'Download link expired as it is older than %d minutes.', 'solidie', 'solidie' ), self::DOWNLOAD_LINK_VALIDITY ) ) );
+			wp_send_json_error( array( 'message' => sprintf( __( 'Download link expired as it is older than %d minutes.', 'solidie'  ), self::DOWNLOAD_LINK_VALIDITY ) ) );
 			exit;
 		}
 
 		// Exit if license id is not 0 (that indecates free or authenticated download) and also the content is not free, and not even the user is authenticated.
 		if ( empty( $license_id ) && ! Contents::isContentFree( $content_id ) && ! Contents::canDownloadByUser( $content_id, get_current_user_id() ) ) {
-			wp_send_json_error( array( 'message' => _x( 'Sorry! You are not allowed to download.', 'solidie', 'solidie' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Sorry! You are not allowed to download.', 'solidie'  ) ) );
 			exit;
 		}
 
 		// Exit if the release is no more though the earlier checks passed.
 		$release = Release::getRelease( $content_id, $version, $license_id, $endpoint );
 		if ( ! $release ) {
-			wp_send_json_error( array( 'message' => _x( 'No release found.', 'solidie', 'solidie' ) ) );
+			wp_send_json_error( array( 'message' => __( 'No release found.', 'solidie'  ) ) );
 			exit;
 		}
 
@@ -279,7 +279,7 @@ class RestAPI {
 		$file_source = $release->file_path ?? $release->file_url;
 		$file_name   = $release->content_uname . ' - ' . $release->version . '.' . pathinfo( basename( $file_source ), PATHINFO_EXTENSION );
 		if ( ! $file_source ) {
-			wp_send_json_error( array( 'message' => _x( 'Release file not found.', 'solidie', 'solidie' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Release file not found.', 'solidie'  ) ) );
 			exit;
 		}
 

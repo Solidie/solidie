@@ -6,6 +6,7 @@ use Solidie\Helpers\Colors;
 use Solidie\Main;
 use Solidie\Models\AdminSetting;
 use Solidie\Models\FrontendDashboard;
+use Solidie\Models\Manifest;
 
 // To Do: Load frontend scripts only in catalog and single content page when not in development mode
 // To Do: Load frontend dashboard script only in the dashboard
@@ -44,7 +45,7 @@ class Scripts {
 			'colors'      => $dynamic_colors,
 			'text_domain' => Main::$configs->text_domain,
 			'settings'    => array(
-				'contents'  => AdminSetting::get( 'contents' ),
+				'contents'  => array_replace_recursive( Manifest::getFilteredContents(), AdminSetting::get( 'contents' ) ),
 				'dashboard' => AdminSetting::get( 'dashboard' ),
 			)
 		);

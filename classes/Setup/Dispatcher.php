@@ -5,7 +5,6 @@ namespace Solidie\Setup;
 use Error;
 use Solidie\Controllers\ContentController;
 use Solidie\Controllers\SettingsController;
-use Solidie\Controllers\StoreController;
 use Solidie\Helpers\_Array;
 use Solidie\Helpers\_String;
 use Solidie\Main;
@@ -23,7 +22,6 @@ class Dispatcher {
 	private static $controllers = array(
 		ContentController::class,
 		SettingsController::class,
-		StoreController::class
 	);
 
 	/**

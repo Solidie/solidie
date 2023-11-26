@@ -2,8 +2,8 @@ import React from "react";
 
 export function Topbar({ frontendDashboardData, children }) {
   return (
-    <div className={"bg-brand-white h-max py flex justify-between items-center ".classNames()} style={{flex: 1}}>
-      <div className={"w-max py-4 px-6 flex justify-between items-center gap-4".classNames()}>
+    <div className={"bg-color-white d-flex justify-content-between align-items-center ".classNames()} style={{flex: 1}}>
+      <div className={"width-p-100 d-flex justify-cotnent-between align-items-center column-gap-4".classNames()}>
         {children}
 		<div className={"h-max w-max select-none".classNames()}>
           <img

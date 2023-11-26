@@ -21,7 +21,7 @@ class WooCommerce {
 		}
 
 		$class = 'notice notice-error';
-		$message = _x('This product has been created programmatically. So you are not supposed to do edit in Product Data section if you don\'t know the exact result.', 'solidie', 'solidie' );
+		$message = __( 'This product has been created programmatically. So you are not supposed to do edit in Product Data section if you don\'t know the exact result.', 'solidie' );
 
 		printf('<div class="%1$s"><p style="color:#aa0000;font-weight:bold;">%2$s</p></div>', esc_attr($class), $message);
 	}

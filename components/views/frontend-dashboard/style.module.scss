@@ -8,9 +8,6 @@ $color-mischka: #DADAE3; // light gray for menu icon
 $color-java: #1BBAE1; // blue text
 $color-mine-shaft: #333; // main section header bg
 $color-zest: #e67e22; // document icon bg
-$color-jungle-green: #27ae60; // calendar icon bg
-$color-cinnabar: #e74c3c; // main icon bg, red
-$color-amethyst: #af64cc; // main photo icon bg
 $color-transparent: rgba(255, 255, 255, .5);
 $color-alto: #D3D3D3;
 
@@ -87,7 +84,9 @@ $width-sidenav: 240px;
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	background-color: $color-catskill-white;
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+    overflow: hidden;
 
 	&__menu {
 		position: fixed; // Needs to stay visible for all mobile scrolling
@@ -350,7 +349,7 @@ $width-sidenav: 240px;
 		}
 
 		a{
-			padding: 10px 30px;
+			padding: 10px 18px;
 			color: #fff;
 			font-size: 16px;
 			text-transform: capitalize;
@@ -411,8 +410,7 @@ $width-sidenav: 240px;
 // Dashboard content wrapper
 .main {
 	grid-area: main;
-	background-color: $color-athens-gray;
-	color: $color-fiord;
+	background-color: var(--crewmat-color-white);
 	padding: 15px;
 }
 
@@ -524,29 +522,6 @@ display: grid;
 	}
 }
 
-.footer {
-	grid-area: footer;
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	padding: 0 16px;
-	color: $color-abbey;
-	background-color: $color-white;
-
-	&__copyright {
-		color: $color-java;
-	}
-
-	&__icon {
-		color: $color-cinnabar;
-	}
-
-	&__signature {
-		color: $color-java;
-		cursor: pointer;
-		font-weight: bold;
-	}
-}
 
 @media only screen and (min-width: 768px) {
 	// Break out to sidenav grid layout on medium + screens

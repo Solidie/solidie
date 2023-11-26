@@ -12,79 +12,68 @@ class Manifest {
 		$manifest = array (
 			'settings' => array(
 				'dashboard' => array (
-					'label' => 'Dashboard', 
+					'label' => __( 'Dashboard', 'solidie' ), 
 					'slug'  => 'dashboard', 
-				), 
-				'content' => array ( // For single content page
-					'full_width' => false, 
 				),
 			),
 			'contents' => array ( 
-				'app' => array ( 
-					'label'       => 'App', 
+				'app' => array (
+					'label'       => __( 'App', 'solidie' ), 
 					'slug'        => 'apps', 
-					'description' => 'Applications for website, android, windows, linux, mac and so on.', 
+					'description' => __( 'Applications for website, android, windows, linux, mac and so on.', 'solidie' ), 
 					'plans'       => array(
 						'unlimited' => array(
 							'license_key_limit' => null,
-							'label'             => _x( 'Unlimited License', 'solidie', 'solidie' ),
-							'period_label'      => _x( 'Unlimited License - %s', 'solidie', 'solidie' ),
+							'label'             => __( 'Unlimited License', 'solidie' ),
+							'period_label'      => __( 'Unlimited License - %s', 'solidie' ),
 						),
 						'fifty' => array(
 							'license_key_limit' => 50,
-							'label'             => _x( '50 Licenses', 'solidie', 'solidie' ),
-							'period_label'      => _x( '50 Licenses - %s', 'solidie', 'solidie' ),
+							'label'             => __( '50 Licenses', 'solidie' ),
+							'period_label'      => __( '50 Licenses - %s', 'solidie' ),
 						),
 						'twenty' => array(
 							'license_key_limit' => 20,
-							'label'             => _x( '20 Licenses', 'solidie', 'solidie' ),
-							'period_label'      => _x( '20 Licenses - %s', 'solidie', 'solidie' ),
+							'label'             => __( '20 Licenses', 'solidie' ),
+							'period_label'      => __( '20 Licenses - %s', 'solidie' ),
 						),
 						'ten' => array(
 							'license_key_limit' => 10,
-							'label'             => _x( '10 Licenses', 'solidie', 'solidie' ),
-							'period_label'      => _x( '10 Licenses - %s', 'solidie', 'solidie' ),
+							'label'             => __( '10 Licenses', 'solidie' ),
+							'period_label'      => __( '10 Licenses - %s', 'solidie' ),
 						),
 						'five' => array(
 							'license_key_limit' => 5,
-							'label'             => _x( '5 Licenses', 'solidie', 'solidie' ),
-							'period_label'      => _x( '5 Licenses - %s', 'solidie', 'solidie' ),
+							'label'             => __( '5 Licenses', 'solidie' ),
+							'period_label'      => __( '5 Licenses - %s', 'solidie' ),
 						),
 						'single' => array(
 							'license_key_limit' => 1,
-							'label'             => _x( 'Single License', 'solidie', 'solidie' ),
-							'period_label'      => _x( 'Single License - %s', 'solidie', 'solidie' ),
+							'label'             => __( 'Single License', 'solidie' ),
+							'period_label'      => __( 'Single License - %s', 'solidie' ),
 						),
-					)
+					),
 				), 
 				'audio' => array ( 
-					'label'       => 'Audio', 
+					'label'       => __( 'Audio', 'solidie' ), 
 					'slug'        => 'audios', 
-					'description' => 'Audio contents like music, podcast and so on.',
-					'plans' => array(),
+					'description' => __( 'Audio contents like music, podcast and so on.', 'solidie' ),
+					'plans'       => array(),
 				), 
 				'video' => array ( 
 					'label' => 'Video', 
 					'slug' => 'videos', 
-					'description' => 'Video contents like travel vlog, cinematography, templates and so on.', 
+					'description' => __( 'Video contents like travel vlog, cinematography, presets, templates and so on.', 'solidie' ), 
 					'plans' => array(),
 				), 
 				'image' => array ( 
-					'label'       => 'Image', 
+					'label'       => __( 'Image', 'solidie' ), 
 					'slug'        => 'images', 
-					'description' => 'Different types of images', 
+					'description' => __( 'Photography, vectore, presets, templates, tools etc.', 'solidie' ), 
 					'plans'       => array(),
-					'catagories'  => array(
-						'photograph'   => 'Photograph',
-						'vector'       => 'Vector',
-						'illustration' => 'Illustration',
-						'ai'           => 'AI',
-						'editorial'    => 'Editorial',
-						'texture'      => 'Texture',
-					)
 				), 
 				'3d' => array ( 
-					'label' => '3D', 
+					'label' => '3D Model', 
 					'slug' => '3d', 
 					'description' => '3D mondels in various formats', 
 					'plans' => array(),
@@ -104,7 +93,7 @@ class Manifest {
 				'font' => array ( 
 					'label' => 'Font', 
 					'slug' => 'fonts', 
-					'description' => 'Various fonts', 
+					'description' => 'Various type of fonts', 
 					'plans' => array(),
 				),
 			), 
@@ -192,39 +181,39 @@ class Manifest {
 		return array(
 			'day' => array(
 				'days'      => 1,
-				'label'     => _x( 'Daily', 'solidie', 'solidie' ),
+				'label'     => __( 'Daily', 'solidie' ),
 				'wcs_label' => sprintf( _nx( 'day',  '%s days',  $number, 'Subscription billing period.', 'woocommerce-subscriptions' ), $number ),
 			),
 			'week' => array(
 				'days'      => 7,
-				'label'     => _x( 'Weekly', 'solidie', 'solidie' ),
+				'label'     => __( 'Weekly', 'solidie' ),
 				'wcs_label' => sprintf( _nx( 'week',  '%s weeks',  $number, 'Subscription billing period.', 'woocommerce-subscriptions' ), $number ),
 			),
 			'fortnight' => array(
 				'days'      => 14,
-				'label'     => _x( 'Fortnightly', 'solidie', 'solidie' ),
+				'label'     => __( 'Fortnightly', 'solidie' ),
 				'wcs_label' => sprintf( _nx( 'fortnight',  '%s fortnights',  $number, 'Subscription billing period.', 'woocommerce-subscriptions' ), $number ),
 				'register'  => true
 			),
 			'month' => array(
 				'days'      => 30,
-				'label'     => _x( 'Monthly', 'solidie', 'solidie' ),
+				'label'     => __( 'Monthly', 'solidie' ),
 				'wcs_label' => sprintf( _nx( 'month',  '%s months',  $number, 'Subscription billing period.', 'woocommerce-subscriptions' ), $number ),
 			),
 			'quarter' => array(
 				'days'      => 90,
-				'label'     => _x( 'Quarterly', 'solidie', 'solidie' ),
+				'label'     => __( 'Quarterly', 'solidie' ),
 				'wcs_label' => sprintf( _nx( 'quarter',  '%s quarters',  $number, 'Subscription billing period.', 'woocommerce-subscriptions' ), $number ),
 				'register'  => true,
 			),
 			'year' => array(
 				'days'      => 365,
-				'label'     => _x( 'Yearly', 'solidie', 'solidie' ),
+				'label'     => __( 'Yearly', 'solidie' ),
 				'wcs_label' => sprintf( _nx( 'year',  '%s years',  $number, 'Subscription billing period.', 'woocommerce-subscriptions' ), $number ),
 			),
 			'lifetime' => array(
 				'days'      => null, // In fact 'null' will be stored in database in case of lifetime license. 
-				'label'     => _x( 'Lifetime', 'solidie', 'solidie' ),
+				'label'     => __( 'Lifetime', 'solidie' ),
 				'wcs_label' => sprintf( _nx( 'lifetime',  '%s lifetime',  $number, 'Subscription billing period.', 'woocommerce-subscriptions' ), $number ),
 				'register'  => true,
 			),
@@ -244,66 +233,84 @@ class Manifest {
 
 		$lincensings = array(
 			'personal_use'             => array(
-				'label'                => _x( 'Personal Use License', 'solidie', 'solidie' ), 
+				'label'                => __( 'Personal Use License', 'solidie' ), 
 			),    
 			'commercial_use'           => array(
-				'label'                => _x( 'Commercial Use License', 'solidie', 'solidie' ), 
+				'label'                => __( 'Commercial Use License', 'solidie' ), 
 			),    
 			'editorial_use'            => array( 
-				'label'                => _x( 'Editorial Use License', 'solidie', 'solidie' ), 
+				'label'                => __( 'Editorial Use License', 'solidie' ), 
 			),    
 			'exclusive_license'        => array(
-				'label'                => _x( 'Exclusive License', 'solidie', 'solidie' ), 
+				'label'                => __( 'Exclusive License', 'solidie' ), 
 			),    
 			'one_time_license'         => array(
-				'label'                => _x( 'One-Time Use License', 'solidie', 'solidie' ), 
+				'label'                => __( 'One-Time Use License', 'solidie' ), 
 			),    
 			'multi_seat_license'       => array(
-				'label'                => _x( 'Multi-Seat License', 'solidie', 'solidie' ), 
+				'label'                => __( 'Multi-Seat License', 'solidie' ), 
 			), 
 			'synchronization_license'  => array(
-				'label'                => _x( 'Synchronization License', 'solidie', 'solidie' ), 
+				'label'                => __( 'Synchronization License', 'solidie' ), 
 				'for'                  => array( 'audio', 'video' )
 			),    
 			'performance_license'      => array(
-				'label'                => _x( 'Performance License', 'solidie', 'solidie' ), 
+				'label'                => __( 'Performance License', 'solidie' ), 
 				'for'                  => array( 'audio' )
 			),
 			'derivative_works_license' => array(
-				'label'                => _x( 'Derivative Works License (for remixes and adaptations)', 'solidie', 'solidie' ),
+				'label'                => __( 'Derivative Works License (for remixes and adaptations)', 'solidie' ),
 			),    
 			'royalty_free'             => array(
-				'label'                => _x( 'Royalty-Free (RF) License', 'solidie', 'solidie' ),
+				'label'                => __( 'Royalty-Free (RF) License', 'solidie' ),
 			),     
 			'rights_managed'           => array(
-				'label'                => _x( 'Rights-Managed (RM) License', 'solidie', 'solidie' ), 
+				'label'                => __( 'Rights-Managed (RM) License', 'solidie' ), 
 			),    
 			'extended_license'         => array(
-				'label'                => _x( 'Extended License', 'solidie', 'solidie' ), 
+				'label'                => __( 'Extended License', 'solidie' ), 
 			),    
 			'cc_attribution'           => array(
-				'label'                => _x( 'CC BY (Attribution)', 'solidie', 'solidie' ), 
+				'label'                => __( 'CC BY (Attribution)', 'solidie' ), 
 			),    
 			'cc_attribution_nc'        => array(
-				'label'                => _x( 'CC BY-NC (Attribution-NonCommercial)', 'solidie', 'solidie' ), 
+				'label'                => __( 'CC BY-NC (Attribution-NonCommercial)', 'solidie' ), 
 			),    
 			'cc_attribution_nd'        => array(
-				'label'                => _x( 'CC BY-ND (Attribution-NoDerivs)', 'solidie', 'solidie' ), 
+				'label'                => __( 'CC BY-ND (Attribution-NoDerivs)', 'solidie' ), 
 			),    
 			'cc_attribution_sa'        => array(
-				'label'                => _x( 'CC BY-SA (Attribution-ShareAlike)', 'solidie', 'solidie' ), 
+				'label'                => __( 'CC BY-SA (Attribution-ShareAlike)', 'solidie' ), 
 			),    
 			'cc_attribution_nc_nd'     => array(
-				'label'                => _x( 'CC BY-NC-ND (Attribution-NonCommercial-NoDerivs)', 'solidie', 'solidie' ), 
+				'label'                => __( 'CC BY-NC-ND (Attribution-NonCommercial-NoDerivs)', 'solidie' ), 
 			),    
 			'cc_attribution_nc_sa'     => array(
-				'label'                => _x( 'CC BY-NC-SA (Attribution-NonCommercial-ShareAlike)', 'solidie', 'solidie' ), 
+				'label'                => __( 'CC BY-NC-SA (Attribution-NonCommercial-ShareAlike)', 'solidie' ), 
 			),    
 			'cc0_public_domain'        => array(
-				'label'                => _x( 'CC0 (Public Domain Dedication)', 'solidie', 'solidie' )
+				'label'                => __( 'CC0 (Public Domain Dedication)', 'solidie' )
 			),
 		);
 
 		return $lincensings;
+	}
+
+	public static function getFilteredContents( $excludes = array( 'plans' ) ) {
+		$manifest = self::getManifest();
+		$contents = $manifest['contents'];
+		$new_array = array();
+
+		foreach ( $contents as $content_key => $structure ) {
+			foreach ( $excludes as $ex ) {
+				if ( isset( $structure[ $ex ] ) ) {
+					unset( $structure[ $ex ] );
+				}
+			}
+			
+			$new_array[ $content_key ] = $structure;
+		}
+
+		return $new_array;
 	}
 }

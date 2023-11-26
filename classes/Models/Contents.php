@@ -53,10 +53,9 @@ class Contents {
 	 * Create or update content
 	 *
 	 * @param array $content_data
-	 * @param int $store_id
 	 * @return int
 	 */
-	public static function updateContent( int $store_id, array $content_data ) {
+	public static function updateContent( array $content_data ) {
 		$content = array();
 
 		$content['content_id']    = ! empty( $content_data['content_id'] ) ? $content_data['content_id'] : 0;
@@ -64,7 +63,7 @@ class Contents {
 		$content['content_title']  = ! empty( $content_data['content_title'] ) ? $content_data['content_title'] : 'Untitled Content';
 
 		// Sync core product first
-		$product_id = self::syncProduct( $content, $store_id );
+		$product_id = self::syncProduct( $content );
 		if ( empty( $product_id ) ) {
 			return false;
 		}
@@ -79,13 +78,11 @@ class Contents {
 	 * Sync product core
 	 *
 	 * @param array $content
-	 * @param integer $store_id
 	 * @return int
 	 */
-	private static function syncProduct( array $content, int $store_id ) {
+	private static function syncProduct( array $content ) {
 
 		// Update existing product info id exists
-		// To Do: Check if the propduct is in the store actually
 		if ( ! empty( $content['content_id'] ) ) {
 			wp_update_post(
 				array(
@@ -117,15 +114,15 @@ class Contents {
 		$wpdb->insert( 
 			DB::contents(), 
 			array(
-				'product_id' => $product_id,
-				'store_id'   => $store_id
+				'content_type' => $content['content_type'],
+				'product_id'   => $product_id,
 			)
 		);
 
 		wp_update_post(
 			array(
-				'ID' => $product_id,
-				'post_status' => 'pending'
+				'ID'          => $product_id,
+				'post_status' => 'pending' // To do: provide settings to approve automatically or not
 			)
 		);
 
@@ -349,7 +346,7 @@ class Contents {
 					'commission_rate'    => $commission_rate,
 					'license_key_limit'  => $content['licensing']['license_key_limit'],
 					'license_expires_on' => $expires_on,
-					'sold_at'            => $order_complete_date,
+					'sold_time'          => $order_complete_date,
 				)
 			);
 
@@ -485,14 +482,11 @@ class Contents {
 	/**
 	 * Get bulk contents
 	 *
-	 * @param integer $store_id
-	 * @param integer $user_id
+	 * @param array $args
 	 * @return array
 	 */
 	public static function getContents( array $args ) {
 		// Prepare arguments
-		$context      = $args['context'] ?? 'catalog';
-		$store_slug   = $args['store_slug'] ?? null;
 		$content_type = $args['content_type'] ?? null;
 		$customer_id  = $args['customer_id'] ?? null;
 		$page         = absint( $args['page'] ?? 1 );
@@ -500,7 +494,6 @@ class Contents {
 
 		// To Do: Validate paramaters for the user as per context. 
 
-		$store_clause  = $store_slug ? " AND  store.slug='" . esc_sql( $store_slug ) . "'" : '';
 		$type_clause   = $content_type ? " AND content.content_type='" . esc_sql( $content_type ) . "'" : '';
 		$customer_clse = $customer_id ? " AND sale.customer_id=" . $customer_id : '';
 		$limit_clause  = " LIMIT " . $limit;
@@ -511,10 +504,8 @@ class Contents {
 			"SELECT DISTINCT product.post_title AS content_title, product.ID as product_id, content.content_id, content.content_type, product.post_status AS content_status, sale.sale_id
 			FROM {$wpdb->posts} product 
 				INNER JOIN " . DB::contents() . " content ON product.ID=content.product_id 
-				INNER JOIN " . DB::stores() . " store ON content.store_id=store.store_id
 				LEFT JOIN " . DB::sales() . " sale ON content.content_id=sale.content_id
 			WHERE 1=1 " 
-				. $store_clause 
 				. $type_clause 
 				. $customer_clse
 				. $limit_clause 

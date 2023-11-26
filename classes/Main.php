@@ -13,7 +13,6 @@ use Solidie\Setup\RestAPI;
 use Solidie\Setup\WooCommerce;
 use Solidie\Setup\WooCommerceSubscription;
 use Solidie\Models\DB;
-use Solidie\SalesReporter\Report;
 use Solidie\Updater\Updater;
 
 class Main {
@@ -64,9 +63,6 @@ class Main {
 		new RestAPI();
 		new Media();
 
-		// Register sales reporter to solidie website
-		new Report( $configs );
-		
 		// Register plugin updater (Registered content name, content main file, parent menu for license page, continous update check bool)
 		// new Updater( $configs );
 	}

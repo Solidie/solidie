@@ -24,7 +24,7 @@ export function SettingPage(props) {
 		});
 	}
 
-	const onchangeContents=(content_id, key, value)=>{
+	const onChangeContents=(content_key, name, value)=>{
 		const {changedSettings={}} = state;
 		const {contents={}} = changedSettings;
 
@@ -34,8 +34,8 @@ export function SettingPage(props) {
 				...changedSettings,
 				contents:{
 					...contents,
-					[content_id]: {
-						[key]: value
+					[content_key]: {
+						[name]: value
 					}
 				}
 			}
@@ -66,10 +66,19 @@ export function SettingPage(props) {
 												<small>{description}</small>
 											</td>
 											<td>
-												<input type='text' name={'content['+key+'][slug]'} defaultValue={savedSettings?.contents?.[key]?.slug || key} className='regular-text' onChange={e=>onchangeContents(key, 'slug', e.currentTarget.value)}/>
+												<input 
+													type='text' 
+													name={'content['+key+'][slug]'} 
+													defaultValue={savedSettings?.contents?.[key]?.slug || key} 
+													className='regular-text' 
+													onChange={e=>onChangeContents(key, 'slug', e.currentTarget.value)}/>
 											</td>
 											<td>
-												<input type='checkbox' name={'content['+key+'][enable]'} defaultChecked={savedSettings?.contents?.[key]?.enable || false} onChange={e=>onchangeContents(key, 'enable', e.currentTarget.checked)}/>
+												<input 
+													type='checkbox' 
+													name={'content['+key+'][enable]'} 
+													defaultChecked={savedSettings?.contents?.[key]?.enable || false} 
+													onChange={e=>onChangeContents(key, 'enable', e.currentTarget.checked)}/>
 											</td>
 										</tr>
 									})

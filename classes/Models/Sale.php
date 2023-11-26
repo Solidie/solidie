@@ -25,26 +25,22 @@ class Sale {
 	 */
 	public static function getSales( $args ) {
 
-		$store_slug = $args['store_slug'] ?? null;
 		$page       = $args['page'] ?? 1;
 		$limit      = $args['limit'] ?? 20;
-		$order_by   = $args['order_by'] ?? 'sale.sold_at';
+		$order_by   = $args['order_by'] ?? 'sale.sold_time';
 		$order      = $args['order'] ?? 'DESC';
 		$offset     = $limit * ( $page - 1 );
 
 		$order_clause = " ORDER BY " . $order_by . " " . $order;
 		$limit_clause = " LIMIT " . $limit . " OFFSET " . $offset;
-		$store_clause = $store_slug ? " AND store.slug='" . esc_sql( $store_slug ) . "'" : '';
 
 		global $wpdb;
 		$sales = $wpdb->get_results(
 				"SELECT sale.*, product.post_title AS content_title, _user.user_email AS customer_email FROM " . DB::sales() . " sale
 					INNER JOIN " . DB::contents() . " content ON sale.content_id=content.content_id
 					INNER JOIN {$wpdb->posts} product ON content.product_id=product.ID
-					INNER JOIN " . DB::stores() . " store ON content.store_id=store.store_id
 					LEFT JOIN {$wpdb->users} _user ON sale.customer_id=_user.ID
 			WHERE 1=1 " 
-			. $store_clause 
 			. $order_clause 
 			. $limit_clause
 		);

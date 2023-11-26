@@ -1,0 +1,19 @@
+.tabs {
+	display: flex;
+	align-items: center;
+	border-bottom: 1px solid var(--crewmat-color-tertiary);
+
+	&>div {
+		padding: 7px 20px;
+		cursor: pointer;
+		
+		&:hover {
+			background-color: rgba(0, 0, 0, 0.043);
+		}
+
+		&.active {
+			margin-bottom: -1px;
+			border-bottom: 1px solid var(--crewmat-color-secondary);
+		}
+	}
+}

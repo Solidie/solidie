@@ -38,17 +38,10 @@ class ContentController {
 	 */
 	public static function createOrUpdateContent() {
 		$content_data = $_POST['content_data'];
-		$store_id = (int)$_POST['store_id'];
-		$user_id = get_current_user_id();
 
-		if ( ! Store::hasKeeperRole( $store_id, $user_id, array( 'admin', 'editor' ) ) ) {
-			wp_send_json_error( array( 'message' => 'You are not allowed to manage content in the store' ) );
-			exit;
-		}
-		
-		// To Do: Check if the product is in the store actually
+		// To Do: Check if the product created by current user or the user is administrator/editor or privileged
 
-		Contents::updateContent( $store_id, $content_data );
+		Contents::updateContent( $content_data );
 
 		wp_send_json_success();
 	}
@@ -71,14 +64,14 @@ class ContentController {
 	public static function versionRelease() {
 		// Check if main three parameter received
 		if ( empty( $_POST['version'] ) || empty( $_POST['changelog'] ) || empty( $_POST['content_id'] ) ) {
-			wp_send_json_error( array( 'message' => _x( 'Required release data missing!', 'solidie', 'solidie' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Required release data missing!', 'solidie' ) ) );
 			exit;
 		}
 
 		// File is required for new release, release id will be falsy if it is new release.
 		if ( empty( $_POST['release_id'] ) ) {
 			if ( empty( $_FILES['file'] ) || ! empty( $_FILES['file']['error'] ) ) {
-				wp_send_json_error( array( 'message' => _x( 'Valid file is required for new release!', 'solidie', 'solidie' ) ) );
+				wp_send_json_error( array( 'message' => __( 'Valid file is required for new release!', 'solidie' ) ) );
 				exit;
 			}
 		}
@@ -146,9 +139,8 @@ class ContentController {
 	 * @return void
 	 */
 	public function getSalesData() {
-		// To Do: Check if the user has access to store data
+		// To do: Make sure to get only user access based data
 		$sales = Sale::getSales( $_POST );
-
 		return wp_send_json_success( array( 'sales' => $sales ) );
 	}
 

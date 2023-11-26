@@ -16,13 +16,11 @@ import { MyAccount } from "./pages/my-account/MyAccount.jsx";
 
 import { Inventory } from "./pages/inventory/index.jsx";
 import { EditApplication } from "./pages/inventory/EditApplication.jsx";
-import { AddApplication } from "./pages/inventory/AddApplication.jsx";
+import { ContentEditor } from "./pages/inventory/ContentEditor.jsx";
 import {Reports} from "./pages/reports/Reports.jsx";
 import { getPath } from "../frontend/catalog/index.jsx";
 
 import layout from './style.module.scss';
-
-export const ContextFrontendDashboard = createContext();
 
 export const getDashboardPath=(rel_path, append_slash=true)=>{
 	const { settings: {dashboard: {slug: dashboard_slug}} } = window[data_pointer];
@@ -120,11 +118,6 @@ function D(props) {
 		</header>
 
 		<aside className={sidebar_class}>
-			{/* <div className={"sidenav__brand".classNames(layout)}>
-				<i className="fas fa-feather-alt sidenav__brand-icon"></i>
-				<a className={"sidenav__brand-link".classNames(layout)} href="#">App<span className={"text-light".classNames(layout)}>Pro</span></a>
-				<i className="fas fa-times sidenav__brand-close"></i>
-			</div> */}
 			<div className={"sidenav__profile".classNames(layout)}>
 				<div className={"sidenav__profile-avatar".classNames(layout)} style={{backgroundImage: 'url('+avatar_url+')'}}></div>
 				<div className={"sidenav__profile-title text-light".classNames(layout)}>John Doe</div>
@@ -134,15 +127,10 @@ function D(props) {
 			</div>
 		</aside>
 
-		<main className={"main".classNames(layout)}>
+		<main className={"main".classNames(layout) + 'overflow-auto'.classNames()}>
 			{props.children}
 		</main>
 
-		<footer className={"footer".classNames(layout)}>
-			<p><span className={"footer__copyright".classNames(layout)}>&copy;</span> 2018 MTH</p>
-			<p>Crafted with <i className="fas fa-heart footer__icon"></i> by <a href="https://www.linkedin.com/in/matt-holland/" target="_blank" className="footer__signature">Matt H</a></p>
-		</footer>
-		
 		{should_open && state.is_mobile_view && <div className={"sidebar-underlay".classNames(layout)} onClick={()=>window.history.back()}></div> || null}
 	</div>
 }
@@ -150,27 +138,26 @@ function D(props) {
 
 function Dashboard(props) {
   return <BrowserRouter>
-		<ContextFrontendDashboard.Provider value={props.frontendDashboardData}>
-			<D>
-				<Routes>
-					<Route path={getDashboardPath('purchased-apps')} element={<PurchasedApps/>} />
-					<Route path={getDashboardPath('subscriptions')} element={<Subscriptions/>} />
-					<Route path={getDashboardPath('my-account')} element={<MyAccount/>} />
+		<D>
+			<Routes>
+				<Route path={getDashboardPath('purchased-apps')} element={<PurchasedApps/>} />
+				<Route path={getDashboardPath('subscriptions')} element={<Subscriptions/>} />
+				<Route path={getDashboardPath('my-account')} element={<MyAccount/>} />
 
-					<Route path={getDashboardPath("store/:store_slug/inventory")} element={<Inventory/>} />
-					<Route path={getDashboardPath("store/:store_slug/inventory/:content_id/release-management")} element={<InventoryReleaseManagment />} />
-					<Route path={getDashboardPath("store/:store_slug/inventory/:content_id/release-management/new")} element={<VersionReleaseForm />} />
-					<Route path={getDashboardPath("store/:store_slug/inventory/:content_id/edit/:release_id")} element={<EditApplication/>} />
-					<Route path={getDashboardPath("store/:store_slug/inventory/add")} element={<AddApplication/>} />
-					<Route path={getDashboardPath("store/:store_slug/sales")} element={<Sales/>} />
-					<Route path={getDashboardPath("store/:store_slug/reports")} element={<Reports/>} />
+				<Route path={getDashboardPath("inventory/:content_type?/")} element={<Inventory/>} />
+				<Route path={getDashboardPath("inventory/:content_type/editor/:content_id")} element={<ContentEditor/>} />
 
-					{/* Redirects */}
-					<Route path={getDashboardPath("*")} element={<Navigate to="purchased-apps" replace />} />
-					<Route path={getDashboardPath("", false)} element={<Navigate to="purchased-apps" replace />} />
-				</Routes>
-			</D>
-		</ContextFrontendDashboard.Provider>
+				{/* <Route path={getDashboardPath("inventory/:content_type/:content_id/release-management")} element={<InventoryReleaseManagment />} />
+				<Route path={getDashboardPath("inventory/:content_type/:content_id/release-management/new")} element={<VersionReleaseForm />} />
+				<Route path={getDashboardPath("inventory/:content_type/:content_id/edit/:release_id")} element={<EditApplication/>} /> */}
+				<Route path={getDashboardPath("sales")} element={<Sales/>} />
+				<Route path={getDashboardPath("reports")} element={<Reports/>} />
+
+				{/* Redirects */}
+				<Route path={getDashboardPath("*")} element={<Navigate to="purchased-apps" replace />} />
+				<Route path={getDashboardPath("", false)} element={<Navigate to="purchased-apps" replace />} />
+			</Routes>
+		</D>
 	</BrowserRouter>
 }
 

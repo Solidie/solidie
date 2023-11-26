@@ -32,7 +32,6 @@ $content_post_name = $sub_pages[0] ?? null;
 
 // Now load content
 if ( AdminSetting::get( 'dashboard.slug' ) == $page ) {
-	$dashboard_data = FrontendDashboard::getDashboardData();
 	require Main::$configs->dir . 'templates/frontend-dashboard.php';
 
 } else {
