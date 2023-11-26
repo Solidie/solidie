@@ -1,14 +1,19 @@
 <?php
+/**
+ * The dispatcher where all the CrewHRM ajax request pass through after validation
+ *
+ * @package crewhrm
+ */
 
 namespace Solidie\Setup;
 
-use Error;
-use Solidie\Controllers\ContentController;
-use Solidie\Controllers\SettingsController;
-use Solidie\Helpers\_Array;
-use Solidie\Helpers\_String;
 use Solidie\Main;
 use Solidie\Models\User;
+use Solidie\Helpers\_Array;
+use Solidie\Controllers\ContentController;
+use Solidie\Controllers\SettingsController;
+
+use Error;
 
 /**
  * Dispatcher class
@@ -36,26 +41,35 @@ class Dispatcher {
 			return;
 		}
 
+		add_action( 'plugins_loaded', array( $this, 'registerControllers' ), 11 );
+	}
+
+	/**
+	 * Register ajax request handlers
+	 *
+	 * @return void
+	 */
+	public function registerControllers(){
+
 		$registered_methods = array();
+		$controllers        = apply_filters( 'crewhrm_controllers', self::$controllers );
 
 		// Loop through controllers classes
-		foreach ( self::$controllers as $class ) {
+		foreach ( $controllers as $class ) {
 
 			// Loop through controller methods in the class
 			foreach ( $class::PREREQUISITES as $method => $prerequisites ) {
 				if ( in_array( $method, $registered_methods, true ) ) {
-					throw new Error( __( 'Duplicate endpoint not possible' ) );
+					throw new Error( __( 'Duplicate endpoint ' . $method . ' not possible' ) );
 				}
-
-				$endpoint = _String::camelToSnakeCase( $method );
 
 				// Determine ajax handler types
 				$handlers    = array();
-				$handlers [] = 'wp_ajax_' . Main::$configs->app_name . '_' . $endpoint;
+				$handlers [] = 'wp_ajax_' . Main::$configs->app_name . '_' . $method;
 
 				// Check if norpriv necessary
 				if ( ( $prerequisites['nopriv'] ?? false ) === true ) {
-					$handlers[] = 'wp_ajax_nopriv_' . Main::$configs->app_name . '_' . $endpoint;
+					$handlers[] = 'wp_ajax_nopriv_' . Main::$configs->app_name . '_' . $method;
 				}
 
 				// Loop through the handlers and register
@@ -90,21 +104,24 @@ class Dispatcher {
 		$files   = is_array( $_FILES ) ? $_FILES : array();
 
 		// Verify nonce first of all
-		$matched = wp_verify_nonce( ( $data['nonce'] ?? '' ), Main::$configs->app_name );
+		/* $matched = wp_verify_nonce( ( $data['nonce'] ?? '' ), $data['nonce_action'] ?? '' );
 		if ( ! $matched ) {
-			wp_send_json_error( array( 'message' => __( 'Session Expired! Reloading the page might help resolve.', 'solidie' ) ) );
-		}
+			wp_send_json_error( array( 'message' => __( 'Session Expired! Reloading the page might help resolve.', 'crewhrm' ) ) );
+		} */
 
 		// Verify required user role
-		if ( ! User::validateRole( get_current_user_id(), $prerequisites['role'] ?? array() ) ) {
-			wp_send_json_error( array( 'message' => __( 'Access Denied!', 'solidie' ) ) );
+		$_required_roles = $prerequisites['role'] ?? array();
+		$_required_roles = is_array( $_required_roles ) ? $_required_roles : array( $_required_roles );
+		$_required_roles = apply_filters( 'crewhrm_hr_roles', $_required_roles );
+		if ( ! User::validateRole( get_current_user_id(), $_required_roles ) ) {
+			wp_send_json_error( array( 'message' => __( 'Access Denied!', 'crewhrm' ) ) );
 		}
 
 		// Now pass to the action handler function
 		if ( class_exists( $class ) && method_exists( $class, $method ) ) {
 			$class::$method( $data, $files );
 		} else {
-			wp_send_json_error( array( 'message' => __( 'Invalid Endpoint!', 'solidie' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Invalid Endpoint!', 'crewhrm' ) ) );
 		}
 	}
 }

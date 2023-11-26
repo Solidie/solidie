@@ -7,7 +7,7 @@ export function PurchasedApps(){
 	const [state, setState] = useState({contents:[]});
 
 	const getContents=()=>{
-		request('get_purchased_contents', {content_type: 'app'}, resp=>{
+		request('getPurchasedContents', {content_type: 'app'}, resp=>{
 			let {contents=[]} = resp?.data || {};
 
 			setState({...state, contents});

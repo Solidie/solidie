@@ -20,7 +20,7 @@ class Manifest {
 				'app' => array (
 					'label'       => __( 'App', 'solidie' ), 
 					'slug'        => 'apps', 
-					'description' => __( 'Applications for website, android, windows, linux, mac and so on.', 'solidie' ), 
+					'description' => __( 'Apps, extensions, addons etc. for website, mobile, computer and so on.', 'solidie' ), 
 					'plans'       => array(
 						'unlimited' => array(
 							'license_key_limit' => null,
@@ -57,48 +57,47 @@ class Manifest {
 				'audio' => array ( 
 					'label'       => __( 'Audio', 'solidie' ), 
 					'slug'        => 'audios', 
-					'description' => __( 'Audio contents like music, podcast and so on.', 'solidie' ),
+					'description' => __( 'Music, beats, song and so on.', 'solidie' ),
 					'plans'       => array(),
 				), 
 				'video' => array ( 
-					'label' => 'Video', 
+					'label' => __( 'Video', 'solidie' ), 
 					'slug' => 'videos', 
-					'description' => __( 'Video contents like travel vlog, cinematography, presets, templates and so on.', 'solidie' ), 
+					'description' => __( 'Vlog, cinematography, film, music videos and so on.', 'solidie' ), 
 					'plans' => array(),
 				), 
 				'image' => array ( 
 					'label'       => __( 'Image', 'solidie' ), 
 					'slug'        => 'images', 
-					'description' => __( 'Photography, vectore, presets, templates, tools etc.', 'solidie' ), 
+					'description' => __( 'Photography, vector etc.', 'solidie' ), 
 					'plans'       => array(),
 				), 
 				'3d' => array ( 
-					'label' => '3D Model', 
+					'label' => __( '3D Model', 'solidie' ), 
 					'slug' => '3d', 
-					'description' => '3D mondels in various formats', 
+					'description' => __( '3D model, VFX contents, animations and so on.', 'solidie' ), 
 					'plans' => array(),
 				), 
 				'document' => array ( 
-					'label' => 'Document', 
+					'label' => __( 'Document', 'solidie' ), 
 					'slug' => 'documents', 
-					'description' => 'Ebook, Sheet and other similar documents.', 
+					'description' => __( 'PDF, Documents, Sheet and so on.', 'solidie' ), 
 					'plans' => array(),
 				), 
 				'tutorial' => array ( 
-					'label' => 'Tutorial', 
+					'label' => __( 'Tutorial', 'solidie' ), 
 					'slug' => 'tutorials', 
-					'description' => 'Tutorial and written documentations.', 
+					'description' => __( 'Tutorial and written documentations.', 'solidie' ), 
 					'plans' => array(),
 				), 
 				'font' => array ( 
-					'label' => 'Font', 
+					'label' => __( 'Font', 'solidie' ), 
 					'slug' => 'fonts', 
-					'description' => 'Various type of fonts', 
+					'description' => __( 'Various type of fonts', 'solidie' ), 
 					'plans' => array(),
 				),
 			), 
 		);
-
 
 		// Prepare app plans
 		$new_array = array();

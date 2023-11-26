@@ -9,7 +9,7 @@ export function PlanCards(props) {
 	const addToCart = (variation_id) => {
 		let {product_id} = content;
 		
-		request('add_to_cart', {product_id, variation_id}, response=>{
+		request('addToCart', {product_id, variation_id}, response=>{
 			let {success, data} = response;
 			let {message, cart_url} = data;
 

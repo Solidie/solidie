@@ -7,12 +7,19 @@ use Solidie\Models\Release;
 use Solidie\Models\Sale;
 use Solidie\Models\Store;
 
+// To Do: Add three custom rules; 
+// finance-manager who disburse payments, 
+// content-reviewer who review submissions from contributors, 
+// and contributor who uploads their contents.
+
 class ContentController {
+
 	const PREREQUISITES = array(
 		'getContentList' => array(
 			'nopriv' => true
 		),
-		'createOrUpdateContent' => array(),
+		'createOrUpdateContent' => array(
+		),
 		'fetchReleases' => array(),
 		'versionRelease' => array(),
 		'getPurchasedContents' => array(),
@@ -34,16 +41,20 @@ class ContentController {
 	/**
 	 * Create or update content from frontend dashboard
 	 *
+	 * @param $data Request data
+	 * @param $files Request files
+	 * 
 	 * @return void
 	 */
-	public static function createOrUpdateContent() {
-		$content_data = $_POST['content_data'];
+	public static function createOrUpdateContent( array $data, array $files ) {
+
+		error_log( var_export( $files, true ) );
 
 		// To Do: Check if the product created by current user or the user is administrator/editor or privileged
 
-		Contents::updateContent( $content_data );
+		// Contents::updateContent( $data, $files );
 
-		wp_send_json_success();
+		wp_send_json_error( array( 'message' => 'Reached' ) );
 	}
 
 	/**

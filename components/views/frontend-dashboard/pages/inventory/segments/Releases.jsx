@@ -8,7 +8,7 @@ export function InventoryReleaseManagment() {
 	const [state, setState] = useState({releases:[]});
 
 	const fetchRelease=()=>{
-		request('fetch_releases', {content_id}, resp=>{
+		request('fetchReleases', {content_id}, resp=>{
 			let {releases=[]} = resp?.data || {};
 			setState({...state, releases});
 		});

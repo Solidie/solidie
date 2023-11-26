@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom';
 
 import { request } from 'crewhrm-materials/request.jsx';
-import { __, data_pointer } from 'crewhrm-materials/helpers.jsx';
+import { __, data_pointer, sprintf } from 'crewhrm-materials/helpers.jsx';
 import { Conditional } from 'crewhrm-materials/conditional.jsx';
 
 import { Tabs } from '../../../../materials/tabs/tabs.jsx';
@@ -14,7 +14,7 @@ export function InventoryWrapper({children}) {
 	const {content_type} = useParams();
 
 	const _contents = window[data_pointer]?.settings?.contents || {};
-	const enabled_contents = Object.keys(_contents).map(c=>_contents[c].enable ? _contents[c] : null).filter(c=>c).map(c=>{return {...c, id: c.slug}});
+	const enabled_contents = Object.keys(_contents).map(c=>_contents[c].enable ? {..._contents[c], content_type:c} : null).filter(c=>c).map(c=>{return {...c, id: c.content_type}});
 	const navigate = useNavigate();
 
 	const [state, setState] = useState({
@@ -23,7 +23,7 @@ export function InventoryWrapper({children}) {
 
 	useEffect(()=>{
 		if ( ! content_type ) {
-			const first = enabled_contents[0]?.id;
+			const first = enabled_contents[0]?.content_type;
 			if ( first ) {
 				navigate(first, {replace: true});
 			} else {
@@ -32,7 +32,7 @@ export function InventoryWrapper({children}) {
 					error_message: __('Please enable at least one content type for selling to see options here')
 				});
 			}
-		} else if( ! enabled_contents.find(e=>e.id===content_type)?.enable ) {
+		} else if( ! enabled_contents.find(e=>e.content_type===content_type)?.enable ) {
 			setState({
 				...state, 
 				error_message: __('The content type is not found or maybe disabled')
@@ -78,7 +78,7 @@ export function Inventory(props) {
 			loading: true
 		});
 
-		request( 'get_content_list', {...state.filters, content_type}, response=>{
+		request( 'getContentList', {...state.filters, content_type}, response=>{
 			let {contents=[]} = response?.data || {};
 
 			setState({
@@ -95,12 +95,14 @@ export function Inventory(props) {
 		}
 	}, [content_type]);
 
+	const _content = window[data_pointer]?.settings?.contents[content_type] || {};
+	
 	return <InventoryWrapper>
 		<div className={"flex flex-col width-p-100 gap-4 min-h-max".classNames()}>
 			<div className={'margin-top-10 margin-bottom-10'.classNames()}>
 				<Link to={getDashboardPath(`inventory/${content_type}/editor/new`)}>
 					<span className={'font-weight-500 cursor-pointer hover-underline'.classNames()}>
-						<i className={'ch-icon ch-icon-add-circle'.classNames()}></i> Add New 
+						<i className={'ch-icon ch-icon-add-circle'.classNames()}></i> {sprintf(__('Add New %s'), _content.label || __('Content'))} 
 					</span>
 				</Link>
 			</div>

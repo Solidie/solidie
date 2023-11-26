@@ -23,7 +23,7 @@ export function VersionReleaseForm() {
 	const getRelease=()=>{
 		setState({...state, loading: true});
 
-		request('get_single_release', {release_id}, resp=>{
+		request('getSingleRelease', {release_id}, resp=>{
 			let {release} = resp?.data || {};
 
 		});
@@ -31,7 +31,7 @@ export function VersionReleaseForm() {
 
 	const onSubmit=(e)=>{
 		e.preventDefault();
-		request('version_release', {...state.values, content_id, release_id}, resp=>{
+		request('versionRelease', {...state.values, content_id, release_id}, resp=>{
 			console.log(resp);
 		});
 	}

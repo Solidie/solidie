@@ -3,6 +3,7 @@
 namespace Solidie\Models;
 
 use Solidie\Helpers\_Array;
+use Solidie\Helpers\File;
 
 class Contents {
 	/**
@@ -31,6 +32,16 @@ class Contents {
 	const FREE_META_KEY = 'solidie_content_is_free';
 
 	/**
+	 * Sample image meta key
+	 */
+	const SAMPLE_IMAGES_META_KEY = 'solidie-content-sample-image-ids';
+
+	/**
+	 * Meta key to store preview file URL to product
+	 */
+	const PREVIEW_META_KEY = 'solidie-content-preview-id';
+
+	/**
 	 * Get associated product id by content id
 	 *
 	 * @param integer $content_id
@@ -55,12 +66,14 @@ class Contents {
 	 * @param array $content_data
 	 * @return int
 	 */
-	public static function updateContent( array $content_data ) {
+	public static function updateContent( array $content_data, array $files ) {
 		$content = array();
 
-		$content['content_id']    = ! empty( $content_data['content_id'] ) ? $content_data['content_id'] : 0;
-		$content['product_id'] = ! empty( $content_data['content_id'] ) ? self::getProductID( $content['content_id'] ) : 0;
-		$content['content_title']  = ! empty( $content_data['content_title'] ) ? $content_data['content_title'] : 'Untitled Content';
+		// Determine content ID
+		$content['content_id']          = ! empty( $content_data['content_id'] ) ? $content_data['content_id'] : 0;
+		$content['product_id']          = ! empty( $content_data['content_id'] ) ? self::getProductID( $content['content_id'] ) : 0;
+		$content['content_title']       = ! empty( $content_data['content_title'] ) ? $content_data['content_title'] : 'Untitled Content';
+		$content['content_description'] = ! empty( $content_data['content_description'] ) ? $content_data['content_description'] : '';
 
 		// Sync core product first
 		$product_id = self::syncProduct( $content );
@@ -70,8 +83,60 @@ class Contents {
 
 		// Update product id as it might've been created newly
 		$content['product_id'] = $product_id;
+
+		// Set thumbnail
+		if ( ! empty( $files['thumbnail'] ) ) {
+			$file_id = FileManager::uploadFile( $content['content_id'], $files['thumbnail'], $content['content_title'] );
+			if ( ! empty( $file_id ) ) {
+				// Delete existing thumbnail first
+				$thumbnail_id = get_post_thumbnail_id( $product_id );
+				if ( ! empty( $thumbnail_id ) ) {
+					File::deleteFile( $thumbnail_id, true );
+				}
+
+				// Set the new one
+				set_post_thumbnail( $product_id, $file_id );
+			}
+		}
+
+		// Store sample images
+		if ( ! empty( $files['sample_images'] ) ) {
+			$images = File::organizeUploadedHierarchy( $files['sample_images'] );
+			$file_ids = array();
+			
+			foreach ( $images as $image ) {
+				$file_id = FileManager::uploadFile( $content['content_id'], $image, $content['content_title'] . ' - Sample Image' );
+				if ( ! empty( $file_id ) ) {
+					$file_ids[] = $file_id;
+				}
+			}
+
+			// Delete files that no longer exists
+			/* $existing_files = get_post_meta( $product_id, self::SAMPLE_IMAGES_META_KEY, true );
+			$existing_files = _Array::getArray( $existing_files );
+			 */
+
+			update_post_meta( $product_id, self::SAMPLE_IMAGES_META_KEY, $file_ids );
+		}
+
+		// Set preview file
+		if ( ! empty( $files['preview'] ) ) {
+			$file_id = FileManager::uploadFile( $content['content_id'], $files['preview'], $content['content_title'] . ' - Preview' );
+			if ( ! empty( $file_id ) ) {
+				// Delete existing preview first
+				$preview_id = get_post_meta( $product_id, self::PREVIEW_META_KEY, true );
+				if ( ! empty( $preview_id ) ) {
+					File::deleteFile( $preview_id, true );
+				}
+
+				// Set the new one
+				update_post_meta( $product_id, self::PREVIEW_META_KEY, $preview_id );
+			}
+		}
+
 		
-		// To Do: Sync variations and other stuffs
+		
+		// To Do: Sync variations
 	}
 
 	/**
@@ -86,8 +151,9 @@ class Contents {
 		if ( ! empty( $content['content_id'] ) ) {
 			wp_update_post(
 				array(
-					'ID'         => $content['product_id'],
-					'post_title' => $content['content_title']
+					'ID'           => $content['product_id'],
+					'post_title'   => $content['content_title'],
+					'post_content' => $content['content_description'],
 				)
 			);
 			
@@ -116,6 +182,7 @@ class Contents {
 			array(
 				'content_type' => $content['content_type'],
 				'product_id'   => $product_id,
+				'category_id'  => ! empty( $content['category_id'] ) ? $content['category_id'] : null
 			)
 		);
 

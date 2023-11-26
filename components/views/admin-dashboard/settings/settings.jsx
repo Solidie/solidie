@@ -6,7 +6,7 @@ export function SettingPage(props) {
 	const [state, setState] = useState({});
 
 	const saveOptions=()=>{
-		request('save_admin_settings', {'solidie_settings': state.changedSettings});
+		request('saveAdminSettings', {'solidie_settings': state.changedSettings});
 	}
 
 	const onChange=(module, key, value)=>{

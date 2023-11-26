@@ -162,7 +162,7 @@ function CatalogLayout(props) {
 			fetching: true
 		});
 
-		request('get_content_list', {...state.filters/* , content_type */}, resp=>{
+		request('getContentList', {...state.filters/* , content_type */}, resp=>{
 			let {contents=[]} = resp?.data || {};
 			setState({...state, fetching: false, contents});
 		});

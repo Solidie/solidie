@@ -10,7 +10,7 @@ export function Sales() {
 	const getSales=()=>{
 		setState({...state, fetching: true});
 
-		request('get_sales_data', {}, resp=>{
+		request('getSalesData', {}, resp=>{
 			let {sales=[]} = resp?.data || {};
 			setState({...state, sales, fetching: false});
 		})

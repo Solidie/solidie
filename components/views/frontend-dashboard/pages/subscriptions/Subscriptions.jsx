@@ -10,7 +10,7 @@ export function Subscriptions () {
 	const getSubscriptions=()=>{
 		setState({...state, fetching: true});
 
-		request('get_subscriptions_data', {}, resp=>{
+		request('getSubscriptionsData', {}, resp=>{
 			let {subscriptions=[]} = resp?.data || {};
 			setState({...state, subscriptions, fetching: false});
 		});
