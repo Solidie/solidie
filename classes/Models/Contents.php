@@ -7,39 +7,14 @@ use Solidie\Helpers\File;
 
 class Contents {
 	/**
-	 * Licensing variation key for contents
-	 */
-	const LICENSING_VARIATION = 'licensing-variation';
-
-	/**
-	 * Meta key for variation enable status indentifier
-	 */
-	const VARATION_ENABLE_KEY = 'solidie-content-variation-enabled';
-
-	/**
-	 * Variation best meta key
-	 */
-	const VARATION_BEST_KEY = 'solidie-content-best-variation';
-
-	/**
-	 * Meta key for variation key features
-	 */
-	const VARATION_FEATURES_KEY = 'solidie-content-key-features';
-
-	/**
-	 * Free product identifer meta key
-	 */
-	const FREE_META_KEY = 'solidie_content_is_free';
-
-	/**
-	 * Sample image meta key
-	 */
-	const SAMPLE_IMAGES_META_KEY = 'solidie-content-sample-image-ids';
-
-	/**
 	 * Meta key to store preview file URL to product
 	 */
 	const PREVIEW_META_KEY = 'solidie-content-preview-id';
+
+	/**
+	 * The meta key for thumbnail
+	 */
+	const THUMBNAIL_KEY = 'content-thumbnail-image-id';
 
 	/**
 	 * Get associated product id by content id
@@ -68,136 +43,91 @@ class Contents {
 	 */
 	public static function updateContent( array $content_data, array $files ) {
 		$content = array();
+		$gmdate  = gmdate( 'Y-m-d H:i:s' );
 
 		// Determine content ID
 		$content['content_id']          = ! empty( $content_data['content_id'] ) ? $content_data['content_id'] : 0;
-		$content['product_id']          = ! empty( $content_data['content_id'] ) ? self::getProductID( $content['content_id'] ) : 0;
+		$content['product_id']          = ! empty( $content_data['product_id'] ) ? $content['product_id'] : null;
 		$content['content_title']       = ! empty( $content_data['content_title'] ) ? $content_data['content_title'] : 'Untitled Content';
-		$content['content_description'] = ! empty( $content_data['content_description'] ) ? $content_data['content_description'] : '';
+		$content['content_description'] = ! empty( $content_data['content_description'] ) ? $content_data['content_description'] : null;
+		$content['product_id']          = ! empty( $content_data['product_id'] ) ? $content_data['product_id'] : null;
+		$content['content_type']        = $content_data['content_type'];
+		$content['category_id']         = $content_data['category_id'] ?? null;
+		$content['content_status']      = $content_data['content_status'] ?? 'review';
+		$content['contributor_id']      = $content_data['contributor_id'] ?? get_current_user_id();
+		$content['modified_at']         = $gmdate;
 
-		// Sync core product first
-		$product_id = self::syncProduct( $content );
-		if ( empty( $product_id ) ) {
+		global $wpdb;
+
+		if ( empty( $content['content_id'] ) ) {
+			$content['created_at'] = $gmdate;
+			$wpdb->insert(
+				DB::contents(),
+				$content
+			);
+			$content['content_id'] = $wpdb->insert_id;
+		} else {
+			$wpdb->update(
+				DB::contents(),
+				$content,
+				array(
+					'content_id' => $content['content_id']
+				)
+			);
+		}
+
+		$content_id = $content['content_id'];
+		if ( empty( $content_id ) ) {
 			return false;
 		}
 
-		// Update product id as it might've been created newly
-		$content['product_id'] = $product_id;
-
-		// Set thumbnail
+		// Meta manager instance
+		$meta = Meta::content( $content_id );
+		
+		// Save thumbnail
 		if ( ! empty( $files['thumbnail'] ) ) {
-			$file_id = FileManager::uploadFile( $content['content_id'], $files['thumbnail'], $content['content_title'] );
+			$file_id = FileManager::uploadFile( $content['content_id'], $files['thumbnail'], $content['content_title'] . ' - Thumbnail' );
 			if ( ! empty( $file_id ) ) {
 				// Delete existing thumbnail first
-				$thumbnail_id = get_post_thumbnail_id( $product_id );
+				$thumbnail_id = $meta->getMeta( self::THUMBNAIL_KEY );
 				if ( ! empty( $thumbnail_id ) ) {
 					File::deleteFile( $thumbnail_id, true );
 				}
 
 				// Set the new one
-				set_post_thumbnail( $product_id, $file_id );
+				$meta->updateMeta( self::THUMBNAIL_KEY, $file_id );
 			}
-		}
-
-		// Store sample images
-		if ( ! empty( $files['sample_images'] ) ) {
-			$images = File::organizeUploadedHierarchy( $files['sample_images'] );
-			$file_ids = array();
-			
-			foreach ( $images as $image ) {
-				$file_id = FileManager::uploadFile( $content['content_id'], $image, $content['content_title'] . ' - Sample Image' );
-				if ( ! empty( $file_id ) ) {
-					$file_ids[] = $file_id;
-				}
-			}
-
-			// Delete files that no longer exists
-			/* $existing_files = get_post_meta( $product_id, self::SAMPLE_IMAGES_META_KEY, true );
-			$existing_files = _Array::getArray( $existing_files );
-			 */
-
-			update_post_meta( $product_id, self::SAMPLE_IMAGES_META_KEY, $file_ids );
 		}
 
 		// Set preview file
-		if ( ! empty( $files['preview'] ) ) {
-			$file_id = FileManager::uploadFile( $content['content_id'], $files['preview'], $content['content_title'] . ' - Preview' );
+		if ( ! empty( $files['preview_file'] ) ) {
+			$file_id = FileManager::uploadFile( $content['content_id'], $files['preview_file'], $content['content_title'] . ' - Preview' );
 			if ( ! empty( $file_id ) ) {
 				// Delete existing preview first
-				$preview_id = get_post_meta( $product_id, self::PREVIEW_META_KEY, true );
+				$preview_id = $meta->getMeta( self::PREVIEW_META_KEY );
 				if ( ! empty( $preview_id ) ) {
 					File::deleteFile( $preview_id, true );
 				}
 
 				// Set the new one
-				update_post_meta( $product_id, self::PREVIEW_META_KEY, $preview_id );
+				$meta->updateMeta( self::PREVIEW_META_KEY, $preview_id );
 			}
 		}
 
-		
-		
-		// To Do: Sync variations
-	}
-
-	/**
-	 * Sync product core
-	 *
-	 * @param array $content
-	 * @return int
-	 */
-	private static function syncProduct( array $content ) {
-
-		// Update existing product info id exists
-		if ( ! empty( $content['content_id'] ) ) {
-			wp_update_post(
+		// Save downloadable file
+		if ( ! empty( $files['downloadable_file'] ) ) {
+			Release::pushRelease(
 				array(
-					'ID'           => $content['product_id'],
-					'post_title'   => $content['content_title'],
-					'post_content' => $content['content_description'],
+					'version'    => $content_data['version'] ?? null,
+					'changelog'  => $content_data['changelog'] ?? null,
+					'content_id' => $content_id,
+					'release_id' => ( int ) ($content_data['release_id'] ?? 0),
+					'file'       => $files['downloadable_file']
 				)
 			);
-			
-			return $content['product_id'];
-		} 
-		
-		// Create new product
-		$product = new \WC_Product_Simple();
-		$product->set_name( $content['content_title'] );
-		// $product->set_slug( 'medium-size-wizard-hat-in-new-york' );
-		$product->set_regular_price( 500.00 ); // in current shop currency
-		$product->set_short_description( '<p>Here it is... A WIZARD HAT!</p><p>Only here and now.</p>' );
-		$product->set_description( 'long description here...' );
-		// $product->set_image_id( 90 );
-		// $product->set_category_ids( array( 19 ) );
-		// $product->set_tag_ids( array( 19 ) );
-		$product->save();
+		}
 
-		// Return the new ID
-		$product_id = $product->get_id();
-
-		// Create Solidie entry
-		global $wpdb;
-		$wpdb->insert( 
-			DB::contents(), 
-			array(
-				'content_type' => $content['content_type'],
-				'product_id'   => $product_id,
-				'category_id'  => ! empty( $content['category_id'] ) ? $content['category_id'] : null
-			)
-		);
-
-		wp_update_post(
-			array(
-				'ID'          => $product_id,
-				'post_status' => 'pending' // To do: provide settings to approve automatically or not
-			)
-		);
-
-		return $product_id;
-	}
-
-	private static function syncVariations() {
-
+		return $content_id;
 	}
 
 	/**
@@ -241,7 +171,7 @@ class Contents {
 	public static function getContentByField( string $field_name, $field_value, $field = null, $public_only = true ) {
 		// Post creator user can preview own product regardless of post status.
 		$current_user_id = get_current_user_id();
-		$status_clause   = $public_only ? ' AND (product.post_status="publish" OR product.post_author=' . $current_user_id . ') ' : '';
+		$status_clause   = $public_only ? ' AND (content.content_status="publish" OR content.contributor_id=' . $current_user_id . ') ' : '';
 
 		// Admin and editor also can visit products no matter what the status is. Other users can only if the product is public.
 		if ( User::validateRole( $current_user_id, array( 'administrator', 'editor' ) ) ) {
@@ -251,9 +181,8 @@ class Contents {
 		global $wpdb;
 		$content = $wpdb->get_row(
 			$wpdb->prepare(
-				"SELECT content.*, product.post_title AS content_title, product.post_excerpt as content_excerpt, author.ID as author_id FROM " . DB::contents() . " content 
-				INNER JOIN {$wpdb->posts} product ON content.product_id=product.ID 
-				INNER JOIN {$wpdb->users} author ON product.post_author=author.ID
+				"SELECT content.*, content.contributor_id as author_id FROM " . DB::contents() . " content 
+				LEFT JOIN {$wpdb->users} _user ON content.contributor_id=_user.ID 
 				WHERE content." . $field_name . "=%s" . $status_clause,
 				$field_value
 			)
@@ -338,18 +267,6 @@ class Contents {
 	}
 
 	/**
-	 * Check if an associated content is free or not
-	 *
-	 * @param int|string $content_id_or_name ID if numeric, otherwise product post name.
-	 * 
-	 * @return boolean
-	 */
-	public static function isContentFree( $content_id_or_name ) {
-		$product_id = is_numeric( $content_id_or_name ) ? self::getContentByContentID( $content_id_or_name, 'product_id' ) : self::getContentByProduct( $content_id_or_name, 'product_id' );
-		return get_post_meta( $product_id, self::FREE_META_KEY, true ) == true;
-	}
-
-	/**
 	 * Get purchae by order id and variation id
 	 *
 	 * @param integer $order_id
@@ -367,183 +284,6 @@ class Contents {
 		);
 
 		return ( $purchase && is_object( $purchase ) ) ? $purchase : null;
-	}
-
-	/**
-	 * Link contents to customer after order complete
-	 *
-	 * @param integer $order_id
-	 * @return void
-	 */
-	public static function processPurchase( int $order_id ) {
-		// This method is for only initial order. Skip if it is renewal one. There's another method to process renewal.
-		if ( function_exists( 'wcs_order_contains_renewal' ) && wcs_order_contains_renewal( $order_id ) ) {
-			return;
-		}
-
-		global $wpdb;
-		$order               = wc_get_order( $order_id );
-		$order_complete_date = $order->get_date_completed();
-		$contents            = self::getContentsFromOrder( $order_id );
-		$commission_rate     = 0;
-
-		foreach ( $contents as $content ) {
-			// Skip if already added
-			if ( self::getPurchaseByOrderVariation( $order_id, $content['variation_id'] ) ) {
-				continue;
-			}
-
-			// Calculate commission
-			$sale_price   = (int)$content['sale_price'];
-			$commission   = ( $commission_rate / 100 ) * $sale_price;
-
-			// Variation validity
-			$expires_on  = $content['licensing']['validity_days'] ? ( new \DateTime( $order_complete_date ) )->modify('+'.$content['licensing']['validity_days'].' days')->format('Y-m-d') : null;
-			
-			// Insert the content in the sales table
-			$wpdb->insert(
-				DB::sales(),
-				array(
-					'content_id'         => $content['content_id'],
-					'customer_id'		 => wc_get_order( $order_id )->get_customer_id(),
-					'order_id'           => $order_id,
-					'variation_id'       => $content['variation_id'],
-					'sale_price'         => $content['sale_price'],
-					'commission'         => $commission,
-					'commission_rate'    => $commission_rate,
-					'license_key_limit'  => $content['licensing']['license_key_limit'],
-					'license_expires_on' => $expires_on,
-					'sold_time'          => $order_complete_date,
-				)
-			);
-
-			// Generate license keys
-			Licensing::generateLicenseKeys( $wpdb->insert_id, $content['licensing']['license_key_limit'] );
-		}
-	}
-
-	/**
-	 * When customer renews a subscription
-	 *
-	 * @param object $subscription
-	 * @return void
-	 */
-	public static function processSubscriptionRenewal( $subscription ) {
-		global $wpdb;
-		
-		$contents  = self::filterContentsFromOrderItems( $subscription->get_items() );
-
-		foreach ( $contents as $content ) {
-			// Don't update if validity is null which means lifetime license
-			if ( ! $content['licensing']['validity_days'] ) {
-				continue;
-			}
-
-			$wpdb->query(
-				$wpdb->prepare(
-					"UPDATE ".DB::sales()." SET license_expires_on=DATE_ADD(license_expires_on, INTERVAL %d DAY) WHERE content_id=%d AND license_expires_on IS NOT NULL",
-					$content['licensing']['validity_days'],
-					$content['content_id']
-				)
-			);
-		}
-	}
-
-	/**
-	 * Update next payment date
-	 *
-	 * @param object $subscription
-	 * @return void
-	 */
-	public static function supportCustomPeriodForSubscription( $subscription ) {
-		/* $parent_order = $subscription->get_parent_id();
-		$subscription->set_date( 'next_payment', '2025-05-04' );
-		$subscription->save(); */
-	}
-
-	/**
-	 * Return only purchased content info from a mixed cart
-	 *
-	 * @param integer $order_id
-	 * @return array
-	 */
-	public static function getContentsFromOrder( int $order_id ) {
-		$order = wc_get_order( $order_id ); 
-		return self::filterContentsFromOrderItems( $order->get_items() );
-	}
-
-	/**
-	 * Filter contents from order contents
-	 *
-	 * @param array $contents All the order items from order regardless of solidie or others
-	 * @return array
-	 */
-	public static function filterContentsFromOrderItems( array $contents ) {
-		$contents  = array();
-		foreach ( $contents as $content ) {
-			// Here contents is actually woocommerce order item. 
-			$product_type = $content->get_product()->get_type();
-			$product_id   = $content->get_product_id();
-			$variation_id = $content->get_variation_id(); // Purchased product variation ID. 
-			$variation    = new \WC_Product_Variation( $variation_id );
-			$content      = self::getContentByProduct( $product_id );
-			$var_info     = self::getVariationInfo( $variation, $content->content_type );
-
-			// Skip non-content products or unsupported variation.
-			// We support either variable or variable subscription product
-			if ( ! $content || ! in_array( $product_type, array( 'subscription_variation', 'variation' ) )  || ! $var_info ) {
-				continue;
-			}
-
-			// To Do: Get sale price in USD currency. (In fact TBD what to do.)
-			$contents[] = array(
-				'content'	   => $content,
-				'product_id'   => $product_id,
-				'content_id'   => $content->content_id,
-				'variation_id' => $variation_id,
-				'licensing'    => $var_info,
-				'sale_price'   => $variation->get_sale_price(),
-			);
-		}
-
-		return $contents;
-	}
-
-	/**
-	 * Return variation label
-	 *
-	 * @param \WC_Product_Variation|int $variation
-	 * @return array|null
-	 */
-	public static function getVariationInfo( $variation, $content_type ) {
-		$variation  = is_numeric( $variation ) ? new \WC_Product_Variation( $variation ) : $variation;
-		if ( empty( $variation ) ) {
-			return null;
-		}
-
-		$lincensing   = Manifest::getVariationBluePrint( $content_type );
-		$attributes   = $variation->get_attributes();
-		$variation_id = $variation->get_id();
-
-		if ( isset( $attributes[ self::LICENSING_VARIATION ], $lincensing[ $attributes[ self::LICENSING_VARIATION ] ] ) ) {
-			$data                   = $lincensing[ $attributes[ self::LICENSING_VARIATION ] ];
-			$data['plan_key']       = $attributes[ self::LICENSING_VARIATION ];
-			$data['price']          = $variation->get_price();
-			$data['regular_price']  = $variation->get_regular_price();
-			$data['sale_price']     = $variation->get_sale_price();
-			$data['variation_id']   = $variation_id;
-			$data['average_rating'] = $variation->get_average_rating();
-			$data['rating_counts']  = $variation->get_rating_counts();
-			$data['rating_count']   = $variation->get_rating_count();
-			$data['review_count']   = $variation->get_review_count();
-			$data['enable']         = (bool) get_post_meta( $variation_id, self::VARATION_ENABLE_KEY, true );
-			$data['is_best']        = (bool) get_post_meta( $variation_id, self::VARATION_BEST_KEY, true );
-			$data['key_features']   = _Array::getArray( get_post_meta( $variation_id, self::VARATION_FEATURES_KEY, true ) );
-
-			return $data;
-		}
-
-		return null;
 	}
 
 	/**
@@ -568,15 +308,16 @@ class Contents {
 		
 		global $wpdb;
 		$contents = $wpdb->get_results(
-			"SELECT DISTINCT product.post_title AS content_title, product.ID as product_id, content.content_id, content.content_type, product.post_status AS content_status, sale.sale_id
-			FROM {$wpdb->posts} product 
-				INNER JOIN " . DB::contents() . " content ON product.ID=content.product_id 
+			"SELECT DISTINCT 
+				content.content_title, 
+				content.product_id, 
+				content.content_id, 
+				content.content_type, 
+				content.content_status, 
+				sale.sale_id
+			FROM " . DB::contents() . " product 
 				LEFT JOIN " . DB::sales() . " sale ON content.content_id=sale.content_id
-			WHERE 1=1 " 
-				. $type_clause 
-				. $customer_clse
-				. $limit_clause 
-				. $offset_clause,
+			WHERE 1=1 {$type_clause} {$customer_clse} {$limit_clause} {$offset_clause}",
 		);
 
 		return self::assignContentMeta( $contents );
@@ -589,144 +330,27 @@ class Contents {
 	 * @param array $meta_array
 	 * @return array|object
 	 */
-	public static function assignContentMeta( $contents, $meta_array = array( 'content_url', 'plans', 'thumbnail_url', 'releases', 'variations' ) ) {
+	public static function assignContentMeta( $contents ) {
 		// Support both list and single content
 		if ( $was_single = ! is_array( $contents ) ) {
 			$contents = array( $contents );
 		}
 
-		foreach ( $meta_array as $meta ) {
-			switch ( $meta ) {
-				case 'content_url' :
-					foreach ( $contents as $index => $content ) {
-						$contents[ $index ]->content_url = self::getPermalink( $content->product_id, $content->content_type );
-					}
-					break;
+		foreach ( $contents as $index => $content ) {
+			// Content permalink
+			$contents[ $index ]->content_url = self::getPermalink( $content->product_id, $content->content_type );
 
-				case 'thumbnail_url' :
-					foreach ( $contents as $index => $content ) {
-						$contents[ $index ]->thumbnail_url = get_the_post_thumbnail_url( $content->product_id );
-					}
-					break;
+			// Content thumbnail URL
+			$contents[ $index ]->thumbnail_url = get_the_post_thumbnail_url( $content->product_id );
 
-				case 'releases' :
-					foreach ($contents as $index => $content) {
-						// Release are available for app types only
-						if ( $content->content_type !== 'app' ) {
-							continue;
-						}
-
-						$contents[ $index ]->releases = Release::getReleases( (int)$content->content_id );
-					}
-					break;
-
-				case 'plans' :
-					// Same content will be available multiple times in the array because of different plans/sale id even though same order. 
-					// We need to merge them here based on unique content ID by adding plan as array.
-					$new_array = array();
-					foreach ( $contents as $index => $content ) {
-						// Create placeholder in new array
-						if ( ! isset( $new_array[ $content->content_id ] ) ) {
-							$new_array[ $content->content_id ]        = $content;
-							$new_array[ $content->content_id ]->plans = array();
-						}
-
-						// Check if sales info available
-						if ( empty( $content->sale_id ) ) {
-							continue;
-						}
-
-						// Add plan to the plan array. Same content may have multiple plan purchased over times.
-						$plan = Sale::getSalePlan( $content->sale_id );
-						if ( ! empty( $plan ) ) {
-							$new_array[ $content->content_id ]->plans[] = $plan;
-						}
-						
-						// Remove the sale ID now as the array is getting consolidated.
-						unset( $new_array[ $content->content_id ]->sale_id );
-					}
-
-					// Finally replace the content array to be returned
-					$contents = array_values( $new_array );
-					break;
-
-				case 'variations' : 
-					foreach ($contents as $index => $content) {
-						$contents[ $index ]->variations = self::getContentVariations( $content );
-					}
-					break;
+			// Releases if it is app
+			if ( $content->content_type === 'app' ) {
+				$contents[ $index ]->releases = Release::getReleases( (int)$content->content_id );
 			}
 		}
+
+		$contents = apply_filters( 'solidie_contents_meta', $contents );
 
 		return $was_single ? $contents[0] : $contents;
-	}
-
-	/**
-	 * Get available variations for the content
-	 *
-	 * @param int $content_id
-	 * @return array
-	 */
-	public static function getContentVariations( $content ) {
-		$product    = wc_get_product( $content->product_id );
-		$_variations = array();
-
-		if ( $product->is_type( 'variable-subscription' ) || $product->is_type( 'variable' ) ) {
-			// Get the variations of the product
-			$variations = $product->get_available_variations();
-
-			// Print or process the variations
-			if ( ! empty( $variations ) ) {
-				// Loop through the variations and store info in the array if available
-				foreach ( $variations as $variation ) {
-					$info = self::getVariationInfo( $variation['variation_id'], $content->content_type );
-					if ( ! empty( $info ) ) {
-						$_variations[] = $info;
-					}
-				}
-			}
-		} 
-		
-		return $_variations;
-	}
-
-	/**
-	 * Get relation between an user and a content like author, admin, customer, editor etc.
-	 *
-	 * @param int $content_id
-	 * @param int $user_id
-	 * 
-	 * @return array
-	 */
-	public static function getUserRelationToTheContent( $content_id, $user_id ) {
-		// Admin and editor has always access to edit or download without extra capabilities.
-		$relations = array_intersect( array( 'administrator', 'editor' ), User::getUserRoles( $user_id ) ); 
-		$content   = self::getContentByContentID( $content_id );
-
-		// Check if author
-		if ( $content->author_id == $user_id ) {
-			$relations[] = 'author';
-		}
-
-		// Check if it is customer
-		if ( Sale::hasCustomerPurchase( $content_id, $user_id ) ) {
-			$relations[] = 'customer';
-		}
-
-		return $relations;
-	}
-
-	/**
-	 * Check if a specific user can download a content.
-	 *
-	 * @param int $content_id
-	 * @param int $user_id
-	 * 
-	 * @return bool
-	 */
-	public static function canDownloadByUser( $content_id, $user_id ) {
-		$capables  = array( 'administrator', 'editor', 'author', 'customer' );
-		$relations = self::getUserRelationToTheContent( $content_id, $user_id );
-		return count( array_intersect( $capables, $relations ) ) > 0;
 	}
 }

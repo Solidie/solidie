@@ -4,7 +4,6 @@ namespace Solidie\TemplateLoader;
 use Solidie\Main;
 use Solidie\Models\AdminSetting;
 use Solidie\Models\Contents;
-use Solidie\Models\FrontendDashboard;
 use Solidie\Setup\AdminPage;
 
 function load_404( $message = '' ) {
@@ -18,7 +17,7 @@ function load_404( $message = '' ) {
 	exit;
 }
 
-$page           = get_query_var( AdminPage::$pagename_key );
+$page           = 'd'; // get_query_var( AdminPage::$pagename_key );
 $parsed         = parse_url( Main::$configs->current_url );
 $url_path       = $parsed['scheme'] . '://' . $parsed['host'] . ( $parsed['port'] ? ':' . $parsed['port'] : '' ) . ( $parsed['path'] ?? '' );
 $projected_path = get_home_url() . '/' . $page;

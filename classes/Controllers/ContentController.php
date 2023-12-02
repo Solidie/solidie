@@ -22,10 +22,6 @@ class ContentController {
 		),
 		'fetchReleases' => array(),
 		'versionRelease' => array(),
-		'getPurchasedContents' => array(),
-		'addToCart' => array(),
-		'getSalesData' => array(),
-		'getSubscriptionsData' => array()
 	);
 
 	/**
@@ -33,8 +29,8 @@ class ContentController {
 	 *
 	 * @return void
 	 */
-	public static function getContentList() {
-		$content_list = Contents::getContents( $_POST );
+	public static function getContentList( array $data ) {
+		$content_list = Contents::getContents( $data );
 		wp_send_json_success( array( 'contents' => $content_list ) );
 	}
 
@@ -48,13 +44,15 @@ class ContentController {
 	 */
 	public static function createOrUpdateContent( array $data, array $files ) {
 
-		error_log( var_export( $files, true ) );
+		// To Do: Before updating, Check if the product created by current user or the user is administrator/editor or privileged
 
-		// To Do: Check if the product created by current user or the user is administrator/editor or privileged
+		$content_id = Contents::updateContent( $data, $files );
 
-		// Contents::updateContent( $data, $files );
-
-		wp_send_json_error( array( 'message' => 'Reached' ) );
+		if ( ! empty( $content_id ) ) {
+			wp_send_json_success();
+		} else {
+			wp_send_json_error( array( 'message' => __( 'Something went wrong!', 'solidie' ) ) );
+		}
 	}
 
 	/**
@@ -62,8 +60,8 @@ class ContentController {
 	 *
 	 * @return void
 	 */
-	public static function fetchReleases() {
-		$releases = Contents::getReleases( (int) $_POST['content_id'] );
+	public static function fetchReleases( array $data ) {
+		$releases = Contents::getReleases( (int) $data['content_id'] );
 		wp_send_json_success( array( 'releases' => $releases ) );
 	}
 
@@ -72,15 +70,15 @@ class ContentController {
 	 *
 	 * @return void
 	 */
-	public static function versionRelease() {
+	public static function versionRelease( array $data ) {
 		// Check if main three parameter received
-		if ( empty( $_POST['version'] ) || empty( $_POST['changelog'] ) || empty( $_POST['content_id'] ) ) {
+		if ( empty( $data['version'] ) || empty( $data['changelog'] ) || empty( $data['content_id'] ) ) {
 			wp_send_json_error( array( 'message' => __( 'Required release data missing!', 'solidie' ) ) );
 			exit;
 		}
 
 		// File is required for new release, release id will be falsy if it is new release.
-		if ( empty( $_POST['release_id'] ) ) {
+		if ( empty( $data['release_id'] ) ) {
 			if ( empty( $_FILES['file'] ) || ! empty( $_FILES['file']['error'] ) ) {
 				wp_send_json_error( array( 'message' => __( 'Valid file is required for new release!', 'solidie' ) ) );
 				exit;
@@ -91,76 +89,19 @@ class ContentController {
 
 		$error_message = Release::pushRelease(
 			array(
-				'version'    => $_POST['version'],
-				'changelog'  => $_POST['changelog'],
-				'content_id'    => $_POST['content_id'],
-				'release_id' => ! empty( $_POST['release_id'] ) ? (int) $_POST['release_id'] : 0,
+				'version'    => $data['version'],
+				'changelog'  => $data['changelog'],
+				'content_id' => $data['content_id'],
+				'release_id' => ! empty( $data['release_id'] ) ? (int) $data['release_id'] : 0,
 				'file'       => ! empty( $_FILES['file'] ) ? $_FILES['file'] : null
-			)
+			),
+			false
 		);
 
-		if ( empty( $error_message ) ) {
+		if ( true === $error_message ) {
 			wp_send_json_success();
 		} else {
 			wp_send_json_error( array( 'message' => $error_message ) );
 		}
-		
-		exit;
-	}
-
-	/**
-	 * Get purchased content list for personal dashboard
-	 *
-	 * @return void
-	 */
-	public static function getPurchasedContents() {
-		$content_list = Contents::getContents( array_merge( $_POST, array( 'customer_id' => get_current_user_id() ) )  );
-		wp_send_json_success( array( 'contents' => $content_list ) );
-	}
-
-	/**
-	 * Add content to cart
-	 *
-	 * @return void
-	 */
-	public static function addToCart() {
-		$product_id   = $_POST['product_id'];
-		$variation_id = $_POST['variation_id'];
-		$content_id   = $_POST['content_id'];
-
-		if ( ! wc_get_product( $product_id ) ) {
-			wp_send_json_error( array( 'message' => __( 'Product Not Fund!', 'solidie' ) ) );
-			exit;
-		}
-	
-		// Add the product to the cart
-		WC()->cart->add_to_cart( $product_id, 1, $variation_id );
-		wp_send_json_success(
-			array( 
-				'message'  => __( 'Added to cart', 'solidie' ), 
-				'cart_url' => wc_get_cart_url(),
-			)
-		);
-		exit;
-	}
-
-	/**
-	 * Provide sales data for dashboard
-	 *
-	 * @return void
-	 */
-	public function getSalesData() {
-		// To do: Make sure to get only user access based data
-		$sales = Sale::getSales( $_POST );
-		return wp_send_json_success( array( 'sales' => $sales ) );
-	}
-
-	/**
-	 * Get subscription data for current user
-	 *
-	 * @return void
-	 */
-	public function getSubscriptionsData() {
-		
 	}
 }

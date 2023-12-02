@@ -2,10 +2,6 @@
 
 namespace Solidie\Models;
 
-use Solidie\Helpers\Crypto;
-use Solidie\Main;
-use Solidie\Setup\RestAPI;
-
 class Release {
 	/**
 	 * Mime types that can be enabled in setting
@@ -235,8 +231,8 @@ class Release {
 	/**
 	 * Create or update a release
 	 *
-	 * @param array $data
-	 * @return mixed
+	 * @param array $data Release data including file
+	 * @return bool
 	 */
 	public static function pushRelease( array $data ) {
 		$content = Contents::getContentByContentID( $data['content_id'] );
@@ -260,7 +256,8 @@ class Release {
 			}
 
 			// Upload new one
-			$file_id = self::uploadFile( $data['content_id'], $data['file'], $content->content_title . ' - ' . $data['version'] );
+			$file_title = $content->content_title . ( ! empty( $data['version'] ) ? ' - ' . $data['version'] : '' );
+			$file_id = self::uploadFile( $data['content_id'], $data['file'], $file_title );
 			if ( ! $file_id ) {
 				return __( 'Error in file saving!', 'solidie'  );
 			}
@@ -280,6 +277,8 @@ class Release {
 				)
 			);
 		}
+
+		return true;
 	}
 
 	/**
@@ -299,11 +298,17 @@ class Release {
 
 		$releases = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT _release.*, product.post_title AS content_title, UNIX_TIMESTAMP(_release.release_date) as release_unix_timestamp, content.product_id, content.content_type
+				"SELECT 
+					_release.*, 
+					content.content_title, 
+					UNIX_TIMESTAMP(_release.release_date) as release_unix_timestamp, 
+					content.product_id, 
+					content.content_type
 				FROM ".DB::releases()." _release
-				INNER JOIN ".DB::contents()." content ON content.content_id=_release.content_id
-				INNER JOIN {$wpdb->posts} product ON content.product_id=product.ID
-				WHERE _release.content_id=%d ".$version_clause." ORDER BY _release.release_date DESC LIMIT %d, %d",
+					INNER JOIN ".DB::contents()." content ON content.content_id=_release.content_id
+				WHERE 
+					_release.content_id=%d {$version_clause} 
+				ORDER BY _release.release_date DESC LIMIT %d, %d",
 				$content_id,
 				$offset,
 				$limit
@@ -326,7 +331,7 @@ class Release {
 			// To Do: Ensure version can't contain empty space. Force author to put non-space characters, and also programmatically remove spaces.
 			// To Do: Validate the license id is associated with proper content (if not free) and vailidity is not expired.
 
-			$release->download_url = get_home_url() . RestAPI::API_PATH . '/?download=' . urlencode( Crypto::encrypt( $release->content_id . ' ' . $license_id . ' ' . time() . ' ' . $endpoint . ' ' . $release->version ) ); // Empty license id means it's free t download. It will be checked during download.
+			$release->download_url = '';
 			$release->file_url     = $file_url;
 			$release->file_path    = $file_path ? $file_path : null;
 			$release->mime_type    = get_post_mime_type( $release->file_id );

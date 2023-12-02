@@ -10,7 +10,7 @@ import { ContextToast } from "crewhrm-materials/toast/toast.jsx";
 import { Conditional } from "crewhrm-materials/conditional.jsx";
 
 import { InventoryWrapper } from "./index.jsx";
-import { getDashboardPath } from "../../index.jsx";
+import { getDashboardPath } from "../../admin-dashboard/inventory/inventory-backend.jsx";
 
 function CategoryField() {
 	return <div>Here's cat field</div>
@@ -34,6 +34,59 @@ export function ContentEditor() {
 			downloadable_file: null, // The actual file to be downloaded by user, it holds all the resouce. Maybe zip, rar, tar, video etc.
 		}
 	});
+
+	const fields = [
+		{
+			type: 'text',
+			name: 'content_title',
+			label: __('Title'),
+			placeholder: __('Give it a title'),
+			required: true
+		},
+		{
+			type: 'textarea',
+			name: 'content_description',
+			label: __('Description'),
+			placeholder: __('Write some description here'),
+			required: true
+		},
+		{
+			type: 'file',
+			name: 'thumbnail',
+			label: __('Thumbnail'),
+			accept: 'image/*'
+		},
+		(['audio', 'video'].indexOf(content_type) === -1 ? null : {
+			type: 'file',
+			name: 'preview_url',
+			label: __('Preview File'),
+			accept: content_type + '/*'
+		}),
+		/* (['app', '3d', 'document', 'font', 'tutorial'].indexOf(content_type)===-1 ? null : {
+			type: 'file',
+			name: 'sample_images',
+			label: __('Sample Images'),
+			accept: 'image/*'
+		}), */
+		{
+			type: 'file',
+			name: 'downloadable_file',
+			label: __('Downloadable File'),
+			hint: __('You can always release new updates later')
+		},
+		/* {
+			type: 'category',
+			name: 'categories',
+			label: __('Category'),
+			placeholder: __('Select category')
+		}, */
+		{
+			type: 'text',
+			name: 'tags',
+			label: __('Tags'),
+			placeholder: __('Enter tags')
+		}
+	].filter(f=>f);
 
 	const setVal=(name, value)=>{
 		setState({
@@ -83,76 +136,39 @@ export function ContentEditor() {
 				<span>{sprintf(__('Add New %s'), _content.label || __('Content'))}</span>
 			</div>
 
-			<div className={'margin-bottom-15'.classNames()}>
-				<strong className={'d-block font-weight-600'.classNames()}>
-					{__('Title')}<span className={'color-error'.classNames()}>*</span>
-				</strong>
-				<TextField 
-					placeholder={__('e.g A sample title')} 
-					onChange={v=>setVal('content_title', v)}
-					value={state.values.content_title}/>
-			</div>
-
-			<div className={'margin-bottom-15'.classNames()}>
-				<strong className={'d-block font-weight-600'.classNames()}>
-					{__('Description')}<span className={'color-error'.classNames()}>*</span>
-				</strong>
-				<TextField 
-					type="textarea"
-					placeholder={__('e.g A sample title')} 
-					onChange={v=>setVal('content_description', v)}
-					value={state.values.content_description}/>
-			</div>
-
-			<div className={'margin-bottom-15'.classNames()}>
-				<strong className={'d-block font-weight-600'.classNames()}>
-					{__('Thumbnail Image')}
-				</strong>
-				<FileUpload 
-					accept="image/*"
-					onChange={v=>setVal('thumbnail', v)}/>
-			</div>
-
 			{
-				['app', '3d', 'document', 'font', 'tutorial'].indexOf(content_type)===-1 ? null :
-				<div className={'margin-bottom-15'.classNames()}>
-					<strong className={'d-block font-weight-600'.classNames()}>
-						{__('Sample Images')}
-					</strong>
-					<FileUpload 
-						accept="image/*" 
-						maxlenth={5}
-						onChange={v=>setVal('sample_images', v)}/>
-				</div>
+				fields.map(field=>{
+					const {name, label, placeholder, type, required, accept, hint} = field;
+					return <div key={name} className={'margin-bottom-15'.classNames()}>
+						<strong className={'d-block font-weight-600'.classNames()}>
+							{label}{required ? <span className={'color-error'.classNames()}>*</span> : null}
+						</strong>
+
+						{
+							!hint ? null :
+							<small className={'d-block'.classNames()}>
+								{hint}
+							</small>
+						}
+
+						{
+							['text', 'textarea'].indexOf(type) === -1 ? null :
+							<TextField 
+								placeholder={placeholder} 
+								onChange={v=>setVal(name, v)}
+								value={state.values[name]}/>
+						}
+
+						{
+							'file' !== type ? null :
+							<FileUpload 
+								accept={accept}
+								onChange={v=>setVal(name, v)}/>
+						}
+					</div>
+				})
 			}
-
-			<div className={'margin-bottom-15'.classNames()}>
-				<strong className={'d-block font-weight-600'.classNames()}>
-					{__('Downloadable File')}
-					<Conditional show={content_type=='app' && content_id=='new'}>
-						<small>&nbsp;({__('You can also release new updates later')})</small>
-					</Conditional>
-				</strong>
-				<FileUpload
-					onChange={v=>setVal('downloadable_file', v)}/>
-			</div>
-
-			<div className={'margin-bottom-15'.classNames()}>
-				<strong className={'d-block font-weight-600'.classNames()}>
-					{__('Category')}
-				</strong>
-				<CategoryField onChange={id=>setVal('category_id', id)}/>
-			</div>
-
-			<div className={'margin-bottom-15'.classNames()}>
-				<strong className={'d-block font-weight-600'.classNames()}>
-					{__('Tags')} <small>({__('Comma separated')})</small>
-				</strong>
-				<TextField 
-					placeholder={__('e.g sunset, landscape, winter')} 
-					onChange={v=>setVal('tags', v)}/>
-			</div>
-
+			
 			<button disabled={state.submitting} className={'button button-primary'.classNames()} onClick={submit}>
 				{__('Submit')} <LoadingIcon show={state.submitting}/>
 			</button>

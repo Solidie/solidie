@@ -27,6 +27,9 @@ module.exports = (env, options) => {
 		},
 		resolve: {
 			extensions: ['.js', '.jsx', '.json'],
+			alias: {
+				'solidie-pro': path.resolve(__dirname, '../solidie-pro/components'),
+			},
 		},
         module: {
             rules: [
@@ -74,7 +77,6 @@ module.exports = (env, options) => {
         {
             dest_path: './dist',
             src_files: {
-				'frontend-dashboard': './components/views/frontend-dashboard/index.jsx',
 				'admin-dashboard': './components/views/admin-dashboard/index.jsx',
 				'frontend': './components/views/frontend/index.jsx'
             }

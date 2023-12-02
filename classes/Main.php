@@ -9,11 +9,6 @@ use Solidie\Setup\Scripts;
 use Solidie\Setup\AdminPage;
 use Solidie\Setup\Utilities;
 use Solidie\Setup\Media;
-use Solidie\Setup\RestAPI;
-use Solidie\Setup\WooCommerce;
-use Solidie\Setup\WooCommerceSubscription;
-use Solidie\Models\DB;
-use Solidie\Updater\Updater;
 
 class Main {
 	/**
@@ -39,8 +34,15 @@ class Main {
 		// Loading Autoloader
 		spl_autoload_register( array( $this, 'loader' ) );
 
+		// Retrieve plugin info from index
 		$manifest = _Array::getManifestArray( $configs->file, ARRAY_A );
 		self::$configs = (object) array_merge( $manifest, (array) self::$configs );
+
+		// Prepare the unique app name
+		$pattern = '/\/([^\/]+)\/wp-content\/(plugins|themes)\/([^\/]+)\/.*/';
+		preg_match( $pattern, self::$configs->url, $matches );
+		$parsedString = strtolower( "CrewMat_{$matches[1]}_{$matches[3]}" );
+		self::$configs->app_name = preg_replace( '/[^a-zA-Z0-9_]/', '', $parsedString );
 
 		// Register Activation/Deactivation Hook
 		register_activation_hook( self::$configs->file, array( $this, 'activate' ) );
@@ -49,22 +51,12 @@ class Main {
 		// Assign crypto
 		self::$configs->crypto = Crypto::class;
 
-		// Add prefix to linked table
-		$table_name = $configs->linked_table;
-		self::$configs->linked_table = DB::$table_name();
-		
 		// Core Modules
 		new Utilities();
 		new Dispatcher();
 		new Scripts();
 		new AdminPage();
-		new WooCommerce();
-		new WooCommerceSubscription();
-		new RestAPI();
 		new Media();
-
-		// Register plugin updater (Registered content name, content main file, parent menu for license page, continous update check bool)
-		// new Updater( $configs );
 	}
 
 	/**

@@ -5,9 +5,8 @@ import { request } from 'crewhrm-materials/request.jsx';
 import { __, data_pointer, sprintf } from 'crewhrm-materials/helpers.jsx';
 import { Conditional } from 'crewhrm-materials/conditional.jsx';
 
-import { Tabs } from '../../../../materials/tabs/tabs.jsx';
-
-import { getDashboardPath } from '../../index.jsx';
+import { Tabs } from '../../../materials/tabs/tabs.jsx';
+import { getDashboardPath } from '../../admin-dashboard/inventory/inventory-backend.jsx';
 
 export function InventoryWrapper({children}) {
 
@@ -25,7 +24,7 @@ export function InventoryWrapper({children}) {
 		if ( ! content_type ) {
 			const first = enabled_contents[0]?.content_type;
 			if ( first ) {
-				navigate(first, {replace: true});
+				navigate(getDashboardPath('inventory/'+first), {replace: true});
 			} else {
 				setState({
 					...state, 

@@ -5,7 +5,6 @@ namespace Solidie\Setup;
 use Solidie\Helpers\Colors;
 use Solidie\Main;
 use Solidie\Models\AdminSetting;
-use Solidie\Models\FrontendDashboard;
 use Solidie\Models\Manifest;
 
 // To Do: Load frontend scripts only in catalog and single content page when not in development mode
@@ -33,12 +32,13 @@ class Scripts {
 		foreach ( $dynamic_colors as $name => $code ) {
 			$_colors .= '--crewmat-color-' . esc_attr( $name ) . ':' . esc_attr( $code ) . ';';
 		}
-		echo '<style>[id^="Solidie_"],#crewhrm-popup-root{' . $_colors . '}</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo '<style>[id^="Solidie_"],#solidie-popup-root{' . $_colors . '}</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 		// Load data
 		$data = array(
 			'ajaxurl'     => admin_url( 'admin-ajax.php' ),
 			'home_url'    => get_home_url(),
+			'is_admin'    => is_admin(),
 			'home_path'   => rtrim( parse_url( get_home_url() )['path'] ?? '/', '/' ) . '/',
 			'app_name'    => Main::$configs->app_name,
 			'nonce'       => wp_create_nonce( Main::$configs->app_name ),
@@ -51,11 +51,7 @@ class Scripts {
 		);
 		
 		// Determine data pointer
-		$pattern = '/\/([^\/]+)\/wp-content\/(plugins|themes)\/([^\/]+)\/.*/';
-		preg_match( $pattern, Main::$configs->url, $matches );
-		$parsedString = strtolower( "CrewMat_{$matches[1]}_{$matches[3]}" );
-		$parsedString = preg_replace( '/[^a-zA-Z0-9_]/', '', $parsedString );
-		echo '<script>window.' . $parsedString . '=' . wp_json_encode( $data ) . '</script>';
+		echo '<script>window.' . Main::$configs->app_name . '=' . wp_json_encode( $data ) . '</script>';
 	}
 
 	public function adminScripts() {
@@ -65,10 +61,6 @@ class Scripts {
 	}
 
 	public function frontendScripts() {
-		if ( FrontendDashboard::is_dashboard() ) {
-			wp_enqueue_script( 'appstore-frontend-dashboard-script', Main::$configs->dist_url . 'frontend-dashboard.js', array( 'jquery' ), Main::$configs->version, true );
-		} else {
-			wp_enqueue_script( 'appstore-frontend-script', Main::$configs->dist_url . 'frontend.js', array( 'jquery' ), Main::$configs->version, true );
-		}
+		wp_enqueue_script( 'appstore-frontend-script', Main::$configs->dist_url . 'frontend.js', array( 'jquery' ), Main::$configs->version, true );
 	}
 }

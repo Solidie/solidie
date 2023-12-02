@@ -126,7 +126,7 @@ const filters = [
 ];
 
 export function getPath(path) {
-	let _path = window[data_pointer].home_path + path;
+	let _path = (window[data_pointer].is_admin ? '/' : window[data_pointer].home_path) + path;
 	return _path.replace(/\/+/g, '/');
 }
 

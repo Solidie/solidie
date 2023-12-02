@@ -1,8 +1,8 @@
 <?php
 /**
- * The dispatcher where all the CrewHRM ajax request pass through after validation
+ * The dispatcher where all the ajax request pass through after validation
  *
- * @package crewhrm
+ * @package solidie
  */
 
 namespace Solidie\Setup;
@@ -52,7 +52,7 @@ class Dispatcher {
 	public function registerControllers(){
 
 		$registered_methods = array();
-		$controllers        = apply_filters( 'crewhrm_controllers', self::$controllers );
+		$controllers        = apply_filters( 'solidie_controllers', self::$controllers );
 
 		// Loop through controllers classes
 		foreach ( $controllers as $class ) {
@@ -106,22 +106,21 @@ class Dispatcher {
 		// Verify nonce first of all
 		/* $matched = wp_verify_nonce( ( $data['nonce'] ?? '' ), $data['nonce_action'] ?? '' );
 		if ( ! $matched ) {
-			wp_send_json_error( array( 'message' => __( 'Session Expired! Reloading the page might help resolve.', 'crewhrm' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Session Expired! Reloading the page might help resolve.', 'solidie' ) ) );
 		} */
 
 		// Verify required user role
 		$_required_roles = $prerequisites['role'] ?? array();
 		$_required_roles = is_array( $_required_roles ) ? $_required_roles : array( $_required_roles );
-		$_required_roles = apply_filters( 'crewhrm_hr_roles', $_required_roles );
 		if ( ! User::validateRole( get_current_user_id(), $_required_roles ) ) {
-			wp_send_json_error( array( 'message' => __( 'Access Denied!', 'crewhrm' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Access Denied!', 'solidie' ) ) );
 		}
 
 		// Now pass to the action handler function
 		if ( class_exists( $class ) && method_exists( $class, $method ) ) {
 			$class::$method( $data, $files );
 		} else {
-			wp_send_json_error( array( 'message' => __( 'Invalid Endpoint!', 'crewhrm' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Invalid Endpoint!', 'solidie' ) ) );
 		}
 	}
 }
