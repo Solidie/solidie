@@ -87,14 +87,14 @@ export function SettingPage(props) {
 						</table>
 					</td>
 				</tr>
-				<tr>
+				{/* <tr>
 					<th scope='row'>
 						<label>{savedSettings.dashboard.label} Base Slug</label>
 					</th>
 					<td>
 						<input type="text" defaultValue={savedSettings?.dashboard?.slug} onChange={e=>onChange('dashboard', 'slug', e.currentTarget.value)} className='regular-text'/>
 					</td>
-				</tr>
+				</tr> */}
 			</tbody>
 		</table>	
 		<button className='button button-primary' onClick={saveOptions} disabled={!state.changedSettings}>Save</button>

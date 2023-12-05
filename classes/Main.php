@@ -9,6 +9,7 @@ use Solidie\Setup\Scripts;
 use Solidie\Setup\AdminPage;
 use Solidie\Setup\Utilities;
 use Solidie\Setup\Media;
+use Solidie\Setup\Route;
 
 class Main {
 	/**
@@ -52,6 +53,7 @@ class Main {
 		self::$configs->crypto = Crypto::class;
 
 		// Core Modules
+		new Route();
 		new Utilities();
 		new Dispatcher();
 		new Scripts();

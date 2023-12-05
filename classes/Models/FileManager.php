@@ -17,21 +17,21 @@ class FileManager {
 	 *
 	 * @var string
 	 */
-	public static $solidie_meta_key = 'solidie_content_file';
+	CONST SOLIDIE_FILE_IDENTIFIER_META_KEY = 'solidie_content_file';
 
 	/**
 	 * Specify where to store files
 	 *
 	 * @var string
 	 */
-	public static $custom_dir = 'solidie-content-files';
+	const SOLIDIE_COTNENTS_DIR = 'solidie-content-files';
 
 	/**
-	 * Replacable file id to make available in upload_dir hook callback
+	 * Replacable relapath for the content to make available in upload_dir hook callback
 	 *
-	 * @var int
+	 * @var string
 	 */
-	public static $content_id = 0;
+	public static $rel_path;
 
 	/**
 	 * Alter upload directory by hook
@@ -41,7 +41,7 @@ class FileManager {
 	 */
 	public static function customUploadDirectory( $upload ) {
 		// Define the new upload directory
-		$upload_dir = '/' . self::$custom_dir . '/' . self::$content_id;
+		$upload_dir = '/' . self::$rel_path;
 
 		// Get the current upload directory path and URL
 		$upload_path = $upload['basedir'] . $upload_dir;
@@ -59,15 +59,16 @@ class FileManager {
 	 * Create custom directory for files
 	 *
 	 * @param int $content_id Create directory for specific content, ideally job application.
-	 * @return void
+	 * @return string
 	 */
 	private static function createUploadDir( $content_id ) {
 
 		$wp_upload_dir = wp_upload_dir(); // Get the path and URL of the wp-uploads directory
 
 		// Create the full path of the custom directory
-		$custom_dir_path = $wp_upload_dir['basedir'] . '/' . self::$custom_dir . '/' . $content_id;
-		$htaccess_path   = $wp_upload_dir['basedir'] . '/' . self::$custom_dir . '/.htaccess';
+		$rel_path        = self::SOLIDIE_COTNENTS_DIR . '/' . $content_id;
+		$custom_dir_path = $wp_upload_dir['basedir'] . '/' . $rel_path;
+		$htaccess_path   = $wp_upload_dir['basedir'] . '/' . self::SOLIDIE_COTNENTS_DIR . '/.htaccess';
 
 		// Create the directory if it doesn't exist
 		if ( ! is_dir( $custom_dir_path ) ) {
@@ -80,6 +81,8 @@ class FileManager {
 		}
 
 		// To Do: nginx doesn't restrict per directory, rather show instruction in dashboard how to restrict directory.
+
+		return $rel_path;
 	}
 
 	/**
@@ -92,14 +95,11 @@ class FileManager {
 	 */
 	public static function uploadFile( $content_id, array $file, string $file_title ) {
 
-		// Store to make available in upload_dir hook handler
-		self::$content_id = $content_id;
-
 		// File id place holder
 		$attachment_id = null;
 
 		// Create necessary directory if not created already
-		self::createUploadDir( $content_id );
+		self::$rel_path = self::createUploadDir( $content_id );
 
 		// Add filters
 		add_filter( 'upload_dir', array( __CLASS__, 'customUploadDirectory' ) );
@@ -129,7 +129,7 @@ class FileManager {
 			// Generate meta data for the file
 			$attachment_data = wp_generate_attachment_metadata( $attachment_id, $file_path );
 			wp_update_attachment_metadata( $attachment_id, $attachment_data );
-			update_post_meta( $attachment_id, self::$solidie_meta_key, true );
+			update_post_meta( $attachment_id, self::SOLIDIE_FILE_IDENTIFIER_META_KEY, true );
 		} else {
 			$attachment_id = null;
 		}

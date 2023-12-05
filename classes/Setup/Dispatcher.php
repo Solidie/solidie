@@ -19,15 +19,6 @@ use Error;
  * Dispatcher class
  */
 class Dispatcher {
-	/**
-	 * Controlles class array
-	 *
-	 * @var array
-	 */
-	private static $controllers = array(
-		ContentController::class,
-		SettingsController::class,
-	);
 
 	/**
 	 * Dispatcher registration in constructor
@@ -51,8 +42,13 @@ class Dispatcher {
 	 */
 	public function registerControllers(){
 
+		$controllers = array(
+			ContentController::class,
+			SettingsController::class,
+		);
+
 		$registered_methods = array();
-		$controllers        = apply_filters( 'solidie_controllers', self::$controllers );
+		$controllers        = apply_filters( 'solidie_controllers', $controllers );
 
 		// Loop through controllers classes
 		foreach ( $controllers as $class ) {

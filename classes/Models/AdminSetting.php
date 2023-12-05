@@ -10,7 +10,7 @@ class AdminSetting {
 	 *
 	 * @var string
 	 */
-	private static $name = 'solidie_store_admin_settings';
+	CONST OPTION_NAME = 'solidie_store_admin_settings';
 
 	/**
 	 * Save admin settings
@@ -26,7 +26,7 @@ class AdminSetting {
 		$settings = _Array::castRecursive( is_array( $settings ) ? $settings : array() );
 		$settings = array_replace_recursive( self::get(), $settings );
 
-		update_option( self::$name, $settings, true );
+		update_option( self::OPTION_NAME, $settings, true );
 		do_action( 'solidie_settings_updated' );
 		return true;
 	}
@@ -41,7 +41,7 @@ class AdminSetting {
 	 */
 	public static function get( $key = null, $default = null ) {		
 		// Get all from saved one
-		$options = get_option( self::$name );
+		$options = get_option( self::OPTION_NAME );
 		$options = is_array( $options ) ? $options : array();
 		$options = array_replace_recursive( Manifest::getManifest()['settings'], $options );
 		

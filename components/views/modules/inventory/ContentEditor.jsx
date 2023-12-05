@@ -58,28 +58,30 @@ export function ContentEditor() {
 		},
 		(['audio', 'video'].indexOf(content_type) === -1 ? null : {
 			type: 'file',
-			name: 'preview_url',
+			name: 'preview',
 			label: __('Preview File'),
 			accept: content_type + '/*'
 		}),
-		/* (['app', '3d', 'document', 'font', 'tutorial'].indexOf(content_type)===-1 ? null : {
+		(['app', '3d', 'document', 'font', 'tutorial'].indexOf(content_type)===-1 ? null : {
 			type: 'file',
 			name: 'sample_images',
 			label: __('Sample Images'),
-			accept: 'image/*'
-		}), */
+			accept: 'image/*',
+			maxlenth: 5,
+		}),
 		{
 			type: 'file',
 			name: 'downloadable_file',
 			label: __('Downloadable File'),
-			hint: __('You can always release new updates later')
+			hint: __('You can always release new updates later'),
+			accept: [content_type + '/*', 'application/zip']
 		},
-		/* {
+		{
 			type: 'category',
 			name: 'categories',
 			label: __('Category'),
 			placeholder: __('Select category')
-		}, */
+		},
 		{
 			type: 'text',
 			name: 'tags',
@@ -138,7 +140,7 @@ export function ContentEditor() {
 
 			{
 				fields.map(field=>{
-					const {name, label, placeholder, type, required, accept, hint} = field;
+					const {name, label, placeholder, type, required, accept, hint, maxlenth} = field;
 					return <div key={name} className={'margin-bottom-15'.classNames()}>
 						<strong className={'d-block font-weight-600'.classNames()}>
 							{label}{required ? <span className={'color-error'.classNames()}>*</span> : null}
@@ -163,7 +165,9 @@ export function ContentEditor() {
 							'file' !== type ? null :
 							<FileUpload 
 								accept={accept}
-								onChange={v=>setVal(name, v)}/>
+								onChange={v=>setVal(name, v)}
+								maxlenth={maxlenth}
+								value={state.values[name]}/>
 						}
 					</div>
 				})

@@ -11,7 +11,7 @@ class _String {
 	 *
 	 * @var array
 	 */
-	private static $allowed_html = array(
+	const ALLOWED_HTML_TAGS = array(
 		'strong',
 		'p',
 		'div',
@@ -26,7 +26,7 @@ class _String {
 	 *
 	 * @var array
 	 */
-	private static $allowed_attributes = array(
+	const ALLOWED_HTML_ATTRIBUTES = array(
 		'style'  => array(),
 		'class'  => array(),
 		'id'     => array(),
@@ -97,10 +97,10 @@ class _String {
 			$allowed = array();
 
 			// Loop through tags
-			foreach ( self::$allowed_html as $tag ) {
+			foreach ( self::ALLOWED_HTML_TAGS as $tag ) {
 
 				// And assign supported attributes per tag
-				$allowed[ $tag ] = self::$allowed_attributes;
+				$allowed[ $tag ] = self::ALLOWED_HTML_ATTRIBUTES;
 			}
 		}
 

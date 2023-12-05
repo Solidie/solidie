@@ -2,6 +2,7 @@
 
 namespace Solidie\Setup;
 
+use Solidie\Models\FileManager;
 use Solidie\Models\Release;
 
 class Media {
@@ -18,7 +19,7 @@ class Media {
 			}
 			
 			$meta_query[] = array(
-				'key'     => Release::$release_meta_key,
+				'key'     => FileManager::SOLIDIE_FILE_IDENTIFIER_META_KEY,
 				'compare' => 'NOT EXISTS', // Hide release media contents
 			);
 

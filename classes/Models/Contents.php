@@ -12,9 +12,9 @@ class Contents {
 	const PREVIEW_META_KEY = 'solidie-content-preview-id';
 
 	/**
-	 * The meta key for thumbnail
+	 * The meta key to store thumbnail image ID
 	 */
-	const THUMBNAIL_KEY = 'content-thumbnail-image-id';
+	const MEDIA_IDS_KEY = 'content-media-ids';
 
 	/**
 	 * Get associated product id by content id
@@ -57,8 +57,8 @@ class Contents {
 		$content['contributor_id']      = $content_data['contributor_id'] ?? get_current_user_id();
 		$content['modified_at']         = $gmdate;
 
+		// Create or update content
 		global $wpdb;
-
 		if ( empty( $content['content_id'] ) ) {
 			$content['created_at'] = $gmdate;
 			$wpdb->insert(
@@ -75,46 +75,61 @@ class Contents {
 				)
 			);
 		}
-
 		$content_id = $content['content_id'];
 		if ( empty( $content_id ) ) {
 			return false;
 		}
 
-		// Meta manager instance
-		$meta = Meta::content( $content_id );
+		// Save thumbnail, preview and sample images
+		$file_names = array( 
+			'thumbnail'     => 'Thumbnail', 
+			'preview'       => 'Preview', 
+			'sample_images' => 'Sample Image' 
+		);
 		
-		// Save thumbnail
-		if ( ! empty( $files['thumbnail'] ) ) {
-			$file_id = FileManager::uploadFile( $content['content_id'], $files['thumbnail'], $content['content_title'] . ' - Thumbnail' );
-			if ( ! empty( $file_id ) ) {
-				// Delete existing thumbnail first
-				$thumbnail_id = $meta->getMeta( self::THUMBNAIL_KEY );
-				if ( ! empty( $thumbnail_id ) ) {
-					File::deleteFile( $thumbnail_id, true );
-				}
+		$meta      = Meta::content( $content_id );
+		$media_ids = $meta->getMeta( self::MEDIA_IDS_KEY );
+		$media_ids = _Array::getArray( $media_ids );
+		$media_ids = array_merge(
+			array(
+				'thumbnail'     => 0,
+				'preview'       => 0,
+				'sample_images' => array()
+			),
+			$media_ids
+		);
 
-				// Set the new one
-				$meta->updateMeta( self::THUMBNAIL_KEY, $file_id );
+		// Loop through initial uploaded files array
+		foreach ( $file_names as $name => $file_type_label ) {
+			if ( empty( $files[ $name ] ) ) {
+				continue;
+			}
+
+			// Sync file array structure to process at once
+			$_files = is_array( $media_ids[ $name ] ) ? File::organizeUploadedHierarchy( $files[ $name ] ) : array( $files[ $name ] );
+
+			// Loop through synced files structure
+			foreach ( $_files as $file ) {
+				$new_file_id = FileManager::uploadFile( $content['content_id'], $file, $content['content_title'] . ' - ' . $file_type_label );
+				if ( ! empty( $new_file_id ) ) {
+
+					// Delete existing thumbnail and preview file.
+					// These two can't be duplicated.
+					if ( in_array( $name, array( 'thumbnail', 'preview' ), true ) ) {
+						File::deleteFile( $media_ids[ $name ] ?? 0, true );
+					}
+					
+					if ( is_array( $media_ids[ $name ] ) ) {
+						$media_ids[ $name ][] = $new_file_id;
+					} else {
+						$media_ids[ $name ] = $new_file_id;
+					}
+				}
 			}
 		}
-
-		// Set preview file
-		if ( ! empty( $files['preview_file'] ) ) {
-			$file_id = FileManager::uploadFile( $content['content_id'], $files['preview_file'], $content['content_title'] . ' - Preview' );
-			if ( ! empty( $file_id ) ) {
-				// Delete existing preview first
-				$preview_id = $meta->getMeta( self::PREVIEW_META_KEY );
-				if ( ! empty( $preview_id ) ) {
-					File::deleteFile( $preview_id, true );
-				}
-
-				// Set the new one
-				$meta->updateMeta( self::PREVIEW_META_KEY, $preview_id );
-			}
-		}
-
-		// Save downloadable file
+		$meta->updateMeta( self::MEDIA_IDS_KEY, $media_ids );
+		
+		// Save downloadable file through release to maintain consistency with app type content and other dependencies.
 		if ( ! empty( $files['downloadable_file'] ) ) {
 			Release::pushRelease(
 				array(

@@ -46,8 +46,11 @@ class File {
 			$file_id = array( $file_id );
 		}
 
+		// Loop through file IDs and delete
 		foreach ( $file_id as $id ) {
-			wp_delete_attachment( $id, $force_delete );
+			if ( ! empty( $id ) && is_numeric( $id ) ) {
+				wp_delete_attachment( $id, $force_delete );
+			}
 		}
 	}
 

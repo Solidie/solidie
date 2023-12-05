@@ -16,7 +16,7 @@ class Colors {
 	 *
 	 * @var array
 	 */
-	private static $base_colors = array(
+	const BASE_COLORS = array(
 		'primary'      => '#1A1A1A',
 		'secondary'    => '#236BFE',
 		'tertiary'     => '#E3E5E8',
@@ -67,7 +67,7 @@ class Colors {
 	 * @return array
 	 */
 	public static function getColors() {
-		$colors = self::$base_colors;
+		$colors = self::BASE_COLORS;
 
 		// Provide some necessary opacity
 		$colors['secondary-15'] = self::hexToRgba( $colors['secondary'], 0.15 );
