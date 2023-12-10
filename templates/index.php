@@ -60,8 +60,8 @@ if ( ! empty( $template ) ) {
 	foreach ( $content_settings as $type => $setting ) {
 		if ( $setting['slug'] == $page ) {
 			// Redirect to appropriate base slug if malformed
-			if ( $content->content_type !== $type ) {
-				wp_safe_redirect( get_home_url() . '/' . $content->content_type . '/' . implode( '/', $sub_pages ) . '/' . ( $parsed['query'] ? '?'.$parsed['query'] : '' ), 301 );
+			if ( $content['content_type'] !== $type ) {
+				wp_safe_redirect( get_home_url() . '/' . $content['content_type'] . '/' . implode( '/', $sub_pages ) . '/' . ( $parsed['query'] ? '?'.$parsed['query'] : '' ), 301 );
 				exit;
 			}
 			break;
@@ -74,7 +74,7 @@ if ( ! empty( $template ) ) {
 			array(
 				'post_type'   => 'product',
 				'post_status' => 'publish',
-				'p'           => $content->product_id,
+				'p'           => $content['product_id'],
 			)
 		);
 		the_post();

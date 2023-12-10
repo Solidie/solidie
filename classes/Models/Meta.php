@@ -158,15 +158,16 @@ class Meta {
 	/**
 	 * Delete bulk meta for multiple objects
 	 *
-	 * @param array  $object_ids Array of object IDs
+	 * @param array|int  $object_ids Array of object IDs
 	 * @param string $meta_key   Specific meta key. It's optional.
 	 * @return void
 	 */
-	public function deleteBulkMeta( array $object_ids, string $meta_key = null ) {
+	public function deleteBulkMeta( $object_ids, $meta_key = null ) {
 		if ( empty( $object_ids ) ) {
 			return;
 		}
 
+		$object_ids = ! is_array( $object_ids ) ? array( $object_ids ) : $object_ids;
 		$ids_in     = implode( ',', $object_ids );
 		$meta_key   = $meta_key ? esc_sql( $meta_key ) : null;
 		$key_clause = $meta_key ? " AND meta_key='{$meta_key}'" : '';

@@ -1,16 +1,21 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom';
 
 import { request } from 'crewhrm-materials/request.jsx';
 import { __, data_pointer, sprintf } from 'crewhrm-materials/helpers.jsx';
 import { Conditional } from 'crewhrm-materials/conditional.jsx';
+import { ContextToast } from 'crewhrm-materials/toast/toast.jsx';
 
 import { Tabs } from '../../../materials/tabs/tabs.jsx';
 import { getDashboardPath } from '../../admin-dashboard/inventory/inventory-backend.jsx';
 
+import table_style from '../../../materials/styles/table.module.scss';
+import style from './inventory.module.scss';
+
 export function InventoryWrapper({children}) {
 
 	const {content_type} = useParams();
+	const {ajaxToast} = useContext(ContextToast);
 
 	const _contents = window[data_pointer]?.settings?.contents || {};
 	const enabled_contents = Object.keys(_contents).map(c=>_contents[c].enable ? {..._contents[c], content_type:c} : null).filter(c=>c).map(c=>{return {...c, id: c.content_type}});
@@ -39,8 +44,8 @@ export function InventoryWrapper({children}) {
 		}
 	}, []);
 
-	return state.error_message || <div className={"flex flex-col gap-4 width-p-100 height-p-100".classNames()}>
-		<div className={"flex justify-between items-center width-p-100".classNames()}>
+	return state.error_message || <div>
+		<div>
 			<h1 className={"font-size-24 font-weight-600 color-text letter-spacing-3".classNames()}>
 				{__('Inventory')}
 			</h1>
@@ -88,6 +93,20 @@ export function Inventory(props) {
 		} );
 	}
 
+	const deleteContent=(content_id)=>{
+		if ( ! window.confirm('Sure to delete?') ) {
+			return;
+		}
+
+		request('deleteContent', {content_id}, resp=>{
+			if (!resp.success) {
+				ajaxToast(resp);
+			} else {
+				fetchContents();
+			}
+		});
+	}
+
 	useEffect(()=>{
 		if ( content_type ) {
 			fetchContents();
@@ -106,7 +125,7 @@ export function Inventory(props) {
 				</Link>
 			</div>
 			
-			<table className={'solidie-ui-table solidie-ui-table-responsive'.classNames()}>
+			<table className={'table'.classNames(style) + 'table table-bordered'.classNames(table_style)}>
 				<thead>
 					<tr>
 						<th>{__('Title')}</th>
@@ -120,13 +139,19 @@ export function Inventory(props) {
 
 							return <tr key={content_id}>
 								<td data-th={__('Title')}>
-									<span className={"d-block font-weight-40".classNames()}>
+									<span className={"d-block".classNames()}>
 										{content_title}
 									</span>
-									<div className={'d-flex align-items-center column-gap-10'.classNames()}>
-										<i className={'ch-icon ch-icon-trash font-size-17 cursor-pointer'.classNames()}></i>
-										<i className={'ch-icon ch-icon-edit-2 font-size-17 cursor-pointer'.classNames()}></i>
-										<i className={'ch-icon ch-icon-hierarchy font-size-17 cursor-pointer'.classNames()}></i>
+									<div className={'actions'.classNames(style) + 'd-flex align-items-center column-gap-10 margin-top-10'.classNames()}>
+										<i 
+											className={'ch-icon ch-icon-trash font-size-15 cursor-pointer'.classNames()} 
+											title={__('Delete')}
+											onClick={()=>deleteContent(content_id)}></i>
+
+										<Link 
+											className={'ch-icon ch-icon-edit-2 font-size-15 cursor-pointer'.classNames()} 
+											title={__('Edit')}
+											to={getDashboardPath(`inventory/${content_type}/editor/${content_id}/`)}/>
 									</div>
 								</td>
 								<td data-th={__('Status')}>

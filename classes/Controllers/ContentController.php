@@ -22,6 +22,8 @@ class ContentController {
 		),
 		'fetchReleases' => array(),
 		'versionRelease' => array(),
+		'deleteContent' => array(),
+		'getSingleContent' => array(),
 	);
 
 	/**
@@ -102,6 +104,33 @@ class ContentController {
 			wp_send_json_success();
 		} else {
 			wp_send_json_error( array( 'message' => $error_message ) );
+		}
+	}
+
+	/**
+	 * Delete content
+	 *
+	 * @param array $data
+	 * @return void
+	 */
+	public static function deleteContent( array $data ) {
+		// To Do: Check if the user is authorized to delete the content
+		Contents::deleteContent( (int) $data['content_id'] ?? 0 );
+		wp_send_json_success();
+	}
+
+	/**
+	 * Get single content for both single view and edit
+	 *
+	 * @param array $data
+	 * @return void
+	 */
+	public static function getSingleContent( array $data ) {
+		$content = Contents::getContentByContentID( (int) $data['content_id'] ?? 0, null, false );
+		if ( ! empty( $content ) ) {
+			wp_send_json_success( array( 'content' => $content ) );
+		} else {
+			wp_send_json_error( array( 'message' => __( 'Content not found', 'solidie' ) ) );
 		}
 	}
 }

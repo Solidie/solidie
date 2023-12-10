@@ -55,6 +55,25 @@ class File {
 	}
 
 	/**
+	 * Delete directory
+	 *
+	 * @param string $dir
+	 * @return bool
+	 */
+	public static function deleteDirectory( string $dir ) {
+		if ( ! is_dir( $dir ) ) {
+			return false;
+		}
+
+		$files = glob( $dir . '/*' );
+		foreach ( $files as $file ) {
+			is_dir( $file ) ? self::deleteDirectory( $file ) : unlink( $file );
+		}
+
+		return rmdir( $dir );
+	}
+
+	/**
 	 * Organize uploaded files hierarchy
 	 *
 	 * @param array $file_s The file holder array to organize

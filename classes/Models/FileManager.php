@@ -86,6 +86,21 @@ class FileManager {
 	}
 
 	/**
+	 * Get dir path for speficic content
+	 *
+	 * @param int $content_id
+	 * @return string
+	 */
+	public static function getContentDir( $content_id ) {
+		if ( empty( $content_id ) ) {
+			$content_id = 0;
+		}
+
+		$wp_upload_dir = wp_upload_dir();
+		return $wp_upload_dir['basedir'] . '/' . self::SOLIDIE_COTNENTS_DIR . '/' . $content_id;
+	}
+
+	/**
 	 * Process upload of a file using native WP methods
 	 *
 	 * @param int    $content_id The content/application ID to upload file for

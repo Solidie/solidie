@@ -6,11 +6,7 @@ use Solidie\Helpers\_Array;
 use Solidie\Helpers\File;
 
 class Contents {
-	/**
-	 * Meta key to store preview file URL to product
-	 */
-	const PREVIEW_META_KEY = 'solidie-content-preview-id';
-
+	
 	/**
 	 * The meta key to store thumbnail image ID
 	 */
@@ -53,7 +49,7 @@ class Contents {
 		$content['product_id']          = ! empty( $content_data['product_id'] ) ? $content_data['product_id'] : null;
 		$content['content_type']        = $content_data['content_type'];
 		$content['category_id']         = $content_data['category_id'] ?? null;
-		$content['content_status']      = $content_data['content_status'] ?? 'review';
+		$content['content_status']      = 'publish'; // To Do: Introduce other statuses in pro add on.
 		$content['contributor_id']      = $content_data['contributor_id'] ?? get_current_user_id();
 		$content['modified_at']         = $gmdate;
 
@@ -169,7 +165,7 @@ class Contents {
 	 * Get content by content id
 	 *
 	 * @param integer $content_id
-	 * @return object|null
+	 * @return array|null
 	 */
 	public static function getContentByContentID( $content_id, $field = null, $public_only = true ) {
 		return self::getContentByField( 'content_id', $content_id, $field, $public_only );
@@ -181,7 +177,7 @@ class Contents {
 	 * @param string $field_name
 	 * @param string|integer $field_value
 	 * 
-	 * @return object|null
+	 * @return array|null
 	 */
 	public static function getContentByField( string $field_name, $field_value, $field = null, $public_only = true ) {
 		// Post creator user can preview own product regardless of post status.
@@ -200,17 +196,58 @@ class Contents {
 				LEFT JOIN {$wpdb->users} _user ON content.contributor_id=_user.ID 
 				WHERE content." . $field_name . "=%s" . $status_clause,
 				$field_value
-			)
+			),
+			ARRAY_A
 		);
 
-		if ( empty( $content ) || ! is_object( $content ) ) {
+		if ( empty( $content ) || ! is_array( $content ) ) {
 			return null;
 		}
 
+		// Assign media
+		
+
 		// Apply content meta
+		$content = _Array::castRecursive( $content );
 		$content = self::assignContentMeta( $content );
 
-		return $field ? ( $content->$field ?? null ) : $content;
+		return $field ? ( $content[ $field ] ?? null ) : $content;
+	}
+
+	/**
+	 * Assign content media data like preview, thumbnail, sample images
+	 *
+	 * @param array $contents
+	 * @return array
+	 */
+	public static function assignContentMedia( array $contents ) {
+		if ( $was_single = ! _Array::isTwoDimensionalArray( $contents ) ) {
+			$contents = array( $contents );
+		}
+
+		// Loop through every contents
+		foreach ( $contents as $index => $content ) {
+			$meta  = Meta::content( $content['content_id'] );
+			$media = $meta->getMeta( self::MEDIA_IDS_KEY );
+
+			// Loop through media like thumbnail, preview
+			foreach ( $media as $key => $id ) {
+				if ( empty( $id ) ) {
+					continue;
+				}
+
+				$is_array = is_array( $id );
+				$ids      = $is_array ? $id : array( $id );
+				$files    = array();
+				foreach ( $ids as $file_id ) {
+					
+				}
+
+				
+			}
+		}
+
+		return $was_single ? $contents[0] : $contents;
 	}
 
 	/**
@@ -232,7 +269,7 @@ class Contents {
 	 */
 	public static function isContentEnabled( $content_id ) {
 		$content = is_object( $content_id ) ? $content_id : self::getContentByContentID( $content_id );
-		return ! empty( $content ) ? self::isContentTypeEnabled( $content->content_type ) : false;
+		return ! empty( $content ) ? self::isContentTypeEnabled( $content['content_type'] ) : false;
 	}
 
 	/**
@@ -275,7 +312,15 @@ class Contents {
 	 * @return string
 	 */
 	public static function getPermalink( $product_id, $content_type = null ) {
-		$content_type = $content_type ? $content_type : self::getContentByProduct( $product_id )->content_type;
+		
+		if ( empty( $content_type ) ) {
+			$content      = self::getContentByProduct( $product_id );
+			$content_type = ! empty( $content ) ? ( $content['content_type'] ?? '' ) : '';
+			if ( empty( $content_type ) ) {
+				return null;
+			}
+		}
+
 		$post_name    = get_post_field( 'post_name', $product_id );
 		$base_slug    = AdminSetting::get( 'contents.' . $content_type . '.slug' );
 		return get_home_url() . '/' . trim( $base_slug, '/' ) . '/' . $post_name . '/';
@@ -330,9 +375,10 @@ class Contents {
 				content.content_type, 
 				content.content_status, 
 				sale.sale_id
-			FROM " . DB::contents() . " product 
+			FROM " . DB::contents() . " content 
 				LEFT JOIN " . DB::sales() . " sale ON content.content_id=sale.content_id
 			WHERE 1=1 {$type_clause} {$customer_clse} {$limit_clause} {$offset_clause}",
+			ARRAY_A
 		);
 
 		return self::assignContentMeta( $contents );
@@ -347,25 +393,67 @@ class Contents {
 	 */
 	public static function assignContentMeta( $contents ) {
 		// Support both list and single content
-		if ( $was_single = ! is_array( $contents ) ) {
+		if ( $was_single = ! _Array::isTwoDimensionalArray( $contents ) ) {
 			$contents = array( $contents );
 		}
 
 		foreach ( $contents as $index => $content ) {
 			// Content permalink
-			$contents[ $index ]->content_url = self::getPermalink( $content->product_id, $content->content_type );
+			$contents[ $index ]['content_url'] = self::getPermalink( $content['product_id'], $content['content_type'] );
 
 			// Content thumbnail URL
-			$contents[ $index ]->thumbnail_url = get_the_post_thumbnail_url( $content->product_id );
+			$contents[ $index ]['thumbnail_url'] = get_the_post_thumbnail_url( $content['product_id'] );
 
 			// Releases if it is app
-			if ( $content->content_type === 'app' ) {
-				$contents[ $index ]->releases = Release::getReleases( (int)$content->content_id );
+			if ( $content['content_type'] === 'app' ) {
+				$contents[ $index ]['releases'] = Release::getReleases( (int)$content['content_id'] );
 			}
 		}
 
 		$contents = apply_filters( 'solidie_contents_meta', $contents );
 
 		return $was_single ? $contents[0] : $contents;
+	}
+
+	/**
+	 * Delete content by content ID
+	 *
+	 * @param int $content_id
+	 * @return bool
+	 */
+	public static function deleteContent( $content_id ) {
+
+		// Meta object
+		$meta = Meta::content( $content_id );
+
+		// Delete preview file
+		$media_ids = $meta->getMeta( self::MEDIA_IDS_KEY );
+		$media_ids = array_values( _Array::getArray( $media_ids ) );
+		$media_ids = _Array::flattenArray( $media_ids );
+		File::deleteFile( $media_ids );
+
+		// Delete all the meta
+		$meta->deleteBulkMeta( $content_id );
+
+		// Delete releases
+		Release::deleteReleaseByContentId( $content_id );
+
+		// To Do: Delete sales and connected license keys
+
+		// To Do: Delete associated tags
+
+		// To Do: Delete associated product
+
+		// Delete the content directory
+		File::deleteDirectory( FileManager::getContentDir( $content_id ) );
+
+		// Delete the content itself at the end
+		global $wpdb;
+		$wpdb->delete(
+			DB::contents(),
+			array(
+				'content_id' => $content_id
+			)
+		);
 	}
 }

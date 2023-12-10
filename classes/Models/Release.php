@@ -27,7 +27,36 @@ class Release {
 			"SELECT file_id FROM " . DB::releases() . " WHERE release_id IN (" . $implodes . ")"
 		);
 
+		// Delete file IDs from file system
 		File::deleteFile( $file_ids, true );
+
+		// Delete release rows
+		foreach ( $release_ids as $id ) {
+			$wpdb->delete(
+				DB::releases(),
+				array(
+					'release_id' => $id
+				)
+			);
+		}
+	}
+
+	/**
+	 * Delete releases from a specific content
+	 *
+	 * @param int $content_id
+	 * @return void
+	 */
+	public static function deleteReleaseByContentId( $content_id ) {
+		global $wpdb;
+		$release_ids = $wpdb->get_col(
+			$wpdb->prepare(
+				"SELECT release_id FROM " . DB::releases() . " WHERE content_id=%d",
+				$content_id
+			)
+		);
+
+		self::deleteRelease( $release_ids );
 	}
 
 	/**
@@ -58,7 +87,7 @@ class Release {
 			}
 
 			// Upload new one
-			$file_id = FileManager::uploadFile( $data['content_id'], $data['file'], $content->content_title . ' - Downloadable' );
+			$file_id = FileManager::uploadFile( $data['content_id'], $data['file'], $content['content_title'] . ' - Downloadable' );
 			if ( ! $file_id ) {
 				return __( 'Error in file saving!', 'solidie'  );
 			}

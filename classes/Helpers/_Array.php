@@ -40,6 +40,19 @@ class _Array {
 	}
 
 	/**
+	 * Check if an array is two dimensional
+	 *
+	 * @param array $array
+	 * @return boolean
+	 */
+	public static function isTwoDimensionalArray( $array ) {
+		if ( ! empty( $array ) && is_array( $array ) ) {
+			return is_array( current( $array ) );
+		}
+		return false;
+	}
+
+	/**
 	 * Cast number, bool from string.
 	 *
 	 * @param array $array The array to cast data recursively

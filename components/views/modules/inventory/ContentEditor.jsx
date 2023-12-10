@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import {TextField} from 'crewhrm-materials/text-field/text-field.jsx';
@@ -23,6 +23,8 @@ export function ContentEditor() {
 
 	const [state, setState] = useState({
 		submitting: false,
+		fetching: false,
+		error_message: null,
 		values: {
 			content_title: '',
 			content_description: '',
@@ -127,6 +129,40 @@ export function ContentEditor() {
 			}
 		});
 	}
+
+	const fetchContent=()=>{
+		if ( content_id == 'new' ) {
+			return;
+		}
+
+		setState({...state, fetching: true});
+
+		request('getSingleContent', {content_id}, resp=>{
+			const {
+				content={}, 
+				message=__('Something went wrong'), 
+				success
+			} = resp;
+
+			const {values} = state;
+			if ( success ) {
+				values.content_title = content.content_title;
+				values.content_description = content.content_description;
+				values.thumbnail = content.thumbnail;
+				values
+			}
+			
+			setState({
+				...state, 
+				fetching: false,
+				error_message: success ? null : message
+			});
+		});
+	}
+
+	useEffect(()=>{
+		fetchContent();
+	}, [content_id]);
 	
 	const _content = window[data_pointer]?.settings?.contents[content_type] || {};
 	
@@ -156,6 +192,7 @@ export function ContentEditor() {
 						{
 							['text', 'textarea'].indexOf(type) === -1 ? null :
 							<TextField 
+								type={type}
 								placeholder={placeholder} 
 								onChange={v=>setVal(name, v)}
 								value={state.values[name]}/>

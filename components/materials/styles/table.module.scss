@@ -1,0 +1,681 @@
+$background-color_1: transparent;
+$background-color_2: #ffffff;
+$background-color_3: #f9f9f9;
+$background-color_4: #f5f5f5;
+$background-color_5: #e8e8e8;
+$background-color_6: #dff0d8;
+$background-color_7: #d0e9c6;
+$background-color_8: #d9edf7;
+$background-color_9: #c4e3f3;
+$background-color_10: #fcf8e3;
+$background-color_11: #faf2cc;
+$background-color_12: #f2dede;
+$background-color_13: #ebcccc;
+
+.table {
+	border-collapse: collapse;
+	border-spacing: 0;
+	background-color: $background-color_1;
+	width: 100%;
+	max-width: 100%;
+	margin-bottom: 20px;
+	col[class*="col-"] {
+		position: static;
+		display: table-column;
+		float: none;
+	}
+	td[class*="col-"] {
+		position: static;
+		display: table-cell;
+		float: none;
+	}
+	th[class*="col-"] {
+		position: static;
+		display: table-cell;
+		float: none;
+	}
+	td {
+		padding: 0;
+	}
+	th {
+		padding: 0;
+		text-align: left;
+	}
+	>thead {
+		>tr {
+			>th {
+				padding: 8px;
+				line-height: 1.42857143;
+				vertical-align: top;
+				border-top: 1px solid #dddddd;
+				vertical-align: bottom;
+				border-bottom: 2px solid #dddddd;
+			}
+			>td {
+				padding: 8px;
+				line-height: 1.42857143;
+				vertical-align: top;
+				border-top: 1px solid #dddddd;
+			}
+			>td.active {
+				background-color: $background-color_4;
+			}
+			>th.active {
+				background-color: $background-color_4;
+			}
+			>td.success {
+				background-color: $background-color_6;
+			}
+			>th.success {
+				background-color: $background-color_6;
+			}
+			>td.info {
+				background-color: $background-color_8;
+			}
+			>th.info {
+				background-color: $background-color_8;
+			}
+			>td.warning {
+				background-color: $background-color_10;
+			}
+			>th.warning {
+				background-color: $background-color_10;
+			}
+			>td.danger {
+				background-color: $background-color_12;
+			}
+			>th.danger {
+				background-color: $background-color_12;
+			}
+		}
+		&:first-child {
+			>tr {
+				&:first-child {
+					>th {
+						border-top: 0;
+					}
+					>td {
+						border-top: 0;
+					}
+				}
+			}
+		}
+		>tr.active {
+			>td {
+				background-color: $background-color_4;
+			}
+			>th {
+				background-color: $background-color_4;
+			}
+		}
+		>tr.success {
+			>td {
+				background-color: $background-color_6;
+			}
+			>th {
+				background-color: $background-color_6;
+			}
+		}
+		>tr.info {
+			>td {
+				background-color: $background-color_8;
+			}
+			>th {
+				background-color: $background-color_8;
+			}
+		}
+		>tr.warning {
+			>td {
+				background-color: $background-color_10;
+			}
+			>th {
+				background-color: $background-color_10;
+			}
+		}
+		>tr.danger {
+			>td {
+				background-color: $background-color_12;
+			}
+			>th {
+				background-color: $background-color_12;
+			}
+		}
+	}
+	>tbody {
+		>tr {
+			>th {
+				padding: 8px;
+				line-height: 1.42857143;
+				vertical-align: top;
+				border-top: 1px solid #dddddd;
+			}
+			>td {
+				padding: 8px;
+				line-height: 1.42857143;
+				vertical-align: top;
+				border-top: 1px solid #dddddd;
+			}
+			>td.active {
+				background-color: $background-color_4;
+			}
+			>th.active {
+				background-color: $background-color_4;
+			}
+			>td.success {
+				background-color: $background-color_6;
+			}
+			>th.success {
+				background-color: $background-color_6;
+			}
+			>td.info {
+				background-color: $background-color_8;
+			}
+			>th.info {
+				background-color: $background-color_8;
+			}
+			>td.warning {
+				background-color: $background-color_10;
+			}
+			>th.warning {
+				background-color: $background-color_10;
+			}
+			>td.danger {
+				background-color: $background-color_12;
+			}
+			>th.danger {
+				background-color: $background-color_12;
+			}
+		}
+		+ {
+			tbody {
+				border-top: 2px solid #dddddd;
+			}
+		}
+		>tr.active {
+			>td {
+				background-color: $background-color_4;
+			}
+			>th {
+				background-color: $background-color_4;
+			}
+		}
+		>tr.success {
+			>td {
+				background-color: $background-color_6;
+			}
+			>th {
+				background-color: $background-color_6;
+			}
+		}
+		>tr.info {
+			>td {
+				background-color: $background-color_8;
+			}
+			>th {
+				background-color: $background-color_8;
+			}
+		}
+		>tr.warning {
+			>td {
+				background-color: $background-color_10;
+			}
+			>th {
+				background-color: $background-color_10;
+			}
+		}
+		>tr.danger {
+			>td {
+				background-color: $background-color_12;
+			}
+			>th {
+				background-color: $background-color_12;
+			}
+		}
+	}
+	>tfoot {
+		>tr {
+			>th {
+				padding: 8px;
+				line-height: 1.42857143;
+				vertical-align: top;
+				border-top: 1px solid #dddddd;
+			}
+			>td {
+				padding: 8px;
+				line-height: 1.42857143;
+				vertical-align: top;
+				border-top: 1px solid #dddddd;
+			}
+			>td.active {
+				background-color: $background-color_4;
+			}
+			>th.active {
+				background-color: $background-color_4;
+			}
+			>td.success {
+				background-color: $background-color_6;
+			}
+			>th.success {
+				background-color: $background-color_6;
+			}
+			>td.info {
+				background-color: $background-color_8;
+			}
+			>th.info {
+				background-color: $background-color_8;
+			}
+			>td.warning {
+				background-color: $background-color_10;
+			}
+			>th.warning {
+				background-color: $background-color_10;
+			}
+			>td.danger {
+				background-color: $background-color_12;
+			}
+			>th.danger {
+				background-color: $background-color_12;
+			}
+		}
+		>tr.active {
+			>td {
+				background-color: $background-color_4;
+			}
+			>th {
+				background-color: $background-color_4;
+			}
+		}
+		>tr.success {
+			>td {
+				background-color: $background-color_6;
+			}
+			>th {
+				background-color: $background-color_6;
+			}
+		}
+		>tr.info {
+			>td {
+				background-color: $background-color_8;
+			}
+			>th {
+				background-color: $background-color_8;
+			}
+		}
+		>tr.warning {
+			>td {
+				background-color: $background-color_10;
+			}
+			>th {
+				background-color: $background-color_10;
+			}
+		}
+		>tr.danger {
+			>td {
+				background-color: $background-color_12;
+			}
+			>th {
+				background-color: $background-color_12;
+			}
+		}
+	}
+	>caption {
+		+ {
+			thead {
+				>tr {
+					&:first-child {
+						>th {
+							border-top: 0;
+						}
+						>td {
+							border-top: 0;
+						}
+					}
+				}
+			}
+		}
+	}
+	>colgroup {
+		+ {
+			thead {
+				>tr {
+					&:first-child {
+						>th {
+							border-top: 0;
+						}
+						>td {
+							border-top: 0;
+						}
+					}
+				}
+			}
+		}
+	}
+	.table {
+		background-color: $background-color_2;
+	}
+}
+.table-condensed {
+	>thead {
+		>tr {
+			>th {
+				padding: 5px;
+			}
+			>td {
+				padding: 5px;
+			}
+		}
+	}
+	>tbody {
+		>tr {
+			>th {
+				padding: 5px;
+			}
+			>td {
+				padding: 5px;
+			}
+		}
+	}
+	>tfoot {
+		>tr {
+			>th {
+				padding: 5px;
+			}
+			>td {
+				padding: 5px;
+			}
+		}
+	}
+}
+.table-bordered {
+	border: 1px solid #dddddd;
+	>thead {
+		>tr {
+			>th {
+				border: 1px solid #dddddd;
+				border-bottom-width: 2px;
+			}
+			>td {
+				border: 1px solid #dddddd;
+				border-bottom-width: 2px;
+			}
+		}
+	}
+	>tbody {
+		>tr {
+			>th {
+				border: 1px solid #dddddd;
+			}
+			>td {
+				border: 1px solid #dddddd;
+			}
+		}
+	}
+	>tfoot {
+		>tr {
+			>th {
+				border: 1px solid #dddddd;
+			}
+			>td {
+				border: 1px solid #dddddd;
+			}
+		}
+	}
+}
+.table-striped {
+	>tbody {
+		>tr {
+			&:nth-of-type(odd) {
+				background-color: $background-color_3;
+			}
+		}
+	}
+}
+.table-hover {
+	>tbody {
+		>tr {
+			&:hover {
+				background-color: $background-color_4;
+				>.active {
+					background-color: $background-color_5;
+				}
+				>.success {
+					background-color: $background-color_7;
+				}
+				>.info {
+					background-color: $background-color_9;
+				}
+				>.warning {
+					background-color: $background-color_11;
+				}
+				>.danger {
+					background-color: $background-color_13;
+				}
+			}
+			>td.active {
+				&:hover {
+					background-color: $background-color_5;
+				}
+			}
+			>th.active {
+				&:hover {
+					background-color: $background-color_5;
+				}
+			}
+			>td.success {
+				&:hover {
+					background-color: $background-color_7;
+				}
+			}
+			>th.success {
+				&:hover {
+					background-color: $background-color_7;
+				}
+			}
+			>td.info {
+				&:hover {
+					background-color: $background-color_9;
+				}
+			}
+			>th.info {
+				&:hover {
+					background-color: $background-color_9;
+				}
+			}
+			>td.warning {
+				&:hover {
+					background-color: $background-color_11;
+				}
+			}
+			>th.warning {
+				&:hover {
+					background-color: $background-color_11;
+				}
+			}
+			>td.danger {
+				&:hover {
+					background-color: $background-color_13;
+				}
+			}
+			>th.danger {
+				&:hover {
+					background-color: $background-color_13;
+				}
+			}
+		}
+		>tr.active {
+			&:hover {
+				>td {
+					background-color: $background-color_5;
+				}
+				>th {
+					background-color: $background-color_5;
+				}
+			}
+		}
+		>tr.success {
+			&:hover {
+				>td {
+					background-color: $background-color_7;
+				}
+				>th {
+					background-color: $background-color_7;
+				}
+			}
+		}
+		>tr.info {
+			&:hover {
+				>td {
+					background-color: $background-color_9;
+				}
+				>th {
+					background-color: $background-color_9;
+				}
+			}
+		}
+		>tr.warning {
+			&:hover {
+				>td {
+					background-color: $background-color_11;
+				}
+				>th {
+					background-color: $background-color_11;
+				}
+			}
+		}
+		>tr.danger {
+			&:hover {
+				>td {
+					background-color: $background-color_13;
+				}
+				>th {
+					background-color: $background-color_13;
+				}
+			}
+		}
+	}
+}
+.table-responsive {
+	min-height: .01%;
+	overflow-x: auto;
+}
+@media screen and (max-width: 767px) {
+	.table-responsive {
+		width: 100%;
+		margin-bottom: 15px;
+		overflow-y: hidden;
+		-ms-overflow-style: -ms-autohiding-scrollbar;
+		border: 1px solid #dddddd;
+		>.table {
+			margin-bottom: 0;
+			>thead {
+				>tr {
+					>th {
+						white-space: nowrap;
+					}
+					>td {
+						white-space: nowrap;
+					}
+				}
+			}
+			>tbody {
+				>tr {
+					>th {
+						white-space: nowrap;
+					}
+					>td {
+						white-space: nowrap;
+					}
+				}
+			}
+			>tfoot {
+				>tr {
+					>th {
+						white-space: nowrap;
+					}
+					>td {
+						white-space: nowrap;
+					}
+				}
+			}
+		}
+		>.table-bordered {
+			border: 0;
+			>thead {
+				>tr {
+					>th {
+						&:first-child {
+							border-left: 0;
+						}
+						&:last-child {
+							border-right: 0;
+						}
+					}
+					>td {
+						&:first-child {
+							border-left: 0;
+						}
+						&:last-child {
+							border-right: 0;
+						}
+					}
+				}
+			}
+			>tbody {
+				>tr {
+					>th {
+						&:first-child {
+							border-left: 0;
+						}
+						&:last-child {
+							border-right: 0;
+						}
+					}
+					>td {
+						&:first-child {
+							border-left: 0;
+						}
+						&:last-child {
+							border-right: 0;
+						}
+					}
+					&:last-child {
+						>th {
+							border-bottom: 0;
+						}
+						>td {
+							border-bottom: 0;
+						}
+					}
+				}
+			}
+			>tfoot {
+				>tr {
+					>th {
+						&:first-child {
+							border-left: 0;
+						}
+						&:last-child {
+							border-right: 0;
+						}
+					}
+					>td {
+						&:first-child {
+							border-left: 0;
+						}
+						&:last-child {
+							border-right: 0;
+						}
+					}
+					&:last-child {
+						>th {
+							border-bottom: 0;
+						}
+						>td {
+							border-bottom: 0;
+						}
+					}
+				}
+			}
+		}
+	}
+}
