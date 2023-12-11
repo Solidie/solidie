@@ -3,7 +3,6 @@
 namespace Solidie\Models;
 
 use Solidie\Helpers\_Array;
-use Solidie\Helpers\File;
 
 class Contents {
 	
@@ -41,6 +40,7 @@ class Contents {
 		$content = array();
 		$gmdate  = gmdate( 'Y-m-d H:i:s' );
 
+		/* -------------- Create or update the content itself -------------- */
 		// Determine content ID
 		$content['content_id']          = ! empty( $content_data['content_id'] ) ? $content_data['content_id'] : 0;
 		$content['product_id']          = ! empty( $content_data['product_id'] ) ? $content['product_id'] : null;
@@ -62,7 +62,9 @@ class Contents {
 				$content
 			);
 			$content['content_id'] = $wpdb->insert_id;
+
 		} else {
+			// Update the content as content ID exists
 			$wpdb->update(
 				DB::contents(),
 				$content,
@@ -71,18 +73,22 @@ class Contents {
 				)
 			);
 		}
+
+		/* -------------- Manage content media -------------- */
+		// Return false if the content ID missing that impies creation failed
 		$content_id = $content['content_id'];
 		if ( empty( $content_id ) ) {
 			return false;
 		}
 
-		// Save thumbnail, preview and sample images
+		// Necessary file names to work on
 		$file_names = array( 
 			'thumbnail'     => 'Thumbnail', 
 			'preview'       => 'Preview', 
 			'sample_images' => 'Sample Image' 
 		);
 		
+		// Prepare the initial media meta value
 		$meta      = Meta::content( $content_id );
 		$media_ids = $meta->getMeta( self::MEDIA_IDS_KEY );
 		$media_ids = _Array::getArray( $media_ids );
@@ -95,24 +101,43 @@ class Contents {
 			$media_ids
 		);
 
-		// Loop through initial uploaded files array
+		// Delete the removed samples images from the meta array
+		$sample_images = $content_data['sample_images'] ?? array();
+		$sample_images = ! is_array( $sample_images ) ? array() : $sample_images;
+		$remaining_ids = array();
+		foreach ( $sample_images as $image ) {
+			if ( is_array( $image ) && ! empty( $image['file_id'] ) ) {
+				$remaining_ids[] = $image['file_id'];
+			}
+		}
+
+		// Get the sample image IDs that have been removed
+		$removed_ids = array_diff( $media_ids['sample_images'], $remaining_ids );
+
+		// Set the latest image IDs to save
+		$media_ids['sample_images'] = array_diff( $media_ids['sample_images'], $removed_ids );
+
+		// Delete the removed files now
+		FileManager::deleteFile( $removed_ids );
+		
+		// Loop through initial uploaded files array 
+		// Save thumbnail, preview and sample images altogether
 		foreach ( $file_names as $name => $file_type_label ) {
 			if ( empty( $files[ $name ] ) ) {
 				continue;
 			}
 
 			// Sync file array structure to process at once
-			$_files = is_array( $media_ids[ $name ] ) ? File::organizeUploadedHierarchy( $files[ $name ] ) : array( $files[ $name ] );
+			$_files = is_array( $media_ids[ $name ] ) ? FileManager::organizeUploadedHierarchy( $files[ $name ] ) : array( $files[ $name ] );
 
 			// Loop through synced files structure
 			foreach ( $_files as $file ) {
 				$new_file_id = FileManager::uploadFile( $content['content_id'], $file, $content['content_title'] . ' - ' . $file_type_label );
 				if ( ! empty( $new_file_id ) ) {
 
-					// Delete existing thumbnail and preview file.
-					// These two can't be duplicated.
+					// Delete existing thumbnail and preview file, These two can't be duplicated.
 					if ( in_array( $name, array( 'thumbnail', 'preview' ), true ) ) {
-						File::deleteFile( $media_ids[ $name ] ?? 0, true );
+						FileManager::deleteFile( $media_ids[ $name ] ?? 0 );
 					}
 					
 					if ( is_array( $media_ids[ $name ] ) ) {
@@ -123,8 +148,11 @@ class Contents {
 				}
 			}
 		}
+
+		// Eventually update the media meta
 		$meta->updateMeta( self::MEDIA_IDS_KEY, $media_ids );
 		
+		/* -------------- Create or update the main downloadable file -------------- */
 		// Save downloadable file through release to maintain consistency with app type content and other dependencies.
 		if ( ! empty( $files['downloadable_file'] ) ) {
 			Release::pushRelease(
@@ -132,7 +160,7 @@ class Contents {
 					'version'    => $content_data['version'] ?? null,
 					'changelog'  => $content_data['changelog'] ?? null,
 					'content_id' => $content_id,
-					'release_id' => ( int ) ($content_data['release_id'] ?? 0),
+					'release_id' => ( int ) ( $content_data['release_id'] ?? 0 ),
 					'file'       => $files['downloadable_file']
 				)
 			);
@@ -209,6 +237,7 @@ class Contents {
 
 		// Apply content meta
 		$content = _Array::castRecursive( $content );
+		$content = self::assignContentMedia( $content );
 		$content = self::assignContentMeta( $content );
 
 		return $field ? ( $content[ $field ] ?? null ) : $content;
@@ -221,6 +250,11 @@ class Contents {
 	 * @return array
 	 */
 	public static function assignContentMedia( array $contents ) {
+		
+		if ( empty( $contents ) ) {
+			return $contents;
+		}
+
 		if ( $was_single = ! _Array::isTwoDimensionalArray( $contents ) ) {
 			$contents = array( $contents );
 		}
@@ -237,14 +271,26 @@ class Contents {
 				}
 
 				$is_array = is_array( $id );
-				$ids      = $is_array ? $id : array( $id );
-				$files    = array();
+
+				// Make even singular IDs to array for consistent operations
+				$ids   = $is_array ? $id : array( $id );
+				$files = array();
+
+				// Loop through every single file IDs and get info
 				foreach ( $ids as $file_id ) {
-					
+					$files[] = array(
+						'file_id'   => $file_id,
+						'file_url'  => FileManager::getMediaPermalink( $file_id ),
+						'file_name' => get_the_title( $file_id ),
+						'mime_type' => get_post_mime_type( $file_id ),
+					);
 				}
 
-				
+				$media[ $key ] = $is_array ? $files : ($files[0] ?? null);
 			}
+
+			// Assign the prepared file info array to contents array
+			$contents[ $index ]['media'] = $media;
 		}
 
 		return $was_single ? $contents[0] : $contents;
@@ -381,7 +427,7 @@ class Contents {
 			ARRAY_A
 		);
 
-		return self::assignContentMeta( $contents );
+		return self::assignContentMeta( self::assignContentMedia( $contents ) );
 	}
 
 	/**
@@ -392,6 +438,10 @@ class Contents {
 	 * @return array|object
 	 */
 	public static function assignContentMeta( $contents ) {
+		if ( empty( $contents ) ) {
+			return $contents;
+		}
+
 		// Support both list and single content
 		if ( $was_single = ! _Array::isTwoDimensionalArray( $contents ) ) {
 			$contents = array( $contents );
@@ -401,13 +451,8 @@ class Contents {
 			// Content permalink
 			$contents[ $index ]['content_url'] = self::getPermalink( $content['product_id'], $content['content_type'] );
 
-			// Content thumbnail URL
-			$contents[ $index ]['thumbnail_url'] = get_the_post_thumbnail_url( $content['product_id'] );
-
-			// Releases if it is app
-			if ( $content['content_type'] === 'app' ) {
-				$contents[ $index ]['releases'] = Release::getReleases( (int)$content['content_id'] );
-			}
+			// Releases no matter app or other content type as the structure is same always
+			$contents[ $index ]['releases'] = Release::getReleases( (int) $content['content_id'] );
 		}
 
 		$contents = apply_filters( 'solidie_contents_meta', $contents );
@@ -430,7 +475,7 @@ class Contents {
 		$media_ids = $meta->getMeta( self::MEDIA_IDS_KEY );
 		$media_ids = array_values( _Array::getArray( $media_ids ) );
 		$media_ids = _Array::flattenArray( $media_ids );
-		File::deleteFile( $media_ids );
+		FileManager::deleteFile( $media_ids );
 
 		// Delete all the meta
 		$meta->deleteBulkMeta( $content_id );
@@ -444,8 +489,8 @@ class Contents {
 
 		// To Do: Delete associated product
 
-		// Delete the content directory
-		File::deleteDirectory( FileManager::getContentDir( $content_id ) );
+		// Delete the directory created for this content
+		FileManager::deleteDirectory( FileManager::getContentDir( $content_id ) );
 
 		// Delete the content itself at the end
 		global $wpdb;

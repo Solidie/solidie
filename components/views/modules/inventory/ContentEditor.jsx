@@ -18,23 +18,26 @@ function CategoryField() {
 
 export function ContentEditor() {
 	const {ajaxToast} = useContext(ContextToast);
-	const {content_type, content_id} = useParams();
+	const {content_type, content_id: _content_id} = useParams();
+	const content_id = isNaN(_content_id) ? 0 : _content_id;
 	const navigate = useNavigate();
+	
+	const initial_values = {
+		content_type: content_type,
+		content_title: '',
+		content_description: '',
+		category_id: 0,
+		thumbnail: null, // General purpose content thumbnail, video poster
+		sample_images:[], // Sample images for fonts, photo templates, apps
+		preview: null, // Preview file for pdf, audio, video etc that can be seen on the website directly
+		downloadable_file: null, // The actual file to be downloaded by user, it holds all the resouce. Maybe zip, rar, tar, video etc.
+	}
 
 	const [state, setState] = useState({
 		submitting: false,
 		fetching: false,
 		error_message: null,
-		values: {
-			content_title: '',
-			content_description: '',
-			category_id: 0,
-			tags: '',
-			thumbnail: null, // General purpose content thumbnail, video poster
-			sample_images:[], // Sample images for fonts, photo templates, apps
-			preview: null, // Preview file for pdf, audio, video etc that can be seen on the website directly
-			downloadable_file: null, // The actual file to be downloaded by user, it holds all the resouce. Maybe zip, rar, tar, video etc.
-		}
+		values: initial_values
 	});
 
 	const fields = [
@@ -78,18 +81,12 @@ export function ContentEditor() {
 			hint: __('You can always release new updates later'),
 			accept: [content_type + '/*', 'application/zip']
 		},
-		{
+		/* {
 			type: 'category',
 			name: 'categories',
 			label: __('Category'),
 			placeholder: __('Select category')
-		},
-		{
-			type: 'text',
-			name: 'tags',
-			label: __('Tags'),
-			placeholder: __('Enter tags')
-		}
+		},*/
 	].filter(f=>f);
 
 	const setVal=(name, value)=>{
@@ -108,13 +105,7 @@ export function ContentEditor() {
 			submitting: true
 		});
 
-		const payload = {
-			...state.values,
-			content_type,
-			content_id: content_id==='new' ? 0 : content_id
-		}
-
-		request('createOrUpdateContent', payload, resp=>{
+		request('createOrUpdateContent', {...state.values, content_id}, resp=>{
 			const {success} = resp;
 
 			setState({
@@ -131,7 +122,11 @@ export function ContentEditor() {
 	}
 
 	const fetchContent=()=>{
-		if ( content_id == 'new' ) {
+		if ( ! content_id ) {
+			setState({
+				...state,
+				values: initial_values
+			})
 			return;
 		}
 
@@ -139,21 +134,41 @@ export function ContentEditor() {
 
 		request('getSingleContent', {content_id}, resp=>{
 			const {
-				content={}, 
-				message=__('Something went wrong'), 
-				success
+				success,
+				data: {
+					content={}, 
+					message=__('Something went wrong'), 
+				}
 			} = resp;
 
-			const {values} = state;
+			const {values={}} = state;
 			if ( success ) {
+				const release = content.releases[0] || {};
+
 				values.content_title = content.content_title;
 				values.content_description = content.content_description;
-				values.thumbnail = content.thumbnail;
-				values
+				values.thumbnail = content.media.thumbnail;
+				values.preview = content.media.preview;
+				values.sample_images = content.media.sample_images;
+
+				if ( release ) {
+					values.downloadable_file = {
+						file_id: release.file_id,
+						file_url: release.downloadable_url,
+						file_name: release.file_name,
+						mime_type: release.mime_type,
+					}
+
+					// Add latest release info too for downloadable file update feature
+					values.version = release.version;
+					values.changelog = release.changelog;
+					values.release_id = release.release_id;
+				}
 			}
 			
 			setState({
 				...state, 
+				values,
 				fetching: false,
 				error_message: success ? null : message
 			});
@@ -166,7 +181,7 @@ export function ContentEditor() {
 	
 	const _content = window[data_pointer]?.settings?.contents[content_type] || {};
 	
-	return <InventoryWrapper>
+	return <InventoryWrapper fetching={state.fetching}>
 		<div style={{maxWidth: '600px'}}>
 			{/* Header */}
 			<div className={"margin-top-20 margin-bottom-30 d-flex align-items-center column-gap-10".classNames()}>

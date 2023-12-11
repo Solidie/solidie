@@ -11,8 +11,9 @@ import { getDashboardPath } from '../../admin-dashboard/inventory/inventory-back
 
 import table_style from '../../../materials/styles/table.module.scss';
 import style from './inventory.module.scss';
+import { LoadingIcon } from 'crewhrm-materials/loading-icon/loading-icon.jsx';
 
-export function InventoryWrapper({children}) {
+export function InventoryWrapper({children, fetching}) {
 
 	const {content_type} = useParams();
 	const {ajaxToast} = useContext(ContextToast);
@@ -46,9 +47,14 @@ export function InventoryWrapper({children}) {
 
 	return state.error_message || <div>
 		<div>
-			<h1 className={"font-size-24 font-weight-600 color-text letter-spacing-3".classNames()}>
-				{__('Inventory')}
-			</h1>
+			<strong className={"d-flex align-items-center column-gap-8 color-text padding-vertical-10 position-sticky top-0".classNames()}>
+				<span className={'font-size-24 font-weight-600 letter-spacing-3'.classNames()}>
+					{__('Inventory')} 
+				</span>
+				<LoadingIcon 
+					show={fetching} 
+					className={'margin-left-5 font-size-15'.classNames()}/>
+			</strong>
 
 			<Conditional show={enabled_contents.length>1}>
 				<Tabs 
@@ -67,7 +73,7 @@ export function Inventory(props) {
 	const {content_type} = useParams();
 
 	const [state, setState] = useState({
-		loading: false,
+		fetching: false,
 		contents: [],
 		filters: {
 			page: 1,
@@ -79,7 +85,7 @@ export function Inventory(props) {
 	const fetchContents=()=>{
 		setState({
 			...state,
-			loading: true
+			fetching: true
 		});
 
 		request( 'getContentList', {...state.filters, content_type}, response=>{
@@ -88,7 +94,7 @@ export function Inventory(props) {
 			setState({
 				...state,
 				contents,
-				loading: false
+				fetching: false
 			});
 		} );
 	}
@@ -115,55 +121,53 @@ export function Inventory(props) {
 
 	const _content = window[data_pointer]?.settings?.contents[content_type] || {};
 	
-	return <InventoryWrapper>
-		<div className={"flex flex-col width-p-100 gap-4 min-h-max".classNames()}>
-			<div className={'margin-top-10 margin-bottom-10'.classNames()}>
-				<Link to={getDashboardPath(`inventory/${content_type}/editor/new`)}>
-					<span className={'font-weight-500 cursor-pointer hover-underline'.classNames()}>
-						<i className={'ch-icon ch-icon-add-circle'.classNames()}></i> {sprintf(__('Add New %s'), _content.label || __('Content'))} 
-					</span>
-				</Link>
-			</div>
-			
-			<table className={'table'.classNames(style) + 'table table-bordered'.classNames(table_style)}>
-				<thead>
-					<tr>
-						<th>{__('Title')}</th>
-						<th>{__('Status')}</th>
-					</tr>
-				</thead>
-				<tbody>
-					{
-						state.contents.map((content, idx) =>{
-							let {content_id, content_title, thumbnail_url} = content;
-
-							return <tr key={content_id}>
-								<td data-th={__('Title')}>
-									<span className={"d-block".classNames()}>
-										{content_title}
-									</span>
-									<div className={'actions'.classNames(style) + 'd-flex align-items-center column-gap-10 margin-top-10'.classNames()}>
-										<i 
-											className={'ch-icon ch-icon-trash font-size-15 cursor-pointer'.classNames()} 
-											title={__('Delete')}
-											onClick={()=>deleteContent(content_id)}></i>
-
-										<Link 
-											className={'ch-icon ch-icon-edit-2 font-size-15 cursor-pointer'.classNames()} 
-											title={__('Edit')}
-											to={getDashboardPath(`inventory/${content_type}/editor/${content_id}/`)}/>
-									</div>
-								</td>
-								<td data-th={__('Status')}>
-									<div>
-										Uppublished
-									</div>
-								</td>
-							</tr>
-						})
-					}
-				</tbody>
-			</table>
+	return <InventoryWrapper fetching={state.fetching}>
+		<div className={'margin-top-10 margin-bottom-10'.classNames()}>
+			<Link to={getDashboardPath(`inventory/${content_type}/editor/new`)}>
+				<span className={'font-weight-500 cursor-pointer hover-underline'.classNames()}>
+					<i className={'ch-icon ch-icon-add-circle'.classNames()}></i> {sprintf(__('Add New %s'), _content.label || __('Content'))} 
+				</span>
+			</Link>
 		</div>
+		
+		<table className={'table'.classNames(style) + 'table table-bordered'.classNames(table_style)}>
+			<thead>
+				<tr>
+					<th>{__('Title')}</th>
+					<th>{__('Status')}</th>
+				</tr>
+			</thead>
+			<tbody>
+				{
+					state.contents.map((content, idx) =>{
+						let {content_id, content_title, thumbnail_url} = content;
+
+						return <tr key={content_id}>
+							<td data-th={__('Title')}>
+								<span className={"d-block".classNames()}>
+									{content_title}
+								</span>
+								<div className={'actions'.classNames(style) + 'd-flex align-items-center column-gap-10 margin-top-10'.classNames()}>
+									<i 
+										className={'ch-icon ch-icon-trash font-size-15 cursor-pointer'.classNames()} 
+										title={__('Delete')}
+										onClick={()=>deleteContent(content_id)}></i>
+
+									<Link 
+										className={'ch-icon ch-icon-edit-2 font-size-15 cursor-pointer'.classNames()} 
+										title={__('Edit')}
+										to={getDashboardPath(`inventory/${content_type}/editor/${content_id}/`)}/>
+								</div>
+							</td>
+							<td data-th={__('Status')}>
+								<div>
+									Uppublished
+								</div>
+							</td>
+						</tr>
+					})
+				}
+			</tbody>
+		</table>
 	</InventoryWrapper>
 }

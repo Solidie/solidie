@@ -2,8 +2,6 @@
 
 namespace Solidie\Models;
 
-use Solidie\Helpers\File;
-
 class Release {
 	
 	/**
@@ -28,7 +26,7 @@ class Release {
 		);
 
 		// Delete file IDs from file system
-		File::deleteFile( $file_ids, true );
+		FileManager::deleteFile( $file_ids );
 
 		// Delete release rows
 		foreach ( $release_ids as $id ) {
@@ -81,7 +79,7 @@ class Release {
 
 		// Process file if exists.
 		if ( ! empty( $data['file'] ) ) {
-			// Delete old one
+			// Delete old file as release ID exists in the data array
 			if ( ! empty( $data['release_id'] ) ) {
 				self::deleteRelease( $data['release_id'] );
 			}
