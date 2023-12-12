@@ -7,73 +7,16 @@ import { __, data_pointer } from "crewhrm-materials/helpers.jsx";
 import { Conditional } from "crewhrm-materials/conditional.jsx";
 import { RadioCheckbox } from "crewhrm-materials/radio-checkbox.jsx";
 import { ErrorBoundary } from "crewhrm-materials/error-boundary.jsx";
+import { LoadingIcon } from "crewhrm-materials/loading-icon/loading-icon.jsx";
+
+import { GenericCard } from "./generic-card/generic-card.jsx";
+import { SingleWrapper } from "../single/index.jsx";
 
 import { Image } from "./image/image.jsx";
 import { Video } from "./video/video.jsx";
 import { Audio } from "./audio/audio.jsx";
 
 import style from './index.module.scss';
-import { GenericCard } from "./generic-card/generic-card.jsx";
-
-const _image = {
-	content_id: 1,
-	thumbnail_url :  "http://localhost:10008/wp-content/uploads/2023/10/pexels-riccardo-bertolo-4245826-scaled.jpg",
-	content_title :  "Beautiful Sunset",
-	like_count :  150,
-	comment_count :  25,
-	uploader_name :  "JohnDoe123",
-	mime_type: 'image/jpeg',
-	uploader_avatar_url :  "https://example.com/profile_pic1.jpg"
-};
-
-const _video = {
-	content_id: 1,
-	thumbnail_url :  "http://localhost:10008/wp-content/uploads/2023/10/video-1080p.mp4",
-	content_title :  "Beautiful Sunset",
-	like_count :  150,
-	comment_count :  25,
-	uploader_name :  "JohnDoe123",
-	mime_type: 'video/mp4',
-	uploader_avatar_url :  "https://example.com/profile_pic1.jpg"
-};
-
-const _audio = {
-	content_id: 1,
-	thumbnail_url :  "http://localhost:10008/wp-content/uploads/2023/09/friendly-melody-14015.mp3",
-	content_title :  "Beautiful Sunset",
-	like_count :  150,
-	comment_count :  25,
-	uploader_name :  "JohnDoe123",
-	mime_type: 'audio/mp3',
-	uploader_avatar_url :  "https://example.com/profile_pic1.jpg"
-};
-
-const content_array = {
-	image: Array(10).fill(_image).map((content, index)=>{
-		return {
-			...content,
-			content_id: content.content_id+index
-		}
-	}),
-	video:  Array(10).fill(_video).map((content, index)=>{
-		return {
-			...content,
-			content_id: content.content_id+index
-		}
-	}),
-	audio:  Array(10).fill(_audio).map((content, index)=>{
-		return {
-			...content,
-			content_id: content.content_id+index
-		}
-	}),
-	app: Array(10).fill(_image).map((content, index)=>{
-		return {
-			...content,
-			content_id: content.content_id+index
-		}
-	}),
-}
 
 const renderers = {
 	video: Video,
@@ -148,7 +91,7 @@ function CatalogLayout(props) {
 
 	const [state, setState] = useState({
 		contents:[], 
-		fetching: false,
+		fetching: true,
 		filters:{
 			page: 1,
 			sort: 'popular'
@@ -162,7 +105,7 @@ function CatalogLayout(props) {
 			fetching: true
 		});
 
-		request('getContentList', {...state.filters/* , content_type */}, resp=>{
+		request('getContentList', {...state.filters, content_type}, resp=>{
 			let {contents=[]} = resp?.data || {};
 			setState({...state, fetching: false, contents});
 		});
@@ -223,12 +166,20 @@ function CatalogLayout(props) {
 			
 			<div className={'list'.classNames(style)}>
 				{
-					RenderComp ? 
-						<ErrorBoundary>
-							<RenderComp contents={content_array[content_type] || []}/>
-						</ErrorBoundary> : 
-						<>Something went wrong. Renderer component not found.</>
+					(!state.fetching && !state.contents.length) ? 
+						<div className={'text-align-center'.classNames()}>
+							{__('No result!')}
+						</div> : null
 				}
+
+				{
+					(RenderComp && state.contents.length) ? 
+						<ErrorBoundary>
+							<RenderComp contents={state.contents}/>
+						</ErrorBoundary> : null
+				}
+			
+				<LoadingIcon center={true} show={state.fetching}/>
 			</div>
 		</div>
 	</div>
@@ -241,6 +192,7 @@ export function Catalog() {
 	return <BrowserRouter>
 		<Routes>
 			<Route path={home_path+':content_type_slug/'} element={<CatalogLayout/>}/>
+			<Route path={home_path+':content_type_slug/:content_slug/'} element={<SingleWrapper/>}/>
 		</Routes>
 	</BrowserRouter>
 }

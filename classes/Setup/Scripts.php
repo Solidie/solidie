@@ -32,7 +32,7 @@ class Scripts {
 		foreach ( $dynamic_colors as $name => $code ) {
 			$_colors .= '--crewmat-color-' . esc_attr( $name ) . ':' . esc_attr( $code ) . ';';
 		}
-		echo '<style>[id^="Solidie_"],#solidie-popup-root{' . $_colors . '}</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo '<style>[id^="Solidie_"],#crewhrm-popup-root{' . $_colors . '}</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 		// Load data
 		$data = array(

@@ -63,6 +63,14 @@ class Contents {
 			);
 			$content['content_id'] = $wpdb->insert_id;
 
+			// For now set the ID as slug. Customization feature will be added later.
+			if ( ! empty( $wpdb->insert_id ) && is_numeric( $wpdb->insert_id ) ) {
+				$wpdb->update(
+					DB::contents(),
+					array( 'content_slug' => $wpdb->insert_id ),
+					array( 'content_id' => $wpdb->insert_id )
+				);
+			}
 		} else {
 			// Update the content as content ID exists
 			$wpdb->update(
@@ -420,6 +428,7 @@ class Contents {
 				content.content_id, 
 				content.content_type, 
 				content.content_status, 
+				content.content_slug,
 				sale.sale_id
 			FROM " . DB::contents() . " content 
 				LEFT JOIN " . DB::sales() . " sale ON content.content_id=sale.content_id
@@ -500,5 +509,15 @@ class Contents {
 				'content_id' => $content_id
 			)
 		);
+	}
+
+	/**
+	 * Get content ID by slug
+	 *
+	 * @param string $slug
+	 * @return int|null
+	 */
+	public static function getContentIdBySlug( string $slug ) {
+		return Field::contents()->getField( array( 'content_slug' => $slug ), 'content_id' );
 	}
 }

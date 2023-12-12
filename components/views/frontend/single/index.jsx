@@ -2,7 +2,8 @@ import React, {createContext, useEffect, useState} from "react";
 import { BrowserRouter, Route, Routes, useParams } from "react-router-dom";
 
 import {ErrorBoundary} from 'crewhrm-materials/error-boundary.jsx';
-import { data_pointer } from "crewhrm-materials/helpers.jsx";
+import { __, data_pointer } from "crewhrm-materials/helpers.jsx";
+import { request } from "crewhrm-materials/request.jsx";
 
 import { AppPreview } from "./app/index.jsx";
 
@@ -12,32 +13,35 @@ const preview_renderers = {
 	app: AppPreview
 }
 
-const _content = {
-	content_id: 1,
-	thumbnail_url :  "http://localhost:10008/wp-content/uploads/2023/10/pexels-riccardo-bertolo-4245826-scaled.jpg",
-	content_title :  "Beautiful Sunset",
-	like_count :  150,
-	comment_count :  25,
-	uploader_name :  "JohnDoe123",
-	mime_type: 'image/jpeg',
-	content_type: 'app',
-	uploader_avatar_url :  "https://example.com/profile_pic1.jpg"
-}
-
-function SingleWrapper() {
+export function SingleWrapper() {
 	const {content_slug} = useParams();
 
 	const [state, setState] = useState({
 		fetching: false,
-		content: _content
+		content: null,
+		error_message: null
 	});
 
 	const getContent=()=>{
-		
+
+		setState({
+			...state, 
+			fetching: true
+		});
+
+		request('getSingleContent', {content_slug}, resp=>{
+			const {success, data:{content, message=__('Something went wrong')}} = resp;
+
+			setState({
+				...state,
+				content: success ? content : null,
+				error_message: success ? null : message
+			});
+		});
 	}
 
 	useEffect(()=>{
-
+		getContent();
 	}, [content_slug]);
 
 	const PreviewComp = preview_renderers[state.content?.content_type];
@@ -61,20 +65,4 @@ function SingleWrapper() {
 			</div>
 		</div>
 	</div>
-}
-
-export function SingleContent() {
-	const {settings={}, home_path} = window[data_pointer];
-	const {contents={}} = settings;
-
-	return <BrowserRouter>
-		<Routes>
-			{
-				Object.keys(contents).map(type=>{
-					let {slug} = contents[type];
-					return <Route key={slug} path={home_path+':content_type/:content_slug/'} element={<SingleWrapper/>}/>
-				})
-			}
-		</Routes>
-	</BrowserRouter>
 }

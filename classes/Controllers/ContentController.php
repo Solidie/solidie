@@ -127,6 +127,11 @@ class ContentController {
 	 * @return void
 	 */
 	public static function getSingleContent( array $data ) {
+
+		if ( ! empty( $data['content_slug'] ) ) {
+			$data['content_id'] = Contents::getContentIdBySlug( $data['content_slug'] );
+		}
+
 		$content = Contents::getContentByContentID( (int) $data['content_id'] ?? 0, null, false );
 		if ( ! empty( $content ) ) {
 			wp_send_json_success( array( 'content' => $content ) );

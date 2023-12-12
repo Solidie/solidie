@@ -26,37 +26,39 @@ if ( strpos( $url_path, $projected_path ) !== 0 ) {
 	load_404( 'Invalid Projected Path' );
 }
 
-$sub_pages         = array_filter(explode( '/', trim( trim( str_replace( $projected_path, '', $url_path ), '/' ) ) ) );
-$content_post_name = $sub_pages[0] ?? null;
-$template          = apply_filters( 'solidie_frontend_template', null, $page );
+$sub_pages    = array_filter(explode( '/', trim( trim( str_replace( $projected_path, '', $url_path ), '/' ) ) ) );
+$content_slug = $sub_pages[0] ?? null;
+$template     = apply_filters( 'solidie_frontend_template', null, $page );
 
 // Now load content
 if ( ! empty( $template ) ) {
+	// Directly load specified template. No need firther check.
 	require $template;
 
 } else {
 	// This conditional block means it is either single content page or the catalog
 	$content_settings = AdminSetting::get( 'contents' );
-	$content          = $content_post_name ? Contents::getContentByProduct( $content_post_name ) : null;
-
-	// Check if the content exists
-	if ( empty( $content ) ) {
-
-		// It may be catalog page
-		if ( empty( $sub_pages ) ) {
-			// Check if the content type is enabled
-			foreach ( $content_settings as $type => $setting ) {
-				if ( $setting['enable'] == true && $page === $setting['slug'] ) {
-					require Main::$configs->dir . 'templates/catalog.php';
-					return;
-				}
-			}
-		}
-
+	$content          = null;
+	
+	if ( ! empty( $content_slug ) ) {
+		$content_id = Contents::getContentIdBySlug( $content_slug );
+		$content    = $content_id ? Contents::getContentByContentID( $content_id ) : null;
+	}
+	
+	// If single, make sure the content exists
+	if ( ! empty( $content_slug ) && empty( $content ) ) {
 		load_404( 'Content Not Found' );
 	}
 
-	// Loop through contents to check if the base slug is okay
+	// Load the catalog/single template if the content type is enabled
+	foreach ( $content_settings as $type => $setting ) {
+		if ( $setting['enable'] == true && $page === $setting['slug'] ) {
+			require Main::$configs->dir . 'templates/catalog.php';
+			return;
+		}
+	}
+	
+	// Check if the content type is okay 
 	foreach ( $content_settings as $type => $setting ) {
 		if ( $setting['slug'] == $page ) {
 			// Redirect to appropriate base slug if malformed
@@ -66,21 +68,5 @@ if ( ! empty( $template ) ) {
 			}
 			break;
 		}
-	}
-	
-	if ( count( $sub_pages ) === 1 ) {
-		// Pretend like it's native single product page
-		query_posts( 
-			array(
-				'post_type'   => 'product',
-				'post_status' => 'publish',
-				'p'           => $content['product_id'],
-			)
-		);
-		the_post();
-		require Main::$configs->dir . 'templates/single-content.php';
-	} else {
-		// Single product tutorial page, supports unlimited sub path. For now show 404.
-		load_404( 'Tutorial Logics To Be Added' );
 	}
 } 
