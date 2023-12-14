@@ -25,7 +25,7 @@ class SettingsController {
 			if ( $saved === true ) {
 				wp_send_json_success( array( 'message' => __( 'Settings Saved Successfully!', 'solidie' ) ) );
 			} else {
-				wp_send_json_error( array( 'message' => __( 'Could not save settings!', 'solidie' ) ) );
+				wp_send_json_error( array( 'message' => __( 'Failed to save settings!', 'solidie' ) ) );
 			}
 		}
 		exit;

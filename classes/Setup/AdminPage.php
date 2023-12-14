@@ -55,7 +55,7 @@ class AdminPage {
 	 * @return void
 	 */
 	public function settingPage() {
-		echo '<div class="wrap" id="Solidie_AdminSettings" 
+		echo '<div id="Solidie_AdminSettings" 
 				   data-saved-settings="' . esc_attr( json_encode( (object)AdminSetting::get() ) ) . '" 
 				   data-manifest="' . esc_attr( json_encode( Manifest::getManifest() ) ) . '"></div>';
 	}

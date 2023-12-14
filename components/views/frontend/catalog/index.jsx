@@ -25,6 +25,7 @@ const renderers = {
 
 	app: GenericCard,
 	'3d': GenericCard,
+	font: GenericCard,
 	document: GenericCard,
 	tutorial: GenericCard
 }
@@ -125,12 +126,17 @@ function CatalogLayout(props) {
 					variant="borderless"
 					clearable={false}
 					options={Object.keys(contents).map(c=>{
-						let {label, slug} = contents[c];
-						return {
-							id: c,
-							label: label || slug
+						let {label, slug, enable} = contents[c];
+
+						if ( enable === true ) {
+							return {
+								id: slug || c,
+								label: label || slug
+							}
+						} else {
+							return null
 						}
-					})}/>
+					}).filter(content=>content!==null)}/>
 			</div>
 
 			{/* Search field */}
@@ -141,7 +147,7 @@ function CatalogLayout(props) {
 			{/* Search Button */}
 			<div className={'align-self-stretch'.classNames()}>
 				<button className={'margin-0 padding-vertical-0 padding-horizontal-30 height-p-100 d-block'.classNames()}>
-					Search
+					{__('Search')}
 				</button>
 			</div>
 		</div>

@@ -84,18 +84,18 @@ class Manifest {
 					'description' => __( 'PDF, Documents, Sheet and so on.', 'solidie' ), 
 					'plans' => array(),
 				), 
-				'tutorial' => array ( 
-					'label' => __( 'Tutorial', 'solidie' ), 
-					'slug' => 'tutorials', 
-					'description' => __( 'Tutorial and written documentations.', 'solidie' ), 
-					'plans' => array(),
-				), 
 				'font' => array ( 
 					'label' => __( 'Font', 'solidie' ), 
 					'slug' => 'fonts', 
 					'description' => __( 'Various type of fonts', 'solidie' ), 
 					'plans' => array(),
 				),
+				/* 'tutorial' => array ( 
+					'label' => __( 'Tutorial', 'solidie' ), 
+					'slug' => 'tutorials', 
+					'description' => __( 'Tutorial and written documentations.', 'solidie' ), 
+					'plans' => array(),
+				),  */
 			), 
 		);
 

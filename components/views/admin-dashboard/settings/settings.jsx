@@ -1,23 +1,39 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { request } from 'crewhrm-materials/request.jsx';
+import { __ } from 'crewhrm-materials/helpers.jsx';
+import { ToggleSwitch } from 'crewhrm-materials/toggle-switch/ToggleSwitch.jsx';
+import { TextField } from 'crewhrm-materials/text-field/text-field.jsx';
+import { ContextToast } from 'crewhrm-materials/toast/toast.jsx';
+import { LoadingIcon } from 'crewhrm-materials/loading-icon/loading-icon.jsx';
+
+import table_style from '../../../materials/styles/table.module.scss';
 
 export function SettingPage(props) {
 	const {savedSettings={}, manifest} = props;
-	const [state, setState] = useState({});
+	const {ajaxToast} = useContext(ContextToast);
+
+	const [state, setState] = useState({
+		saving: false,
+		settings: savedSettings
+	});
 
 	const saveOptions=()=>{
-		request('saveAdminSettings', {'solidie_settings': state.changedSettings});
+		setState({...state, saving: true});
+		request('saveAdminSettings', {'solidie_settings': state.settings}, resp=>{
+			setState({...state, saving: false});
+			ajaxToast(resp);
+		});
 	}
 
 	const onChange=(module, key, value)=>{
-		const {changedSettings={}} = state;
+		const {settings={}} = state;
 
 		setState({
 			...state, 
-			changedSettings:{
-				...changedSettings, 
+			settings:{
+				...settings, 
 				[module]: {
-					...changedSettings.module,
+					...settings.module,
 					[key]: value
 				}
 			}
@@ -25,16 +41,17 @@ export function SettingPage(props) {
 	}
 
 	const onChangeContents=(content_key, name, value)=>{
-		const {changedSettings={}} = state;
-		const {contents={}} = changedSettings;
+		const {settings={}} = state;
+		const {contents={}} = settings;
 
 		setState({
 			...state,
-			changedSettings:{
-				...changedSettings,
+			settings:{
+				...settings,
 				contents:{
 					...contents,
 					[content_key]: {
+						...contents[content_key],
 						[name]: value
 					}
 				}
@@ -42,61 +59,65 @@ export function SettingPage(props) {
 		});
 	}
 
-	return <>
-		<table className='form-table'>
-			<tbody>
-				<tr>
-					<th scope='row'>
-						<label>What you'd sell</label>
-					</th>
-					<td>
-						<table>
-							<tbody>
-								<tr>
-									<td><b>Content</b></td>
-									<td><b>Product Base Slug</b></td>
-									<td><b>Enable</b></td>
-								</tr>
-								{
-									Object.keys(manifest.contents).map(key=>{
-										let {label, description} = manifest.contents[key];
-										return <tr key={key}>
-											<td style={{width: '190px'}}>
-												{label} <br/>
-												<small>{description}</small>
-											</td>
-											<td>
-												<input 
-													type='text' 
-													name={'content['+key+'][slug]'} 
-													defaultValue={savedSettings?.contents?.[key]?.slug || key} 
-													className='regular-text' 
-													onChange={e=>onChangeContents(key, 'slug', e.currentTarget.value)}/>
-											</td>
-											<td>
-												<input 
-													type='checkbox' 
-													name={'content['+key+'][enable]'} 
-													defaultChecked={savedSettings?.contents?.[key]?.enable || false} 
-													onChange={e=>onChangeContents(key, 'enable', e.currentTarget.checked)}/>
-											</td>
-										</tr>
-									})
-								}
-							</tbody>
-						</table>
-					</td>
-				</tr>
-				{/* <tr>
-					<th scope='row'>
-						<label>{savedSettings.dashboard.label} Base Slug</label>
-					</th>
-					<td>
-						<input type="text" defaultValue={savedSettings?.dashboard?.slug} onChange={e=>onChange('dashboard', 'slug', e.currentTarget.value)} className='regular-text'/>
-					</td>
-				</tr> */}
-			</tbody>
-		</table>	
-		<button className='button button-primary' onClick={saveOptions} disabled={!state.changedSettings}>Save</button>
-	</>
+	return <div className={'padding-15 bg-color-white'.classNames()}>
+		<div style={{maxWidth: '600px', margin: 'auto'}}>
+			<br/>
+			<strong className={'d-block font-size-24 font-weight-600'.classNames()}>
+				{__('Manage content types')}
+			</strong>
+			<br/>
+			<br/>
+
+			<table className={'table'.classNames(table_style)}>
+				<thead>
+					<tr>
+						<th>{__('Content')}</th>
+						<th>{__('Base Slug')}</th>
+					</tr>
+				</thead>
+				<tbody>
+					{
+						Object.keys(manifest.contents).map(key=>{
+							let {label, description} = manifest.contents[key];
+							return <tr key={key}>
+								<td style={{paddingTop: '20px', paddingBottom: '20px'}}>
+									<div className={'d-flex align-items-center column-gap-15'.classNames()}>
+										<div>
+											<ToggleSwitch 
+												disabled={state.saving}
+												checked ={state.settings?.contents?.[key]?.enable || false}
+												onChange={checked=>onChangeContents(key, 'enable', checked)} />
+										</div>
+										<div className={'flex-1'.classNames()}>
+											{label} <br/>
+											<small>{description}</small>
+										</div>
+									</div>
+								</td>
+								<td style={{verticalAlign: 'middle'}}>
+									<TextField
+										disabled={state.saving}
+										value={state.settings?.contents?.[key]?.slug || key}
+										onChange={v=>onChangeContents(key, 'slug', v)}/>
+								</td>
+							</tr>
+						})
+					}
+					<tr>
+						<td colSpan={2}></td>
+					</tr>
+				</tbody>
+			</table>
+
+			<div className={'text-align-right'.classNames()}>
+				<button 
+					className={'button button-primary'.classNames()}
+					onClick={saveOptions} 
+					disabled={state.saving}
+				>
+					{__('Save Changes')} <LoadingIcon show={state.saving}/>
+				</button>
+			</div>
+		</div>
+	</div>
 }
