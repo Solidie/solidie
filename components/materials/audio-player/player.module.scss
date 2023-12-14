@@ -1,3 +1,18 @@
 .audio {
 	background: rgba(0, 0, 0, 0.05);
+
+	.player-control {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 50px;
+		height: 50%;
+		border-radius: 50%;
+		background-color: var(--crewmat-color-primary);
+		flex-shrink: 0;
+
+		i {
+			color: var(--crewmat-color-text);
+		}
+	}
 }

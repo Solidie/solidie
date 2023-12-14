@@ -264,10 +264,12 @@ class FileManager {
 	/**
 	 * Generate restricted file link to access application files
 	 *
-	 * @param integer $file_id File ID to generate URL for
+	 * @param integer $file_id  File ID to generate URL for
+	 * @param array   $add_args Additional arguments to combine with download URL
+	 * 
 	 * @return string
 	 */
-	public static function getMediaPermalink( int $file_id ) {
+	public static function getMediaPermalink( int $file_id, array $add_args = array() ) {
 
 		$ajaxurl      = admin_url( 'admin-ajax.php' );
 		$nonce_action = '_solidie_' . str_replace( '-', '_', gmdate( 'Y-m-d' ) );
@@ -280,7 +282,10 @@ class FileManager {
 			'nonce_action' => $nonce_action,
 		);
 
-		return apply_filters( 'solidie_media_permalink', add_query_arg( $args, $ajaxurl ) );
+		$args = array_merge( $args, $add_args );
+		$url  = add_query_arg( $args, $ajaxurl );
+
+		return apply_filters( 'solidie_media_permalink', $url );
 	}
 
 	/**

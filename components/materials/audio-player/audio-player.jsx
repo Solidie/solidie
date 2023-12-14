@@ -4,7 +4,7 @@ import WaveSurfer from './wavesurfer.js';
 
 import style from './player.module.scss';
 
-export function AudioPlayer({content, className}) {
+export function AudioPlayer({src, title, thumbnail}) {
 
 	const waveform_ref = useRef();
 	const [state, setState] = useState({
@@ -27,7 +27,7 @@ export function AudioPlayer({content, className}) {
 			waveColor: gradient,
 			height: 60,
 			progressColor: 'rgba(0, 0, 100, 0.5)',
-			url: 'http://localhost:10008/wp-content/uploads/2023/09/friendly-melody-14015.mp3',
+			url: src,
 		});
 
 		setState({
@@ -54,18 +54,32 @@ export function AudioPlayer({content, className}) {
 	}, []);
 
 	return <div className={'audio'.classNames(style) + 'padding-15 border-radius-5'.classNames()}>
-		<div ref={waveform_ref}></div>
-		<div className={'d-flex align-items-center'.classNames()}>
-			<div>
-				<i 
-					className={`ch-icon ${!state.is_playing ? 'ch-icon-play' : 'ch-icon-pause'} cursor-pointer font-size-28`.classNames()}
-					onClick={playPause}
-				></i>
+		<div className={'d-flex column-gap-15'.classNames()}>
+			<div style={{width: '70px'}} className="">
+				<img src={thumbnail} className={'width-p-100 height-auto'.classNames}/>
 			</div>
-			<div>
-				<strong className={'d-block font-weight-500 font-size-16'.classNames()}>
-					The Audio Name
-				</strong> 
+			<div className={'flex-1'.classNames()}>
+				<div className={'d-flex align-items-center'.classNames()}>
+					<div style={{width: '50px'}}>
+						<span className={'player-control'.classNames(style)}>
+							<i 
+								className={`ch-icon ${!state.is_playing ? 'ch-icon-play' : 'ch-icon-pause'} cursor-pointer font-size-28`.classNames()}
+								onClick={playPause}
+							></i>
+						</span>
+					</div>
+					<div className={'flex-1'.classNames()}>
+						<strong className={'d-block font-weight-500 font-size-16'.classNames()}>
+							{title}
+						</strong> 
+					</div>
+				</div>
+				<div>
+					<div ref={waveform_ref}></div>
+				</div>
+				<div>
+		
+				</div>
 			</div>
 		</div>
 	</div>

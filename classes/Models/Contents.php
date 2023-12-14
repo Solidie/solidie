@@ -360,24 +360,19 @@ class Contents {
 	/**
 	 * Get permalink by product id as per content type
 	 *
-	 * @param int $product_id
-	 * @param mixed $content_or_type
+	 * @param int|array $product_id Single content ID or whole content array
 	 * 
 	 * @return string
 	 */
-	public static function getPermalink( $product_id, $content_type = null ) {
+	public static function getPermalink( $content_id ) {
 		
-		if ( empty( $content_type ) ) {
-			$content      = self::getContentByProduct( $product_id );
-			$content_type = ! empty( $content ) ? ( $content['content_type'] ?? '' ) : '';
-			if ( empty( $content_type ) ) {
-				return null;
-			}
+		$content = is_array( $content_id ) ? $content_id : Field::contents()->getField( array( 'content_id' => $content_id ), array( 'content_type', 'content_slug' ) );
+		if ( empty( $content ) ) {
+			return null;
 		}
 
-		$post_name    = get_post_field( 'post_name', $product_id );
-		$base_slug    = AdminSetting::get( 'contents.' . $content_type . '.slug' );
-		return get_home_url() . '/' . trim( $base_slug, '/' ) . '/' . $post_name . '/';
+		$base_slug = AdminSetting::get( 'contents.' . $content['content_type'] . '.slug' );
+		return get_home_url() . '/' . trim( $base_slug, '/' ) . '/' . $content['content_slug'] . '/';
 	}
 
 	/**
@@ -458,7 +453,7 @@ class Contents {
 
 		foreach ( $contents as $index => $content ) {
 			// Content permalink
-			$contents[ $index ]['content_url'] = self::getPermalink( $content['product_id'], $content['content_type'] );
+			$contents[ $index ]['content_url'] = self::getPermalink( $content );
 
 			// Releases no matter app or other content type as the structure is same always
 			$contents[ $index ]['releases'] = Release::getReleases( (int) $content['content_id'] );

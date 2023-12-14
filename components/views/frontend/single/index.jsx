@@ -1,16 +1,20 @@
 import React, {createContext, useEffect, useState} from "react";
-import { BrowserRouter, Route, Routes, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 import {ErrorBoundary} from 'crewhrm-materials/error-boundary.jsx';
-import { __, data_pointer } from "crewhrm-materials/helpers.jsx";
+import { __ } from "crewhrm-materials/helpers.jsx";
 import { request } from "crewhrm-materials/request.jsx";
 
-import { AppPreview } from "./app/index.jsx";
+import { AppPreview } from "./previews/app.jsx";
+import { ImagePreview } from "./previews/image.jsx";
+import { VideoPreview } from "./previews/video.jsx";
 
 export const ContextSingleData = createContext();
 
 const preview_renderers = {
-	app: AppPreview
+	app: AppPreview,
+	image: ImagePreview,
+	video: VideoPreview
 }
 
 export function SingleWrapper() {
@@ -18,7 +22,7 @@ export function SingleWrapper() {
 
 	const [state, setState] = useState({
 		fetching: false,
-		content: null,
+		content: {},
 		error_message: null
 	});
 
@@ -34,7 +38,7 @@ export function SingleWrapper() {
 
 			setState({
 				...state,
-				content: success ? content : null,
+				content: success ? content : {},
 				error_message: success ? null : message
 			});
 		});
@@ -47,21 +51,35 @@ export function SingleWrapper() {
 	const PreviewComp = preview_renderers[state.content?.content_type];
 
 	return <div>
-		<strong className={'d-block font-size-25 color-text'.classNames()}>
-			{state.content.content_title}
-		</strong>
+		<div>
+			<strong className={'d-block font-size-24 color-text'.classNames()}>
+				{state.content.content_title}
+			</strong>
+		</div>
+		
 		<div className={'d-flex column-gap-15'.classNames()}>
 			<div className={'flex-1'.classNames()}>
-				{
-					PreviewComp ? 
-						<ErrorBoundary>
-							<PreviewComp content={state.content}/>
-						</ErrorBoundary> :
-						<>Something went wrong</>
-				}
+				<div>
+					{
+						PreviewComp ? 
+							<ErrorBoundary>
+								<PreviewComp content={state.content}/>
+							</ErrorBoundary> : null
+					}
+				</div>
+				<div>
+					{state.content?.content_description}
+				</div>
 			</div>
 			<div style={{width: '300px'}}>
-				Plans here
+				<div className={'border-1 b-color-tertiary border-radius-5 padding-15'.classNames()}>
+					<a 
+						href={(state.content?.releases || [])[0]?.download_url} 
+						className={'button button-primary button-outlined button-full-width'.classNames()}
+					>
+						{__('Download')}
+					</a>
+				</div>
 			</div>
 		</div>
 	</div>

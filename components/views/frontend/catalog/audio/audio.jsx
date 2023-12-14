@@ -7,7 +7,10 @@ export function Audio({contents=[]}) {
 			const {content_id} = content;
 
 			return <div key={content_id} className={'margin-bottom-15'.classNames()}>
-				<AudioPlayer />
+				<AudioPlayer 
+					src={content.media?.preview?.file_url} 
+					title={content.content_title}
+					thumbnail={content.media.thumbnail?.file_url}/>
 			</div>
 		})}
 	</div>

@@ -156,14 +156,17 @@ class Release {
 				continue;
 			}
 
-			// To Do: Ensure version can't contain empty space. Force author to put non-space characters, and also programmatically remove spaces.
-			// To Do: Validate the license id is associated with proper content (if not free) and vailidity is not expired.
+			$arg_payload = array(
+				'release'    => $release,
+				'license_id' => $license_id, 
+				'endpoint'   => $endpoint,
+			);
 
-			$release->download_url = '';
+			$release->download_url = apply_filters( 'solidie_content_download_url', FileManager::getMediaPermalink( $release->file_id ), $arg_payload );
 			$release->file_url     = $file_url;
 			$release->file_path    = $file_path ? $file_path : null;
 			$release->mime_type    = get_post_mime_type( $release->file_id );
-			$release->content_url  = Contents::getPermalink( $release->product_id, $release->content_type );
+			$release->content_url  = Contents::getPermalink( $release->content_id );
 			
 			// Store the release in the new array
 			$new_array[] = $release;

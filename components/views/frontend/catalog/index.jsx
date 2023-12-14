@@ -84,8 +84,6 @@ function CatalogLayout(props) {
 		if (contents[k].slug===content_type_slug) {
 			content_type = k;
 			break;
-		} else {
-			console.log(contents[k].slug, content_type_slug);
 		}
 	}
 
@@ -98,11 +96,12 @@ function CatalogLayout(props) {
 		}
 	});
 
-	const getContents=()=>{
+	const getContents=(clear_list=false)=>{
 
 		setState({
 			...state, 
-			fetching: true
+			fetching: true,
+			contents: clear_list ? [] : state.contents
 		});
 
 		request('getContentList', {...state.filters, content_type}, resp=>{
@@ -112,7 +111,7 @@ function CatalogLayout(props) {
 	}
 
 	useEffect(()=>{
-		getContents();
+		getContents(true);
 	}, [content_type_slug]);
 
 	const RenderComp = renderers[content_type];
