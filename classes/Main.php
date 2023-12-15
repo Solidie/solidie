@@ -49,9 +49,6 @@ class Main {
 		register_activation_hook( self::$configs->file, array( $this, 'activate' ) );
 		register_deactivation_hook( self::$configs->file, array( $this, 'deactivate' ) );
 
-		// Assign crypto
-		self::$configs->crypto = Crypto::class;
-
 		// Core Modules
 		new Route();
 		new Utilities();

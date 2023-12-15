@@ -44,6 +44,8 @@ class Scripts {
 			'nonce'       => wp_create_nonce( Main::$configs->app_name ),
 			'colors'      => $dynamic_colors,
 			'text_domain' => Main::$configs->text_domain,
+			'date_format'     => get_option( 'date_format' ),
+			'time_format'     => get_option( 'time_format' ),
 			'settings'    => array(
 				'contents'  => array_replace_recursive( Manifest::getFilteredContents(), AdminSetting::get( 'contents' ) ),
 				'dashboard' => AdminSetting::get( 'dashboard' ),

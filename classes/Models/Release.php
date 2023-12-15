@@ -129,7 +129,7 @@ class Release {
 				"SELECT 
 					_release.*, 
 					content.content_title, 
-					UNIX_TIMESTAMP(_release.release_date) as release_unix_timestamp, 
+					UNIX_TIMESTAMP(_release.release_date) as release_date, 
 					content.product_id, 
 					content.content_type
 				FROM ".DB::releases()." _release

@@ -399,39 +399,81 @@ class Contents {
 	 * Get bulk contents
 	 *
 	 * @param array $args
+	 * @param bool $segmentation
 	 * @return array
 	 */
-	public static function getContents( array $args ) {
+	public static function getContents( array $args, bool $segmentation = false ) {
 		// Prepare arguments
 		$content_type = $args['content_type'] ?? null;
 		$customer_id  = $args['customer_id'] ?? null;
-		$page         = absint( $args['page'] ?? 1 );
-		$limit        = absint( $args['limit'] ?? 15 );
+		$keyword      = $args['search'] ?? '';
+		$page         = DB::getPage( $args['page'] ?? null );
+		$limit        = DB::getLimit( $args['limit'] ?? null );
 
 		// To Do: Validate paramaters for the user as per context. 
 
-		$type_clause   = $content_type ? " AND content.content_type='" . esc_sql( $content_type ) . "'" : '';
-		$customer_clse = $customer_id ? " AND sale.customer_id=" . $customer_id : '';
 		$limit_clause  = " LIMIT " . $limit;
 		$offset_clause = " OFFSET " . ( absint( $page - 1 ) * $limit );
+		$where_clause  = '1=1';
 		
-		global $wpdb;
-		$contents = $wpdb->get_results(
-			"SELECT DISTINCT 
+		// Content type filter
+		if ( ! empty( $content_type ) ) {
+			$c_type = esc_sql( $content_type );
+			$where_clause .= " AND content.content_type='{$c_type}'";
+		}
+
+		// Customer filter
+		if ( ! empty( $customer_id ) ) {
+			$where_clause .= " AND sale.customer_id=" . $customer_id;
+		}
+
+		// Search filter
+		if ( ! empty( $keyword ) ) {
+			$_keyword = esc_sql( $keyword );
+			$where_clause .= " AND (content.content_title LIKE '%{$_keyword}%' OR content.content_description LIKE '%{$_keyword}%')";
+		}
+
+		if ( $segmentation ) {
+			$selects = 'COUNT(content.content_id)';
+		} else {
+			$selects = '
+				DISTINCT
 				content.content_title, 
 				content.product_id, 
 				content.content_id, 
 				content.content_type, 
 				content.content_status, 
 				content.content_slug,
-				sale.sale_id
+				UNIX_TIMESTAMP(content.created_at) AS created_at,
+				sale.sale_id';
+		}
+
+		$query = "SELECT {$selects}
 			FROM " . DB::contents() . " content 
 				LEFT JOIN " . DB::sales() . " sale ON content.content_id=sale.content_id
-			WHERE 1=1 {$type_clause} {$customer_clse} {$limit_clause} {$offset_clause}",
-			ARRAY_A
-		);
+			WHERE {$where_clause} " . ( $segmentation ? '' : "{$limit_clause} {$offset_clause}" );
 
-		return self::assignContentMeta( self::assignContentMedia( $contents ) );
+		global $wpdb;
+		if ( $segmentation ) {
+			$total_count = (int) $wpdb->get_var( $query );
+			$page_count  = ceil( $total_count / $limit );
+
+			return array(
+				'total_count' => $total_count,
+				'page_count'  => $page_count,
+				'page'        => $page,
+				'limit'       => $limit,
+			);
+
+		} else {
+			$contents = $wpdb->get_results( $query, ARRAY_A );
+		}
+
+		$contents = _Array::castRecursive( $contents );
+		$contents = self::assignContentMedia( $contents );
+		$contents = self::assignContentMeta( $contents );
+		
+		return $contents;
 	}
 
 	/**

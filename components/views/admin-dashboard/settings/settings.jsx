@@ -104,7 +104,7 @@ export function SettingPage(props) {
 						})
 					}
 					<tr>
-						<td colSpan={2}></td>
+						<td colSpan="100%"></td>
 					</tr>
 				</tbody>
 			</table>

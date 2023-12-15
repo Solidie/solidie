@@ -94,4 +94,32 @@ class DB {
 			dbDelta( $query );
 		}
 	}
+
+	/**
+	 * Get limit for queries
+	 *
+	 * @param int|null $limit
+	 * @return int
+	 */
+	public static function getLimit( $limit = null ) {
+		$limit = absint( ( int ) $limit );
+		if ( empty( $limit ) ) {
+			$limit = 1;
+		}
+		return apply_filters( 'solidie_query_result_count', $limit );
+	}
+
+	/**
+	 * Get page num to get results for
+	 *
+	 * @param int|null $page
+	 * @return int
+	 */
+	public static function getPage( $page = null ) {
+		$page = absint( ( int ) $page );
+		if ( empty( $page ) ) {
+			$page = 1;
+		}
+		return $page;
+	}
 }

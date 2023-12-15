@@ -34,7 +34,12 @@ class ContentController {
 	 */
 	public static function getContentList( array $data ) {
 		$content_list = Contents::getContents( $data );
-		wp_send_json_success( array( 'contents' => $content_list ) );
+		$segmentation = ! empty( $data['segmentation'] ) ? Contents::getContents( $data, true ) : null;
+
+		wp_send_json_success( array( 
+			'contents' => $content_list,
+			'segmentation' => $segmentation
+		) );
 	}
 
 	/**
