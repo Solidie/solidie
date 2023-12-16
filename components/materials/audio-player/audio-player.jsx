@@ -55,8 +55,8 @@ export function AudioPlayer({src, title, thumbnail}) {
 
 	return <div className={'audio'.classNames(style) + 'padding-15 border-radius-5'.classNames()}>
 		<div className={'d-flex column-gap-15'.classNames()}>
-			<div style={{width: '70px'}} className="">
-				<img src={thumbnail} className={'width-p-100 height-auto'.classNames}/>
+			<div style={{width: '70px'}}>
+				<img src={thumbnail} className={'width-p-100 height-auto'.classNames()}/>
 			</div>
 			<div className={'flex-1'.classNames()}>
 				<div className={'d-flex align-items-center'.classNames()}>

@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter, Route, Routes, useNavigate, useParams } from "react-router-dom";
+import { BrowserRouter, Route, Routes, useNavigate, useParams, useSearchParams } from "react-router-dom";
 
 import { DropDown } from "crewhrm-materials/dropdown/dropdown.jsx";
 import { request } from "crewhrm-materials/request.jsx";
-import { __, data_pointer } from "crewhrm-materials/helpers.jsx";
+import { __, data_pointer, filterObject, isEmpty, parseParams } from "crewhrm-materials/helpers.jsx";
 import { Conditional } from "crewhrm-materials/conditional.jsx";
-import { RadioCheckbox } from "crewhrm-materials/radio-checkbox.jsx";
+import { RadioCheckbox, checkBoxRadioValue } from "crewhrm-materials/radio-checkbox.jsx";
 import { ErrorBoundary } from "crewhrm-materials/error-boundary.jsx";
 import { LoadingIcon } from "crewhrm-materials/loading-icon/loading-icon.jsx";
 
@@ -32,38 +32,17 @@ const renderers = {
 
 const filters = [
 	{
-		label: __('Category'),
-		type: 'checkbox',
-		options: [
-			{
-				id: 1,
-				label: 'Cat 1'
-			},
-			{
-				id: 2,
-				label: 'Cat 1'
-			},
-			{
-				id: 3,
-				label: 'Cat 1'
-			}
-		]
-	},
-	{
-		label: __('Sort By'),
+		label: __('Sort'),
 		type: 'radio',
+		name: 'order_by',
 		options: [
 			{
-				id: 'popularity',
-				label: __( 'Popularity' )
+				id: 'trending',
+				label: __( 'Trending' )
 			},
 			{
 				id: 'newest',
 				label: __( 'New Arrival' )
-			},
-			{
-				id: 'cost',
-				label: __( 'Cost Efficient' )
 			}
 		]
 	}
@@ -74,12 +53,20 @@ export function getPath(path) {
 	return _path.replace(/\/+/g, '/');
 }
 
-function CatalogLayout(props) {
+function CatalogLayout({categories={}}) {
 	const {settings={}} = window[data_pointer];
 	const {contents={}} = settings;
 	const {content_type_slug} = useParams();
 	const navigate = useNavigate();
 	
+    const [searchParam, setSearchParam] = useSearchParams();
+    const queryParams = parseParams(searchParam);
+    const current_page = parseInt( queryParams.page || 1 );
+
+	// Decode category IDs
+	queryParams.category_ids = (queryParams.category_ids || '').split(',');
+	queryParams.order_by = queryParams.order_by || 'trending';
+
 	let content_type;
 	for ( let k in contents ) {
 		if (contents[k].slug===content_type_slug) {
@@ -91,11 +78,30 @@ function CatalogLayout(props) {
 	const [state, setState] = useState({
 		contents:[], 
 		fetching: true,
-		filters:{
-			page: 1,
-			sort: 'popular'
-		}
+		no_more: false,
 	});
+
+	const setFilter=(name, value)=>{
+
+
+		const filters = typeof name === 'object' ? name : {
+            ...queryParams,
+            page: 1,
+            [name]: value
+        };
+
+		if ( filters.category_ids ) {
+			filters.category_ids = filters.category_ids.join(',');
+		}
+		
+        setState({
+            ...state,
+            no_more: false
+        });
+
+        // Push the filters to search param
+        setSearchParam(new URLSearchParams(filterObject(filters, (v) => v)).toString());
+	}
 
 	const getContents=(clear_list=false)=>{
 
@@ -105,7 +111,7 @@ function CatalogLayout(props) {
 			contents: clear_list ? [] : state.contents
 		});
 
-		request('getContentList', {...state.filters, content_type}, resp=>{
+		request('getContentList', {page: 1, ...queryParams, content_type}, resp=>{
 			let {contents=[]} = resp?.data || {};
 			setState({...state, fetching: false, contents});
 		});
@@ -115,13 +121,38 @@ function CatalogLayout(props) {
 		getContents(true);
 	}, [content_type_slug]);
 
+	useEffect(()=>{
+		getContents();
+	}, [searchParam])
+
+	function CatList({categories=[], level=0}) {
+		return categories.map(category=>{
+			const {category_id, category_name, children=[]} = category;
+			return <div key={category_id} style={{paddingLeft: level > 0 ? '10px' : 0}}>
+				<label
+					className={`d-inline-flex align-items-center column-gap-10 cursor-pointer`.classNames()}
+				>
+					<input
+						type='checkbox'
+						checked={(queryParams.category_ids || []).indexOf(category_id.toString())>-1}
+						value={category_id}
+						onChange={(e) => setFilter('category_ids', checkBoxRadioValue(e, queryParams.category_ids || []))}
+					/>
+					
+					<span>{category_name}</span>
+				</label>
+				{children.length ? <CatList categories={children} level={level+1}/> : null}
+			</div>
+		});
+	}
+
 	const RenderComp = renderers[content_type];
 
 	return <div className={'catalog'.classNames(style)}>
 		<div className={'d-flex align-items-center position-sticky border-1 border-radius-8 b-color-tertiary margin-bottom-15'.classNames()}>
 			<div className={'border-right-1 b-color-tertiary'.classNames()}>
 				<DropDown
-					value={content_type}
+					value={contents[content_type]?.slug}
 					onChange={v=>navigate(getPath(v+'/'))}
 					variant="borderless"
 					clearable={false}
@@ -141,7 +172,11 @@ function CatalogLayout(props) {
 
 			{/* Search field */}
 			<div className={'flex-1 padding-horizontal-15'.classNames()}>
-				<input type='text' className={"text-field-flat overflow-hidden text-overflow-ellipsis".classNames()}/>
+				<input 
+					type='text' 
+					className={"text-field-flat overflow-hidden text-overflow-ellipsis".classNames()}
+					value={queryParams.search || ''}
+					onChange={e=>setFilter('search', e.currentTarget.value)}/>
 			</div>
 
 			{/* Search Button */}
@@ -154,8 +189,19 @@ function CatalogLayout(props) {
 		
 		<div className={'content'.classNames(style)}>
 			<div className={'sidebar'.classNames(style) + 'position-sticky'.classNames()}>
+				
+				{
+					isEmpty( categories[content_type] ) ? null :
+						<div className={'margin-bottom-15'.classNames()}>
+							<strong className={'d-block font-weight-500 font-size-15'.classNames()}>
+								{__('Categories')}
+							</strong>
+							<CatList categories={categories[content_type]}/>
+						</div>
+				}
+				
 				{filters.map((filter, i)=>{
-					const {label, options=[], type} = filter;
+					const {label, options=[], type, name} = filter;
 
 					return <div key={i} className={'margin-bottom-15'.classNames()}>
 						<strong className={'d-block font-weight-500 font-size-15'.classNames()}>
@@ -163,7 +209,11 @@ function CatalogLayout(props) {
 						</strong>
 
 						<Conditional show={type=='checkbox' || type=='radio'}>
-							<RadioCheckbox type={type} options={options}/>
+							<RadioCheckbox 
+								type={type} 
+								options={options}
+								value={queryParams[name]}
+								onChange={val=>setFilter(name, val)}/>
 						</Conditional>
 					</div>
 				})}
@@ -190,14 +240,14 @@ function CatalogLayout(props) {
 	</div>
 }
 
-export function Catalog() {
+export function Catalog(props) {
 
 	const {home_path} = window[data_pointer];
 
 	return <BrowserRouter>
 		<Routes>
-			<Route path={home_path+':content_type_slug/'} element={<CatalogLayout/>}/>
-			<Route path={home_path+':content_type_slug/:content_slug/'} element={<SingleWrapper/>}/>
+			<Route path={home_path+':content_type_slug/'} element={<CatalogLayout {...props}/>}/>
+			<Route path={home_path+':content_type_slug/:content_slug/'} element={<SingleWrapper {...props}/>}/>
 		</Routes>
 	</BrowserRouter>
 }

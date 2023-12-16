@@ -56,7 +56,7 @@ class Category {
 			$cats[ $index ] = _Array::buildNestedArray( $cat, null, 'parent_id', 'category_id' );
 		}
 
-		return $cats;
+		return (object) $cats;
 	}
 
 	/**

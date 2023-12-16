@@ -10,7 +10,7 @@ const catalog = document.getElementById('Solidie_Catalog');
 if(catalog){
 	createRoot(catalog).render(
 		<MountPoint element={catalog}>
-			<Catalog {...getElementDataSet(Catalog)} />
+			<Catalog {...getElementDataSet(catalog)} />
 		</MountPoint>
 	);
 }
