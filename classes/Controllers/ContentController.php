@@ -33,6 +33,7 @@ class ContentController {
 	 * @return void
 	 */
 	public static function getContentList( array $data ) {
+
 		$content_list = Contents::getContents( $data );
 		$segmentation = ! empty( $data['segmentation'] ) ? Contents::getContents( $data, true ) : null;
 
@@ -57,7 +58,10 @@ class ContentController {
 		$content_id = Contents::updateContent( $data, $files );
 
 		if ( ! empty( $content_id ) ) {
-			wp_send_json_success();
+			wp_send_json_success(array(
+				'message' => ! empty( $data['content_id'] ) ? __( 'Saved successfully.', 'solidie' ) : __( 'Created successfully.', 'solidie' ),
+				'content' => Contents::getContentByContentID( $content_id )
+			));
 		} else {
 			wp_send_json_error( array( 'message' => __( 'Something went wrong!', 'solidie' ) ) );
 		}

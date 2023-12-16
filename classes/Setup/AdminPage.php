@@ -47,7 +47,7 @@ class AdminPage {
 	 * @return void
 	 */
 	public function mainPage() {
-		echo '<div id="Solidie_Backend_Dashboard"></div>';
+		echo '<div id="Solidie_Backend_Dashboard" data-categories="' . esc_attr( json_encode( Category::getCategories() ) ) . '"></div>';
 	}
 	
 	/**

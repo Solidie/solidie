@@ -253,7 +253,7 @@ class _Array {
 	 *
 	 * @param array $elements
 	 * @param int $parentId
-	 * @return void
+	 * @return array
 	 */
 	public static function buildNestedArray( $elements, $parentId, $col_name, $parent_col_name ) {
 		$nestedArray = array();
@@ -293,5 +293,26 @@ class _Array {
 		}
 
 		return $groupedArray;
+	}
+
+	/**
+	 * Convert nested table to single table
+	 *
+	 * @param array $nested
+	 * @param string $nested_col_name
+	 * @return array
+	 */
+	public static function convertToSingleTable( array $tables, string $nested_col_name ) {
+		$new_array = array();
+		foreach ( $tables as $index => $rows ) {
+			foreach ( $rows as $col_name => $col ) {
+				if ( $col_name === $nested_col_name && is_array( $col ) ) {
+					$new_array = array_merge( $new_array, self::convertToSingleTable( $col, $nested_col_name ) );
+				} else {
+					$new_array[$index][ $col_name ] = $col;
+				}
+			}
+		}
+		return $new_array;
 	}
 }

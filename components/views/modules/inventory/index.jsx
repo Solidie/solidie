@@ -188,6 +188,7 @@ export function Inventory(props) {
 									<thead>
 										<tr>
 											<th>{__('Title')}</th>
+											<th>{__('Category')}</th>
 											<th>{__('Status')}</th>
 											<th>{__('Created')}</th>
 										</tr>
@@ -195,7 +196,7 @@ export function Inventory(props) {
 									<tbody>
 										{
 											state.contents.map((content, idx) =>{
-												let {content_id, content_title, content_url, media, created_at, content_status} = content;
+												let {content_id, content_title, content_url, media, created_at, content_status, category_name} = content;
 
 												return <tr key={content_id}>
 													<td data-th={__('Title')} style={{paddingTop: '20px', paddingBottom: '20px'}}>
@@ -226,6 +227,9 @@ export function Inventory(props) {
 																</div>
 															</div>
 														</div>
+													</td>
+													<td>
+														{category_name}
 													</td>
 													<td data-th={__('Status')}>
 														<div>

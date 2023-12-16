@@ -5,19 +5,15 @@ import {TextField} from 'crewhrm-materials/text-field/text-field.jsx';
 import {FileUpload} from 'crewhrm-materials/file-upload/file-upload.jsx';
 import {request} from 'crewhrm-materials/request.jsx';
 import {LoadingIcon} from 'crewhrm-materials/loading-icon/loading-icon.jsx';
-import { __, data_pointer, sprintf } from "crewhrm-materials/helpers.jsx";
+import { __, data_pointer, isEmpty, sprintf } from "crewhrm-materials/helpers.jsx";
 import { ContextToast } from "crewhrm-materials/toast/toast.jsx";
-import { Conditional } from "crewhrm-materials/conditional.jsx";
+import { DropDown } from "crewhrm-materials/dropdown/dropdown.jsx";
 
 import { InventoryWrapper } from "./index.jsx";
-import { getDashboardPath } from "../../admin-dashboard/inventory/inventory-backend.jsx";
+import { getFlattenedCategories } from "../../admin-dashboard/settings/categories.jsx";
 
-function CategoryField() {
-	return <div>Here's cat field</div>
-}
-
-export function ContentEditor() {
-	const {ajaxToast} = useContext(ContextToast);
+export function ContentEditor({categories=[]}) {
+	const {ajaxToast, addToast} = useContext(ContextToast);
 	const {content_type, content_id: _content_id} = useParams();
 	const content_id = isNaN(_content_id) ? 0 : _content_id;
 	const navigate = useNavigate();
@@ -81,12 +77,13 @@ export function ContentEditor() {
 			hint: __('You can always release new updates later'),
 			accept: [content_type + '/*', 'application/zip']
 		},
-		/* {
-			type: 'category',
-			name: 'categories',
+		{
+			type: 'dropdown',
+			name: 'category_id',
 			label: __('Category'),
-			placeholder: __('Select category')
-		},*/
+			placeholder: __('Select category'),
+			options: getFlattenedCategories(categories[content_type] || [])
+		},
 	].filter(f=>f);
 
 	const setVal=(name, value)=>{
@@ -106,17 +103,21 @@ export function ContentEditor() {
 		});
 
 		request('createOrUpdateContent', {...state.values, content_id}, resp=>{
-			const {success} = resp;
+			const {success, data:{content={}, message}} = resp;
 
 			setState({
 				...state,
 				submitting: false
 			});
 
-			ajaxToast(resp);
-
 			if ( success ) {
-				navigate(getDashboardPath('inventory/'+content_type));
+				addToast({
+					message: <span>{message} <a href={content.content_url} target="_blank">{__('Visit Now')}</a></span>,
+					dismissible: true,
+					status: 'success'
+				});
+			} else {
+				ajaxToast(resp);
 			}
 		});
 	}
@@ -147,6 +148,7 @@ export function ContentEditor() {
 
 				values.content_title = content.content_title;
 				values.content_description = content.content_description;
+				values.category_id = content.category_id;
 				values.thumbnail = content.media.thumbnail;
 				values.preview = content.media.preview;
 				values.sample_images = content.media.sample_images;
@@ -191,8 +193,9 @@ export function ContentEditor() {
 
 			{
 				fields.map(field=>{
-					const {name, label, placeholder, type, required, accept, hint, maxlenth} = field;
-					return <div key={name} className={'margin-bottom-15'.classNames()}>
+					const {name, label, placeholder, type, required, accept, hint, maxlenth, options=[]} = field;
+					return (type=='dropdown' && isEmpty(options)) ? null : 
+					<div key={name} className={'margin-bottom-15'.classNames()}>
 						<strong className={'d-block font-weight-600'.classNames()}>
 							{label}{required ? <span className={'color-error'.classNames()}>*</span> : null}
 						</strong>
@@ -221,11 +224,24 @@ export function ContentEditor() {
 								maxlenth={maxlenth}
 								value={state.values[name]}/>
 						}
+
+						{
+							'dropdown' !== type ? null :
+							<DropDown
+								placeholder={placeholder}
+								value={state.values[name]}
+								options={options}
+								onChange={value=>setVal(name, value)}/>
+						}
 					</div>
 				})
 			}
 			
-			<button disabled={state.submitting} className={'button button-primary'.classNames()} onClick={submit}>
+			<button 
+				disabled={state.submitting} 
+				className={'button button-primary'.classNames()} 
+				onClick={submit}
+			>
 				{__('Submit')} <LoadingIcon show={state.submitting}/>
 			</button>
 		</div>

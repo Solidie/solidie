@@ -68,9 +68,10 @@ class Category {
 	public static function deleteCategory( $category_id ) {
 		global $wpdb;
 
-		// Delete category relations
-		$wpdb->delete(
-			DB::category_relations(),
+		// Update content categories to null where it is used
+		$wpdb->update(
+			DB::contents(),
+			array( 'category_id' => null ),
 			array( 'category_id' => $category_id )
 		);
 
@@ -79,5 +80,27 @@ class Category {
 			DB::categories(),
 			array( 'category_id' => $category_id )
 		);
+	}
+
+	/**
+	 * Get children IDs of a category
+	 *
+	 * @param int $category_id
+	 * @return array
+	 */
+	public static function getChildren( $category_id, $linear = true ) {
+		
+		$category_id = (int) $category_id;
+
+		global $wpdb;
+		$cats = $wpdb->get_results(
+			"SELECT * FROM " . DB::categories(),
+			ARRAY_A
+		);
+
+		$cats   = _Array::castRecursive( $cats );
+		$table  = _Array::buildNestedArray( $cats, $category_id, 'parent_id', 'category_id' );
+
+		return $linear ? _Array::convertToSingleTable( $table, 'children' ) : $table;
 	}
 }

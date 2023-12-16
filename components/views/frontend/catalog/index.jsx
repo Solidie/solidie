@@ -64,7 +64,7 @@ function CatalogLayout({categories={}}) {
     const current_page = parseInt( queryParams.page || 1 );
 
 	// Decode category IDs
-	queryParams.category_ids = (queryParams.category_ids || '').split(',');
+	queryParams.category_ids = (queryParams.category_ids || '').split(',').filter(c=>c);
 	queryParams.order_by = queryParams.order_by || 'trending';
 
 	let content_type;
@@ -83,14 +83,13 @@ function CatalogLayout({categories={}}) {
 
 	const setFilter=(name, value)=>{
 
-
 		const filters = typeof name === 'object' ? name : {
             ...queryParams,
             page: 1,
             [name]: value
         };
 
-		if ( filters.category_ids ) {
+		if ( ! isEmpty( filters.category_ids ) ) {
 			filters.category_ids = filters.category_ids.join(',');
 		}
 		

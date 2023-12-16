@@ -407,6 +407,7 @@ class Contents {
 		$content_type = $args['content_type'] ?? null;
 		$customer_id  = $args['customer_id'] ?? null;
 		$keyword      = $args['search'] ?? '';
+		$category_ids = $args['category_ids'] ?? array();
 		$page         = DB::getPage( $args['page'] ?? null );
 		$limit        = DB::getLimit( $args['limit'] ?? null );
 
@@ -414,7 +415,7 @@ class Contents {
 
 		$limit_clause  = " LIMIT " . $limit;
 		$offset_clause = " OFFSET " . ( absint( $page - 1 ) * $limit );
-		$where_clause  = '1=1';
+		$where_clause  = ' 1=1';
 		
 		// Content type filter
 		if ( ! empty( $content_type ) ) {
@@ -433,6 +434,23 @@ class Contents {
 			$where_clause .= " AND (content.content_title LIKE '%{$_keyword}%' OR content.content_description LIKE '%{$_keyword}%')";
 		}
 
+		// Filter category
+		if ( ! empty( $category_ids ) ) {
+
+			// Get child IDs 
+			$all_ids = array();
+			foreach ( $category_ids as $id ) {
+				$children  = Category::getChildren( $id );
+				$all_ids = array_merge( $all_ids, array_column( $children, 'category_id' ) );
+			}
+
+			// Merge and consolidate all the IDs together
+			$all_ids = array_unique( array_merge( $all_ids, $category_ids ) );
+			$ids_in = implode( ',', $all_ids );
+
+			$where_clause .= " AND content.category_id IN ({$ids_in})";
+		}
+
 		if ( $segmentation ) {
 			$selects = 'COUNT(content.content_id)';
 		} else {
@@ -445,12 +463,14 @@ class Contents {
 				content.content_status, 
 				content.content_slug,
 				UNIX_TIMESTAMP(content.created_at) AS created_at,
+				cat.category_name,
 				sale.sale_id';
 		}
 
 		$query = "SELECT {$selects}
 			FROM " . DB::contents() . " content 
 				LEFT JOIN " . DB::sales() . " sale ON content.content_id=sale.content_id
+				LEFT JOIN " . DB::categories() . " cat ON content.category_id=cat.category_id
 			WHERE {$where_clause} " . ( $segmentation ? '' : "{$limit_clause} {$offset_clause}" );
 
 		global $wpdb;
