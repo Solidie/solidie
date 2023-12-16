@@ -5,7 +5,7 @@ import { MountPoint } from 'crewhrm-materials/mountpoint.jsx';
 import { getElementDataSet } from 'crewhrm-materials/helpers.jsx';
 import {WpDashboardFullPage} from 'crewhrm-materials/backend-dashboard-container/full-page-container.jsx';
 
-import { SettingPage } from './settings/settings.jsx';
+import { CatSettings } from './settings/categories.jsx';
 import { InventoryBackend } from './inventory/inventory-backend.jsx';
 
 // Render inventory
@@ -21,12 +21,12 @@ if (inventory) {
 }
 
 // Render settings
-const settings = document.getElementById('Solidie_AdminSettings');
+const settings = document.getElementById('Solidie_ContentTypeSettings');
 if ( settings ) {
 	createRoot( settings ).render( 
 		<MountPoint>
 			<WpDashboardFullPage>
-				<SettingPage {...getElementDataSet(settings)}/>
+				<CatSettings {...getElementDataSet(settings)}/>
 			</WpDashboardFullPage>
 		</MountPoint>
 	);

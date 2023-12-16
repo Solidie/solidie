@@ -12,7 +12,7 @@ use Solidie\Models\User;
 use Solidie\Helpers\_Array;
 use Solidie\Controllers\ContentController;
 use Solidie\Controllers\SettingsController;
-
+use Solidie\Controllers\CategoryController;
 use Error;
 
 /**
@@ -45,6 +45,7 @@ class Dispatcher {
 		$controllers = array(
 			ContentController::class,
 			SettingsController::class,
+			CategoryController::class
 		);
 
 		$registered_methods = array();

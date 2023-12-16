@@ -4,6 +4,7 @@ namespace Solidie\Setup;
 
 use Solidie\Main;
 use Solidie\Models\AdminSetting;
+use Solidie\Models\Category;
 use Solidie\Models\Contents;
 use Solidie\Models\Manifest;
 use Solidie\Setup\AdminPage as SetupAdminPage;
@@ -32,11 +33,11 @@ class AdminPage {
 		// Setting page
 		add_submenu_page( 
 			Main::$configs->root_menu_slug, 
-			__( 'Settings', 'tutor' ),
-			 __( 'Settings', 'tutor' ), 
+			__( 'Content Types', 'tutor' ),
+			 __( 'Content Types', 'tutor' ), 
 			 'administrator', 
-			 'settings', 
-			 array( $this, 'settingPage' ) 
+			 'content-types', 
+			 array( $this, 'contentTypesPage' ) 
 		);
 	}
 
@@ -54,8 +55,9 @@ class AdminPage {
 	 *
 	 * @return void
 	 */
-	public function settingPage() {
-		echo '<div id="Solidie_AdminSettings" 
+	public function contentTypesPage() {
+		echo '<div id="Solidie_ContentTypeSettings" 
+				   data-categories="' . esc_attr( json_encode( Category::getCategories() ) ) . '"
 				   data-saved-settings="' . esc_attr( json_encode( (object)AdminSetting::get() ) ) . '" 
 				   data-manifest="' . esc_attr( json_encode( Manifest::getManifest() ) ) . '"></div>';
 	}

@@ -247,4 +247,51 @@ class _Array {
 
 		return $ret_type === ARRAY_A ? $result : (object)$result;
 	}
+	
+	/**
+	 * Build nested array
+	 *
+	 * @param array $elements
+	 * @param int $parentId
+	 * @return void
+	 */
+	public static function buildNestedArray( $elements, $parentId, $col_name, $parent_col_name ) {
+		$nestedArray = array();
+
+		foreach ( $elements as $element ) {
+			if ( $element[ $col_name ] == $parentId ) {
+				$children = self::buildNestedArray( $elements, $element[ $parent_col_name ], $col_name, $parent_col_name );
+				
+				if ( ! empty( $children ) ) {
+					$element['children'] = $children;
+				}
+
+				$nestedArray[] = $element;
+			}
+		}
+
+		return $nestedArray;
+	}
+
+	/**
+	 * Group multiple rows by a common field
+	 *
+	 * @param array $array
+	 * @return array
+	 */
+	public static function groupRows( $array, $col_name ) {
+		$groupedArray = array();
+
+		foreach ( $array as $item ) {
+			$contentType = $item[ $col_name ];
+
+			if ( ! isset( $groupedArray[ $contentType ] ) ) {
+				$groupedArray[ $contentType ] = array();
+			}
+
+			$groupedArray[ $contentType ][] = $item;
+		}
+
+		return $groupedArray;
+	}
 }
