@@ -8,6 +8,7 @@ import { Conditional } from "crewhrm-materials/conditional.jsx";
 import { RadioCheckbox, checkBoxRadioValue } from "crewhrm-materials/radio-checkbox.jsx";
 import { ErrorBoundary } from "crewhrm-materials/error-boundary.jsx";
 import { LoadingIcon } from "crewhrm-materials/loading-icon/loading-icon.jsx";
+import { Pagination } from "crewhrm-materials/pagination/pagination.jsx";
 
 import { GenericCard } from "./generic-card/generic-card.jsx";
 import { SingleWrapper } from "../single/index.jsx";
@@ -77,6 +78,7 @@ function CatalogLayout({categories={}}) {
 
 	const [state, setState] = useState({
 		contents:[], 
+		segmentation: null,
 		fetching: true,
 		no_more: false,
 	});
@@ -111,8 +113,8 @@ function CatalogLayout({categories={}}) {
 		});
 
 		request('getContentList', {page: 1, ...queryParams, content_type}, resp=>{
-			let {contents=[]} = resp?.data || {};
-			setState({...state, fetching: false, contents});
+			const {data:{contents=[], segmentation}} = resp;
+			setState({...state, fetching: false, contents, segmentation});
 		});
 	}
 
@@ -230,6 +232,20 @@ function CatalogLayout({categories={}}) {
 					(RenderComp && state.contents.length) ? 
 						<ErrorBoundary>
 							<RenderComp contents={state.contents}/>
+							{
+								(state.segmentation?.page_count || 0) < 2 ? null :
+									<>
+										<br/>
+										<div className={'d-flex justify-content-center'.classNames()}>
+											<div>
+												<Pagination
+													onChange={(page) => setFilter('page', page)}
+													pageNumber={current_page}
+													pageCount={state.segmentation.page_count}/>
+											</div>
+										</div>
+									</>
+							}
 						</ErrorBoundary> : null
 				}
 			

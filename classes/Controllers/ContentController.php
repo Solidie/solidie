@@ -35,7 +35,7 @@ class ContentController {
 	public static function getContentList( array $data ) {
 
 		$content_list = Contents::getContents( $data );
-		$segmentation = ! empty( $data['segmentation'] ) ? Contents::getContents( $data, true ) : null;
+		$segmentation = Contents::getContents( $data, true );
 
 		wp_send_json_success( array( 
 			'contents' => $content_list,
@@ -158,6 +158,8 @@ class ContentController {
 	public static function loadFile( array $data ) {
 		$file_id = $data['file_id'] ?? 0;
 		$path    = get_attached_file( $file_id );
+
+		// var_dump( $path, is_readable( $path ) ); exit;
 
 		if ( empty( $path ) || ! is_readable( $path ) ) {
 			http_response_code( 404 );

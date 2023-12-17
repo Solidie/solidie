@@ -408,14 +408,16 @@ class Contents {
 		$customer_id  = $args['customer_id'] ?? null;
 		$keyword      = $args['search'] ?? '';
 		$category_ids = $args['category_ids'] ?? array();
+		$order_by     = $args['order_by'] ?? 'trending';
 		$page         = DB::getPage( $args['page'] ?? null );
 		$limit        = DB::getLimit( $args['limit'] ?? null );
 
 		// To Do: Validate paramaters for the user as per context. 
-
+		
+		$where_clause  = ' 1=1';
+		$order_clause  = '';
 		$limit_clause  = " LIMIT " . $limit;
 		$offset_clause = " OFFSET " . ( absint( $page - 1 ) * $limit );
-		$where_clause  = ' 1=1';
 		
 		// Content type filter
 		if ( ! empty( $content_type ) ) {
@@ -451,17 +453,30 @@ class Contents {
 			$where_clause .= " AND content.category_id IN ({$ids_in})";
 		}
 
+		// Order by
+		if ( ! $segmentation ) {
+			if ( $order_by == 'newest' ) {
+				$order_clause .= " ORDER BY content.created_at DESC ";
+			} else {
+				// Trending by default
+				$order_clause .= " ORDER BY download_count, download_date DESC ";
+			}
+
+			$order_clause = " GROUP BY content.content_id, sale.sale_id {$order_clause}";
+		}
+		
 		if ( $segmentation ) {
 			$selects = 'COUNT(content.content_id)';
 		} else {
 			$selects = '
-				DISTINCT
 				content.content_title, 
 				content.product_id, 
 				content.content_id, 
 				content.content_type, 
 				content.content_status, 
 				content.content_slug,
+				COUNT(pop.download_id) AS download_count,
+				pop.download_date,
 				UNIX_TIMESTAMP(content.created_at) AS created_at,
 				cat.category_name,
 				sale.sale_id';
@@ -471,7 +486,10 @@ class Contents {
 			FROM " . DB::contents() . " content 
 				LEFT JOIN " . DB::sales() . " sale ON content.content_id=sale.content_id
 				LEFT JOIN " . DB::categories() . " cat ON content.category_id=cat.category_id
-			WHERE {$where_clause} " . ( $segmentation ? '' : "{$limit_clause} {$offset_clause}" );
+				LEFT JOIN " . DB::popularity() . " pop ON content.content_id=pop.content_id
+			WHERE {$where_clause} {$order_clause} " . ( $segmentation ? '' : "{$limit_clause} {$offset_clause}" );
+
+		error_log( $query );
 
 		global $wpdb;
 		if ( $segmentation ) {

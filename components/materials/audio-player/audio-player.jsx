@@ -3,8 +3,9 @@ import React, { useEffect, useRef, useState } from "react";
 import WaveSurfer from './wavesurfer.js';
 
 import style from './player.module.scss';
+import { Link } from "react-router-dom";
 
-export function AudioPlayer({src, title, thumbnail}) {
+export function AudioPlayer({src, permalink, title, thumbnail, height=40}) {
 
 	const waveform_ref = useRef();
 	const [state, setState] = useState({
@@ -25,7 +26,7 @@ export function AudioPlayer({src, title, thumbnail}) {
 		const wavesurfer = WaveSurfer.create({
 			container: waveform_ref.current,
 			waveColor: gradient,
-			height: 60,
+			height,
 			progressColor: 'rgba(0, 0, 100, 0.5)',
 			url: src,
 		});
@@ -56,26 +57,26 @@ export function AudioPlayer({src, title, thumbnail}) {
 	return <div className={'audio'.classNames(style) + 'padding-15 border-radius-5'.classNames()}>
 		<div className={'d-flex column-gap-15'.classNames()}>
 			<div style={{width: '70px'}}>
-				<img src={thumbnail} className={'width-p-100 height-auto'.classNames()}/>
+				<Link to={permalink} className={'d-block cursor-pointer'.classNames()}>
+					<img src={thumbnail} className={'width-p-100 height-auto'.classNames()}/>
+				</Link>
 			</div>
 			<div className={'flex-1'.classNames()}>
-				<div className={'d-flex align-items-center'.classNames()}>
-					<div style={{width: '50px'}}>
-						<span className={'player-control'.classNames(style)}>
-							<i 
-								className={`ch-icon ${!state.is_playing ? 'ch-icon-play' : 'ch-icon-pause'} cursor-pointer font-size-28`.classNames()}
-								onClick={playPause}
-							></i>
-						</span>
+				<div 
+					className={'d-flex align-items-center column-gap-15 margin-bottom-10 border-bottom-1 b-color-tertiary'.classNames()}
+					style={{paddingBottom: '10px'}}
+				>
+					<div className={'player-control'.classNames(style)} onClick={playPause}>
+						<i className={`ch-icon ${!state.is_playing ? 'ch-icon-play' : 'ch-icon-pause'} font-size-14`.classNames()}></i>
 					</div>
 					<div className={'flex-1'.classNames()}>
-						<strong className={'d-block font-weight-500 font-size-16'.classNames()}>
+						<Link to={permalink} className={'d-block font-weight-500 font-size-16 cursor-pointer'.classNames()}>
 							{title}
-						</strong> 
+						</Link> 
 					</div>
 				</div>
 				<div>
-					<div ref={waveform_ref}></div>
+					<div ref={waveform_ref} style={{cursor: 'text'}}></div>
 				</div>
 				<div>
 		

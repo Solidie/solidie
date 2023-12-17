@@ -101,7 +101,14 @@ export function Inventory(props) {
 			fetching: true
 		});
 
-		request( 'getContentList', {...filterState, content_type, segmentation: true}, resp=>{
+		const payload = {
+			...filterState, 
+			content_type, 
+			segmentation: true, 
+			order_by: 'newest'
+		}
+
+		request( 'getContentList', payload, resp=>{
 			const {success, data:{segmentation = {}, contents=[]}} = resp;
 			setState({
 				...state,
@@ -244,14 +251,19 @@ export function Inventory(props) {
 										}
 									</tbody>
 								</table>
-								<br/>
-								<div className={'d-flex justify-content-end'.classNames()}>
-									<Pagination
-										onChange={(page) => setFilter('page', page)}
-										pageNumber={filterState.page}
-										pageCount={state.segmentation?.page_count || 1}
-									/>
-								</div>
+								{
+									(state.segmentation?.page_count || 0) < 2 ? null :
+									<>
+										<br/>
+										<div className={'d-flex justify-content-end'.classNames()}>
+											<Pagination
+												onChange={(page) => setFilter('page', page)}
+												pageNumber={filterState.page}
+												pageCount={state.segmentation.page_count}
+											/>
+										</div>
+									</>
+								}
 							</>
 					}
 				</>

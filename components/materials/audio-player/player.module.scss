@@ -5,14 +5,14 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		width: 50px;
-		height: 50%;
+		width: 30px;
+		height: 30px;
 		border-radius: 50%;
 		background-color: var(--crewmat-color-primary);
-		flex-shrink: 0;
+		cursor: pointer;
 
 		i {
-			color: var(--crewmat-color-text);
+			color: var(--crewmat-color-white);
 		}
 	}
 }

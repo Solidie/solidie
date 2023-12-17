@@ -5,16 +5,18 @@ import {ErrorBoundary} from 'crewhrm-materials/error-boundary.jsx';
 import { __ } from "crewhrm-materials/helpers.jsx";
 import { request } from "crewhrm-materials/request.jsx";
 
-import { AppPreview } from "./previews/app.jsx";
+import { GenericPreview } from "./previews/generic.jsx";
 import { ImagePreview } from "./previews/image.jsx";
 import { VideoPreview } from "./previews/video.jsx";
+import { AudioPreview } from "./previews/audio.jsx";
 
 export const ContextSingleData = createContext();
 
 const preview_renderers = {
-	app: AppPreview,
+	app: GenericPreview,
 	image: ImagePreview,
-	video: VideoPreview
+	video: VideoPreview,
+	audio: AudioPreview,
 }
 
 export function SingleWrapper() {
