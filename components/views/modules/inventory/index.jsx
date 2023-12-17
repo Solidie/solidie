@@ -62,12 +62,13 @@ export function InventoryWrapper({children, fetching}) {
 					className={'margin-left-5 font-size-15'.classNames()}/>
 			</strong>
 
-			<Conditional show={enabled_contents.length>1}>
+			{
+				enabled_contents.length < 2 ? null :
 				<Tabs 
 					tabs={enabled_contents} 
 					active={content_type} 
 					onChange={tab=>navigate(getDashboardPath('inventory/'+tab))}/>
-			</Conditional>
+			}
 		</div>
 		
 		{children}
@@ -223,18 +224,20 @@ export function Inventory(props) {
 																	{content_title}
 																</a>
 																<div className={'actions'.classNames(style) + 'd-flex align-items-center column-gap-10 margin-top-10'.classNames()}>
-																	<span>
-																		<Link 
-																			className={'ch-icon ch-icon-edit-2 font-size-15 cursor-pointer'.classNames()} 
-																			title={__('Edit')}
-																			to={getDashboardPath(`inventory/${content_type}/editor/${content_id}/`)}/> {__('Edit')}
-																	</span>
+																	<Link 
+																		className={'cursor-pointer'.classNames()} 
+																		title={__('Edit')}
+																		to={getDashboardPath(`inventory/${content_type}/editor/${content_id}/`)}
+																	>
+																		<i className={'ch-icon ch-icon-edit-2 font-size-15'.classNames()}></i> {__('Edit')}
+																	</Link>
 																	<span className={'color-text-lighter'.classNames()}>|</span>
-																	<span>
-																		<i 
-																			className={'ch-icon ch-icon-trash font-size-15 cursor-pointer'.classNames()} 
-																			title={__('Delete')}
-																			onClick={()=>deleteContent(content_id)}></i> {__('Delete')}
+																	<span
+																		className={'cursor-pointer'.classNames()}
+																		title={__('Delete')}
+																		onClick={()=>deleteContent(content_id)}
+																	>
+																		<i className={'ch-icon ch-icon-trash font-size-15'.classNames()}></i> {__('Delete')}
 																	</span>
 																</div>
 															</div>

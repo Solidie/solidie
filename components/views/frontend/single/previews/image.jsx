@@ -5,6 +5,6 @@ export function ImagePreview({content}) {
 		<img 
 			style={{width:'auto', maxWidth: '100%', height: 'auto', margin: 'auto'}} 
 			src={content.media?.thumbnail?.file_url}
-			className={'border-radius-5'.classNames()}/>
+			className={'d-block border-radius-5'.classNames()}/>
 	</div>
 }

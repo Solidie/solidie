@@ -104,7 +104,7 @@ class DB {
 	public static function getLimit( $limit = null ) {
 		$limit = absint( (int) $limit );
 		if ( empty( $limit ) ) {
-			$limit = 1;
+			$limit = 25;
 		}
 		return apply_filters( 'solidie_query_result_count', $limit );
 	}
