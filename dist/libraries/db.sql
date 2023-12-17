@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Dec 11, 2023 at 04:22 AM
+-- Generation Time: Dec 17, 2023 at 05:08 AM
 -- Server version: 8.0.16
 -- PHP Version: 8.0.0
 
@@ -31,8 +31,10 @@ CREATE TABLE IF NOT EXISTS `wp_solidie_categories` (
   `category_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `category_name` varchar(255) COLLATE utf8mb4_unicode_520_ci NOT NULL,
   `content_type` varchar(20) COLLATE utf8mb4_unicode_520_ci NOT NULL,
-  `parent_id` bigint(20) UNSIGNED NOT NULL DEFAULT '0',
-  PRIMARY KEY (`category_id`)
+  `parent_id` bigint(20) UNSIGNED DEFAULT NULL,
+  PRIMARY KEY (`category_id`),
+  KEY `content_type` (`content_type`),
+  KEY `parent_id` (`parent_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 
 -- --------------------------------------------------------
@@ -47,6 +49,7 @@ CREATE TABLE IF NOT EXISTS `wp_solidie_contents` (
   `category_id` bigint(20) UNSIGNED DEFAULT NULL,
   `product_id` bigint(20) UNSIGNED DEFAULT NULL COMMENT 'WooCommerce Product ID',
   `content_title` mediumtext COLLATE utf8mb4_unicode_520_ci,
+  `content_slug` varchar(255) COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
   `content_description` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci,
   `content_status` varchar(10) COLLATE utf8mb4_unicode_520_ci NOT NULL,
   `contributor_id` bigint(20) UNSIGNED NOT NULL,

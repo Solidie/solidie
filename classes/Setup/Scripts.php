@@ -64,6 +64,10 @@ class Scripts {
 			'text_domain' => Main::$configs->text_domain,
 			'date_format' => get_option( 'date_format' ),
 			'time_format' => get_option( 'time_format' ),
+			'permalinks'  => array(
+				'content_types' => admin_url( 'admin.php?page=' . AdminPage::CONTENT_TYPES_SLUG ),
+				'dashboard'     => admin_url( 'admin.php?page=' . Main::$configs->root_menu_slug ),
+			),
 			'settings'    => array(
 				'contents'  => array_replace_recursive( Manifest::getFilteredContents(), AdminSetting::get( 'contents' ) ),
 				'dashboard' => AdminSetting::get( 'dashboard' ),

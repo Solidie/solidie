@@ -35,7 +35,12 @@ export function InventoryWrapper({children, fetching}) {
 			} else {
 				setState({
 					...state, 
-					error_message: __('Please enable at least one content type for selling to see options here')
+					error_message: <div className={'text-align-center padding-vertical-40'.classNames()}>
+						<span className={'d-block margin-bottom-10 font-size-20'.classNames()}>{__('No content type is enabled yet.')}</span>
+						<a href={window[data_pointer]?.permalinks?.content_types} className={'button button-primary button-small'.classNames()}>
+							{__('Enable Now')}
+						</a>
+					</div>
 				});
 			}
 		} else if( ! enabled_contents.find(e=>e.content_type===content_type)?.enable ) {

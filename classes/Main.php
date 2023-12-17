@@ -11,6 +11,7 @@ use Solidie\Helpers\_Array;
 use Solidie\Setup\Dispatcher;
 use Solidie\Setup\Scripts;
 use Solidie\Setup\AdminPage;
+use Solidie\Setup\Database;
 use Solidie\Setup\Media;
 use Solidie\Setup\Route;
 
@@ -56,6 +57,7 @@ class Main {
 		register_deactivation_hook( self::$configs->file, array( $this, 'deactivate' ) );
 
 		// Core Modules
+		new Database();
 		new Route();
 		new Dispatcher();
 		new Scripts();

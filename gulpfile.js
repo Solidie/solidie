@@ -1,6 +1,6 @@
 var gulp = require('gulp'),
     plumber = require('gulp-plumber'),
-    notify = require('gulp-notify'),
+    /* notify = require('gulp-notify'), */
     wpPot = require('gulp-wp-pot'),
     clean = require('gulp-clean'),
     zip = require('gulp-zip'),
@@ -9,18 +9,19 @@ var gulp = require('gulp'),
     build_name = 'solidie-' + require('./package.json').version + '.zip';
 
 var onError = function (err) {
-    notify.onError({
+    /* notify.onError({
         title: 'Gulp',
         subtitle: 'Failure!',
         message: 'Error: <%= error.message %>',
         sound: 'Basso'
-    })(err);
+    })(err); */
+	console.error(err);
     this.emit('end');
 };
 
 var added_texts = [];
 const regex = /__\(\s*'([^']*)'\s*\)/g;
-const js_files = ['hrm', 'careers', 'settings'].map((f) => 'dist/' + f + '.js:1').join(', ');
+const js_files = ['frontend', 'admin-dashboard'].map((f) => 'dist/' + f + '.js:1').join(', ');
 function i18n_makepot(callback, target_dir) {
     const parent_dir = target_dir || __dirname;
     var translation_texts = '';

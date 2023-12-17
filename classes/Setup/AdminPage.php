@@ -17,6 +17,8 @@ use Solidie\Models\Manifest;
  */
 class AdminPage {
 
+	const CONTENT_TYPES_SLUG = 'content-types';
+
 	/**
 	 * Admin page setup hooks register
 	 *
@@ -47,7 +49,7 @@ class AdminPage {
 			__( 'Content Types', 'tutor' ),
 			__( 'Content Types', 'tutor' ),
 			'administrator',
-			'content-types',
+			self::CONTENT_TYPES_SLUG,
 			array( $this, 'contentTypesPage' )
 		);
 	}
