@@ -1,10 +1,19 @@
 <?php
+/**
+ * Custom routes manager for contents
+ *
+ * @package solidie
+ */
 
 namespace Solidie\Setup;
 
 use Solidie\Main;
 use Solidie\Models\AdminSetting;
 
+
+/**
+ * Route manager class
+ */
 class Route {
 
 	/**
@@ -25,30 +34,30 @@ class Route {
 	/**
 	 * Register var
 	 *
-	 * @param array $vars
-	 * 
+	 * @param array $vars Query vars
+	 *
 	 * @return array
 	 */
-	public function registerPagename ($vars) {
+	public function registerPagename( $vars ) {
 		$vars[] = self::KEY;
 		return $vars;
-	} 
+	}
 
 	/**
 	 * Add custom Rewrite rules
 	 *
-	 * @param array $rules
+	 * @param array $rules Existing rewrite rules
 	 * @return array
 	 */
 	public function rebuildPermalinks( $rules ) {
 		$settings = AdminSetting::get();
-		$slugs = array(
+		$slugs    = array(
 			$settings['dashboard']['slug'],
 		);
 
 		// Loop through content types and register their slug
 		foreach ( $settings['contents'] as $content ) {
-			if ( ( $content['enable'] ?? false ) == true && ! empty( $content['slug'] ) && $content['slug'] !== 'wp-admin' ) {
+			if ( true === ( $content['enable'] ?? false ) && ! empty( $content['slug'] ) && 'wp-admin' !== $content['slug'] ) {
 				$slugs[] = $content['slug'];
 			}
 		}
@@ -56,8 +65,8 @@ class Route {
 		// Register to rules now
 		$new_rules = array();
 		foreach ( $slugs as $slug ) {
-			$template = 'index.php?' . self::KEY . '=' . $slug;
-			$new_rules[ $slug . '/?$' ] = $template;
+			$template                         = 'index.php?' . self::KEY . '=' . $slug;
+			$new_rules[ $slug . '/?$' ]       = $template;
 			$new_rules[ $slug . '/(.+?)/?$' ] = $template;
 		}
 
@@ -76,10 +85,10 @@ class Route {
 	/**
 	 * Undocumented function
 	 *
-	 * @param string $template
+	 * @param string $template The template to load
 	 * @return string
 	 */
-	function registerTemplate( $template ) {
+	public function registerTemplate( $template ) {
 		if ( get_query_var( self::KEY ) ) {
 			// Load your custom template file here
 			$template = Main::$configs->dir . 'templates/index.php';

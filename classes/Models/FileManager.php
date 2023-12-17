@@ -19,7 +19,7 @@ class FileManager {
 	 *
 	 * @var string
 	 */
-	CONST SOLIDIE_FILE_IDENTIFIER_META_KEY = 'solidie_content_file';
+	const SOLIDIE_FILE_IDENTIFIER_META_KEY = 'solidie_content_file';
 
 	/**
 	 * Specify where to store files
@@ -90,7 +90,7 @@ class FileManager {
 	/**
 	 * Get dir path for speficic content
 	 *
-	 * @param int $content_id
+	 * @param int $content_id The content ID to get directory for
 	 * @return string
 	 */
 	public static function getContentDir( $content_id ) {
@@ -202,7 +202,7 @@ class FileManager {
 	/**
 	 * Delete directory
 	 *
-	 * @param string $dir
+	 * @param string $dir Dir path to delete including files and sub folders
 	 * @return bool
 	 */
 	public static function deleteDirectory( string $dir ) {
@@ -266,7 +266,7 @@ class FileManager {
 	 *
 	 * @param integer $file_id  File ID to generate URL for
 	 * @param array   $add_args Additional arguments to combine with download URL
-	 * 
+	 *
 	 * @return string
 	 */
 	public static function getMediaPermalink( int $file_id, array $add_args = array() ) {
@@ -295,17 +295,17 @@ class FileManager {
 	 * @return array
 	 */
 	public static function getFilesInDirectory( string $directory ) {
-		
+
 		$files = array();
 
 		// Check if the directory exists
 		if ( is_dir( $directory ) ) {
 			$iterator = new \DirectoryIterator( $directory );
 
-			foreach ( $iterator as $fileInfo ) {
-				if ( $fileInfo->isFile() ) {
-					$filename = pathinfo( $fileInfo->getFilename(), PATHINFO_FILENAME );
-					$files[ $filename ] = $fileInfo->getPathname();
+			foreach ( $iterator as $file_info ) {
+				if ( $file_info->isFile() ) {
+					$filename           = pathinfo( $file_info->getFilename(), PATHINFO_FILENAME );
+					$files[ $filename ] = $file_info->getPathname();
 				}
 			}
 		}

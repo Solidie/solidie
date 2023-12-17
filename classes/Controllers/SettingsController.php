@@ -1,19 +1,28 @@
 <?php
+/**
+ * Settings controller
+ *
+ * @package solidie
+ */
 
 namespace Solidie\Controllers;
 
 use Solidie\Models\AdminSetting;
 
+/**
+ * Settings controller class and methods
+ */
 class SettingsController {
 	const PREREQUISITES = array(
 		'saveAdminSettings' => array(
-			'role' => 'administrator'
-		)
+			'role' => 'administrator',
+		),
 	);
 
 	/**
 	 * Admin Dashboard Settings save
 	 *
+	 * @param array $data Request data
 	 * @return void
 	 */
 	public static function saveAdminSettings( array $data ) {
@@ -22,7 +31,7 @@ class SettingsController {
 
 		} else {
 			$saved = AdminSetting::save( $data['solidie_settings'] );
-			if ( $saved === true ) {
+			if ( true === $saved ) {
 				wp_send_json_success( array( 'message' => __( 'Settings Saved Successfully!', 'solidie' ) ) );
 			} else {
 				wp_send_json_error( array( 'message' => __( 'Failed to save settings!', 'solidie' ) ) );

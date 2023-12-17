@@ -1,4 +1,9 @@
 <?php
+/**
+ * Array methods
+ *
+ * @package solidie
+ */
 
 namespace Solidie\Helpers;
 
@@ -42,8 +47,8 @@ class _Array {
 	/**
 	 * Check if an array is two dimensional
 	 *
-	 * @param array $array
-	 * @return boolean
+	 * @param array $array The array to check if it is two dimensional
+	 * @return bool
 	 */
 	public static function isTwoDimensionalArray( $array ) {
 		if ( ! empty( $array ) && is_array( $array ) ) {
@@ -211,7 +216,7 @@ class _Array {
 	/**
 	 * Parse comments from php file as array
 	 *
-	 * @param string $path
+	 * @param string         $path File path  to parse data from
 	 * @param ARRAY_A|OBJECT $ret_type Either object or array to return
 	 * @return array|object
 	 */
@@ -219,21 +224,21 @@ class _Array {
 		$result = [];
 
 		// Use regular expressions to match the first PHP comment block
-		preg_match('/\/\*\*(.*?)\*\//s', file_get_contents( $path ), $matches);
+		preg_match( '/\/\*\*(.*?)\*\//s', file_get_contents( $path ), $matches ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
 
-		if (isset($matches[1])) {
+		if ( isset( $matches[1] ) ) {
 			$comment = $matches[1];
 
 			// Remove leading asterisks and split lines
-			$lines = preg_split('/\r\n|\r|\n/', trim(preg_replace('/^\s*\*\s*/m', '', $comment)));
+			$lines = preg_split( '/\r\n|\r|\n/', trim( preg_replace( '/^\s*\*\s*/m', '', $comment ) ) );
 
-			foreach ($lines as $line) {
+			foreach ( $lines as $line ) {
 				// Check if the line contains a colon
-				if (strpos($line, ':') !== false) {
-					list($key, $value) = array_map('trim', explode(':', $line, 2));
+				if ( strpos( $line, ':' ) !== false ) {
+					list($key, $value) = array_map( 'trim', explode( ':', $line, 2 ) );
 
-					$key = strtolower( str_replace( ' ', '_', $key ) );
-					$result[$key] = $value;
+					$key            = strtolower( str_replace( ' ', '_', $key ) );
+					$result[ $key ] = $value;
 				}
 			}
 		}
@@ -243,63 +248,66 @@ class _Array {
 		$result['url']      = plugin_dir_url( $path );
 		$result['dist_url'] = $result['url'] . 'dist/';
 
-		$result = _Array::castRecursive( $result );
+		$result = self::castRecursive( $result );
 
-		return $ret_type === ARRAY_A ? $result : (object)$result;
+		return ARRAY_A === $ret_type ? $result : (object) $result;
 	}
-	
+
 	/**
 	 * Build nested array
 	 *
-	 * @param array $elements
-	 * @param int $parentId
+	 * @param array  $elements The array to get nested data from
+	 * @param int    $parent_id The parent ID to start the level from
+	 * @param string $col_name The column name that holds parent ID
+	 * @param string $parent_col_name The column name that holds the index numbers
 	 * @return array
 	 */
-	public static function buildNestedArray( $elements, $parentId, $col_name, $parent_col_name ) {
-		$nestedArray = array();
+	public static function buildNestedArray( $elements, $parent_id, $col_name, $parent_col_name ) {
+		$nested_array = array();
 
 		foreach ( $elements as $element ) {
-			if ( $element[ $col_name ] == $parentId ) {
+			if ( $parent_id === $element[ $col_name ] ) {
 				$children = self::buildNestedArray( $elements, $element[ $parent_col_name ], $col_name, $parent_col_name );
-				
+
 				if ( ! empty( $children ) ) {
 					$element['children'] = $children;
 				}
 
-				$nestedArray[] = $element;
+				$nested_array[] = $element;
 			}
 		}
 
-		return $nestedArray;
+		return $nested_array;
 	}
 
 	/**
 	 * Group multiple rows by a common field
 	 *
-	 * @param array $array
+	 * @param array  $array The table array to group rows
+	 * @param string $col_name The column name to group by
 	 * @return array
 	 */
 	public static function groupRows( $array, $col_name ) {
-		$groupedArray = array();
+		$grouped_array = array();
 
 		foreach ( $array as $item ) {
-			$contentType = $item[ $col_name ];
+			$content_type = $item[ $col_name ];
 
-			if ( ! isset( $groupedArray[ $contentType ] ) ) {
-				$groupedArray[ $contentType ] = array();
+			if ( ! isset( $grouped_array[ $content_type ] ) ) {
+				$grouped_array[ $content_type ] = array();
 			}
 
-			$groupedArray[ $contentType ][] = $item;
+			$grouped_array[ $content_type ][] = $item;
 		}
 
-		return $groupedArray;
+		return $grouped_array;
 	}
 
 	/**
 	 * Convert nested table to single table
 	 *
-	 * @param array $nested
-	 * @param string $nested_col_name
+	 * @param array  $tables The nested array to make linear
+	 * @param string $nested_col_name Then column name that holds children
 	 * @return array
 	 */
 	public static function convertToSingleTable( array $tables, string $nested_col_name ) {
@@ -309,7 +317,7 @@ class _Array {
 				if ( $col_name === $nested_col_name && is_array( $col ) ) {
 					$new_array = array_merge( $new_array, self::convertToSingleTable( $col, $nested_col_name ) );
 				} else {
-					$new_array[$index][ $col_name ] = $col;
+					$new_array[ $index ][ $col_name ] = $col;
 				}
 			}
 		}

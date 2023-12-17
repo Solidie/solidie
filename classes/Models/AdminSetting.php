@@ -1,22 +1,30 @@
 <?php
+/**
+ * Admin settings manafer
+ *
+ * @package solidie
+ */
 
 namespace Solidie\Models;
 
 use Solidie\Helpers\_Array;
 
+/**
+ * AdminSettings class
+ */
 class AdminSetting {
 	/**
-	 * Option name to save as. It will be encoded before save. Site host will be used as salt in disguise mode. 
+	 * Option name to save as. It will be encoded before save. Site host will be used as salt in disguise mode.
 	 *
 	 * @var string
 	 */
-	CONST OPTION_NAME = 'solidie_store_admin_settings';
+	const OPTION_NAME = 'solidie_store_admin_settings';
 
 	/**
 	 * Save admin settings
 	 *
-	 * @param array $settings
-	 * @return void
+	 * @param array $settings Settings array to save
+	 * @return bool
 	 */
 	public static function save( $settings ) {
 		if ( ! current_user_can( 'administrator' ) ) {
@@ -34,17 +42,17 @@ class AdminSetting {
 	/**
 	 * Get Solidie option
 	 *
-	 * @param string|null $key
-	 * @param string|int|array|bool|null $default
-	 * 
+	 * @param string|null                $key Settings key to get individual value
+	 * @param string|int|array|bool|null $default The fallback to return
+	 *
 	 * @return string|int|array|bool|null
 	 */
-	public static function get( $key = null, $default = null ) {		
+	public static function get( $key = null, $default = null ) {
 		// Get all from saved one
 		$options = get_option( self::OPTION_NAME );
 		$options = is_array( $options ) ? $options : array();
 		$options = array_replace_recursive( Manifest::getManifest()['settings'], $options );
-		
+
 		// Return all options, maybe for settings page
 		if ( null === $key ) {
 			return $options;
@@ -60,7 +68,7 @@ class AdminSetting {
 				$return_value = $return_value[ $pointer ];
 				continue;
 			}
-			
+
 			$return_value = $default;
 			break;
 		}

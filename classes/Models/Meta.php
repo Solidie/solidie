@@ -45,7 +45,7 @@ class Meta {
 	 * Provide an instance of content meta
 	 *
 	 * @param int $content_id Content ID to return meta instance for
-	 * 
+	 *
 	 * @return self
 	 */
 	public static function content( $content_id ) {
@@ -158,8 +158,8 @@ class Meta {
 	/**
 	 * Delete bulk meta for multiple objects
 	 *
-	 * @param array|int  $object_ids Array of object IDs
-	 * @param string $meta_key   Specific meta key. It's optional.
+	 * @param array|int $object_ids Array of object IDs
+	 * @param string    $meta_key   Specific meta key. It's optional.
 	 * @return void
 	 */
 	public function deleteBulkMeta( $object_ids, $meta_key = null ) {

@@ -1,4 +1,9 @@
 <?php
+/**
+ * String related functions
+ *
+ * @package solidie
+ */
 
 namespace Solidie\Helpers;
 

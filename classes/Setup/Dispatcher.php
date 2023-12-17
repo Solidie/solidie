@@ -38,14 +38,15 @@ class Dispatcher {
 	/**
 	 * Register ajax request handlers
 	 *
+	 * @throws Error If there is any duplicate ajax handler across controllers.
 	 * @return void
 	 */
-	public function registerControllers(){
+	public function registerControllers() {
 
 		$controllers = array(
 			ContentController::class,
 			SettingsController::class,
-			CategoryController::class
+			CategoryController::class,
 		);
 
 		$registered_methods = array();
@@ -57,7 +58,8 @@ class Dispatcher {
 			// Loop through controller methods in the class
 			foreach ( $class::PREREQUISITES as $method => $prerequisites ) {
 				if ( in_array( $method, $registered_methods, true ) ) {
-					throw new Error( __( 'Duplicate endpoint ' . $method . ' not possible' ) );
+					// translators: Controller conflict message
+					throw new Error( sprintf( __( 'Duplicate endpoint %s not possible', 'solidie' ), $method ) );
 				}
 
 				// Determine ajax handler types
@@ -100,11 +102,12 @@ class Dispatcher {
 		$data    = _Array::stripslashesRecursive( _Array::getArray( $data ) );
 		$files   = is_array( $_FILES ) ? $_FILES : array();
 
+		// phpcs:ignore Squiz.PHP.CommentedOutCode.Found
 		// Verify nonce first of all
-		/* $matched = wp_verify_nonce( ( $data['nonce'] ?? '' ), $data['nonce_action'] ?? '' );
-		if ( ! $matched ) {
-			wp_send_json_error( array( 'message' => __( 'Session Expired! Reloading the page might help resolve.', 'solidie' ) ) );
-		} */
+		// $matched = wp_verify_nonce( ( $data['nonce'] ?? '' ), $data['nonce_action'] ?? '' );
+		// if ( ! $matched ) {
+		// wp_send_json_error( array( 'message' => __( 'Session Expired! Reloading the page might help resolve.', 'solidie' ) ) );
+		// }
 
 		// Verify required user role
 		$_required_roles = $prerequisites['role'] ?? array();

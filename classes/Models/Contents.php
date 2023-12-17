@@ -1,46 +1,36 @@
 <?php
+/**
+ * Content manager
+ *
+ * @package solidie
+ */
 
 namespace Solidie\Models;
 
 use Solidie\Helpers\_Array;
 
+/**
+ * Content manager class
+ */
 class Contents {
-	
+
 	/**
 	 * The meta key to store thumbnail image ID
 	 */
 	const MEDIA_IDS_KEY = 'content-media-ids';
 
 	/**
-	 * Get associated product id by content id
-	 *
-	 * @param integer $content_id
-	 * @return int
-	 */
-	public static function getProductID( int $content_id ) {
-		global $wpdb;
-
-		$id = $wpdb->get_var(
-			$wpdb->prepare(
-				"SELECT product_id FROM " . DB::contents() . " WHERE content_id=%d",
-				$content_id
-			)
-		);
-
-		return $id ? $id : 0;
-	}
-
-	/**
 	 * Create or update content
 	 *
-	 * @param array $content_data
+	 * @param array $content_data Content data array to create or update
+	 * @param array $files        Attached media
 	 * @return int
 	 */
 	public static function updateContent( array $content_data, array $files ) {
 		$content = array();
 		$gmdate  = gmdate( 'Y-m-d H:i:s' );
 
-		/* -------------- Create or update the content itself -------------- */
+		// -------------- Create or update the content itself --------------
 		// Determine content ID
 		$content['content_id']          = ! empty( $content_data['content_id'] ) ? $content_data['content_id'] : 0;
 		$content['product_id']          = ! empty( $content_data['product_id'] ) ? $content['product_id'] : null;
@@ -77,12 +67,12 @@ class Contents {
 				DB::contents(),
 				$content,
 				array(
-					'content_id' => $content['content_id']
+					'content_id' => $content['content_id'],
 				)
 			);
 		}
 
-		/* -------------- Manage content media -------------- */
+		// -------------- Manage content media --------------
 		// Return false if the content ID missing that impies creation failed
 		$content_id = $content['content_id'];
 		if ( empty( $content_id ) ) {
@@ -90,12 +80,12 @@ class Contents {
 		}
 
 		// Necessary file names to work on
-		$file_names = array( 
-			'thumbnail'     => 'Thumbnail', 
-			'preview'       => 'Preview', 
-			'sample_images' => 'Sample Image' 
+		$file_names = array(
+			'thumbnail'     => 'Thumbnail',
+			'preview'       => 'Preview',
+			'sample_images' => 'Sample Image',
 		);
-		
+
 		// Prepare the initial media meta value
 		$meta      = Meta::content( $content_id );
 		$media_ids = $meta->getMeta( self::MEDIA_IDS_KEY );
@@ -104,7 +94,7 @@ class Contents {
 			array(
 				'thumbnail'     => 0,
 				'preview'       => 0,
-				'sample_images' => array()
+				'sample_images' => array(),
 			),
 			$media_ids
 		);
@@ -127,8 +117,8 @@ class Contents {
 
 		// Delete the removed files now
 		FileManager::deleteFile( $removed_ids );
-		
-		// Loop through initial uploaded files array 
+
+		// Loop through initial uploaded files array
 		// Save thumbnail, preview and sample images altogether
 		foreach ( $file_names as $name => $file_type_label ) {
 			if ( empty( $files[ $name ] ) ) {
@@ -147,7 +137,7 @@ class Contents {
 					if ( in_array( $name, array( 'thumbnail', 'preview' ), true ) ) {
 						FileManager::deleteFile( $media_ids[ $name ] ?? 0 );
 					}
-					
+
 					if ( is_array( $media_ids[ $name ] ) ) {
 						$media_ids[ $name ][] = $new_file_id;
 					} else {
@@ -159,8 +149,8 @@ class Contents {
 
 		// Eventually update the media meta
 		$meta->updateMeta( self::MEDIA_IDS_KEY, $media_ids );
-		
-		/* -------------- Create or update the main downloadable file -------------- */
+
+		// -------------- Create or update the main downloadable file --------------
 		// Save downloadable file through release to maintain consistency with app type content and other dependencies.
 		if ( ! empty( $files['downloadable_file'] ) ) {
 			Release::pushRelease(
@@ -168,8 +158,8 @@ class Contents {
 					'version'    => $content_data['version'] ?? null,
 					'changelog'  => $content_data['changelog'] ?? null,
 					'content_id' => $content_id,
-					'release_id' => ( int ) ( $content_data['release_id'] ?? 0 ),
-					'file'       => $files['downloadable_file']
+					'release_id' => (int) ( $content_data['release_id'] ?? 0 ),
+					'file'       => $files['downloadable_file'],
 				)
 			);
 		}
@@ -180,19 +170,17 @@ class Contents {
 	/**
 	 * Get release log
 	 *
-	 * @param integer $content_id
+	 * @param integer $content_id The content ID to get releases of
 	 * @return array
 	 */
-	public static function getReleases( int $content_id) {
+	public static function getReleases( int $content_id ) {
 		global $wpdb;
 		$releases = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT * FROM " . DB::releases() . " WHERE content_id=%d ORDER BY release_date DESC",
+				'SELECT * FROM ' . DB::releases() . ' WHERE content_id=%d ORDER BY release_date DESC',
 				$content_id
 			)
 		);
-
-		// To Do: Assign download links
 
 		return $releases;
 	}
@@ -200,7 +188,9 @@ class Contents {
 	/**
 	 * Get content by content id
 	 *
-	 * @param integer $content_id
+	 * @param integer $content_id The content ID to get content by
+	 * @param string  $field To get specific field
+	 * @param bool    $public_only Whether to get only public
 	 * @return array|null
 	 */
 	public static function getContentByContentID( $content_id, $field = null, $public_only = true ) {
@@ -210,9 +200,11 @@ class Contents {
 	/**
 	 * Get single content by field
 	 *
-	 * @param string $field_name
-	 * @param string|integer $field_value
-	 * 
+	 * @param string         $field_name The field to get content by
+	 * @param string|integer $field_value The value to match
+	 * @param string         $field To get specific field rather than whole data
+	 * @param bool           $public_only Whether to get only public
+	 *
 	 * @return array|null
 	 */
 	public static function getContentByField( string $field_name, $field_value, $field = null, $public_only = true ) {
@@ -228,9 +220,9 @@ class Contents {
 		global $wpdb;
 		$content = $wpdb->get_row(
 			$wpdb->prepare(
-				"SELECT content.*, content.contributor_id as author_id FROM " . DB::contents() . " content 
+				'SELECT content.*, content.contributor_id as author_id FROM ' . DB::contents() . " content 
 				LEFT JOIN {$wpdb->users} _user ON content.contributor_id=_user.ID 
-				WHERE content." . $field_name . "=%s" . $status_clause,
+				WHERE content." . $field_name . '=%s' . $status_clause,
 				$field_value
 			),
 			ARRAY_A
@@ -241,7 +233,6 @@ class Contents {
 		}
 
 		// Assign media
-		
 
 		// Apply content meta
 		$content = _Array::castRecursive( $content );
@@ -254,16 +245,17 @@ class Contents {
 	/**
 	 * Assign content media data like preview, thumbnail, sample images
 	 *
-	 * @param array $contents
+	 * @param array $contents The content array to add media data to
 	 * @return array
 	 */
 	public static function assignContentMedia( array $contents ) {
-		
+
 		if ( empty( $contents ) ) {
 			return $contents;
 		}
 
-		if ( $was_single = ! _Array::isTwoDimensionalArray( $contents ) ) {
+		$was_single = ! _Array::isTwoDimensionalArray( $contents );
+		if ( $was_single ) {
 			$contents = array( $contents );
 		}
 
@@ -294,7 +286,7 @@ class Contents {
 					);
 				}
 
-				$media[ $key ] = $is_array ? $files : ($files[0] ?? null);
+				$media[ $key ] = $is_array ? $files : ( $files[0] ?? null );
 			}
 
 			// Assign the prepared file info array to contents array
@@ -305,20 +297,10 @@ class Contents {
 	}
 
 	/**
-	 * Check if a product is solidie content
-	 *
-	 * @param string|int $product_id_or_name
-	 * @return boolean
-	 */
-	public static function isProductContent( $product_id_or_name ) {
-		return self::getContentByProduct( $product_id_or_name ) !== null;
-	}
-
-	/**
 	 * Check if a content is enabled by content ID
 	 *
 	 * @param object|int $content_id Content object or content id
-	 * 
+	 *
 	 * @return boolean
 	 */
 	public static function isContentEnabled( $content_id ) {
@@ -329,7 +311,7 @@ class Contents {
 	/**
 	 * Content type check if enabled
 	 *
-	 * @param string $content_type
+	 * @param string $content_type The content type to check if enaled
 	 * @return boolean
 	 */
 	public static function isContentTypeEnabled( $content_type ) {
@@ -337,35 +319,14 @@ class Contents {
 	}
 
 	/**
-	 * Get Content by product id and post name.
-	 * 
-	 * @param string|int $product_id_or_name
-	 *
-	 * @return object|int|string|null
-	 */
-	public static function getContentByProduct( $product_id, $field = null, $public_only = true ) {
-		if ( ! is_numeric( $product_id ) ) {
-			$product = get_page_by_path( $product_id, OBJECT, 'product' );
-
-			if ( empty( $product ) ) {
-				return null;
-			}
-
-			$product_id = $product->ID;
-		}
-
-		return self::getContentByField( 'product_id', $product_id, $field, $public_only );
-	}
-
-	/**
 	 * Get permalink by product id as per content type
 	 *
-	 * @param int|array $product_id Single content ID or whole content array
-	 * 
+	 * @param int|array $content_id Single content ID or whole content array
+	 *
 	 * @return string
 	 */
 	public static function getPermalink( $content_id ) {
-		
+
 		$content = is_array( $content_id ) ? $content_id : Field::contents()->getField( array( 'content_id' => $content_id ), array( 'content_type', 'content_slug' ) );
 		if ( empty( $content ) ) {
 			return null;
@@ -376,30 +337,10 @@ class Contents {
 	}
 
 	/**
-	 * Get purchae by order id and variation id
-	 *
-	 * @param integer $order_id
-	 * @param integer $variation_id
-	 * @return object|null
-	 */
-	public static function getPurchaseByOrderVariation( int $order_id, int $variation_id ) {
-		global $wpdb;
-		$purchase = $wpdb->get_row(
-			$wpdb->prepare(
-				"SELECT * FROM " . DB::sales() . " WHERE order_id=%d AND variation_id=%d",
-				$order_id,
-				$variation_id
-			)
-		);
-
-		return ( $purchase && is_object( $purchase ) ) ? $purchase : null;
-	}
-
-	/**
 	 * Get bulk contents
 	 *
-	 * @param array $args
-	 * @param bool $segmentation
+	 * @param array $args Arguments to get contents based on
+	 * @param bool  $segmentation Whether to add pagination data
 	 * @return array
 	 */
 	public static function getContents( array $args, bool $segmentation = false ) {
@@ -412,59 +353,59 @@ class Contents {
 		$page         = DB::getPage( $args['page'] ?? null );
 		$limit        = DB::getLimit( $args['limit'] ?? null );
 
-		// To Do: Validate paramaters for the user as per context. 
-		
+		// To Do: Validate paramaters for the user as per context.
+
 		$where_clause  = ' 1=1';
 		$order_clause  = '';
-		$limit_clause  = " LIMIT " . $limit;
-		$offset_clause = " OFFSET " . ( absint( $page - 1 ) * $limit );
-		
+		$limit_clause  = ' LIMIT ' . $limit;
+		$offset_clause = ' OFFSET ' . ( absint( $page - 1 ) * $limit );
+
 		// Content type filter
 		if ( ! empty( $content_type ) ) {
-			$c_type = esc_sql( $content_type );
+			$c_type        = esc_sql( $content_type );
 			$where_clause .= " AND content.content_type='{$c_type}'";
 		}
 
 		// Customer filter
 		if ( ! empty( $customer_id ) ) {
-			$where_clause .= " AND sale.customer_id=" . $customer_id;
+			$where_clause .= ' AND sale.customer_id=' . $customer_id;
 		}
 
 		// Search filter
 		if ( ! empty( $keyword ) ) {
-			$_keyword = esc_sql( $keyword );
+			$_keyword      = esc_sql( $keyword );
 			$where_clause .= " AND (content.content_title LIKE '%{$_keyword}%' OR content.content_description LIKE '%{$_keyword}%')";
 		}
 
 		// Filter category
 		if ( ! empty( $category_ids ) ) {
 
-			// Get child IDs 
+			// Get child IDs
 			$all_ids = array();
 			foreach ( $category_ids as $id ) {
-				$children  = Category::getChildren( $id );
-				$all_ids = array_merge( $all_ids, array_column( $children, 'category_id' ) );
+				$children = Category::getChildren( $id );
+				$all_ids  = array_merge( $all_ids, array_column( $children, 'category_id' ) );
 			}
 
 			// Merge and consolidate all the IDs together
 			$all_ids = array_unique( array_merge( $all_ids, $category_ids ) );
-			$ids_in = implode( ',', $all_ids );
+			$ids_in  = implode( ',', $all_ids );
 
 			$where_clause .= " AND content.category_id IN ({$ids_in})";
 		}
 
 		// Order by
 		if ( ! $segmentation ) {
-			if ( $order_by == 'newest' ) {
-				$order_clause .= " ORDER BY content.created_at DESC ";
+			if ( 'newest' === $order_by ) {
+				$order_clause .= ' ORDER BY content.created_at DESC ';
 			} else {
 				// Trending by default
-				$order_clause .= " ORDER BY download_count, download_date DESC ";
+				$order_clause .= ' ORDER BY download_count, download_date DESC ';
 			}
 
 			$order_clause = " GROUP BY content.content_id, sale.sale_id {$order_clause}";
 		}
-		
+
 		if ( $segmentation ) {
 			$selects = 'COUNT(content.content_id)';
 		} else {
@@ -483,13 +424,11 @@ class Contents {
 		}
 
 		$query = "SELECT {$selects}
-			FROM " . DB::contents() . " content 
-				LEFT JOIN " . DB::sales() . " sale ON content.content_id=sale.content_id
-				LEFT JOIN " . DB::categories() . " cat ON content.category_id=cat.category_id
-				LEFT JOIN " . DB::popularity() . " pop ON content.content_id=pop.content_id
+			FROM " . DB::contents() . ' content 
+				LEFT JOIN ' . DB::sales() . ' sale ON content.content_id=sale.content_id
+				LEFT JOIN ' . DB::categories() . ' cat ON content.category_id=cat.category_id
+				LEFT JOIN ' . DB::popularity() . " pop ON content.content_id=pop.content_id
 			WHERE {$where_clause} {$order_clause} " . ( $segmentation ? '' : "{$limit_clause} {$offset_clause}" );
-
-		error_log( $query );
 
 		global $wpdb;
 		if ( $segmentation ) {
@@ -510,16 +449,15 @@ class Contents {
 		$contents = _Array::castRecursive( $contents );
 		$contents = self::assignContentMedia( $contents );
 		$contents = self::assignContentMeta( $contents );
-		
+
 		return $contents;
 	}
 
 	/**
 	 * Undocumented function
 	 *
-	 * @param array|object $content
-	 * @param array $meta_array
-	 * @return array|object
+	 * @param array $contents Content array to append content meta to
+	 * @return array
 	 */
 	public static function assignContentMeta( $contents ) {
 		if ( empty( $contents ) ) {
@@ -527,7 +465,8 @@ class Contents {
 		}
 
 		// Support both list and single content
-		if ( $was_single = ! _Array::isTwoDimensionalArray( $contents ) ) {
+		$was_single = ! _Array::isTwoDimensionalArray( $contents );
+		if ( $was_single ) {
 			$contents = array( $contents );
 		}
 
@@ -547,8 +486,8 @@ class Contents {
 	/**
 	 * Delete content by content ID
 	 *
-	 * @param int $content_id
-	 * @return bool
+	 * @param int $content_id The content ID to delete
+	 * @return void
 	 */
 	public static function deleteContent( $content_id ) {
 
@@ -581,7 +520,7 @@ class Contents {
 		$wpdb->delete(
 			DB::contents(),
 			array(
-				'content_id' => $content_id
+				'content_id' => $content_id,
 			)
 		);
 	}
@@ -589,7 +528,7 @@ class Contents {
 	/**
 	 * Get content ID by slug
 	 *
-	 * @param string $slug
+	 * @param string $slug The content slug to get content by
 	 * @return int|null
 	 */
 	public static function getContentIdBySlug( string $slug ) {

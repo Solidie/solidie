@@ -1,9 +1,17 @@
 <?php
+/**
+ * Category manager module
+ *
+ * @package solidie
+ */
 
 namespace Solidie\Models;
 
 use Solidie\Helpers\_Array;
 
+/**
+ * Category class and methods
+ */
 class Category {
 	/**
 	 * Create or update category
@@ -46,7 +54,7 @@ class Category {
 	public static function getCategories() {
 		global $wpdb;
 		$cats = $wpdb->get_results(
-			"SELECT * FROM " . DB::categories(),
+			'SELECT * FROM ' . DB::categories(),
 			ARRAY_A
 		);
 
@@ -62,7 +70,7 @@ class Category {
 	/**
 	 * Delete category
 	 *
-	 * @param int $category_id
+	 * @param int $category_id The category ID to delete
 	 * @return void
 	 */
 	public static function deleteCategory( $category_id ) {
@@ -85,21 +93,22 @@ class Category {
 	/**
 	 * Get children IDs of a category
 	 *
-	 * @param int $category_id
+	 * @param int  $category_id The category ID to get children of
+	 * @param bool $linear Whether to return linear or nested table
 	 * @return array
 	 */
 	public static function getChildren( $category_id, $linear = true ) {
-		
+
 		$category_id = (int) $category_id;
 
 		global $wpdb;
 		$cats = $wpdb->get_results(
-			"SELECT * FROM " . DB::categories(),
+			'SELECT * FROM ' . DB::categories(),
 			ARRAY_A
 		);
 
-		$cats   = _Array::castRecursive( $cats );
-		$table  = _Array::buildNestedArray( $cats, $category_id, 'parent_id', 'category_id' );
+		$cats  = _Array::castRecursive( $cats );
+		$table = _Array::buildNestedArray( $cats, $category_id, 'parent_id', 'category_id' );
 
 		return $linear ? _Array::convertToSingleTable( $table, 'children' ) : $table;
 	}

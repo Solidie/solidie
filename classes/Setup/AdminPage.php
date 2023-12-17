@@ -1,17 +1,28 @@
 <?php
+/**
+ * Admin page setup
+ *
+ * @package solidie
+ */
 
 namespace Solidie\Setup;
 
 use Solidie\Main;
 use Solidie\Models\AdminSetting;
 use Solidie\Models\Category;
-use Solidie\Models\Contents;
 use Solidie\Models\Manifest;
-use Solidie\Setup\AdminPage as SetupAdminPage;
 
+/**
+ * Admin page setup handlers
+ */
 class AdminPage {
 
-	function __construct() {
+	/**
+	 * Admin page setup hooks register
+	 *
+	 * @return void
+	 */
+	public function __construct() {
 		add_action( 'admin_menu', array( $this, 'registerMenu' ) );
 	}
 
@@ -31,13 +42,13 @@ class AdminPage {
 		);
 
 		// Setting page
-		add_submenu_page( 
-			Main::$configs->root_menu_slug, 
+		add_submenu_page(
+			Main::$configs->root_menu_slug,
 			__( 'Content Types', 'tutor' ),
-			 __( 'Content Types', 'tutor' ), 
-			 'administrator', 
-			 'content-types', 
-			 array( $this, 'contentTypesPage' ) 
+			__( 'Content Types', 'tutor' ),
+			'administrator',
+			'content-types',
+			array( $this, 'contentTypesPage' )
 		);
 	}
 
@@ -47,9 +58,9 @@ class AdminPage {
 	 * @return void
 	 */
 	public function mainPage() {
-		echo '<div id="Solidie_Backend_Dashboard" data-categories="' . esc_attr( json_encode( Category::getCategories() ) ) . '"></div>';
+		echo '<div id="Solidie_Backend_Dashboard" data-categories="' . esc_attr( wp_json_encode( Category::getCategories() ) ) . '"></div>';
 	}
-	
+
 	/**
 	 * Setting page content
 	 *
@@ -57,8 +68,8 @@ class AdminPage {
 	 */
 	public function contentTypesPage() {
 		echo '<div id="Solidie_ContentTypeSettings" 
-				   data-categories="' . esc_attr( json_encode( Category::getCategories() ) ) . '"
-				   data-saved-settings="' . esc_attr( json_encode( (object)AdminSetting::get() ) ) . '" 
-				   data-manifest="' . esc_attr( json_encode( Manifest::getManifest() ) ) . '"></div>';
+				   data-categories="' . esc_attr( wp_json_encode( Category::getCategories() ) ) . '"
+				   data-saved-settings="' . esc_attr( wp_json_encode( (object) AdminSetting::get() ) ) . '" 
+				   data-manifest="' . esc_attr( wp_json_encode( Manifest::getManifest() ) ) . '"></div>';
 	}
 }

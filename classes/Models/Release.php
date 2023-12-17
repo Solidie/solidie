@@ -1,9 +1,17 @@
 <?php
+/**
+ * Release management
+ *
+ * @package solidie
+ */
 
 namespace Solidie\Models;
 
+/**
+ * Release class
+ */
 class Release {
-	
+
 	/**
 	 * Delete file for a single release
 	 *
@@ -22,7 +30,7 @@ class Release {
 
 		global $wpdb;
 		$file_ids = $wpdb->get_col(
-			"SELECT file_id FROM " . DB::releases() . " WHERE release_id IN (" . $implodes . ")"
+			'SELECT file_id FROM ' . DB::releases() . ' WHERE release_id IN (' . $implodes . ')'
 		);
 
 		// Delete file IDs from file system
@@ -33,7 +41,7 @@ class Release {
 			$wpdb->delete(
 				DB::releases(),
 				array(
-					'release_id' => $id
+					'release_id' => $id,
 				)
 			);
 		}
@@ -42,14 +50,14 @@ class Release {
 	/**
 	 * Delete releases from a specific content
 	 *
-	 * @param int $content_id
+	 * @param int $content_id The content ID to delete releases for
 	 * @return void
 	 */
 	public static function deleteReleaseByContentId( $content_id ) {
 		global $wpdb;
 		$release_ids = $wpdb->get_col(
 			$wpdb->prepare(
-				"SELECT release_id FROM " . DB::releases() . " WHERE content_id=%d",
+				'SELECT release_id FROM ' . DB::releases() . ' WHERE content_id=%d',
 				$content_id
 			)
 		);
@@ -66,9 +74,9 @@ class Release {
 	public static function pushRelease( array $data ) {
 		$content = Contents::getContentByContentID( $data['content_id'] );
 		if ( empty( $content ) ) {
-			return __( 'Content not found to release', 'solidie'  );
+			return __( 'Content not found to release', 'solidie' );
 		}
-		
+
 		$release = array(
 			'version'    => $data['version'],
 			'changelog'  => $data['changelog'],
@@ -87,7 +95,7 @@ class Release {
 			// Upload new one
 			$file_id = FileManager::uploadFile( $data['content_id'], $data['file'], $content['content_title'] . ' - Downloadable' );
 			if ( ! $file_id ) {
-				return __( 'Error in file saving!', 'solidie'  );
+				return __( 'Error in file saving!', 'solidie' );
 			}
 
 			// Link new one to the release
@@ -101,7 +109,7 @@ class Release {
 				DB::releases(),
 				$release,
 				array(
-					'release_id' => $data['release_id']
+					'release_id' => $data['release_id'],
 				)
 			);
 		}
@@ -110,12 +118,14 @@ class Release {
 	}
 
 	/**
-	 * Get release history. No matter what the defined version is, the order will be latest first. 
+	 * Get release history. No matter what the defined version is, the order will be latest first.
 	 *
-	 * @param integer $content_id
-	 * @param integer|null $page
-	 * @param integer|null $limit
-	 * @param string|null $version
+	 * @param integer      $content_id The content ID to get releases for
+	 * @param integer|null $page Paginated page number
+	 * @param integer|null $limit Release per page
+	 * @param string|null  $version Specific version to get
+	 * @param int          $license_id In case license ID matters
+	 * @param string       $endpoint Specific endpoint
 	 * @return array
 	 */
 	public static function getReleases( int $content_id, int $page = 1, int $limit = 20, string $version = null, $license_id = 0, $endpoint = 'N/A' ) {
@@ -126,14 +136,14 @@ class Release {
 
 		$releases = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT 
+				'SELECT 
 					_release.*, 
 					content.content_title, 
 					UNIX_TIMESTAMP(_release.release_date) as release_date, 
 					content.product_id, 
 					content.content_type
-				FROM ".DB::releases()." _release
-					INNER JOIN ".DB::contents()." content ON content.content_id=_release.content_id
+				FROM ' . DB::releases() . ' _release
+					INNER JOIN ' . DB::contents() . " content ON content.content_id=_release.content_id
 				WHERE 
 					_release.content_id=%d {$version_clause} 
 				ORDER BY _release.release_date DESC LIMIT %d, %d",
@@ -158,7 +168,7 @@ class Release {
 
 			$arg_payload = array(
 				'release'    => $release,
-				'license_id' => $license_id, 
+				'license_id' => $license_id,
 				'endpoint'   => $endpoint,
 			);
 
@@ -167,19 +177,21 @@ class Release {
 			$release->file_path    = $file_path ? $file_path : null;
 			$release->mime_type    = get_post_mime_type( $release->file_id );
 			$release->content_url  = Contents::getPermalink( $release->content_id );
-			
+
 			// Store the release in the new array
 			$new_array[] = $release;
 		}
 
 		return $new_array;
-	} 
+	}
 
 	/**
 	 * Get a single release. Latest one will be returned if version is not specified.
 	 *
-	 * @param integer $content_id
-	 * @param string|null $version
+	 * @param integer     $content_id The content ID to get single release for
+	 * @param string|null $version If specific version needed
+	 * @param int         $license_id License ID
+	 * @param string      $endpoint Endpoint
 	 * @return object
 	 */
 	public static function getRelease( int $content_id, string $version = null, $license_id = 0, $endpoint = 'N/A' ) {

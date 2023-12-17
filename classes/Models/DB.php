@@ -98,11 +98,11 @@ class DB {
 	/**
 	 * Get limit for queries
 	 *
-	 * @param int|null $limit
+	 * @param int|null $limit The limit to prepare
 	 * @return int
 	 */
 	public static function getLimit( $limit = null ) {
-		$limit = absint( ( int ) $limit );
+		$limit = absint( (int) $limit );
 		if ( empty( $limit ) ) {
 			$limit = 1;
 		}
@@ -112,11 +112,11 @@ class DB {
 	/**
 	 * Get page num to get results for
 	 *
-	 * @param int|null $page
+	 * @param int|null $page The page to prepare
 	 * @return int
 	 */
 	public static function getPage( $page = null ) {
-		$page = absint( ( int ) $page );
+		$page = absint( (int) $page );
 		if ( empty( $page ) ) {
 			$page = 1;
 		}

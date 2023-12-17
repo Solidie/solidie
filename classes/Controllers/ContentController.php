@@ -1,35 +1,41 @@
 <?php
+/**
+ * Content management request handler
+ *
+ * @package solidie
+ */
 
 namespace Solidie\Controllers;
 
 use Solidie\Models\Contents;
 use Solidie\Models\Release;
-use Solidie\Models\Sale;
-use Solidie\Models\Store;
 
-// To Do: Add three custom rules; 
-// finance-manager who disburse payments, 
-// content-reviewer who review submissions from contributors, 
+// To Do: Add three custom rules;
+// finance-manager who disburse payments,
+// content-reviewer who review submissions from contributors,
 // and contributor who uploads their contents.
 
+/**
+ * Content manager class
+ */
 class ContentController {
 
 	const PREREQUISITES = array(
-		'getContentList' => array(
-			'nopriv' => true
+		'getContentList'        => array(
+			'nopriv' => true,
 		),
-		'createOrUpdateContent' => array(
-		),
-		'fetchReleases' => array(),
-		'versionRelease' => array(),
-		'deleteContent' => array(),
-		'getSingleContent' => array(),
-		'loadFile' => array(),
+		'createOrUpdateContent' => array(),
+		'fetchReleases'         => array(),
+		'versionRelease'        => array(),
+		'deleteContent'         => array(),
+		'getSingleContent'      => array(),
+		'loadFile'              => array(),
 	);
 
 	/**
 	 * Provide content list for various area like dashboard, catalog and so on.
 	 *
+	 * @param array $data Request data
 	 * @return void
 	 */
 	public static function getContentList( array $data ) {
@@ -37,18 +43,20 @@ class ContentController {
 		$content_list = Contents::getContents( $data );
 		$segmentation = Contents::getContents( $data, true );
 
-		wp_send_json_success( array( 
-			'contents' => $content_list,
-			'segmentation' => $segmentation
-		) );
+		wp_send_json_success(
+			array(
+				'contents'     => $content_list,
+				'segmentation' => $segmentation,
+			)
+		);
 	}
 
 	/**
 	 * Create or update content from frontend dashboard
 	 *
-	 * @param $data Request data
-	 * @param $files Request files
-	 * 
+	 * @param array $data Request data
+	 * @param array $files Request files
+	 *
 	 * @return void
 	 */
 	public static function createOrUpdateContent( array $data, array $files ) {
@@ -58,10 +66,12 @@ class ContentController {
 		$content_id = Contents::updateContent( $data, $files );
 
 		if ( ! empty( $content_id ) ) {
-			wp_send_json_success(array(
-				'message' => ! empty( $data['content_id'] ) ? __( 'Saved successfully.', 'solidie' ) : __( 'Created successfully.', 'solidie' ),
-				'content' => Contents::getContentByContentID( $content_id )
-			));
+			wp_send_json_success(
+				array(
+					'message' => ! empty( $data['content_id'] ) ? __( 'Saved successfully.', 'solidie' ) : __( 'Created successfully.', 'solidie' ),
+					'content' => Contents::getContentByContentID( $content_id ),
+				)
+			);
 		} else {
 			wp_send_json_error( array( 'message' => __( 'Something went wrong!', 'solidie' ) ) );
 		}
@@ -70,6 +80,7 @@ class ContentController {
 	/**
 	 * Get content release history
 	 *
+	 * @param array $data Request data
 	 * @return void
 	 */
 	public static function fetchReleases( array $data ) {
@@ -80,9 +91,11 @@ class ContentController {
 	/**
 	 * Create or update version
 	 *
+	 * @param array $data Request data
+	 * @param array $files Request files
 	 * @return void
 	 */
-	public static function versionRelease( array $data ) {
+	public static function versionRelease( array $data, array $files ) {
 		// Check if main three parameter received
 		if ( empty( $data['version'] ) || empty( $data['changelog'] ) || empty( $data['content_id'] ) ) {
 			wp_send_json_error( array( 'message' => __( 'Required release data missing!', 'solidie' ) ) );
@@ -91,7 +104,7 @@ class ContentController {
 
 		// File is required for new release, release id will be falsy if it is new release.
 		if ( empty( $data['release_id'] ) ) {
-			if ( empty( $_FILES['file'] ) || ! empty( $_FILES['file']['error'] ) ) {
+			if ( empty( $files['file'] ) || ! empty( $files['file']['error'] ) ) {
 				wp_send_json_error( array( 'message' => __( 'Valid file is required for new release!', 'solidie' ) ) );
 				exit;
 			}
@@ -105,7 +118,7 @@ class ContentController {
 				'changelog'  => $data['changelog'],
 				'content_id' => $data['content_id'],
 				'release_id' => ! empty( $data['release_id'] ) ? (int) $data['release_id'] : 0,
-				'file'       => ! empty( $_FILES['file'] ) ? $_FILES['file'] : null
+				'file'       => ! empty( $files['file'] ) ? $files['file'] : null,
 			),
 			false
 		);
@@ -120,7 +133,7 @@ class ContentController {
 	/**
 	 * Delete content
 	 *
-	 * @param array $data
+	 * @param array $data Request data
 	 * @return void
 	 */
 	public static function deleteContent( array $data ) {
@@ -132,7 +145,7 @@ class ContentController {
 	/**
 	 * Get single content for both single view and edit
 	 *
-	 * @param array $data
+	 * @param array $data Request data
 	 * @return void
 	 */
 	public static function getSingleContent( array $data ) {
@@ -159,8 +172,6 @@ class ContentController {
 		$file_id = $data['file_id'] ?? 0;
 		$path    = get_attached_file( $file_id );
 
-		// var_dump( $path, is_readable( $path ) ); exit;
-
 		if ( empty( $path ) || ! is_readable( $path ) ) {
 			http_response_code( 404 );
 			exit;
@@ -173,26 +184,26 @@ class ContentController {
 		$last_modified = gmdate( 'D, d M Y H:i:s', filemtime( $path ) ) . ' GMT';
 		$etag          = md5_file( $path );
 
-		header('Last-Modified: ' . $last_modified );
-		header('ETag: ' . $etag );
-		header('Cache-Control: public, max-age=604800'); // Set the caching time in seconds (e.g., 1 week)
+		header( 'Last-Modified: ' . $last_modified );
+		header( 'ETag: ' . $etag );
+		header( 'Cache-Control: public, max-age=604800' ); // Set the caching time in seconds (e.g., 1 week)
 		header( 'Expires: 604800' );
 
 		// Check if the file has been modified
-		if ( isset( $_SERVER['HTTP_IF_MODIFIED_SINCE'] ) && strtotime( $_SERVER['HTTP_IF_MODIFIED_SINCE'] ) >= filemtime( $path ) ) {
-			header('HTTP/1.1 304 Not Modified');
+		if ( isset( $_SERVER['HTTP_IF_MODIFIED_SINCE'] ) && strtotime( sanitize_text_field( wp_unslash( $_SERVER['HTTP_IF_MODIFIED_SINCE'] ) ) ) >= filemtime( $path ) ) {
+			header( 'HTTP/1.1 304 Not Modified' );
 			exit;
 		}
 
-		if ( isset( $_SERVER['HTTP_IF_NONE_MATCH'] ) && trim( $_SERVER['HTTP_IF_NONE_MATCH'] ) === $etag ) {
-			header('HTTP/1.1 304 Not Modified');
+		if ( isset( $_SERVER['HTTP_IF_NONE_MATCH'] ) && trim( sanitize_text_field( wp_unslash( $_SERVER['HTTP_IF_NONE_MATCH'] ) ) ) === $etag ) {
+			header( 'HTTP/1.1 304 Not Modified' );
 			exit;
 		}
 
 		header( 'Content-Type: ' . $mime_type . '; charset=utf-8' );
 		header( 'Content-Disposition: attachment; filename=' . basename( $path ) );
 		header( 'Content-Length: ' . $file_size );
-		
+
 		readfile( $path ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_readfile
 		exit;
 	}

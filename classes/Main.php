@@ -1,16 +1,22 @@
 <?php
+/**
+ * App initiator class
+ *
+ * @package solidie
+ */
 
 namespace Solidie;
 
 use Solidie\Helpers\_Array;
-use Solidie\Helpers\Crypto;
 use Solidie\Setup\Dispatcher;
 use Solidie\Setup\Scripts;
 use Solidie\Setup\AdminPage;
-use Solidie\Setup\Utilities;
 use Solidie\Setup\Media;
 use Solidie\Setup\Route;
 
+/**
+ * Main class to initiate app
+ */
 class Main {
 	/**
 	 * Configs array
@@ -21,9 +27,9 @@ class Main {
 
 	/**
 	 * Initialize Plugin
-	 * 
-	 * @param object $configs
-	 * 
+	 *
+	 * @param object $configs Plugin configs for start up
+	 *
 	 * @return void
 	 */
 	public function init( object $configs ) {
@@ -36,14 +42,14 @@ class Main {
 		spl_autoload_register( array( $this, 'loader' ) );
 
 		// Retrieve plugin info from index
-		$manifest = _Array::getManifestArray( $configs->file, ARRAY_A );
+		$manifest      = _Array::getManifestArray( $configs->file, ARRAY_A );
 		self::$configs = (object) array_merge( $manifest, (array) self::$configs );
 
 		// Prepare the unique app name
 		$pattern = '/\/([^\/]+)\/wp-content\/(plugins|themes)\/([^\/]+)\/.*/';
 		preg_match( $pattern, self::$configs->url, $matches );
-		$parsedString = strtolower( "CrewMat_{$matches[1]}_{$matches[3]}" );
-		self::$configs->app_name = preg_replace( '/[^a-zA-Z0-9_]/', '', $parsedString );
+		$parsed_string           = strtolower( "CrewMat_{$matches[1]}_{$matches[3]}" );
+		self::$configs->app_name = preg_replace( '/[^a-zA-Z0-9_]/', '', $parsed_string );
 
 		// Register Activation/Deactivation Hook
 		register_activation_hook( self::$configs->file, array( $this, 'activate' ) );
@@ -51,7 +57,6 @@ class Main {
 
 		// Core Modules
 		new Route();
-		new Utilities();
 		new Dispatcher();
 		new Scripts();
 		new AdminPage();
