@@ -210,6 +210,7 @@ export function CatSettings(props) {
 						Object.keys(manifest.contents).map(c_type=>{
 							let {label, description} = manifest.contents[c_type];
 							const {enable=false} = state.settings?.contents?.[c_type] || {};
+							const categories = getFlattenedCategories(catState.categories[c_type] || []);
 
 							return <tr key={c_type}>
 								<td style={{paddingTop: '20px', paddingBottom: '20px', width: '33%'}}>
@@ -234,7 +235,7 @@ export function CatSettings(props) {
 								</td>
 								<td>
 									{
-										getFlattenedCategories(catState.categories[c_type] || []).map(category=>{
+										categories.map(category=>{
 											const {label, category_id} = category;
 											return <div key={category_id} className={'d-flex align-items-center column-gap-15'.classNames() + 'category-single'.classNames(style)}>
 												{label} <span className={'d-inline-flex align-items-center column-gap-8'.classNames() + 'actions'.classNames(style)}>
@@ -248,7 +249,8 @@ export function CatSettings(props) {
 									<div className={"d-flex align-items-center column-gap-10".classNames()}>
 										<span 
 											onClick={()=>openCatEditor({content_type: c_type})} 
-											className={"cursor-pointer hover-underline".classNames()}
+											className={`cursor-pointer hover-underline ${categories.length ? 'border-top-1 b-color-tertiary' : ''}`.classNames()}
+											style={categories.length ? {paddingTop: '6px', marginTop: '6px'} : {}}
 										>
 											<i className={"ch-icon ch-icon-add-circle".classNames()}></i>&nbsp;&nbsp;
 											<span>{__('Add New Category')}</span>

@@ -157,7 +157,7 @@ export function ContentEditor({categories=[]}) {
 					values.downloadable_file = {
 						file_id: release.file_id,
 						file_url: release.downloadable_url,
-						file_name: release.file_name,
+						file_name: release.content_title,
 						mime_type: release.mime_type,
 					}
 

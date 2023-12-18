@@ -43,7 +43,14 @@ Manual Installation
 
 **Usage Instructions:**
 
-Once the plugin is activated, you will find **Solidie** menu in the dashboard left sidebar.
+Once the plugin is activated, you will find **Solidie** menu in the dashboard left sidebar. It has more submenus containing various features.
+
+= Documentation and Support =
+
+If you have any questions or problems using this plugin, you can write here in [support channel](https://wordpress.org/support/plugin/solidie/)
+
+Please note that this plugin is developed using React.js. 
+If you want to access the unminified files for this plugin, you can do so from [here](https://bitbucket.org/jayedulk/solidie/)
 
 == Screenshots ==
 

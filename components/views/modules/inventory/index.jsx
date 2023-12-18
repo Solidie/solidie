@@ -15,7 +15,7 @@ import { getDashboardPath } from '../../admin-dashboard/inventory/inventory-back
 import table_style from '../../../materials/styles/table.module.scss';
 import style from './inventory.module.scss';
 
-export function InventoryWrapper({children, fetching}) {
+export function InventoryWrapper({children, fetching, content_label, catalog_permalink}) {
 
 	const {content_type} = useParams();
 
@@ -36,7 +36,9 @@ export function InventoryWrapper({children, fetching}) {
 				setState({
 					...state, 
 					error_message: <div className={'text-align-center padding-vertical-40'.classNames()}>
-						<span className={'d-block margin-bottom-10 font-size-20'.classNames()}>{__('No content type is enabled yet.')}</span>
+						<span className={'d-block margin-bottom-10 font-size-20'.classNames()}>
+							{__('No content type is enabled yet.')}
+						</span>
 						<a href={window[data_pointer]?.permalinks?.content_types} className={'button button-primary button-small'.classNames()}>
 							{__('Enable Now')}
 						</a>
@@ -46,7 +48,14 @@ export function InventoryWrapper({children, fetching}) {
 		} else if( ! enabled_contents.find(e=>e.content_type===content_type)?.enable ) {
 			setState({
 				...state, 
-				error_message: __('The content type is not found or maybe disabled')
+				error_message: <div className={'text-align-center padding-vertical-40'.classNames()}>
+						<span className={'d-block margin-bottom-10 font-size-20'.classNames()}>
+							{sprintf(__('The content type \'%s\' is not found or maybe disabled meanwhile'), content_type)}
+						</span>
+						<a href={window[data_pointer]?.permalinks?.content_types} className={'button button-primary button-small'.classNames()}>
+							{__('Check Content Types')}
+						</a>
+					</div>
 			});
 		}
 	}, []);
@@ -55,7 +64,7 @@ export function InventoryWrapper({children, fetching}) {
 		<div>
 			<strong className={"d-flex align-items-center column-gap-8 color-text padding-vertical-10 position-sticky top-0".classNames()}>
 				<span className={'font-size-24 font-weight-600 letter-spacing-3'.classNames()}>
-					{__('Inventory')} 
+					{__('Inventory')} - <a href={catalog_permalink} target='_blank' className={'hover-underline'.classNames()}>{content_label}</a>
 				</span>
 				<LoadingIcon 
 					show={fetching} 
@@ -83,7 +92,8 @@ export function Inventory(props) {
 	const [state, setState] = useState({
 		fetching: false,
 		contents: [],
-		segmentation: null
+		segmentation: null,
+		catalog_permalink: null
 	});
 
 	const filterStateInitial = {
@@ -115,12 +125,21 @@ export function Inventory(props) {
 		}
 
 		request( 'getContentList', payload, resp=>{
-			const {success, data:{segmentation = {}, contents=[]}} = resp;
+			const {
+				success, 
+				data: {
+					segmentation = {}, 
+					contents=[],
+					catalog_permalink
+				}
+			} = resp;
+
 			setState({
 				...state,
 				contents,
 				fetching: false,
-				segmentation
+				segmentation,
+				catalog_permalink
 			});
 		} );
 	}
@@ -152,7 +171,12 @@ export function Inventory(props) {
 	const _content = window[data_pointer]?.settings?.contents[content_type] || {};
 	const _content_label = _content.label || __('Content');
 	
-	return <InventoryWrapper fetching={state.fetching}>
+	return <InventoryWrapper 
+		fetching={state.fetching} 
+		content_label={_content_label} 
+		content_type={content_type}
+		catalog_permalink={state.catalog_permalink}
+	>
 		{
 			// When no content created at all
 			(!state.fetching && filterState.page===1 && isEmpty( filterState.search ) && !state.contents.length) ?
@@ -220,12 +244,12 @@ export function Inventory(props) {
 																	style={{width: '30px', height: 'auto', borderRadius: '2px'}}/>
 															</div>
 															<div className={'flex-1'.classNames()}>
-																<a href={content_url} target='_blank' className={"d-block".classNames()}>
+																<a href={content_url} target='_blank' className={"d-block font-size-14 font-weight-600".classNames()}>
 																	{content_title}
 																</a>
 																<div className={'actions'.classNames(style) + 'd-flex align-items-center column-gap-10 margin-top-10'.classNames()}>
 																	<Link 
-																		className={'cursor-pointer'.classNames()} 
+																		className={'cursor-pointer color-text-light d-inline-flex align-items-center column-gap-8'.classNames()} 
 																		title={__('Edit')}
 																		to={getDashboardPath(`inventory/${content_type}/editor/${content_id}/`)}
 																	>
@@ -233,7 +257,7 @@ export function Inventory(props) {
 																	</Link>
 																	<span className={'color-text-lighter'.classNames()}>|</span>
 																	<span
-																		className={'cursor-pointer'.classNames()}
+																		className={'cursor-pointer color-text-light d-inline-flex align-items-center column-gap-8'.classNames()}
 																		title={__('Delete')}
 																		onClick={()=>deleteContent(content_id)}
 																	>

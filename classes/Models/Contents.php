@@ -130,14 +130,14 @@ class Contents {
 
 			// Loop through synced files structure
 			foreach ( $_files as $file ) {
+				// Delete existing thumbnail and preview file, These two can't be duplicated.
+				if ( in_array( $name, array( 'thumbnail', 'preview' ), true ) ) {
+					FileManager::deleteFile( $media_ids[ $name ] ?? 0 );
+				}
+
+				// Now create new file for it
 				$new_file_id = FileManager::uploadFile( $content['content_id'], $file, $content['content_title'] . ' - ' . $file_type_label );
 				if ( ! empty( $new_file_id ) ) {
-
-					// Delete existing thumbnail and preview file, These two can't be duplicated.
-					if ( in_array( $name, array( 'thumbnail', 'preview' ), true ) ) {
-						FileManager::deleteFile( $media_ids[ $name ] ?? 0 );
-					}
-
 					if ( is_array( $media_ids[ $name ] ) ) {
 						$media_ids[ $name ][] = $new_file_id;
 					} else {
@@ -332,8 +332,18 @@ class Contents {
 			return null;
 		}
 
-		$base_slug = AdminSetting::get( 'contents.' . $content['content_type'] . '.slug' );
-		return get_home_url() . '/' . trim( $base_slug, '/' ) . '/' . $content['content_slug'] . '/';
+		return self::getCatalogPermalink( $content['content_type'] ) . $content['content_slug'] . '/';
+	}
+
+	/**
+	 * Get catalog url for content type
+	 *
+	 * @param string $content_type The content type to get catalog permalink for
+	 * @return string
+	 */
+	public static function getCatalogPermalink( string $content_type ) {
+		$base_slug = AdminSetting::get( 'contents.' . $content_type . '.slug' );
+		return get_home_url() . '/' . trim( $base_slug, '/' ) . '/';
 	}
 
 	/**

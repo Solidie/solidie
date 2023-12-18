@@ -45,8 +45,9 @@ class ContentController {
 
 		wp_send_json_success(
 			array(
-				'contents'     => $content_list,
-				'segmentation' => $segmentation,
+				'contents'          => $content_list,
+				'segmentation'      => $segmentation,
+				'catalog_permalink' => Contents::getCatalogPermalink( $data['content_type'] )
 			)
 		);
 	}
