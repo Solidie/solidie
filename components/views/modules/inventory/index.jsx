@@ -64,7 +64,7 @@ export function InventoryWrapper({children, fetching, content_label, catalog_per
 		<div>
 			<strong className={"d-flex align-items-center column-gap-8 color-text padding-vertical-10 position-sticky top-0".classNames()}>
 				<span className={'font-size-24 font-weight-600 letter-spacing-3'.classNames()}>
-					{__('Inventory')} - <a href={catalog_permalink} target='_blank' className={'hover-underline'.classNames()}>{content_label}</a>
+					{__('Inventory')} {content_label ? <> - <a href={catalog_permalink} target='_blank' className={'hover-underline'.classNames()}>{content_label}</a></> : null}
 				</span>
 				<LoadingIcon 
 					show={fetching} 

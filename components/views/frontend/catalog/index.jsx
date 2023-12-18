@@ -148,31 +148,30 @@ function CatalogLayout({categories={}}) {
 	}
 
 	const RenderComp = renderers[content_type];
-	const content_keys = Object.keys(contents);
+	const content_options = Object.keys(contents).map(c=>{
+		let {label, slug, enable} = contents[c];
+		if ( enable === true ) {
+			return {
+				id: slug || c,
+				label: label || slug
+			}
+		} else {
+			return null
+		}
+	}).filter(content=>content!==null);
 
 	return <div className={'catalog'.classNames(style)}>
 		<div className={'d-flex align-items-center position-sticky border-1 border-radius-8 b-color-tertiary margin-bottom-15'.classNames()}>
 			<div 
 				className={'border-right-1 b-color-tertiary'.classNames()} 
-				style={content_keys.length<2 ? {width: '0px !important', visibility: 'hidden'} : {}}
+				style={content_options.length<2 ? {width: 0, visibility: 'hidden'} : {}}
 			>
 				<DropDown
 					value={contents[content_type]?.slug}
 					onChange={v=>navigate(getPath(v+'/'))}
 					variant="borderless"
 					clearable={false}
-					options={content_keys.map(c=>{
-						let {label, slug, enable} = contents[c];
-
-						if ( enable === true ) {
-							return {
-								id: slug || c,
-								label: label || slug
-							}
-						} else {
-							return null
-						}
-					}).filter(content=>content!==null)}/>
+					options={content_options}/>
 			</div>
 
 			{/* Search field */}

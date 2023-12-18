@@ -103,7 +103,7 @@ export function ContentEditor({categories=[]}) {
 		});
 
 		request('createOrUpdateContent', {...state.values, content_id}, resp=>{
-			const {success, data:{content={}, message}} = resp;
+			const {success, data:{content={}, message, content_id: c_id}} = resp;
 
 			setState({
 				...state,
@@ -116,6 +116,11 @@ export function ContentEditor({categories=[]}) {
 					dismissible: true,
 					status: 'success'
 				});
+
+				// Replace current URL state with content ID to make it update from later attempts
+				if ( ! content_id ) {
+					navigate('/inventory/'+content_type, {replace: true});
+				}
 			} else {
 				ajaxToast(resp);
 			}
@@ -242,7 +247,7 @@ export function ContentEditor({categories=[]}) {
 				className={'button button-primary'.classNames()} 
 				onClick={submit}
 			>
-				{__('Submit')} <LoadingIcon show={state.submitting}/>
+				{content_id ? __('Update') : __('Create')} <LoadingIcon show={state.submitting}/>
 			</button>
 		</div>
 	</InventoryWrapper> 
