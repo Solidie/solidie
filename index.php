@@ -1,13 +1,14 @@
 <?php
 /**
- * Plugin Name: Solidie
+ * Plugin Name: Solidie - Digital Content Showcase & Sales
  * Plugin URI: https://solidie.com
- * Description: Digital content showcase
+ * Description: Multimedia stock plugin to showcase and sell any digital contents like audio, video, image, ebook, apps and so on.
  * Author: Solidie
  * Version: 1.0.0
  * Author URI: https://solidie.com
  * Requires at least: 5.3
- * Tested up to: 6.4.1
+ * Tested up to: 6.4.2
+ * Requires PHP: 7.4
  * Text Domain: solidie
  *
  * @package solidie
