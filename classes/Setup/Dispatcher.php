@@ -64,11 +64,11 @@ class Dispatcher {
 
 				// Determine ajax handler types
 				$handlers    = array();
-				$handlers [] = 'wp_ajax_' . Main::$configs->app_name . '_' . $method;
+				$handlers [] = 'wp_ajax_' . Main::$configs->app_id . '_' . $method;
 
 				// Check if norpriv necessary
 				if ( ( $prerequisites['nopriv'] ?? false ) === true ) {
-					$handlers[] = 'wp_ajax_nopriv_' . Main::$configs->app_name . '_' . $method;
+					$handlers[] = 'wp_ajax_nopriv_' . Main::$configs->app_id . '_' . $method;
 				}
 
 				// Loop through the handlers and register

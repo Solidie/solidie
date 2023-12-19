@@ -50,7 +50,7 @@ class Main {
 		$pattern = '/\/([^\/]+)\/wp-content\/(plugins|themes)\/([^\/]+)\/.*/';
 		preg_match( $pattern, self::$configs->url, $matches );
 		$parsed_string           = strtolower( "CrewMat_{$matches[1]}_{$matches[3]}" );
-		self::$configs->app_name = preg_replace( '/[^a-zA-Z0-9_]/', '', $parsed_string );
+		self::$configs->app_id = preg_replace( '/[^a-zA-Z0-9_]/', '', $parsed_string );
 
 		// Register Activation/Deactivation Hook
 		register_activation_hook( self::$configs->file, array( $this, 'activate' ) );

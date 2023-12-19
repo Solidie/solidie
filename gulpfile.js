@@ -22,7 +22,8 @@ var onError = function (err) {
 var added_texts = [];
 const regex = /__\(\s*'([^']*)'\s*\)/g;
 const js_files = ['frontend', 'admin-dashboard'].map((f) => 'dist/' + f + '.js:1').join(', ');
-function i18n_makepot(callback, target_dir) {
+
+function i18n_makepot(target_dir) {
     const parent_dir = target_dir || __dirname;
     var translation_texts = '';
 
@@ -36,7 +37,7 @@ function i18n_makepot(callback, target_dir) {
 
         var stat = fs.lstatSync(full_path);
         if (stat.isDirectory()) {
-            i18n_makepot(null, full_path);
+            i18n_makepot(full_path);
             return;
         }
 
@@ -66,8 +67,16 @@ function i18n_makepot(callback, target_dir) {
         __dirname + '/languages/' + text_domain.toLowerCase() + '.pot',
         translation_texts
     );
+}
 
-    callback ? callback() : 0;
+function i18n_makepot_init(callback) {
+	i18n_makepot(path.resolve(__dirname) );
+	i18n_makepot(path.resolve(__dirname + '/../Solidie-Pro') );
+	i18n_makepot(path.resolve(__dirname + '/../Materials') );
+
+	if ( typeof callback === 'function' ) {
+		callback();
+	}
 }
 
 gulp.task('makepot', function () {
@@ -153,7 +162,7 @@ exports.build = gulp.series(
     'clean-zip',
     'clean-build',
     'makepot',
-    i18n_makepot,
+    i18n_makepot_init,
     'copy',
     'make-zip'
 );

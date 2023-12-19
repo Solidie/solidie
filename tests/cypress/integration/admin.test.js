@@ -1,0 +1,13 @@
+describe('Admin can login and make sure plugin is activated', () => {
+	before(() => {
+		cy.login();
+	});
+
+	it('Can activate plugin if it is deactivated', () => {
+		cy.activatePlugin('solidie');
+	});
+
+	it('Can visit "Solidie" page', () => {
+		cy.visit('wp-admin/admin.php?page=solidie');
+	});
+});

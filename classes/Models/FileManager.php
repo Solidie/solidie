@@ -276,7 +276,7 @@ class FileManager {
 		$nonce        = wp_create_nonce( $nonce_action );
 
 		$args = array(
-			'action'       => Main::$configs->app_name . '_loadFile',
+			'action'       => Main::$configs->app_id . '_loadFile',
 			'file_id'      => $file_id,
 			'nonce'        => $nonce,
 			'nonce_action' => $nonce_action,

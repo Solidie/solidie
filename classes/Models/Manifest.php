@@ -106,7 +106,7 @@ class Manifest {
 			),
 		);
 
-		// Prepare app plans
+		// Prepare plans for 'app' only at first
 		$new_array = array();
 		$periods   = self::getPeriods();
 		foreach ( $manifest['contents']['app']['plans'] as $attr => $variation ) {
@@ -123,7 +123,7 @@ class Manifest {
 		$manifest['contents']['app']['plans'] = $new_array;
 
 		// Now prepare plans for audio, video, image, 3d, document and font together as these are similar in terms of usage.
-		// Tutorial doesn't need any plan as it is not downloadable or subscription based. It is onetime purchase, lifetime access no matter gets update or not.
+		// Tutorial doesn't need any plan as it is not downloadable or subscription based. It is onetime purchase, lifetime access no matter if it gets update or not in future.
 		// If tutorial is written as part of other contents such as app or video template, then customers don't need to purchase it separately as they've done so for the main content already.
 		// Tutorial can be purchased and showcased separately only if it is created independently as not part of other contents.
 		$lincensings   = self::getLicensings();
@@ -159,6 +159,8 @@ class Manifest {
 				'enable' => false,
 			);
 		}
+
+		// error_log( var_export( $manifest, true ) );
 
 		// Finally return the manifest
 		return $manifest;
@@ -290,6 +292,9 @@ class Manifest {
 		$contents  = $manifest['contents'];
 		$new_array = array();
 
+		/**
+		 * Loop through contents and exclude specified data
+		 */
 		foreach ( $contents as $content_key => $structure ) {
 			foreach ( $excludes as $ex ) {
 				if ( isset( $structure[ $ex ] ) ) {

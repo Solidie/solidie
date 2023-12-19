@@ -10,6 +10,7 @@ import { DropDown } from 'crewhrm-materials/dropdown/dropdown.jsx';
 
 import table_style from '../../../materials/styles/table.module.scss';
 import style from './category.module.scss';
+import { Slot } from 'crewhrm-materials/mountpoint';
 
 export const getFlattenedCategories=(categories=[], exclude_level=null)=>{
 	const options = [];
@@ -200,20 +201,22 @@ export function CatSettings(props) {
 			<table className={'table'.classNames(table_style)}>
 				<thead>
 					<tr>
-						<th style={{width: '33%'}}>{__('Content')}</th>
-						<th style={{width: '33%'}}>{__('Base Slug')}</th>
+						<th style={{width: '200px'}}>{__('Content')}</th>
+						<th style={{width: '120px'}}>{__('Base Slug')}</th>
 						<th>{__('Categories')}</th>
+						<th>{__('Sales Plan')}</th>
 					</tr>
 				</thead>
 				<tbody>
 					{
 						Object.keys(manifest.contents).map(c_type=>{
-							let {label, description} = manifest.contents[c_type];
+							const content_structure = manifest.contents[c_type];
+							const {label, description} = content_structure;
 							const {enable=false} = state.settings?.contents?.[c_type] || {};
 							const categories = getFlattenedCategories(catState.categories[c_type] || []);
 
 							return <tr key={c_type}>
-								<td style={{paddingTop: '20px', paddingBottom: '20px', width: '33%'}}>
+								<td style={{paddingTop: '20px', paddingBottom: '20px', width: '200px'}}>
 									<div className={'d-flex column-gap-15'.classNames()}>
 										<div>
 											<ToggleSwitch 
@@ -227,7 +230,7 @@ export function CatSettings(props) {
 										</div>
 									</div>
 								</td>
-								<td style={{width: '33%'}}>
+								<td style={{width: '120px'}}>
 									<TextField
 										disabled={state.saving}
 										value={state.settings?.contents?.[c_type]?.slug || c_type}
@@ -256,6 +259,9 @@ export function CatSettings(props) {
 											<span>{__('Add New Category')}</span>
 										</span>
 									</div>
+								</td>
+								<td>
+									
 								</td>
 							</tr>
 						})

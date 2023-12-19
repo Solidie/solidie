@@ -8,6 +8,7 @@
 namespace Solidie\Setup;
 
 use Solidie\Helpers\Colors;
+use Solidie\Helpers\Utilities;
 use Solidie\Main;
 use Solidie\Models\AdminSetting;
 use Solidie\Models\Manifest;
@@ -29,8 +30,8 @@ class Scripts {
 	 */
 	public function __construct() {
 
-		add_action( 'admin_enqueue_scripts', array( $this, 'adminScripts' ) );
-		add_action( 'wp_enqueue_scripts', array( $this, 'frontendScripts' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'adminScripts' ), 11 );
+		add_action( 'wp_enqueue_scripts', array( $this, 'frontendScripts' ), 11 );
 
 		// Vars
 		add_action( 'wp_head', array( $this, 'loadVariables' ), 1000 );
@@ -54,28 +55,35 @@ class Scripts {
 
 		// Load data
 		$data = array(
-			'ajaxurl'     => admin_url( 'admin-ajax.php' ),
-			'home_url'    => get_home_url(),
-			'is_admin'    => is_admin(),
-			'home_path'   => rtrim( wp_parse_url( get_home_url() )['path'] ?? '/', '/' ) . '/',
-			'app_name'    => Main::$configs->app_name,
-			'nonce'       => wp_create_nonce( Main::$configs->app_name ),
-			'colors'      => $dynamic_colors,
-			'text_domain' => Main::$configs->text_domain,
-			'date_format' => get_option( 'date_format' ),
-			'time_format' => get_option( 'time_format' ),
-			'permalinks'  => array(
+			'ajaxurl'      => admin_url( 'admin-ajax.php' ),
+			'home_url'     => get_home_url(),
+			'is_admin'     => is_admin(),
+			'action_hooks' => array(),
+			'filter_hooks' => array(),
+			'home_path'    => rtrim( wp_parse_url( get_home_url() )['path'] ?? '/', '/' ) . '/',
+			'app_name'     => Main::$configs->app_id,
+			'nonce'        => wp_create_nonce( Main::$configs->app_id ),
+			'colors'       => $dynamic_colors,
+			'text_domain'  => Main::$configs->text_domain,
+			'date_format'  => get_option( 'date_format' ),
+			'time_format'  => get_option( 'time_format' ),
+			'permalinks'   => array(
 				'content_types' => admin_url( 'admin.php?page=' . AdminPage::CONTENT_TYPES_SLUG ),
 				'dashboard'     => admin_url( 'admin.php?page=' . Main::$configs->root_menu_slug ),
 			),
-			'settings'    => array(
+			'settings'     => array(
 				'contents'  => array_replace_recursive( Manifest::getFilteredContents(), AdminSetting::get( 'contents' ) ),
 				'dashboard' => AdminSetting::get( 'dashboard' ),
 			),
 		);
 
-		// Determine data pointer
-		echo '<script>window.' . Main::$configs->app_name . '=' . wp_json_encode( $data ) . '</script>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		$pointer   = Main::$configs->app_id;
+		$variables = '<script>
+			window.' . $pointer . '=' . wp_json_encode( $data ) . ';
+			window.' . $pointer . 'pro=window.' . $pointer . ';
+		</script>';
+
+		echo $variables; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
 	/**
@@ -84,7 +92,7 @@ class Scripts {
 	 * @return void
 	 */
 	public function adminScripts() {
-		if ( get_admin_page_parent() === Main::$configs->root_menu_slug ) {
+		if ( Utilities::isAdminDashboard() ) {
 			wp_enqueue_script( 'solidie-admin-script', Main::$configs->dist_url . 'admin-dashboard.js', array( 'jquery' ), Main::$configs->version, true );
 		}
 	}
@@ -95,6 +103,6 @@ class Scripts {
 	 * @return void
 	 */
 	public function frontendScripts() {
-		wp_enqueue_script( 'appstore-frontend-script', Main::$configs->dist_url . 'frontend.js', array( 'jquery' ), Main::$configs->version, true );
+		wp_enqueue_script( 'solidie-frontend-script', Main::$configs->dist_url . 'frontend.js', array( 'jquery' ), Main::$configs->version, true );
 	}
 }
