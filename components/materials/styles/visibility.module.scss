@@ -1,0 +1,7 @@
+.d-none-hover-parent {
+	&:not(:hover) {
+		.d-none-child {
+			display: none;
+		}
+	}
+}

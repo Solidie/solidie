@@ -1,4 +1,5 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
+
 import { request } from 'crewhrm-materials/request.jsx';
 import { __, data_pointer, isEmpty } from 'crewhrm-materials/helpers.jsx';
 import { ToggleSwitch } from 'crewhrm-materials/toggle-switch/ToggleSwitch.jsx';
@@ -7,10 +8,10 @@ import { ContextToast } from 'crewhrm-materials/toast/toast.jsx';
 import { LoadingIcon } from 'crewhrm-materials/loading-icon/loading-icon.jsx';
 import { Modal } from 'crewhrm-materials/modal.jsx';
 import { DropDown } from 'crewhrm-materials/dropdown/dropdown.jsx';
+import { Slot } from 'crewhrm-materials/mountpoint';
 
 import table_style from '../../../materials/styles/table.module.scss';
-import style from './category.module.scss';
-import { Slot } from 'crewhrm-materials/mountpoint';
+import style from './contents.module.scss';
 
 export const getFlattenedCategories=(categories=[], exclude_level=null)=>{
 	const options = [];
@@ -141,6 +142,7 @@ export function ContentSettings(props) {
 
 	const {has_pro} = window[data_pointer];
 	const cat_options = catState.editor !== null ? getFlattenedCategories(catState.categories[catState.editor.content_type], catState.editor.category_id) : null;
+	const col_style = {width: has_pro ? '20%' : '33.33%', paddingTop: '20px', paddingBottom: '20px'};
 
 	return <> 
 		{
@@ -202,10 +204,10 @@ export function ContentSettings(props) {
 			<table className={'table'.classNames(table_style)}>
 				<thead>
 					<tr>
-						<th style={{width: '200px'}}>{__('Content')}</th>
-						<th style={{width: '120px'}}>{__('Base Slug')}</th>
-						<th>{__('Categories')}</th>
-						{has_pro ? <th>{__('Sales Plan')}</th> : null}
+						<th style={col_style}>{__('Content')}</th>
+						<th style={col_style}>{__('Base Slug')}</th>
+						<th style={col_style}>{__('Categories')}</th>
+						{has_pro ? <th style={col_style}>{__('Sales Plan')}</th> : null}
 					</tr>
 				</thead>
 				<tbody>
@@ -217,7 +219,7 @@ export function ContentSettings(props) {
 							const categories = getFlattenedCategories(catState.categories[c_type] || []);
 
 							return <tr key={c_type}>
-								<td style={{paddingTop: '20px', paddingBottom: '20px', width: '200px'}}>
+								<td style={col_style}>
 									<div className={'d-flex column-gap-15'.classNames()}>
 										<div>
 											<ToggleSwitch 
@@ -231,13 +233,14 @@ export function ContentSettings(props) {
 										</div>
 									</div>
 								</td>
-								<td style={{width: '120px'}}>
+								<td style={col_style}>
 									<TextField
 										disabled={state.saving}
 										value={state.settings?.contents?.[c_type]?.slug || c_type}
-										onChange={v=>onChangeContents(c_type, 'slug', v)}/>
+										onChange={v=>onChangeContents(c_type, 'slug', v)}
+										style={{height:'30px'}}/>
 								</td>
-								<td>
+								<td style={col_style}>
 									{
 										categories.map(category=>{
 											const {label, category_id} = category;
@@ -256,13 +259,12 @@ export function ContentSettings(props) {
 											className={`cursor-pointer hover-underline ${categories.length ? 'border-top-1 b-color-tertiary' : ''}`.classNames()}
 											style={categories.length ? {paddingTop: '6px', marginTop: '6px'} : {}}
 										>
-											<i className={"ch-icon ch-icon-add-circle".classNames()}></i>&nbsp;&nbsp;
-											<span>{__('Add New Category')}</span>
+											{__('+ Add Category')}
 										</span>
 									</div>
 								</td>
 								{
-									! has_pro ? null : <td>
+									! has_pro ? null : <td style={{...col_style, width: '40%'}}>
 										<Slot 
 											name="content_settings_plans_column" 
 											payload={{
