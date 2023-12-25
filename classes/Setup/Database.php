@@ -1,8 +1,8 @@
 <?php
 /**
- * Database importer for CrewHRM
+ * Database importer for Solidie
  *
- * @package crewhrm
+ * @package solidie
  */
 
 namespace Solidie\Setup;

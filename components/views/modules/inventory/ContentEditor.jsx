@@ -10,7 +10,7 @@ import { ContextToast } from "crewhrm-materials/toast/toast.jsx";
 import { DropDown } from "crewhrm-materials/dropdown/dropdown.jsx";
 
 import { InventoryWrapper } from "./index.jsx";
-import { getFlattenedCategories } from "../../admin-dashboard/settings/categories.jsx";
+import { getFlattenedCategories } from "../../admin-dashboard/settings/contents.jsx";
 
 export function ContentEditor({categories=[]}) {
 	const {ajaxToast, addToast} = useContext(ContextToast);

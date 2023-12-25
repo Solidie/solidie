@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { request } from 'crewhrm-materials/request.jsx';
-import { __, isEmpty } from 'crewhrm-materials/helpers.jsx';
+import { __, data_pointer, isEmpty } from 'crewhrm-materials/helpers.jsx';
 import { ToggleSwitch } from 'crewhrm-materials/toggle-switch/ToggleSwitch.jsx';
 import { TextField } from 'crewhrm-materials/text-field/text-field.jsx';
 import { ContextToast } from 'crewhrm-materials/toast/toast.jsx';
@@ -39,7 +39,7 @@ export const getFlattenedCategories=(categories=[], exclude_level=null)=>{
 	return options;
 }
 
-export function CatSettings(props) {
+export function ContentSettings(props) {
 	const {savedSettings={}, manifest, categories={}} = props;
 	const {ajaxToast} = useContext(ContextToast);
 
@@ -139,6 +139,7 @@ export function CatSettings(props) {
 		});
 	}
 
+	const {has_pro} = window[data_pointer];
 	const cat_options = catState.editor !== null ? getFlattenedCategories(catState.categories[catState.editor.content_type], catState.editor.category_id) : null;
 
 	return <> 
@@ -204,7 +205,7 @@ export function CatSettings(props) {
 						<th style={{width: '200px'}}>{__('Content')}</th>
 						<th style={{width: '120px'}}>{__('Base Slug')}</th>
 						<th>{__('Categories')}</th>
-						<th>{__('Sales Plan')}</th>
+						{has_pro ? <th>{__('Sales Plan')}</th> : null}
 					</tr>
 				</thead>
 				<tbody>
@@ -260,9 +261,18 @@ export function CatSettings(props) {
 										</span>
 									</div>
 								</td>
-								<td>
-									
-								</td>
+								{
+									! has_pro ? null : <td>
+										<Slot 
+											name="content_settings_plans_column" 
+											payload={{
+												content_type: c_type,
+												content: state.settings.contents[c_type],
+												onChange: (name, value)=>onChangeContents(c_type, name, value)
+											}}
+										/>
+									</td>
+								}
 							</tr>
 						})
 					}

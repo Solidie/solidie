@@ -5,7 +5,7 @@ import { MountPoint } from 'crewhrm-materials/mountpoint.jsx';
 import { getElementDataSet } from 'crewhrm-materials/helpers.jsx';
 import {WpDashboardFullPage} from 'crewhrm-materials/backend-dashboard-container/full-page-container.jsx';
 
-import { CatSettings } from './settings/categories.jsx';
+import { ContentSettings } from './settings/contents.jsx';
 import { InventoryBackend } from './inventory/inventory-backend.jsx';
 
 // Render inventory
@@ -26,7 +26,7 @@ if ( settings ) {
 	createRoot( settings ).render( 
 		<MountPoint>
 			<WpDashboardFullPage>
-				<CatSettings {...getElementDataSet(settings)}/>
+				<ContentSettings {...getElementDataSet(settings)}/>
 			</WpDashboardFullPage>
 		</MountPoint>
 	);

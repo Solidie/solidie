@@ -63,6 +63,7 @@ class Scripts {
 			'home_path'    => rtrim( wp_parse_url( get_home_url() )['path'] ?? '/', '/' ) . '/',
 			'app_name'     => Main::$configs->app_id,
 			'nonce'        => wp_create_nonce( Main::$configs->app_id ),
+			'has_pro'      => Main::$configs->has_pro,
 			'colors'       => $dynamic_colors,
 			'text_domain'  => Main::$configs->text_domain,
 			'date_format'  => get_option( 'date_format' ),
@@ -72,8 +73,11 @@ class Scripts {
 				'dashboard'     => admin_url( 'admin.php?page=' . Main::$configs->root_menu_slug ),
 			),
 			'settings'     => array(
-				'contents'  => array_replace_recursive( Manifest::getFilteredContents(), AdminSetting::get( 'contents' ) ),
 				'dashboard' => AdminSetting::get( 'dashboard' ),
+				'contents'  => array_replace_recursive(
+					Manifest::getManifest()['contents'],
+					AdminSetting::get( 'contents' )
+				),
 			),
 		);
 
