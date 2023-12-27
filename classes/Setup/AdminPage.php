@@ -17,7 +17,8 @@ use Solidie\Models\Manifest;
  */
 class AdminPage {
 
-	const CONTENT_TYPES_SLUG = 'content-types';
+	const CONTENT_TYPES_SLUG = 'solidie-content-types';
+	const SETTINGS_SLUG = 'solidie-settings';
 
 	/**
 	 * Admin page setup hooks register
@@ -43,7 +44,7 @@ class AdminPage {
 			array( $this, 'mainPage' )
 		);
 
-		// Setting page
+		// Content tyoes setting page
 		add_submenu_page(
 			Main::$configs->root_menu_slug,
 			__( 'Content Types', 'tutor' ),
@@ -51,6 +52,16 @@ class AdminPage {
 			'administrator',
 			self::CONTENT_TYPES_SLUG,
 			array( $this, 'contentTypesPage' )
+		);
+
+		// General settings page
+		add_submenu_page(
+			Main::$configs->root_menu_slug,
+			__( 'Settings', 'tutor' ),
+			__( 'Settings', 'tutor' ),
+			'administrator',
+			self::SETTINGS_SLUG,
+			array( $this, 'settingsPage' )
 		);
 	}
 
@@ -73,5 +84,14 @@ class AdminPage {
 				   data-categories="' . esc_attr( wp_json_encode( Category::getCategories() ) ) . '"
 				   data-saved-settings="' . esc_attr( wp_json_encode( (object) AdminSetting::get() ) ) . '" 
 				   data-manifest="' . esc_attr( wp_json_encode( Manifest::getManifest() ) ) . '"></div>';
+	}
+
+	/**
+	 * Geenral settings page contents
+	 *
+	 * @return void
+	 */
+	public function settingsPage() {
+		echo '<div <div id="Solidie_Settings"></div>';
 	}
 }

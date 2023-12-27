@@ -10,7 +10,7 @@ import { Modal } from 'crewhrm-materials/modal.jsx';
 import { DropDown } from 'crewhrm-materials/dropdown/dropdown.jsx';
 import { Slot } from 'crewhrm-materials/mountpoint';
 
-import table_style from '../../../materials/styles/table.module.scss';
+import table_style from '../../../../materials/styles/table.module.scss';
 import style from './contents.module.scss';
 
 export const getFlattenedCategories=(categories=[], exclude_level=null)=>{
@@ -207,7 +207,7 @@ export function ContentSettings(props) {
 						<th style={col_style}>{__('Content')}</th>
 						<th style={col_style}>{__('Base Slug')}</th>
 						<th style={col_style}>{__('Categories')}</th>
-						{has_pro ? <th style={col_style}>{__('Sales Plan')}</th> : null}
+						{has_pro ? <th style={col_style}>{__('Sales Plans')}</th> : null}
 					</tr>
 				</thead>
 				<tbody>
