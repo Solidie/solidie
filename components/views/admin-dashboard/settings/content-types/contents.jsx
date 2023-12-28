@@ -8,7 +8,7 @@ import { ContextToast } from 'crewhrm-materials/toast/toast.jsx';
 import { LoadingIcon } from 'crewhrm-materials/loading-icon/loading-icon.jsx';
 import { Modal } from 'crewhrm-materials/modal.jsx';
 import { DropDown } from 'crewhrm-materials/dropdown/dropdown.jsx';
-import { Slot } from 'crewhrm-materials/mountpoint';
+import { DoAction } from 'crewhrm-materials/mountpoint.jsx';
 
 import table_style from '../../../../materials/styles/table.module.scss';
 import style from './contents.module.scss';
@@ -265,8 +265,8 @@ export function ContentSettings(props) {
 								</td>
 								{
 									! has_pro ? null : <td style={{...col_style, width: '40%'}}>
-										<Slot 
-											name="content_settings_plans_column" 
+										<DoAction 
+											action="content_settings_plans_column" 
 											payload={{
 												content_type: c_type,
 												content: state.settings.contents[c_type],

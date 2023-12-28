@@ -38,12 +38,7 @@ class Release {
 
 		// Delete release rows
 		foreach ( $release_ids as $id ) {
-			$wpdb->delete(
-				DB::releases(),
-				array(
-					'release_id' => $id,
-				)
-			);
+			Field::releases()->deleteField( array( 'release_id' => $id ) );
 		}
 	}
 
@@ -105,12 +100,9 @@ class Release {
 		if ( empty( $data['release_id'] ) ) {
 			$wpdb->insert( DB::releases(), $release );
 		} else {
-			$wpdb->update(
-				DB::releases(),
+			Field::releases()->updateField(
 				$release,
-				array(
-					'release_id' => $data['release_id'],
-				)
+				array( 'release_id' => $data['release_id'] )
 			);
 		}
 

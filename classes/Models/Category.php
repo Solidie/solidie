@@ -30,8 +30,7 @@ class Category {
 		$cat_id = $category['category_id'] ?? null;
 
 		if ( ! empty( $category['category_id'] ) ) {
-			$wpdb->update(
-				DB::categories(),
+			Field::categories()->updateField(
 				$_category,
 				array( 'category_id' => $category['category_id'] )
 			);
@@ -77,17 +76,13 @@ class Category {
 		global $wpdb;
 
 		// Update content categories to null where it is used
-		$wpdb->update(
-			DB::contents(),
+		Field::contents()->updateField(
 			array( 'category_id' => null ),
 			array( 'category_id' => $category_id )
 		);
 
 		// Delete category itself
-		$wpdb->delete(
-			DB::categories(),
-			array( 'category_id' => $category_id )
-		);
+		Field::categories()->deleteField( array( 'category_id' => $category_id ) );
 	}
 
 	/**

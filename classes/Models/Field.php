@@ -110,4 +110,15 @@ class Field {
 		global $wpdb;
 		$wpdb->update( $this->table, $update, $where );
 	}
+
+	/**
+	 * Delete field/s with where condition array
+	 *
+	 * @param array $where Where condition array
+	 * @return void
+	 */
+	public function deleteField( array $where ) {
+		global $wpdb;
+		$wpdb->delete( $this->table, $where );
+	}
 }

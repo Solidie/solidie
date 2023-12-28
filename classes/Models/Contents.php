@@ -33,15 +33,16 @@ class Contents {
 		// -------------- Create or update the content itself --------------
 		// Determine content ID
 		$content['content_id']          = ! empty( $content_data['content_id'] ) ? $content_data['content_id'] : 0;
-		$content['product_id']          = ! empty( $content_data['product_id'] ) ? $content['product_id'] : null;
 		$content['content_title']       = ! empty( $content_data['content_title'] ) ? $content_data['content_title'] : 'Untitled Content';
 		$content['content_description'] = ! empty( $content_data['content_description'] ) ? $content_data['content_description'] : null;
-		$content['product_id']          = ! empty( $content_data['product_id'] ) ? $content_data['product_id'] : null;
 		$content['content_type']        = $content_data['content_type'];
 		$content['category_id']         = $content_data['category_id'] ?? null;
 		$content['content_status']      = 'publish'; // To Do: Introduce other statuses in pro add on.
 		$content['contributor_id']      = $content_data['contributor_id'] ?? get_current_user_id();
 		$content['modified_at']         = $gmdate;
+
+		//
+		$is_update = false;
 
 		// Create or update content
 		global $wpdb;
@@ -55,21 +56,18 @@ class Contents {
 
 			// For now set the ID as slug. Customization feature will be added later.
 			if ( ! empty( $wpdb->insert_id ) && is_numeric( $wpdb->insert_id ) ) {
-				$wpdb->update(
-					DB::contents(),
+				Field::contents()->updateField(
 					array( 'content_slug' => $wpdb->insert_id ),
 					array( 'content_id' => $wpdb->insert_id )
 				);
 			}
 		} else {
 			// Update the content as content ID exists
-			$wpdb->update(
-				DB::contents(),
+			Field::contents()->updateField(
 				$content,
-				array(
-					'content_id' => $content['content_id'],
-				)
+				array( 'content_id' => $content['content_id'] )
 			);
+			$is_update = true;
 		}
 
 		// -------------- Manage content media --------------
@@ -164,6 +162,9 @@ class Contents {
 			);
 		}
 
+		$hook = $is_update ? 'solidie_content_updated' : 'solidie_content_created';
+		do_action( $hook, $content_id, $content, $content_data );
+
 		return $content_id;
 	}
 
@@ -238,6 +239,7 @@ class Contents {
 		$content = _Array::castRecursive( $content );
 		$content = self::assignContentMedia( $content );
 		$content = self::assignContentMeta( $content );
+		$content = apply_filters( 'solidie_single_content', $content );
 
 		return $field ? ( $content[ $field ] ?? null ) : $content;
 	}
@@ -526,13 +528,7 @@ class Contents {
 		FileManager::deleteDirectory( FileManager::getContentDir( $content_id ) );
 
 		// Delete the content itself at the end
-		global $wpdb;
-		$wpdb->delete(
-			DB::contents(),
-			array(
-				'content_id' => $content_id,
-			)
-		);
+		Field::contents()->deleteField( array( 'content_id' => $content_id ) );
 	}
 
 	/**

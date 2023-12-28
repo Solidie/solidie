@@ -11,6 +11,7 @@ import { DropDown } from "crewhrm-materials/dropdown/dropdown.jsx";
 
 import { InventoryWrapper } from "./index.jsx";
 import { getFlattenedCategories } from "../../admin-dashboard/settings/content-types/contents.jsx";
+import { DoAction } from "crewhrm-materials/mountpoint.jsx";
 
 export function ContentEditor({categories=[]}) {
 	const {ajaxToast, addToast} = useContext(ContextToast);
@@ -151,12 +152,13 @@ export function ContentEditor({categories=[]}) {
 			if ( success ) {
 				const release = content.releases[0] || {};
 
-				values.content_title = content.content_title;
+				values.content_title       = content.content_title;
 				values.content_description = content.content_description;
-				values.category_id = content.category_id;
-				values.thumbnail = content.media.thumbnail;
-				values.preview = content.media.preview;
-				values.sample_images = content.media.sample_images;
+				values.category_id         = content.category_id;
+				values.thumbnail           = content.media.thumbnail;
+				values.preview             = content.media.preview;
+				values.sample_images       = content.media.sample_images;
+				values.product             = content.product;
 
 				if ( release ) {
 					values.downloadable_file = {
@@ -241,9 +243,18 @@ export function ContentEditor({categories=[]}) {
 					</div>
 				})
 			}
+
+			<DoAction 
+				action="solidie_content_editor_after_form" 
+				payload={{
+					content: state.values,
+					content_type,
+					onChange: setVal
+				}}
+			/>
 			
 			<button 
-				disabled={state.submitting} 
+				disabled={state.submitting || state.fetching} 
 				className={'button button-primary'.classNames()} 
 				onClick={submit}
 			>
