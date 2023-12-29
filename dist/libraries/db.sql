@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Dec 17, 2023 at 05:08 AM
+-- Generation Time: Dec 29, 2023 at 02:33 AM
 -- Server version: 8.0.16
 -- PHP Version: 8.0.0
 
@@ -45,9 +45,9 @@ CREATE TABLE IF NOT EXISTS `wp_solidie_categories` (
 
 CREATE TABLE IF NOT EXISTS `wp_solidie_contents` (
   `content_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `product_id` bigint(20) UNSIGNED DEFAULT NULL,
   `content_type` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL COMMENT 'app, audio, video, image, 3d, font, document',
   `category_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `product_id` bigint(20) UNSIGNED DEFAULT NULL COMMENT 'WooCommerce Product ID',
   `content_title` mediumtext COLLATE utf8mb4_unicode_520_ci,
   `content_slug` varchar(255) COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
   `content_description` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci,
@@ -56,7 +56,7 @@ CREATE TABLE IF NOT EXISTS `wp_solidie_contents` (
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `modified_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`content_id`),
-  UNIQUE KEY `product_id_unique` (`product_id`),
+  UNIQUE KEY `product_id` (`product_id`),
   KEY `item_type` (`content_type`),
   KEY `category_id` (`category_id`,`content_status`,`contributor_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
@@ -138,7 +138,7 @@ CREATE TABLE IF NOT EXISTS `wp_solidie_sales` (
   `sale_price` double UNSIGNED NOT NULL,
   `commission` double NOT NULL COMMENT 'The amount site owner will get',
   `commission_rate` double NOT NULL COMMENT 'Commission percentage site owner gets',
-  `license_key_limit` smallint(5) UNSIGNED DEFAULT NULL,
+  `license_or_content_limit` mediumint(8) UNSIGNED DEFAULT NULL,
   `license_expires_on` date DEFAULT NULL,
   `sold_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Order date time',
   PRIMARY KEY (`sale_id`),

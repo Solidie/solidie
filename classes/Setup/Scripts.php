@@ -54,31 +54,34 @@ class Scripts {
 		echo '<style>[id^="Solidie_"],#crewhrm-popup-root{' . $_colors . '}</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 		// Load data
-		$data = array(
-			'ajaxurl'      => admin_url( 'admin-ajax.php' ),
-			'home_url'     => get_home_url(),
-			'is_admin'     => is_admin(),
-			'action_hooks' => array(),
-			'filter_hooks' => array(),
-			'home_path'    => rtrim( wp_parse_url( get_home_url() )['path'] ?? '/', '/' ) . '/',
-			'app_name'     => Main::$configs->app_id,
-			'nonce'        => wp_create_nonce( Main::$configs->app_id ),
-			'has_pro'      => Main::$configs->has_pro,
-			'colors'       => $dynamic_colors,
-			'text_domain'  => Main::$configs->text_domain,
-			'date_format'  => get_option( 'date_format' ),
-			'time_format'  => get_option( 'time_format' ),
-			'permalinks'   => array(
-				'content_types' => admin_url( 'admin.php?page=' . AdminPage::CONTENT_TYPES_SLUG ),
-				'dashboard'     => admin_url( 'admin.php?page=' . Main::$configs->root_menu_slug ),
-			),
-			'settings'     => array(
-				'dashboard' => AdminSetting::get( 'dashboard' ),
-				'contents'  => array_replace_recursive(
-					Manifest::getManifest()['contents'],
-					AdminSetting::get( 'contents' )
+		$data = apply_filters(
+			'solidie_frontend_variables',
+			array(
+				'ajaxurl'      => admin_url( 'admin-ajax.php' ),
+				'home_url'     => get_home_url(),
+				'is_admin'     => is_admin(),
+				'action_hooks' => array(),
+				'filter_hooks' => array(),
+				'home_path'    => rtrim( wp_parse_url( get_home_url() )['path'] ?? '/', '/' ) . '/',
+				'app_name'     => Main::$configs->app_id,
+				'nonce'        => wp_create_nonce( Main::$configs->app_id ),
+				'has_pro'      => Main::$configs->has_pro,
+				'colors'       => $dynamic_colors,
+				'text_domain'  => Main::$configs->text_domain,
+				'date_format'  => get_option( 'date_format' ),
+				'time_format'  => get_option( 'time_format' ),
+				'permalinks'   => array(
+					'content_types' => admin_url( 'admin.php?page=' . AdminPage::CONTENT_TYPES_SLUG ),
+					'dashboard'     => admin_url( 'admin.php?page=' . Main::$configs->root_menu_slug ),
 				),
-			),
+				'settings'     => array(
+					'dashboard' => AdminSetting::get( 'dashboard' ),
+					'contents'  => array_replace_recursive(
+						Manifest::getManifest()['contents'],
+						AdminSetting::get( 'contents' )
+					),
+				),
+			)
 		);
 
 		$pointer   = Main::$configs->app_id;
