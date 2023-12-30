@@ -80,10 +80,11 @@ class AdminPage {
 	 * @return void
 	 */
 	public function contentTypesPage() {
-		echo '<div id="Solidie_ContentTypeSettings" 
-				   data-categories="' . esc_attr( wp_json_encode( Category::getCategories() ) ) . '"
-				   data-saved-settings="' . esc_attr( wp_json_encode( (object) AdminSetting::get() ) ) . '" 
-				   data-manifest="' . esc_attr( wp_json_encode( Manifest::getManifest() ) ) . '"></div>';
+		echo '<div 
+				id="Solidie_ContentTypeSettings" 
+				data-categories="' . esc_attr( wp_json_encode( Category::getCategories() ) ) . '"
+				data-saved-settings="' . esc_attr( wp_json_encode( (object) AdminSetting::get() ) ) . '" 
+				data-content_list="' . esc_attr( wp_json_encode( Manifest::getManifest()['contents'] ) ) . '"></div>';
 	}
 
 	/**

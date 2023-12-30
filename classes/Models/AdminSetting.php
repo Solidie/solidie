@@ -26,16 +26,16 @@ class AdminSetting {
 	 * @param array $settings Settings array to save
 	 * @return bool
 	 */
-	public static function save( $settings ) {
-		if ( ! current_user_can( 'administrator' ) ) {
-			return false;
+	public static function save( $settings, $merge = false ) {
+		
+		// In case you need to update only on option inside the array
+		if ( true === $merge ) {
+			$settings = array_merge( self::get(), $settings );
 		}
 
-		$settings = _Array::castRecursive( is_array( $settings ) ? $settings : array() );
-		$settings = array_replace_recursive( self::get(), $settings );
-
 		update_option( self::OPTION_NAME, $settings, true );
-		do_action( 'solidie_settings_updated' );
+		do_action( 'solidie_settings_updated', $settings );
+		
 		return true;
 	}
 
@@ -51,6 +51,8 @@ class AdminSetting {
 		// Get all from saved one
 		$options = get_option( self::OPTION_NAME );
 		$options = is_array( $options ) ? $options : array();
+
+		// Replace default settings in manifest with saved values resursively.
 		$options = array_replace_recursive( Manifest::getManifest()['settings'], $options );
 
 		// Return all options, maybe for settings page

@@ -28,6 +28,9 @@ class Manifest {
 					'label' => __( 'Dashboard', 'solidie' ),
 					'slug'  => 'dashboard',
 				),
+				'contents' => array(
+					// This array will be filled with content types
+				)
 			),
 			'contents' => array(
 				'app'      => array(
@@ -75,14 +78,10 @@ class Manifest {
 			),
 		);
 
-		// Get this through filter for modification by others
-		$manifest = apply_filters( 'solidie_manifest', $manifest );
-
 		// Add the content type array in content settings
-		$manifest['settings']['contents'] = array();
 		foreach ( array_keys( $manifest['contents'] ) as $type ) {
 			$manifest['settings']['contents'][ $type ] = array(
-				'slug'   => $type,
+				'slug'   => $manifest['contents'][ $type ]['slug'],
 				'enable' => false,
 			);
 		}
@@ -92,13 +91,13 @@ class Manifest {
 	}
 
 	/**
-	 * Get supported plans for specific content type
+	 * Get content type label
 	 *
-	 * @param string $content_type The content type to get plans from
-	 * @return array
+	 * @param string $content_type
+	 * @return string
 	 */
-	public static function getContentPlans( string $content_type ) {
-		$content = self::getManifest()['contents'][ $content_type ] ?? array();
-		return $content['plans'] ?? array();
+	public static function getContentTypeLabel( $content_type, $default = null ) {
+		$content_type = self::getManifest()['contents'][ $content_type ] ?? array();
+		return $content_type['label'] ?? $default;
 	}
 }

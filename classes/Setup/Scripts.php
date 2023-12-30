@@ -76,10 +76,7 @@ class Scripts {
 				),
 				'settings'     => array(
 					'dashboard' => AdminSetting::get( 'dashboard' ),
-					'contents'  => array_replace_recursive(
-						Manifest::getManifest()['contents'],
-						AdminSetting::get( 'contents' )
-					),
+					'contents'  => AdminSetting::get( 'contents' ),
 				),
 			)
 		);

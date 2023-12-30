@@ -41,7 +41,7 @@ export const getFlattenedCategories=(categories=[], exclude_level=null)=>{
 }
 
 export function ContentSettings(props) {
-	const {savedSettings={}, manifest, categories={}} = props;
+	const {savedSettings={}, content_list={}, categories={}} = props;
 	const {ajaxToast} = useContext(ContextToast);
 
 	const [state, setState] = useState({
@@ -212,9 +212,9 @@ export function ContentSettings(props) {
 				</thead>
 				<tbody>
 					{
-						Object.keys(manifest.contents).map(c_type=>{
-							const content_structure = manifest.contents[c_type];
-							const {label, description} = content_structure;
+						// Loop through hard coded content_list, so no risk to show unwanted things from database
+						Object.keys(content_list).map(c_type=>{
+							const {label, description, slug: default_slug} = content_list[c_type];
 							const {enable=false} = state.settings?.contents?.[c_type] || {};
 							const categories = getFlattenedCategories(catState.categories[c_type] || []);
 
@@ -236,7 +236,7 @@ export function ContentSettings(props) {
 								<td style={col_style}>
 									<TextField
 										disabled={state.saving}
-										value={state.settings?.contents?.[c_type]?.slug || c_type}
+										value={state.settings?.contents?.[c_type]?.slug || default_slug}
 										onChange={v=>onChangeContents(c_type, 'slug', v)}
 										style={{height:'30px'}}/>
 								</td>

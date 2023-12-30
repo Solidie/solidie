@@ -301,12 +301,12 @@ class Contents {
 	/**
 	 * Check if a content is enabled by content ID
 	 *
-	 * @param object|int $content_id Content object or content id
+	 * @param array|int $content_id Single content data array or content id integer
 	 *
 	 * @return boolean
 	 */
 	public static function isContentEnabled( $content_id ) {
-		$content = is_object( $content_id ) ? $content_id : self::getContentByContentID( $content_id );
+		$content = is_array( $content_id ) ? $content_id : self::getContentByContentID( $content_id );
 		return ! empty( $content ) ? self::isContentTypeEnabled( $content['content_type'] ) : false;
 	}
 
@@ -539,5 +539,31 @@ class Contents {
 	 */
 	public static function getContentIdBySlug( string $slug ) {
 		return Field::contents()->getField( array( 'content_slug' => $slug ), 'content_id' );
+	}
+
+	/**
+	 * Get single product by meta key and value
+	 *
+	 * @param string $key The meta key
+	 * @param mixed $value The value to get post by
+	 * @return object|null
+	 */
+	public static function getProductByMeta( $key, $value ) {
+		
+		$product = get_posts(
+			array(
+				'post_type'      => 'product',
+				'posts_per_page' => 1,
+				'meta_query'     => array(
+					array(
+						'key'     => $key,
+						'value'   => $value,
+						'compare' => '=', 
+					),
+				),
+			)
+		);
+
+		return empty( $product ) ? null : $product[0];
 	}
 }
