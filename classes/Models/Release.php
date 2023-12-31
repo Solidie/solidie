@@ -142,15 +142,16 @@ class Release {
 				$content_id,
 				$offset,
 				$limit
-			)
+			),
+			ARRAY_A
 		);
 
 		$new_array = array();
 
 		// Loop through releases and add more data like download URL
 		foreach ( $releases as $release ) {
-			$file_url  = wp_get_attachment_url( $release->file_id );
-			$file_path = get_attached_file( $release->file_id );
+			$file_url  = wp_get_attachment_url( $release['file_id'] );
+			$file_path = get_attached_file( $release['file_id'] );
 
 			// To Do: Check if the file really exists in file system or cloud
 			// To Do: Remove file_path and absolute url from response. Rather use a proxy url for direct download in dashboard.
@@ -164,11 +165,11 @@ class Release {
 				'endpoint'   => $endpoint,
 			);
 
-			$release->download_url = apply_filters( 'solidie_content_download_url', FileManager::getMediaPermalink( $release->file_id ), $arg_payload );
-			$release->file_url     = $file_url;
-			$release->file_path    = $file_path ? $file_path : null;
-			$release->mime_type    = get_post_mime_type( $release->file_id );
-			$release->content_url  = Contents::getPermalink( $release->content_id );
+			$release['download_url'] = apply_filters( 'solidie_content_download_url', FileManager::getMediaPermalink( $release['file_id'] ), $arg_payload );
+			$release['file_url']     = $file_url;
+			$release['file_path']    = $file_path ? $file_path : null;
+			$release['mime_type']    = get_post_mime_type( $release['file_id'] );
+			$release['content_url']  = Contents::getPermalink( $release['content_id'] );
 
 			// Store the release in the new array
 			$new_array[] = $release;

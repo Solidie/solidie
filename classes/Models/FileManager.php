@@ -285,7 +285,7 @@ class FileManager {
 		$args = array_merge( $args, $add_args );
 		$url  = add_query_arg( $args, $ajaxurl );
 
-		return apply_filters( 'solidie_media_permalink', $url );
+		return $url;
 	}
 
 	/**
