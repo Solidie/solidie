@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Dec 29, 2023 at 02:33 AM
+-- Generation Time: Dec 31, 2023 at 12:56 AM
 -- Server version: 8.0.16
 -- PHP Version: 8.0.0
 
@@ -139,7 +139,7 @@ CREATE TABLE IF NOT EXISTS `wp_solidie_sales` (
   `commission` double NOT NULL COMMENT 'The amount site owner will get',
   `commission_rate` double NOT NULL COMMENT 'Commission percentage site owner gets',
   `license_or_content_limit` mediumint(8) UNSIGNED DEFAULT NULL,
-  `license_expires_on` date DEFAULT NULL,
+  `expires_on` date DEFAULT NULL,
   `sold_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Order date time',
   PRIMARY KEY (`sale_id`),
   KEY `app_id` (`content_id`,`variation_id`),

@@ -138,19 +138,21 @@ class _Array {
 	}
 
 	/**
-	 * Get object from array by object key value match, similar to js find method.
+	 * Get single array from a two dimensional array, similar to 'find' method in JavaScript.
 	 *
-	 * @param array  $array The array to find objects in
-	 * @param string $key   The key to match in the object
-	 * @param mixed  $value The value to match in the object
-	 * @return mixed
+	 * @param array  $array   The array to find in
+	 * @param string $key     The key to match in the second dimension
+	 * @param mixed  $value   The value to match in the second dimension
+	 * @param mixed  $default The default return value if not found
+	 * @return array
 	 */
-	public static function find( array $array, $key, $value ) {
-		foreach ( $array as $object ) {
-			if ( ( $object[ $key ] ?? null ) === $value ) {
-				return $object;
+	public static function find( array $array, $key, $value, $default = null ) {
+		foreach ( $array as $row ) {
+			if ( ( $row[ $key ] ?? null ) === $value ) {
+				return $row;
 			}
 		}
+		return $default;
 	}
 
 	/**

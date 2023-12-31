@@ -42,7 +42,7 @@ export function VersionReleaseForm() {
 	
 
   	return <div className={"z-20 flex flex-col gap-5".classNames()}>
-		<button onClick={window.history.back} className={"flex gap-2 justify-around items-center w-max bg-primary hover:bg-primary/70 focus:text-green-900 focus:outline-green-900 text-tertiary font-bold text-sm px-6 py-2 rounded-full shadow-xl active:animate-bounce shadow-primary border border-tertiary/5 cursor-pointer".classNames()}>
+		<button onClick={window.history.back} className={"flex gap-2 justify-around items-center w-max bg-primary hover:bg-primary/70 focus:text-green-900 focus:outline-green-900 color-text-light font-bold text-sm px-6 py-2 rounded-full shadow-xl active:animate-bounce shadow-primary border border-tertiary/5 cursor-pointer".classNames()}>
 			<i className={'s-icon s-icon-arrow-left'.classNames()}></i> Back
 		</button>
 		<h3>{state.release.content_title} - <strong>{state.release.version}</strong></h3>
