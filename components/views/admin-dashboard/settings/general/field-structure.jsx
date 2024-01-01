@@ -12,55 +12,58 @@ export const settings_fields = applyFilters(
 			),
 			segments: {
 				careers: {
-					label: __('Job Listing Page'),
+					label: __('Frontend Dashboard'),
 					icon: 'ch-icon ch-icon-bill',
 					sections: {
 						careers_settings:{
-							label: __('Job Listing Page'),
-							description: __('Configure careers page features and application submission'),
+							label: __('Frontend Dashboard'),
+							description: __('Frontend dashboard configurations'),
 							separator: true,
 							vertical: false,
 							fields: [
 								{
-									name: 'careers_page_id',
-									label: __('Job Listing Page'),
-									type: 'dropdown',
-									options: 'pages',
+									name: 'frontend_dashboard_path',
+									label: __('The path'),
+									type: 'text',
+									hint: __('Set the relative path to frontend dashboard'),
+									placeholder: __('Select Page')
+								}
+							]
+						}
+					}
+				},
+				contributor: {
+					label: __('Contributor'),
+					icon: 'ch-icon ch-icon-bill',
+					sections: {
+						contributor_settings:{
+							label: __('Contributor'),
+							description: __('Contributor settings'),
+							separator: true,
+							vertical: true,
+							fields: [
+								{
+									name: 'contribution_enabled',
+									label: __('Enable contribution'),
+									type: 'switch',
+									hint: __('Enabling this will allow users to submit their contents'),
+									placeholder: __('Select Page')
+								},
+								{
+									name: 'contribution_monetizations',
+									label: __('Contributor contents monetizations'),
+									type: 'checkbox',
+									options: [
+										{id: 'free', label: __('Free')}, 
+										{id: 'paid', label: __('Paid')}
+									],
+									hint: __('Select the monetization model they can choose'),
 									placeholder: __('Select Page')
 								}
 							]
 						}
 					}
 				}
-			}
-		},
-		contributor: {
-			label: __('Contributor'),
-			description: __(
-				'Control contributors behaviors'
-			),
-			segments: {
-				profile: {
-					label: __('Company Info'),
-					icon: 'ch-icon ch-icon-building-4',
-					sections: {
-						basic_info: {
-							label: __('Company Info'),
-							description: __('Set your company informations'),
-							separator: false,
-							vertical: true,
-							fields: [
-								{
-									name: 'company_name',
-									label: __('Company Name'),
-									type: 'text',
-									required: true,
-									placeholder: __('ex. ABC')
-								},
-							]
-						},
-					}
-				},
 			}
 		},
 	}

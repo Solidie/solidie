@@ -23,7 +23,7 @@ function Wrapper({ children }) {
 
     const saveSettings = () => {
 		setSavingState(true);
-        request('saveSettings', { settings: values }, (resp) => {
+        request('saveGeneralSettings', { general_settings: values }, (resp) => {
             ajaxToast(resp);
 			setSavingState(false);
         });

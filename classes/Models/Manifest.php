@@ -17,16 +17,11 @@ class Manifest {
 	 * @return array
 	 */
 	public static function getManifest() {
-		static $manifest = null;
-		if ( null !== $manifest ) {
-			return $manifest;
-		}
-
+		
 		$manifest = array(
 			'settings' => array(
-				'dashboard' => array(
-					'label' => __( 'Dashboard', 'solidie' ),
-					'slug'  => 'dashboard',
+				'general' => array(
+					'frontend_dashboard_path'    => 'solidie-dashboard',
 				),
 				'contents' => array(
 					// This array will be filled with content types
@@ -87,7 +82,7 @@ class Manifest {
 		}
 
 		// Finally return the manifest
-		return $manifest;
+		return apply_filters( 'solidie_manifest', $manifest );
 	}
 
 	/**

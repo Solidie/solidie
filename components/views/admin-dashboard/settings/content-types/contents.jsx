@@ -41,12 +41,12 @@ export const getFlattenedCategories=(categories=[], exclude_level=null)=>{
 }
 
 export function ContentSettings(props) {
-	const {savedSettings={}, content_list={}, categories={}} = props;
+	const {content_list={}, categories={}, contents={}} = props;
 	const {ajaxToast} = useContext(ContextToast);
 
 	const [state, setState] = useState({
 		saving: false,
-		settings: savedSettings
+		contents: contents
 	});
 
 	const [catState, setCatState] = useState({
@@ -115,26 +115,22 @@ export function ContentSettings(props) {
 
 	const saveOptions=()=>{
 		setState({...state, saving: true});
-		request('saveAdminSettings', {'solidie_settings': state.settings}, resp=>{
+		request('saveContentTypes', {'content_types': state.contents}, resp=>{
 			setState({...state, saving: false});
 			ajaxToast(resp);
 		});
 	}
 
 	const onChangeContents=(content_key, name, value)=>{
-		const {settings={}} = state;
-		const {contents={}} = settings;
+		const {contents={}} = state;
 
 		setState({
 			...state,
-			settings:{
-				...settings,
-				contents:{
-					...contents,
-					[content_key]: {
-						...contents[content_key],
-						[name]: value
-					}
+			contents:{
+				...contents,
+				[content_key]: {
+					...contents[content_key],
+					[name]: value
 				}
 			}
 		});
@@ -215,7 +211,7 @@ export function ContentSettings(props) {
 						// Loop through hard coded content_list, so no risk to show unwanted things from database
 						Object.keys(content_list).map(c_type=>{
 							const {label, description, slug: default_slug} = content_list[c_type];
-							const {enable=false} = state.settings?.contents?.[c_type] || {};
+							const {enable=false} = state.contents?.[c_type] || {};
 							const categories = getFlattenedCategories(catState.categories[c_type] || []);
 
 							return <tr key={c_type}>
@@ -236,7 +232,7 @@ export function ContentSettings(props) {
 								<td style={col_style}>
 									<TextField
 										disabled={state.saving}
-										value={state.settings?.contents?.[c_type]?.slug || default_slug}
+										value={state.contents?.[c_type]?.slug || default_slug}
 										onChange={v=>onChangeContents(c_type, 'slug', v)}
 										style={{height:'30px'}}/>
 								</td>
@@ -269,7 +265,7 @@ export function ContentSettings(props) {
 											action="content_settings_plans_column" 
 											payload={{
 												content_type: c_type,
-												content: state.settings.contents[c_type],
+												content: state.contents[c_type],
 												onChange: (name, value)=>onChangeContents(c_type, name, value)
 											}}
 										/>

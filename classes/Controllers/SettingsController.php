@@ -14,29 +14,42 @@ use Solidie\Models\AdminSetting;
  */
 class SettingsController {
 	const PREREQUISITES = array(
-		'saveAdminSettings' => array(
+		'saveContentTypes' => array(
+			'role' => 'administrator',
+		),
+		'saveGeneralSettings' => array(
 			'role' => 'administrator',
 		),
 	);
 
 	/**
-	 * Admin Dashboard Settings save
+	 * Save content types configuration
 	 *
 	 * @param array $data Request data
 	 * @return void
 	 */
-	public static function saveAdminSettings( array $data ) {
-		if ( empty( $data['solidie_settings'] ) || ! is_array( $data['solidie_settings'] ) ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid Payload!', 'solidie' ) ) );
+	public static function saveContentTypes( array $data ) {
+		if ( empty( $data['content_types'] ) || ! is_array( $data['content_types'] ) ) {
+			wp_send_json_error( array( 'message' => __( 'Invalid Request Data!', 'solidie' ) ) );
+		} 
+		
+		AdminSetting::save( array( 'contents' => $data['content_types']) );
+		wp_send_json_success( array( 'message' => __( 'Content types saved successfully!', 'solidie' ) ) );
+	}
 
-		} else {
-			$saved = AdminSetting::save( $data['solidie_settings'] );
-			if ( true === $saved ) {
-				wp_send_json_success( array( 'message' => __( 'Settings Saved Successfully!', 'solidie' ) ) );
-			} else {
-				wp_send_json_error( array( 'message' => __( 'Failed to save settings!', 'solidie' ) ) );
-			}
+	/**
+	 * Save general settings
+	 *
+	 * @param array $data Request data
+	 * 
+	 * @return void
+	 */
+	public static function saveGeneralSettings( array $data ) {
+		if ( empty( $data['general_settings'] ) || ! is_array( $data['general_settings'] ) ) {
+			wp_send_json_error( array( 'message' => __( 'Invalid Request Data!', 'solidie' ) ) );
 		}
-		exit;
+
+		AdminSetting::save( array( 'general' => $data['general_settings'] ) );
+		wp_send_json_success( array( 'message' => __( 'Settings saved successfully!', 'solidie' ) ) );
 	}
 }

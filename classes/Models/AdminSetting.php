@@ -26,7 +26,7 @@ class AdminSetting {
 	 * @param array $settings Settings array to save
 	 * @return bool
 	 */
-	public static function save( $settings, $merge = false ) {
+	public static function save( $settings, $merge = true ) {
 		
 		// In case you need to update only on option inside the array
 		if ( true === $merge ) {

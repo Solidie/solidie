@@ -83,7 +83,7 @@ class AdminPage {
 		echo '<div 
 				id="Solidie_ContentTypeSettings" 
 				data-categories="' . esc_attr( wp_json_encode( Category::getCategories() ) ) . '"
-				data-saved-settings="' . esc_attr( wp_json_encode( (object) AdminSetting::get() ) ) . '" 
+				data-contents="' . esc_attr( wp_json_encode( (object) AdminSetting::get( 'contents', array() ) ) ) . '" 
 				data-content_list="' . esc_attr( wp_json_encode( Manifest::getManifest()['contents'] ) ) . '"></div>';
 	}
 
@@ -93,6 +93,8 @@ class AdminPage {
 	 * @return void
 	 */
 	public function settingsPage() {
-		echo '<div <div id="Solidie_Settings"></div>';
+		echo '<div 
+				id="Solidie_Settings" 
+				data-settings="' . esc_attr( wp_json_encode( AdminSetting::get( 'general', array() ) ) ) . '"></div>';
 	}
 }
