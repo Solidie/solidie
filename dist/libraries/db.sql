@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Dec 31, 2023 at 12:56 AM
+-- Generation Time: Jan 01, 2024 at 04:43 AM
 -- Server version: 8.0.16
--- PHP Version: 8.0.0
+-- PHP Version: 8.1.23
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -145,6 +145,20 @@ CREATE TABLE IF NOT EXISTS `wp_solidie_sales` (
   KEY `app_id` (`content_id`,`variation_id`),
   KEY `order_id` (`order_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `wp_solidie_tokens`
+--
+
+CREATE TABLE IF NOT EXISTS `wp_solidie_tokens` (
+  `token_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `data` varchar(1000) NOT NULL,
+  `token` varchar(500) NOT NULL,
+  `expires_on` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`token_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

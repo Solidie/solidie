@@ -165,7 +165,7 @@ class Release {
 				'endpoint'   => $endpoint,
 			);
 
-			$release['download_url'] = apply_filters( 'solidie_content_download_url', FileManager::getMediaPermalink( $release['file_id'] ), $arg_payload );
+			$release['download_url'] = apply_filters( 'solidie_release_download_link', FileManager::getMediaLink( $release['file_id'] ), $arg_payload );
 			$release['file_url']     = $file_url;
 			$release['file_path']    = $file_path ? $file_path : null;
 			$release['mime_type']    = get_post_mime_type( $release['file_id'] );
@@ -190,5 +190,21 @@ class Release {
 	public static function getRelease( int $content_id, string $version = null, $license_id = 0, $endpoint = 'N/A' ) {
 		$relases = self::getReleases( $content_id, 1, 1, $version, $license_id, $endpoint );
 		return ( is_array( $relases ) && ! empty( $relases ) ) ? $relases[0] : null;
+	}
+
+	/**
+	 * Increase single release download count
+	 *
+	 * @param int $release_id
+	 * @return void
+	 */
+	public static function increaseDownloadCount( $release_id ) {
+		global $wpdb;
+		$wpdb->query(
+			$wpdb->prepare(
+				"UPDATE " . DB::releases() . " SET download_count=download_count+1 WHERE release_id=%d",
+				$release_id
+			)
+		);
 	}
 }

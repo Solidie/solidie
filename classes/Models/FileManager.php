@@ -170,7 +170,7 @@ class FileManager {
 			if ( is_array( $content ) ) {
 				if ( isset( $content['file_id'], $content['file_url'] ) ) {
 					// Assign dynamic url replace for host change support
-					$contents[ $index ]['file_url'] = self::getMediaPermalink( $content['file_id'] );
+					$contents[ $index ]['file_url'] = self::getMediaLink( $content['file_id'] );
 				}
 
 				$contents[ $index ] = self::applyDynamics( $content );
@@ -269,7 +269,7 @@ class FileManager {
 	 *
 	 * @return string
 	 */
-	public static function getMediaPermalink( int $file_id, array $add_args = array() ) {
+	public static function getMediaLink( int $file_id, array $add_args = array() ) {
 
 		$ajaxurl      = admin_url( 'admin-ajax.php' );
 		$nonce_action = '_solidie_' . str_replace( '-', '_', gmdate( 'Y-m-d' ) );
@@ -311,5 +311,50 @@ class FileManager {
 		}
 
 		return $files;
+	}
+
+	/**
+	 * Process file downloading
+	 *
+	 * @param int $file_id
+	 * @return void
+	 */
+	public static function downloadFile( $file_id ) {
+
+		$path = ! empty( $file_id ) ? get_attached_file( $file_id ) : null;
+		if ( empty( $path ) ) {
+			http_response_code( 404 );
+			exit;
+		}
+
+		$mime_type = mime_content_type( $path );
+		$file_size = filesize( $path );
+
+		// Set the headers for caching
+		$last_modified = gmdate( 'D, d M Y H:i:s', filemtime( $path ) ) . ' GMT';
+		$etag          = md5_file( $path );
+
+		header( 'Last-Modified: ' . $last_modified );
+		header( 'ETag: ' . $etag );
+		header( 'Cache-Control: public, max-age=86400' );
+		header( 'Expires: 86400' );
+
+		// Check if the file has been modified
+		if ( isset( $_SERVER['HTTP_IF_MODIFIED_SINCE'] ) && strtotime( sanitize_text_field( wp_unslash( $_SERVER['HTTP_IF_MODIFIED_SINCE'] ) ) ) >= filemtime( $path ) ) {
+			header( 'HTTP/1.1 304 Not Modified' );
+			exit;
+		}
+
+		if ( isset( $_SERVER['HTTP_IF_NONE_MATCH'] ) && trim( sanitize_text_field( wp_unslash( $_SERVER['HTTP_IF_NONE_MATCH'] ) ) ) === $etag ) {
+			header( 'HTTP/1.1 304 Not Modified' );
+			exit;
+		}
+
+		header( 'Content-Type: ' . $mime_type . '; charset=utf-8' );
+		header( 'Content-Disposition: attachment; filename=' . basename( $path ) );
+		header( 'Content-Length: ' . $file_size );
+
+		readfile( $path ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_readfile
+		exit;
 	}
 }

@@ -8,6 +8,7 @@
 namespace Solidie\Controllers;
 
 use Solidie\Models\Contents;
+use Solidie\Models\FileManager;
 use Solidie\Models\Release;
 
 // To Do: Add three custom rules;
@@ -29,7 +30,9 @@ class ContentController {
 		'versionRelease'        => array(),
 		'deleteContent'         => array(),
 		'getSingleContent'      => array(),
-		'loadFile'              => array(),
+		'loadFile'              => array(
+			'nopriv' => true,
+		),
 	);
 
 	/**
@@ -170,42 +173,7 @@ class ContentController {
 	 * @return void
 	 */
 	public static function loadFile( array $data ) {
-		$file_id = $data['file_id'] ?? 0;
-		$path    = get_attached_file( $file_id );
-
-		if ( empty( $path ) || ! is_readable( $path ) ) {
-			http_response_code( 404 );
-			exit;
-		}
-
-		$mime_type = mime_content_type( $path );
-		$file_size = filesize( $path );
-
-		// Set the headers for caching
-		$last_modified = gmdate( 'D, d M Y H:i:s', filemtime( $path ) ) . ' GMT';
-		$etag          = md5_file( $path );
-
-		header( 'Last-Modified: ' . $last_modified );
-		header( 'ETag: ' . $etag );
-		header( 'Cache-Control: public, max-age=604800' ); // Set the caching time in seconds (e.g., 1 week)
-		header( 'Expires: 604800' );
-
-		// Check if the file has been modified
-		if ( isset( $_SERVER['HTTP_IF_MODIFIED_SINCE'] ) && strtotime( sanitize_text_field( wp_unslash( $_SERVER['HTTP_IF_MODIFIED_SINCE'] ) ) ) >= filemtime( $path ) ) {
-			header( 'HTTP/1.1 304 Not Modified' );
-			exit;
-		}
-
-		if ( isset( $_SERVER['HTTP_IF_NONE_MATCH'] ) && trim( sanitize_text_field( wp_unslash( $_SERVER['HTTP_IF_NONE_MATCH'] ) ) ) === $etag ) {
-			header( 'HTTP/1.1 304 Not Modified' );
-			exit;
-		}
-
-		header( 'Content-Type: ' . $mime_type . '; charset=utf-8' );
-		header( 'Content-Disposition: attachment; filename=' . basename( $path ) );
-		header( 'Content-Length: ' . $file_size );
-
-		readfile( $path ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_readfile
-		exit;
+		do_action( 'solidie_load_file_before', $data );
+		FileManager::downloadFile( $data['file_id'] ?? 0 );
 	}
 }

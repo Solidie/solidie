@@ -282,7 +282,7 @@ class Contents {
 				foreach ( $ids as $file_id ) {
 					$files[] = array(
 						'file_id'   => $file_id,
-						'file_url'  => FileManager::getMediaPermalink( $file_id ),
+						'file_url'  => FileManager::getMediaLink( $file_id ),
 						'file_name' => get_the_title( $file_id ),
 						'mime_type' => get_post_mime_type( $file_id ),
 					);
