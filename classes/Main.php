@@ -11,6 +11,7 @@ use Solidie\Helpers\_Array;
 use Solidie\Setup\Dispatcher;
 use Solidie\Setup\Scripts;
 use Solidie\Setup\AdminPage;
+use Solidie\Setup\Cron;
 use Solidie\Setup\Database;
 use Solidie\Setup\Media;
 use Solidie\Setup\Route;
@@ -65,6 +66,7 @@ class Main {
 		new Scripts();
 		new AdminPage();
 		new Media();
+		new Cron();
 
 		// Set pro flag
 		add_action(

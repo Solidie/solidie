@@ -1,5 +1,5 @@
 import React from "react";
-import { AudioPlayer } from "../../../../materials/audio-player/audio-player.jsx";
+import { AudioPlayer } from "solidie-materials/audio-player/audio-player.jsx";
 
 export function Audio({contents=[]}) {
 	return <div>

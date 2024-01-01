@@ -2,7 +2,7 @@ import React, { useContext, useRef } from "react";
 import { Link } from "react-router-dom";
 
 import {chunkArray} from '../image/image.jsx';
-import { ColCounter, ContextColCounter } from "../../../../materials/col-counter.jsx";
+import { ColCounter, ContextColCounter } from "solidie-materials/col-counter.jsx";
 
 import style from './video.module.scss';
 

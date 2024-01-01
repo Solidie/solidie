@@ -21,7 +21,6 @@ class Manifest {
 		$manifest = array(
 			'settings' => array(
 				'general' => array(
-					'frontend_dashboard_path'    => 'solidie-dashboard',
 				),
 				'contents' => array(
 					// This array will be filled with content types

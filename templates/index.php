@@ -81,4 +81,6 @@ if ( ! empty( $template ) ) {
 			break;
 		}
 	}
+
+	load_404();
 }

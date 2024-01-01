@@ -27,7 +27,7 @@ class Route {
 	public function __construct() {
 		add_filter( 'query_vars', array( $this, 'registerPagename' ) );
 		add_action( 'rewrite_rules_array', array( $this, 'rebuildPermalinks' ) );
-		add_action( 'solidie_settings_updated', array( $this, 'triggerRewrite' ) );
+		add_action( 'solidie_settings_updated', array( $this, 'triggerRewrite' ), 100 );
 		add_filter( 'template_include', array( $this, 'registerTemplate' ) );
 	}
 
@@ -51,9 +51,7 @@ class Route {
 	 */
 	public function rebuildPermalinks( $rules ) {
 		$settings = AdminSetting::get();
-		$slugs    = array(
-			$settings['dashboard']['slug'],
-		);
+		$slugs    = apply_filters( 'solidie_frontend_routes', array() );
 
 		// Loop through content types and register their slug
 		foreach ( $settings['contents'] as $content ) {
@@ -74,7 +72,8 @@ class Route {
 	}
 
 	/**
-	 * Trigger rewrite rules on Solidie settings update
+	 * Trigger rewrite rules on Solidie settings update.
+	 * This one should be called as last as possible.
 	 *
 	 * @return void
 	 */

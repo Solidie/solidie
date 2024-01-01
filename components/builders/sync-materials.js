@@ -2,9 +2,25 @@ const path = require('path');
 const fs = require('fs');
 const { syncDirectory } = require('./sync-directory');
 
-const materials_path = path.resolve('../Materials');
-const materials_path_node = path.resolve('./node_modules/crewhrm-materials');
+const to_sync = [
+	{
+		from: './node_modules/crewhrm-materials',
+		to: '../Materials'
+	},
+	{
+		from: './node_modules/solidie-materials',
+		to: '../Solidie-Materials'
+	}
+];
 
-if ( fs.existsSync(materials_path) && fs.existsSync(materials_path_node) ) {
-	syncDirectory('./node_modules/crewhrm-materials', '../Materials');
+for ( let i=0; i<to_sync.length; i++ ) {
+
+	const {to, from} = to_sync[i];
+
+	const materials_path = path.resolve(to);
+	const materials_path_node = path.resolve(from);
+
+	if ( fs.existsSync(materials_path) && fs.existsSync(materials_path_node) ) {
+		syncDirectory(from, to);
+	}
 }
