@@ -3,16 +3,15 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 
 import { request } from 'crewhrm-materials/request.jsx';
 import { __, data_pointer, sprintf, formatDate, isEmpty } from 'crewhrm-materials/helpers.jsx';
-import { Conditional } from 'crewhrm-materials/conditional.jsx';
 import { ContextToast } from 'crewhrm-materials/toast/toast.jsx';
 import { LoadingIcon } from 'crewhrm-materials/loading-icon/loading-icon.jsx';
 import { Pagination } from 'crewhrm-materials/pagination/pagination.jsx';
 import { TextField } from 'crewhrm-materials/text-field/text-field.jsx';
 
-import { Tabs } from '../../../materials/tabs/tabs.jsx';
+import { Tabs } from 'solidie-materials/tabs/tabs.jsx';
 import { getDashboardPath } from '../../admin-dashboard/inventory/inventory-backend.jsx';
 
-import table_style from '../../../materials/styles/table.module.scss';
+import table_style from 'solidie-materials/styles/table.module.scss';
 import style from './inventory.module.scss';
 
 export function InventoryWrapper({children, fetching, content_label, catalog_permalink}) {
@@ -219,7 +218,7 @@ export function Inventory(props) {
 							:
 							<>
 								<table 
-									className={'table'.classNames(style) + 'table'.classNames(table_style) + 'border-1 b-color-tertiary'.classNames()} 
+									className={'table'.classNames(style) + 'table'.classNames(table_style)} 
 									style={{background: 'rgb(128 128 128 / 3.5%)'}}
 								>
 									<thead>

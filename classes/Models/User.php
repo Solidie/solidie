@@ -41,4 +41,23 @@ class User {
 		$user_data = get_userdata( $user_id );
 		return ( is_object( $user_data ) && ! empty( $user_data->roles ) ) ? $user_data->roles : array();
 	}
+
+	/**
+	 * Get user data by user id
+	 *
+	 * @param int $user_id
+	 * @return array|null
+	 */
+	public static function getUserData( $user_id ) {
+		$user = ! empty( $user_id ) ? get_userdata( $user_id ) : null;
+		if ( empty( $user ) ) {
+			return null;
+		}
+
+		return array(
+			'first_name' => $user->first_name,
+			'last_name'  => $user->last_name,
+			'avatar_url' => get_avatar_url( $user_id )
+		);
+	}
 }

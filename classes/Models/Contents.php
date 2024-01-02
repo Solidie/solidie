@@ -358,7 +358,6 @@ class Contents {
 	public static function getContents( array $args, bool $segmentation = false ) {
 		// Prepare arguments
 		$content_type = $args['content_type'] ?? null;
-		$customer_id  = $args['customer_id'] ?? null;
 		$keyword      = $args['search'] ?? '';
 		$category_ids = $args['category_ids'] ?? array();
 		$order_by     = $args['order_by'] ?? 'trending';
@@ -376,11 +375,6 @@ class Contents {
 		if ( ! empty( $content_type ) ) {
 			$c_type        = esc_sql( $content_type );
 			$where_clause .= " AND content.content_type='{$c_type}'";
-		}
-
-		// Customer filter
-		if ( ! empty( $customer_id ) ) {
-			$where_clause .= ' AND sale.customer_id=' . $customer_id;
 		}
 
 		// Search filter
@@ -415,7 +409,7 @@ class Contents {
 				$order_clause .= ' ORDER BY download_count, download_date DESC ';
 			}
 
-			$order_clause = " GROUP BY content.content_id, sale.sale_id {$order_clause}";
+			$order_clause = " GROUP BY content.content_id {$order_clause}";
 		}
 
 		if ( $segmentation ) {
@@ -431,13 +425,11 @@ class Contents {
 				COUNT(pop.download_id) AS download_count,
 				pop.download_date,
 				UNIX_TIMESTAMP(content.created_at) AS created_at,
-				cat.category_name,
-				sale.sale_id';
+				cat.category_name';
 		}
 
 		$query = "SELECT {$selects}
 			FROM " . DB::contents() . ' content 
-				LEFT JOIN ' . DB::sales() . ' sale ON content.content_id=sale.content_id
 				LEFT JOIN ' . DB::categories() . ' cat ON content.category_id=cat.category_id
 				LEFT JOIN ' . DB::popularity() . " pop ON content.content_id=pop.content_id
 			WHERE {$where_clause} {$order_clause} " . ( $segmentation ? '' : "{$limit_clause} {$offset_clause}" );

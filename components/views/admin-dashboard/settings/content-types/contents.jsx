@@ -10,7 +10,7 @@ import { Modal } from 'crewhrm-materials/modal.jsx';
 import { DropDown } from 'crewhrm-materials/dropdown/dropdown.jsx';
 import { DoAction } from 'crewhrm-materials/mountpoint.jsx';
 
-import table_style from '../../../../materials/styles/table.module.scss';
+import table_style from 'solidie-materials/styles/table.module.scss';
 import style from './contents.module.scss';
 
 export const getFlattenedCategories=(categories=[], exclude_level=null)=>{

@@ -77,4 +77,14 @@ class AdminSetting {
 
 		return $return_value;
 	}
+
+	/**
+	 * Return filtered settings ideally for frontend view. Sensitive data will be excluded.
+	 *
+	 * @return array
+	 */
+	public static function getFilteredSettings() {
+		$settings = self::get();
+		return apply_filters( 'solidie_filter_settings_data', $settings );
+	}
 }
