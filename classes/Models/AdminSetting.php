@@ -85,6 +85,12 @@ class AdminSetting {
 	 */
 	public static function getFilteredSettings() {
 		$settings = self::get();
+
+		// Assign content type label
+		foreach ( $settings['contents'] as $type => $content ) {
+			$settings['contents'][ $type ]['label'] = Manifest::getContentTypeLabel( $type );
+		}
+
 		return apply_filters( 'solidie_filter_settings_data', $settings );
 	}
 }

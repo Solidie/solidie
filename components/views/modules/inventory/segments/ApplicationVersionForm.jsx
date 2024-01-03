@@ -41,17 +41,17 @@ export function VersionReleaseForm() {
 	}, []);
 	
 
-  	return <div className={"z-20 flex flex-col gap-5".classNames()}>
+  	return <div className={"z-20 gap-5".classNames()}>
 		<button onClick={window.history.back} className={"flex gap-2 justify-around items-center w-max bg-primary hover:bg-primary/70 focus:text-green-900 focus:outline-green-900 color-text-light font-bold text-sm px-6 py-2 rounded-full shadow-xl active:animate-bounce shadow-primary border border-tertiary/5 cursor-pointer".classNames()}>
 			<i className={'s-icon s-icon-arrow-left'.classNames()}></i> Back
 		</button>
 		<h3>{state.release.content_title} - <strong>{state.release.version}</strong></h3>
 		<div>
 			<div>
-				<Form.Root className={" bg-tertiary/20 -lightest-version p-4 rounded-2xl shadow-md flex flex-col gap-3".classNames()}>
-					<div className={"flex justify-between gap-4 flex-wrap sm:flex-nowrap width-p-100 height-p-100".classNames()}>
-						<div className={"flex gap-4 flex-wrap width-p-100".classNames()}>
-							<Form.Field name="upload-application-zip-file" className={"flex flex-col gap-1 width-p-100 sm:max-w-xs".classNames()}>
+				<Form.Root className={" bg-tertiary/20 -lightest-version p-4 rounded-2xl shadow-md gap-3".classNames()}>
+					<div className={"flex justify-between flex-wrap sm:flex-nowrap width-p-100 height-p-100".classNames()}>
+						<div className={"flex flex-wrap width-p-100".classNames()}>
+							<Form.Field name="upload-application-zip-file" className={"gap-1 width-p-100 sm:max-w-xs".classNames()}>
 								<div className={"flex items-base justify-between".classNames()}>
 									<Form.Label className={"Label".classNames()}>
 										Upload Application Zip File
@@ -65,7 +65,7 @@ export function VersionReleaseForm() {
 								</Form.Control>
 							</Form.Field>
 
-							<Form.Field name="version" className={"flex flex-col gap-1 width-p-100 sm:max-w-xs".classNames()}>
+							<Form.Field name="version" className={"gap-1 width-p-100 sm:max-w-xs".classNames()}>
 								<div className={"flex items-base justify-between".classNames()}>
 									<Form.Label className={"Label".classNames()}>version</Form.Label>
 									<Form.Message match="valueMissing" className={"FieldMessage".classNames()}>
@@ -77,7 +77,7 @@ export function VersionReleaseForm() {
 								</Form.Control>
 							</Form.Field>
 			
-							<Form.Field name="change-log" className={"flex flex-col gap-1 width-p-100 sm:max-w-md h-auto".classNames()}>
+							<Form.Field name="change-log" className={"gap-1 width-p-100 sm:max-w-md h-auto".classNames()}>
 								<div className={"flex items-base justify-between".classNames()}>
 									<Form.Label className={"Label".classNames()}>Change Log</Form.Label>
 									<Form.Message match="valueMissing" className={"FieldMessage".classNames()}>

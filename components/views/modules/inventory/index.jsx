@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom';
 
 import { request } from 'crewhrm-materials/request.jsx';
 import { __, data_pointer, sprintf, formatDate, isEmpty } from 'crewhrm-materials/helpers.jsx';
@@ -9,18 +8,17 @@ import { Pagination } from 'crewhrm-materials/pagination/pagination.jsx';
 import { TextField } from 'crewhrm-materials/text-field/text-field.jsx';
 
 import { Tabs } from 'solidie-materials/tabs/tabs.jsx';
-import { getDashboardPath } from '../../admin-dashboard/inventory/inventory-backend.jsx';
+import { getDashboardPath } from 'solidie-materials/helpers.jsx';
 
 import table_style from 'solidie-materials/styles/table.module.scss';
 import style from './inventory.module.scss';
 
-export function InventoryWrapper({children, fetching, content_label, catalog_permalink}) {
+export function InventoryWrapper({children, fetching, content_label, catalog_permalink, navigate, params={}}) {
 
-	const {content_type} = useParams();
+	const {content_type} = params;
 
 	const _contents = window[data_pointer]?.settings?.contents || {};
 	const enabled_contents = Object.keys(_contents).map(c=>_contents[c].enable ? {..._contents[c], content_type:c} : null).filter(c=>c).map(c=>{return {...c, id: c.content_type}});
-	const navigate = useNavigate();
 
 	const [state, setState] = useState({
 		error_message: null
@@ -83,9 +81,9 @@ export function InventoryWrapper({children, fetching, content_label, catalog_per
 	</div>
 }
 
-export function Inventory(props) {
+export function Inventory({navigate, params={}}) {
 
-	const {content_type} = useParams();
+	const {content_type} = params;
 	const {ajaxToast} = useContext(ContextToast);
 
 	const [state, setState] = useState({
@@ -157,6 +155,17 @@ export function Inventory(props) {
 		});
 	}
 
+	function Link({children, className, title, to}) {
+		return <a 
+			className={className} 
+			title={title} 
+			href={to}
+			onClick={e=>{e.preventDefault(); navigate(to);}}
+		>
+			{children}
+		</a>
+	}
+
 	useEffect(()=>{
 		if ( content_type ) {
 			fetchContents();
@@ -175,6 +184,8 @@ export function Inventory(props) {
 		content_label={_content_label} 
 		content_type={content_type}
 		catalog_permalink={state.catalog_permalink}
+		navigate={navigate}
+		params={params}
 	>
 		{
 			// When no content created at all

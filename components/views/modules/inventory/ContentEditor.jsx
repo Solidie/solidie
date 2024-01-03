@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
 
 import {TextField} from 'crewhrm-materials/text-field/text-field.jsx';
 import {FileUpload} from 'crewhrm-materials/file-upload/file-upload.jsx';
@@ -13,11 +12,10 @@ import { InventoryWrapper } from "./index.jsx";
 import { getFlattenedCategories } from "../../admin-dashboard/settings/content-types/contents.jsx";
 import { DoAction } from "crewhrm-materials/mountpoint.jsx";
 
-export function ContentEditor({categories=[]}) {
+export function ContentEditor({categories=[], navigate, params={}}) {
 	const {ajaxToast, addToast} = useContext(ContextToast);
-	const {content_type, content_id: _content_id} = useParams();
+	const {content_type, content_id: _content_id} = params;
 	const content_id = isNaN(_content_id) ? 0 : _content_id;
-	const navigate = useNavigate();
 	
 	const initial_values = {
 		content_type: content_type,
@@ -190,7 +188,7 @@ export function ContentEditor({categories=[]}) {
 	
 	const _content = window[data_pointer]?.settings?.contents[content_type] || {};
 	
-	return <InventoryWrapper fetching={state.fetching}>
+	return <InventoryWrapper fetching={state.fetching} navigate={navigate} params={params}>
 		<div style={{maxWidth: '600px'}}>
 			{/* Header */}
 			<div className={"margin-top-20 margin-bottom-30 d-flex align-items-center column-gap-10".classNames()}>

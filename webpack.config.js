@@ -78,7 +78,8 @@ module.exports = (env, options) => {
             dest_path: './dist',
             src_files: {
 				'admin-dashboard': './components/views/admin-dashboard/index.jsx',
-				'frontend': './components/views/frontend/index.jsx'
+				'frontend': './components/views/frontend/index.jsx',
+				'frontend-dashboard-patch': './components/views/frontend-dashboard-patch/index.jsx'
             }
         }
     ];

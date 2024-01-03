@@ -10,6 +10,8 @@ import { ErrorBoundary } from "crewhrm-materials/error-boundary.jsx";
 import { LoadingIcon } from "crewhrm-materials/loading-icon/loading-icon.jsx";
 import { Pagination } from "crewhrm-materials/pagination/pagination.jsx";
 
+import {getPath} from 'solidie-materials/helpers.jsx';
+
 import { GenericCard } from "./generic-card/generic-card.jsx";
 import { SingleWrapper } from "../single/index.jsx";
 
@@ -48,11 +50,6 @@ const filters = [
 		]
 	}
 ];
-
-export function getPath(path) {
-	let _path = (window[data_pointer].is_admin ? '/' : window[data_pointer].home_path) + path;
-	return _path.replace(/\/+/g, '/');
-}
 
 function CatalogLayout({categories={}}) {
 	const {settings={}} = window[data_pointer];

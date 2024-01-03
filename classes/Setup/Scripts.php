@@ -33,6 +33,8 @@ class Scripts {
 		add_action( 'admin_enqueue_scripts', array( $this, 'adminScripts' ), 11 );
 		add_action( 'wp_enqueue_scripts', array( $this, 'frontendScripts' ), 11 );
 
+		add_action( 'solidie_fe_dashboard_js_enqueue_before', array( $this, 'loadScriptForProDashboard' ) );
+
 		// Vars
 		add_action( 'wp_head', array( $this, 'loadVariables' ), 1000 );
 		add_action( 'admin_head', array( $this, 'loadVariables' ), 1000 );
@@ -105,5 +107,14 @@ class Scripts {
 	 */
 	public function frontendScripts() {
 		wp_enqueue_script( 'solidie-frontend-script', Main::$configs->dist_url . 'frontend.js', array( 'jquery' ), Main::$configs->version, true );
+	}
+
+	/**
+	 * Load scripts to render free page in pro dashboard
+	 *
+	 * @return void
+	 */
+	public function loadScriptForProDashboard() {
+		wp_enqueue_script( 'solidie-frontend-dashboard-patch-script', Main::$configs->dist_url . 'frontend-dashboard-patch.js', array( 'jquery' ), Main::$configs->version, true );
 	}
 }
