@@ -49,7 +49,8 @@ class Meta {
 	 * @return self
 	 */
 	public static function content( $content_id ) {
-		return new self( DB::content_meta(), $content_id );
+		global $wpdb;
+		return new self( $wpdb->solidie_content_meta, $content_id );
 	}
 
 	/**

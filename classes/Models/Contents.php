@@ -49,7 +49,7 @@ class Contents {
 		if ( empty( $content['content_id'] ) ) {
 			$content['created_at'] = $gmdate;
 			$wpdb->insert(
-				DB::contents(),
+				$wpdb->solidie_contents,
 				$content
 			);
 			$content['content_id'] = $wpdb->insert_id;
@@ -178,7 +178,7 @@ class Contents {
 		global $wpdb;
 		$releases = $wpdb->get_results(
 			$wpdb->prepare(
-				'SELECT * FROM ' . DB::releases() . ' WHERE content_id=%d ORDER BY release_date DESC',
+				"SELECT * FROM {$wpdb->solidie_releases} WHERE content_id=%d ORDER BY release_date DESC",
 				$content_id
 			)
 		);
@@ -221,8 +221,11 @@ class Contents {
 		global $wpdb;
 		$content = $wpdb->get_row(
 			$wpdb->prepare(
-				'SELECT content.*, content.contributor_id as author_id FROM ' . DB::contents() . " content 
-				LEFT JOIN {$wpdb->users} _user ON content.contributor_id=_user.ID 
+				"SELECT 
+					content.*, 
+					content.contributor_id as author_id 
+				FROM {$wpdb->solidie_contents} content 
+					LEFT JOIN {$wpdb->users} _user ON content.contributor_id=_user.ID 
 				WHERE content." . $field_name . '=%s' . $status_clause,
 				$field_value
 			),
@@ -428,13 +431,14 @@ class Contents {
 				cat.category_name';
 		}
 
+		global $wpdb;
+
 		$query = "SELECT {$selects}
-			FROM " . DB::contents() . ' content 
-				LEFT JOIN ' . DB::categories() . ' cat ON content.category_id=cat.category_id
-				LEFT JOIN ' . DB::popularity() . " pop ON content.content_id=pop.content_id
+			FROM {$wpdb->solidie_contents} content 
+				LEFT JOIN {$wpdb->solidie_categories} cat ON content.category_id=cat.category_id
+				LEFT JOIN {$wpdb->solidie_popularity} pop ON content.content_id=pop.content_id
 			WHERE {$where_clause} {$order_clause} " . ( $segmentation ? '' : "{$limit_clause} {$offset_clause}" );
 
-		global $wpdb;
 		if ( $segmentation ) {
 			$total_count = (int) $wpdb->get_var( $query );
 			$page_count  = ceil( $total_count / $limit );

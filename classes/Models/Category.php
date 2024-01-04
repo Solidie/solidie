@@ -36,7 +36,7 @@ class Category {
 			);
 		} else {
 			$wpdb->insert(
-				DB::categories(),
+				$wpdb->solidie_categories,
 				$_category
 			);
 			$cat_id = $wpdb->insert_id;
@@ -53,7 +53,7 @@ class Category {
 	public static function getCategories() {
 		global $wpdb;
 		$cats = $wpdb->get_results(
-			'SELECT * FROM ' . DB::categories(),
+			"SELECT * FROM {$wpdb->solidie_categories}",
 			ARRAY_A
 		);
 
@@ -98,7 +98,7 @@ class Category {
 
 		global $wpdb;
 		$cats = $wpdb->get_results(
-			'SELECT * FROM ' . DB::categories(),
+			"SELECT * FROM {$wpdb->solidie_categories}",
 			ARRAY_A
 		);
 

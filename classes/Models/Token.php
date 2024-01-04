@@ -17,7 +17,7 @@ class Token {
 		global $wpdb;
 		$data = $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT data FROM " . DB::tokens() . " WHERE token_id=%d AND token=%s AND expires_on>NOW()",
+				"SELECT data FROM {$wpdb->solidie_tokens} WHERE token_id=%d AND token=%s AND expires_on>NOW()",
 				$token_id,
 				$token
 			)
@@ -38,7 +38,7 @@ class Token {
 		
 		global $wpdb;
 		$wpdb->insert(
-			DB::tokens(),
+			$wpdb->solidie_tokens,
 			array(
 				'data'       => maybe_serialize( $data ),
 				'token'      => $token,
@@ -47,7 +47,7 @@ class Token {
 
 		$wpdb->query(
 			$wpdb->prepare(
-				"UPDATE " . DB::tokens() . " SET expires_on=DATE_ADD(NOW(), INTERVAL 12 HOUR) WHERE token_id=%d",
+				"UPDATE {$wpdb->solidie_tokens} SET expires_on=DATE_ADD(NOW(), INTERVAL 12 HOUR) WHERE token_id=%d",
 				$wpdb->insert_id
 			)
 		);
@@ -65,6 +65,6 @@ class Token {
 	 */
 	public static function deleteExpired() {
 		global $wpdb;
-		$wpdb->query( "DELETE FROM " . DB::tokens() . " WHERE expires_on<NOW()" );
+		$wpdb->query( "DELETE FROM {$wpdb->solidie_tokens} WHERE expires_on<NOW()" );
 	}
 }

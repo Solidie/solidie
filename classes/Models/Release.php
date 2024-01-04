@@ -30,7 +30,7 @@ class Release {
 
 		global $wpdb;
 		$file_ids = $wpdb->get_col(
-			'SELECT file_id FROM ' . DB::releases() . ' WHERE release_id IN (' . $implodes . ')'
+			"SELECT file_id FROM {$wpdb->solidie_releases} WHERE release_id IN ({$implodes})"
 		);
 
 		// Delete file IDs from file system
@@ -52,7 +52,7 @@ class Release {
 		global $wpdb;
 		$release_ids = $wpdb->get_col(
 			$wpdb->prepare(
-				'SELECT release_id FROM ' . DB::releases() . ' WHERE content_id=%d',
+				"SELECT release_id FROM {$wpdb->solidie_releases} WHERE content_id=%d",
 				$content_id
 			)
 		);
@@ -98,7 +98,7 @@ class Release {
 		}
 
 		if ( empty( $data['release_id'] ) ) {
-			$wpdb->insert( DB::releases(), $release );
+			$wpdb->insert( $wpdb->solidie_releases, $release );
 		} else {
 			Field::releases()->updateField(
 				$release,
@@ -128,14 +128,14 @@ class Release {
 
 		$releases = $wpdb->get_results(
 			$wpdb->prepare(
-				'SELECT 
+				"SELECT 
 					_release.*, 
 					content.content_title, 
 					UNIX_TIMESTAMP(_release.release_date) as release_date, 
 					content.product_id, 
 					content.content_type
-				FROM ' . DB::releases() . ' _release
-					INNER JOIN ' . DB::contents() . " content ON content.content_id=_release.content_id
+				FROM {$wpdb->solidie_releases} _release
+					INNER JOIN {$wpdb->solidie_contents} content ON content.content_id=_release.content_id
 				WHERE 
 					_release.content_id=%d {$version_clause} 
 				ORDER BY _release.release_date DESC LIMIT %d, %d",
@@ -202,7 +202,7 @@ class Release {
 		global $wpdb;
 		$wpdb->query(
 			$wpdb->prepare(
-				"UPDATE " . DB::releases() . " SET download_count=download_count+1 WHERE release_id=%d",
+				"UPDATE {$wpdb->solidie_releases} SET download_count=download_count+1 WHERE release_id=%d",
 				$release_id
 			)
 		);
