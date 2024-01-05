@@ -95,6 +95,7 @@ export function SingleWrapper() {
 					{state.content?.content_description}
 				</div>
 			</div>
+			
 			<div style={{width: '300px'}}>
 				<RenderExternal 
 					component={applyFilters('free_download_button', FreeDownlod, state.content)}

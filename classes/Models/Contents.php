@@ -538,18 +538,20 @@ class Contents {
 	}
 
 	/**
-	 * Get single product by meta key and value
+	 * Get product/s by meta key and value
 	 *
 	 * @param string $key The meta key
-	 * @param mixed $value The value to get post by
-	 * @return object|null
+	 * @param mixed  $value The value to get post by
+	 * @param bool   $single Whether to return single product object or the array. Defualt true, means the first single product object.
+	 * 
+	 * @return object|array|null
 	 */
-	public static function getProductByMeta( $key, $value ) {
+	public static function getProductByMeta( $key, $value, $single = true ) {
 		
-		$product = get_posts(
+		$products = get_posts(
 			array(
 				'post_type'      => 'product',
-				'posts_per_page' => 1,
+				'posts_per_page' => $single ? 1 : -1,
 				'meta_query'     => array(
 					array(
 						'key'     => $key,
@@ -560,6 +562,7 @@ class Contents {
 			)
 		);
 
-		return empty( $product ) ? null : $product[0];
+		// Return first product object if single, otherwise the array of products.
+		return $single ? ( $products[0] ?? null ) : $products;
 	}
 }

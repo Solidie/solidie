@@ -8,6 +8,7 @@ import { Pagination } from 'crewhrm-materials/pagination/pagination.jsx';
 import { TextField } from 'crewhrm-materials/text-field/text-field.jsx';
 
 import { Tabs } from 'solidie-materials/tabs/tabs.jsx';
+import { TableStat } from 'solidie-materials/table-stat.jsx';
 import { getDashboardPath } from 'solidie-materials/helpers.jsx';
 
 import table_style from 'solidie-materials/styles/table.module.scss';
@@ -221,92 +222,97 @@ export function Inventory({navigate, params={}}) {
 						</div>
 					</div>
 
-					{
-						!state.contents.length ? 
-							<div className={'text-align-center padding-vertical-40'.classNames()}>
-								{state.fetching ? null : <strong>{__('No result')}</strong>}
-							</div>
-							:
-							<>
-								<table 
-									className={'table'.classNames(style) + 'table'.classNames(table_style)} 
-									style={{background: 'rgb(128 128 128 / 3.5%)'}}
-								>
-									<thead>
-										<tr>
-											<th>{__('Title')}</th>
-											<th>{__('Category')}</th>
-											<th>{__('Status')}</th>
-											<th>{__('Created')}</th>
-										</tr>
-									</thead>
-									<tbody>
-										{
-											state.contents.map((content, idx) =>{
-												let {content_id, content_title, content_url, media, created_at, content_status, category_name} = content;
+					<table 
+						className={'table'.classNames(style) + 'table responsive'.classNames(table_style)} 
+						style={{background: 'rgb(128 128 128 / 3.5%)'}}
+					>
+						<thead>
+							<tr>
+								<th>{__('Title')}</th>
+								<th>{__('Category')}</th>
+								<th>{__('Monetization')}</th>
+								<th>{__('Status')}</th>
+								<th>{__('Created')}</th>
+							</tr>
+						</thead>
+						<tbody>
+							{
+								state.contents.map((content, idx) =>{
+									let {
+										content_id, 
+										content_title, 
+										content_url, 
+										media, 
+										created_at, 
+										content_status, 
+										category_name,
+										product_id
+									} = content;
 
-												return <tr key={content_id}>
-													<td data-th={__('Title')} style={{paddingTop: '20px', paddingBottom: '20px'}}>
-														<div className={'d-flex column-gap-15'.classNames()}>
-															<div>
-																<img 
-																	src={media?.thumbnail?.file_url} 
-																	style={{width: '30px', height: 'auto', borderRadius: '2px'}}/>
-															</div>
-															<div className={'flex-1'.classNames()}>
-																<a href={content_url} target='_blank' className={"d-block font-size-14 font-weight-600".classNames()}>
-																	{content_title}
-																</a>
-																<div className={'actions'.classNames(style) + 'd-flex align-items-center column-gap-10 margin-top-10'.classNames()}>
-																	<Link 
-																		className={'cursor-pointer color-text-light d-inline-flex align-items-center column-gap-8'.classNames()} 
-																		title={__('Edit')}
-																		to={getDashboardPath(`inventory/${content_type}/editor/${content_id}/`)}
-																	>
-																		<i className={'ch-icon ch-icon-edit-2 font-size-15'.classNames()}></i> {__('Edit')}
-																	</Link>
-																	<span className={'color-text-lighter'.classNames()}>|</span>
-																	<span
-																		className={'cursor-pointer color-text-light d-inline-flex align-items-center column-gap-8'.classNames()}
-																		title={__('Delete')}
-																		onClick={()=>deleteContent(content_id)}
-																	>
-																		<i className={'ch-icon ch-icon-trash font-size-15'.classNames()}></i> {__('Delete')}
-																	</span>
-																</div>
-															</div>
-														</div>
-													</td>
-													<td>
-														{category_name}
-													</td>
-													<td data-th={__('Status')}>
-														<div>
-															{content_status}
-														</div>
-													</td>
-													<td>
-														{formatDate(created_at, window[data_pointer]?.date_format + ' ' + window[data_pointer]?.time_format)}
-													</td>
-												</tr>
-											})
-										}
-									</tbody>
-								</table>
-								{
-									(state.segmentation?.page_count || 0) < 2 ? null :
-									<>
-										<br/>
-										<div className={'d-flex justify-content-end'.classNames()}>
-											<Pagination
-												onChange={(page) => setFilter('page', page)}
-												pageNumber={filterState.page}
-												pageCount={state.segmentation.page_count}
-											/>
-										</div>
-									</>
-								}
-							</>
+									return <tr key={content_id}>
+										<td data-th={__('Title')} style={{paddingTop: '20px', paddingBottom: '20px'}}>
+											<div className={'d-flex column-gap-15'.classNames()}>
+												<div>
+													<img 
+														src={media?.thumbnail?.file_url} 
+														style={{width: '30px', height: 'auto', borderRadius: '2px'}}/>
+												</div>
+												<div className={'flex-1'.classNames()}>
+													<a href={content_url} target='_blank' className={"d-block font-size-14 font-weight-600".classNames()}>
+														{content_title}
+													</a>
+													<div className={'actions'.classNames(style) + 'd-flex align-items-center column-gap-10 margin-top-10'.classNames()}>
+														<Link 
+															className={'cursor-pointer color-text-light d-inline-flex align-items-center column-gap-8'.classNames()} 
+															title={__('Edit')}
+															to={getDashboardPath(`inventory/${content_type}/editor/${content_id}/`)}
+														>
+															<i className={'ch-icon ch-icon-edit-2 font-size-15'.classNames()}></i> {__('Edit')}
+														</Link>
+														<span className={'color-text-lighter'.classNames()}>|</span>
+														<span
+															className={'cursor-pointer color-text-light d-inline-flex align-items-center column-gap-8'.classNames()}
+															title={__('Delete')}
+															onClick={()=>deleteContent(content_id)}
+														>
+															<i className={'ch-icon ch-icon-trash font-size-15'.classNames()}></i> {__('Delete')}
+														</span>
+													</div>
+												</div>
+											</div>
+										</td>
+										<td data-th={__('Category')}>
+											{category_name || <>&nbsp;</>}
+										</td>
+										<td data-th={__('Monetization')}>
+											{product_id ? __('Paid') : __('Free')}
+										</td>
+										<td data-th={__('Status')}>
+											<div>
+												{content_status}
+											</div>
+										</td>
+										<td data-th={__('Created')}>
+											{formatDate(created_at, window[data_pointer]?.date_format + ' ' + window[data_pointer]?.time_format)}
+										</td>
+									</tr>
+								})
+							}
+							<TableStat empty={!state.contents.length} loading={state.fetching}/>
+						</tbody>
+					</table>
+					{
+						(state.segmentation?.page_count || 0) < 2 ? null :
+						<>
+							<br/>
+							<div className={'d-flex justify-content-end'.classNames()}>
+								<Pagination
+									onChange={(page) => setFilter('page', page)}
+									pageNumber={filterState.page}
+									pageCount={state.segmentation.page_count}
+								/>
+							</div>
+						</>
 					}
 				</>
 		}
