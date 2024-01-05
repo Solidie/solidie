@@ -267,7 +267,7 @@ class Contents {
 		// Loop through every contents
 		foreach ( $contents as $index => $content ) {
 			$meta  = Meta::content( $content['content_id'] );
-			$media = $meta->getMeta( self::MEDIA_IDS_KEY );
+			$media = $meta->getMeta( self::MEDIA_IDS_KEY, array() );
 
 			// Loop through media like thumbnail, preview
 			foreach ( $media as $key => $id ) {
@@ -333,7 +333,7 @@ class Contents {
 	public static function getPermalink( $content_id ) {
 
 		$content = is_array( $content_id ) ? $content_id : Field::contents()->getField( array( 'content_id' => $content_id ), array( 'content_type', 'content_slug' ) );
-		if ( empty( $content ) ) {
+		if ( empty( $content ) || empty( $content['content_slug'] ) ) {
 			return null;
 		}
 

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jan 01, 2024 at 04:43 AM
+-- Generation Time: Jan 05, 2024 at 05:42 AM
 -- Server version: 8.0.16
 -- PHP Version: 8.1.23
 
@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS `wp_solidie_categories` (
 CREATE TABLE IF NOT EXISTS `wp_solidie_contents` (
   `content_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `product_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `content_type` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL COMMENT 'app, audio, video, image, 3d, font, document',
+  `content_type` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL COMMENT 'app, audio, video, image, 3d, font, document, tutorial',
   `category_id` bigint(20) UNSIGNED DEFAULT NULL,
   `content_title` mediumtext COLLATE utf8mb4_unicode_520_ci,
   `content_slug` varchar(255) COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
@@ -133,14 +133,16 @@ CREATE TABLE IF NOT EXISTS `wp_solidie_sales` (
   `sale_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `content_id` bigint(20) UNSIGNED NOT NULL,
   `customer_id` bigint(20) UNSIGNED NOT NULL,
+  `product_id` bigint(20) UNSIGNED NOT NULL,
   `order_id` bigint(20) UNSIGNED NOT NULL,
   `variation_id` bigint(20) UNSIGNED NOT NULL,
+  `order_status` varchar(15) COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
   `sale_price` double UNSIGNED NOT NULL,
   `commission` double NOT NULL COMMENT 'The amount site owner will get',
   `commission_rate` double NOT NULL COMMENT 'Commission percentage site owner gets',
   `license_or_content_limit` mediumint(8) UNSIGNED DEFAULT NULL,
   `expires_on` date DEFAULT NULL,
-  `sold_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Order date time',
+  `purchase_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Order date time',
   PRIMARY KEY (`sale_id`),
   KEY `app_id` (`content_id`,`variation_id`),
   KEY `order_id` (`order_id`)
