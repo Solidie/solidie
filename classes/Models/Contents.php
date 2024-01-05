@@ -236,8 +236,6 @@ class Contents {
 			return null;
 		}
 
-		// Assign media
-
 		// Apply content meta
 		$content = _Array::castRecursive( $content );
 		$content = self::assignContentMedia( $content );
@@ -326,13 +324,21 @@ class Contents {
 	/**
 	 * Get permalink by product id as per content type
 	 *
-	 * @param int|array $content_id Single content ID or whole content array
+	 * @param int|array $content_id Single content ID or whole content data array
 	 *
 	 * @return string
 	 */
 	public static function getPermalink( $content_id ) {
 
-		$content = is_array( $content_id ) ? $content_id : Field::contents()->getField( array( 'content_id' => $content_id ), array( 'content_type', 'content_slug' ) );
+		if ( is_array( $content_id ) ) {
+			$content = $content_id;
+		} else {
+			$content = Field::contents()->getField(
+				array( 'content_id' => $content_id ),
+				array( 'content_type', 'content_slug' )
+			);
+		}
+
 		if ( empty( $content ) || empty( $content['content_slug'] ) ) {
 			return null;
 		}
@@ -542,15 +548,16 @@ class Contents {
 	 *
 	 * @param string $key The meta key
 	 * @param mixed  $value The value to get post by
+	 * @param mixed  $post_type The post type to get by.
 	 * @param bool   $single Whether to return single product object or the array. Defualt true, means the first single product object.
 	 * 
 	 * @return object|array|null
 	 */
-	public static function getProductByMeta( $key, $value, $single = true ) {
+	public static function getPostByMeta( $key, $value, $post_type, $single = true ) {
 		
 		$products = get_posts(
 			array(
-				'post_type'      => 'product',
+				'post_type'      => $post_type,
 				'posts_per_page' => $single ? 1 : -1,
 				'meta_query'     => array(
 					array(

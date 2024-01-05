@@ -317,15 +317,19 @@ class FileManager {
 	 * Process file downloading
 	 *
 	 * @param int $file_id
+	 * @param array $data Additional request data for hook usage
 	 * @return void
 	 */
-	public static function downloadFile( $file_id ) {
+	public static function downloadFile( $file_id, $data = array() ) {
 
 		$path = ! empty( $file_id ) ? get_attached_file( $file_id ) : null;
 		if ( empty( $path ) ) {
 			http_response_code( 404 );
 			exit;
 		}
+
+		do_action( 'solidie_load_file_before', $data );
+		Release::increaseDownloadCount( $file_id );
 
 		$mime_type = mime_content_type( $path );
 		$file_size = filesize( $path );

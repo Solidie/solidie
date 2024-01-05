@@ -198,13 +198,28 @@ class Release {
 	 * @param int $release_id
 	 * @return void
 	 */
-	public static function increaseDownloadCount( $release_id ) {
+	public static function increaseDownloadCount( $file_id ) {
 		global $wpdb;
+
+		// 
+		$release = Field::releases()->getField(
+			array( 'file_id' => $file_id ),
+			array( 'release_id', 'content_id' )
+		);
+
+		if ( empty( $release ) ) {
+			return;
+		}
+		
+		// Increase specific release ID count
 		$wpdb->query(
 			$wpdb->prepare(
 				"UPDATE {$wpdb->solidie_releases} SET download_count=download_count+1 WHERE release_id=%d",
-				$release_id
+				$release['release_id']
 			)
 		);
+
+		// Add as popularity now
+		Popularity::logDownload( $release['content_id'] );
 	}
 }

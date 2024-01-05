@@ -173,7 +173,6 @@ class ContentController {
 	 * @return void
 	 */
 	public static function loadFile( array $data ) {
-		do_action( 'solidie_load_file_before', $data );
-		FileManager::downloadFile( $data['file_id'] ?? 0 );
+		FileManager::downloadFile( $data['file_id'] ?? 0, $data );
 	}
 }
