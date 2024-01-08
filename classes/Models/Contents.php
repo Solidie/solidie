@@ -240,7 +240,6 @@ class Contents {
 		$content = _Array::castRecursive( $content );
 		$content = self::assignContentMedia( $content );
 		$content = self::assignContentMeta( $content );
-		$content = apply_filters( 'solidie_single_content', $content );
 
 		return $field ? ( $content[ $field ] ?? null ) : $content;
 	}
