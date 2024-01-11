@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jan 07, 2024 at 09:46 PM
+-- Generation Time: Jan 11, 2024 at 05:41 AM
 -- Server version: 8.0.16
 -- PHP Version: 8.1.23
 
@@ -136,13 +136,14 @@ CREATE TABLE IF NOT EXISTS `wp_solidie_sales` (
   `product_id` bigint(20) UNSIGNED NOT NULL,
   `order_id` bigint(20) UNSIGNED NOT NULL,
   `variation_id` bigint(20) UNSIGNED NOT NULL,
+  `parent_id` bigint(20) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Parent ID is here to simulate subscription model little bit',
   `order_status` varchar(15) COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
   `sale_price` double UNSIGNED NOT NULL,
-  `commission` double NOT NULL COMMENT 'The amount site owner will get',
+  `commission` double NOT NULL COMMENT 'The exact amount site owner will get',
   `commission_rate` double NOT NULL COMMENT 'Commission percentage site owner gets',
-  `license_or_content_limit` mediumint(8) UNSIGNED DEFAULT NULL,
-  `expires_on` date DEFAULT NULL,
-  `renewal_date` timestamp NULL DEFAULT NULL,
+  `license_or_content_limit` mediumint(8) UNSIGNED DEFAULT NULL COMMENT 'The limit per subscription period/season',
+  `downloads_in_season` mediumint(8) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Downloads in a subscription period/season. It is supposed to be used in content pack only. ',
+  `expires_on` date DEFAULT NULL COMMENT 'When the subscription of app or content pack expires',
   `purchase_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Order date time',
   PRIMARY KEY (`sale_id`),
   KEY `app_id` (`content_id`,`variation_id`),
