@@ -41,7 +41,6 @@ class Contents {
 		$content['contributor_id']      = $content_data['contributor_id'] ?? get_current_user_id();
 		$content['modified_at']         = $gmdate;
 
-		//
 		$is_update = false;
 
 		// Create or update content
@@ -549,11 +548,11 @@ class Contents {
 	 * @param mixed  $value The value to get post by
 	 * @param mixed  $post_type The post type to get by.
 	 * @param bool   $single Whether to return single product object or the array. Defualt true, means the first single product object.
-	 * 
+	 *
 	 * @return object|array|null
 	 */
 	public static function getPostByMeta( $key, $value, $post_type, $single = true ) {
-		
+
 		$products = get_posts(
 			array(
 				'post_type'      => $post_type,
@@ -562,7 +561,7 @@ class Contents {
 					array(
 						'key'     => $key,
 						'value'   => $value,
-						'compare' => '=', 
+						'compare' => '=',
 					),
 				),
 			)

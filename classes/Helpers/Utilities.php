@@ -1,11 +1,19 @@
 <?php
+/**
+ * The utilities functionalities
+ *
+ * @package solidie
+ */
 
 namespace Solidie\Helpers;
 
 use Solidie\Main;
 
+/**
+ * The class
+ */
 class Utilities {
-	
+
 	/**
 	 * Check if the page is a Crew Dashboard
 	 *

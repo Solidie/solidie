@@ -57,6 +57,8 @@ class Meta {
 	 * Get single meta value by object id and meta key
 	 *
 	 * @param string $meta_key Optional meta key to get specific. Otherwise all.
+	 * @param mixed  $default_single Fallback parameter
+	 *
 	 * @return mixed
 	 */
 	public function getMeta( $meta_key = null, $default_single = null ) {

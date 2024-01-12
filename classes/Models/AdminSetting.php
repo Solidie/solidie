@@ -7,8 +7,6 @@
 
 namespace Solidie\Models;
 
-use Solidie\Helpers\_Array;
-
 /**
  * AdminSettings class
  */
@@ -24,10 +22,12 @@ class AdminSetting {
 	 * Save admin settings
 	 *
 	 * @param array $settings Settings array to save
+	 * @param bool  $merge Whether to merge or not
+	 *
 	 * @return bool
 	 */
 	public static function save( $settings, $merge = true ) {
-		
+
 		// In case you need to update only on option inside the array
 		if ( true === $merge ) {
 			$settings = array_merge( self::get(), $settings );
@@ -35,7 +35,7 @@ class AdminSetting {
 
 		update_option( self::OPTION_NAME, $settings, true );
 		do_action( 'solidie_settings_updated', $settings );
-		
+
 		return true;
 	}
 

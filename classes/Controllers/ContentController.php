@@ -52,7 +52,7 @@ class ContentController {
 			array(
 				'contents'          => $content_list,
 				'segmentation'      => $segmentation,
-				'catalog_permalink' => Contents::getCatalogPermalink( $data['content_type'] )
+				'catalog_permalink' => Contents::getCatalogPermalink( $data['content_type'] ),
 			)
 		);
 	}
@@ -150,7 +150,7 @@ class ContentController {
 
 	/**
 	 * Get single content for both single view and inventory screen.
-	 * Conntent slug will be provided if it is single screen. 
+	 * Conntent slug will be provided if it is single screen.
 	 * Otherwise content ID will be provided if called from inventory page.
 	 *
 	 * @param array $data Request data
@@ -161,7 +161,7 @@ class ContentController {
 		if ( ! empty( $data['content_slug'] ) ) {
 			$data['content_id'] = Contents::getContentIdBySlug( $data['content_slug'] );
 		}
-		
+
 		$content_id = (int) $data['content_id'] ?? 0;
 		$content    = $content_id ? Contents::getContentByContentID( $content_id, null, false ) : null;
 

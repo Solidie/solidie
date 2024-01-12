@@ -42,7 +42,7 @@ class Database {
 	 */
 	private function prepareTableNames() {
 		global $wpdb;
-		
+
 		// WP and Plugin prefix
 		$prefix = $wpdb->prefix . Main::$configs->db_prefix;
 

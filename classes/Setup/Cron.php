@@ -1,9 +1,24 @@
 <?php
+/**
+ * Cron functionalities
+ *
+ * @package solidie
+ */
+
 namespace Solidie\Setup;
 
 use Solidie\Models\Token;
 
+/**
+ * The cron class
+ */
 class Cron {
+
+	/**
+	 * The constructor to register hooks
+	 *
+	 * @return void
+	 */
 	public function __construct() {
 		add_action( 'solidie_clear_expired_tokens', array( $this, 'clearTokens' ) );
 		add_action( 'init', array( $this, 'tokenDeletion' ) );

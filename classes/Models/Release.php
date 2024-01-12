@@ -195,22 +195,22 @@ class Release {
 	/**
 	 * Increase single release download count
 	 *
-	 * @param int $release_id
+	 * @param int $file_id The file ID to increase download count for
+	 *
 	 * @return void
 	 */
 	public static function increaseDownloadCount( $file_id ) {
 		global $wpdb;
 
-		// 
-		$release = Field::releases()->getField(
-			array( 'file_id' => $file_id ),
-			array( 'release_id', 'content_id' )
-		);
+				$release = Field::releases()->getField(
+					array( 'file_id' => $file_id ),
+					array( 'release_id', 'content_id' )
+				);
 
 		if ( empty( $release ) ) {
 			return;
 		}
-		
+
 		// Increase specific release ID count
 		$wpdb->query(
 			$wpdb->prepare(

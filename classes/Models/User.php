@@ -45,7 +45,8 @@ class User {
 	/**
 	 * Get user data by user id
 	 *
-	 * @param int $user_id
+	 * @param int $user_id The user ID to get data for
+	 *
 	 * @return array|null
 	 */
 	public static function getUserData( $user_id ) {
@@ -57,7 +58,7 @@ class User {
 		return array(
 			'first_name' => $user->first_name,
 			'last_name'  => $user->last_name,
-			'avatar_url' => get_avatar_url( $user_id )
+			'avatar_url' => get_avatar_url( $user_id ),
 		);
 	}
 }

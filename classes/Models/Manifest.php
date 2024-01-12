@@ -17,14 +17,13 @@ class Manifest {
 	 * @return array
 	 */
 	public static function getManifest() {
-		
+
 		$manifest = array(
 			'settings' => array(
-				'general' => array(
-				),
+				'general'  => array(),
 				'contents' => array(
 					// This array will be filled with content types
-				)
+				),
 			),
 			'contents' => array(
 				'app'      => array(
@@ -87,7 +86,9 @@ class Manifest {
 	/**
 	 * Get content type label
 	 *
-	 * @param string $content_type
+	 * @param string $content_type The content type get label for
+	 * @param bool   $default The fallback to return
+	 *
 	 * @return string
 	 */
 	public static function getContentTypeLabel( $content_type, $default = null ) {

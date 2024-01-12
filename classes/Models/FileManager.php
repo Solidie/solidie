@@ -316,8 +316,9 @@ class FileManager {
 	/**
 	 * Process file downloading
 	 *
-	 * @param int $file_id
+	 * @param int   $file_id The file ID to download
 	 * @param array $data Additional request data for hook usage
+	 *
 	 * @return void
 	 */
 	public static function downloadFile( $file_id, $data = array() ) {

@@ -18,7 +18,7 @@ use Solidie\Models\Manifest;
 class AdminPage {
 
 	const CONTENT_TYPES_SLUG = 'solidie-content-types';
-	const SETTINGS_SLUG = 'solidie-settings';
+	const SETTINGS_SLUG      = 'solidie-settings';
 
 	/**
 	 * Admin page setup hooks register
