@@ -217,39 +217,6 @@ function OptionFields({fields=[], vertical, separator, is_group=false}) {
 						</div>
 					</>
 				) : null}
-
-				{type==='address' ? <>
-					<div className={'flex-5'.classNames()}>{label_text}</div>
-					<div>
-						<AddressFields 
-							values={values} 
-							onChange={onChange}/>
-					</div>
-				</> : null}
-
-				{type==='list' ? 
-					<>
-						<div className={'flex-5'.classNames()}>{label_text}</div>
-						<div>
-							<ListManager
-								addText={add_text}
-								mode="stack"
-								list={(values[name] || []).map(item=>{
-									return {
-										id: item[key_map.id || 'id'],
-										label: item[key_map.label || 'label']
-									}
-								})}
-								onChange={(items) => onChange(name, items.map(item=>{
-									return {
-										[key_map.id || 'id']: item.id,
-										[key_map.label || 'label']: item.label
-									}
-								}))}
-							/>
-						</div>
-					</> : null
-				}
 			</div>
 		);
 	});

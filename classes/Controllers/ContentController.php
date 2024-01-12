@@ -29,7 +29,9 @@ class ContentController {
 		'fetchReleases'         => array(),
 		'versionRelease'        => array(),
 		'deleteContent'         => array(),
-		'getSingleContent'      => array(),
+		'getSingleContent'      => array(
+			'nopriv' => true,
+		),
 		'loadFile'              => array(
 			'nopriv' => true,
 		),
@@ -147,7 +149,9 @@ class ContentController {
 	}
 
 	/**
-	 * Get single content for both single view and edit
+	 * Get single content for both single view and inventory screen.
+	 * Conntent slug will be provided if it is single screen. 
+	 * Otherwise content ID will be provided if called from inventory page.
 	 *
 	 * @param array $data Request data
 	 * @return void
@@ -157,8 +161,10 @@ class ContentController {
 		if ( ! empty( $data['content_slug'] ) ) {
 			$data['content_id'] = Contents::getContentIdBySlug( $data['content_slug'] );
 		}
+		
+		$content_id = (int) $data['content_id'] ?? 0;
+		$content    = $content_id ? Contents::getContentByContentID( $content_id, null, false ) : null;
 
-		$content = Contents::getContentByContentID( (int) $data['content_id'] ?? 0, null, false );
 		if ( ! empty( $content ) ) {
 			wp_send_json_success( array( 'content' => $content ) );
 		} else {
