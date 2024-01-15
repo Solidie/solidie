@@ -41,6 +41,15 @@ class AdminPage {
 			__( 'Solidie', 'solidie' ),
 			'administrator',
 			Main::$configs->root_menu_slug,
+			array( $this, 'mainPage' ),
+			Main::$configs->dist_url . 'libraries/menu-icon.svg'
+		);
+		add_submenu_page(
+			Main::$configs->root_menu_slug,
+			__( 'Contents', 'solidie' ),
+			__( 'Contents', 'solidie' ),
+			'administrator',
+			Main::$configs->root_menu_slug,
 			array( $this, 'mainPage' )
 		);
 
