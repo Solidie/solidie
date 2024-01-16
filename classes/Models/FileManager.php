@@ -328,7 +328,7 @@ class FileManager {
 			http_response_code( 404 );
 			exit;
 		}
-
+		
 		do_action( 'solidie_load_file_before', $data );
 		Release::increaseDownloadCount( $file_id );
 

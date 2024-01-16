@@ -7,6 +7,8 @@ import { request } from "crewhrm-materials/request.jsx";
 import { applyFilters } from "crewhrm-materials/hooks.jsx";
 import { RenderExternal } from "crewhrm-materials/render-external.jsx";
 import { InitState } from "crewhrm-materials/init-state.jsx";
+import { DangerouslySet } from "crewhrm-materials/dangerously-set.jsx";
+import { RenderMedia } from "crewhrm-materials/render-media/render-media.jsx";
 
 import { GenericPreview } from "./previews/generic.jsx";
 import { ImagePreview } from "./previews/image.jsx";
@@ -24,7 +26,10 @@ const preview_renderers = {
 
 function FreeDownlod( props ) {
 	const {content} = props;
-	return <div className={'border-1 b-color-tertiary border-radius-5 padding-15'.classNames()}>
+	return <div className={'border-1 b-color-tertiary border-radius-5 padding-horizontal-15 padding-vertical-20'.classNames()}>
+		<strong className={'d-block font-size-15 color-text font-weight-500 margin-bottom-15'.classNames()}>
+			{__('Free')}
+		</strong>
 		<a 
 			href={(content?.releases || [])[0]?.download_url} 
 			className={'button button-primary button-outlined button-full-width'.classNames()}
@@ -73,6 +78,8 @@ export function SingleWrapper() {
 				error_message={state.error_message} />
 
     }
+
+	const {sample_images=[]} = state.content?.media || {};
 	
 	return <div>
 		<div>
@@ -92,8 +99,20 @@ export function SingleWrapper() {
 					}
 				</div>
 				<div>
-					{state.content?.content_description}
+					<DangerouslySet>
+						{state.content?.content_description || ''}
+					</DangerouslySet>
 				</div>
+
+				{
+					!sample_images.length ? null : 
+					<div>
+						<strong className={'d-block font-size-18 font-weight-500'.classNames()}>
+							{__('Samples')}:
+						</strong>
+						<RenderMedia media={sample_images}/>
+					</div>
+				}
 			</div>
 			
 			<div style={{width: '300px'}}>

@@ -68,6 +68,12 @@ class Manifest {
 					'description' => __( 'Various type of fonts', 'solidie' ),
 					'plans'       => array(),
 				),
+				/* 'tutorial'        => array(
+					'label'       => __( 'Tutorial', 'solidie' ),
+					'slug'        => 'tutorials',
+					'description' => __( 'Full fledged tutorial management system', 'solidie' ),
+					'plans'       => array(),
+				), */
 			),
 		);
 

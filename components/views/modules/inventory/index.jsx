@@ -14,12 +14,20 @@ import { getDashboardPath } from 'solidie-materials/helpers.jsx';
 import table_style from 'solidie-materials/styles/table.module.scss';
 import style from './inventory.module.scss';
 
-export function InventoryWrapper({children, fetching, content_label, catalog_permalink, navigate, params={}}) {
+export function InventoryWrapper({children, content_label, catalog_permalink, navigate, params={}}) {
 
 	const {content_type} = params;
 
 	const _contents = window[data_pointer]?.settings?.contents || {};
-	const enabled_contents = Object.keys(_contents).map(c=>_contents[c].enable ? {..._contents[c], content_type:c} : null).filter(c=>c).map(c=>{return {...c, id: c.content_type}});
+	const enabled_contents = 
+		Object.keys(_contents)
+		.map(c=>{
+			return _contents[c].enable ? {..._contents[c], content_type:c} : null
+		})
+		.filter(c=>c)
+		.map(c=>{
+			return {...c, id: c.content_type}
+		});
 
 	const [state, setState] = useState({
 		error_message: null
@@ -64,9 +72,6 @@ export function InventoryWrapper({children, fetching, content_label, catalog_per
 				<span className={'font-size-24 font-weight-600 letter-spacing-3'.classNames()}>
 					{__('Inventory')} {content_label ? <> - <a href={catalog_permalink} target='_blank' className={'hover-underline'.classNames()}>{content_label}</a></> : null}
 				</span>
-				<LoadingIcon 
-					show={fetching} 
-					className={'margin-left-5 font-size-15'.classNames()}/>
 			</strong>
 
 			{
@@ -91,7 +96,8 @@ export function Inventory({navigate, params={}}) {
 		fetching: false,
 		contents: [],
 		segmentation: null,
-		catalog_permalink: null
+		catalog_permalink: null,
+		content_type: content_type
 	});
 
 	const filterStateInitial = {
@@ -109,10 +115,11 @@ export function Inventory({navigate, params={}}) {
 		});
 	}
 
-	const fetchContents=()=>{
+	const fetchContents=(variables={})=>{
 		setState({
 			...state,
-			fetching: true
+			fetching: true,
+			...variables
 		});
 
 		const payload = {
@@ -169,7 +176,10 @@ export function Inventory({navigate, params={}}) {
 
 	useEffect(()=>{
 		if ( content_type ) {
-			fetchContents();
+			fetchContents({
+				content_type,
+				contents: state.content_type!=content_type ? [] : state.contents
+			});
 		}
 	}, [content_type, filterState]);
 
@@ -181,7 +191,6 @@ export function Inventory({navigate, params={}}) {
 	const _content_label = _content.label || __('Content');
 	
 	return <InventoryWrapper 
-		fetching={state.fetching} 
 		content_label={_content_label} 
 		content_type={content_type}
 		catalog_permalink={state.catalog_permalink}
@@ -190,14 +199,23 @@ export function Inventory({navigate, params={}}) {
 	>
 		{
 			// When no content created at all
-			(!state.fetching && filterState.page===1 && isEmpty( filterState.search ) && !state.contents.length) ?
+			!state.contents.length ?
 				<div className={'padding-vertical-40 text-align-center'.classNames()}>
-					<strong className={'d-block font-size-14 margin-bottom-20'.classNames()}>
-						{sprintf(__('No %s found'), _content_label)}
-					</strong>
-					<Link to={getDashboardPath(`inventory/${content_type}/editor/new`)} className={'button button-primary button-small'.classNames()}>
-						{__('Add New')}
-					</Link>
+					{
+						state.fetching ? <div>
+							<LoadingIcon center={true}/>
+						</div>
+						:
+						<>
+							<strong className={'d-block font-size-14 margin-bottom-20'.classNames()}>
+								{sprintf(__('No %s found'), _content_label)}
+							</strong>
+							<Link to={getDashboardPath(`inventory/${content_type}/editor/new`)} className={'button button-primary button-small'.classNames()}>
+								{__('Add New')}
+							</Link>
+						</>
+						
+					}
 				</div> 
 				: 
 				<>
@@ -249,21 +267,27 @@ export function Inventory({navigate, params={}}) {
 										product_id
 									} = content;
 
+									const thumbnail_url = media?.thumbnail?.file_url;
+
 									return <tr key={content_id}>
-										<td data-th={__('Title')} style={{paddingTop: '20px', paddingBottom: '20px'}}>
+										<td data-th={__('Content')} style={{paddingTop: '20px', paddingBottom: '20px'}}>
 											<div className={'d-flex column-gap-15'.classNames()}>
-												<div>
-													<img 
-														src={media?.thumbnail?.file_url} 
-														style={{width: '30px', height: 'auto', borderRadius: '2px'}}/>
-												</div>
+												{
+													!thumbnail_url ? null :
+													<div>
+														<img 
+															src={thumbnail_url} 
+															style={{width: '30px', height: 'auto', borderRadius: '2px'}}/>
+													</div>
+												}
+												
 												<div className={'flex-1'.classNames()}>
 													<a href={content_url} target='_blank' className={"d-block font-size-14 font-weight-600".classNames()}>
 														{content_title}
 													</a>
 													<div className={'actions'.classNames(style) + 'd-flex align-items-center column-gap-10 margin-top-10'.classNames()}>
 														<Link 
-															className={'cursor-pointer color-text-light d-inline-flex align-items-center column-gap-8'.classNames()} 
+															className={'action'.classNames(style) + 'cursor-pointer d-inline-flex align-items-center column-gap-8'.classNames()} 
 															title={__('Edit')}
 															to={getDashboardPath(`inventory/${content_type}/editor/${content_id}/`)}
 														>
@@ -271,11 +295,11 @@ export function Inventory({navigate, params={}}) {
 														</Link>
 														<span className={'color-text-lighter'.classNames()}>|</span>
 														<span
-															className={'cursor-pointer color-text-light d-inline-flex align-items-center column-gap-8'.classNames()}
+															className={'action'.classNames(style) + 'cursor-pointer d-inline-flex align-items-center column-gap-8'.classNames()}
 															title={__('Delete')}
 															onClick={()=>deleteContent(content_id)}
 														>
-															<i className={'ch-icon ch-icon-trash font-size-15'.classNames()}></i> {__('Delete')}
+															<i className={'ch-icon ch-icon-trash color-error font-size-15'.classNames()}></i> {__('Delete')}
 														</span>
 													</div>
 												</div>
@@ -298,7 +322,9 @@ export function Inventory({navigate, params={}}) {
 									</tr>
 								})
 							}
-							<TableStat empty={!state.contents.length} loading={state.fetching}/>
+							<TableStat 
+								empty={!state.contents.length} 
+								loading={state.fetching}/>
 						</tbody>
 					</table>
 					{

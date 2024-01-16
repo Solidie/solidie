@@ -7,10 +7,36 @@ import {LoadingIcon} from 'crewhrm-materials/loading-icon/loading-icon.jsx';
 import { __, data_pointer, isEmpty, sprintf } from "crewhrm-materials/helpers.jsx";
 import { ContextToast } from "crewhrm-materials/toast/toast.jsx";
 import { DropDown } from "crewhrm-materials/dropdown/dropdown.jsx";
+import { TextEditor } from "crewhrm-materials/text-editor/text-editor.jsx";
 
 import { InventoryWrapper } from "./index.jsx";
 import { getFlattenedCategories } from "../../admin-dashboard/settings/content-types/contents.jsx";
 import { DoAction } from "crewhrm-materials/mountpoint.jsx";
+
+var audio_extensions = [
+	'.mp3',
+	'.aac',
+	'.wav',
+	'.flac',
+	'.ogg',
+	'.wma',
+	'.aiff',
+	'.alac',
+];
+
+var video_extensions = [
+	'.mp4',
+	'.webm',
+	'.mkv',
+	'.avi',
+	'.mov',
+	'.wmv',
+	'.flv',
+	'.m4v',
+	'.3gp',
+	'.ogg',
+	'.ogv'
+];
 
 export function ContentEditor({categories=[], navigate, params={}}) {
 	const {ajaxToast, addToast} = useContext(ContextToast);
@@ -32,7 +58,8 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 		submitting: false,
 		fetching: false,
 		error_message: null,
-		values: initial_values
+		values: initial_values,
+		update_title: null
 	});
 
 	const fields = [
@@ -60,7 +87,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 			type: 'file',
 			name: 'preview',
 			label: __('Preview File'),
-			accept: content_type + '/*'
+			accept: content_type === 'audio' ? audio_extensions : video_extensions
 		}),
 		(['app', '3d', 'document', 'font', 'tutorial'].indexOf(content_type)===-1 ? null : {
 			type: 'file',
@@ -176,6 +203,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 			setState({
 				...state, 
 				values,
+				update_title: values.content_title,
 				fetching: false,
 				error_message: success ? null : message
 			});
@@ -188,76 +216,113 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 	
 	const _content = window[data_pointer]?.settings?.contents[content_type] || {};
 	
-	return <InventoryWrapper fetching={state.fetching} navigate={navigate} params={params}>
-		<div style={{maxWidth: '600px'}}>
+	return <InventoryWrapper navigate={navigate} params={params}>
+		
+		<div style={{maxWidth: '600px', margin: '20px auto'}}>
 			{/* Header */}
 			<div className={"margin-top-20 margin-bottom-30 d-flex align-items-center column-gap-10".classNames()}>
 				<i onClick={()=>window.history.back()} className={"ch-icon ch-icon-arrow-left cursor-pointer".classNames()}></i>
-				<span>{sprintf(__('Add New %s'), _content.label || __('Content'))}</span>
+				<span>
+					{
+						!content_id ? 
+							sprintf(__('Add New %s'), _content.label) : 
+							sprintf(__('Update %s'), state.update_title || _content.label)
+					}
+				</span>
 			</div>
 
 			{
-				fields.map(field=>{
-					const {name, label, placeholder, type, required, accept, hint, maxlenth, options=[]} = field;
-					return (type=='dropdown' && isEmpty(options)) ? null : 
-					<div key={name} className={'margin-bottom-15'.classNames()}>
-						<strong className={'d-block font-weight-600'.classNames()}>
-							{label}{required ? <span className={'color-error'.classNames()}>*</span> : null}
-						</strong>
+				state.fetching ? <div className={'padding-vertical-40'.classNames()}>
+					<LoadingIcon center={true}/>
+				</div>
+				:
+				<>
+					{
+						fields.map(field=>{
+							
+							const {
+								name, 
+								label, 
+								placeholder, 
+								type, 
+								required, 
+								accept, 
+								hint, 
+								maxlenth, 
+								options=[]
+							} = field;
 
-						{
-							!hint ? null :
-							<small className={'d-block'.classNames()}>
-								{hint}
-							</small>
-						}
+							return (type=='dropdown' && isEmpty(options)) ? null : 
+							<div key={name} className={'margin-bottom-15'.classNames()}>
+								<strong className={'d-block font-weight-600'.classNames()}>
+									{label}{required ? <span className={'color-error'.classNames()}>*</span> : null}
+								</strong>
 
-						{
-							['text', 'textarea'].indexOf(type) === -1 ? null :
-							<TextField 
-								type={type}
-								placeholder={placeholder} 
-								onChange={v=>setVal(name, v)}
-								value={state.values[name]}/>
-						}
+								{
+									!hint ? null :
+									<small className={'d-block'.classNames()}>
+										{hint}
+									</small>
+								}
 
-						{
-							'file' !== type ? null :
-							<FileUpload 
-								accept={accept}
-								onChange={v=>setVal(name, v)}
-								maxlenth={maxlenth}
-								value={state.values[name]}/>
-						}
+								{
+									'text' !=type ? null :
+									<TextField 
+										type={type}
+										placeholder={placeholder} 
+										onChange={v=>setVal(name, v)}
+										value={state.values[name]}/>
+								}
 
-						{
-							'dropdown' !== type ? null :
-							<DropDown
-								placeholder={placeholder}
-								value={state.values[name]}
-								options={options}
-								onChange={value=>setVal(name, value)}/>
-						}
+								{
+									'textarea' !== type ? null :
+									<TextEditor
+										placeholder={__('Write description..')}
+										value={state.values[name]}
+										onChange={v=>setVal(name, v)}/>
+								}
+
+								{
+									'file' !== type ? null :
+									<FileUpload 
+										accept={accept}
+										onChange={v=>setVal(name, v)}
+										maxlenth={maxlenth}
+										value={state.values[name]}/>
+								}
+
+								{
+									'dropdown' !== type ? null :
+									<DropDown
+										placeholder={placeholder}
+										value={state.values[name]}
+										options={options}
+										onChange={value=>setVal(name, value)}/>
+								}
+							</div>
+						})
+					}
+
+					<DoAction 
+						action="solidie_content_editor_after_form" 
+						payload={{
+							content: state.values,
+							content_type,
+							onChange: setVal
+						}}
+					/>
+					
+					<div className={'text-align-right'.classNames()}>
+						<button 
+							disabled={state.submitting} 
+							className={'button button-primary'.classNames()} 
+							onClick={submit}
+						>
+							{content_id ? __('Update') : __('Create')} <LoadingIcon show={state.submitting}/>
+						</button>
 					</div>
-				})
+				</>				
 			}
-
-			<DoAction 
-				action="solidie_content_editor_after_form" 
-				payload={{
-					content: state.values,
-					content_type,
-					onChange: setVal
-				}}
-			/>
-			
-			<button 
-				disabled={state.submitting || state.fetching} 
-				className={'button button-primary'.classNames()} 
-				onClick={submit}
-			>
-				{content_id ? __('Update') : __('Create')} <LoadingIcon show={state.submitting}/>
-			</button>
 		</div>
 	</InventoryWrapper> 
 }

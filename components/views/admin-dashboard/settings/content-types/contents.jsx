@@ -138,7 +138,12 @@ export function ContentSettings(props) {
 
 	const {has_pro} = window[data_pointer];
 	const cat_options = catState.editor !== null ? getFlattenedCategories(catState.categories[catState.editor.content_type], catState.editor.category_id) : null;
-	const col_style = {width: has_pro ? '20%' : '33.33%', paddingTop: '20px', paddingBottom: '20px'};
+	const col_style = {
+		className: `${has_pro ? 'col-20' : 'col-33'}`.classNames(style), 
+		style : {
+			textAlign: 'left'
+		}
+	};
 
 	return <> 
 		{
@@ -197,13 +202,13 @@ export function ContentSettings(props) {
 			<br/>
 			<br/>
 
-			<table className={'table'.classNames(table_style)}>
+			<table className={'table responsive'.classNames(table_style)}>
 				<thead>
 					<tr>
-						<th style={col_style}>{__('Content')}</th>
-						<th style={col_style}>{__('Base Slug')}</th>
-						<th style={col_style}>{__('Categories')}</th>
-						{has_pro ? <th style={col_style}>{__('Sales Plans')}</th> : null}
+						<th {...col_style}>{__('Content')}</th>
+						<th {...col_style}>{__('Base Slug')}</th>
+						<th {...col_style}>{__('Categories')}</th>
+						{has_pro ? <th {...col_style}>{__('Monetization Plans')}</th> : null}
 					</tr>
 				</thead>
 				<tbody>
@@ -214,8 +219,8 @@ export function ContentSettings(props) {
 							const {enable=false} = state.contents?.[c_type] || {};
 							const categories = getFlattenedCategories(catState.categories[c_type] || []);
 
-							return <tr key={c_type}>
-								<td style={col_style}>
+							return <tr key={c_type} style={{verticalAlign: 'top'}}>
+								<td data-th={__('Content Type')} {...col_style}>
 									<div className={'d-flex column-gap-15'.classNames()}>
 										<div>
 											<ToggleSwitch 
@@ -229,64 +234,66 @@ export function ContentSettings(props) {
 										</div>
 									</div>
 								</td>
-								<td style={col_style}>
+								<td data-th={__('Base Slug')} {...col_style}>
 									<TextField
 										disabled={state.saving}
 										value={state.contents?.[c_type]?.slug || default_slug}
 										onChange={v=>onChangeContents(c_type, 'slug', v)}
 										style={{height:'30px'}}/>
 								</td>
-								<td style={col_style}>
-									{
-										categories.map(category=>{
-											const {label, category_id} = category;
-											return <div key={category_id} className={'d-flex align-items-center column-gap-15'.classNames() + 'category-single'.classNames(style)}>
-												{label} <span className={'d-inline-flex align-items-center column-gap-8'.classNames() + 'actions'.classNames(style)}>
-													<i className={'ch-icon ch-icon-edit-2 cursor-pointer'.classNames()} onClick={()=>openCatEditor(category)}></i>
-													<i className={'ch-icon ch-icon-trash cursor-pointer'.classNames()} onClick={()=>deleteCategory(category_id)}></i>
-												</span>
-											</div>
-										})
-									}
+								<td data-th={__('Categories')} {...col_style}>
+									<div>
+										{
+											categories.map(category=>{
+												const {label, category_id} = category;
+												return <div key={category_id} className={'d-flex align-items-center column-gap-15'.classNames() + 'category-single'.classNames(style)}>
+													{label} <span className={'d-inline-flex align-items-center column-gap-8'.classNames() + 'actions'.classNames(style)}>
+														<i className={'ch-icon ch-icon-edit-2 cursor-pointer'.classNames()} onClick={()=>openCatEditor(category)}></i>
+														<i className={'ch-icon ch-icon-trash cursor-pointer'.classNames()} onClick={()=>deleteCategory(category_id)}></i>
+													</span>
+												</div>
+											})
+										}
 
-									<div className={"d-flex align-items-center column-gap-10".classNames()}>
-										<span 
-											onClick={()=>openCatEditor({content_type: c_type})} 
-											className={`cursor-pointer hover-underline ${categories.length ? 'border-top-1 b-color-tertiary' : ''}`.classNames()}
-											style={categories.length ? {paddingTop: '6px', marginTop: '6px'} : {}}
-										>
-											{__('+ Add Category')}
-										</span>
+										<div className={"d-flex align-items-center column-gap-10".classNames()}>
+											<span 
+												onClick={()=>openCatEditor({content_type: c_type})} 
+												className={`cursor-pointer hover-underline ${categories.length ? 'border-top-1 b-color-tertiary' : ''}`.classNames()}
+												style={categories.length ? {paddingTop: '6px', marginTop: '6px'} : {}}
+											>
+												{__('+ Add Category')}
+											</span>
+										</div>
 									</div>
+									
 								</td>
 								{
-									! has_pro ? null : <td style={{...col_style, width: '40%'}}>
-										<DoAction 
-											action="content_settings_plans_column" 
-											payload={{
-												content_type: c_type,
-												content: state.contents[c_type],
-												onChange: (name, value)=>onChangeContents(c_type, name, value)
-											}}
-										/>
+									! has_pro ? null : <td data-th={__('Monteziation Plans')} {...{col_style, className: 'col-40'.classNames(style)}}>
+										<div style={{width: '100%'}}>
+											<DoAction 
+												action="content_settings_plans_column" 
+												payload={{
+													content_type: c_type,
+													content: state.contents[c_type],
+													onChange: (name, value)=>onChangeContents(c_type, name, value)
+												}}
+											/>
+										</div>
 									</td>
 								}
 							</tr>
 						})
 					}
-					<tr>
-						<td colSpan="100%"></td>
-					</tr>
 				</tbody>
 			</table>
-
+			<br/>
 			<div className={'text-align-right'.classNames()}>
 				<button 
 					className={'button button-primary'.classNames()}
 					onClick={saveOptions} 
 					disabled={state.saving}
 				>
-					{__('Save Changes')} <LoadingIcon show={state.saving}/>
+					{__('Update Content Types')} <LoadingIcon show={state.saving}/>
 				</button>
 			</div>
 		</div>
