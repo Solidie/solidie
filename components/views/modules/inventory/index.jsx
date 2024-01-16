@@ -241,7 +241,7 @@ export function Inventory({navigate, params={}}) {
 					</div>
 
 					<table 
-						className={'table'.classNames(style) + 'table responsive'.classNames(table_style)} 
+						className={'table'.classNames(style) + 'table'.classNames(table_style)} 
 						style={{background: 'rgb(128 128 128 / 3.5%)'}}
 					>
 						<thead>

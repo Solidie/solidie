@@ -46,8 +46,8 @@ class AdminPage {
 		);
 		add_submenu_page(
 			Main::$configs->root_menu_slug,
-			__( 'Contents', 'solidie' ),
-			__( 'Contents', 'solidie' ),
+			__( 'Inventory', 'solidie' ),
+			__( 'Inventory', 'solidie' ),
 			'administrator',
 			Main::$configs->root_menu_slug,
 			array( $this, 'mainPage' )

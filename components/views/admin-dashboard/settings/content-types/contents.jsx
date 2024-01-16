@@ -199,14 +199,17 @@ export function ContentSettings(props) {
 			<strong className={'d-block font-size-24 font-weight-600'.classNames()}>
 				{__('Manage content types')}
 			</strong>
+			<span className={'d-block margin-top-10 font-size-14 color-text-light'.classNames()}>
+				{__('Enable and configure the content types that would like to showcase to the world')}
+			</span>
 			<br/>
 			<br/>
 
-			<table className={'table responsive'.classNames(table_style)}>
+			<table className={'table'.classNames(table_style)}>
 				<thead>
 					<tr>
 						<th {...col_style}>{__('Content')}</th>
-						<th {...col_style}>{__('Base Slug')}</th>
+						<th {...col_style}>{__('Base URL Slug')}</th>
 						<th {...col_style}>{__('Categories')}</th>
 						{has_pro ? <th {...col_style}>{__('Monetization Plans')}</th> : null}
 					</tr>
@@ -218,6 +221,7 @@ export function ContentSettings(props) {
 							const {label, description, slug: default_slug} = content_list[c_type];
 							const {enable=false} = state.contents?.[c_type] || {};
 							const categories = getFlattenedCategories(catState.categories[c_type] || []);
+							const base_slug = state.contents?.[c_type]?.slug || default_slug;
 
 							return <tr key={c_type} style={{verticalAlign: 'top'}}>
 								<td data-th={__('Content Type')} {...col_style}>
@@ -234,12 +238,14 @@ export function ContentSettings(props) {
 										</div>
 									</div>
 								</td>
-								<td data-th={__('Base Slug')} {...col_style}>
-									<TextField
+								<td data-th={__('Base URL Slug')} {...col_style}>
+									<div>
+										<TextField
 										disabled={state.saving}
-										value={state.contents?.[c_type]?.slug || default_slug}
+										value={base_slug}
 										onChange={v=>onChangeContents(c_type, 'slug', v)}
 										style={{height:'30px'}}/>
+									</div>
 								</td>
 								<td data-th={__('Categories')} {...col_style}>
 									<div>
