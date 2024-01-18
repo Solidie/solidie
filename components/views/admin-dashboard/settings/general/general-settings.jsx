@@ -29,18 +29,37 @@ function Wrapper({ children }) {
         });
     };
 
-    const { segment, sub_segment } = useParams();
-    const sub_title = settings_fields[segment]?.segments[sub_segment]?.label;
-    const title = __('Settings') + (sub_title ? ' > ' + sub_title : '');
+    const { 
+		segment, 
+		sub_segment 
+	} = useParams();
+
+    const {
+		label: sub_title, 
+		description: segment_description
+	} = settings_fields[segment]?.segments[sub_segment] || {};
+
+    const title = __('Solidie Settings') + (sub_title ? ' > ' + sub_title : '');
 
     return (
         <ContextSettings.Provider value={{ values, onChange }}>
 
 			<br/>
-			<div className={'container'.classNames(segment_style) + 'border-bottom-1 b-color-tertiary padding-vertical-15'.classNames()}>
-				<strong className={'font-size-18'.classNames()}>
-					{title}
-				</strong>
+			<br/>
+			<br/>
+			<br/>
+			<br/>
+			<div className={'container'.classNames(segment_style)}>
+				<span
+					className={'d-flex align-items-center column-gap-10 font-size-17 font-weight-600 color-text margin-bottom-10'.classNames()}
+				>
+					{sub_title ? <i className={'ch-icon ch-icon-arrow-left cursor-pointer'.classNames()} onClick={()=>window.history.back()}></i> : null} {title}
+				</span>
+				<span
+					className={'d-block font-size-14 font-weight-400 line-height-22 letter-spacing--14 color-text-light'.classNames()}
+				>
+					{segment_description || __('Configure all the content management, sales and contributor related settings in one place')}
+				</span>
 			</div>
 
             <div className={'padding-horizontal-15 overflow-auto'.classNames()}>
@@ -56,6 +75,12 @@ function Wrapper({ children }) {
 					{__('Save All Changes')} <LoadingIcon show={savingState}/>
 				</button>
 			</div>
+
+			<br/>
+			<br/>
+			<br/>
+			<br/>
+			<br/>
         </ContextSettings.Provider>
     );
 }

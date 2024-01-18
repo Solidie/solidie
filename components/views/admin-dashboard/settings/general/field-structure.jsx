@@ -6,10 +6,8 @@ export const settings_fields = applyFilters(
 	'solidie_setting_fields',
 	{
 		general: {
-			label: __('General'),
-			description: __(
-				'Configure general settings'
-			),
+			label: __('Solidie Settings'),
+			description: __('Configure all the content management, sales and contributor related settings in one place'),
 			segments: {
 				
 			}

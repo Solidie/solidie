@@ -9,8 +9,6 @@ import { NumberField } from 'crewhrm-materials/number-field';
 import { RadioCheckbox } from 'crewhrm-materials/radio-checkbox.jsx';
 import { DropDown } from 'crewhrm-materials/dropdown/dropdown.jsx';
 import { RenderMedia } from 'crewhrm-materials/render-media/render-media.jsx';
-import { ListManager } from 'crewhrm-materials/list-manager/list-manager.jsx';
-import { AddressFields } from 'crewhrm-materials/address-fields.jsx';
 import { RenderExternal } from 'crewhrm-materials/render-external.jsx';
 
 import { settings_fields } from '../field-structure.jsx';
@@ -24,7 +22,7 @@ const label_class =
 const hint_class =
     'd-block margin-top-3 font-size-15 font-weight-400 line-height-24 letter-spacing--15 color-text-light'.classNames();
 
-function OptionFields({fields=[], vertical, separator, is_group=false}) {
+function OptionFields({fields=[] }) {
     const { values = {}, onChange } = useContext(ContextSettings);
     const { resources = {} } = {};
 	
@@ -75,8 +73,6 @@ function OptionFields({fields=[], vertical, separator, is_group=false}) {
 			name,
 			label, 
 			type, 
-			add_text=__('Add New'),
-			key_map={},
 			options, 
 			when, 
 			direction, 
@@ -88,14 +84,12 @@ function OptionFields({fields=[], vertical, separator, is_group=false}) {
 			WpMedia
 		} = field;
 
-		const show_separator = separator && !is_group && i !== fields.length - 1;
-
 		if (when && !satisfyLogic(when)) {
 			return null;
 		}
 
 		const label_text = (
-			<div className={`${vertical ? 'margin-bottom-10' : ''}`.classNames()}>
+			<div>
 				<span className={label_class}>{label}</span>
 				{(hint && <span className={hint_class}>{hint}</span>) || null}
 			</div>
@@ -104,13 +98,7 @@ function OptionFields({fields=[], vertical, separator, is_group=false}) {
 		return (
 			<div
 				key={name}
-				className={`${vertical ? '' : 'd-flex'} ${
-					direction === 'column'
-						? 'flex-direction-column'
-						: 'flex-direction-row align-items-center'
-				} flex-wrap-wrap ${
-					show_separator ? 'padding-vertical-25 border-bottom-1 b-color-tertiary' : 'padding-vertical-10'
-				} ${when ? 'fade-in' : ''}`.classNames()}
+				className={`d-flex ${direction === 'column' ? 'flex-direction-column' : 'flex-direction-row align-items-center'} flex-wrap-wrap padding-vertical-10 ${when ? 'fade-in' : ''}`.classNames()}
 				ref={highlight_field===name ? highlight_ref : null}
 			>
 				{/* Toggle switch option */}
@@ -223,8 +211,19 @@ function OptionFields({fields=[], vertical, separator, is_group=false}) {
 }
 
 export function Options() {
-    const { segment, sub_segment } = useParams();
-    const { sections={}, component, overflow=true, width='582px', useWrapper=true } = settings_fields[segment].segments[sub_segment];
+
+    const { 
+		segment, 
+		sub_segment 
+	} = useParams();
+
+    const {
+		fields=[], 
+		component, 
+		overflow=true, 
+		width='582px', 
+		useWrapper=true 
+	} = settings_fields[segment].segments[sub_segment];
 
 	const wrapper_attrs = {
 		className: `position-relative ${overflow ? '' : 'overflow-hidden'} padding-30 bg-color-white box-shadow-thin`.classNames(),
@@ -232,26 +231,22 @@ export function Options() {
 	}
 
 	function Wrapper({children}) {
-		return !useWrapper ? children : <div className={'section'.classNames(style)} style={{width}}>
+		return !useWrapper ? children : <div className={'section'.classNames(style) + 'padding-vertical-20 margin-auto'.classNames()} style={{width}}>
 			<div {...wrapper_attrs}>
 				{children}
 			</div>
 		</div>
 	}
 
-	return <div style={{marginTop: '79px', marginBottom: '79px'}}>
+	return <div>
 		{
 			component ? <Wrapper>
 					<RenderExternal component={component}/>
 				</Wrapper>
 				:
-				Object.keys(sections).map(section_name=>{
-					const {fields=[], vertical, separator} = sections[section_name];
-
-					return <Wrapper key={section_name}>
-						<OptionFields {...{fields, vertical, separator}}/>
-					</Wrapper>
-				})
+				<Wrapper>
+					<OptionFields fields={fields}/>
+				</Wrapper>
 		}
 	</div>
 }

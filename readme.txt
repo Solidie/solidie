@@ -1,4 +1,4 @@
-=== Solidie - Digital Content Showcase & Sales ===
+=== Solidie - Digital Content Stock ===
 Contributors: jayedul
 Donate Link: https://solidie.com/pricing/
 Tags: multimedia, stock, audio, video, image, pdf, 3d model, apps, ebook, font, plugins, software, sales, marketplace, contributors, photography, video making
