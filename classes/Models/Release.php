@@ -21,7 +21,7 @@ class Release {
 	 * @param int|array $release_ids Release ID or array of release IDs
 	 * @return void
 	 */
-	private static function deleteRelease( $release_ids ) {
+	private static function deleteRelease( $release_ids, $delete_release_row = true ) {
 
 		$release_ids = _Array::getArray( $release_ids, true );
 		if ( empty( $release_ids ) ) {
@@ -42,8 +42,10 @@ class Release {
 		FileManager::deleteFile( $file_ids );
 
 		// Delete release rows
-		foreach ( $release_ids as $id ) {
-			Field::releases()->deleteField( array( 'release_id' => $id ) );
+		if ( $delete_release_row ) {
+			foreach ( $release_ids as $id ) {
+				Field::releases()->deleteField( array( 'release_id' => $id ) );
+			}
 		}
 	}
 
@@ -89,11 +91,11 @@ class Release {
 		if ( ! empty( $data['file'] ) ) {
 			// Delete old file as release ID exists in the data array
 			if ( ! empty( $data['release_id'] ) ) {
-				self::deleteRelease( $data['release_id'] );
+				self::deleteRelease( $data['release_id'], false );
 			}
 
 			// Upload new one
-			$file_id = FileManager::uploadFile( $data['content_id'], $data['file'], $content['content_title'] . ' - Downloadable' );
+			$file_id = FileManager::uploadFile( $data['content_id'], $data['file'] );
 			if ( ! $file_id ) {
 				return esc_html__( 'Error in file saving!', 'solidie' );
 			}
@@ -173,7 +175,7 @@ class Release {
 
 			$release['download_url'] = apply_filters( 'solidie_release_download_link', FileManager::getMediaLink( $release['file_id'] ), $arg_payload );
 			$release['file_url']     = $file_url;
-			$release['file_path']    = $file_path ? $file_path : null;
+			$release['file_name']    = $file_path ? basename( $file_path ) : null;
 			$release['mime_type']    = get_post_mime_type( $release['file_id'] );
 			$release['content_url']  = Contents::getPermalink( $release['content_id'] );
 

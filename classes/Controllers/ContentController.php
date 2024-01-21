@@ -62,19 +62,26 @@ class ContentController {
 	 * @param array $content Content data
 	 * @param array $thumbnail Thumbnail file
 	 * @param array $sample_images Sample image/video files
+	 * @param array $sample_image_ids Existing sample image IDs to delete removed ones
 	 * @param array $downloadable_file Main downloadable file
 	 * @param array $preview Preview file
 	 * @return void
 	 */
-	public static function createOrUpdateContent( array $content, array $thumbnail = array(), array $sample_images = array(), array $downloadable_file = array(), array $preview = array() ) {
+	public static function createOrUpdateContent( array $content, array $thumbnail = array(), array $sample_images = array(), array $sample_image_ids = array(), array $downloadable_file = array(), array $preview = array() ) {
 
-		// To Do: Before updating, Check if the product created by current user or the user is administrator/editor or privileged
+		/**
+		 * To Do:
+		 * Before updating, Check if the product created by current user or the user is administrator/editor or privileged.
+		 * It's not necessary currently as only admin can manage contents so far.
+		 * It is for future update.
+		 */
 
-		$files = array(
-			$thumbnail,
-			$sample_images,
-			$downloadable_file,
-			$preview,
+		$files = compact(
+			'thumbnail',
+			'sample_images',
+			'downloadable_file',
+			'preview',
+			'sample_image_ids'
 		);
 
 		$content_id = Contents::updateContent( $content, $files );

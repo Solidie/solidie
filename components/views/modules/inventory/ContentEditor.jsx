@@ -95,6 +95,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 			label: __('Sample Images'),
 			accept: 'image/*',
 			maxlenth: 5,
+			removable: true
 		}),
 		{
 			type: 'file',
@@ -128,7 +129,23 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 			submitting: true
 		});
 
-		request('createOrUpdateContent', {content:{...state.values, content_id}}, resp=>{
+		// Separate files from content object
+		const sample_image_ids = state.values.sample_images.map(img=>img.file_id).filter(id=>id);
+		const content = {content_id};
+		const files = {sample_image_ids};
+		Object.keys(state.values).forEach(key=>{
+			
+			const _value = state.values[key];
+
+			if ( fields.find(field=>field.name===key && field.type==='file') ) {
+				// If it is sample images, then don't put JSON, only file instance.
+				files[key] = key === 'sample_images' ? _value.filter(f=>f instanceof File) : _value;
+			} else {
+				content[key] = _value
+			}
+		});
+
+		request('createOrUpdateContent', {content, ...files}, resp=>{
 			const {
 				success, 
 				data:{
@@ -152,6 +169,8 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 				// Replace current URL state with content ID to make it update from later attempts
 				if ( ! content_id ) {
 					navigate('/inventory/'+content_type, {replace: true});
+				} else {
+					window.location.reload();
 				}
 			} else {
 				ajaxToast(resp);
@@ -181,7 +200,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 
 			const {values={}} = state;
 			if ( success ) {
-				const release = content.releases[0] || {};
+				const release = content.releases[0] || null;
 
 				values.content_title       = content.content_title;
 				values.content_description = content.content_description;
@@ -195,7 +214,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 					values.downloadable_file = {
 						file_id: release.file_id,
 						file_url: release.downloadable_url,
-						file_name: release.content_title,
+						file_name: release.file_name,
 						mime_type: release.mime_type,
 					}
 
@@ -253,6 +272,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 								type, 
 								required, 
 								accept, 
+								removable=false,
 								hint, 
 								maxlenth, 
 								options=[]
@@ -294,7 +314,8 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 										accept={accept}
 										onChange={v=>setVal(name, v)}
 										maxlenth={maxlenth}
-										value={state.values[name]}/>
+										value={state.values[name] || null}
+										removable={removable}/>
 								}
 
 								{

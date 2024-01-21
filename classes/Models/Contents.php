@@ -24,7 +24,7 @@ class Contents {
 	 * Create or update content
 	 *
 	 * @param array $content_data Content data array to create or update
-	 * @param array $files        Attached media
+	 * @param array $files Attached media data
 	 * @return int
 	 */
 	public static function updateContent( array $content_data, array $files ) {
@@ -77,13 +77,6 @@ class Contents {
 			return false;
 		}
 
-		// Necessary file names to work on
-		$file_names = array(
-			'thumbnail'     => 'Thumbnail',
-			'preview'       => 'Preview',
-			'sample_images' => 'Sample Image',
-		);
-
 		// Prepare the initial media meta value
 		$meta      = Meta::content( $content_id );
 		$media_ids = $meta->getMeta( self::MEDIA_IDS_KEY );
@@ -97,28 +90,20 @@ class Contents {
 			$media_ids
 		);
 
-		// Delete the removed samples images from the meta array
-		$sample_images = $content_data['sample_images'] ?? array();
-		$sample_images = ! is_array( $sample_images ) ? array() : $sample_images;
-		$remaining_ids = array();
-		foreach ( $sample_images as $image ) {
-			if ( is_array( $image ) && ! empty( $image['file_id'] ) ) {
-				$remaining_ids[] = $image['file_id'];
-			}
-		}
-
 		// Get the sample image IDs that have been removed
-		$removed_ids = array_diff( $media_ids['sample_images'], $remaining_ids );
+		$removed_ids = array_diff( $media_ids['sample_images'], $files['sample_image_ids'] );
 
 		// Set the latest image IDs to save
 		$media_ids['sample_images'] = array_diff( $media_ids['sample_images'], $removed_ids );
 
-		// Delete the removed files now
+		// Delete the removed sample image files first
+		// New uploads will be saved in the next loop below
 		FileManager::deleteFile( $removed_ids );
 
 		// Loop through initial uploaded files array
 		// Save thumbnail, preview and sample images altogether
-		foreach ( $file_names as $name => $file_type_label ) {
+		foreach ( array( 'thumbnail', 'preview', 'sample_images' ) as $name ) {
+			// If no file info, nor uploaded new, skip.
 			if ( empty( $files[ $name ] ) ) {
 				continue;
 			}
@@ -128,13 +113,18 @@ class Contents {
 
 			// Loop through synced files structure
 			foreach ( $_files as $file ) {
-				// Delete existing thumbnail and preview file, These two can't be duplicated.
+				// Skip if the new file is not uploaded.
+				if ( empty( $file['tmp_name'] ) ) {
+					continue;
+				}
+
+				// Delete existing thumbnail and preview file if new file uploaded for these.
 				if ( in_array( $name, array( 'thumbnail', 'preview' ), true ) ) {
 					FileManager::deleteFile( $media_ids[ $name ] ?? 0 );
 				}
 
 				// Now create new file for it
-				$new_file_id = FileManager::uploadFile( $content['content_id'], $file, $content['content_title'] . ' - ' . $file_type_label );
+				$new_file_id = FileManager::uploadFile( $content['content_id'], $file );
 				if ( ! empty( $new_file_id ) ) {
 					if ( is_array( $media_ids[ $name ] ) ) {
 						$media_ids[ $name ][] = $new_file_id;
@@ -150,7 +140,7 @@ class Contents {
 
 		// -------------- Create or update the main downloadable file --------------
 		// Save downloadable file through release to maintain consistency with app type content and other dependencies.
-		if ( ! empty( $files['downloadable_file'] ) ) {
+		if ( is_array( $files['downloadable_file'] ) && ! empty( $files['downloadable_file']['tmp_name'] ) ) {
 			Release::pushRelease(
 				array(
 					'version'    => $content_data['version'] ?? null,
@@ -281,12 +271,7 @@ class Contents {
 
 				// Loop through every single file IDs and get info
 				foreach ( $ids as $file_id ) {
-					$files[] = array(
-						'file_id'   => $file_id,
-						'file_url'  => FileManager::getMediaLink( $file_id ),
-						'file_name' => get_the_title( $file_id ),
-						'mime_type' => get_post_mime_type( $file_id ),
-					);
+					$files[] = FileManager::getFileInfo( $file_id );
 				}
 
 				$media[ $key ] = $is_array ? $files : ( $files[0] ?? null );
