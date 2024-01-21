@@ -16,14 +16,27 @@ class _String {
 	 *
 	 * @var array
 	 */
-	const ALLOWED_HTML_TAGS = array(
-		'strong',
-		'p',
-		'div',
-		'b',
-		'i',
-		'br',
+	private static $allowed_html = array(
 		'a',
+		'b',
+		'br',
+		'code',
+		'del',
+		'div',
+		'em',
+		'i',
+		'ins',
+		'kbd',
+		'li',
+		'ol',
+		'p',
+		'small',
+		'span',
+		'strong',
+		'sub',
+		'sup',
+		'u',
+		'ul',
 	);
 
 	/**
@@ -31,7 +44,7 @@ class _String {
 	 *
 	 * @var array
 	 */
-	const ALLOWED_HTML_ATTRIBUTES = array(
+	private static $allowed_attributes = array(
 		'style'  => array(),
 		'class'  => array(),
 		'id'     => array(),
@@ -40,60 +53,38 @@ class _String {
 		'title'  => array(),
 		'width'  => array(),
 		'height' => array(),
+		'size'   => array(),
 	);
-
-	/**
-	 * Convert snake case to camel
-	 *
-	 * @param string $input The string to convert from snake to camel
-	 * @return string
-	 */
-	public static function snakeToCamel( $input ) {
-		$parts      = explode( '_', $input );
-		$camel_case = $parts[0];
-		$counts     = count( $parts );
-
-		for ( $i = 1; $i < $counts; $i++ ) {
-			$camel_case .= ucfirst( $parts[ $i ] ); // phpcs:ignore Generic.CodeAnalysis.ForLoopWithTestFunctionCall.NotAllowed
-		}
-
-		return $camel_case;
-	}
-
-	/**
-	 * Convert camel case to snake case
-	 *
-	 * @param string $input The string to convert camel to snake case
-	 * @return string
-	 */
-	public static function camelToSnakeCase( $input ) {
-		return strtolower( preg_replace( '/([a-z])([A-Z])/', '$1_$2', $input ) );
-	}
 
 	/**
 	 * Generate random string
 	 *
-	 * @param int $length The length to generate random stirng
+	 * @param stirng $prefix Prefix
+	 * @param stirng $postfix Postfix
+	 *
 	 * @return string
 	 */
-	public static function getRandomString( $length = 10 ) {
-		$characters    = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-		$random_string = '';
+	public static function getRandomString( $prefix = 'r', $postfix = 'r' ) {
+		$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+		$ms         = (string) microtime( true );
+		$ms         = str_replace( '.', '', $ms );
+		$string     = $prefix . $ms;
 
-		for ( $i = 0; $i < $length; $i++ ) {
-			$random_string .= $characters[ wp_rand( 0, strlen( $characters ) - 1 ) ];
+		for ( $i = 0; $i < 5; $i++ ) {
+			$string .= $characters[ wp_rand( 0, strlen( $characters ) - 1 ) ];
 		}
 
-		return $random_string;
+		return $string . $postfix;
 	}
 
 	/**
 	 * Apply kses filter on string
 	 *
 	 * @param string $string The string to apply kses filter
+	 * @param bool   $echo Whether to echo rather than return or not
 	 * @return string
 	 */
-	public static function applyKses( string $string ) {
+	public static function applyKses( string $string, $echo = false ) {
 		static $allowed = null;
 
 		// Prepare allowed array only once by defining as static
@@ -102,13 +93,79 @@ class _String {
 			$allowed = array();
 
 			// Loop through tags
-			foreach ( self::ALLOWED_HTML_TAGS as $tag ) {
+			foreach ( self::$allowed_html as $tag ) {
 
 				// And assign supported attributes per tag
-				$allowed[ $tag ] = self::ALLOWED_HTML_ATTRIBUTES;
+				$allowed[ $tag ] = self::$allowed_attributes;
 			}
 		}
 
-		return wp_kses( $string, $allowed );
+		if ( $echo ) {
+			echo wp_kses( $string, $allowed );
+		} else {
+			return wp_kses( $string, $allowed );
+		}
+	}
+
+	/**
+	 * Check if a value is float
+	 *
+	 * @param string|int|float $numeric_string The value to check if float
+	 * @return boolean
+	 */
+	public static function isFloat( $numeric_string ) {
+		return is_numeric( $numeric_string ) && strpos( $numeric_string, '.' ) !== false;
+	}
+
+	/**
+	 * Cast a string value to nearest data type
+	 *
+	 * @param string $value The value to convert to nearest data type
+	 *
+	 * @return mixed
+	 */
+	public static function castValue( $value ) {
+
+		if ( is_string( $value ) ) {
+
+			if ( is_numeric( $value ) ) {
+				// Cast number
+				$value = self::isFloat( $value ) ? (float) $value : (int) $value;
+
+			} elseif ( 'true' === $value ) {
+				// Cast boolean true
+				$value = true;
+
+			} elseif ( 'false' === $value ) {
+				// Cast boolean false
+				$value = false;
+
+			} elseif ( 'null' === $value ) {
+				// Cast null
+				$value = null;
+
+			} elseif ( '[]' === $value ) {
+				// Cast empty array
+				$value = array();
+
+			} else {
+				// Maybe unserialize
+				$value = maybe_unserialize( $value );
+			}
+		}
+
+		return $value;
+	}
+
+	/**
+	 * Helper method to generate placeholders for in query
+	 *
+	 * @param int|array $count The amount of placeholders or the data array to get count of.
+	 * @param string    $placeholder The placeholder. Default %d for numeric values as it is mostly used.
+	 * @return string
+	 */
+	public static function getPlaceHolders( $count, string $placeholder = '%d' ) {
+		$count = is_array( $count ) ? count( $count ) : $count;
+		return implode( ', ', array_fill( 0, $count, $placeholder ) );
 	}
 }

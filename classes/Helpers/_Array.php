@@ -35,13 +35,30 @@ class _Array {
 	}
 
 	/**
-	 * Return array no matter what. And cast values to appropriate data type.
+	 * Multipurpose array preparation
 	 *
-	 * @param mixed $value The value to get array of and cast before. If not retruns empty array.
+	 * @param mixed $array Expected array, however anything else could be passed to convert to array element
+	 * @param bool  $mutate Whether to make the non array element to array element
+	 * @param mixed $non_empty_fallback The fallback array element when the array is empty
+	 *
 	 * @return array
 	 */
-	public static function getArray( $value ) {
-		return self::castRecursive( is_array( $value ) ? $value : array() );
+	public static function getArray( $array, $mutate = false, $non_empty_fallback = null ) {
+
+		// Set the array as empty or convert the non array to array
+		if ( ! is_array( $array ) ) {
+			$array = $mutate ? array( $array ) : array();
+		}
+
+		// Avoid non empty array by adding fallback element for IN query epecially
+		if ( empty( $array ) && null !== $non_empty_fallback ) {
+			$array = array( $non_empty_fallback );
+		}
+
+		// Convert data types to near ones
+		$array = self::castRecursive( $array );
+
+		return $array;
 	}
 
 	/**
@@ -73,33 +90,7 @@ class _Array {
 				continue;
 			}
 
-			if ( is_string( $value ) ) {
-
-				if ( is_numeric( $value ) ) {
-					// Cast number
-					$array[ $index ] = (int) $value;
-
-				} elseif ( 'true' === $value ) {
-					// Cast boolean true
-					$array[ $index ] = true;
-
-				} elseif ( 'false' === $value ) {
-					// Cast boolean false
-					$array[ $index ] = false;
-
-				} elseif ( 'null' === $value ) {
-					// Cast null
-					$array[ $index ] = null;
-
-				} elseif ( '[]' === $value ) {
-					// Cast empty array
-					$array[ $index ] = array();
-
-				} else {
-					// Maybe unserialize
-					$array[ $index ] = maybe_unserialize( $value );
-				}
-			}
+			$array[ $index ] = _String::castValue( $value );
 		}
 
 		return $array;
@@ -158,43 +149,58 @@ class _Array {
 	/**
 	 * Sanitize contents recursively
 	 *
-	 * @param array      $value    The array to run kses through
-	 * @param array      $kses_for Define field name to use wp_kses for instead of sanitize_text_field.
-	 * @param string|int $key      Do not use outside of this function. It's for internal use.
-	 * @return array
+	 * @param mixed      $value The value to sanitize
+	 * @param string|int $key Current key in recursion. Do not pass it from outside of this function. It's for internal use only.
+	 *
+	 * @return mixed
 	 */
-	public static function sanitizeRecursive( $value, $kses_for = array(), $key = null ) {
+	public static function sanitizeRecursive( $value, $key = null ) {
 		if ( is_array( $value ) ) {
 			foreach ( $value as $_key => $_value ) {
-				$value[ $_key ] = self::sanitizeRecursive( $_value, $kses_for, $_key );
+				// If it is kses, then remove the key prefix from array key as it is not necessary in core applications.
+				$index           = strpos( $_key, 'kses_' ) === 0 ? substr( $_key, 5 ) : $_key;
+				$value[ $index ] = self::sanitizeRecursive( $_value, $_key );
 			}
 		} elseif ( is_string( $value ) ) {
-			$value = in_array( $key, $kses_for, true ) ? _String::applyKses( $value ) : sanitize_text_field( $value );
+			// If the prefix is kses_, it means rich text editor content and get it through kses filter. Otherise normal sanitize.
+			$value = strpos( $key, 'kses_' ) === 0 ? _String::applyKses( $value ) : sanitize_text_field( $value );
 		}
 
 		return $value;
 	}
 
 	/**
-	 * Strip slasshes from string in array resursivley. Ideally used in post data.
+	 * Get method parameter names
 	 *
-	 * @param array $array Array of strings or whatever. Only strings will be processed.
+	 * @param class  $class The class to get method info from
+	 * @param string $method The method to get parameters definition
+	 *
 	 * @return array
 	 */
-	public static function stripslashesRecursive( array $array ) {
-		// Loop through array elements
-		foreach ( $array as $index => $element ) {
-			if ( is_array( $element ) ) {
-				$array[ $index ] = self::stripslashesRecursive( $element );
-				continue;
-			}
+	public static function getMethodParams( $class, $method ) {
 
-			if ( is_string( $element ) ) {
-				$array[ $index ] = stripslashes( $element );
-			}
+		$reflection_method = new \ReflectionMethod( $class, $method );
+		$parameters        = $reflection_method->getParameters();
+		$_params           = array();
+
+		$type_map = array(
+			'int'   => 'integer',
+			'float' => 'double',
+			'bool'  => 'boolean',
+		);
+
+		// Loop through method parameter definition and get configurations
+		foreach ( $parameters as $parameter ) {
+
+			$type = (string) $parameter->getType();
+
+			$_params[ $parameter->getName() ] = array(
+				'type'    => $type_map[ $type ] ?? $type,
+				'default' => $parameter->isDefaultValueAvailable() ? $parameter->getDefaultValue() : null,
+			);
 		}
 
-		return $array;
+		return $_params;
 	}
 
 	/**

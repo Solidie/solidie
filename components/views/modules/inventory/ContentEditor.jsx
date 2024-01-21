@@ -128,8 +128,14 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 			submitting: true
 		});
 
-		request('createOrUpdateContent', {...state.values, content_id}, resp=>{
-			const {success, data:{content={}, message, content_id: c_id}} = resp;
+		request('createOrUpdateContent', {content:{...state.values, content_id}}, resp=>{
+			const {
+				success, 
+				data:{
+					content={}, 
+					message, 
+				}
+			} = resp;
 
 			setState({
 				...state,

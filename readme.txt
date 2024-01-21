@@ -1,7 +1,7 @@
 === Solidie - Digital Content Stock ===
 Contributors: jayedul
-Donate Link: https://solidie.com/pricing/
-Tags: multimedia, stock, audio, video, image, pdf, 3d model, apps, ebook, font, plugins, software, sales, marketplace, contributors, photography, video making
+Donate Link: https://solidie.com/apps/solidie-pro
+Tags: multimedia, stock, sales, marketplace, contributors, photography, digital content
 Requires at least: 5.3
 Tested up to: 6.4.2
 Requires PHP: 7.4
@@ -9,24 +9,28 @@ Stable tag: 1.0.0
 License: GPLv3
 License URI: https://opensource.org/licenses/GPL-3.0
 
-The ultimate stock plugin for showcasing and selling all kind of digital cotnents, contributors and customers.
+The ultimate stock plugin for showcasing and selling all kind of digital cotnents.
 
 == Description ==
 
-No matter if you are photographer, video maker, 3d modeler or anything else. Solidie has all the features you need to manage contents, sales, customers, app release, update distributions and many more. You can showcase your creations to the world and start earning from them right now.
+No matter if you are photographer, video maker, 3d modeler or anything else. Solidie has all the features you need to manage contents, sales, customers, app release, update distributions and many more. You can showcase your creations to the world.
 
 The core features are:
 
 * **Dashboard:** A centralized dashboard where you can manage all aspects of your contents, contributors and customers.
 * **Create Contents:** Easily create contents in your WordPress website.
 * **Content Catalog:** Easily showcase contents where users can downlod or buy from.
+* **Single Content Page:** Single content page to showcase specific download options with license informations.
 
 The pro version of the plugin includes additional features, such as:
 
-* **File uploads:** Allow third party contributors to upload their creations.
-* **Contributor profile:** View and manage contributor profiles, including their contact information, payment methods etc.
+* **Monetization:** Monetize your contents to earn from.
+* **Contributor:** Enable third party contributions.
+* **Frontend Dashboard:** A custom dashboard dedicated for customers and third party contributors.
 
-This WordPress multimedia stock plugin is the ultimate solution for any business that wants to sale and showcase their digital creations.
+And so many more fatures are coming in future.
+
+This WordPress multimedia stock plugin is the ultimate solution for any business or individual that wants to sale and showcase their digital creations.
 
 == Installation ==
 From WordPress Dashboard
@@ -43,7 +47,7 @@ Manual Installation
 
 **Usage Instructions:**
 
-Once the plugin is activated, you will find **Solidie** menu in the dashboard left sidebar. It has more submenus containing various features.
+Once the plugin is activated, you will find **Solidie** menu in the admin dashboard at left sidebar. It has more submenus containing various features.
 
 = Documentation and Support =
 
@@ -61,6 +65,6 @@ If you want to access the unminified files for this plugin, you can do so from [
 
 == Changelog ==
 
-= v1.0 -> Dec 17, 2023 =
+= v1.0.0 -> Feb o1, 2024 =
 --------------------------
 * 🥁 First Release! 🎉

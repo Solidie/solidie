@@ -1,14 +1,16 @@
 <?php
 /**
  * Plugin Name: Solidie - Digital Content Stock
- * Plugin URI: https://solidie.com
+ * Plugin URI: https://wordpress.org/plugins/solidie/
  * Description: Multimedia stock plugin to showcase and sell any digital contents like audio, video, image, ebook, apps and so on.
- * Author: JK
  * Version: 1.0.0
- * Author URI: https://github.com/jayedul
+ * Author: JK
+ * Author URI: https://www.linkedin.com/in/jayedulk/
  * Requires at least: 5.3
  * Tested up to: 6.4.2
  * Requires PHP: 7.4
+ * License: GPLv3
+ * License URI: https://opensource.org/licenses/GPL-3.0
  * Text Domain: solidie
  *
  * @package solidie

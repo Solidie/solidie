@@ -109,7 +109,7 @@ function CatalogLayout({categories={}}) {
 			contents: clear_list ? [] : state.contents
 		});
 
-		request('getContentList', {page: 1, ...queryParams, content_type}, resp=>{
+		request('getContentList', {filters:{page: 1, ...queryParams, content_type}}, resp=>{
 			const {data:{contents=[], segmentation}} = resp;
 			setState({...state, fetching: false, contents, segmentation});
 		});

@@ -129,7 +129,7 @@ export function Inventory({navigate, params={}}) {
 			order_by: 'newest'
 		}
 
-		request( 'getContentList', payload, resp=>{
+		request( 'getContentList', {filters: payload}, resp=>{
 			const {
 				success, 
 				data: {

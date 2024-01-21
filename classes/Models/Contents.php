@@ -8,6 +8,7 @@
 namespace Solidie\Models;
 
 use Solidie\Helpers\_Array;
+use Solidie\Helpers\_String;
 
 /**
  * Content manager class
@@ -53,10 +54,10 @@ class Contents {
 			);
 			$content['content_id'] = $wpdb->insert_id;
 
-			// For now set the ID as slug. Customization feature will be added later.
+			// Set default content slug
 			if ( ! empty( $wpdb->insert_id ) && is_numeric( $wpdb->insert_id ) ) {
 				Field::contents()->updateField(
-					array( 'content_slug' => $wpdb->insert_id ),
+					array( 'content_slug' => $content['content_type'] . '-' . $wpdb->insert_id ),
 					array( 'content_id' => $wpdb->insert_id )
 				);
 			}
@@ -208,16 +209,17 @@ class Contents {
 	 * @return array|null
 	 */
 	public static function getContentByField( string $field_name, $field_value, $field = null, $public_only = true ) {
+		global $wpdb;
+
 		// Post creator user can preview own product regardless of post status.
 		$current_user_id = get_current_user_id();
-		$status_clause   = $public_only ? ' AND (content.content_status="publish" OR content.contributor_id=' . $current_user_id . ') ' : '';
+		$status_clause   = $public_only ? $wpdb->prepare( ' AND (content.content_status="publish" OR content.contributor_id=%d) ', $current_user_id ) : '';
 
 		// Admin and editor also can visit products no matter what the status is. Other users can only if the product is public.
 		if ( User::validateRole( $current_user_id, array( 'administrator', 'editor' ) ) ) {
 			$status_clause = '';
 		}
 
-		global $wpdb;
 		$content = $wpdb->get_row(
 			$wpdb->prepare(
 				"SELECT 
@@ -359,10 +361,13 @@ class Contents {
 	 * Get bulk contents
 	 *
 	 * @param array $args Arguments to get contents based on
-	 * @param bool  $segmentation Whether to add pagination data
+	 * @param bool  $segmentation Whether to return pagination data
 	 * @return array
 	 */
 	public static function getContents( array $args, bool $segmentation = false ) {
+
+		global $wpdb;
+
 		// Prepare arguments
 		$content_type = $args['content_type'] ?? null;
 		$keyword      = $args['search'] ?? '';
@@ -370,27 +375,26 @@ class Contents {
 		$order_by     = $args['order_by'] ?? 'trending';
 		$page         = DB::getPage( $args['page'] ?? null );
 		$limit        = DB::getLimit( $args['limit'] ?? null );
+		$offset       = absint( $page - 1 ) * $limit;
 
 		// To Do: Validate paramaters for the user as per context.
 
-		$where_clause  = ' 1=1';
-		$order_clause  = '';
-		$limit_clause  = ' LIMIT ' . $limit;
-		$offset_clause = ' OFFSET ' . ( absint( $page - 1 ) * $limit );
-
+		$where_clause = '';
+		
 		// Content type filter
-		if ( ! empty( $content_type ) ) {
-			$c_type        = esc_sql( $content_type );
-			$where_clause .= " AND content.content_type='{$c_type}'";
-		}
+		$where_clause .= ! empty( $content_type ) ? $wpdb->prepare( " AND content.content_type=%s", $content_type ) : '';
 
 		// Search filter
 		if ( ! empty( $keyword ) ) {
-			$_keyword      = esc_sql( $keyword );
-			$where_clause .= " AND (content.content_title LIKE '%{$_keyword}%' OR content.content_description LIKE '%{$_keyword}%')";
+			$where_clause .= $wpdb->prepare(
+				" AND (content.content_title LIKE %s OR content.content_description LIKE %s)", 
+				"%{$wpdb->esc_like( $keyword )}%",
+				"%{$wpdb->esc_like( $keyword )}%"
+			);
 		}
 
 		// Filter category
+		$category_ids_in = array();
 		if ( ! empty( $category_ids ) ) {
 
 			// Get child IDs
@@ -401,50 +405,28 @@ class Contents {
 			}
 
 			// Merge and consolidate all the IDs together
-			$all_ids = array_unique( array_merge( $all_ids, $category_ids ) );
-			$ids_in  = implode( ',', $all_ids );
+			$category_ids_in = array_unique( array_merge( $all_ids, $category_ids ) );
+			$ids_places      = _String::getPlaceHolders( $category_ids_in );
 
-			$where_clause .= " AND content.category_id IN ({$ids_in})";
+			$where_clause .= " AND content.category_id IN ({$ids_places})";
 		}
 
-		// Order by
-		if ( ! $segmentation ) {
-			if ( 'newest' === $order_by ) {
-				$order_clause .= ' ORDER BY content.created_at DESC ';
-			} else {
-				// Trending by default
-				$order_clause .= ' ORDER BY download_count, download_date DESC ';
-			}
-
-			$order_clause = " GROUP BY content.content_id {$order_clause}";
-		}
-
+		// If it is segmentation
 		if ( $segmentation ) {
-			$selects = 'COUNT(content.content_id)';
-		} else {
-			$selects = '
-				content.content_title, 
-				content.product_id, 
-				content.content_id, 
-				content.content_type, 
-				content.content_status, 
-				content.content_slug,
-				COUNT(pop.download_id) AS download_count,
-				pop.download_date,
-				UNIX_TIMESTAMP(content.created_at) AS created_at,
-				cat.category_name';
-		}
-
-		global $wpdb;
-
-		$query = "SELECT {$selects}
-			FROM {$wpdb->solidie_contents} content 
-				LEFT JOIN {$wpdb->solidie_categories} cat ON content.category_id=cat.category_id
-				LEFT JOIN {$wpdb->solidie_popularity} pop ON content.content_id=pop.content_id
-			WHERE {$where_clause} {$order_clause} " . ( $segmentation ? '' : "{$limit_clause} {$offset_clause}" );
-
-		if ( $segmentation ) {
-			$total_count = (int) $wpdb->get_var( $query );
+		
+			$total_count = (int) $wpdb->get_var(
+				$wpdb->prepare(
+					"SELECT 
+						COUNT(content.content_id)
+					FROM 
+						{$wpdb->solidie_contents} content 
+						LEFT JOIN {$wpdb->solidie_categories} cat ON content.category_id=cat.category_id
+						LEFT JOIN {$wpdb->solidie_popularity} pop ON content.content_id=pop.content_id
+					WHERE 1=1 {$where_clause}",
+					...$category_ids_in
+				)
+			);
+			
 			$page_count  = ceil( $total_count / $limit );
 
 			return array(
@@ -453,11 +435,37 @@ class Contents {
 				'page'        => $page,
 				'limit'       => $limit,
 			);
-
-		} else {
-			$contents = $wpdb->get_results( $query, ARRAY_A );
 		}
-
+		
+		// Determine how to sort the list
+		$order_by     = 'newest' === $order_by ? 'content.created_at' : 'download_count, download_date';
+		$order_clause = " GROUP BY content.content_id ORDER BY {$order_by} DESC";
+		$limit_offset = $wpdb->prepare( " LIMIT %d OFFSET %d", $limit, $offset );
+		
+		// If not segmentation, return data
+		$contents = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT
+					content.content_title, 
+					content.product_id, 
+					content.content_id, 
+					content.content_type, 
+					content.content_status, 
+					content.content_slug,
+					COUNT(pop.download_id) AS download_count,
+					pop.download_date,
+					UNIX_TIMESTAMP(content.created_at) AS created_at,
+					cat.category_name
+				FROM 
+					{$wpdb->solidie_contents} content 
+					LEFT JOIN {$wpdb->solidie_categories} cat ON content.category_id=cat.category_id
+					LEFT JOIN {$wpdb->solidie_popularity} pop ON content.content_id=pop.content_id
+				WHERE 1=1 {$where_clause} {$order_clause} {$limit_offset}",
+				...$category_ids_in
+			), 
+			ARRAY_A 
+		);
+			
 		$contents = _Array::castRecursive( $contents );
 		$contents = self::assignContentMedia( $contents );
 		$contents = self::assignContentMeta( $contents );

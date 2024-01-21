@@ -7,6 +7,9 @@
 
 namespace Solidie\Models;
 
+use Solidie\Helpers\_Array;
+use Solidie\Helpers\_String;
+
 /**
  * Release class
  */
@@ -19,18 +22,20 @@ class Release {
 	 * @return void
 	 */
 	private static function deleteRelease( $release_ids ) {
-		if ( ! is_array( $release_ids ) ) {
-			$release_ids = array( $release_ids );
-		}
-
-		$implodes = implode( ',', $release_ids );
-		if ( empty( $implodes ) ) {
+		
+		$release_ids = _Array::getArray( $release_ids, true );
+		if ( empty( $release_ids ) ) {
 			return;
 		}
 
+		$ids_places = _String::getPlaceHolders( $release_ids );
+
 		global $wpdb;
 		$file_ids = $wpdb->get_col(
-			"SELECT file_id FROM {$wpdb->solidie_releases} WHERE release_id IN ({$implodes})"
+			$wpdb->prepare(
+				"SELECT file_id FROM {$wpdb->solidie_releases} WHERE release_id IN ({$ids_places})",
+				$release_ids
+			)
 		);
 
 		// Delete file IDs from file system
@@ -121,10 +126,11 @@ class Release {
 	 * @return array
 	 */
 	public static function getReleases( int $content_id, int $page = 1, int $limit = 20, string $version = null, $license_id = 0, $endpoint = 'N/A' ) {
+		
 		global $wpdb;
 
 		$offset         = $limit * ( $page - 1 );
-		$version_clause = $version ? " AND version='" . esc_sql( $version ) . "'" : '';
+		$version_clause = ! empty( $version ) ? $wpdb->prepare( " AND version=%s", $version ) : '';
 
 		$releases = $wpdb->get_results(
 			$wpdb->prepare(

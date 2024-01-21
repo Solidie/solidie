@@ -58,16 +58,18 @@ class Field {
 	 * @return mixed
 	 */
 	public function getField( array $where, $field, $fallback = null ) {
+		
+		global $wpdb;
+
 		// Prepare select columns and where clause
 		$columns      = is_array( $field ) ? implode( ', ', $field ) : $field;
 		$where_clause = '1=1';
 
 		// Loop through conditions
 		foreach ( $where as $col => $val ) {
-			$where_clause .= " AND {$col}='{$val}'";
+			$where_clause .= $wpdb->prepare( " AND {$col}=%s", $val );
 		}
 
-		global $wpdb;
 		$row = $wpdb->get_row(
 			"SELECT {$columns} FROM {$this->table} WHERE {$where_clause} LIMIT 1"
 		);
@@ -86,14 +88,15 @@ class Field {
 	 */
 	public function getCol( array $where, string $col_name ) {
 
+		global $wpdb;
+
 		$where_clause = '1=1';
 
 		// Loop through conditions
 		foreach ( $where as $col => $val ) {
-			$where_clause .= " AND {$col}='{$val}'";
+			$where_clause .= $wpdb->prepare( " AND {$col}=%s", $val );
 		}
 
-		global $wpdb;
 		$col = $wpdb->get_col(
 			"SELECT {$col_name} FROM {$this->table} WHERE {$where_clause}"
 		);

@@ -55,6 +55,9 @@ class Scripts {
 		}
 		echo '<style>[id^="Solidie_"],[id^="solidie_"],#crewhrm-popup-root{' . $_colors . '}</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
+		$nonce_action = '_solidie_' . str_replace( '-', '_', gmdate( 'Y-m-d' ) );
+		$nonce        = wp_create_nonce( $nonce_action );
+
 		// Load data
 		$data = apply_filters(
 			'solidie_frontend_variables',
@@ -66,7 +69,8 @@ class Scripts {
 				'filter_hooks' => array(),
 				'home_path'    => rtrim( wp_parse_url( get_home_url() )['path'] ?? '/', '/' ) . '/',
 				'app_name'     => Main::$configs->app_id,
-				'nonce'        => wp_create_nonce( Main::$configs->app_id ),
+				'nonce'        => $nonce,
+				'nonce_action' => $nonce_action,
 				'has_pro'      => Main::$configs->has_pro,
 				'colors'       => $dynamic_colors,
 				'text_domain'  => Main::$configs->text_domain,

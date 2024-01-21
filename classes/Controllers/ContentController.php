@@ -26,8 +26,6 @@ class ContentController {
 			'nopriv' => true,
 		),
 		'createOrUpdateContent' => array(),
-		'fetchReleases'         => array(),
-		'versionRelease'        => array(),
 		'deleteContent'         => array(),
 		'getSingleContent'      => array(
 			'nopriv' => true,
@@ -40,11 +38,12 @@ class ContentController {
 	/**
 	 * Provide content list for various area like dashboard, catalog and so on.
 	 *
-	 * @param array $data Request data
+	 * @param array $filters Request data
 	 * @return void
 	 */
-	public static function getContentList( array $data ) {
+	public static function getContentList( array $filters ) {
 
+		$data         = $filters;
 		$content_list = Contents::getContents( $data );
 		$segmentation = Contents::getContents( $data, true );
 
@@ -60,21 +59,30 @@ class ContentController {
 	/**
 	 * Create or update content from frontend dashboard
 	 *
-	 * @param array $data Request data
-	 * @param array $files Request files
-	 *
+	 * @param array $content Content data
+	 * @param array $thumbnail Thumbnail file
+	 * @param array $sample_images Sample image/video files
+	 * @param array $downloadable_file Main downloadable file
+	 * @param array $preview Preview file
 	 * @return void
 	 */
-	public static function createOrUpdateContent( array $data, array $files ) {
+	public static function createOrUpdateContent( array $content, array $thumbnail = array(), array $sample_images = array(), array $downloadable_file = array(), array $preview = array() ) {
 
 		// To Do: Before updating, Check if the product created by current user or the user is administrator/editor or privileged
 
-		$content_id = Contents::updateContent( $data, $files );
+		$files = array(
+			$thumbnail,
+			$sample_images,
+			$downloadable_file,
+			$preview,
+		);
+
+		$content_id = Contents::updateContent( $content, $files );
 
 		if ( ! empty( $content_id ) ) {
 			wp_send_json_success(
 				array(
-					'message' => ! empty( $data['content_id'] ) ? __( 'Saved successfully.', 'solidie' ) : __( 'Created successfully.', 'solidie' ),
+					'message' => ! empty( $content['content_id'] ) ? __( 'Saved successfully.', 'solidie' ) : __( 'Created successfully.', 'solidie' ),
 					'content' => Contents::getContentByContentID( $content_id ),
 				)
 			);
@@ -84,101 +92,50 @@ class ContentController {
 	}
 
 	/**
-	 * Get content release history
-	 *
-	 * @param array $data Request data
-	 * @return void
-	 */
-	public static function fetchReleases( array $data ) {
-		$releases = Contents::getReleases( (int) $data['content_id'] );
-		wp_send_json_success( array( 'releases' => $releases ) );
-	}
-
-	/**
-	 * Create or update version
-	 *
-	 * @param array $data Request data
-	 * @param array $files Request files
-	 * @return void
-	 */
-	public static function versionRelease( array $data, array $files ) {
-		// Check if main three parameter received
-		if ( empty( $data['version'] ) || empty( $data['changelog'] ) || empty( $data['content_id'] ) ) {
-			wp_send_json_error( array( 'message' => __( 'Required release data missing!', 'solidie' ) ) );
-			exit;
-		}
-
-		// File is required for new release, release id will be falsy if it is new release.
-		if ( empty( $data['release_id'] ) ) {
-			if ( empty( $files['file'] ) || ! empty( $files['file']['error'] ) ) {
-				wp_send_json_error( array( 'message' => __( 'Valid file is required for new release!', 'solidie' ) ) );
-				exit;
-			}
-		}
-
-		// To Do: Check if current user can create/update release for the content
-
-		$error_message = Release::pushRelease(
-			array(
-				'version'    => $data['version'],
-				'changelog'  => $data['changelog'],
-				'content_id' => $data['content_id'],
-				'release_id' => ! empty( $data['release_id'] ) ? (int) $data['release_id'] : 0,
-				'file'       => ! empty( $files['file'] ) ? $files['file'] : null,
-			),
-			false
-		);
-
-		if ( true === $error_message ) {
-			wp_send_json_success();
-		} else {
-			wp_send_json_error( array( 'message' => $error_message ) );
-		}
-	}
-
-	/**
 	 * Delete content
 	 *
-	 * @param array $data Request data
+	 * @param int $content_id The content ID to delete by
 	 * @return void
 	 */
-	public static function deleteContent( array $data ) {
+	public static function deleteContent( int $content_id ) {
 		// To Do: Check if the user is authorized to delete the content
-		Contents::deleteContent( (int) $data['content_id'] ?? 0 );
+		Contents::deleteContent( $content_id );
 		wp_send_json_success();
 	}
 
 	/**
 	 * Get single content for both single view and inventory screen.
 	 * Conntent slug will be provided if it is single screen.
-	 * Otherwise content ID will be provided if called from inventory page.
+	 * Otherwise content ID will be provided if called from editor.
 	 *
-	 * @param array $data Request data
+	 * @param string $content_slug The content slug to edit by
+	 * @param int    $content_id The content to get content by
 	 * @return void
 	 */
-	public static function getSingleContent( array $data ) {
+	public static function getSingleContent( string $content_slug = '', int $content_id = 0 ) {
 
-		if ( ! empty( $data['content_slug'] ) ) {
-			$data['content_id'] = Contents::getContentIdBySlug( $data['content_slug'] );
+		// Get the content ID by slug if slug is not empty
+		if ( ! empty( $content_slug ) ) {
+			$content_id = Contents::getContentIdBySlug( $content_slug );
 		}
 
-		$content_id = (int) $data['content_id'] ?? 0;
-		$content    = $content_id ? Contents::getContentByContentID( $content_id, null, false ) : null;
+		// Now get the content by content ID
+		$content = $content_id ? Contents::getContentByContentID( $content_id, null, false ) : null;
 
 		if ( ! empty( $content ) ) {
 			wp_send_json_success( array( 'content' => $content ) );
-		} else {
-			wp_send_json_error( array( 'message' => __( 'Content not found', 'solidie' ) ) );
 		}
+		
+		wp_send_json_error( array( 'message' => __( 'Content not found', 'solidie' ) ) );
 	}
 
 	/**
 	 * Load file
 	 *
-	 * @param array $data Request data
+	 * @param int $file_id The file ID to download
 	 * @return void
 	 */
-	public static function loadFile( array $data ) {
-		FileManager::downloadFile( $data['file_id'] ?? 0, $data );
+	public static function loadFile( int $file_id ) {
+		FileManager::downloadFile( $file_id );
 	}
 }

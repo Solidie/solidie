@@ -21,6 +21,17 @@ use Error;
 class Dispatcher {
 
 	/**
+	 * Controlles class array
+	 *
+	 * @var array
+	 */
+	private static $controllers = array(
+		ContentController::class,
+		SettingsController::class,
+		CategoryController::class,
+	);
+
+	/**
 	 * Dispatcher registration in constructor
 	 *
 	 * @return void
@@ -43,14 +54,8 @@ class Dispatcher {
 	 */
 	public function registerControllers() {
 
-		$controllers = array(
-			ContentController::class,
-			SettingsController::class,
-			CategoryController::class,
-		);
-
 		$registered_methods = array();
-		$controllers        = apply_filters( 'solidie_controllers', $controllers );
+		$controllers        = apply_filters( 'solidie_controllers', self::$controllers );
 
 		// Loop through controllers classes
 		foreach ( $controllers as $class ) {
@@ -58,8 +63,8 @@ class Dispatcher {
 			// Loop through controller methods in the class
 			foreach ( $class::PREREQUISITES as $method => $prerequisites ) {
 				if ( in_array( $method, $registered_methods, true ) ) {
-					// translators: Controller conflict message
-					throw new Error( sprintf( __( 'Duplicate endpoint %s not possible', 'solidie' ), $method ) );
+					// translators: Show the duplicate registered endpoint
+					throw new Error( sprintf( esc_html__( 'Duplicate endpoint %s not possible', 'solidie' ), esc_html( $method ) ) );
 				}
 
 				// Determine ajax handler types
@@ -96,31 +101,47 @@ class Dispatcher {
 	 * @return void
 	 */
 	public function dispatch( $class, $method, $prerequisites ) {
-		// Determine post/get data
-		$is_post = isset( $_SERVER['REQUEST_METHOD'] ) ? strtolower( sanitize_text_field( wp_unslash( $_SERVER['REQUEST_METHOD'] ) ) ) === 'post' : null;
-		$data    = $is_post ? $_POST : $_GET; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		$data    = _Array::stripslashesRecursive( _Array::getArray( $data ) );
-		$files   = is_array( $_FILES ) ? $_FILES : array();
 
-		// phpcs:ignore Squiz.PHP.CommentedOutCode.Found
-		// Verify nonce first of all
-		// $matched = wp_verify_nonce( ( $data['nonce'] ?? '' ), $data['nonce_action'] ?? '' );
-		// if ( ! $matched ) {
-		// wp_send_json_error( array( 'message' => __( 'Session Expired! Reloading the page might help resolve.', 'solidie' ) ) );
-		// }
+		// Nonce verification
+		$matched = wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ?? '' ) ), sanitize_text_field( wp_unslash( $_POST['nonce_action'] ?? '' ) ) );
+		$matched = $matched || wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['nonce'] ?? '' ) ), sanitize_text_field( wp_unslash( $_GET['nonce_action'] ?? '' ) ) );
+		if ( ! $matched ) {
+			wp_send_json_error( array( 'message' => esc_html__( 'Nonce verification failed!', 'solidie' ) ) );
+		}
 
-		// Verify required user role
-		$_required_roles = $prerequisites['role'] ?? array();
-		$_required_roles = is_array( $_required_roles ) ? $_required_roles : array( $_required_roles );
-		if ( ! User::validateRole( get_current_user_id(), $_required_roles ) ) {
-			wp_send_json_error( array( 'message' => __( 'Access Denied!', 'solidie' ) ) );
+		// Validate access privilege
+		$required_roles = $prerequisites['role'] ?? array();
+		$required_roles = is_array( $required_roles ) ? $required_roles : array( $required_roles );
+		if ( ! User::validateRole( get_current_user_id(), $required_roles ) ) {
+			wp_send_json_error( array( 'message' => esc_html__( 'Access Denied!', 'solidie' ) ) );
 		}
 
 		// Now pass to the action handler function
-		if ( class_exists( $class ) && method_exists( $class, $method ) ) {
-			$class::$method( $data, $files );
-		} else {
-			wp_send_json_error( array( 'message' => __( 'Invalid Endpoint!', 'solidie' ) ) );
+		if ( ! class_exists( $class ) || ! method_exists( $class, $method ) ) {
+			wp_send_json_error( array( 'message' => esc_html__( 'Invalid Endpoint!', 'solidie' ) ) );
 		}
+
+		// Prepare request data
+		$is_post = strtolower( sanitize_text_field( wp_unslash( $_SERVER['REQUEST_METHOD'] ?? '' ) ) ) === 'post';
+		$params  = _Array::getMethodParams( $class, $method );
+
+		// Pick only the used arguments in the mathod from request data
+		$args = array();
+		foreach ( $params as $param => $configs ) {
+			$args[ $param ] = wp_unslash( ( $is_post ? ( $_POST[ $param ] ?? null ) : ( $_GET[ $param ] ?? null ) ) ?? $_FILES[ $param ] ?? $configs['default'] ?? null );
+		}
+
+		// Sanitize and type cast
+		$args = _Array::castRecursive( _Array::sanitizeRecursive( $args ) );
+
+		// Now verify all the arguments expected data types after casting
+		foreach ( $args as $name => $value ) {
+			if ( gettype( $value ) != $params[ $name ]['type'] ) {
+				wp_send_json_error( array( 'message' => esc_html__( 'Invalid request data!', 'solidie' ) ) );
+			}
+		}
+
+		// Then pass to method with spread as the parameter count is variable.
+		$class::$method( ...$args );
 	}
 }

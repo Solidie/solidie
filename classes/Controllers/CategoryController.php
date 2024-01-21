@@ -16,17 +16,27 @@ class CategoryController {
 
 	const PREREQUISITES = array(
 		'saveCategory'   => array(),
-		'getCategories'  => array(),
 		'deleteCategory' => array(),
 	);
 
 	/**
-	 * Create or update category
+	 * Create or update a content category
 	 *
-	 * @param array $data Request Data
+	 * @param string $category_name The category name to create or update
+	 * @param string $content_type The content type to create/update for
+	 * @param integer $category_id The category ID for update if not new
+	 * @param integer $parent_id The category parent ID to set
 	 * @return void
 	 */
-	public static function saveCategory( array $data ) {
+	public static function saveCategory( string $category_name, string $content_type, int $category_id = 0, int $parent_id = 0 ) {
+
+		$data = array(
+			'category_name' => $category_name,
+			'content_type'  => $content_type,
+			'category_id'   => $category_id,
+			'parent_id'     => $parent_id,
+		);
+
 		$cat_id = Category::createUpdateCategory( $data );
 		if ( ! empty( $cat_id ) ) {
 			wp_send_json_success(
@@ -43,11 +53,11 @@ class CategoryController {
 	/**
 	 * Delete single category
 	 *
-	 * @param array $data Request data
+	 * @param int $category_id The category ID to delete
 	 * @return void
 	 */
-	public static function deleteCategory( array $data ) {
-		Category::deleteCategory( $data['category_id'] ?? 0 );
+	public static function deleteCategory( int $category_id ) {
+		Category::deleteCategory( $category_id );
 		wp_send_json_success(
 			array(
 				'message'    => __( 'Category deleted', 'solidie' ),

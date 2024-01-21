@@ -94,7 +94,7 @@ export function ContentSettings(props) {
 	}
 
 	const deleteCategory=(category_id)=>{
-		if ( ! window.confirm( __( 'Sure to delete' ) ) ) {
+		if ( ! window.confirm( __( 'Sure to delete the category and it\'s children?' ) ) ) {
 			return;
 		}
 
@@ -115,7 +115,7 @@ export function ContentSettings(props) {
 
 	const saveOptions=()=>{
 		setState({...state, saving: true});
-		request('saveContentTypes', {'content_types': state.contents}, resp=>{
+		request('saveContentTypes', {content_types: state.contents}, resp=>{
 			setState({...state, saving: false});
 			ajaxToast(resp);
 		});

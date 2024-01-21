@@ -8,6 +8,7 @@
 namespace Solidie\Models;
 
 use Solidie\Helpers\_Array;
+use Solidie\Helpers\_String;
 
 /**
  * Meta table CRUD functionalities.
@@ -62,13 +63,21 @@ class Meta {
 	 * @return mixed
 	 */
 	public function getMeta( $meta_key = null, $default_single = null ) {
-		$is_singular  = ! empty( $meta_key );
-		$where_clause = $is_singular ? " AND meta_key='" . esc_sql( $meta_key ) . "' " : '';
-
+		
 		global $wpdb;
+
+		$is_singular  = ! empty( $meta_key );
+		$where_clause = $is_singular ? $wpdb->prepare( " AND meta_key=%s", $meta_key ) : '';
+
 		$results = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT meta_key, meta_value FROM {$this->table} WHERE object_id=%d {$where_clause}",
+				"SELECT 
+					meta_key, 
+					meta_value 
+				FROM 
+					{$this->table} 
+				WHERE 
+					object_id=%d {$where_clause}",
 				$this->object_id
 			),
 			ARRAY_A
@@ -102,7 +111,7 @@ class Meta {
 		// Check if the meta exists already
 		$exists = $wpdb->get_var(
 			$wpdb->prepare(
-				'SELECT meta_key FROM ' . $this->table . ' WHERE object_id=%d AND meta_key=%s LIMIT 1',
+				"SELECT meta_key FROM {$this->table} WHERE object_id=%d AND meta_key=%s LIMIT 1",
 				$this->object_id,
 				$meta_key
 			)
@@ -170,13 +179,21 @@ class Meta {
 			return;
 		}
 
-		$object_ids = ! is_array( $object_ids ) ? array( $object_ids ) : $object_ids;
-		$ids_in     = implode( ',', $object_ids );
-		$meta_key   = $meta_key ? esc_sql( $meta_key ) : null;
-		$key_clause = $meta_key ? " AND meta_key='{$meta_key}'" : '';
-
 		global $wpdb;
-		$wpdb->query( "DELETE FROM {$this->table} WHERE object_id IN ({$ids_in}) {$key_clause}" );
+
+		// Meta key condition
+		$key_clause = ! empty( $meta_key ) ? $wpdb->prepare( " AND meta_key=%s", $meta_key ) : '';
+
+		// IDs in
+		$object_ids = _Array::getArray( $object_ids, true, 0 );
+		$ids_places =  _String::getPlaceHolders( $object_ids );
+
+		$wpdb->query( 
+			$wpdb->prepare(
+				"DELETE FROM {$this->table} WHERE 1=1 {$key_clause} AND object_id IN ({$ids_places})",
+				...$object_ids
+			)
+		);
 	}
 
 	/**
@@ -190,18 +207,19 @@ class Meta {
 		global $wpdb;
 
 		$objects = _Array::appendColumn( $objects, 'meta', (object) array() );
-		$obj_ids = array_keys( $objects );
-		$ids_in  = implode( ',', $obj_ids );
 
-		$where_clause = "object_id IN({$ids_in})";
+		// Key clause
+		$key_clause = ! empty( $meta_key ) ? $wpdb->prepare( " AND meta_key=%s", $meta_key ) : '';
 
-		if ( $meta_key ) {
-			$key           = esc_sql( $meta_key );
-			$where_clause .= " AND meta_key='{$key}'";
-		}
+		// IDs in
+		$obj_ids    = _Array::getArray( array_keys( $objects ), false, 0 );
+		$ids_places = _String::getPlaceHolders( $obj_ids );
 
 		$meta = $wpdb->get_results(
-			'SELECT * FROM ' . $this->table . " WHERE {$where_clause}",
+			$wpdb->prepare(
+				"SELECT * FROM {$this->table} WHERE object_id IN({$ids_places}) {$key_clause}",
+				$obj_ids
+			),
 			ARRAY_A
 		);
 
@@ -226,7 +244,7 @@ class Meta {
 
 		$meta_data = $wpdb->get_results(
 			$wpdb->prepare(
-				'SELECT meta_key, meta_value FROM ' . $this->table . ' WHERE object_id=%d',
+				"SELECT meta_key, meta_value FROM {$this->table} WHERE object_id=%d",
 				$this->object_id
 			),
 			ARRAY_A

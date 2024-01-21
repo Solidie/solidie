@@ -22,7 +22,7 @@ class Category {
 	public static function createUpdateCategory( array $category ) {
 		$_category = array(
 			'category_name' => $category['category_name'],
-			'parent_id'     => $category['parent_id'] ?? null,
+			'parent_id'     => ! empty( $category['parent_id'] ) ?  $category['parent_id'] : null,
 			'content_type'  => $category['content_type'],
 		);
 
@@ -73,7 +73,8 @@ class Category {
 	 * @return void
 	 */
 	public static function deleteCategory( $category_id ) {
-		global $wpdb;
+
+		// To Do: Delete sub categories too and un assigned all the deleted category IDs from content
 
 		// Update content categories to null where it is used
 		Field::contents()->updateField(
