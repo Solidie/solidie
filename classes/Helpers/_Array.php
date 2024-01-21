@@ -232,7 +232,7 @@ class _Array {
 		$result = [];
 
 		// Use regular expressions to match the first PHP comment block
-		preg_match( '/\/\*\*(.*?)\*\//s', file_get_contents( $path ), $matches ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+		preg_match( '/\/\*\*(.*?)\*\//s', file_get_contents( $path ), $matches );
 
 		if ( isset( $matches[1] ) ) {
 			$comment = $matches[1];

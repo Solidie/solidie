@@ -30,7 +30,7 @@ class SettingsController {
 	 */
 	public static function saveContentTypes( array $content_types ) {
 		AdminSetting::save( array( 'contents' => $content_types ) );
-		wp_send_json_success( array( 'message' => __( 'Content types saved successfully!', 'solidie' ) ) );
+		wp_send_json_success( array( 'message' => esc_html__( 'Content types saved successfully!', 'solidie' ) ) );
 	}
 
 	/**
@@ -42,6 +42,6 @@ class SettingsController {
 	 */
 	public static function saveGeneralSettings( array $general_settings ) {
 		AdminSetting::save( array( 'general' => $general_settings ) );
-		wp_send_json_success( array( 'message' => __( 'Settings saved successfully!', 'solidie' ) ) );
+		wp_send_json_success( array( 'message' => esc_html__( 'Settings saved successfully!', 'solidie' ) ) );
 	}
 }

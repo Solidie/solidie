@@ -227,7 +227,7 @@ class Contents {
 					content.contributor_id as author_id 
 				FROM {$wpdb->solidie_contents} content 
 					LEFT JOIN {$wpdb->users} _user ON content.contributor_id=_user.ID 
-				WHERE content." . $field_name . '=%s' . $status_clause,
+				WHERE content.{$field_name}=%s {$status_clause}",
 				$field_value
 			),
 			ARRAY_A
@@ -380,14 +380,14 @@ class Contents {
 		// To Do: Validate paramaters for the user as per context.
 
 		$where_clause = '';
-		
+
 		// Content type filter
-		$where_clause .= ! empty( $content_type ) ? $wpdb->prepare( " AND content.content_type=%s", $content_type ) : '';
+		$where_clause .= ! empty( $content_type ) ? $wpdb->prepare( ' AND content.content_type=%s', $content_type ) : '';
 
 		// Search filter
 		if ( ! empty( $keyword ) ) {
 			$where_clause .= $wpdb->prepare(
-				" AND (content.content_title LIKE %s OR content.content_description LIKE %s)", 
+				' AND (content.content_title LIKE %s OR content.content_description LIKE %s)',
 				"%{$wpdb->esc_like( $keyword )}%",
 				"%{$wpdb->esc_like( $keyword )}%"
 			);
@@ -413,7 +413,7 @@ class Contents {
 
 		// If it is segmentation
 		if ( $segmentation ) {
-		
+
 			$total_count = (int) $wpdb->get_var(
 				$wpdb->prepare(
 					"SELECT 
@@ -426,8 +426,8 @@ class Contents {
 					...$category_ids_in
 				)
 			);
-			
-			$page_count  = ceil( $total_count / $limit );
+
+			$page_count = ceil( $total_count / $limit );
 
 			return array(
 				'total_count' => $total_count,
@@ -436,12 +436,12 @@ class Contents {
 				'limit'       => $limit,
 			);
 		}
-		
+
 		// Determine how to sort the list
 		$order_by     = 'newest' === $order_by ? 'content.created_at' : 'download_count, download_date';
 		$order_clause = " GROUP BY content.content_id ORDER BY {$order_by} DESC";
-		$limit_offset = $wpdb->prepare( " LIMIT %d OFFSET %d", $limit, $offset );
-		
+		$limit_offset = $wpdb->prepare( ' LIMIT %d OFFSET %d', $limit, $offset );
+
 		// If not segmentation, return data
 		$contents = $wpdb->get_results(
 			$wpdb->prepare(
@@ -462,10 +462,10 @@ class Contents {
 					LEFT JOIN {$wpdb->solidie_popularity} pop ON content.content_id=pop.content_id
 				WHERE 1=1 {$where_clause} {$order_clause} {$limit_offset}",
 				...$category_ids_in
-			), 
-			ARRAY_A 
+			),
+			ARRAY_A
 		);
-			
+
 		$contents = _Array::castRecursive( $contents );
 		$contents = self::assignContentMedia( $contents );
 		$contents = self::assignContentMeta( $contents );

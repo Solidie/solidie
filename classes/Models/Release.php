@@ -22,7 +22,7 @@ class Release {
 	 * @return void
 	 */
 	private static function deleteRelease( $release_ids ) {
-		
+
 		$release_ids = _Array::getArray( $release_ids, true );
 		if ( empty( $release_ids ) ) {
 			return;
@@ -74,7 +74,7 @@ class Release {
 	public static function pushRelease( array $data ) {
 		$content = Contents::getContentByContentID( $data['content_id'] );
 		if ( empty( $content ) ) {
-			return __( 'Content not found to release', 'solidie' );
+			return esc_html__( 'Content not found to release', 'solidie' );
 		}
 
 		$release = array(
@@ -95,7 +95,7 @@ class Release {
 			// Upload new one
 			$file_id = FileManager::uploadFile( $data['content_id'], $data['file'], $content['content_title'] . ' - Downloadable' );
 			if ( ! $file_id ) {
-				return __( 'Error in file saving!', 'solidie' );
+				return esc_html__( 'Error in file saving!', 'solidie' );
 			}
 
 			// Link new one to the release
@@ -126,11 +126,11 @@ class Release {
 	 * @return array
 	 */
 	public static function getReleases( int $content_id, int $page = 1, int $limit = 20, string $version = null, $license_id = 0, $endpoint = 'N/A' ) {
-		
+
 		global $wpdb;
 
 		$offset         = $limit * ( $page - 1 );
-		$version_clause = ! empty( $version ) ? $wpdb->prepare( " AND version=%s", $version ) : '';
+		$version_clause = ! empty( $version ) ? $wpdb->prepare( ' AND version=%s', $version ) : '';
 
 		$releases = $wpdb->get_results(
 			$wpdb->prepare(

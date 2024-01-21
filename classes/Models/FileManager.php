@@ -79,7 +79,7 @@ class FileManager {
 
 		// Add direct file download restriction apache server.
 		if ( ! file_exists( $htaccess_path ) ) {
-			file_put_contents( $htaccess_path, 'deny from all' ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_file_put_contents
+			file_put_contents( $htaccess_path, 'deny from all' );
 		}
 
 		// To Do: nginx doesn't restrict per directory, rather show instruction in dashboard how to restrict directory.
@@ -327,7 +327,7 @@ class FileManager {
 			http_response_code( 404 );
 			exit;
 		}
-		
+
 		do_action( 'solidie_load_file_before' );
 		Release::increaseDownloadCount( $file_id );
 
@@ -358,7 +358,7 @@ class FileManager {
 		header( 'Content-Disposition: attachment; filename=' . basename( $path ) );
 		header( 'Content-Length: ' . $file_size );
 
-		readfile( $path ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_readfile
+		readfile( $path );
 		exit;
 	}
 }

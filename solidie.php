@@ -16,6 +16,9 @@
  * @package solidie
  */
 
+if ( ! defined( 'ABSPATH' ) ) { exit;
+}
+
 // Load autoloader
 require_once __DIR__ . '/classes/Main.php';
 

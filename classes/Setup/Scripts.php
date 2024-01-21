@@ -53,7 +53,13 @@ class Scripts {
 		foreach ( $dynamic_colors as $name => $code ) {
 			$_colors .= '--crewmat-color-' . esc_attr( $name ) . ':' . esc_attr( $code ) . ';';
 		}
-		echo '<style>[id^="Solidie_"],[id^="solidie_"],#crewhrm-popup-root{' . $_colors . '}</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		?>
+			<style>
+				[id^="Solidie_"],[id^="solidie_"],#crewhrm-popup-root{
+					<?php echo esc_html( $_colors ); ?>
+				}
+			</style>
+		<?php
 
 		$nonce_action = '_solidie_' . str_replace( '-', '_', gmdate( 'Y-m-d' ) );
 		$nonce        = wp_create_nonce( $nonce_action );
@@ -84,13 +90,14 @@ class Scripts {
 			)
 		);
 
-		$pointer   = Main::$configs->app_id;
-		$variables = '<script>
-			window.' . $pointer . '=' . wp_json_encode( $data ) . ';
-			window.' . $pointer . 'pro=window.' . $pointer . ';
-		</script>';
+		$pointer = Main::$configs->app_id;
 
-		echo $variables; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		?>
+		<script>
+			window.<?php echo esc_html( $pointer ); ?> = JSON.parse("<?php echo esc_attr( wp_json_encode( $data ) ); ?>".replace(/&quot;/g, '"'));
+			window.<?php echo esc_html( $pointer ); ?>pro = window.<?php echo esc_html( $pointer ); ?>;
+		</script>
+		<?php
 	}
 
 	/**

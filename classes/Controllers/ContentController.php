@@ -82,12 +82,12 @@ class ContentController {
 		if ( ! empty( $content_id ) ) {
 			wp_send_json_success(
 				array(
-					'message' => ! empty( $content['content_id'] ) ? __( 'Saved successfully.', 'solidie' ) : __( 'Created successfully.', 'solidie' ),
+					'message' => ! empty( $content['content_id'] ) ? esc_html__( 'Saved successfully.', 'solidie' ) : esc_html__( 'Created successfully.', 'solidie' ),
 					'content' => Contents::getContentByContentID( $content_id ),
 				)
 			);
 		} else {
-			wp_send_json_error( array( 'message' => __( 'Something went wrong!', 'solidie' ) ) );
+			wp_send_json_error( array( 'message' => esc_html__( 'Something went wrong!', 'solidie' ) ) );
 		}
 	}
 
@@ -125,8 +125,8 @@ class ContentController {
 		if ( ! empty( $content ) ) {
 			wp_send_json_success( array( 'content' => $content ) );
 		}
-		
-		wp_send_json_error( array( 'message' => __( 'Content not found', 'solidie' ) ) );
+
+		wp_send_json_error( array( 'message' => esc_html__( 'Content not found', 'solidie' ) ) );
 	}
 
 	/**

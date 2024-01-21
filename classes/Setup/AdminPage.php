@@ -37,8 +37,8 @@ class AdminPage {
 	public function registerMenu() {
 		// Main page
 		add_menu_page(
-			__( 'Solidie', 'solidie' ),
-			__( 'Solidie', 'solidie' ),
+			esc_html__( 'Solidie', 'solidie' ),
+			esc_html__( 'Solidie', 'solidie' ),
 			'administrator',
 			Main::$configs->root_menu_slug,
 			array( $this, 'mainPage' ),
@@ -46,8 +46,8 @@ class AdminPage {
 		);
 		add_submenu_page(
 			Main::$configs->root_menu_slug,
-			__( 'Inventory', 'solidie' ),
-			__( 'Inventory', 'solidie' ),
+			esc_html__( 'Inventory', 'solidie' ),
+			esc_html__( 'Inventory', 'solidie' ),
 			'administrator',
 			Main::$configs->root_menu_slug,
 			array( $this, 'mainPage' )
@@ -56,8 +56,8 @@ class AdminPage {
 		// Content tyoes setting page
 		add_submenu_page(
 			Main::$configs->root_menu_slug,
-			__( 'Content Types', 'tutor' ),
-			__( 'Content Types', 'tutor' ),
+			esc_html__( 'Content Types', 'solidie' ),
+			esc_html__( 'Content Types', 'solidie' ),
 			'administrator',
 			self::CONTENT_TYPES_SLUG,
 			array( $this, 'contentTypesPage' )
@@ -66,8 +66,8 @@ class AdminPage {
 		// General settings page
 		add_submenu_page(
 			Main::$configs->root_menu_slug,
-			__( 'Settings', 'tutor' ),
-			__( 'Settings', 'tutor' ),
+			esc_html__( 'Settings', 'solidie' ),
+			esc_html__( 'Settings', 'solidie' ),
 			'administrator',
 			self::SETTINGS_SLUG,
 			array( $this, 'settingsPage' )

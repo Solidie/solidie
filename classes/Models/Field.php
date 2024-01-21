@@ -54,11 +54,11 @@ class Field {
 	 * @param array        $where Array of values to use as where clause
 	 * @param string|array $field The field or array of fields to get data from the table
 	 * @param mixed        $fallback Default return value if single field not found or null
-	 * 
+	 *
 	 * @return mixed
 	 */
 	public function getField( array $where, $field, $fallback = null ) {
-		
+
 		global $wpdb;
 
 		// Prepare select columns and where clause

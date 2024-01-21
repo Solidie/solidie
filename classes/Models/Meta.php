@@ -63,11 +63,11 @@ class Meta {
 	 * @return mixed
 	 */
 	public function getMeta( $meta_key = null, $default_single = null ) {
-		
+
 		global $wpdb;
 
 		$is_singular  = ! empty( $meta_key );
-		$where_clause = $is_singular ? $wpdb->prepare( " AND meta_key=%s", $meta_key ) : '';
+		$where_clause = $is_singular ? $wpdb->prepare( ' AND meta_key=%s', $meta_key ) : '';
 
 		$results = $wpdb->get_results(
 			$wpdb->prepare(
@@ -182,13 +182,13 @@ class Meta {
 		global $wpdb;
 
 		// Meta key condition
-		$key_clause = ! empty( $meta_key ) ? $wpdb->prepare( " AND meta_key=%s", $meta_key ) : '';
+		$key_clause = ! empty( $meta_key ) ? $wpdb->prepare( ' AND meta_key=%s', $meta_key ) : '';
 
 		// IDs in
 		$object_ids = _Array::getArray( $object_ids, true, 0 );
-		$ids_places =  _String::getPlaceHolders( $object_ids );
+		$ids_places = _String::getPlaceHolders( $object_ids );
 
-		$wpdb->query( 
+		$wpdb->query(
 			$wpdb->prepare(
 				"DELETE FROM {$this->table} WHERE 1=1 {$key_clause} AND object_id IN ({$ids_places})",
 				...$object_ids
@@ -209,7 +209,7 @@ class Meta {
 		$objects = _Array::appendColumn( $objects, 'meta', (object) array() );
 
 		// Key clause
-		$key_clause = ! empty( $meta_key ) ? $wpdb->prepare( " AND meta_key=%s", $meta_key ) : '';
+		$key_clause = ! empty( $meta_key ) ? $wpdb->prepare( ' AND meta_key=%s', $meta_key ) : '';
 
 		// IDs in
 		$obj_ids    = _Array::getArray( array_keys( $objects ), false, 0 );
@@ -227,7 +227,7 @@ class Meta {
 			$_key   = $m['meta_key'];
 			$_value = maybe_unserialize( $m['meta_value'] );
 
-			$objects[ (int) $m['object_id'] ]['meta']->$_key = $_value; // phpcs:ignore Squiz.PHP.DisallowMultipleAssignments.Found
+			$objects[ (int) $m['object_id'] ]['meta']->$_key = $_value;
 		}
 
 		return $objects;

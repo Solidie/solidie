@@ -12,6 +12,9 @@ use Solidie\Models\AdminSetting;
 use Solidie\Models\Contents;
 use Solidie\Setup\Route;
 
+if ( ! defined( 'ABSPATH' ) ) { exit;
+}
+
 /**
  * 404 loader function
  *
