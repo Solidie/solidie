@@ -3,14 +3,14 @@ import {createRoot} from 'react-dom/client';
 
 import { MountPoint } from 'crewhrm-materials/mountpoint.jsx';
 import { getElementDataSet } from 'crewhrm-materials/helpers.jsx';
-import { Catalog } from './catalog/index.jsx';
+import { Gallery } from './gallery/index.jsx';
 
-// Render content catalog
-const catalog = document.getElementById('Solidie_Catalog');
-if(catalog){
-	createRoot(catalog).render(
-		<MountPoint element={catalog}>
-			<Catalog {...getElementDataSet(catalog)} />
+// Render content gallery
+const gallery = document.getElementById('Solidie_Gallery');
+if(gallery){
+	createRoot(gallery).render(
+		<MountPoint element={gallery}>
+			<Gallery {...getElementDataSet(gallery)} />
 		</MountPoint>
 	);
 }

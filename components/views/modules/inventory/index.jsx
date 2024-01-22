@@ -14,7 +14,7 @@ import { getDashboardPath } from 'solidie-materials/helpers.jsx';
 import table_style from 'solidie-materials/styles/table.module.scss';
 import style from './inventory.module.scss';
 
-export function InventoryWrapper({children, content_label, catalog_permalink, navigate, params={}}) {
+export function InventoryWrapper({children, content_label, gallery_permalink, navigate, params={}}) {
 
 	const {content_type} = params;
 
@@ -42,11 +42,11 @@ export function InventoryWrapper({children, content_label, catalog_permalink, na
 				setState({
 					...state, 
 					error_message: <div className={'text-align-center padding-vertical-40'.classNames()}>
-						<span className={'d-block margin-bottom-10 font-size-20'.classNames()}>
-							{__('No content type is enabled yet.')}
+						<span className={'d-block margin-bottom-10'.classNames()}>
+							{__('To showcase your contents, please enable preferred content types first.')}
 						</span>
-						<a href={window[data_pointer]?.permalinks?.content_types} className={'button button-primary button-small'.classNames()}>
-							{__('Enable Now')}
+						<a href={window[data_pointer]?.permalinks?.content_types} className={'button button-primary button-outlined button-small'.classNames()}>
+							{__('Go to Content Types')}
 						</a>
 					</div>
 				});
@@ -55,22 +55,35 @@ export function InventoryWrapper({children, content_label, catalog_permalink, na
 			setState({
 				...state, 
 				error_message: <div className={'text-align-center padding-vertical-40'.classNames()}>
-						<span className={'d-block margin-bottom-10 font-size-20'.classNames()}>
+						<span className={'d-block margin-bottom-10'.classNames()}>
 							{sprintf(__('The content type \'%s\' is not found or maybe disabled meanwhile'), content_type)}
 						</span>
-						<a href={window[data_pointer]?.permalinks?.content_types} className={'button button-primary button-small'.classNames()}>
+						<a href={window[data_pointer]?.permalinks?.content_types} className={'button button-primary button-outlined button-small'.classNames()}>
 							{__('Check Content Types')}
 						</a>
 					</div>
 			});
 		}
-	}, []);
+	}, [content_type]);
 
-	return state.error_message || <div>
+	if ( state.error_message ) {
+		return <div>
+			<div>
+				<strong className={"d-flex align-items-center column-gap-8 color-text padding-vertical-10 position-sticky top-0".classNames()}>
+					<span className={'font-size-24 font-weight-600 letter-spacing-3'.classNames()}>
+						{__('Inventory')}
+					</span>
+				</strong>
+			</div>
+			{state.error_message}
+		</div>
+	}
+
+	return <div>
 		<div>
 			<strong className={"d-flex align-items-center column-gap-8 color-text padding-vertical-10 position-sticky top-0".classNames()}>
 				<span className={'font-size-24 font-weight-600 letter-spacing-3'.classNames()}>
-					{__('Inventory')} {content_label ? <> - <a href={catalog_permalink} target='_blank' className={'hover-underline'.classNames()}>{content_label}</a></> : null}
+					{__('Inventory')} {content_label ? <> - <a href={gallery_permalink} target='_blank' className={'hover-underline'.classNames()}>{content_label}</a></> : null}
 				</span>
 			</strong>
 
@@ -83,7 +96,11 @@ export function InventoryWrapper({children, content_label, catalog_permalink, na
 			}
 		</div>
 		
-		{children}
+		{
+			content_type!=='tutorial' ? children : <div className={'padding-vertical-40 text-align-center'.classNames()}>
+				{__('Tutorial Management is an upcoming feature')}
+			</div>
+		}
 	</div>
 }
 
@@ -96,7 +113,7 @@ export function Inventory({navigate, params={}}) {
 		fetching: false,
 		contents: [],
 		segmentation: null,
-		catalog_permalink: null,
+		gallery_permalink: null,
 		content_type: content_type
 	});
 
@@ -135,7 +152,7 @@ export function Inventory({navigate, params={}}) {
 				data: {
 					segmentation = {}, 
 					contents=[],
-					catalog_permalink
+					gallery_permalink
 				}
 			} = resp;
 
@@ -144,7 +161,7 @@ export function Inventory({navigate, params={}}) {
 				contents,
 				fetching: false,
 				segmentation,
-				catalog_permalink
+				gallery_permalink
 			});
 		} );
 	}
@@ -193,7 +210,7 @@ export function Inventory({navigate, params={}}) {
 	return <InventoryWrapper 
 		content_label={_content_label} 
 		content_type={content_type}
-		catalog_permalink={state.catalog_permalink}
+		gallery_permalink={state.gallery_permalink}
 		navigate={navigate}
 		params={params}
 	>

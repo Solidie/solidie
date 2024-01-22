@@ -51,7 +51,7 @@ if ( ! empty( $template ) ) {
 	require $template;
 
 } else {
-	// This conditional block means it is either single content page or the catalog
+	// This conditional block means it is either single content page or the gallery
 	$content_settings = AdminSetting::get( 'contents' );
 	$content          = null;
 
@@ -65,10 +65,10 @@ if ( ! empty( $template ) ) {
 		load_404( 'Content Not Found' );
 	}
 
-	// Load the catalog/single template if the content type is enabled
+	// Load the gallery/single template if the content type is enabled
 	foreach ( $content_settings as $type => $setting ) {
 		if ( true === $setting['enable'] && $page === $setting['slug'] ) {
-			require Main::$configs->dir . 'templates/catalog.php';
+			require Main::$configs->dir . 'templates/gallery.php';
 			return;
 		}
 	}

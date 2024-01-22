@@ -51,7 +51,7 @@ const filters = [
 	}
 ];
 
-function CatalogLayout({categories={}}) {
+function GalleryLayout({categories={}}) {
 	const {settings={}} = window[data_pointer];
 	const {contents={}} = settings;
 	const {content_type_slug} = useParams();
@@ -157,7 +157,7 @@ function CatalogLayout({categories={}}) {
 		}
 	}).filter(content=>content!==null);
 
-	return <div className={'catalog'.classNames(style)}>
+	return <div className={'gallery'.classNames(style)}>
 		<div className={'d-flex align-items-center position-sticky border-1 border-radius-8 b-color-tertiary margin-bottom-15'.classNames()}>
 			<div 
 				className={'border-right-1 b-color-tertiary'.classNames()} 
@@ -255,13 +255,13 @@ function CatalogLayout({categories={}}) {
 	</div>
 }
 
-export function Catalog(props) {
+export function Gallery(props) {
 
 	const {home_path} = window[data_pointer];
 
 	return <BrowserRouter>
 		<Routes>
-			<Route path={home_path+':content_type_slug/'} element={<CatalogLayout {...props}/>}/>
+			<Route path={home_path+':content_type_slug/'} element={<GalleryLayout {...props}/>}/>
 			<Route path={home_path+':content_type_slug/:content_slug/'} element={<SingleWrapper {...props}/>}/>
 		</Routes>
 	</BrowserRouter>

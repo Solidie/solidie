@@ -328,16 +328,16 @@ class Contents {
 			return null;
 		}
 
-		return self::getCatalogPermalink( $content['content_type'] ) . $content['content_slug'] . '/';
+		return self::getGalleryPermalink( $content['content_type'] ) . $content['content_slug'] . '/';
 	}
 
 	/**
-	 * Get catalog url for content type
+	 * Get gallery url for content type
 	 *
-	 * @param string $content_type The content type to get catalog permalink for
+	 * @param string $content_type The content type to get gallery permalink for
 	 * @return string
 	 */
-	public static function getCatalogPermalink( string $content_type ) {
+	public static function getGalleryPermalink( string $content_type ) {
 		$base_slug = AdminSetting::get( 'contents.' . $content_type . '.slug' );
 		return get_home_url() . '/' . trim( $base_slug, '/' ) . '/';
 	}

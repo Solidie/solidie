@@ -36,7 +36,7 @@ class ContentController {
 	);
 
 	/**
-	 * Provide content list for various area like dashboard, catalog and so on.
+	 * Provide content list for various area like dashboard, gallery and so on.
 	 *
 	 * @param array $filters Request data
 	 * @return void
@@ -51,7 +51,7 @@ class ContentController {
 			array(
 				'contents'          => $content_list,
 				'segmentation'      => $segmentation,
-				'catalog_permalink' => Contents::getCatalogPermalink( $data['content_type'] ),
+				'gallery_permalink' => Contents::getGalleryPermalink( $data['content_type'] ),
 			)
 		);
 	}

@@ -9,6 +9,7 @@
     "clear": "find ./dist -maxdepth 1 -type f -delete",
     "build": "npm run clear && npm run compile && gulp build",
     "watch": "npm run clear && concurrently \"npm run sync-materials\" \"webpack --watch --mode=development\"",
+    "watch-core": "npm run clear && webpack --watch --mode=development",
     "lint": "eslint ./components/**/*.jsx",
     "lint:fix": "eslint --fix ./components/**/*.jsx",
     "cypress:open": "cypress open --config-file tests/cypress/config.config.js",

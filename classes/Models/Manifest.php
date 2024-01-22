@@ -68,13 +68,12 @@ class Manifest {
 					'description' => esc_html__( 'Various type of fonts', 'solidie' ),
 					'plans'       => array(),
 				),
-				/*
-				 'tutorial'        => array(
+				'tutorial'        => array(
 					'label'       => esc_html__( 'Tutorial', 'solidie' ),
 					'slug'        => 'tutorials',
-					'description' => esc_html__( 'Full fledged tutorial management system', 'solidie' ),
+					'description' => esc_html__( 'Full fledged tutorial management system. It is an upcoming feature.', 'solidie' ),
 					'plans'       => array(),
-				), */
+				),
 			),
 		);
 
