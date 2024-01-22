@@ -148,7 +148,7 @@ gulp.task('copy', function () {
 
 gulp.task('make-zip', function () {
 	// Replace the mode in build folder
-	const index_path = path.resolve( __dirname+'/build/solidie/index.php' );
+	const index_path = path.resolve( __dirname+'/build/solidie/solidie.php' );
 	const codes      = fs.readFileSync(index_path).toString().replace( "=> 'development',", "=> 'production'," );
 	fs.writeFileSync(index_path, codes);
 	
