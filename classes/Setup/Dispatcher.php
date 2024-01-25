@@ -14,6 +14,7 @@ use Solidie\Controllers\ContentController;
 use Solidie\Controllers\SettingsController;
 use Solidie\Controllers\CategoryController;
 use Error;
+use Solidie\Controllers\ProController;
 
 /**
  * Dispatcher class
@@ -29,6 +30,7 @@ class Dispatcher {
 		ContentController::class,
 		SettingsController::class,
 		CategoryController::class,
+		ProController::class,
 	);
 
 	/**

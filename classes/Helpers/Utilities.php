@@ -52,7 +52,7 @@ class Utilities {
 
 		$plugins_dir = self::getPluginsDir();
 
-		if ( is_dir( $plugins_dir . self::PRO_DIR ) ) {
+		if ( file_exists( $plugins_dir . self::PRO_PATH ) ) {
 			return true && ( ! $check_active || class_exists( 'Solidie_Pro\Main' ) );
 		}
 		

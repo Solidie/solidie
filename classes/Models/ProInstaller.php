@@ -13,10 +13,10 @@ class ProInstaller {
 	
 	private static function getLinkToPro() {
 		
-		$host         = 'development' === Main::$configs->mode ? 'http://localhost:10019' : 'https://www.solidie.com';
+		$host         = Main::$configs->api_host;
 		$plugin_uri   = $host . '/wp-content/plugins/solidie/';
 		$solidie_id   = Utilities::getSolidieId( $plugin_uri );
-		$download_uri = $host . 'wp-admin/admin-ajax.php';
+		$download_uri = $host . '/wp-admin/admin-ajax.php';
 
 		$payload = array(
 			'action'       => $solidie_id . '_loadFile',
@@ -32,11 +32,24 @@ class ProInstaller {
 	 * @return void
 	 */
 	public static function download() {
+
+		$plugin_dir = trailingslashit( WP_PLUGIN_DIR );
+		$pro_dir    = $plugin_dir . Utilities::PRO_DIR . '/';
+
+		// Check if the directory exists already
+		if ( is_dir( $pro_dir ) ) {
+			return sprintf( __( 'Directory \'%s\' already exists. Installation aborted.', 'solidie' ), Utilities::PRO_DIR );
+		}
 		
 		// Download the plugin file
 		$response  = wp_remote_get( self::getLinkToPro() );
 		if ( is_wp_error( $response ) ) {
 			return $response->get_error_message();
+		}
+		
+		$response_code = wp_remote_retrieve_response_code($response);
+		if ( $response_code !== 200 ) {
+			return sprintf( __( 'Error: %s from solidie server' ), $response_code );
 		}
 		
 		// Get the body of the response, which contains the plugin ZIP file content
@@ -52,8 +65,12 @@ class ProInstaller {
         file_put_contents( $temp_file, $plugin_zip_content );
 
 		// Extract the plugin ZIP content to the destination path
-		$unzipped = unzip_file( $temp_file, trailingslashit( WP_PLUGIN_DIR ) . Utilities::PRO_DIR . '/' );
-		unlink( $temp_file );
+		$unzipped = unzip_file( $temp_file, $plugin_dir );
+		
+		// Remove downloaded file as it is not necessary anymore
+		if ( file_exists( $temp_file ) ) {
+			unlink( $temp_file );
+		}
 
 		return $unzipped ? true : false;
 	}

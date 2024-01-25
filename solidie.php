@@ -5,7 +5,7 @@
  * Description: Multimedia stock plugin to showcase any digital contents like audio, video, image, ebook, apps and so on.
  * Version: 1.0.0
  * Author: Solidie
- * Author URI: https://www.solidie.com/
+ * Author URI: https://solidie.com/
  * Requires at least: 5.3
  * Tested up to: 6.4.2
  * Requires PHP: 7.4

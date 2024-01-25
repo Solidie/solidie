@@ -164,5 +164,6 @@ exports.build = gulp.series(
     'makepot',
     i18n_makepot_init,
     'copy',
-    'make-zip'
+    'make-zip',
+    'clean-build'
 );

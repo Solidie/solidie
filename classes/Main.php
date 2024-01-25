@@ -39,6 +39,7 @@ class Main {
 
 		// Store configs in runtime static property
 		self::$configs           = $configs;
+		self::$configs->api_host = 'development' === $configs->mode ? 'http://localhost:10019' : 'https://solidie.com';
 		self::$configs->dir      = dirname( $configs->file ) . '/';
 		self::$configs->basename = plugin_basename( $configs->file );
 
