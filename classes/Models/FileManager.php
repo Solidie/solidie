@@ -290,14 +290,11 @@ class FileManager {
 		$args = array(
 			'action'       => Main::$configs->app_id . '_loadFile',
 			'file_id'      => $file_id,
-			'nonce'        => $nonce,
-			'nonce_action' => $nonce_action,
+			// 'nonce'        => $nonce,
+			// 'nonce_action' => $nonce_action,
 		);
 
-		$args = array_merge( $args, $add_args );
-		$url  = add_query_arg( $args, $ajaxurl );
-
-		return $url;
+		return add_query_arg( array_merge( $args, $add_args ), $ajaxurl );
 	}
 
 	/**
@@ -340,7 +337,7 @@ class FileManager {
 			exit;
 		}
 
-		do_action( 'solidie_load_file_before' );
+		do_action( 'solidie_load_file_before', $file_id );
 		Release::increaseDownloadCount( $file_id );
 
 		$mime_type = mime_content_type( $path );

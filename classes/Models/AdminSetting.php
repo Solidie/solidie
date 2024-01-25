@@ -79,18 +79,19 @@ class AdminSetting {
 	}
 
 	/**
-	 * Return filtered settings ideally for frontend view. Sensitive data will be excluded.
+	 * Return content settings
 	 *
 	 * @return array
 	 */
-	public static function getFilteredSettings() {
-		$settings = self::get();
+	public static function getContentSettings() {
+		// All the settings to get
+		$contents = self::get( 'contents' );
 
 		// Assign content type label
-		foreach ( $settings['contents'] as $type => $content ) {
-			$settings['contents'][ $type ]['label'] = Manifest::getContentTypeLabel( $type );
+		foreach ( $contents as $type => $content ) {
+			$contents[ $type ]['label'] = Manifest::getContentTypeLabel( $type );
 		}
 
-		return apply_filters( 'solidie_filter_settings_data', $settings );
+		return $contents;
 	}
 }

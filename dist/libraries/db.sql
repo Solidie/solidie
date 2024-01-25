@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jan 22, 2024 at 06:10 AM
+-- Generation Time: Jan 24, 2024 at 10:42 PM
 -- Server version: 8.0.16
 -- PHP Version: 8.1.23
 
@@ -57,6 +57,7 @@ CREATE TABLE IF NOT EXISTS `wp_solidie_contents` (
   `modified_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`content_id`),
   UNIQUE KEY `product_id` (`product_id`),
+  UNIQUE KEY `content_slug` (`content_slug`),
   KEY `item_type` (`content_type`),
   KEY `category_id` (`category_id`,`content_status`,`contributor_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;

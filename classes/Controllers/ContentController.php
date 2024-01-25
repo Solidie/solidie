@@ -139,10 +139,17 @@ class ContentController {
 	/**
 	 * Load file
 	 *
-	 * @param int $file_id The file ID to download
+	 * @param int    $file_id The file ID to download
+	 * @param string $content_slug The content slug to download latest release file from
+	 *
 	 * @return void
 	 */
-	public static function loadFile( int $file_id ) {
+	public static function loadFile( int $file_id = 0, string $content_slug = '' ) {
+		if ( ! empty( $content_slug ) ) {
+			$content_id     = Contents::getContentIdBySlug( $content_slug );
+			$latest_release = ! empty( $content_id ) ? Release::getRelease( $content_id ) : null;
+			$file_id        = ! empty( $latest_release ) ? $latest_release['file_id'] : 0;
+		}
 		FileManager::downloadFile( $file_id );
 	}
 }

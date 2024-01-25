@@ -8,6 +8,18 @@ import {WpDashboardFullPage} from 'crewhrm-materials/backend-dashboard-container
 import { ContentSettings } from './settings/content-types/contents.jsx';
 import { InventoryBackend } from './inventory/inventory-backend.jsx';
 import { GeneralSettings } from './settings/general/general-settings.jsx';
+import { HomeBackend } from './home/home-backend.jsx';
+
+const home = document.getElementById('Solidie_Backend_Dashboard');
+if ( home ) {
+	createRoot(home).render(
+		<MountPoint>
+			<WpDashboardFullPage>
+				<HomeBackend/>
+			</WpDashboardFullPage>
+		</MountPoint>
+	);
+}
 
 // Render hrm settings
 const settings = document.getElementById('Solidie_Settings');
@@ -20,7 +32,7 @@ if (settings) {
 }
 
 // Render inventory
-const inventory = document.getElementById('Solidie_Backend_Dashboard');
+const inventory = document.getElementById('Solidie_Backend_Inventory');
 if (inventory) {
 	createRoot( inventory ).render(
 		<MountPoint>

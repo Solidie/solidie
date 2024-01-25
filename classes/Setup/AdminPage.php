@@ -17,8 +17,10 @@ use Solidie\Models\Manifest;
  */
 class AdminPage {
 
+	const HOME_SLUG          = 'solidie-home';
 	const CONTENT_TYPES_SLUG = 'solidie-content-types';
 	const SETTINGS_SLUG      = 'solidie-settings';
+	const INVENTORY_SLUG     = 'solidie-inventory';
 
 	/**
 	 * Admin page setup hooks register
@@ -41,16 +43,28 @@ class AdminPage {
 			esc_html__( 'Solidie', 'solidie' ),
 			'administrator',
 			Main::$configs->root_menu_slug,
-			array( $this, 'mainPage' ),
+			array( $this, 'homePage' ),
 			Main::$configs->dist_url . 'libraries/menu-icon.svg'
 		);
+
+		// Register solidie dashboard home
+		add_submenu_page(
+			Main::$configs->root_menu_slug,
+			esc_html__( 'Home', 'solidie' ),
+			esc_html__( 'Home', 'solidie' ),
+			'administrator',
+			Main::$configs->root_menu_slug,
+			array( $this, 'homePage' )
+		);
+
+		// Register inventory
 		add_submenu_page(
 			Main::$configs->root_menu_slug,
 			esc_html__( 'Inventory', 'solidie' ),
 			esc_html__( 'Inventory', 'solidie' ),
 			'administrator',
-			Main::$configs->root_menu_slug,
-			array( $this, 'mainPage' )
+			self::INVENTORY_SLUG,
+			array( $this, 'inventoryPage' )
 		);
 
 		// Content tyoes setting page
@@ -79,8 +93,17 @@ class AdminPage {
 	 *
 	 * @return void
 	 */
-	public function mainPage() {
-		echo '<div id="Solidie_Backend_Dashboard" data-categories="' . esc_attr( wp_json_encode( Category::getCategories() ) ) . '"></div>';
+	public function homePage() {
+		echo '<div id="Solidie_Backend_Dashboard"></div>';
+	}
+
+	/**
+	 * Backend dashboard inventory
+	 *
+	 * @return void
+	 */
+	public function inventoryPage() {
+		echo '<div id="Solidie_Backend_Inventory" data-categories="' . esc_attr( wp_json_encode( Category::getCategories() ) ) . '"></div>';
 	}
 
 	/**

@@ -71,10 +71,11 @@ class Field {
 		}
 
 		$row = $wpdb->get_row(
-			"SELECT {$columns} FROM {$this->table} WHERE {$where_clause} LIMIT 1"
+			"SELECT {$columns} FROM {$this->table} WHERE {$where_clause} LIMIT 1",
+			ARRAY_A
 		);
-		$row = ! empty( $row ) ? (array) $row : array();
-		$row = _Array::castRecursive( $row );
+
+		$row = ! empty( $row ) ? _Array::castRecursive( $row ) : array();
 
 		return ! is_array( $field ) ? ( $row[ $field ] ?? $fallback ) : $row;
 	}

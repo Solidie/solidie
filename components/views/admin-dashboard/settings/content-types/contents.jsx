@@ -136,10 +136,10 @@ export function ContentSettings(props) {
 		});
 	}
 
-	const {has_pro} = window[data_pointer];
+	const {is_pro_active} = window[data_pointer];
 	const cat_options = catState.editor !== null ? getFlattenedCategories(catState.categories[catState.editor.content_type], catState.editor.category_id) : null;
 	const col_style = {
-		className: `${has_pro ? 'col-20' : 'col-33'}`.classNames(style), 
+		className: `${is_pro_active ? 'col-20' : 'col-33'}`.classNames(style), 
 		style : {
 			textAlign: 'left'
 		}
@@ -211,7 +211,7 @@ export function ContentSettings(props) {
 						<th {...col_style}>{__('Content')}</th>
 						<th {...col_style}>{__('Base URL Slug')}</th>
 						<th {...col_style}>{__('Categories')}</th>
-						{has_pro ? <th {...col_style}>{__('Monetization Plans')}</th> : null}
+						{is_pro_active ? <th {...col_style}>{__('Monetization Plans')}</th> : null}
 					</tr>
 				</thead>
 				<tbody>
@@ -274,7 +274,7 @@ export function ContentSettings(props) {
 									
 								</td>
 								{
-									! has_pro ? null : <td data-th={__('Monteziation Plans')} {...{col_style, className: 'col-40'.classNames(style)}}>
+									! is_pro_active ? null : <td data-th={__('Monteziation Plans')} {...{col_style, className: 'col-40'.classNames(style)}}>
 										<div style={{width: '100%'}}>
 											<DoAction 
 												action="content_settings_plans_column" 

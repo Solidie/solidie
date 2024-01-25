@@ -139,6 +139,7 @@ class Release {
 				"SELECT 
 					_release.*, 
 					content.content_title, 
+					content.content_slug, 
 					UNIX_TIMESTAMP(_release.release_date) as release_date, 
 					content.product_id, 
 					content.content_type
@@ -173,7 +174,7 @@ class Release {
 				'endpoint'   => $endpoint,
 			);
 
-			$release['download_url'] = apply_filters( 'solidie_release_download_link', FileManager::getMediaLink( $release['file_id'] ), $arg_payload );
+			$release['download_url'] = apply_filters( 'solidie_release_download_link', FileManager::getMediaLink( 0, array( 'content_slug' => $release['content_slug'] ) ), $arg_payload );
 			$release['file_url']     = $file_url;
 			$release['file_name']    = $file_path ? basename( $file_path ) : null;
 			$release['mime_type']    = get_post_mime_type( $release['file_id'] );
@@ -193,7 +194,7 @@ class Release {
 	 * @param string|null $version If specific version needed
 	 * @param int         $license_id License ID
 	 * @param string      $endpoint Endpoint
-	 * @return object
+	 * @return array
 	 */
 	public static function getRelease( int $content_id, string $version = null, $license_id = 0, $endpoint = 'N/A' ) {
 		$relases = self::getReleases( $content_id, 1, 1, $version, $license_id, $endpoint );
@@ -208,16 +209,17 @@ class Release {
 	 * @return void
 	 */
 	public static function increaseDownloadCount( $file_id ) {
-		global $wpdb;
-
-				$release = Field::releases()->getField(
-					array( 'file_id' => $file_id ),
-					array( 'release_id', 'content_id' )
-				);
+		
+		$release = Field::releases()->getField(
+			array( 'file_id' => $file_id ),
+			array( 'release_id', 'content_id' )
+		);
 
 		if ( empty( $release ) ) {
 			return;
 		}
+
+		global $wpdb;
 
 		// Increase specific release ID count
 		$wpdb->query(

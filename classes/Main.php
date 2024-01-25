@@ -8,6 +8,7 @@
 namespace Solidie;
 
 use Solidie\Helpers\_Array;
+use Solidie\Helpers\Utilities;
 use Solidie\Setup\Dispatcher;
 use Solidie\Setup\Scripts;
 use Solidie\Setup\AdminPage;
@@ -39,7 +40,6 @@ class Main {
 		// Store configs in runtime static property
 		self::$configs           = $configs;
 		self::$configs->dir      = dirname( $configs->file ) . '/';
-		self::$configs->has_pro  = false;
 		self::$configs->basename = plugin_basename( $configs->file );
 
 		// Loading Autoloader
@@ -50,10 +50,7 @@ class Main {
 		self::$configs = (object) array_merge( $manifest, (array) self::$configs );
 
 		// Prepare the unique app name
-		$pattern = '/\/([^\/]+)\/wp-content\/(plugins|themes)\/([^\/]+)\/.*/';
-		preg_match( $pattern, self::$configs->url, $matches );
-		$parsed_string         = strtolower( "CrewMat_{$matches[1]}_{$matches[3]}" );
-		self::$configs->app_id = preg_replace( '/[^a-zA-Z0-9_]/', '', $parsed_string );
+		self::$configs->app_id = Utilities::getSolidieId( self::$configs->url );
 
 		// Register Activation/Deactivation Hook
 		register_activation_hook( self::$configs->file, array( $this, 'activate' ) );
@@ -67,14 +64,6 @@ class Main {
 		new AdminPage();
 		new Media();
 		new Cron();
-
-		// Set pro flag
-		add_action(
-			'solidie_pro_loaded',
-			function() {
-				self::$configs->has_pro = true;
-			}
-		);
 
 		do_action( 'solidie_loaded' );
 	}

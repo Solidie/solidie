@@ -13,6 +13,12 @@ use Solidie\Main;
  * The class
  */
 class Utilities {
+	
+	/**
+	 * Pro plugin path constant
+	 */
+	const PRO_PATH = 'solidie-pro/solidie-pro.php';
+	const PRO_DIR  = 'solidie-pro';
 
 	/**
 	 * Check if the page is a Crew Dashboard
@@ -34,5 +40,46 @@ class Utilities {
 		}
 
 		return $is_dashboard;
+	}
+
+	/**
+	 * Check if Solidie Pro version installed or not
+	 *
+	 * @param boolean $check_active
+	 * @return boolean
+	 */
+	public static function isProInstalled( $check_active = false ) {
+
+		$plugins_dir = self::getPluginsDir();
+
+		if ( is_dir( $plugins_dir . self::PRO_DIR ) ) {
+			return true && ( ! $check_active || class_exists( 'Solidie_Pro\Main' ) );
+		}
+		
+		return false;
+	}
+
+	/**
+	 * Get WP plugins directory path
+	 *
+	 * @return string
+	 */
+	public static function getPluginsDir() {
+		return trailingslashit( trailingslashit( WP_CONTENT_DIR ) . 'plugins' );
+	}
+
+	/**
+	 * Get unique ID to point solid app in any setup
+	 *
+	 * @return void
+	 */
+	public static function getSolidieId( $url ) {
+		$pattern = '/\/([^\/]+)\/wp-content\/(plugins|themes)\/([^\/]+)\/.*/';
+		preg_match( $pattern, $url, $matches );
+
+		$parsed_string = strtolower( "CrewMat_{$matches[1]}_{$matches[3]}" );
+		$app_id        = preg_replace( '/[^a-zA-Z0-9_]/', '', $parsed_string );
+
+		return $app_id;
 	}
 }

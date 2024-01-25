@@ -105,7 +105,12 @@ class Dispatcher {
 		// Nonce verification
 		$matched = wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ?? '' ) ), sanitize_text_field( wp_unslash( $_POST['nonce_action'] ?? '' ) ) );
 		$matched = $matched || wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['nonce'] ?? '' ) ), sanitize_text_field( wp_unslash( $_GET['nonce_action'] ?? '' ) ) );
-		if ( ! $matched ) {
+		$is_post = strtolower( sanitize_text_field( wp_unslash( $_SERVER['REQUEST_METHOD'] ?? '' ) ) ) === 'post';
+		
+		// We can't really restrict GET requests for nonce. 
+		// Because GET requests usually comes from bookmarked URL or direct links where nonce doesn't really make any sense. 
+		// Rather we've enhanced security by verifying accepted argument data types, sanitizing and escaping in all cases.
+		if ( $is_post && ! $matched ) {
 			wp_send_json_error( array( 'message' => esc_html__( 'Nonce verification failed!', 'solidie' ) ) );
 		}
 
@@ -122,7 +127,6 @@ class Dispatcher {
 		}
 
 		// Prepare request data
-		$is_post = strtolower( sanitize_text_field( wp_unslash( $_SERVER['REQUEST_METHOD'] ?? '' ) ) ) === 'post';
 		$params  = _Array::getMethodParams( $class, $method );
 
 		// Pick only the used arguments in the mathod from request data
@@ -136,8 +140,24 @@ class Dispatcher {
 
 		// Now verify all the arguments expected data types after casting
 		foreach ( $args as $name => $value ) {
-			if ( gettype( $value ) != $params[ $name ]['type'] ) {
-				wp_send_json_error( array( 'message' => esc_html__( 'Invalid request data!', 'solidie' ) ) );
+
+			// The request data value
+			$arg_type = gettype( $value );
+
+			// The accepted type by the method
+			$param_type = $params[ $name ]['type'];
+
+			// Check if request data type and accepted type matched
+			if ( $arg_type != $param_type ) {
+
+				// If not matched, however accpets string but passed int, then convert the int to string and pass to the method.
+				// Because in some cases both content ID and content slug maybe passed to same variable, especially when visiting single content page.
+				// And in fact there's no issue to treat a numeric value as string in this plugin so far.
+				if ( 'string' === $param_type && 'integer' === $arg_type ) {
+					$args[ $name ] = ( string ) $value;
+				} else {
+					wp_send_json_error( array( 'message' => esc_html__( 'Invalid request data!', 'hr-management' ) ) );
+				}
 			}
 		}
 
