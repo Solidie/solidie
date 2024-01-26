@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState } from 'react';
 import { HashRouter, Navigate, Route, Routes, useParams } from 'react-router-dom';
 
 import { WpDashboardFullPage } from 'crewhrm-materials/backend-dashboard-container/full-page-container.jsx';
-import { __ } from 'crewhrm-materials/helpers.jsx';
+import { __, data_pointer } from 'crewhrm-materials/helpers.jsx';
 import { request } from 'crewhrm-materials/request.jsx';
 import { ContextHistoryFields, HistoryFields } from 'crewhrm-materials/undo-redo.jsx';
 import { ContextToast } from 'crewhrm-materials/toast/toast.jsx';
@@ -13,6 +13,8 @@ import { Segments } from './segments/segments.jsx';
 import { settings_fields } from './field-structure.jsx';
 
 import segment_style from './segments/segments.module.scss';
+
+const {readonly_mode} = window[data_pointer];
 
 export const ContextSettings = createContext();
 
@@ -70,7 +72,7 @@ function Wrapper({ children }) {
 				<button
 					className={'button button-primary'.classNames()}
 					onClick={saveSettings}
-					disabled={!can_go_next}
+					disabled={readonly_mode || !can_go_next}
 				>
 					{__('Save All Changes')} <LoadingIcon show={savingState}/>
 				</button>

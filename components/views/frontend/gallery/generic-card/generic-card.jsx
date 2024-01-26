@@ -10,19 +10,19 @@ export function GenericCard({contents=[]}) {
 	return <div className={'generic-card'.classNames(style)}>
 		<ResponsiveLayout columnWidth={300}>
 			{contents.map(content=>{
-				const {content_id, content_url, media={}, content_title} = content;
+				const {content_id, content_permalink, media={}, content_title} = content;
 
 				return <div key={content_id} className={'d-flex flex-direction-column justify-content-space-between border-radius-5'.classNames()} style={{boxShadow: '1px 1px 4px #0000002e'}}>
 					<div>
 						<Ratio x={16} y={9}>
 							<Link 
-								to={content_url}
+								to={content_permalink}
 								className={'d-block width-p-100 height-p-100 cursor-pointer'.classNames() + 'thumbnail'.classNames(style)} 
 								style={{backgroundImage: 'url('+media?.thumbnail?.file_url+')'}}/>
 						</Ratio>
 
 						<div className={'padding-vertical-15 padding-horizontal-20'.classNames()}>
-							<Link to={content_url} className={'d-block font-size-17 font-weight-400 color-text cursor-pointer'.classNames()}>
+							<Link to={content_permalink} className={'d-block font-size-17 font-weight-400 color-text cursor-pointer'.classNames()}>
 								{content_title}
 							</Link>
 						</div>

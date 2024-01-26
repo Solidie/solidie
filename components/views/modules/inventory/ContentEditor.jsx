@@ -13,6 +13,8 @@ import { InventoryWrapper } from "./index.jsx";
 import { getFlattenedCategories } from "../../admin-dashboard/settings/content-types/contents.jsx";
 import { DoAction } from "crewhrm-materials/mountpoint.jsx";
 
+const {readonly_mode} = window[data_pointer];
+
 var audio_extensions = [
 	'.mp3',
 	'.aac',
@@ -56,6 +58,8 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 
 	const [state, setState] = useState({
 		submitting: false,
+		slug_editor: false,
+		updating_slug: false,
 		fetching: false,
 		error_message: null,
 		values: initial_values,
@@ -161,7 +165,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 
 			if ( success ) {
 				addToast({
-					message: <span>{message} <a href={content.content_url} target="_blank">{__('Visit Now')}</a></span>,
+					message: <span>{message} <a href={content.content_permalink} target="_blank">{__('Visit Now')}</a></span>,
 					dismissible: true,
 					status: 'success'
 				});
@@ -204,6 +208,8 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 
 				values.content_title       = content.content_title;
 				values.content_description = content.content_description;
+				values.content_permalink   = content.content_permalink;
+				values.content_slug        = content.content_slug;
 				values.category_id         = content.category_id;
 				values.thumbnail           = content.media.thumbnail;
 				values.preview             = content.media.preview;
@@ -231,6 +237,32 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 				update_title: values.content_title,
 				fetching: false,
 				error_message: success ? null : message
+			});
+		});
+	}
+
+	const updateSlug=()=>{
+		
+		setState({
+			...state,
+			updating_slug: true
+		});
+
+		const {content_slug} = state.values;
+		request('updateContentSlug', {content_id, content_slug}, resp=>{
+
+			const {success, data:{ content_slug, content_permalink }} = resp;
+
+			ajaxToast(resp);
+
+			setState({
+				updating_slug: false,
+				slug_editor: success ? false : state.slug_editor,
+				values: {
+					...state.values,
+					content_slug: success ? content_slug : state.values.content_slug,
+					content_permalink: success ? content_permalink: state.values.content_permalink
+				}
 			});
 		});
 	}
@@ -278,53 +310,92 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 								options=[]
 							} = field;
 
-							return (type=='dropdown' && isEmpty(options)) ? null : 
-							<div key={name} className={'margin-bottom-15'.classNames()}>
-								<strong className={'d-block font-weight-600'.classNames()}>
-									{label}{required ? <span className={'color-error'.classNames()}>*</span> : null}
-								</strong>
+							return (type=='dropdown' && isEmpty(options)) ? null : <div key={name}>
+								<div className={`${name=='content_title' ? '' : 'margin-bottom-15'}`.classNames()}>
+									<strong className={'d-block font-weight-600'.classNames()}>
+										{label}{required ? <span className={'color-error'.classNames()}>*</span> : null}
+									</strong>
+
+									{
+										!hint ? null :
+										<small className={'d-block'.classNames()}>
+											{hint}
+										</small>
+									}
+
+									{
+										'text' !=type ? null :
+										<TextField 
+											type={type}
+											placeholder={placeholder} 
+											onChange={v=>setVal(name, v)}
+											value={state.values[name]}/>
+									}
+
+									{
+										'textarea' !== type ? null :
+										<TextEditor
+											placeholder={__('Write description..')}
+											value={state.values[name]}
+											onChange={v=>setVal(name, v)}/>
+									}
+
+									{
+										'file' !== type ? null :
+										<FileUpload 
+											accept={accept}
+											onChange={v=>setVal(name, v)}
+											maxlenth={maxlenth}
+											value={state.values[name] || null}
+											removable={removable}/>
+									}
+
+									{
+										'dropdown' !== type ? null :
+										<DropDown
+											placeholder={placeholder}
+											value={state.values[name]}
+											options={options}
+											onChange={value=>setVal(name, value)}/>
+									}
+								</div>
 
 								{
-									!hint ? null :
-									<small className={'d-block'.classNames()}>
-										{hint}
-									</small>
-								}
+									(name != 'content_title' || !state.values.content_slug) ? null : 
+									<div 
+										className={'d-flex align-items-center flex-wrap-wrap flex-direction-row column-gap-5'.classNames()}
+										style={{margin: '3px 0 15px', height: '34px'}}
+									>
+										<a 
+											href={state.values.content_permalink} 
+											target='_blank'
+										>
+											{window[data_pointer].permalinks.gallery[content_type]}{state.slug_editor ? null : <><strong>{state.values.content_slug}</strong>/</>}
+										</a>
 
-								{
-									'text' !=type ? null :
-									<TextField 
-										type={type}
-										placeholder={placeholder} 
-										onChange={v=>setVal(name, v)}
-										value={state.values[name]}/>
-								}
-
-								{
-									'textarea' !== type ? null :
-									<TextEditor
-										placeholder={__('Write description..')}
-										value={state.values[name]}
-										onChange={v=>setVal(name, v)}/>
-								}
-
-								{
-									'file' !== type ? null :
-									<FileUpload 
-										accept={accept}
-										onChange={v=>setVal(name, v)}
-										maxlenth={maxlenth}
-										value={state.values[name] || null}
-										removable={removable}/>
-								}
-
-								{
-									'dropdown' !== type ? null :
-									<DropDown
-										placeholder={placeholder}
-										value={state.values[name]}
-										options={options}
-										onChange={value=>setVal(name, value)}/>
+										{
+											!state.slug_editor ? 
+												<i 
+													className={'ch-icon ch-icon-edit-2 cursor-pointer font-size-18'.classNames()}
+													onClick={()=>setState({...state, slug_editor: true})}></i>
+												:
+												<>
+													<TextField 
+														style={{width: '170px', height: '30px'}}
+														value={state.values.content_slug}
+														autofocus={true}
+														onChange={content_slug=>setVal('content_slug', content_slug)}
+													/>
+													<button 
+														className={'button button-primary button-outlined button-small'.classNames()}
+														onClick={updateSlug}
+														disabled={readonly_mode}
+													>
+														{__('Update')} <LoadingIcon show={state.updating_slug}/>
+													</button>
+												</>
+										}
+									</div>
 								}
 							</div>
 						})
@@ -341,7 +412,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 					
 					<div className={'text-align-right'.classNames()}>
 						<button 
-							disabled={state.submitting} 
+							disabled={readonly_mode || state.submitting} 
 							className={'button button-primary'.classNames()} 
 							onClick={submit}
 						>

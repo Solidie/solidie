@@ -21,8 +21,8 @@ export function VideoLayout({contents=[]}) {
 				return <div className={'flex-1 d-flex flex-direction-column row-gap-5'.classNames()} key={index}>
 					{
 						video.map(content=>{
-							const {media={}, content_id, content_slug, content_url} = content;
-							return <Link key={content_id} to={content_url}>
+							const {media={}, content_id, content_slug, content_permalink} = content;
+							return <Link key={content_id} to={content_permalink}>
 								<div className={'position-relative cursor-pointer'.classNames() + 'single-video'.classNames(style)}>
 									<video 
 										className={'d-block width-p-100 height-auto'.classNames()} 

@@ -11,6 +11,7 @@ use Solidie\Helpers\Colors;
 use Solidie\Helpers\Utilities;
 use Solidie\Main;
 use Solidie\Models\AdminSetting;
+use Solidie\Models\Contents;
 
 // To Do: Load frontend scripts only in gallery and single content page when not in development mode
 // To Do: Load frontend dashboard script only in the dashboard
@@ -82,6 +83,7 @@ class Scripts {
 				'text_domain'      => Main::$configs->text_domain,
 				'date_format'      => get_option( 'date_format' ),
 				'time_format'      => get_option( 'time_format' ),
+				'readonly_mode'    => apply_filters( 'solidie_readonly_mode', false ), // It's for solidie demo site only. No other use is expected.
 				'settings'         => array(
 					'contents' => AdminSetting::getContentSettings(),
 					'general'  => array(
@@ -91,6 +93,7 @@ class Scripts {
 				'permalinks'       => array(
 					'content_types' => admin_url( 'admin.php?page=' . AdminPage::CONTENT_TYPES_SLUG ),
 					'dashboard'     => admin_url( 'admin.php?page=' . Main::$configs->root_menu_slug ),
+					'gallery'       => Contents::getGalleryPermalink()
 				),
 			)
 		);

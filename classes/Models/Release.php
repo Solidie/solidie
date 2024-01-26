@@ -178,7 +178,7 @@ class Release {
 			$release['file_url']     = $file_url;
 			$release['file_name']    = $file_path ? basename( $file_path ) : null;
 			$release['mime_type']    = get_post_mime_type( $release['file_id'] );
-			$release['content_url']  = Contents::getPermalink( $release['content_id'] );
+			$release['content_permalink']  = Contents::getPermalink( $release['content_id'] );
 
 			// Store the release in the new array
 			$new_array[] = $release;

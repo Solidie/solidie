@@ -54,13 +54,12 @@ class Contents {
 			);
 			$content['content_id'] = $wpdb->insert_id;
 
-			// Set default content slug
+			// Set content slug
 			if ( ! empty( $wpdb->insert_id ) && is_numeric( $wpdb->insert_id ) ) {
-				Field::contents()->updateField(
-					array( 'content_slug' => $content['content_type'] . '-' . $wpdb->insert_id ),
-					array( 'content_id' => $wpdb->insert_id )
-				);
+				// Generate content slug
+				self::setContentSlug( $content['content_id'], $content['content_title'] );
 			}
+
 		} else {
 			// Update the content as content ID exists
 			Field::contents()->updateField(
@@ -156,6 +155,40 @@ class Contents {
 		do_action( $hook, $content_id, $content, $content_data );
 
 		return $content_id;
+	}
+
+	/**
+	 * Set content slug
+	 *
+	 * @param int        $content_id The content ID to set slug for
+	 * @param string|int $content_slug The slug to set for the job
+	 * 
+	 * @return string
+	 */
+	public static function setContentSlug( $content_id, $content_slug, $update_row = true ) {
+		$content_slug = _String::consolidate( ( string ) $content_slug, true );
+		$content_slug = strtolower( str_replace( ' ', '-', $content_slug ) );
+		$content_slug = preg_replace( '/[^A-Za-z\-]/u', '', $content_slug );
+		$content_slug = empty( $content_slug ) ? 'content' : $content_slug;
+		$content_slug = preg_replace( '/-+/', '-', $content_slug );
+		
+		$new_slug = $content_slug;
+		$index    = 0;
+		
+		// Get the slug until it's not avaialble in database
+		while ( $content_id != self::getContentIdBySlug( $new_slug, $content_id ) ) {
+			$index++;
+			$new_slug = $content_slug . '-' . $index;
+		}
+
+		if ( $update_row ) {
+			Field::contents()->updateField(
+				array( 'content_slug' => $new_slug ),
+				array( 'content_id' => $content_id )
+			);
+		}
+		
+		return $new_slug;
 	}
 
 	/**
@@ -337,9 +370,17 @@ class Contents {
 	 * @param string $content_type The content type to get gallery permalink for
 	 * @return string
 	 */
-	public static function getGalleryPermalink( string $content_type ) {
-		$base_slug = AdminSetting::get( 'contents.' . $content_type . '.slug' );
-		return get_home_url() . '/' . trim( $base_slug, '/' ) . '/';
+	public static function getGalleryPermalink( $content_type = null ) {
+
+		$home       = get_home_url();
+		$contents   = AdminSetting::get( 'contents' );
+		$permalinks = array();
+
+		foreach ( $contents as $type => $content ) {
+			$permalinks[ $type ] = $home . '/' . $content['slug'] . '/';
+		}
+
+		return $content_type ? ( $permalinks[ $content_type ] ?? null ) : $permalinks;
 	}
 
 	/**
@@ -477,7 +518,7 @@ class Contents {
 
 		foreach ( $contents as $index => $content ) {
 			// Content permalink
-			$contents[ $index ]['content_url'] = self::getPermalink( $content );
+			$contents[ $index ]['content_permalink'] = self::getPermalink( $content );
 
 			// Releases no matter app or other content type as the structure is same always
 			$contents[ $index ]['releases'] = Release::getReleases( (int) $content['content_id'] );
@@ -528,10 +569,12 @@ class Contents {
 	 * Get content ID by slug
 	 *
 	 * @param string $slug The content slug to get content by
+	 * @param mixed $fallback The fallback if content ID not found
+	 *
 	 * @return int|null
 	 */
-	public static function getContentIdBySlug( string $slug ) {
-		return Field::contents()->getField( array( 'content_slug' => $slug ), 'content_id' );
+	public static function getContentIdBySlug( string $slug, $fallback = null ) {
+		return Field::contents()->getField( array( 'content_slug' => $slug ), 'content_id', $fallback );
 	}
 
 	/**

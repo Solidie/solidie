@@ -26,6 +26,7 @@ class ContentController {
 			'nopriv' => true,
 		),
 		'createOrUpdateContent' => array(),
+		'updateContentSlug'     => array(),
 		'deleteContent'         => array(),
 		'getSingleContent'      => array(
 			'nopriv' => true,
@@ -99,6 +100,23 @@ class ContentController {
 	}
 
 	/**
+	 * Update content slug
+	 *
+	 * @param integer $content_id The content ID to update slug for
+	 * @param string $content_slug The content slug to set
+	 * @return void
+	 */
+	public static function updateContentSlug( int $content_id, string $content_slug ) {
+		$new_slug = Contents::setContentSlug( $content_id, $content_slug );
+		wp_send_json_success(
+			array(
+				'content_permalink' => Contents::getPermalink( $content_id ),
+				'content_slug' => $new_slug,
+			)
+		);
+	}
+
+	/**
 	 * Delete content
 	 *
 	 * @param int $content_id The content ID to delete by
@@ -130,7 +148,13 @@ class ContentController {
 		$content = $content_id ? Contents::getContentByContentID( $content_id, null, false ) : null;
 
 		if ( ! empty( $content ) ) {
-			wp_send_json_success( array( 'content' => $content ) );
+			wp_send_json_success(
+				array(
+					'content' => $content, 
+					'free_content_plan_label'       => apply_filters( 'solidie_free_content_plan_label', __( 'Free', 'solidie' ), $content ),
+					'free_content_plan_description' => apply_filters( 'solidie_free_content_plan_description', __( 'This content is eligible to download for free', 'solidie' ), $content )
+				)
+			);
 		}
 
 		wp_send_json_error( array( 'message' => esc_html__( 'Content not found', 'solidie' ) ) );

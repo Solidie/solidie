@@ -14,6 +14,8 @@ import { getDashboardPath } from 'solidie-materials/helpers.jsx';
 import table_style from 'solidie-materials/styles/table.module.scss';
 import style from './inventory.module.scss';
 
+const {readonly_mode} = window[data_pointer];
+
 export function InventoryWrapper({children, content_label, gallery_permalink, navigate, params={}}) {
 
 	const {content_type} = params;
@@ -276,7 +278,7 @@ export function Inventory({navigate, params={}}) {
 									let {
 										content_id, 
 										content_title, 
-										content_url, 
+										content_permalink, 
 										media, 
 										created_at, 
 										content_status, 
@@ -299,7 +301,7 @@ export function Inventory({navigate, params={}}) {
 												}
 												
 												<div className={'flex-1'.classNames()}>
-													<a href={content_url} target='_blank' className={"d-block font-size-14 font-weight-600".classNames()}>
+													<a href={content_permalink} target='_blank' className={"d-block font-size-14 font-weight-600".classNames()}>
 														{content_title}
 													</a>
 													<div className={'actions'.classNames(style) + 'd-flex align-items-center column-gap-10 margin-top-10'.classNames()}>
@@ -314,7 +316,7 @@ export function Inventory({navigate, params={}}) {
 														<span
 															className={'action'.classNames(style) + 'cursor-pointer d-inline-flex align-items-center column-gap-8'.classNames()}
 															title={__('Delete')}
-															onClick={()=>deleteContent(content_id)}
+															onClick={()=>!readonly_mode && deleteContent(content_id)}
 														>
 															<i className={'ch-icon ch-icon-trash color-error font-size-15'.classNames()}></i> {__('Delete')}
 														</span>

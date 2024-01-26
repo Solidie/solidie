@@ -25,11 +25,14 @@ const preview_renderers = {
 }
 
 function FreeDownlod( props ) {
-	const {content} = props;
+	const {content, free_content_plan_label, free_content_plan_description} = props;
 	return <div className={'border-1 b-color-tertiary border-radius-5 padding-horizontal-15 padding-vertical-20'.classNames()}>
 		<strong className={'d-block font-size-15 color-text font-weight-500 margin-bottom-15'.classNames()}>
-			{__('Free')}
+			{free_content_plan_label}
 		</strong>
+		<span className={'d-block'.classNames()}>
+			{free_content_plan_description}
+		</span>
 		<a 
 			href={(content?.releases || [])[0]?.download_url} 
 			className={'button button-primary button-outlined button-full-width'.classNames()}
@@ -56,10 +59,20 @@ export function SingleWrapper() {
 		});
 
 		request('getSingleContent', {content_slug}, resp=>{
-			const {success, data:{content, message=__('Something went wrong')}} = resp;
+			const {
+				success, 
+				data:{
+					content, 
+					free_content_plan_label,
+					free_content_plan_description,
+					message=__('Something went wrong')
+				}
+			} = resp;
 
 			setState({
 				...state,
+				free_content_plan_label,
+				free_content_plan_description,
 				content: success ? content : {},
 				error_message: success ? null : message
 			});
@@ -118,7 +131,11 @@ export function SingleWrapper() {
 			<div style={{width: '300px'}}>
 				<RenderExternal 
 					component={applyFilters('free_download_button', FreeDownlod, state.content)}
-					payload={{content: state.content}}/>
+					payload={{
+						content: state.content, 
+						free_content_plan_label: state.free_content_plan_label,
+						free_content_plan_description: state.free_content_plan_description
+					}}/>
 			</div>
 		</div>
 	</div>

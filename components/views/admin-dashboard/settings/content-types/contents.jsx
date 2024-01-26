@@ -13,6 +13,8 @@ import { DoAction } from 'crewhrm-materials/mountpoint.jsx';
 import table_style from 'solidie-materials/styles/table.module.scss';
 import style from './contents.module.scss';
 
+const {readonly_mode} = window[data_pointer];
+
 export const getFlattenedCategories=(categories=[], exclude_level=null)=>{
 	const options = [];
 
@@ -187,7 +189,7 @@ export function ContentSettings(props) {
 					<button 
 						className={'button button-primary'.classNames()} 
 						onClick={saveCat}
-						disabled={isEmpty(catState.editor.category_name)}
+						disabled={readonly_mode || isEmpty(catState.editor.category_name)}
 					>
 						{!catState.editor.category_id ? __('Create') : __('Update')} <LoadingIcon show={catState.saving}/>
 					</button>
@@ -254,8 +256,8 @@ export function ContentSettings(props) {
 												const {label, category_id} = category;
 												return <div key={category_id} className={'d-flex align-items-center column-gap-15'.classNames() + 'category-single'.classNames(style)}>
 													{label} <span className={'d-inline-flex align-items-center column-gap-8'.classNames() + 'actions'.classNames(style)}>
-														<i className={'ch-icon ch-icon-edit-2 cursor-pointer'.classNames()} onClick={()=>openCatEditor(category)}></i>
-														<i className={'ch-icon ch-icon-trash cursor-pointer'.classNames()} onClick={()=>deleteCategory(category_id)}></i>
+														<i className={'ch-icon ch-icon-edit-2 cursor-pointer'.classNames()} onClick={()=>!readonly_mode && openCatEditor(category)}></i>
+														<i className={'ch-icon ch-icon-trash cursor-pointer'.classNames()} onClick={()=>!readonly_mode && deleteCategory(category_id)}></i>
 													</span>
 												</div>
 											})
@@ -297,7 +299,7 @@ export function ContentSettings(props) {
 				<button 
 					className={'button button-primary'.classNames()}
 					onClick={saveOptions} 
-					disabled={state.saving}
+					disabled={readonly_mode || state.saving}
 				>
 					{__('Update Content Types')} <LoadingIcon show={state.saving}/>
 				</button>
