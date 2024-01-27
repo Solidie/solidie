@@ -50,22 +50,11 @@ class Utilities {
 	 */
 	public static function isProInstalled( $check_active = false ) {
 
-		$plugins_dir = self::getPluginsDir();
-
-		if ( file_exists( $plugins_dir . self::PRO_PATH ) ) {
-			return true && ( ! $check_active || is_plugin_active( 'solidie-pro/solidie-pro.php' ) );
+		if ( file_exists( trailingslashit( WP_PLUGIN_DIR ) . self::PRO_PATH ) ) {
+			return true && ( ! $check_active || is_plugin_active( self::PRO_PATH ) );
 		}
 		
 		return false;
-	}
-
-	/**
-	 * Get WP plugins directory path
-	 *
-	 * @return string
-	 */
-	public static function getPluginsDir() {
-		return trailingslashit( trailingslashit( WP_CONTENT_DIR ) . 'plugins' );
 	}
 
 	/**

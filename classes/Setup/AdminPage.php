@@ -37,11 +37,14 @@ class AdminPage {
 	 * @return void
 	 */
 	public function registerMenu() {
+
+		$role = apply_filters( 'solidie_administrative_role', 'administrator' );
+
 		// Main page
 		add_menu_page(
 			esc_html__( 'Solidie', 'solidie' ),
 			esc_html__( 'Solidie', 'solidie' ),
-			'administrator',
+			$role,
 			Main::$configs->root_menu_slug,
 			array( $this, 'homePage' ),
 			Main::$configs->dist_url . 'libraries/menu-icon.svg'
@@ -52,7 +55,7 @@ class AdminPage {
 			Main::$configs->root_menu_slug,
 			esc_html__( 'Home', 'solidie' ),
 			esc_html__( 'Home', 'solidie' ),
-			'administrator',
+			$role,
 			Main::$configs->root_menu_slug,
 			array( $this, 'homePage' )
 		);
@@ -62,7 +65,7 @@ class AdminPage {
 			Main::$configs->root_menu_slug,
 			esc_html__( 'Inventory', 'solidie' ),
 			esc_html__( 'Inventory', 'solidie' ),
-			'administrator',
+			$role,
 			self::INVENTORY_SLUG,
 			array( $this, 'inventoryPage' )
 		);
@@ -72,7 +75,7 @@ class AdminPage {
 			Main::$configs->root_menu_slug,
 			esc_html__( 'Content Types', 'solidie' ),
 			esc_html__( 'Content Types', 'solidie' ),
-			'administrator',
+			$role,
 			self::CONTENT_TYPES_SLUG,
 			array( $this, 'contentTypesPage' )
 		);
@@ -82,7 +85,7 @@ class AdminPage {
 			Main::$configs->root_menu_slug,
 			esc_html__( 'Settings', 'solidie' ),
 			esc_html__( 'Settings', 'solidie' ),
-			'administrator',
+			$role,
 			self::SETTINGS_SLUG,
 			array( $this, 'settingsPage' )
 		);

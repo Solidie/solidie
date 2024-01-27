@@ -7,6 +7,7 @@
 
 namespace Solidie\Setup;
 
+use Solidie\Helpers\Utilities;
 use Solidie\Main;
 
 class Promotion {
@@ -17,13 +18,25 @@ class Promotion {
 
 	public function proInstallLink( array $actions ) {
 		
-		$action = self::getPluginAction( 'solidie-pro/solidie-pro.php', __( 'Pro', 'solidie' ) );
-		if ( ! empty( $action ) ) {
-			$actions['solidie_pro_action_link'] = '<a href="' . esc_url( $action['action_link'] ) . '">
+		// If not even exists in file system
+		if ( ! Utilities::isProInstalled( false ) ) {
+			$actions['solidie_pro_action_link'] = '<a href="https://solidie.com" target="_blank">
 				<span style="color: #ff7742; font-weight: bold;">' .
-					$action['action_label'] .
+					__( 'Upgrade to Pro', 'solidie' ) .
 				'</span>
 			</a>';
+
+		} else if( ! Utilities::isProInstalled( true ) ) {
+
+			// If exists, but not active
+			$action = self::getPluginAction( Utilities::PRO_PATH, __( 'Pro', 'solidie' ) );
+			if ( ! empty( $action ) ) {
+				$actions['solidie_pro_action_link'] = '<a href="' . esc_url( $action['action_link'] ) . '">
+					<span style="color: #ff7742; font-weight: bold;">' .
+						$action['action_label'] .
+					'</span>
+				</a>';
+			}
 		}
 		
 		return $actions;
