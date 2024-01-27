@@ -75,19 +75,22 @@ export function ProInstaller() {
 			:
 			<div>
 				<strong>
-					{
-						is_local ? 
-							__('Whooaa! Solidie Pro is forever free for local site.') : 
-							__('Whooaa! This site is eligible to get Solidie Pro without buying for one month.')
-					}
+					{__('Solidie has a pro version with all the extensive features like content monetization, third party contributors and so on.')}
 				</strong>
-				<button 
+				<a 
 					className={'button button-primary'.classNames()}
-					disabled={state.in_progress}
-					onClick={()=>take_action('install')}
+					href={'https://demo.solidie.com'}
 				>
-					{__('Install Now')} <LoadingIcon show={state.in_progress}/>
-				</button>
+					{__('Live Demo')} <LoadingIcon show={state.in_progress}/>
+				</a>
+				
+				<a 
+					className={'button button-primary'.classNames()}
+					href='https://demo.solidie.com'
+					target="_blank"
+				>
+					{__('Buy Now')}
+				</a>
 			</div>
 		}
 	</div>

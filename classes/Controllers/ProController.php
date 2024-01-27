@@ -8,7 +8,6 @@
 namespace Solidie\Controllers;
 
 use Solidie\Helpers\Utilities;
-use Solidie\Models\ProInstaller;
 
 /**
  * Pro controller class
@@ -46,31 +45,7 @@ class ProController {
 
 			wp_send_json_success( array( 'message' => __( 'Solidie Pro has been activated successfully', 'solidie' ) ) );
 		}
-
-		// Download and then activate
-		if ( 'install' === $action_name ) {
-			
-			// Check if activated already somehow
-			if ( Utilities::isProInstalled( true ) ) {
-				wp_send_json_success( array( 'message' => __( 'Solidie Pro is active already!', 'solidie' ) ) );
-			}
-
-			// Check if it is installed meanwhile
-			if ( Utilities::isProInstalled( false ) ) {
-				wp_send_json_error( array( 'message' => __( 'Solidie Pro was not found to activate', 'solidie' ) ) );
-
-			} else {
-				// As not installed meanwhile, download it
-				$message = ProInstaller::download();
-				
-				if ( true !== $message ) {
-					wp_send_json_error( array( 'message' => ! empty( $message ) ? $message : __( 'Something went wrong', 'solidie' ) ) );
-				}
-			}
-
-			activate_plugin( Utilities::PRO_PATH );
-
-			wp_send_json_success( array( 'message' => __( 'Solidie Pro has been installed and activated successfully', 'solidie' ) ) );
-		}
+		
+		wp_send_json_error( array( 'message' => __( 'Invalid Action', 'solidie' ) ) );
 	}
 }

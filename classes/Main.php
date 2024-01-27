@@ -15,6 +15,7 @@ use Solidie\Setup\AdminPage;
 use Solidie\Setup\Cron;
 use Solidie\Setup\Database;
 use Solidie\Setup\Media;
+use Solidie\Setup\Promotion;
 use Solidie\Setup\Route;
 
 /**
@@ -65,6 +66,7 @@ class Main {
 		new AdminPage();
 		new Media();
 		new Cron();
+		new Promotion();
 
 		do_action( 'solidie_loaded' );
 	}
