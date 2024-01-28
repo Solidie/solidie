@@ -6,7 +6,22 @@ import { ProInstaller } from "./pro-installer.jsx";
 
 import logo_svg from '../../../images/logo.svg';
 
-import style from './home.module.scss';
+const {permalinks} = window[data_pointer];
+
+const quick_links = [
+	{
+		label: __('Inventory'),
+		link: permalinks.inventory_backend
+	},
+	{
+		label: __('Content Types'),
+		link: permalinks.content_types
+	},
+	{
+		label: __('Settings'),
+		link: permalinks.settings
+	}
+];
 
 export function HomeBackend() {
 	
@@ -28,6 +43,28 @@ export function HomeBackend() {
 			<span className={'d-block font-size-16 color-text-light'.classNames()}>
 				{__('Your own Stock Empire')}
 			</span>
+		</div>
+
+		<br/>
+		<br/>
+		<div>
+			<strong className={'d-block font-size-16 font-weight-500 margin-bottom-10'.classNames()}>
+				{__('Quick Links')}
+			</strong>
+
+			<div className={'d-flex column-gap-15'.classNames()}>
+				{
+					quick_links.map((link, index)=>{
+						return <a 
+							key={index} 
+							href={link.link}
+							className={'flex-1 d-block padding-vertical-40 border-1 b-color-tertiary cursor-pointer text-align-center font-size-14 font-weight-400 border-radius-8 bg-color-white color-text'.classNames()}
+						>
+							{link.label}
+						</a>
+					})
+				}
+			</div>
 		</div>
 
 		{

@@ -17,6 +17,7 @@ use Solidie\Setup\Database;
 use Solidie\Setup\Media;
 use Solidie\Setup\Promotion;
 use Solidie\Setup\Route;
+use Solidie\Setup\Welcome;
 
 /**
  * Main class to initiate app
@@ -60,6 +61,7 @@ class Main {
 
 		// Core Modules
 		new Database();
+		new Welcome();
 		new Route();
 		new Dispatcher();
 		new Scripts();

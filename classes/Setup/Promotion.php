@@ -17,6 +17,12 @@ class Promotion {
 	}
 
 	public function proInstallLink( array $actions ) {
+
+		$actions['solidie_dashboard_link'] = '<a href="' . esc_url( Utilities::getBackendPermalink( 'solidie' ) ) . '">
+			<span style="color: #00aa00; font-weight: bold;">' .
+				__( 'Dashboard', 'solidie' ) .
+			'</span>
+		</a>';
 		
 		// If not even exists in file system
 		if ( ! Utilities::isProInstalled( false ) ) {

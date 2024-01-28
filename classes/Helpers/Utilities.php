@@ -18,7 +18,6 @@ class Utilities {
 	 * Pro plugin path constant
 	 */
 	const PRO_PATH = 'solidie-pro/solidie-pro.php';
-	const PRO_DIR  = 'solidie-pro';
 
 	/**
 	 * Check if the page is a Crew Dashboard
@@ -70,5 +69,20 @@ class Utilities {
 		$app_id        = preg_replace( '/[^a-zA-Z0-9_]/', '', $parsed_string );
 
 		return $app_id;
+	}
+
+	/**
+	 * Generate admin page urls
+	 *
+	 * @param string $page
+	 * @return string
+	 */
+	public static function getBackendPermalink( string $page ) {
+		return add_query_arg(
+			array(
+				'page' => $page
+			),
+			admin_url( 'admin.php' )
+		);
 	}
 }
