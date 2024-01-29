@@ -204,7 +204,8 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 
 			const {values={}} = state;
 			if ( success ) {
-				const release = content.releases[0] || null;
+				
+				const release = content.release || null;
 
 				values.content_title       = content.content_title;
 				values.content_description = content.content_description;

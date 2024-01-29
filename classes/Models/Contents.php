@@ -521,7 +521,7 @@ class Contents {
 			$contents[ $index ]['content_permalink'] = self::getPermalink( $content );
 
 			// Releases no matter app or other content type as the structure is same always
-			$contents[ $index ]['releases'] = Release::getReleases( (int) $content['content_id'] );
+			$contents[ $index ]['release'] = Release::getRelease( (int) $content['content_id'] );
 		}
 
 		$contents = apply_filters( 'solidie_contents_meta', $contents );

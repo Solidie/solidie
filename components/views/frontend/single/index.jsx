@@ -34,7 +34,7 @@ function FreeDownlod( props ) {
 			{free_content_plan_description}
 		</span>
 		<a 
-			href={(content?.releases || [])[0]?.download_url} 
+			href={content?.release?.download_url} 
 			className={'button button-primary button-outlined button-full-width'.classNames()}
 		>
 			{__('Download')}
