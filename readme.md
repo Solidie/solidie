@@ -1,6 +1,9 @@
 ## Solidie
 
-Digital content stock plguin for WordPress.
+Digital content showcase and sales plugin for WordPress.
+
+## Production Deployment
+If you are here to get the production build, please [download from WordPress Plugin Directory](https://wordpress.org/plugins/solidie/). Or choose one from the release section in this repository.
 
 ## Dev environment setup
 - Open terminal at <kbd>~/wp-content/plugins/</kbd> directory

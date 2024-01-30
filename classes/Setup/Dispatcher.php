@@ -159,6 +159,13 @@ class Dispatcher {
 				// And in fact there's no issue to treat a numeric value as string in this plugin so far.
 				if ( 'string' === $param_type && 'integer' === $arg_type ) {
 					$args[ $name ] = (string) $value;
+
+				} else if ( 'array' === $param_type && 'integer' === $arg_type ) {
+					// Sometimes 0 can be passed instead of array
+					// Then use empty array rather
+					// So far the seneario has found when thumbnail is not set in content editor
+					$args[ $name ] = array();
+
 				} else {
 					wp_send_json_error( array( 'message' => esc_html__( 'Invalid request data!', 'hr-management' ) ) );
 				}

@@ -75,10 +75,17 @@ class Release {
 	 */
 	public static function pushRelease( array $data ) {
 		$content = Contents::getContentByContentID( $data['content_id'] );
+
 		if ( empty( $content ) ) {
 			return esc_html__( 'Content not found to release', 'solidie' );
 		}
 
+		if ( empty( $data['release_id'] ) && empty( $data['file'] ) ) {
+			// First release must need uploaded file.
+			// Return as both file and 
+			return esc_html__( 'First release must need downloadable file', 'solidie' );;
+		}
+		
 		$release = array(
 			'version'    => $data['version'],
 			'changelog'  => $data['changelog'],
@@ -88,7 +95,7 @@ class Release {
 		global $wpdb;
 
 		// Process file if exists.
-		if ( ! empty( $data['file'] ) ) {
+		if ( ! empty( $data['file'] ) && ! empty( $data['file']['tmp_name'] ) ) {
 			// Delete old file as release ID exists in the data array
 			if ( ! empty( $data['release_id'] ) ) {
 				self::deleteRelease( $data['release_id'], false );

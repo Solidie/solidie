@@ -1,7 +1,7 @@
-=== Solidie - Digital Content Showcase ===
+=== Solidie - Digital Content Stock ===
 Contributors: jayedul
-Donate Link: https://solidie.com/apps/solidie-pro
-Tags: multimedia, stock, marketplace, contributors, digital content, photography, video making, appstore, content, sales, subscription
+Donate Link: https://solidie.com/apps/solidie-pro/
+Tags: image stock, video stock, content marketplace, stock contributors, digital content, photography, video making, appstore, playstore, content sales, content subscription, apps subscription
 Requires at least: 5.3
 Tested up to: 6.4.2
 Requires PHP: 7.4
@@ -32,14 +32,6 @@ If you have any questions or problems using this plugin, you can write here in [
 
 There are several minified JavaScript file that are built with React JS and compiled with Webpack. If you want to access the unminified files for this plugin, you can do so from [here](https://github.com/Solidie/Solidie)
 
-== Screenshots ==
-
-1. Content management dashboard
-2. Single content editor
-3. Gallery
-4. Single content page
-5. Frontend dashboard (Pro) 
-
 == Frequently Asked Questions ==
 
 = Any limit on how many content can be created? =
@@ -65,6 +57,6 @@ You can [create issue](https://github.com/Solidie/Solidie/issues) on Github repo
 
 == Changelog ==
 
-= v1.0.0 -> Feb 01, 2024 =
+= v1.0.0 -> Jan 30, 2024 =
 --------------------------
 * Initial release

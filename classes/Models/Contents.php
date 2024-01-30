@@ -138,17 +138,15 @@ class Contents {
 
 		// -------------- Create or update the main downloadable file --------------
 		// Save downloadable file through release to maintain consistency with app type content and other dependencies.
-		if ( is_array( $files['downloadable_file'] ) && ! empty( $files['downloadable_file']['tmp_name'] ) ) {
-			Release::pushRelease(
-				array(
-					'version'    => $content_data['version'] ?? null,
-					'changelog'  => $content_data['changelog'] ?? null,
-					'content_id' => $content_id,
-					'release_id' => (int) ( $content_data['release_id'] ?? 0 ),
-					'file'       => $files['downloadable_file'],
-				)
-			);
-		}
+		Release::pushRelease(
+			array(
+				'version'    => $content_data['version'] ?? null,
+				'changelog'  => $content_data['changelog'] ?? null,
+				'content_id' => $content_id,
+				'release_id' => (int) ( $content_data['release_id'] ?? 0 ),
+				'file'       => $files['downloadable_file'] ?? null,
+			)
+		);
 
 		$hook = $is_update ? 'solidie_content_updated' : 'solidie_content_created';
 		do_action( $hook, $content_id, $content, $content_data );
@@ -188,24 +186,6 @@ class Contents {
 		}
 
 		return $new_slug;
-	}
-
-	/**
-	 * Get release log
-	 *
-	 * @param integer $content_id The content ID to get releases of
-	 * @return array
-	 */
-	public static function getReleases( int $content_id ) {
-		global $wpdb;
-		$releases = $wpdb->get_results(
-			$wpdb->prepare(
-				"SELECT * FROM {$wpdb->solidie_releases} WHERE content_id=%d ORDER BY release_date DESC",
-				$content_id
-			)
-		);
-
-		return $releases;
 	}
 
 	/**
@@ -531,7 +511,7 @@ class Contents {
 			$contents[ $index ]['release'] = Release::getRelease( (int) $content['content_id'] );
 
 			// Contributor avatar URL
-			$contents[ $index ]['contributor_avatar_url'] = get_avatar_url( $content['contributor_id'] );
+			$contents[ $index ]['contributor_avatar_url'] = ! empty( $content['contributor_id'] ) ? get_avatar_url( $content['contributor_id'] ) : null;
 		}
 
 		$contents = apply_filters( 'solidie_contents_meta', $contents );

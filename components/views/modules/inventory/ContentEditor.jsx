@@ -104,10 +104,20 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 		{
 			type: 'file',
 			name: 'downloadable_file',
-			label: __('Downloadable File'),
+			label: __('Downloadable File') + ('app' !== content_type ? '' : ` (${__('Latest')})`),
 			hint: __('You can always release new updates later'),
 			accept: [content_type + '/*', 'application/zip']
 		},
+		('app' !== content_type ? null : {
+			type: 'text',
+			name: 'version',
+			label: __('App Version (Latest)'),
+		}),
+		('app' !== content_type ? null : {
+			type: 'textarea',
+			name: 'changelog',
+			label: __('Changelog (Latest)'),
+		}),
 		{
 			type: 'dropdown',
 			name: 'category_id',
@@ -226,6 +236,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 					}
 
 					// Add latest release info too for downloadable file update feature
+					values.release_id = release.release_id;
 					values.version = release.version;
 					values.changelog = release.changelog;
 					values.release_id = release.release_id;
