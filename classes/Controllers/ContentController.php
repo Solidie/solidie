@@ -107,7 +107,7 @@ class ContentController {
 	 * Update content slug
 	 *
 	 * @param integer $content_id The content ID to update slug for
-	 * @param string $content_slug The content slug to set
+	 * @param string  $content_slug The content slug to set
 	 * @return void
 	 */
 	public static function updateContentSlug( int $content_id, string $content_slug ) {
@@ -115,7 +115,7 @@ class ContentController {
 		wp_send_json_success(
 			array(
 				'content_permalink' => Contents::getPermalink( $content_id ),
-				'content_slug' => $new_slug,
+				'content_slug'      => $new_slug,
 			)
 		);
 	}
@@ -154,9 +154,9 @@ class ContentController {
 		if ( ! empty( $content ) ) {
 			wp_send_json_success(
 				array(
-					'content' => $content, 
+					'content'                       => $content,
 					'free_content_plan_label'       => apply_filters( 'solidie_free_content_plan_label', __( 'Free', 'solidie' ), $content ),
-					'free_content_plan_description' => apply_filters( 'solidie_free_content_plan_description', __( 'This content is eligible to download for free', 'solidie' ), $content )
+					'free_content_plan_description' => apply_filters( 'solidie_free_content_plan_description', __( 'This content is eligible to download for free', 'solidie' ), $content ),
 				)
 			);
 		}

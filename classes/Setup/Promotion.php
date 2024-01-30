@@ -1,7 +1,7 @@
 <?php
 /**
  * Pro version promotion
- * 
+ *
  * @solidie
  */
 
@@ -23,7 +23,7 @@ class Promotion {
 				__( 'Dashboard', 'solidie' ) .
 			'</span>
 		</a>';
-		
+
 		// If not even exists in file system
 		if ( ! Utilities::isProInstalled( false ) ) {
 			$actions['solidie_pro_action_link'] = '<a href="https://solidie.com" target="_blank">
@@ -32,7 +32,7 @@ class Promotion {
 				'</span>
 			</a>';
 
-		} else if( ! Utilities::isProInstalled( true ) ) {
+		} elseif ( ! Utilities::isProInstalled( true ) ) {
 
 			// If exists, but not active
 			$action = self::getPluginAction( Utilities::PRO_PATH, __( 'Pro', 'solidie' ) );
@@ -44,7 +44,7 @@ class Promotion {
 				</a>';
 			}
 		}
-		
+
 		return $actions;
 	}
 
@@ -53,7 +53,7 @@ class Promotion {
 	 *
 	 * @param string $plugin_id
 	 * @param string $label
-	 * 
+	 *
 	 * @return array|null
 	 */
 	public static function getPluginAction( string $plugin_id, string $label ) {
@@ -62,7 +62,7 @@ class Promotion {
 		$plugin_path = trailingslashit( WP_PLUGIN_DIR ) . $plugin_id;
 
 		if ( ! is_plugin_active( $plugin_id ) ) {
-			
+
 			if ( file_exists( $plugin_path ) ) {
 
 				$action = array(
@@ -74,7 +74,7 @@ class Promotion {
 							'_wpnonce' => wp_create_nonce( 'activate-plugin_' . $plugin_id ),
 						),
 						admin_url( 'plugins.php' )
-					)
+					),
 				);
 			} else {
 
@@ -82,7 +82,7 @@ class Promotion {
 					'action_label' => sprintf( __( 'Install %s', 'solidie' ), $label ),
 					'action_link'  => add_query_arg(
 						array(
-							'tab' => 'plugin-information',
+							'tab'    => 'plugin-information',
 							'plugin' => pathinfo( $plugin_id )['filename'],
 						),
 						admin_url( 'plugin-install.php' )

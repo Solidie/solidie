@@ -1,7 +1,7 @@
 <?php
 /**
  * Pro version install and activation automator
- * 
+ *
  * @package solidie
  */
 
@@ -15,8 +15,8 @@ use Solidie\Helpers\Utilities;
 class ProController {
 	const PREREQUISITES = array(
 		'proVersionAction' => array(
-			'role' => 'administrator'
-		)
+			'role' => 'administrator',
+		),
 	);
 
 	/**
@@ -27,7 +27,7 @@ class ProController {
 	 * @return void
 	 */
 	public static function proVersionAction( string $action_name ) {
-		
+
 		// Activate pro plugin
 		if ( 'activate' === $action_name ) {
 
@@ -45,7 +45,7 @@ class ProController {
 
 			wp_send_json_success( array( 'message' => __( 'Solidie Pro has been activated successfully', 'solidie' ) ) );
 		}
-		
+
 		wp_send_json_error( array( 'message' => __( 'Invalid Action', 'solidie' ) ) );
 	}
 }

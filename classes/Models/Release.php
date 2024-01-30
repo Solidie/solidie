@@ -174,11 +174,11 @@ class Release {
 				'endpoint'   => $endpoint,
 			);
 
-			$release['download_url'] = apply_filters( 'solidie_release_download_link', FileManager::getMediaLink( 0, array( 'content_slug' => $release['content_slug'] ) ), $arg_payload );
-			$release['file_url']     = $file_url;
-			$release['file_name']    = $file_path ? basename( $file_path ) : null;
-			$release['mime_type']    = get_post_mime_type( $release['file_id'] );
-			$release['content_permalink']  = Contents::getPermalink( $release['content_id'] );
+			$release['download_url']      = apply_filters( 'solidie_release_download_link', FileManager::getMediaLink( 0, array( 'content_slug' => $release['content_slug'] ) ), $arg_payload );
+			$release['file_url']          = $file_url;
+			$release['file_name']         = $file_path ? basename( $file_path ) : null;
+			$release['mime_type']         = get_post_mime_type( $release['file_id'] );
+			$release['content_permalink'] = Contents::getPermalink( $release['content_id'] );
 
 			// Store the release in the new array
 			$new_array[] = $release;
@@ -209,7 +209,7 @@ class Release {
 	 * @return void
 	 */
 	public static function increaseDownloadCount( $file_id ) {
-		
+
 		$release = Field::releases()->getField(
 			array( 'file_id' => $file_id ),
 			array( 'release_id', 'content_id' )

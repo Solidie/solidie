@@ -88,14 +88,14 @@ class Scripts {
 					'contents' => AdminSetting::getContentSettings(),
 					'general'  => array(
 						'frontend_dashboard_path' => AdminSetting::get( 'general.frontend_dashboard_path' ),
-					)
+					),
 				),
 				'permalinks'       => array(
 					'content_types'     => Utilities::getBackendPermalink( AdminPage::CONTENT_TYPES_SLUG ),
 					'inventory_backend' => Utilities::getBackendPermalink( AdminPage::INVENTORY_SLUG ),
 					'settings'          => Utilities::getBackendPermalink( AdminPage::SETTINGS_SLUG ),
 					'dashboard'         => Utilities::getBackendPermalink( Main::$configs->root_menu_slug ),
-					'gallery'           => Contents::getGalleryPermalink()
+					'gallery'           => Contents::getGalleryPermalink(),
 				),
 			)
 		);

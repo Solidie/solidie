@@ -59,7 +59,6 @@ class Contents {
 				// Generate content slug
 				self::setContentSlug( $content['content_id'], $content['content_title'] );
 			}
-
 		} else {
 			// Update the content as content ID exists
 			Field::contents()->updateField(
@@ -162,19 +161,19 @@ class Contents {
 	 *
 	 * @param int        $content_id The content ID to set slug for
 	 * @param string|int $content_slug The slug to set for the job
-	 * 
+	 *
 	 * @return string
 	 */
 	public static function setContentSlug( $content_id, $content_slug, $update_row = true ) {
-		$content_slug = _String::consolidate( ( string ) $content_slug, true );
+		$content_slug = _String::consolidate( (string) $content_slug, true );
 		$content_slug = strtolower( str_replace( ' ', '-', $content_slug ) );
 		$content_slug = preg_replace( '/[^A-Za-z\-]/u', '', $content_slug );
 		$content_slug = empty( $content_slug ) ? 'content' : $content_slug;
 		$content_slug = preg_replace( '/-+/', '-', $content_slug );
-		
+
 		$new_slug = $content_slug;
 		$index    = 0;
-		
+
 		// Get the slug until it's not avaialble in database
 		while ( $content_id != self::getContentIdBySlug( $new_slug, $content_id ) ) {
 			$index++;
@@ -187,7 +186,7 @@ class Contents {
 				array( 'content_id' => $content_id )
 			);
 		}
-		
+
 		return $new_slug;
 	}
 
@@ -439,7 +438,7 @@ class Contents {
 
 		// Specific contributor filter
 		if ( ! empty( $args['contributor_id'] ) ) {
-			$where_clause .= $wpdb->prepare( " AND content.contributor_id=%d", $args['contributor_id'] );
+			$where_clause .= $wpdb->prepare( ' AND content.contributor_id=%d', $args['contributor_id'] );
 		}
 
 		// If it is segmentation
@@ -580,7 +579,7 @@ class Contents {
 	 * Get content ID by slug
 	 *
 	 * @param string $slug The content slug to get content by
-	 * @param mixed $fallback The fallback if content ID not found
+	 * @param mixed  $fallback The fallback if content ID not found
 	 *
 	 * @return int|null
 	 */

@@ -13,7 +13,7 @@ use Solidie\Main;
  * The class
  */
 class Utilities {
-	
+
 	/**
 	 * Pro plugin path constant
 	 */
@@ -52,7 +52,7 @@ class Utilities {
 		if ( file_exists( trailingslashit( WP_PLUGIN_DIR ) . self::PRO_PATH ) ) {
 			return true && ( ! $check_active || is_plugin_active( self::PRO_PATH ) );
 		}
-		
+
 		return false;
 	}
 
@@ -80,7 +80,7 @@ class Utilities {
 	public static function getBackendPermalink( string $page ) {
 		return add_query_arg(
 			array(
-				'page' => $page
+				'page' => $page,
 			),
 			admin_url( 'admin.php' )
 		);
