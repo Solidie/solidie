@@ -357,7 +357,7 @@ class Contents {
 			);
 		}
 
-		if ( empty( $content ) || empty( $content['content_slug'] ) ) {
+		if ( ! is_array( $content ) || empty( $content['content_type'] ) || empty( $content['content_slug'] ) ) {
 			return null;
 		}
 
@@ -437,6 +437,11 @@ class Contents {
 			$where_clause .= " AND content.category_id IN ({$ids_places})";
 		}
 
+		// Specific contributor filter
+		if ( ! empty( $args['contributor_id'] ) ) {
+			$where_clause .= $wpdb->prepare( " AND content.contributor_id=%d", $args['contributor_id'] );
+		}
+
 		// If it is segmentation
 		if ( $segmentation ) {
 
@@ -478,6 +483,8 @@ class Contents {
 					content.content_type, 
 					content.content_status, 
 					content.content_slug,
+					content.contributor_id,
+					contributor.display_name AS contributor_name,
 					COUNT(pop.download_id) AS download_count,
 					pop.download_date,
 					UNIX_TIMESTAMP(content.created_at) AS created_at,
@@ -486,6 +493,7 @@ class Contents {
 					{$wpdb->solidie_contents} content 
 					LEFT JOIN {$wpdb->solidie_categories} cat ON content.category_id=cat.category_id
 					LEFT JOIN {$wpdb->solidie_popularity} pop ON content.content_id=pop.content_id
+					LEFT JOIN {$wpdb->users} contributor ON content.contributor_id=contributor.ID
 				WHERE 1=1 {$where_clause} {$order_clause} {$limit_offset}",
 				...$category_ids_in
 			),
@@ -522,6 +530,9 @@ class Contents {
 
 			// Releases no matter app or other content type as the structure is same always
 			$contents[ $index ]['release'] = Release::getRelease( (int) $content['content_id'] );
+
+			// Contributor avatar URL
+			$contents[ $index ]['contributor_avatar_url'] = get_avatar_url( $content['contributor_id'] );
 		}
 
 		$contents = apply_filters( 'solidie_contents_meta', $contents );

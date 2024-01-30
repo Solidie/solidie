@@ -14,7 +14,7 @@ import { getDashboardPath } from 'solidie-materials/helpers.jsx';
 import table_style from 'solidie-materials/styles/table.module.scss';
 import style from './inventory.module.scss';
 
-const {readonly_mode} = window[data_pointer];
+const {readonly_mode, is_admin} = window[data_pointer];
 
 export function InventoryWrapper({children, content_label, gallery_permalink, navigate, params={}}) {
 
@@ -148,7 +148,7 @@ export function Inventory({navigate, params={}}) {
 			order_by: 'newest'
 		}
 
-		request( 'getContentList', {filters: payload}, resp=>{
+		request( 'getContentList', {filters: payload, is_contributor_inventory: !is_admin}, resp=>{
 			const {
 				success, 
 				data: {
@@ -266,8 +266,9 @@ export function Inventory({navigate, params={}}) {
 						<thead>
 							<tr>
 								<th>{__('Title')}</th>
+								{!is_admin ? null : <th>{__('Contributor')}</th>}
 								<th>{__('Category')}</th>
-								<th>{__('Monetization')}</th>
+								{!is_admin ? null : <th>{__('Monetization')}</th>}
 								<th>{__('Status')}</th>
 								<th>{__('Created')}</th>
 							</tr>
@@ -283,7 +284,9 @@ export function Inventory({navigate, params={}}) {
 										created_at, 
 										content_status, 
 										category_name,
-										product_id
+										product_id,
+										contributor_name,
+										contributor_avatar_url
 									} = content;
 
 									const thumbnail_url = media?.thumbnail?.file_url;
@@ -324,12 +327,28 @@ export function Inventory({navigate, params={}}) {
 												</div>
 											</div>
 										</td>
+										{
+											!is_admin ? null :
+											<td data-th={__('Contributor')}>
+												<div className={'d-flex align-items-center column-gap-8'.classNames()}>
+													<img src={contributor_avatar_url} style={{width: '25px', borderRadius: '50%', overflow: 'hidden'}}/>
+													<span>
+														{contributor_name}
+													</span>
+												</div>
+											</td>
+										}
 										<td data-th={__('Category')}>
 											{category_name || <>&nbsp;</>}
 										</td>
-										<td data-th={__('Monetization')}>
-											{product_id ? __('Paid') : __('Free')}
-										</td>
+										
+										{
+											!is_admin ? null :
+											<td data-th={__('Monetization')}>
+												{product_id ? __('Paid') : __('Free')}
+											</td>
+										}
+										
 										<td data-th={__('Status')}>
 											<div>
 												{content_status}

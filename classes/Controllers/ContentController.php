@@ -39,20 +39,24 @@ class ContentController {
 	/**
 	 * Provide content list for various area like dashboard, gallery and so on.
 	 *
-	 * @param array $filters Request data
+	 * @param array $filters Content filter arguments
+	 * @param bool  $is_contributor_inventory Whether it is frontend contributor dashboard
 	 * @return void
 	 */
-	public static function getContentList( array $filters ) {
+	public static function getContentList( array $filters, bool $is_contributor_inventory ) {
 
-		$data         = $filters;
-		$content_list = Contents::getContents( $data );
-		$segmentation = Contents::getContents( $data, true );
+		if ( $is_contributor_inventory ) {
+			$filters['contributor_id'] = get_current_user_id();
+		}
+
+		$content_list = Contents::getContents( $filters );
+		$segmentation = Contents::getContents( $filters, true );
 
 		wp_send_json_success(
 			array(
 				'contents'          => $content_list,
 				'segmentation'      => $segmentation,
-				'gallery_permalink' => Contents::getGalleryPermalink( $data['content_type'] ),
+				'gallery_permalink' => Contents::getGalleryPermalink( $filters['content_type'] ),
 			)
 		);
 	}
