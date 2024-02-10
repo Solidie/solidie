@@ -3,11 +3,11 @@
  * Plugin Name: Solidie - Digital Content Stock
  * Plugin URI: https://solidie.com/apps/solidie/
  * Description: Multimedia stock plugin to showcase any digital contents like audio, video, image, ebook, apps and so on.
- * Version: 1.0.0
+ * Version: 1.0.1
  * Author: Solidie
  * Author URI: https://solidie.com/
  * Requires at least: 5.3
- * Tested up to: 6.4.2
+ * Tested up to: 6.4.3
  * Requires PHP: 7.4
  * License: GPLv3
  * License URI: https://opensource.org/licenses/GPL-3.0

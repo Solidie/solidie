@@ -126,6 +126,7 @@ gulp.task('copy', function () {
             '!./dist/**/*.map',
             '!./dist/**/*.txt',
             '!./node_modules/**',
+            '!./svn-push/**',
             '!./tests/**',
 
             '!./vendor/**',
@@ -135,6 +136,7 @@ gulp.task('copy', function () {
 			
             '!./**/*.zip',
             '!./readme.md',
+            '!./release.sh',
             '!.DS_Store',
             '!./**/.DS_Store',
             '!./LICENSE.txt',

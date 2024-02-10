@@ -3,9 +3,9 @@ Contributors: jayedul
 Donate Link: https://solidie.com/apps/solidie-pro/
 Tags: image stock, video stock, content marketplace, stock contributors, digital content, photography, video making, appstore, playstore, content sales, content subscription, apps subscription
 Requires at least: 5.3
-Tested up to: 6.4.2
+Tested up to: 6.4.3
 Requires PHP: 7.4
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPLv3
 License URI: https://opensource.org/licenses/GPL-3.0
 
@@ -56,6 +56,10 @@ Yes, with the pro version. You can sell various plans for apps and all other con
 You can [create issue](https://github.com/Solidie/Solidie/issues) on Github repository or write here in [support channel](https://wordpress.org/support/plugin/solidie/).
 
 == Changelog ==
+
+= v1.0.1 -> Feb 10, 2024 =
+--------------------------
+* Bug fixes
 
 = v1.0.0 -> Jan 30, 2024 =
 --------------------------

@@ -1,6 +1,6 @@
 {
   "name": "solidie",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "HR Management System",
   "main": "index.js",
   "scripts": {
@@ -80,5 +80,18 @@
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "gulp-notify": "^4.0.0"
-  }
+  },
+  "directories": {
+    "test": "tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Solidie/Solidie.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/Solidie/Solidie/issues"
+  },
+  "homepage": "https://github.com/Solidie/Solidie#readme",
+  "svn": "https://plugins.svn.wordpress.org/solidie"
 }

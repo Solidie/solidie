@@ -140,7 +140,7 @@ class Dispatcher {
 		}
 
 		// Sanitize and type cast
-		$args = _Array::castRecursive( _Array::sanitizeRecursive( $args ) );
+		$args = _Array::sanitizeRecursive( $args );
 
 		// Now verify all the arguments expected data types after casting
 		foreach ( $args as $name => $value ) {
@@ -173,6 +173,7 @@ class Dispatcher {
 		}
 
 		// Then pass to method with spread as the parameter count is variable.
+		$args = array_values( $args );
 		$class::$method( ...$args );
 	}
 }
