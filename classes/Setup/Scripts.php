@@ -84,6 +84,9 @@ class Scripts {
 				'date_format'      => get_option( 'date_format' ),
 				'time_format'      => get_option( 'time_format' ),
 				'readonly_mode'    => apply_filters( 'solidie_readonly_mode', false ), // It's for solidie demo site only. No other use is expected.
+				'user'             => array(
+					'id' => get_current_user_id()
+				),
 				'settings'         => array(
 					'contents' => AdminSetting::getContentSettings(),
 					'general'  => array(

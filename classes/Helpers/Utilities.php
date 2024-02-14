@@ -50,7 +50,7 @@ class Utilities {
 	public static function isProInstalled( $check_active = false ) {
 
 		if ( file_exists( trailingslashit( WP_PLUGIN_DIR ) . self::PRO_PATH ) ) {
-			return true && ( ! $check_active || is_plugin_active( self::PRO_PATH ) );
+			return true && ( ! $check_active || ( function_exists( 'is_plugin_active' ) && is_plugin_active( self::PRO_PATH ) ) );
 		}
 
 		return false;

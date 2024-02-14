@@ -1,6 +1,6 @@
 {
   "name": "solidie",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "HR Management System",
   "main": "index.js",
   "scripts": {
@@ -31,7 +31,7 @@
     "babel-loader": "^9.1.3",
     "chokidar": "^3.5.3",
     "concurrently": "^8.2.2",
-    "crewhrm-materials": "git+https://jayedulk@bitbucket.org/jayedulk/crewhrm-materials.git",
+    "crewhrm-materials": "github:CrewHRM/Materials",
     "css-loader": "^6.8.1",
     "css-minimizer-webpack-plugin": "^5.0.1",
     "cypress": "^11.2.0",

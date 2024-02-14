@@ -410,7 +410,7 @@ class Contents {
 			}
 
 			// Merge and consolidate all the IDs together
-			$category_ids_in = array_unique( array_merge( $all_ids, $category_ids ) );
+			$category_ids_in = array_values( array_unique( array_merge( $all_ids, $category_ids ) ) );
 			$ids_places      = _String::getPlaceHolders( $category_ids_in );
 
 			$where_clause .= " AND content.category_id IN ({$ids_places})";

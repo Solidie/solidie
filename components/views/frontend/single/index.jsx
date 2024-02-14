@@ -14,6 +14,7 @@ import { GenericPreview } from "./previews/generic.jsx";
 import { ImagePreview } from "./previews/image.jsx";
 import { VideoPreview } from "./previews/video.jsx";
 import { AudioPreview } from "./previews/audio.jsx";
+import { Comments } from "./comments/comments.jsx";
 
 export const ContextSingleData = createContext();
 
@@ -126,6 +127,8 @@ export function SingleWrapper() {
 						<RenderMedia media={sample_images}/>
 					</div>
 				}
+
+				{state.content?.content_id ? <Comments content_id={state.content.content_id}/> : null}
 			</div>
 			
 			<div style={{width: '300px'}}>

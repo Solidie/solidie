@@ -61,10 +61,16 @@ cp -r ./svn-push/$DIRECTORY_NAME/trunk/* ./svn-push/$DIRECTORY_NAME/tags/$VERSIO
 # 5. Add missing files into svn
 svn add --force ./svn-push/$DIRECTORY_NAME --username $SVN_USERNAME --password $SVN_PASSWORD
 
+# 5. Add new or modified files into svn
+svn status ./svn-push/$DIRECTORY_NAME | grep "^[?M]" | awk '{print $2}' | xargs svn add
+
+# and Delete files from svn if they are deleted from the directory
+svn status ./svn-push/$DIRECTORY_NAME | grep "^\!" | awk '{print $2}' | xargs svn delete
+
 # 6. Commit finally
 cd ./svn-push/$DIRECTORY_NAME/
-svn commit -m "Adding $DIRECTORY_NAME plugin version $VERSION" --username $SVN_USERNAME --password $SVN_PASSWORD
+# svn commit -m "Adding $DIRECTORY_NAME plugin version $VERSION" --username $SVN_USERNAME --password $SVN_PASSWORD
 cd ../../
 
 # 7. Remove the svn-push directory
-rm -rf ./svn-push/
+# rm -rf ./svn-push/

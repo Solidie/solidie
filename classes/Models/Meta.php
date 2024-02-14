@@ -185,7 +185,7 @@ class Meta {
 		$key_clause = ! empty( $meta_key ) ? $wpdb->prepare( ' AND meta_key=%s', $meta_key ) : '';
 
 		// IDs in
-		$object_ids = _Array::getArray( $object_ids, true, 0 );
+		$object_ids = array_values( _Array::getArray( $object_ids, true, 0 ) );
 		$ids_places = _String::getPlaceHolders( $object_ids );
 
 		$wpdb->query(
