@@ -52,6 +52,10 @@ function OptionFields({fields=[] }) {
             case '==':
                 _return = value == operand;
                 break;
+
+            case 'in_array':
+                _return = operand.indexOf(value)>-1;
+                break;
         }
 
         return _return;
@@ -104,12 +108,17 @@ function OptionFields({fields=[] }) {
 				{/* Toggle switch option */}
 				{(type === 'switch' && (
 					<>
-						<div className={'flex-1'.classNames()}>{label_text}</div>
-						<div>
+						<div className={'flex-1 margin-bottom-10'.classNames()}>
+							{label_text}
+						</div>
+						<div className={'d-flex align-items-center column-gap-10'.classNames()}>
 							<ToggleSwitch
 								checked={values[name] ? true : false}
 								onChange={(enabled) => onChange(name, enabled)}
-							/>
+							/> 
+							<span className={'font-size-15 font-weight-400 line-height-24 letter-spacing--15 color-text'.classNames()}>
+								{placeholder}
+							</span>
 						</div>
 					</>
 				)) ||

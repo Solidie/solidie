@@ -7,9 +7,11 @@
 
 namespace Solidie\Controllers;
 
+use Solidie\Models\AdminSetting;
 use Solidie\Models\Contents;
 use Solidie\Models\FileManager;
 use Solidie\Models\Release;
+use Solidie\Models\User;
 
 // To Do: Add three custom rules;
 // finance-manager who disburse payments,
@@ -150,18 +152,31 @@ class ContentController {
 
 		// Now get the content by content ID
 		$content = $content_id ? Contents::getContentByContentID( $content_id, null, false ) : null;
+		
 
-		if ( ! empty( $content ) ) {
-			wp_send_json_success(
-				array(
-					'content'                       => $content,
-					'free_content_plan_label'       => apply_filters( 'solidie_free_content_plan_label', __( 'Free', 'solidie' ), $content ),
-					'free_content_plan_description' => apply_filters( 'solidie_free_content_plan_description', __( 'This content is eligible to download for free', 'solidie' ), $content ),
-				)
-			);
+		if ( empty( $content ) ) {
+			wp_send_json_error( array( 'message' => esc_html__( 'Content not found', 'solidie' ) ) );
+			exit;
 		}
 
-		wp_send_json_error( array( 'message' => esc_html__( 'Content not found', 'solidie' ) ) );
+		$feedback_settings = AdminSetting::getFeedbackSettings( $content['content_type'] );
+
+		// Get contributor info
+		if ( $feedback_settings['contributor'] ) {
+			$content['contributor'] = User::getUserData( $content['contributor_id'] );
+		}
+
+		if ( $feedback_settings['rating'] ) {
+			$content['rating'] = 
+		}
+		
+		wp_send_json_success(
+			array(
+				'content'                       => $content,
+				'free_content_plan_label'       => apply_filters( 'solidie_free_content_plan_label', __( 'Free', 'solidie' ), $content ),
+				'free_content_plan_description' => apply_filters( 'solidie_free_content_plan_description', __( 'This content is eligible to download for free', 'solidie' ), $content ),
+			)
+		);
 	}
 
 	/**

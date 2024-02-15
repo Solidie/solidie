@@ -7,6 +7,8 @@
 
 namespace Solidie\Models;
 
+use Solidie\Helpers\_Array;
+
 /**
  * AdminSettings class
  */
@@ -93,5 +95,28 @@ class AdminSetting {
 		}
 
 		return $contents;
+	}
+
+	/**
+	 * Get supported reaction settings for the content type
+	 *
+	 * @param string $content_type
+	 * @return array
+	 */
+	public static function getFeedbackSettings( $content_type ) {
+
+		$settings     = self::get( 'general' );
+		$reaction_for = in_array( $content_type, _Array::getArray( $settings['enable_reaction_for'] ?? null ) );
+		$like         = 'like' === ( $settings['reaction_mode'] ?? null );
+		$dislike      = $like && ( bool ) ( $settings['enable_dislike'] ?? false );
+		$rating       = 'rating' === ( $settings['reaction_mode'] ?? null );
+
+		return array(
+			'like'        => $reaction_for && $like,
+			'dislike'     => $reaction_for && $dislike,
+			'rating'      => $reaction_for && $rating,
+			'comment'     => in_array( $content_type, _Array::getArray( $settings['enable_comment_for'] ?? null ) ),
+			'contributor' => in_array( $content_type, _Array::getArray( $settings['show_contributor_info_for'] ?? null ) ),
+		);
 	}
 }

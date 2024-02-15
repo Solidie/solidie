@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jan 24, 2024 at 10:42 PM
+-- Generation Time: Feb 15, 2024 at 06:47 AM
 -- Server version: 8.0.16
 -- PHP Version: 8.1.23
 
@@ -35,6 +35,23 @@ CREATE TABLE IF NOT EXISTS `wp_solidie_categories` (
   PRIMARY KEY (`category_id`),
   KEY `content_type` (`content_type`),
   KEY `parent_id` (`parent_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `wp_solidie_comments`
+--
+
+CREATE TABLE IF NOT EXISTS `wp_solidie_comments` (
+  `comment_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `parent_id` bigint(20) UNSIGNED NOT NULL DEFAULT '0',
+  `content_id` bigint(20) UNSIGNED NOT NULL,
+  `comment_content` longtext COLLATE utf8mb4_unicode_520_ci NOT NULL,
+  `user_id` bigint(20) UNSIGNED NOT NULL,
+  `comment_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `comment_edit_date` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`comment_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 
 -- --------------------------------------------------------
@@ -103,6 +120,23 @@ CREATE TABLE IF NOT EXISTS `wp_solidie_popularity` (
   `download_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Note: Rows older than certain period will be deleted.',
   PRIMARY KEY (`download_id`),
   KEY `content_id` (`content_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `wp_solidie_reactions`
+--
+
+CREATE TABLE IF NOT EXISTS `wp_solidie_reactions` (
+  `reaction_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(20) UNSIGNED NOT NULL,
+  `content_id` bigint(20) UNSIGNED NOT NULL,
+  `value` tinyint(3) UNSIGNED NOT NULL COMMENT '0=dislike, 1=like (If like mode). 1-5 if rating.',
+  `reaction_type` varchar(10) COLLATE utf8mb4_unicode_520_ci NOT NULL COMMENT 'like, rating (For now)',
+  `reaction_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`reaction_id`),
+  KEY `user_id` (`user_id`,`content_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 
 -- --------------------------------------------------------
