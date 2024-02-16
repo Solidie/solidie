@@ -87,28 +87,6 @@ class Reaction {
 	}
 	
 	/**
-	 * Get reaction stats
-	 *
-	 * @return int|array
-	 */
-	public function getTotalCount() {
-
-		$total_count = $this->getCount();
-
-		if ( $this->type === 'like' ) {
-
-			$total_dislike_count = $this->getCount( 0, '=' );
-
-			return array(
-				'like'    => $total_count,
-				'dislike' => $total_dislike_count
-			);
-		}
-
-		return $total_count;
-	}
-
-	/**
 	 * Get average value. Do not call for non rating reactions.
 	 *
 	 * @return int
@@ -117,13 +95,15 @@ class Reaction {
 		
 		global $wpdb;
 
-		return ( int ) $wpdb->get_var(
+		$average = ( float ) $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT AVG(reaction_id) FROM {$wpdb->solidie_reactions} WHERE content_id=%d AND reaction_type=%s",
+				"SELECT AVG(value) FROM {$wpdb->solidie_reactions} WHERE content_id=%d AND reaction_type=%s",
 				$this->content_id,
 				$this->type
 			)
 		);
+
+		return number_format( $average, 1 );
 	}
 
 	/**
@@ -135,7 +115,7 @@ class Reaction {
 	public function applyReaction( $value, $user_id ) {
 
 		global $wpdb;
-		
+
 		// Delete the reaction  the value is negative
 		if ( $value < 0 ) {
 			$wpdb->delete(
@@ -220,7 +200,7 @@ class Reaction {
 		if ( $feedback_settings['rating'] ) {
 			$reaction = self::rating( $content_id );
 			$stats['rating'] = array(
-				'rating_count' => $reaction->getTotalCount(),
+				'rating_count' => $reaction->getCount(),
 				'average'      => $reaction->getAverage(),
 				'my_reaction'  => $reaction->getReaction( $user_id, 'value' )
 			);
@@ -229,13 +209,15 @@ class Reaction {
 
 			// Get like dislike info
 			$reaction = self::like( $content_id );
-			$total    = $reaction->getTotalCount();
+
 			$stats['like'] = array(
-				'like_count'    => $total['like'],
-				'dislike_count' => $total['dislike'],
-				'my_reaction'  => $reaction->getReaction( $user_id, 'value' )
+				'like_count'    => $reaction->getCount(),
+				'dislike_count' => $feedback_settings['dislike'] ? $reaction->getCount( 0, '=' ) : null,
+				'my_reaction'   => $reaction->getReaction( $user_id, 'value' )
 			);
 		}
+
+		$stats['commenting'] = $feedback_settings['comment'];
 
 		return $stats;
 	}

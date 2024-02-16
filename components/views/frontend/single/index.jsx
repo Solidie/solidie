@@ -15,15 +15,15 @@ import { ImagePreview } from "./previews/image.jsx";
 import { VideoPreview } from "./previews/video.jsx";
 import { AudioPreview } from "./previews/audio.jsx";
 import { Comments } from "./comments/comments.jsx";
-// import { MetaData } from "./meta-data/meta-data.jsx";
+import { MetaData } from "./meta-data/meta-data.jsx";
 
 export const ContextSingleData = createContext();
 
 const preview_renderers = {
-	app: GenericPreview,
 	image: ImagePreview,
 	video: VideoPreview,
 	audio: AudioPreview,
+	other: GenericPreview,
 }
 
 function FreeDownlod( props ) {
@@ -81,11 +81,22 @@ export function SingleWrapper() {
 		});
 	}
 
+	const updateReactions=(reactions)=>{		
+		setState({
+			...state,
+			content: {
+				...state.content,
+				reactions
+			}
+		});
+	}
+
 	useEffect(()=>{
 		getContent();
 	}, [content_slug]);
 
-	const PreviewComp = preview_renderers[state.content?.content_type];
+	const {content_type} = state.content || {};
+	const PreviewComp = preview_renderers[content_type] || preview_renderers.other;
 
     if ( state.fetching || state.error_message ) {
         return <InitState 
@@ -102,18 +113,17 @@ export function SingleWrapper() {
 			<strong className={'d-block font-size-24 color-text'.classNames()}>
 				{state.content.content_title}
 			</strong>
-			{/* <MetaData content={state.content}/> */}
+			<MetaData 
+				content={state.content}
+				updateReactions={updateReactions}/>
 		</div>
 		
 		<div className={'d-flex column-gap-15'.classNames()}>
 			<div className={'flex-1'.classNames()}>
 				<div>
-					{
-						PreviewComp ? 
-							<ErrorBoundary>
-								<PreviewComp content={state.content}/>
-							</ErrorBoundary> : null
-					}
+					<ErrorBoundary>
+						<PreviewComp content={state.content}/>
+					</ErrorBoundary>
 				</div>
 				<div>
 					<DangerouslySet>
@@ -131,7 +141,10 @@ export function SingleWrapper() {
 					</div>
 				}
 
-				{state.content?.content_id ? <Comments content_id={state.content.content_id}/> : null}
+				{
+					(!state.content?.content_id || !state.content?.reactions?.commenting) ? null : 
+					<Comments content_id={state.content.content_id}/>
+				}
 			</div>
 			
 			<div style={{width: '300px'}}>

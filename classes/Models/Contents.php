@@ -248,6 +248,37 @@ class Contents {
 	}
 
 	/**
+	 * Get download counts
+	 *
+	 * @param array $content_ids Array of contents IDs
+	 * @return array
+	 */
+	public static function getDownloadCounts( $content_ids ) {
+
+		$content_ids = array_values( $content_ids );
+		$ids_places  = _String::getPlaceHolders( $content_ids );
+
+		global $wpdb;
+		$downloads = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT 
+					SUM(download_count) AS download_count, 
+					content_id 
+				FROM 
+					{$wpdb->solidie_releases} 
+				WHERE content_id IN ({$ids_places}) GROUP BY content_id",
+				...$content_ids
+			),
+			ARRAY_A
+		);
+
+		$downloads = _Array::castRecursive( $downloads );
+		$downloads = _Array::indexify( $downloads, 'content_id', 'download_count' );
+
+		return $downloads;
+	}
+
+	/**
 	 * Assign content media data like preview, thumbnail, sample images
 	 *
 	 * @param array $contents The content array to add media data to
@@ -263,6 +294,9 @@ class Contents {
 		if ( $was_single ) {
 			$contents = array( $contents );
 		}
+
+		// Get download counts per content
+		$downloads = self::getDownloadCounts( array_column( $contents, 'content_id' ) );
 
 		// Loop through every contents
 		foreach ( $contents as $index => $content ) {
@@ -291,6 +325,9 @@ class Contents {
 
 			// Assign the prepared file info array to contents array
 			$contents[ $index ]['media'] = $media;
+
+			// Assign download count from the download array
+			$contents[ $index ]['download_count'] = $downloads[ $content['content_id'] ] ?? 0;
 		}
 
 		return $was_single ? $contents[0] : $contents;
@@ -352,7 +389,7 @@ class Contents {
 	public static function getGalleryPermalink( $content_type = null ) {
 
 		$home       = get_home_url();
-		$contents   = AdminSetting::get( 'contents' );
+		$contents   = AdminSetting::getContentSettings();
 		$permalinks = array();
 
 		foreach ( $contents as $type => $content ) {
@@ -448,7 +485,7 @@ class Contents {
 		}
 
 		// Determine how to sort the list
-		$order_by     = 'newest' === $order_by ? 'content.created_at' : 'download_count, download_date';
+		$order_by     = 'newest' === $order_by ? 'content.created_at' : 'download_trend, download_date';
 		$order_clause = " GROUP BY content.content_id ORDER BY {$order_by} DESC";
 		$limit_offset = $wpdb->prepare( ' LIMIT %d OFFSET %d', $limit, $offset );
 
@@ -464,7 +501,7 @@ class Contents {
 					content.content_slug,
 					content.contributor_id,
 					contributor.display_name AS contributor_name,
-					COUNT(pop.download_id) AS download_count,
+					COUNT(pop.download_id) AS download_trend,
 					pop.download_date,
 					UNIX_TIMESTAMP(content.created_at) AS created_at,
 					cat.category_name

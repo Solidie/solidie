@@ -25,12 +25,7 @@ const renderers = {
 	video: Video,
 	audio: Audio,
 	image: Image,
-
-	app: GenericCard,
-	'3d': GenericCard,
-	font: GenericCard,
-	document: GenericCard,
-	tutorial: GenericCard
+	other: GenericCard
 }
 
 const filters = [
@@ -144,7 +139,7 @@ function GalleryLayout({categories={}}) {
 		});
 	}
 
-	const RenderComp = renderers[content_type];
+	const RenderComp = renderers[content_type] || renderers.other;
 	const content_options = Object.keys(contents).map(c=>{
 		let {label, slug, enable} = contents[c];
 		if ( enable === true ) {
@@ -229,24 +224,25 @@ function GalleryLayout({categories={}}) {
 				}
 
 				{
-					(RenderComp && state.contents.length) ? 
-						<ErrorBoundary>
-							<RenderComp contents={state.contents}/>
-							{
-								(state.segmentation?.page_count || 0) < 2 ? null :
-									<>
-										<br/>
-										<div className={'d-flex justify-content-center'.classNames()}>
-											<div>
-												<Pagination
-													onChange={(page) => setFilter('page', page)}
-													pageNumber={current_page}
-													pageCount={state.segmentation.page_count}/>
-											</div>
+					!state.contents.length ? null :
+					<ErrorBoundary>
+						<RenderComp contents={state.contents}/>
+						
+						{
+							(state.segmentation?.page_count || 0) < 2 ? null :
+								<>
+									<br/>
+									<div className={'d-flex justify-content-center'.classNames()}>
+										<div>
+											<Pagination
+												onChange={(page) => setFilter('page', page)}
+												pageNumber={current_page}
+												pageCount={state.segmentation.page_count}/>
 										</div>
-									</>
-							}
-						</ErrorBoundary> : null
+									</div>
+								</>
+						}
+					</ErrorBoundary>
 				}
 			
 				<LoadingIcon center={true} show={state.fetching}/>

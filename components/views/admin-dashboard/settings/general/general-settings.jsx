@@ -100,11 +100,11 @@ export function GeneralSettings({settings={}, content_list={}, categories={}}) {
 	// Add content types in setting field
 	Object.keys(content_list).forEach(content_type=>{
 		payload.settings_fields.contents.segments[content_type] = {
-			label: content_list[content_type].label,
-			description: content_list[content_type].description,
-			component: ContentTypeEditor,
-			onToggle: onToggle,
-			is_enabled: state.settings.contents[content_type].enable
+			label       : content_list[content_type].label,
+			description : content_list[content_type].description,
+			component   : ContentTypeEditor,
+			onToggle    : onToggle,
+			is_enabled  : state.settings.contents[content_type].enable
 		}
 	});
 

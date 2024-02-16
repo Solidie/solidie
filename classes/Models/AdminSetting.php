@@ -87,14 +87,20 @@ class AdminSetting {
 	 */
 	public static function getContentSettings() {
 		// All the settings to get
-		$contents = self::get( 'contents' );
+		$contents  = self::get( 'contents' );
+		$new_array = array();
 
 		// Assign content type label
 		foreach ( $contents as $type => $content ) {
-			$contents[ $type ]['label'] = Manifest::getContentTypeLabel( $type );
+
+			$label = Manifest::getContentTypeLabel( $type );
+			if ( ! empty( $label ) ) {
+				$content['label']   = $label;
+				$new_array[ $type ] = $content;
+			}
 		}
 
-		return $contents;
+		return $new_array;
 	}
 
 	/**
@@ -105,18 +111,22 @@ class AdminSetting {
 	 */
 	public static function getFeedbackSettings( $content_type ) {
 
-		$settings     = self::get( 'general' );
-		$reaction_for = in_array( $content_type, _Array::getArray( $settings['enable_reaction_for'] ?? null ) );
-		$like         = 'like' === ( $settings['reaction_mode'] ?? null );
-		$dislike      = $like && ( bool ) ( $settings['enable_dislike'] ?? false );
-		$rating       = 'rating' === ( $settings['reaction_mode'] ?? null );
+		$content = self::get( 'contents.' . $content_type );
+		if ( empty( $content ) || ! is_array( $content ) ) {
+			return array();
+		}
+
+		$type         = $content['reaction_type'] ?? null;
+		$like         = 'like' === $type;
+		$dislike      = $like && ( bool ) ( $content['enable_dislike'] ?? false );
+		$rating       = 'rating' === $type;
 
 		return array(
-			'like'        => $reaction_for && $like,
-			'dislike'     => $reaction_for && $dislike,
-			'rating'      => $reaction_for && $rating,
-			'comment'     => in_array( $content_type, _Array::getArray( $settings['enable_comment_for'] ?? null ) ),
-			'contributor' => in_array( $content_type, _Array::getArray( $settings['show_contributor_info_for'] ?? null ) ),
+			'like'        => $like,
+			'dislike'     => $dislike,
+			'rating'      => $rating,
+			'comment'     => ( bool ) ( $content['enable_comment'] ?? false ),
+			'contributor' => ( bool ) ( $content['show_contributor_info'] ?? false ),
 		);
 	}
 }

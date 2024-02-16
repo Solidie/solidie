@@ -21,16 +21,16 @@ export const label_class =
 export const hint_class =
     'd-block margin-top-3 font-size-15 font-weight-400 line-height-24 letter-spacing--15 color-text-light'.classNames();
 
-function OptionFields({fields=[]}) {
+export function OptionFields({fields=[], settings, onChange: _onChange}) {
 
     const { segment } = useParams();
-    const { settings={}, onChange: dispatchChange } = useContext(ContextSettings);
+    const { settings: settings_context={}, onChange: dispatchChange } = useContext(ContextSettings);
     const { resources = {} } = {};
 	
-	const values = settings[segment];
+	const values = settings || settings_context[segment];
 	
 	const onChange=(name, value)=>{
-		dispatchChange(segment, name, value);
+		_onChange ? _onChange(name, value) : dispatchChange(segment, name, value);
 	}
 
     const satisfyLogic = (when) => {

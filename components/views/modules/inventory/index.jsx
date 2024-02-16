@@ -267,6 +267,7 @@ export function Inventory({navigate, params={}}) {
 							<tr>
 								<th>{__('Title')}</th>
 								{!is_admin ? null : <th>{__('Contributor')}</th>}
+								<th>{__('Downloads')}</th>
 								<th>{__('Category')}</th>
 								{!is_admin ? null : <th>{__('Monetization')}</th>}
 								<th>{__('Status')}</th>
@@ -285,8 +286,10 @@ export function Inventory({navigate, params={}}) {
 										content_status, 
 										category_name,
 										product_id,
+										download_count,
 										contributor_name,
-										contributor_avatar_url
+										contributor_avatar_url,
+										release
 									} = content;
 
 									const thumbnail_url = media?.thumbnail?.file_url;
@@ -313,20 +316,32 @@ export function Inventory({navigate, params={}}) {
 															title={__('Edit')}
 															to={getDashboardPath(`inventory/${content_type}/editor/${content_id}/`)}
 														>
-															<i className={'ch-icon ch-icon-edit-2 font-size-15'.classNames()}></i> {__('Edit')}
+															<i className={'ch-icon ch-icon-edit-2 font-size-15'.classNames()}></i>
 														</Link>
+														
 														<span className={'color-text-lighter'.classNames()}>|</span>
 														<span
 															className={'action'.classNames(style) + 'cursor-pointer d-inline-flex align-items-center column-gap-8'.classNames()}
 															title={__('Delete')}
 															onClick={()=>!readonly_mode && deleteContent(content_id)}
 														>
-															<i className={'ch-icon ch-icon-trash color-error font-size-15'.classNames()}></i> {__('Delete')}
+															<i className={'ch-icon ch-icon-trash color-error font-size-15'.classNames()}></i>
 														</span>
+														
+														<span className={'color-text-lighter'.classNames()}>|</span>
+														<a 
+															className={'action'.classNames(style) + 'cursor-pointer d-inline-flex align-items-center column-gap-8'.classNames()} 
+															title={__('Download')}
+															href={release?.download_url || '#'}
+															target='_blank'
+														>
+															<i className={'ch-icon ch-icon-download font-size-15'.classNames()}></i>
+														</a>
 													</div>
 												</div>
 											</div>
 										</td>
+
 										{
 											!is_admin ? null :
 											<td data-th={__('Contributor')}>
@@ -338,6 +353,11 @@ export function Inventory({navigate, params={}}) {
 												</div>
 											</td>
 										}
+
+										<td data-th={__('Downloads')}>
+											{download_count}
+										</td>
+
 										<td data-th={__('Category')}>
 											{category_name || <>&nbsp;</>}
 										</td>

@@ -101,12 +101,13 @@ class _Array {
 	 *
 	 * @param array  $array  Array to indexify
 	 * @param string $column The field to use the value as index
+	 * @param string $singular_field To store only a single column for the index as value
 	 * @return array
 	 */
-	public static function indexify( array $array, string $column ) {
+	public static function indexify( array $array, string $column, $singular_field = null ) {
 		$new_array = array();
 		foreach ( $array as $element ) {
-			$new_array[ $element[ $column ] ] = $element;
+			$new_array[ $element[ $column ] ] = $singular_field ? ( $element[ $singular_field ] ?? null ) : $element;
 		}
 
 		return $new_array;

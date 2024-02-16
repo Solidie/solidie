@@ -52,7 +52,7 @@ if ( ! empty( $template ) ) {
 
 } else {
 	// This conditional block means it is either single content page or the gallery
-	$content_settings = AdminSetting::get( 'contents' );
+	$content_settings = AdminSetting::getContentSettings();
 	$content          = null;
 
 	if ( ! empty( $content_slug ) ) {

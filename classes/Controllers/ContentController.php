@@ -48,7 +48,7 @@ class ContentController {
 	 * @param bool  $is_contributor_inventory Whether it is frontend contributor dashboard
 	 * @return void
 	 */
-	public static function getContentList( array $filters, bool $is_contributor_inventory ) {
+	public static function getContentList( array $filters, bool $is_contributor_inventory = false ) {
 
 		if ( $is_contributor_inventory ) {
 			$filters['contributor_id'] = get_current_user_id();
@@ -169,7 +169,7 @@ class ContentController {
 			$content['contributor'] = User::getUserData( $content['contributor_id'] );
 		}
 
-		$content['reactions'] = Reaction::getStats( $content_id, get_current_user_id() );
+		$content['reactions'] = ( object ) Reaction::getStats( $content_id, get_current_user_id() );
 		
 		wp_send_json_success(
 			array(
@@ -200,16 +200,17 @@ class ContentController {
 	/**
 	 * Aply reaction to a content
 	 *
-	 * @param integer $content_id
-	 * @param integer $value
-	 * @param string $reaction_type
+	 * @param integer $content_id The content ID to react to
+	 * @param integer $reaction The value to set. Check reactions table-column comments to know meaning of values.
+	 * @param string  $reaction_type Reaction type
 	 * @return void
 	 */
-	public static function reactToContent( int $content_id, int $value, string $reaction_type ) {
+	public static function reactToContent( int $content_id, int $reaction, string $reaction_type ) {
 		
-		$u_id     = get_current_user_id();
-		$reaction = new Reaction( $reaction_type, $content_id );
-		$reaction->applyReaction( $value, $u_id );
+		$u_id = get_current_user_id();
+		
+		// Apply reaction
+		( new Reaction( $reaction_type, $content_id ) )->applyReaction( $reaction, $u_id );
 
 		// Send update reactions
 		wp_send_json_success(
