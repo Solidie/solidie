@@ -47,7 +47,7 @@ export function InventoryWrapper({children, content_label, gallery_permalink, na
 						<span className={'d-block margin-bottom-10'.classNames()}>
 							{__('To showcase your contents, please enable preferred content types first.')}
 						</span>
-						<a href={window[data_pointer]?.permalinks?.content_types} className={'button button-primary button-outlined button-small'.classNames()}>
+						<a href={window[data_pointer]?.permalinks?.settings} className={'button button-primary button-outlined button-small'.classNames()}>
 							{__('Go to Content Types')}
 						</a>
 					</div>
@@ -60,7 +60,7 @@ export function InventoryWrapper({children, content_label, gallery_permalink, na
 						<span className={'d-block margin-bottom-10'.classNames()}>
 							{sprintf(__('The content type \'%s\' is not found or maybe disabled meanwhile'), content_type)}
 						</span>
-						<a href={window[data_pointer]?.permalinks?.content_types} className={'button button-primary button-outlined button-small'.classNames()}>
+						<a href={window[data_pointer]?.permalinks?.settings} className={'button button-primary button-outlined button-small'.classNames()}>
 							{__('Check Content Types')}
 						</a>
 					</div>

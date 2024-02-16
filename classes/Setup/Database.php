@@ -15,6 +15,8 @@ use Solidie\Models\DB;
  */
 class Database {
 
+	const DB_VERSION_KEY = 'solidie_db_version';
+
 	/**
 	 * Constructor that registeres hook to deploy database on plugin activation
 	 *
@@ -23,6 +25,21 @@ class Database {
 	public function __construct() {
 		$this->prepareTableNames();
 		add_action( 'solidie_activated', array( $this, 'importDB' ) );
+		add_action( 'admin_init', array( $this, 'importDBOnUpdate' ), 0 );
+	}
+
+	/**
+	 * Trigger import db function on plugin update
+	 *
+	 * @return void
+	 */
+	public function importDBOnUpdate() {
+
+		$last_version = get_option( self::DB_VERSION_KEY );
+		
+		if ( empty( $last_version ) || version_compare( $last_version, Main::$configs->version, '<' ) ) {
+			$this->importDB();
+		}
 	}
 
 	/**
@@ -31,8 +48,9 @@ class Database {
 	 * @return void
 	 */
 	public function importDB() {
-		$sql_path = Main::$configs->dir . 'dist' . DIRECTORY_SEPARATOR . 'libraries' . DIRECTORY_SEPARATOR . 'db.sql';
+		$sql_path = Main::$configs->dir . 'dist/libraries/db.sql';
 		DB::import( file_get_contents( $sql_path ) );
+		update_option( self::DB_VERSION_KEY, Main::$configs->version, true );
 	}
 
 	/**

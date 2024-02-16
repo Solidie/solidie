@@ -15,6 +15,7 @@ import { ImagePreview } from "./previews/image.jsx";
 import { VideoPreview } from "./previews/video.jsx";
 import { AudioPreview } from "./previews/audio.jsx";
 import { Comments } from "./comments/comments.jsx";
+// import { MetaData } from "./meta-data/meta-data.jsx";
 
 export const ContextSingleData = createContext();
 
@@ -93,7 +94,7 @@ export function SingleWrapper() {
 
     }
 
-	const {contributor, media={}} = state.content || {};
+	const {media={}} = state.content || {};
 	const {sample_images=[]} = media || {};
 	
 	return <div>
@@ -101,24 +102,7 @@ export function SingleWrapper() {
 			<strong className={'d-block font-size-24 color-text'.classNames()}>
 				{state.content.content_title}
 			</strong>
-			<div className={'d-flex align-items-center flex-wrap-wrap flex-direction-row column-gap-20 row-gap-10'.classNames()}>
-				{
-					!contributor ? null :
-					<div className={'d-inline-flex align-items-center column-gap-10'.classNames()}>
-						<img 
-							src={contributor.avatar_url} 
-							style={{width: '22px', height: '22px', borderRadius: '50%'}}
-						/>
-						<span className={'font-size-14 color-text-light'.classNames()}>
-							{contributor.display_name}
-						</span>
-					</div>
-				}
-				
-				<div className={'flex-1 d-flex align-items-center'.classNames()}>
-				
-				</div>
-			</div>
+			{/* <MetaData content={state.content}/> */}
 		</div>
 		
 		<div className={'d-flex column-gap-15'.classNames()}>

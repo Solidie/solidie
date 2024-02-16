@@ -15,7 +15,7 @@ const quick_links = [
 	},
 	{
 		label: __('Content Types'),
-		link: permalinks.content_types
+		link: permalinks.settings
 	},
 	{
 		label: __('Settings'),

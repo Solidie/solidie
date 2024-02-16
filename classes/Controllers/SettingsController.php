@@ -36,12 +36,24 @@ class SettingsController {
 	/**
 	 * Save general settings
 	 *
-	 * @param array $general_settings General settings to save
+	 * @param array $settings General settings to save
 	 *
 	 * @return void
 	 */
-	public static function saveGeneralSettings( array $general_settings ) {
-		AdminSetting::save( array( 'general' => $general_settings ) );
+	public static function saveGeneralSettings( array $settings ) {
+		
+		if ( empty( $settings['general'] ) || empty( $settings['contents'] ) ) {
+			wp_send_json_error( array( 'message' => __( 'Invalid settings data', 'solidie' ) ) );
+			exit;
+		}
+
+		$settings = array(
+			'general'  => $settings['general'],
+			'contents' => $settings['contents']
+		);
+
+		AdminSetting::save( $settings );
+
 		wp_send_json_success( array( 'message' => esc_html__( 'Settings saved successfully!', 'solidie' ) ) );
 	}
 }

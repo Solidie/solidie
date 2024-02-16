@@ -94,7 +94,6 @@ class Scripts {
 					),
 				),
 				'permalinks'       => array(
-					'content_types'     => Utilities::getBackendPermalink( AdminPage::CONTENT_TYPES_SLUG ),
 					'inventory_backend' => Utilities::getBackendPermalink( AdminPage::INVENTORY_SLUG ),
 					'settings'          => Utilities::getBackendPermalink( AdminPage::SETTINGS_SLUG ),
 					'dashboard'         => Utilities::getBackendPermalink( Main::$configs->root_menu_slug ),

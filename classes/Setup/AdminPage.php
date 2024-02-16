@@ -18,7 +18,6 @@ use Solidie\Models\Manifest;
 class AdminPage {
 
 	const HOME_SLUG          = 'solidie-home';
-	const CONTENT_TYPES_SLUG = 'solidie-content-types';
 	const SETTINGS_SLUG      = 'solidie-settings';
 	const INVENTORY_SLUG     = 'solidie-inventory';
 
@@ -70,16 +69,6 @@ class AdminPage {
 			array( $this, 'inventoryPage' )
 		);
 
-		// Content tyoes setting page
-		add_submenu_page(
-			Main::$configs->root_menu_slug,
-			esc_html__( 'Content Types', 'solidie' ),
-			esc_html__( 'Content Types', 'solidie' ),
-			$role,
-			self::CONTENT_TYPES_SLUG,
-			array( $this, 'contentTypesPage' )
-		);
-
 		// General settings page
 		add_submenu_page(
 			Main::$configs->root_menu_slug,
@@ -110,19 +99,6 @@ class AdminPage {
 	}
 
 	/**
-	 * Setting page content
-	 *
-	 * @return void
-	 */
-	public function contentTypesPage() {
-		echo '<div 
-				id="Solidie_ContentTypeSettings" 
-				data-categories="' . esc_attr( wp_json_encode( Category::getCategories() ) ) . '"
-				data-contents="' . esc_attr( wp_json_encode( (object) AdminSetting::get( 'contents', array() ) ) ) . '" 
-				data-content_list="' . esc_attr( wp_json_encode( Manifest::getManifest()['contents'] ) ) . '"></div>';
-	}
-
-	/**
 	 * Geenral settings page contents
 	 *
 	 * @return void
@@ -130,6 +106,8 @@ class AdminPage {
 	public function settingsPage() {
 		echo '<div 
 				id="Solidie_Settings" 
-				data-settings="' . esc_attr( wp_json_encode( AdminSetting::get( 'general', array() ) ) ) . '"></div>';
+				data-settings="' . esc_attr( wp_json_encode( AdminSetting::get() ) ) . '"
+				data-content_list="' . esc_attr( wp_json_encode( Manifest::getManifest()['contents'] ) ) . '"
+				data-categories="' . esc_attr( wp_json_encode( Category::getCategories() ) ) . '"></div>';
 	}
 }

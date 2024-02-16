@@ -5,7 +5,6 @@ import { MountPoint } from 'crewhrm-materials/mountpoint.jsx';
 import { getElementDataSet } from 'crewhrm-materials/helpers.jsx';
 import {WpDashboardFullPage} from 'crewhrm-materials/backend-dashboard-container/full-page-container.jsx';
 
-import { ContentSettings } from './settings/content-types/contents.jsx';
 import { InventoryBackend } from './inventory/inventory-backend.jsx';
 import { GeneralSettings } from './settings/general/general-settings.jsx';
 import { HomeBackend } from './home/home-backend.jsx';
@@ -38,18 +37,6 @@ if (inventory) {
 		<MountPoint>
 			<WpDashboardFullPage>
 				<InventoryBackend {...getElementDataSet(inventory)}/>
-			</WpDashboardFullPage>
-		</MountPoint>
-	);
-}
-
-// Render settings
-const content_settings = document.getElementById('Solidie_ContentTypeSettings');
-if ( content_settings ) {
-	createRoot( content_settings ).render( 
-		<MountPoint>
-			<WpDashboardFullPage>
-				<ContentSettings {...getElementDataSet(content_settings)}/>
 			</WpDashboardFullPage>
 		</MountPoint>
 	);

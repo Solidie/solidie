@@ -31,7 +31,7 @@ export const settings_fields = applyFilters(
 	'solidie_setting_fields',
 	{
 		general: {
-			label: __('Solidie Settings'),
+			label: __('General Settings'),
 			description: __('Configure all the content management, sales and contributor related settings in one place'),
 			segments: {
 				gallery: {
@@ -39,44 +39,24 @@ export const settings_fields = applyFilters(
 					description: __('Gallery and single page settings'),
 					fields: [
 						{
-							name: 'enable_comment_for',
-							label: __('Enable comment for'),
-							type: 'checkbox',
-							direction: 'column',
-							options: conte_dropdown
+							name: 'free_content_donwload_label',
+							label: __('Free content download label'),
+							type: 'text'
 						},
 						{
-							name: 'show_contributor_info_for',
-							label: __('Show contributor info for'),
-							type: 'checkbox',
-							direction: 'column',
-							options: conte_dropdown
-						},
-						{
-							name: 'reaction_mode',
-							label: __('Feedback Mode'),
-							type: 'radio',
-							direction: 'column',
-							options: reaction_modes
-						},
-						{
-							name: 'enable_dislike',
-							label: __('Woud you like to show dislike too?'),
-							type: 'switch',
-							direction: 'column',
-							placeholder: __('Enable dislike'),
-							when: ['reaction_mode', 'like' ]
-						},
-						{
-							name: 'enable_reaction_for',
-							label: __('Enable reaction for'),
-							type: 'checkbox',
-							direction: 'column',
-							options: conte_dropdown,
-							when: ['reaction_mode', 'in_array', ['like', 'rating']]
-						},
+							name: 'free_content_donwload_description',
+							label: __('Free content download description'),
+							type: 'textarea_rich'
+						}
 					]
 				}
+			}
+		},
+		contents: {
+			label: __('Content Types'),
+			description: __('Configure the content types you\'d like to showcase'),
+			segments: {
+				
 			}
 		},
 	}

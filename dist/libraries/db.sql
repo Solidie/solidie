@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Feb 15, 2024 at 06:47 AM
+-- Generation Time: Feb 15, 2024 at 08:22 PM
 -- Server version: 8.0.16
 -- PHP Version: 8.1.23
 
@@ -132,8 +132,8 @@ CREATE TABLE IF NOT EXISTS `wp_solidie_reactions` (
   `reaction_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) UNSIGNED NOT NULL,
   `content_id` bigint(20) UNSIGNED NOT NULL,
-  `value` tinyint(3) UNSIGNED NOT NULL COMMENT '0=dislike, 1=like (If like mode). 1-5 if rating.',
-  `reaction_type` varchar(10) COLLATE utf8mb4_unicode_520_ci NOT NULL COMMENT 'like, rating (For now)',
+  `value` tinyint(3) UNSIGNED NOT NULL COMMENT '0=dislike, 1=like (If like mode); 1-5 if rating; 1=wishlist if wishlist;',
+  `reaction_type` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL COMMENT 'like, rating, wishlist (For now)',
   `reaction_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`reaction_id`),
   KEY `user_id` (`user_id`,`content_id`)

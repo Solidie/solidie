@@ -10,6 +10,7 @@ namespace Solidie\Controllers;
 use Solidie\Models\AdminSetting;
 use Solidie\Models\Contents;
 use Solidie\Models\FileManager;
+use Solidie\Models\Reaction;
 use Solidie\Models\Release;
 use Solidie\Models\User;
 
@@ -35,6 +36,8 @@ class ContentController {
 		),
 		'loadFile'              => array(
 			'nopriv' => true,
+		),
+		'reactToContent' => array(
 		),
 	);
 
@@ -166,9 +169,7 @@ class ContentController {
 			$content['contributor'] = User::getUserData( $content['contributor_id'] );
 		}
 
-		if ( $feedback_settings['rating'] ) {
-			$content['rating'] = 
-		}
+		$content['reactions'] = Reaction::getStats( $content_id, get_current_user_id() );
 		
 		wp_send_json_success(
 			array(
@@ -194,5 +195,27 @@ class ContentController {
 			$file_id        = ! empty( $latest_release ) ? $latest_release['file_id'] : 0;
 		}
 		FileManager::downloadFile( $file_id );
+	}
+
+	/**
+	 * Aply reaction to a content
+	 *
+	 * @param integer $content_id
+	 * @param integer $value
+	 * @param string $reaction_type
+	 * @return void
+	 */
+	public static function reactToContent( int $content_id, int $value, string $reaction_type ) {
+		
+		$u_id     = get_current_user_id();
+		$reaction = new Reaction( $reaction_type, $content_id );
+		$reaction->applyReaction( $value, $u_id );
+
+		// Send update reactions
+		wp_send_json_success(
+			array(
+				'reactions' => Reaction::getStats( $content_id, $u_id )
+			)
+		);
 	}
 }

@@ -10,8 +10,8 @@ import { DropDown } from "crewhrm-materials/dropdown/dropdown.jsx";
 import { TextEditor } from "crewhrm-materials/text-editor/text-editor.jsx";
 
 import { InventoryWrapper } from "./index.jsx";
-import { getFlattenedCategories } from "../../admin-dashboard/settings/content-types/contents.jsx";
 import { DoAction } from "crewhrm-materials/mountpoint.jsx";
+import { getFlattenedCategories } from "../../admin-dashboard/settings/general/content-type/category-editor.jsx";
 
 const {readonly_mode} = window[data_pointer];
 

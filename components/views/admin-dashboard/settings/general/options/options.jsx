@@ -11,30 +11,27 @@ import { DropDown } from 'crewhrm-materials/dropdown/dropdown.jsx';
 import { RenderMedia } from 'crewhrm-materials/render-media/render-media.jsx';
 import { RenderExternal } from 'crewhrm-materials/render-external.jsx';
 
-import { settings_fields } from '../field-structure.jsx';
 import { ContextSettings } from '../general-settings.jsx';
 
 import style from './options.module.scss';
 
-const label_class =
+export const label_class =
     'd-block font-size-15 font-weight-500 line-height-24 letter-spacing--16 color-text'.classNames();
 
-const hint_class =
+export const hint_class =
     'd-block margin-top-3 font-size-15 font-weight-400 line-height-24 letter-spacing--15 color-text-light'.classNames();
 
-function OptionFields({fields=[] }) {
-    const { values = {}, onChange } = useContext(ContextSettings);
+function OptionFields({fields=[]}) {
+
+    const { segment } = useParams();
+    const { settings={}, onChange: dispatchChange } = useContext(ContextSettings);
     const { resources = {} } = {};
 	
-	const highlight_ref = useRef();
-	const highlight_field = new URL(window.location.href).searchParams.get("highlight");
-
-	useEffect(()=>{
-		if ( highlight_ref?.current ) {
-			highlight_ref.current.scrollIntoView(true);
-			highlight_ref.current.classList.add('highlight'.classNames(style).split(' ')[0] || '');
-		}
-	}, [highlight_ref]);
+	const values = settings[segment];
+	
+	const onChange=(name, value)=>{
+		dispatchChange(segment, name, value);
+	}
 
     const satisfyLogic = (when) => {
         const pointer = when[0];
@@ -103,7 +100,6 @@ function OptionFields({fields=[] }) {
 			<div
 				key={name}
 				className={`d-flex ${direction === 'column' ? 'flex-direction-column' : 'flex-direction-row align-items-center'} flex-wrap-wrap padding-vertical-10 ${when ? 'fade-in' : ''}`.classNames()}
-				ref={highlight_field===name ? highlight_ref : null}
 			>
 				{/* Toggle switch option */}
 				{(type === 'switch' && (
@@ -226,12 +222,16 @@ export function Options() {
 		sub_segment 
 	} = useParams();
 
+	const {settings_fields, updateWholeSetting, settings={}} = useContext(ContextSettings);
+
     const {
 		fields=[], 
 		component, 
 		overflow=true, 
 		width='582px', 
-		useWrapper=true 
+		useWrapper=true,
+		label,
+		description
 	} = settings_fields[segment].segments[sub_segment];
 
 	const wrapper_attrs = {
@@ -248,9 +248,30 @@ export function Options() {
 	}
 
 	return <div>
+
+		<div className={'padding-vertical-5'.classNames()}>
+			<span
+				className={'d-flex align-items-center column-gap-10 font-size-17 font-weight-600 color-text margin-bottom-10'.classNames()}
+			>
+				<span className={'d-flex align-items-center column-gap-10'.classNames()}>
+					<i 
+						className={'ch-icon ch-icon-arrow-left cursor-pointer'.classNames()} 
+						onClick={()=>window.history.back()}></i>
+					{label}
+				</span>
+			</span>
+			<span
+				className={'d-block font-size-14 font-weight-400 line-height-22 letter-spacing--14 color-text-light'.classNames()}
+			>
+				{description}
+			</span>
+		</div>
+
 		{
 			component ? <Wrapper>
-					<RenderExternal component={component}/>
+					<RenderExternal 
+						component={component} 
+						payload={{updateWholeSetting, settings, segment: sub_segment}}/>
 				</Wrapper>
 				:
 				<Wrapper>
