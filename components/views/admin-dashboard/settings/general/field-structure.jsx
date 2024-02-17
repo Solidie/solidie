@@ -39,14 +39,16 @@ export const settings_fields = applyFilters(
 					description: __('Gallery and single page settings'),
 					fields: [
 						{
-							name: 'free_content_donwload_label',
-							label: __('Free content download label'),
-							type: 'text'
+							name: 'free_download_label',
+							label: __('Free download label'),
+							type: 'text',
+							placeholder: __('Free')
 						},
 						{
-							name: 'free_content_donwload_description',
-							label: __('Free content download description'),
-							type: 'textarea_rich'
+							name: 'free_download_description',
+							label: __('Free download description'),
+							type: 'textarea',
+							placeholder: __('This content is eligible to download for free')
 						}
 					]
 				}

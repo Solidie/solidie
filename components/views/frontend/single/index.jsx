@@ -27,13 +27,13 @@ const preview_renderers = {
 }
 
 function FreeDownlod( props ) {
-	const {content, free_content_plan_label, free_content_plan_description} = props;
+	const {content, free_download_label, free_download_description} = props;
 	return <div className={'border-1 b-color-tertiary border-radius-5 padding-horizontal-15 padding-vertical-20'.classNames()}>
 		<strong className={'d-block font-size-15 color-text font-weight-500 margin-bottom-15'.classNames()}>
-			{free_content_plan_label}
+			{free_download_label}
 		</strong>
 		<span className={'d-block'.classNames()}>
-			{free_content_plan_description}
+			{free_download_description}
 		</span>
 		<a 
 			href={content?.release?.download_url} 
@@ -65,16 +65,16 @@ export function SingleWrapper() {
 				success, 
 				data:{
 					content, 
-					free_content_plan_label,
-					free_content_plan_description,
+					free_download_label,
+					free_download_description,
 					message=__('Something went wrong')
 				}
 			} = resp;
 
 			setState({
 				...state,
-				free_content_plan_label,
-				free_content_plan_description,
+				free_download_label,
+				free_download_description,
 				content: success ? content : {},
 				error_message: success ? null : message
 			});
@@ -152,8 +152,8 @@ export function SingleWrapper() {
 					component={applyFilters('free_download_button', FreeDownlod, state.content)}
 					payload={{
 						content: state.content, 
-						free_content_plan_label: state.free_content_plan_label,
-						free_content_plan_description: state.free_content_plan_description
+						free_download_label: state.free_download_label,
+						free_download_description: state.free_download_description
 					}}/>
 			</div>
 		</div>

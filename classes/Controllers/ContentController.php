@@ -170,12 +170,26 @@ class ContentController {
 		}
 
 		$content['reactions'] = ( object ) Reaction::getStats( $content_id, get_current_user_id() );
+
+		// Determine free download label and description
+		$free_label = __( 'Free', 'solidie' );
+		$free_desc  = __( 'This content is eligible to download for free', 'solidie' );
+		
+		$saved_label = AdminSetting::get( 'general.free_download_label' );
+		if ( ! empty( $saved_label ) ) {
+			$free_label = $saved_label;
+		}
+
+		$saved_desc = AdminSetting::get( 'general.free_download_description' );
+		if ( ! empty( $saved_desc ) ) {
+			$free_desc = $saved_desc;
+		}
 		
 		wp_send_json_success(
 			array(
 				'content'                       => $content,
-				'free_content_plan_label'       => apply_filters( 'solidie_free_content_plan_label', __( 'Free', 'solidie' ), $content ),
-				'free_content_plan_description' => apply_filters( 'solidie_free_content_plan_description', __( 'This content is eligible to download for free', 'solidie' ), $content ),
+				'free_download_label'       => apply_filters( 'solidie_free_download_label', $free_label, $content ),
+				'free_download_description' => apply_filters( 'solidie_free_download_description', $free_desc, $content ),
 			)
 		);
 	}

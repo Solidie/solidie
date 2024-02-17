@@ -14,7 +14,7 @@ import { getDashboardPath } from 'solidie-materials/helpers.jsx';
 import table_style from 'solidie-materials/styles/table.module.scss';
 import style from './inventory.module.scss';
 
-const {readonly_mode, is_admin} = window[data_pointer];
+const {readonly_mode, is_admin, is_pro_active} = window[data_pointer];
 
 export function InventoryWrapper({children, content_label, gallery_permalink, navigate, params={}}) {
 
@@ -209,6 +209,8 @@ export function Inventory({navigate, params={}}) {
 	const _content = window[data_pointer]?.settings?.contents[content_type] || {};
 	const _content_label = _content.label || __('Content');
 	
+	const show_monetization = is_admin && is_pro_active;
+
 	return <InventoryWrapper 
 		content_label={_content_label} 
 		content_type={content_type}
@@ -269,7 +271,7 @@ export function Inventory({navigate, params={}}) {
 								{!is_admin ? null : <th>{__('Contributor')}</th>}
 								<th>{__('Downloads')}</th>
 								<th>{__('Category')}</th>
-								{!is_admin ? null : <th>{__('Monetization')}</th>}
+								{!show_monetization ? null : <th>{__('Monetization')}</th>}
 								<th>{__('Status')}</th>
 								<th>{__('Created')}</th>
 							</tr>
@@ -363,7 +365,7 @@ export function Inventory({navigate, params={}}) {
 										</td>
 										
 										{
-											!is_admin ? null :
+											!show_monetization ? null :
 											<td data-th={__('Monetization')}>
 												{product_id ? __('Paid') : __('Free')}
 											</td>

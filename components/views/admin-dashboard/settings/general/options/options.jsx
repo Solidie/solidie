@@ -121,11 +121,12 @@ export function OptionFields({fields=[], settings, onChange: _onChange}) {
 					null}
 
 				{/* Text input field */}
-				{(['text', 'url', 'email'].indexOf(type)>-1 && (
+				{(['text', 'url', 'email', 'textarea'].indexOf(type)>-1 && (
 					<>
 						<div className={'flex-1'.classNames()}>{label_text}</div>
 						<div className={'flex-1'.classNames()}>
 							<TextField
+								type={type}
 								value={values[name] || ''}
 								onChange={(v) => onChange(name, v)}
 								placeholder={placeholder}
