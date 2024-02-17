@@ -9,6 +9,7 @@ import { RadioCheckbox, checkBoxRadioValue } from "crewhrm-materials/radio-check
 import { ErrorBoundary } from "crewhrm-materials/error-boundary.jsx";
 import { LoadingIcon } from "crewhrm-materials/loading-icon/loading-icon.jsx";
 import { Pagination } from "crewhrm-materials/pagination/pagination.jsx";
+import { TextField } from "crewhrm-materials/text-field/text-field.jsx";
 
 import {getPath} from 'solidie-materials/helpers.jsx';
 
@@ -167,19 +168,17 @@ function GalleryLayout({categories={}}) {
 			</div>
 
 			{/* Search field */}
-			<div className={'flex-1 padding-horizontal-15'.classNames()}>
-				<input 
-					type='text' 
-					className={"text-field-flat overflow-hidden text-overflow-ellipsis".classNames()}
-					value={queryParams.search || ''}
-					onChange={e=>setFilter('search', e.currentTarget.value)}/>
-			</div>
-
-			{/* Search Button */}
-			<div className={'align-self-stretch'.classNames()}>
-				<button className={'margin-0 padding-vertical-0 padding-horizontal-30 height-p-100 d-block'.classNames()}>
-					{__('Search')}
-				</button>
+			<div className={'flex-1 d-flex align-items-center padding-horizontal-15'.classNames()}>
+				<div className={'flex-1'.classNames()}>
+					<input 
+						type='text' 
+						className={"text-field-flat overflow-hidden text-overflow-ellipsis".classNames()}
+						value={queryParams.search || ''}
+						onChange={e=>setFilter('search', e.currentTarget.value)}/>
+				</div>
+				<div>
+					<i className={'ch-icon ch-icon-search-normal-1 font-size-16'.classNames()}></i>
+				</div>
 			</div>
 		</div>
 		

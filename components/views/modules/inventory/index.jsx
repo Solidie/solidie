@@ -248,14 +248,14 @@ export function Inventory({navigate, params={}}) {
 						</div>
 						
 						<div className={'d-flex align-items-center column-gap-5'.classNames()}>
-							<strong className={'white-space-nowrap'.classNames()}>
-								{__('Search')}
-							</strong>
 							<TextField
 								placeholder={__('Enter Keyword')}
 								onChange={key=>setFilter('search', key)}
 								value={filterState.search}
-								style={{height: '35px'}}/>
+								style={{height: '35px'}}
+								iconClass={'ch-icon ch-icon-search-normal-1'.classNames()}
+								icon_position='right'
+							/>
 						</div>
 					</div>
 

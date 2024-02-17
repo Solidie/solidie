@@ -1,6 +1,6 @@
 import React from "react";
 
-import {__, data_pointer} from 'crewhrm-materials/helpers.jsx';
+import {__, data_pointer, sprintf} from 'crewhrm-materials/helpers.jsx';
 
 import { ProInstaller } from "./pro-installer.jsx";
 
@@ -74,5 +74,16 @@ export function HomeBackend() {
 				<ProInstaller/>
 			</>
 		}
+
+		<br/>
+		<br/>
+		<div className={'d-flex'.classNames()}>
+			<div className={'flex-1'.classNames()}>
+				<strong className={'d-block font-size-16 font-weight-500 margin-bottom-10'.classNames()}>
+					Enjoying Solidie? &#128512;
+				</strong>
+				<span className={'font-size-14'.classNames()}>Please <a href="https://wordpress.org/plugins/solidie/#reviews" target="_blank"><strong>provide your feedback</strong></a> on WordPress to help us improve.</span>
+			</div>
+		</div>
 	</div>
 }

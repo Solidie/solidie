@@ -12,7 +12,10 @@ export function GenericCard({contents=[]}) {
 			{contents.map(content=>{
 				const {content_id, content_permalink, media={}, content_title} = content;
 
-				return <div key={content_id} className={'d-flex flex-direction-column justify-content-space-between border-radius-5'.classNames()} style={{boxShadow: '1px 1px 4px #0000002e'}}>
+				return <div 
+					key={content_id} 
+					className={'d-flex flex-direction-column justify-content-space-between border-radius-5'.classNames() + 'single'.classNames(style)}
+				>
 					<div>
 						<Ratio x={16} y={9}>
 							<Link 

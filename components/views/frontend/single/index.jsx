@@ -109,7 +109,7 @@ export function SingleWrapper() {
 	const {sample_images=[]} = media || {};
 	
 	return <div>
-		<div>
+		<div className={'margin-bottom-15'.classNames()}>
 			<strong className={'d-block font-size-24 color-text'.classNames()}>
 				{state.content.content_title}
 			</strong>

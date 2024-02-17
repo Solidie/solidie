@@ -57,14 +57,16 @@ You can [create issue](https://github.com/Solidie/Solidie/issues) on Github repo
 
 == Changelog ==
 
-= v1.0.2 -> Feb 10, 2024 =
+= v1.0.2 -> Feb 17, 2024 =
 --------------------------
-* Design update
+* New: Like, Dislike, Rating, Comment, Share functionalities
+* Fix: Some content type not loading in single page
+* Update: Content type configuration page merged into general settings
 
 = v1.0.1 -> Feb 10, 2024 =
 --------------------------
-* Bug fixes
+* Fix: Multiple bug fixes
 
 = v1.0.0 -> Jan 30, 2024 =
 --------------------------
-* Initial release
+* New: Initial release

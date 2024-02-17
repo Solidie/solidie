@@ -19,7 +19,7 @@ function LikeDislike({content={}, applyReaction}) {
 	const liked    = my_reaction===1;
 	const disliked = my_reaction===0;
 
-	return <div className={'d-flex align-items-center column-gap-8'.classNames()}>
+	return <div className={'d-flex align-items-center column-gap-8'.classNames() + 'like-wrapper'.classNames(style)}>
 		<span>
 			<span className={'color-text-light'.classNames()}>{like_count || 0}</span>&nbsp;
 			<i 

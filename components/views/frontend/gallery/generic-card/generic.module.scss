@@ -1,7 +1,15 @@
 .generic-card {
-	.thumbnail {
-		background-size: cover;
-		background-position: center center;
-		background-repeat: no-repeat;
+	.single {
+		box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.151);
+
+		&:hover {
+			box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.255);
+		}
+
+		.thumbnail {
+			background-size: cover;
+			background-position: center center;
+			background-repeat: no-repeat;
+		}
 	}
 }
