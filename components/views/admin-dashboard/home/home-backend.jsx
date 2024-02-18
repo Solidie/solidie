@@ -82,7 +82,7 @@ export function HomeBackend() {
 				<strong className={'d-block font-size-16 font-weight-500 margin-bottom-10'.classNames()}>
 					Enjoying Solidie? &#128512;
 				</strong>
-				<span className={'font-size-14'.classNames()}>Please <a href="https://wordpress.org/plugins/solidie/#reviews" target="_blank"><strong>provide your feedback</strong></a> on WordPress to help us improve.</span>
+				<span className={'font-size-14'.classNames()}>Please <a href="https://wordpress.org/plugins/solidie/#reviews" target="_blank"><strong>provide your feedback</strong></a> to help us improve.</span>
 			</div>
 		</div>
 	</div>

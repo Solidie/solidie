@@ -255,6 +255,10 @@ class Contents {
 	 */
 	public static function getDownloadCounts( $content_ids ) {
 
+		if ( empty( $content_ids ) ) {
+			return array();
+		}
+
 		$content_ids = array_values( $content_ids );
 		$ids_places  = _String::getPlaceHolders( $content_ids );
 

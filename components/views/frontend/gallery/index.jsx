@@ -1,15 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { BrowserRouter, Route, Routes, useNavigate, useParams, useSearchParams } from "react-router-dom";
 
 import { DropDown } from "crewhrm-materials/dropdown/dropdown.jsx";
 import { request } from "crewhrm-materials/request.jsx";
 import { __, data_pointer, filterObject, isEmpty, parseParams } from "crewhrm-materials/helpers.jsx";
-import { Conditional } from "crewhrm-materials/conditional.jsx";
-import { RadioCheckbox, checkBoxRadioValue } from "crewhrm-materials/radio-checkbox.jsx";
 import { ErrorBoundary } from "crewhrm-materials/error-boundary.jsx";
 import { LoadingIcon } from "crewhrm-materials/loading-icon/loading-icon.jsx";
 import { Pagination } from "crewhrm-materials/pagination/pagination.jsx";
-import { TextField } from "crewhrm-materials/text-field/text-field.jsx";
 
 import {getPath} from 'solidie-materials/helpers.jsx';
 
@@ -21,6 +18,7 @@ import { Video } from "./video/video.jsx";
 import { Audio } from "./audio/audio.jsx";
 
 import style from './index.module.scss';
+import { Sidebar } from "./sidebar.jsx";
 
 const renderers = {
 	video: Video,
@@ -29,11 +27,10 @@ const renderers = {
 	other: GenericCard
 }
 
-const filters = [
-	{
-		label: __('Sort'),
-		type: 'radio',
-		name: 'order_by',
+const filterList = {
+	order_by: {
+		section_label: __('Sort'),
+		selection_type: 'radio',
 		options: [
 			{
 				id: 'trending',
@@ -45,7 +42,7 @@ const filters = [
 			}
 		]
 	}
-];
+};
 
 function GalleryLayout({categories={}}) {
 	const {settings={}} = window[data_pointer];
@@ -58,8 +55,7 @@ function GalleryLayout({categories={}}) {
     const current_page = parseInt( queryParams.page || 1 );
 
 	// Decode category IDs
-	queryParams.category_ids = (queryParams.category_ids || '').split(',').filter(c=>c);
-	queryParams.order_by = queryParams.order_by || 'trending';
+	queryParams.category_ids = (queryParams.category_ids || '').split(',').map(id=>parseInt(id)).filter(c=>c);
 
 	let content_type;
 	for ( let k in contents ) {
@@ -69,12 +65,21 @@ function GalleryLayout({categories={}}) {
 		}
 	}
 
+	const reff_wrapper = useRef();
+	const [is_mobile, setMobile] = useState(false);
+
 	const [state, setState] = useState({
 		contents:[], 
 		segmentation: null,
 		fetching: true,
 		no_more: false,
 	});
+
+	const setLayout=()=>{
+		if ( reff_wrapper?.current ) {
+			setMobile(reff_wrapper.current.offsetWidth<560);
+		}
+	}
 
 	const setFilter=(name, value)=>{
 
@@ -117,28 +122,14 @@ function GalleryLayout({categories={}}) {
 
 	useEffect(()=>{
 		getContents();
-	}, [searchParam])
+	}, [searchParam]);
 
-	function CatList({categories=[], level=0}) {
-		return categories.map(category=>{
-			const {category_id, category_name, children=[]} = category;
-			return <div key={category_id} style={{paddingLeft: level > 0 ? '10px' : 0}}>
-				<label
-					className={`d-inline-flex align-items-center column-gap-10 cursor-pointer`.classNames()}
-				>
-					<input
-						type='checkbox'
-						checked={(queryParams.category_ids || []).indexOf(category_id.toString())>-1}
-						value={category_id}
-						onChange={(e) => setFilter('category_ids', checkBoxRadioValue(e, queryParams.category_ids || []))}
-					/>
-					
-					<span>{category_name}</span>
-				</label>
-				{children.length ? <CatList categories={children} level={level+1}/> : null}
-			</div>
-		});
-	}
+	useEffect(()=>{
+		// Set responsive layout and register event
+		setLayout();
+		window.addEventListener('resize', setLayout);
+		return ()=>window.removeEventListener('resize', setLayout);
+	}, []);
 
 	const RenderComp = renderers[content_type] || renderers.other;
 	const content_options = Object.keys(contents).map(c=>{
@@ -182,38 +173,21 @@ function GalleryLayout({categories={}}) {
 			</div>
 		</div>
 		
-		<div className={'content'.classNames(style)}>
-			<div className={'sidebar'.classNames(style) + 'position-sticky'.classNames()}>
-				
-				{
-					isEmpty( categories[content_type] ) ? null :
-						<div className={'margin-bottom-15'.classNames()}>
-							<strong className={'d-block font-weight-500 font-size-15'.classNames()}>
-								{__('Categories')}
-							</strong>
-							<CatList categories={categories[content_type]}/>
-						</div>
-				}
-				
-				{filters.map((filter, i)=>{
-					const {label, options=[], type, name} = filter;
+		<div ref={reff_wrapper} className={`content ${is_mobile ? 'mobile' : ''}`.classNames(style)}>
+			<Sidebar
+				filters={queryParams}
+				setFilter={setFilter}
+				is_mobile={is_mobile}
+				filterList={{
+					category_ids: {
+						section_label: __('Category'),
+						selection_type: 'checkbox',
+						options: categories[content_type] || []
+					},
+					...filterList
+				}}
+			/>
 
-					return <div key={i} className={'margin-bottom-15'.classNames()}>
-						<strong className={'d-block font-weight-500 font-size-15'.classNames()}>
-							{label}
-						</strong>
-
-						<Conditional show={type=='checkbox' || type=='radio'}>
-							<RadioCheckbox 
-								type={type} 
-								options={options}
-								value={queryParams[name]}
-								onChange={val=>setFilter(name, val)}/>
-						</Conditional>
-					</div>
-				})}
-			</div>
-			
 			<div className={'list'.classNames(style)}>
 				{
 					(!state.fetching && !state.contents.length) ? 

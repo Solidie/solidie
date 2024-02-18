@@ -230,23 +230,9 @@ export function Options() {
 		component, 
 		overflow=true, 
 		width='582px', 
-		useWrapper=true,
 		label,
 		description
 	} = settings_fields[segment].segments[sub_segment];
-
-	const wrapper_attrs = {
-		className: `position-relative ${overflow ? '' : 'overflow-hidden'} padding-30 bg-color-white box-shadow-thin`.classNames(),
-		style: {borderRadius: '5px'}
-	}
-
-	function Wrapper({children}) {
-		return !useWrapper ? children : <div className={'section'.classNames(style) + 'padding-vertical-20 margin-auto'.classNames()} style={{width}}>
-			<div {...wrapper_attrs}>
-				{children}
-			</div>
-		</div>
-	}
 
 	return <div>
 
@@ -268,16 +254,19 @@ export function Options() {
 			</span>
 		</div>
 
-		{
-			component ? <Wrapper>
+		<div className={'section'.classNames(style) + 'padding-vertical-20 margin-auto'.classNames()} style={{width}}>
+			<div 
+				className={`position-relative ${overflow ? '' : 'overflow-hidden'} padding-30 bg-color-white box-shadow-thin`.classNames()}
+				style={{borderRadius: '5px'}}
+			>
+				{
+					component ? 
 					<RenderExternal 
 						component={component} 
-						payload={{updateWholeSetting, settings, segment: sub_segment}}/>
-				</Wrapper>
-				:
-				<Wrapper>
+						payload={{updateWholeSetting, settings, segment: sub_segment}}/> :
 					<OptionFields fields={fields}/>
-				</Wrapper>
-		}
+				}
+			</div>
+		</div>
 	</div>
 }

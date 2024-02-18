@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Feb 16, 2024 at 10:45 PM
+-- Generation Time: Feb 17, 2024 at 09:17 PM
 -- Server version: 8.0.16
 -- PHP Version: 8.1.23
 
@@ -132,7 +132,7 @@ CREATE TABLE IF NOT EXISTS `wp_solidie_reactions` (
   `reaction_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) UNSIGNED NOT NULL,
   `content_id` bigint(20) UNSIGNED NOT NULL,
-  `value` tinyint(3) UNSIGNED NOT NULL COMMENT '0=dislike, 1=like (If like mode); 1-5 if rating; 1=wishlist if wishlist;',
+  `value` tinyint(3) UNSIGNED NOT NULL COMMENT '0 dislike, 1 like, 1 to 5 rating and 1 wishlist.',
   `reaction_type` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL COMMENT 'like, rating, wishlist (For now)',
   `reaction_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`reaction_id`),
@@ -194,11 +194,11 @@ CREATE TABLE IF NOT EXISTS `wp_solidie_sales` (
 
 CREATE TABLE IF NOT EXISTS `wp_solidie_tokens` (
   `token_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `data` varchar(1000) NOT NULL,
-  `token` varchar(500) NOT NULL,
+  `data` varchar(1000) COLLATE utf8mb4_unicode_520_ci NOT NULL,
+  `token` varchar(500) COLLATE utf8mb4_unicode_520_ci NOT NULL,
   `expires_on` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`token_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

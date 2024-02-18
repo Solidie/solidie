@@ -57,6 +57,11 @@ class Category {
 			ARRAY_A
 		);
 
+		foreach ( $cats as $index => $cat ) {
+			$cats[ $index ][ 'id' ]    = ( int ) $cat['category_id'];
+			$cats[ $index ][ 'label' ] = $cat['category_name'];
+		}
+
 		$cats = _Array::getArray( $cats );
 		$cats = _Array::groupRows( $cats, 'content_type' );
 		foreach ( $cats as $index => $cat ) {
