@@ -79,12 +79,10 @@ class ContentController {
 	 */
 	public static function createOrUpdateContent( array $content, array $thumbnail = array(), array $sample_images = array(), array $sample_image_ids = array(), array $downloadable_file = array(), array $preview = array() ) {
 
-		/**
-		 * To Do:
-		 * Before updating, Check if the product created by current user or the user is administrator/editor or privileged.
-		 * It's not necessary currently as only admin can manage contents so far.
-		 * It is for future update.
-		 */
+		// If it is edit, make sure the user is privileged to.
+		if ( ! empty( $content['content_id'] ) ) {
+			self::contentAccessCheck( $content['content_id'], get_current_user_id() );
+		}
 
 		$files = compact(
 			'thumbnail',
@@ -116,6 +114,9 @@ class ContentController {
 	 * @return void
 	 */
 	public static function updateContentSlug( int $content_id, string $content_slug ) {
+
+		self::contentAccessCheck( $content_id, get_current_user_id() );
+
 		$new_slug = Contents::setContentSlug( $content_id, $content_slug );
 		wp_send_json_success(
 			array(
@@ -132,7 +133,9 @@ class ContentController {
 	 * @return void
 	 */
 	public static function deleteContent( int $content_id ) {
-		// To Do: Check if the user is authorized to delete the content
+
+		self::contentAccessCheck( $content_id, get_current_user_id() );
+
 		Contents::deleteContent( $content_id );
 		wp_send_json_success();
 	}
@@ -144,9 +147,11 @@ class ContentController {
 	 *
 	 * @param string $content_slug The content slug to edit by
 	 * @param int    $content_id The content to get content by
+	 * @param bool   $is_editor Whether it is in editor request
+	 * 
 	 * @return void
 	 */
-	public static function getSingleContent( string $content_slug = '', int $content_id = 0 ) {
+	public static function getSingleContent( string $content_slug = '', int $content_id = 0, bool $is_editor = false ) {
 
 		// Get the content ID by slug if slug is not empty
 		if ( ! empty( $content_slug ) ) {
@@ -160,6 +165,11 @@ class ContentController {
 		if ( empty( $content ) ) {
 			wp_send_json_error( array( 'message' => esc_html__( 'Content not found', 'solidie' ) ) );
 			exit;
+		}
+
+		// If editor, make sure the autor requested, or the admin who can do anything
+		if ( $is_editor ) {
+			self::contentAccessCheck( $content['content_id'], get_current_user_id() );
 		}
 
 		$feedback_settings = AdminSetting::getFeedbackSettings( $content['content_type'] );
@@ -192,6 +202,19 @@ class ContentController {
 				'free_download_description' => apply_filters( 'solidie_free_download_description', $free_desc, $content ),
 			)
 		);
+	}
+
+	/**
+	 * Add content access checker
+	 *
+	 * @param int $content_id
+	 * @param int $user_id
+	 * @return void
+	 */
+	private static function contentAccessCheck( $content_id, $user_id ) {
+		if ( ! Contents::isUserCapableToManage( $content_id, $user_id ) ) {
+			wp_send_json_error( array( 'message' => __( 'Access denied!', 'solidie' ) ) );
+		}
 	}
 
 	/**

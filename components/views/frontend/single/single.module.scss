@@ -1,0 +1,16 @@
+.single {
+	.content-wrapper {
+
+		display: flex;
+
+		@media (max-width: 659px) {
+			flex-direction: column;
+		}
+
+		@media (min-width: 660px) {
+			.pricing {
+				width: 300px;
+			}
+		}
+	}
+}

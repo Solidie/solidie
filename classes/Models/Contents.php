@@ -637,4 +637,16 @@ class Contents {
 		// Return first product object if single, otherwise the array of products.
 		return $single ? ( $products[0] ?? null ) : $products;
 	}
+
+	/**
+	 * Check if a user can edit/delete a content
+	 *
+	 * @param int $content_id
+	 * @param int $user_id
+	 * @return boolean
+	 */
+	public static function isUserCapableToManage( $content_id, $user_id ) {
+		$contributor_id = Field::contents()->getField( array( 'content_id' => $content_id ), 'contributor_id' );
+		return ! empty( $contributor_id ) && ( $contributor_id == $user_id || User::validateRole( $user_id, User::getSolidieAdminRole() ) );
+	}
 }

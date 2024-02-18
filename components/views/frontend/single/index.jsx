@@ -17,6 +17,8 @@ import { AudioPreview } from "./previews/audio.jsx";
 import { Comments } from "./comments/comments.jsx";
 import { MetaData } from "./meta-data/meta-data.jsx";
 
+import style from './single.module.scss';
+
 export const ContextSingleData = createContext();
 
 const preview_renderers = {
@@ -108,7 +110,7 @@ export function SingleWrapper() {
 	const {media={}} = state.content || {};
 	const {sample_images=[]} = media || {};
 	
-	return <div>
+	return <div className={'single'.classNames(style)}>
 		<div className={'margin-bottom-15'.classNames()}>
 			<strong className={'d-block font-size-24 color-text'.classNames()}>
 				{state.content.content_title}
@@ -118,8 +120,8 @@ export function SingleWrapper() {
 				updateReactions={updateReactions}/>
 		</div>
 		
-		<div className={'d-flex column-gap-15'.classNames()}>
-			<div className={'flex-1'.classNames()}>
+		<div className={'d-flex column-gap-15 row-gap-15'.classNames() + 'content-wrapper'.classNames(style)}>
+			<div className={'flex-1'.classNames() + 'content'.classNames(style)}>
 				<div>
 					<ErrorBoundary>
 						<PreviewComp content={state.content}/>
@@ -147,7 +149,7 @@ export function SingleWrapper() {
 				}
 			</div>
 			
-			<div style={{width: '300px'}}>
+			<div className={'pricing'.classNames(style)}>
 				<RenderExternal 
 					component={applyFilters('free_download_button', FreeDownlod, state.content)}
 					payload={{

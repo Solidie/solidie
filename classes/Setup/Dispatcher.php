@@ -121,7 +121,7 @@ class Dispatcher {
 		// Validate access privilege
 		$required_roles      = $prerequisites['role'] ?? array();
 		$required_roles      = is_array( $required_roles ) ? $required_roles : array( $required_roles );
-		$administrative_role = apply_filters( 'solidie_administrative_role', 'administrator' );
+		$administrative_role = User::getSolidieAdminRole();
 		$required_roles      = in_array( 'administrator', $required_roles ) ? array_unique( array_merge( $required_roles, array( $administrative_role ) ) ) : array();
 		if ( ! User::validateRole( get_current_user_id(), $required_roles ) ) {
 			wp_send_json_error( array( 'message' => esc_html__( 'Access Denied!', 'solidie' ) ) );

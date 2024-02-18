@@ -78,6 +78,7 @@ export function OptionFields({fields=[], settings, onChange: _onChange}) {
 			when, 
 			direction, 
 			hint, 
+			hint2, 
 			placeholder, 
 			min, 
 			max, 
@@ -131,6 +132,7 @@ export function OptionFields({fields=[], settings, onChange: _onChange}) {
 								onChange={(v) => onChange(name, v)}
 								placeholder={placeholder}
 							/>
+							<small>{hint ? hint2(values[name] || 'custom-path') : null}</small>
 						</div>
 					</>
 				)) ||

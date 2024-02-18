@@ -62,4 +62,13 @@ class User {
 			'avatar_url'   => get_avatar_url( $user_id ),
 		);
 	}
+
+	/**
+	 * Return the user role that can do administrative actions for solidie.
+	 *
+	 * @return string
+	 */
+	public static function getSolidieAdminRole() {
+		return apply_filters( 'solidie_administrative_role', 'administrator' );
+	}
 }

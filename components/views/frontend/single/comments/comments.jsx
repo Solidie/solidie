@@ -25,7 +25,7 @@ export function Comments({content_id}) {
 		new_comment: '',
 		show_load_more: true,
 		comments: [],
-		comment_page: 1
+		show_in_mobile: false
 	});
 
 	const submitComment=()=>{
@@ -134,14 +134,18 @@ export function Comments({content_id}) {
 		fetchComments();
 	}, []);
 	
-	return <> 
-		<strong className={'d-block padding-vertical-15 margin-top-10'.classNames()}>
-			{__('Comments:')}
+	return <div className={`comments-wrapper ${state.show_in_mobile ? 'show-in-mobile' : ''}`.classNames(style)}> 
+		<strong 
+			className={'d-flex align-items-center column-gap-8 padding-vertical-15 margin-top-10'.classNames() + 'comments-control'.classNames(style)}
+			onClick={()=>setState({...state, show_in_mobile: !state.show_in_mobile})}
+		>
+			{__('Comments')}
+			<i className={'ch-icon ch-icon-arrow-right'.classNames() + 'commnents-arrow'.classNames(style)}></i>
 		</strong>
-		<div className={"comments".classNames(style)} id="comment_box_input">
+		<div className={`comments`.classNames(style)}>
 			{
 				!user_id ? <div className={"comment-box".classNames(style)}>
-					<a href={`${home_url}/my-account/?redirect_to=${window.location.href}#comment_box_input`}>
+					<a href={`${home_url}/my-account/?redirect_to=${window.location.href}`}>
 						{__('Log in to comment')}
 					</a>
 				</div>
@@ -242,10 +246,10 @@ export function Comments({content_id}) {
 						className={'cursor-pointer hover-underline'.classNames()}
 						onClick={fetchComments}
 					>
-						{__('Load More')} <LoadingIcon show={state.fetching}/>
+						{__('More Comments')} <LoadingIcon show={state.fetching}/>
 					</span>
 				</div>
 			}
 		</div>
-	</>
+	</div>
 }

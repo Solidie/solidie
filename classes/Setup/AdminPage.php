@@ -11,6 +11,7 @@ use Solidie\Main;
 use Solidie\Models\AdminSetting;
 use Solidie\Models\Category;
 use Solidie\Models\Manifest;
+use Solidie\Models\User;
 
 /**
  * Admin page setup handlers
@@ -37,7 +38,7 @@ class AdminPage {
 	 */
 	public function registerMenu() {
 
-		$role = apply_filters( 'solidie_administrative_role', 'administrator' );
+		$role = User::getSolidieAdminRole();
 
 		// Main page
 		add_menu_page(

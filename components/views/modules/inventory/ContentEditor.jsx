@@ -8,6 +8,7 @@ import { __, data_pointer, isEmpty, sprintf } from "crewhrm-materials/helpers.js
 import { ContextToast } from "crewhrm-materials/toast/toast.jsx";
 import { DropDown } from "crewhrm-materials/dropdown/dropdown.jsx";
 import { TextEditor } from "crewhrm-materials/text-editor/text-editor.jsx";
+import { InitState } from "crewhrm-materials/init-state.jsx";
 
 import { InventoryWrapper } from "./index.jsx";
 import { DoAction } from "crewhrm-materials/mountpoint.jsx";
@@ -63,7 +64,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 		fetching: false,
 		error_message: null,
 		values: initial_values,
-		update_title: null
+		update_title: null,
 	});
 
 	const fields = [
@@ -104,9 +105,8 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 		{
 			type: 'file',
 			name: 'downloadable_file',
-			label: __('Downloadable File') + ('app' !== content_type ? '' : ` (${__('Latest')})`),
-			hint: __('You can always release new updates later'),
-			accept: [content_type + '/*', 'application/zip']
+			label: __('Downloadable File (zip)'),
+			accept: ['application/zip']
 		},
 		('app' !== content_type ? null : {
 			type: 'text',
@@ -203,7 +203,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 
 		setState({...state, fetching: true});
 
-		request('getSingleContent', {content_id}, resp=>{
+		request('getSingleContent', {content_id, is_editor: true}, resp=>{
 			const {
 				success,
 				data: {
@@ -285,154 +285,161 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 	
 	const _content = window[data_pointer]?.settings?.contents[content_type] || {};
 	
-	return <InventoryWrapper navigate={navigate} params={params}>
+	if ( state.fetching || state.error_message ) {
 		
-		<div style={{maxWidth: '600px', margin: '20px auto'}}>
-			{/* Header */}
-			<div className={"margin-top-20 margin-bottom-30 d-flex align-items-center column-gap-10".classNames()}>
-				<i onClick={()=>window.history.back()} className={"ch-icon ch-icon-arrow-left cursor-pointer".classNames()}></i>
-				<span>
-					{
-						!content_id ? 
-							sprintf(__('Add New %s'), _content.label) : 
-							sprintf(__('Update %s'), state.update_title || _content.label)
-					}
-				</span>
-			</div>
+	}
 
-			{
-				state.fetching ? <div className={'padding-vertical-40'.classNames()}>
-					<LoadingIcon center={true}/>
+	return <InventoryWrapper navigate={navigate} params={params}>
+		{
+			( state.fetching || state.error_message ) ? 
+			<InitState fetching={state.fetching} error_message={state.error_message}/> :
+			<div style={{maxWidth: '600px', margin: '20px auto'}}>
+				{/* Header */}
+				<div className={"margin-top-20 margin-bottom-30 d-flex align-items-center column-gap-10".classNames()}>
+					<i onClick={()=>window.history.back()} className={"ch-icon ch-icon-arrow-left cursor-pointer".classNames()}></i>
+					<span>
+						{
+							!content_id ? 
+								sprintf(__('Add New %s'), _content.label) : 
+								sprintf(__('Update %s'), state.update_title || _content.label)
+						}
+					</span>
 				</div>
-				:
-				<>
-					{
-						fields.map(field=>{
-							
-							const {
-								name, 
-								label, 
-								placeholder, 
-								type, 
-								required, 
-								accept, 
-								removable=false,
-								hint, 
-								maxlenth, 
-								options=[]
-							} = field;
 
-							return (type=='dropdown' && isEmpty(options)) ? null : <div key={name}>
-								<div className={`${name=='content_title' ? '' : 'margin-bottom-15'}`.classNames()}>
-									<strong className={'d-block font-weight-600'.classNames()}>
-										{label}{required ? <span className={'color-error'.classNames()}>*</span> : null}
-									</strong>
+				{
+					state.fetching ? <div className={'padding-vertical-40'.classNames()}>
+						<LoadingIcon center={true}/>
+					</div>
+					:
+					<>
+						{
+							fields.map(field=>{
+								
+								const {
+									name, 
+									label, 
+									placeholder, 
+									type, 
+									required, 
+									accept, 
+									removable=false,
+									hint, 
+									maxlenth, 
+									options=[]
+								} = field;
 
-									{
-										!hint ? null :
-										<small className={'d-block'.classNames()}>
-											{hint}
-										</small>
-									}
-
-									{
-										'text' !=type ? null :
-										<TextField 
-											type={type}
-											placeholder={placeholder} 
-											onChange={v=>setVal(name, v)}
-											value={state.values[name]}/>
-									}
-
-									{
-										'textarea' !== type ? null :
-										<TextEditor
-											placeholder={__('Write description..')}
-											value={state.values[name]}
-											onChange={v=>setVal(name, v)}/>
-									}
-
-									{
-										'file' !== type ? null :
-										<FileUpload 
-											accept={accept}
-											onChange={v=>setVal(name, v)}
-											maxlenth={maxlenth}
-											value={state.values[name] || null}
-											removable={removable}/>
-									}
-
-									{
-										'dropdown' !== type ? null :
-										<DropDown
-											placeholder={placeholder}
-											value={state.values[name]}
-											options={options}
-											onChange={value=>setVal(name, value)}/>
-									}
-								</div>
-
-								{
-									(name != 'content_title' || !state.values.content_slug) ? null : 
-									<div 
-										className={'d-flex align-items-center flex-wrap-wrap flex-direction-row column-gap-5'.classNames()}
-										style={{margin: '3px 0 15px', height: '34px'}}
-									>
-										<a 
-											href={state.values.content_permalink} 
-											target='_blank'
-										>
-											{window[data_pointer].permalinks.gallery[content_type]}{state.slug_editor ? null : <><strong>{state.values.content_slug}</strong>/</>}
-										</a>
+								return (type=='dropdown' && isEmpty(options)) ? null : <div key={name}>
+									<div className={`${name=='content_title' ? '' : 'margin-bottom-15'}`.classNames()}>
+										<strong className={'d-block font-weight-600'.classNames()}>
+											{label}{required ? <span className={'color-error'.classNames()}>*</span> : null}
+										</strong>
 
 										{
-											!state.slug_editor ? 
-												<i 
-													className={'ch-icon ch-icon-edit-2 cursor-pointer font-size-18'.classNames()}
-													onClick={()=>setState({...state, slug_editor: true})}></i>
-												:
-												<>
-													<TextField 
-														style={{width: '170px', height: '30px'}}
-														value={state.values.content_slug}
-														autofocus={true}
-														onChange={content_slug=>setVal('content_slug', content_slug)}
-													/>
-													<button 
-														className={'button button-primary button-outlined button-small'.classNames()}
-														onClick={updateSlug}
-														disabled={readonly_mode}
-													>
-														{__('Update')} <LoadingIcon show={state.updating_slug}/>
-													</button>
-												</>
+											!hint ? null :
+											<small className={'d-block'.classNames()}>
+												{hint}
+											</small>
+										}
+
+										{
+											'text' !=type ? null :
+											<TextField 
+												type={type}
+												placeholder={placeholder} 
+												onChange={v=>setVal(name, v)}
+												value={state.values[name]}/>
+										}
+
+										{
+											'textarea' !== type ? null :
+											<TextEditor
+												placeholder={__('Write description..')}
+												value={state.values[name]}
+												onChange={v=>setVal(name, v)}/>
+										}
+
+										{
+											'file' !== type ? null :
+											<FileUpload 
+												accept={accept}
+												onChange={v=>setVal(name, v)}
+												maxlenth={maxlenth}
+												value={state.values[name] || null}
+												removable={removable}/>
+										}
+
+										{
+											'dropdown' !== type ? null :
+											<DropDown
+												placeholder={placeholder}
+												value={state.values[name]}
+												options={options}
+												onChange={value=>setVal(name, value)}/>
 										}
 									</div>
-								}
-							</div>
-						})
-					}
 
-					<DoAction 
-						action="solidie_content_editor_after_form" 
-						payload={{
-							content: state.values,
-							content_type,
-							onChange: setVal
-						}}
-					/>
-					
-					<div className={'text-align-right'.classNames()}>
-						<button 
-							disabled={readonly_mode || state.submitting} 
-							className={'button button-primary'.classNames()} 
-							onClick={submit}
-						>
-							{content_id ? __('Update') : __('Create')} <LoadingIcon show={state.submitting}/>
-						</button>
-					</div>
-				</>				
-			}
-		</div>
+									{
+										(name != 'content_title' || !state.values.content_slug) ? null : 
+										<div 
+											className={'d-flex align-items-center flex-wrap-wrap flex-direction-row column-gap-5'.classNames()}
+											style={{margin: '3px 0 15px', height: '34px'}}
+										>
+											<a 
+												href={state.values.content_permalink} 
+												target='_blank'
+											>
+												{window[data_pointer].permalinks.gallery[content_type]}{state.slug_editor ? null : <><strong>{state.values.content_slug}</strong>/</>}
+											</a>
+
+											{
+												!state.slug_editor ? 
+													<i 
+														className={'ch-icon ch-icon-edit-2 cursor-pointer font-size-18'.classNames()}
+														onClick={()=>setState({...state, slug_editor: true})}></i>
+													:
+													<>
+														<TextField 
+															style={{width: '170px', height: '30px', padding: '0 9px'}}
+															value={state.values.content_slug}
+															autofocus={true}
+															onChange={content_slug=>setVal('content_slug', content_slug)}
+														/>
+														<button 
+															className={'button button-primary button-outlined button-small'.classNames()}
+															onClick={updateSlug}
+															disabled={readonly_mode}
+														>
+															{__('Update')} <LoadingIcon show={state.updating_slug}/>
+														</button>
+													</>
+											}
+										</div>
+									}
+								</div>
+							})
+						}
+
+						<DoAction 
+							action="solidie_content_editor_after_form" 
+							payload={{
+								content: state.values,
+								content_type,
+								onChange: setVal
+							}}
+						/>
+						
+						<div className={'text-align-right'.classNames()}>
+							<button 
+								disabled={readonly_mode || state.submitting} 
+								className={'button button-primary'.classNames()} 
+								onClick={submit}
+							>
+								{content_id ? __('Update') : __('Create')} <LoadingIcon show={state.submitting}/>
+							</button>
+						</div>
+					</>				
+				}
+			</div>
+		}
 	</InventoryWrapper> 
 }
