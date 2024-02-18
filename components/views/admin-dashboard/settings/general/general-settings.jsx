@@ -66,7 +66,8 @@ export function GeneralSettings({settings={}, content_list={}, categories={}}) {
 
 			setState({
 				...state,
-				saving: false
+				saving: false,
+				has_change: false,
 			});
         });
     };

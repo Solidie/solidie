@@ -9,14 +9,14 @@ import { ContextToast } from "crewhrm-materials/toast/toast.jsx";
 import { DropDown } from "crewhrm-materials/dropdown/dropdown.jsx";
 import { TextEditor } from "crewhrm-materials/text-editor/text-editor.jsx";
 import { InitState } from "crewhrm-materials/init-state.jsx";
+import { DoAction } from "crewhrm-materials/mountpoint.jsx";
 
 import { InventoryWrapper } from "./index.jsx";
-import { DoAction } from "crewhrm-materials/mountpoint.jsx";
 import { getFlattenedCategories } from "../../admin-dashboard/settings/general/content-type/category-editor.jsx";
 
 const {readonly_mode} = window[data_pointer];
 
-var audio_extensions = [
+const audio_extensions = [
 	'.mp3',
 	'.aac',
 	'.wav',
@@ -27,7 +27,7 @@ var audio_extensions = [
 	'.alac',
 ];
 
-var video_extensions = [
+const video_extensions = [
 	'.mp4',
 	'.webm',
 	'.mkv',
@@ -39,6 +39,12 @@ var video_extensions = [
 	'.3gp',
 	'.ogg',
 	'.ogv'
+];
+
+const img_extensions = [
+	'.png', 
+	'.jpg',
+	'.jpeg'
 ];
 
 export function ContentEditor({categories=[], navigate, params={}}) {
@@ -85,8 +91,8 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 		{
 			type: 'file',
 			name: 'thumbnail',
-			label: __('Thumbnail'),
-			accept: 'image/*'
+			label: __('Thumbnail Image'),
+			accept: img_extensions
 		},
 		(['audio', 'video'].indexOf(content_type) === -1 ? null : {
 			type: 'file',
@@ -98,8 +104,8 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 			type: 'file',
 			name: 'sample_images',
 			label: __('Sample Images'),
-			accept: 'image/*',
-			maxlenth: 5,
+			accept: img_extensions,
+			maxlength: 5,
 			removable: true
 		}),
 		{
@@ -324,7 +330,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 									accept, 
 									removable=false,
 									hint, 
-									maxlenth, 
+									maxlength, 
 									options=[]
 								} = field;
 
@@ -363,7 +369,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 											<FileUpload 
 												accept={accept}
 												onChange={v=>setVal(name, v)}
-												maxlenth={maxlenth}
+												maxlength={maxlength}
 												value={state.values[name] || null}
 												removable={removable}/>
 										}
