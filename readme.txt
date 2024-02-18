@@ -13,7 +13,7 @@ The ultimate plugin for showcasing all kind of digital contents to the world and
 
 == Description ==
 
-No matter if you are an app developer, photographer, video maker, 3d modeler, writer, or you create any kind of digital contents, Solidie has all the features you need to present your creations to the world and start earning from them.
+No matter if you are an app developer, photographer, video maker, 3d modeler, writer, or you create any kind of digital contents, Solidie has all the features you need to present your creations to the world and start earning from them. See [Live Demo](https://demo.solidie.com)
 
 == Installation ==
 From WordPress Dashboard
