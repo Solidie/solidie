@@ -39,6 +39,12 @@ class ContentController {
 		),
 		'reactToContent' => array(
 		),
+		'fetchReleases' => array(
+		),
+		'updateAppRelease' => array(
+		),
+		'deleteAppRelease' => array(
+		),
 	);
 
 	/**
@@ -255,5 +261,62 @@ class ContentController {
 				'reactions' => Reaction::getStats( $content_id, $u_id )
 			)
 		);
+	}
+
+	/**
+	 * Get release for release manager editor.
+	 *
+	 * @param integer $content_id
+	 * @return void
+	 */
+	public static function fetchReleases( int $content_id ) {
+		$releases = Release::getReleases( $content_id, 1, 1000 );
+		wp_send_json_success( array( 'releases' => $releases ) );
+	}
+
+	/**
+	 * Create or update an app release
+	 *
+	 * @param array $release Release data
+	 * @param array $file The file to release
+	 *
+	 * @return void
+	 */
+	public static function updateAppRelease( array $release, array $file = array() ) {
+		
+		self::contentAccessCheck( $release['content_id'], get_current_user_id() );
+
+		$release = array(
+			'content_id' => $release['content_id'],
+			'version'    => $release['version'],
+			'changelog'  => strip_tags( $release['changelog'] ),
+			'release_id' => $release['release_id'],
+			'file'       => $file
+		);
+
+		$error_message = Release::pushRelease( $release );
+
+		if ( is_string( $error_message ) ) {
+			wp_send_json_error( array( 'message' => $error_message ) );
+		}
+
+		wp_send_json_success( array( 'releases' => Release::getReleases( $release['content_id'], 1, 1000 ) ) );
+	}
+
+	/**
+	 * Delete a release
+	 *
+	 * @param integer $release_id
+	 * @return void
+	 */
+	public static function deleteAppRelease( int $release_id ) {
+
+		$content_id = Release::getContentIdByReleaseId( $release_id, 0 );
+
+		self::contentAccessCheck( $content_id, get_current_user_id() );
+		
+		Release::deleteRelease( $release_id );
+
+		wp_send_json_success( array( 'message' => __( 'The release has been deleted', 'solidie' ) ) );
 	}
 }

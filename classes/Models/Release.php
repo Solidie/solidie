@@ -16,12 +16,23 @@ use Solidie\Helpers\_String;
 class Release {
 
 	/**
+	 * Get content ID by release ID
+	 *
+	 * @param int $release_id
+	 * @param mixed $fallback
+	 * @return int|null
+	 */
+	public static function getContentIdByReleaseId( $release_id, $fallback = null ) {
+		return Field::releases()->getField( array( 'release_id' => $release_id ), 'content_id', $fallback );
+	}
+
+	/**
 	 * Delete file for a single release
 	 *
 	 * @param int|array $release_ids Release ID or array of release IDs
 	 * @return void
 	 */
-	private static function deleteRelease( $release_ids, $delete_release_row = true ) {
+	public static function deleteRelease( $release_ids, $delete_release_row = true ) {
 
 		$release_ids = _Array::getArray( $release_ids, true );
 		if ( empty( $release_ids ) ) {
@@ -155,7 +166,7 @@ class Release {
 					INNER JOIN {$wpdb->solidie_contents} content ON content.content_id=_release.content_id
 				WHERE 
 					_release.content_id=%d {$version_clause} 
-				ORDER BY _release.release_date DESC LIMIT %d, %d",
+				ORDER BY _release.release_id DESC LIMIT %d, %d",
 				$content_id,
 				$offset,
 				$limit
@@ -167,6 +178,7 @@ class Release {
 
 		// Loop through releases and add more data like download URL
 		foreach ( $releases as $release ) {
+			$release   = _Array::castRecursive( $release );
 			$file_url  = wp_get_attachment_url( $release['file_id'] );
 			$file_path = get_attached_file( $release['file_id'] );
 

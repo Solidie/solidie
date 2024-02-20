@@ -136,18 +136,22 @@ class Contents {
 		// Eventually update the media meta
 		$meta->updateMeta( self::MEDIA_IDS_KEY, $media_ids );
 
-		// -------------- Create or update the main downloadable file --------------
-		// Save downloadable file through release to maintain consistency with app type content and other dependencies.
-		Release::pushRelease(
-			array(
-				'version'      => $content_data['version'] ?? null,
-				'changelog'    => ! empty( $content_data['changelog'] ) ? strip_tags( $content_data['changelog'] ) : null,
-				'content_id'   => $content_id,
-				'release_id'   => (int) ( $content_data['release_id'] ?? 0 ),
-				'file'         => $files['downloadable_file'] ?? null,
-				'release_date' => gmdate('Y-m-d H:i:s')
-			)
-		);
+		// -------------- Create or update the main downloadable file (if not app and tutorial. App has dedicated release management system and tutorial doesn't need downloadable file) --------------
+		if ( ! in_array( $content['content_type'], array( 'app', 'tutorial' ) ) ) {
+			
+			// Save downloadable file through release to maintain consistency with app type content and other dependencies.
+			Release::pushRelease(
+				array(
+					'version'      => $content_data['version'] ?? null,
+					'changelog'    => ! empty( $content_data['changelog'] ) ? strip_tags( $content_data['changelog'] ) : null,
+					'content_id'   => $content_id,
+					'release_id'   => (int) ( $content_data['release_id'] ?? 0 ),
+					'file'         => $files['downloadable_file'] ?? null,
+					'release_date' => gmdate('Y-m-d H:i:s')
+				)
+			);
+		}
+		
 
 		$hook = $is_update ? 'solidie_content_updated' : 'solidie_content_created';
 		do_action( $hook, $content_id, $content, $content_data );

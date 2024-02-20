@@ -10,9 +10,12 @@ import { DropDown } from "crewhrm-materials/dropdown/dropdown.jsx";
 import { TextEditor } from "crewhrm-materials/text-editor/text-editor.jsx";
 import { InitState } from "crewhrm-materials/init-state.jsx";
 import { DoAction } from "crewhrm-materials/mountpoint.jsx";
+import { Tabs } from "crewhrm-materials/tabs/tabs.jsx";
 
 import { InventoryWrapper } from "./index.jsx";
 import { getFlattenedCategories } from "../../admin-dashboard/settings/general/content-type/category-editor.jsx";
+import { ReleaseManager } from "./release-manager/release-manager.jsx";
+import { TutorialManager } from "./tutorial-manager/tutorial-manager.jsx";
 
 const {readonly_mode} = window[data_pointer];
 
@@ -64,6 +67,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 	}
 
 	const [state, setState] = useState({
+		active_tab: 'overview',
 		submitting: false,
 		slug_editor: false,
 		updating_slug: false,
@@ -108,21 +112,11 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 			maxlength: 5,
 			removable: true
 		}),
-		{
+		(['audio', 'video', 'image', '3d', 'document', 'font'].indexOf(content_type)===-1 ? null : {
 			type: 'file',
 			name: 'downloadable_file',
 			label: __('Downloadable File (zip)'),
 			accept: ['application/zip']
-		},
-		('app' !== content_type ? null : {
-			type: 'text',
-			name: 'version',
-			label: __('App Version'),
-		}),
-		('app' !== content_type ? null : {
-			type: 'textarea',
-			name: 'kses_changelog',
-			label: <>{__('Changelog')} - <i>{__('Separate by new line')}</i></>,
 		}),
 		{
 			type: 'dropdown',
@@ -243,8 +237,6 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 
 					// Add latest release info too for downloadable file update feature
 					values.release_id     = release.release_id;
-					values.version        = release.version;
-					values.kses_changelog = release.changelog;
 					values.release_id     = release.release_id;
 				}
 			}
@@ -291,14 +283,13 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 	
 	const _content = window[data_pointer]?.settings?.contents[content_type] || {};
 	
-	if ( state.fetching || state.error_message ) {
-		
-	}
-
 	return <InventoryWrapper navigate={navigate} params={params}>
 		{
 			( state.fetching || state.error_message ) ? 
-			<InitState fetching={state.fetching} error_message={state.error_message}/> :
+			<InitState 
+				fetching={state.fetching} 
+				error_message={state.error_message}/> 
+			:
 			<div style={{maxWidth: '600px', margin: '20px auto'}}>
 				{/* Header */}
 				<div className={"margin-top-20 margin-bottom-30 d-flex align-items-center column-gap-10".classNames()}>
@@ -319,130 +310,165 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 					:
 					<>
 						{
-							fields.map(field=>{
-								
-								const {
-									name, 
-									label, 
-									placeholder, 
-									type, 
-									required, 
-									accept, 
-									removable=false,
-									hint, 
-									maxlength, 
-									options=[]
-								} = field;
-
-								return (type=='dropdown' && isEmpty(options)) ? null : <div key={name}>
-									<div className={`${name=='content_title' ? '' : 'margin-bottom-15'}`.classNames()}>
-										<strong className={'d-block font-weight-600'.classNames()}>
-											{label}{required ? <span className={'color-error'.classNames()}>*</span> : null}
-										</strong>
-
+							['app', 'tutorial'].indexOf(content_type)===-1 ? null :
+							<div className={'margin-bottom-20'.classNames()}>
+								<Tabs
+									active={state.active_tab}
+									tabs={[
 										{
-											!hint ? null :
-											<small className={'d-block'.classNames()}>
-												{hint}
-											</small>
-										}
-
+											id: 'overview',
+											label: __('Overview')
+										},
 										{
-											('text' !=type && 'textarea' != type ) ? null :
-											<TextField 
-												type={type}
-												placeholder={placeholder} 
-												onChange={v=>setVal(name, v)}
-												value={state.values[name]}/>
+											id: 'details',
+											label: content_type === 'app' ? __('Release Management') : __('Lessons')
 										}
-
-										{
-											'textarea_rich' !== type ? null :
-											<TextEditor
-												placeholder={__('Write description..')}
-												value={state.values[name]}
-												onChange={v=>setVal(name, v)}/>
-										}
-
-										{
-											'file' !== type ? null :
-											<FileUpload 
-												accept={accept}
-												onChange={v=>setVal(name, v)}
-												maxlength={maxlength}
-												value={state.values[name] || null}
-												removable={removable}/>
-										}
-
-										{
-											'dropdown' !== type ? null :
-											<DropDown
-												placeholder={placeholder}
-												value={state.values[name]}
-												options={options}
-												onChange={value=>setVal(name, value)}/>
-										}
-									</div>
-
-									{
-										(name != 'content_title' || !state.values.content_slug) ? null : 
-										<div 
-											className={'d-flex align-items-center flex-wrap-wrap flex-direction-row column-gap-5'.classNames()}
-											style={{margin: '3px 0 15px', height: '34px'}}
-										>
-											<a 
-												href={state.values.content_permalink} 
-												target='_blank'
-											>
-												{window[data_pointer].permalinks.gallery[content_type]}{state.slug_editor ? null : <><strong>{state.values.content_slug}</strong>/</>}
-											</a>
-
-											{
-												!state.slug_editor ? 
-													<i 
-														className={'ch-icon ch-icon-edit-2 cursor-pointer font-size-18'.classNames()}
-														onClick={()=>setState({...state, slug_editor: true})}></i>
-													:
-													<>
-														<TextField 
-															style={{width: '170px', height: '30px', padding: '0 9px'}}
-															value={state.values.content_slug}
-															autofocus={true}
-															onChange={content_slug=>setVal('content_slug', content_slug)}
-														/>
-														<button 
-															className={'button button-primary button-outlined button-small'.classNames()}
-															onClick={updateSlug}
-															disabled={readonly_mode}
-														>
-															{__('Update')} <LoadingIcon show={state.updating_slug}/>
-														</button>
-													</>
-											}
-										</div>
-									}
-								</div>
-							})
+									]}
+									onNavigate={(active_tab) => setState({ ...state, active_tab })}
+									theme="button"
+								/>
+							</div>
+							
 						}
 
-						<DoAction 
-							action="solidie_content_editor_after_form" 
-							payload={{
-								content: state.values,
-								content_type,
-								onChange: setVal
-							}}
-						/>
-						
-						<div className={'text-align-right'.classNames()}>
-							<button 
-								disabled={readonly_mode || state.submitting} 
-								className={'button button-primary'.classNames()} 
-								onClick={submit}
-							>
-								{content_id ? __('Update') : __('Create')} <LoadingIcon show={state.submitting}/>
-							</button>
-						</div>
+						{
+							state.active_tab!=='details' ? null :
+							<>
+								{content_type==='app' ? <ReleaseManager content_id={content_id}/> : null}
+								{content_type==='tutorial' ? <TutorialManager content_id={content_id}/> : null}
+							</>
+						}
+
+						{
+							state.active_tab !== 'overview' ? null :
+							<div className={'border-radius-10 padding-15 border-1 b-color-tertiary'.classNames()}>
+								{
+									fields.map(field=>{
+										
+										const {
+											name, 
+											label, 
+											placeholder, 
+											type, 
+											required, 
+											accept, 
+											removable=false,
+											hint, 
+											maxlength, 
+											options=[]
+										} = field;
+
+										return (type=='dropdown' && isEmpty(options)) ? null : <div key={name}>
+											<div className={`${name=='content_title' ? '' : 'margin-bottom-15'}`.classNames()}>
+												<strong className={'d-block font-weight-600'.classNames()}>
+													{label}{required ? <span className={'color-error'.classNames()}>*</span> : null}
+												</strong>
+
+												{
+													!hint ? null :
+													<small className={'d-block'.classNames()}>
+														{hint}
+													</small>
+												}
+
+												{
+													('text' !=type && 'textarea' != type ) ? null :
+													<TextField 
+														type={type}
+														placeholder={placeholder} 
+														onChange={v=>setVal(name, v)}
+														value={state.values[name]}/>
+												}
+
+												{
+													'textarea_rich' !== type ? null :
+													<TextEditor
+														placeholder={__('Write description..')}
+														value={state.values[name]}
+														onChange={v=>setVal(name, v)}/>
+												}
+
+												{
+													'file' !== type ? null :
+													<FileUpload 
+														accept={accept}
+														onChange={v=>setVal(name, v)}
+														maxlength={maxlength}
+														value={state.values[name] || null}
+														removable={removable}/>
+												}
+
+												{
+													'dropdown' !== type ? null :
+													<DropDown
+														placeholder={placeholder}
+														value={state.values[name]}
+														options={options}
+														onChange={value=>setVal(name, value)}/>
+												}
+											</div>
+
+											{
+												(name != 'content_title' || !state.values.content_slug) ? null : 
+												<div 
+													className={'d-flex align-items-center flex-wrap-wrap flex-direction-row column-gap-5'.classNames()}
+													style={{margin: '3px 0 15px', height: '34px'}}
+												>
+													<a 
+														href={state.values.content_permalink} 
+														target='_blank'
+													>
+														{window[data_pointer].permalinks.gallery[content_type]}{state.slug_editor ? null : <><strong>{state.values.content_slug}</strong>/</>}
+													</a>
+
+													{
+														!state.slug_editor ? 
+															<i 
+																className={'ch-icon ch-icon-edit-2 cursor-pointer font-size-18'.classNames()}
+																onClick={()=>setState({...state, slug_editor: true})}></i>
+															:
+															<>
+																<TextField 
+																	style={{width: '170px', height: '30px', padding: '0 9px'}}
+																	value={state.values.content_slug}
+																	autofocus={true}
+																	onChange={content_slug=>setVal('content_slug', content_slug)}
+																/>
+																<button 
+																	className={'button button-primary button-outlined button-small'.classNames()}
+																	onClick={updateSlug}
+																	disabled={readonly_mode}
+																>
+																	{__('Update')} <LoadingIcon show={state.updating_slug}/>
+																</button>
+															</>
+													}
+												</div>
+											}
+										</div>
+									})
+								}
+
+								<DoAction 
+									action="solidie_content_editor_after_form" 
+									payload={{
+										content: state.values,
+										content_type,
+										onChange: setVal
+									}}
+								/>
+								
+								<div className={'text-align-right'.classNames()}>
+									<button 
+										disabled={readonly_mode || state.submitting} 
+										className={'button button-primary'.classNames()} 
+										onClick={submit}
+									>
+										{content_id ? __('Update') : __('Create')} <LoadingIcon show={state.submitting}/>
+									</button>
+								</div>
+							</div>		
+						}		
 					</>				
 				}
 			</div>

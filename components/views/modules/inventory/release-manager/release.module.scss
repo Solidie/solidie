@@ -1,0 +1,9 @@
+.release-wrapper {
+	tr {
+		&:not(:hover) {
+			.actions {
+				visibility: hidden;
+			}
+		}
+	}
+}

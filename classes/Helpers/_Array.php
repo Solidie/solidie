@@ -275,7 +275,7 @@ class _Array {
 		$nested_array = array();
 
 		foreach ( $elements as $element ) {
-			if ( $parent_id === $element[ $col_name ] ) {
+			if ( is_array( $element ) && $parent_id === ( $element[ $col_name ] ?? null ) ) {
 				$children = self::buildNestedArray( $elements, $element[ $parent_col_name ], $col_name, $parent_col_name );
 
 				if ( ! empty( $children ) ) {
