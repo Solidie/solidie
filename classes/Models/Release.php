@@ -87,9 +87,10 @@ class Release {
 		}
 		
 		$release = array(
-			'version'    => $data['version'],
-			'changelog'  => $data['changelog'],
-			'content_id' => $data['content_id'],
+			'version'      => $data['version'],
+			'changelog'    => $data['changelog'],
+			'content_id'   => $data['content_id'],
+			'release_date' => ! empty( $data['release_date'] ) ? $data['release_date'] : gmdate('Y-m-d H:i:s')
 		);
 
 		global $wpdb;

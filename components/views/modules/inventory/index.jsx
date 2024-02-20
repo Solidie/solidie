@@ -220,7 +220,7 @@ export function Inventory({navigate, params={}}) {
 	>
 		{
 			// When no content created at all
-			!state.contents.length ?
+			(!state.contents.length && isEmpty(filterState.search)) ?
 				<div className={'padding-vertical-40 text-align-center'.classNames()}>
 					{
 						state.fetching ? <div>

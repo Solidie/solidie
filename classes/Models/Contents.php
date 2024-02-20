@@ -140,11 +140,12 @@ class Contents {
 		// Save downloadable file through release to maintain consistency with app type content and other dependencies.
 		Release::pushRelease(
 			array(
-				'version'    => $content_data['version'] ?? null,
-				'changelog'  => $content_data['changelog'] ?? null,
-				'content_id' => $content_id,
-				'release_id' => (int) ( $content_data['release_id'] ?? 0 ),
-				'file'       => $files['downloadable_file'] ?? null,
+				'version'      => $content_data['version'] ?? null,
+				'changelog'    => ! empty( $content_data['changelog'] ) ? strip_tags( $content_data['changelog'] ) : null,
+				'content_id'   => $content_id,
+				'release_id'   => (int) ( $content_data['release_id'] ?? 0 ),
+				'file'         => $files['downloadable_file'] ?? null,
+				'release_date' => gmdate('Y-m-d H:i:s')
 			)
 		);
 

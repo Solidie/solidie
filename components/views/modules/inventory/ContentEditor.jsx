@@ -55,7 +55,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 	const initial_values = {
 		content_type: content_type,
 		content_title: '',
-		content_description: '',
+		kses_content_description: '',
 		category_id: 0,
 		thumbnail: null, // General purpose content thumbnail, video poster
 		sample_images:[], // Sample images for fonts, photo templates, apps
@@ -82,8 +82,8 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 			required: true
 		},
 		{
-			type: 'textarea',
-			name: 'content_description',
+			type: 'textarea_rich',
+			name: 'kses_content_description',
 			label: __('Description'),
 			placeholder: __('Write some description here'),
 			required: true
@@ -117,12 +117,12 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 		('app' !== content_type ? null : {
 			type: 'text',
 			name: 'version',
-			label: __('App Version (Latest)'),
+			label: __('App Version'),
 		}),
 		('app' !== content_type ? null : {
 			type: 'textarea',
-			name: 'changelog',
-			label: __('Changelog (Latest)'),
+			name: 'kses_changelog',
+			label: <>{__('Changelog')} - <i>{__('Separate by new line')}</i></>,
 		}),
 		{
 			type: 'dropdown',
@@ -223,15 +223,15 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 				
 				const release = content.release || null;
 
-				values.content_title       = content.content_title;
-				values.content_description = content.content_description;
-				values.content_permalink   = content.content_permalink;
-				values.content_slug        = content.content_slug;
-				values.category_id         = content.category_id;
-				values.thumbnail           = content.media.thumbnail;
-				values.preview             = content.media.preview;
-				values.sample_images       = content.media.sample_images;
-				values.product             = content.product;
+				values.content_title            = content.content_title;
+				values.kses_content_description = content.content_description;
+				values.content_permalink        = content.content_permalink;
+				values.content_slug             = content.content_slug;
+				values.category_id              = content.category_id;
+				values.thumbnail                = content.media.thumbnail;
+				values.preview                  = content.media.preview;
+				values.sample_images            = content.media.sample_images;
+				values.product                  = content.product;
 
 				if ( release ) {
 					values.downloadable_file = {
@@ -242,10 +242,10 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 					}
 
 					// Add latest release info too for downloadable file update feature
-					values.release_id = release.release_id;
-					values.version = release.version;
-					values.changelog = release.changelog;
-					values.release_id = release.release_id;
+					values.release_id     = release.release_id;
+					values.version        = release.version;
+					values.kses_changelog = release.changelog;
+					values.release_id     = release.release_id;
 				}
 			}
 			
@@ -348,7 +348,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 										}
 
 										{
-											'text' !=type ? null :
+											('text' !=type && 'textarea' != type ) ? null :
 											<TextField 
 												type={type}
 												placeholder={placeholder} 
@@ -357,7 +357,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 										}
 
 										{
-											'textarea' !== type ? null :
+											'textarea_rich' !== type ? null :
 											<TextEditor
 												placeholder={__('Write description..')}
 												value={state.values[name]}

@@ -5,7 +5,7 @@ Tags: image stock, video stock, content marketplace, stock contributors, digital
 Requires at least: 5.3
 Tested up to: 6.4.3
 Requires PHP: 7.4
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 License: GPLv3
 License URI: https://opensource.org/licenses/GPL-3.0
 
@@ -56,6 +56,13 @@ Yes, with the pro version. You can sell various plans for apps and all other con
 You can [create issue](https://github.com/Solidie/Solidie/issues) on Github repository or write here in [support channel](https://wordpress.org/support/plugin/solidie/).
 
 == Changelog ==
+
+= v1.0.3 -> Feb 25, 2024 =
+--------------------------
+* Fix: Content description formatting gets removed
+* Update: Plain text has been preferred for changelogs
+* Update: Anchor tag and youtube video link support added in content description
+* Update: Prev Next navigation added in sample image previewer
 
 = v1.0.2 -> Feb 18, 2024 =
 --------------------------
