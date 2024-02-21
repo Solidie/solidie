@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Feb 17, 2024 at 09:17 PM
+-- Generation Time: Feb 21, 2024 at 05:38 AM
 -- Server version: 8.0.16
 -- PHP Version: 8.1.23
 
@@ -106,6 +106,24 @@ CREATE TABLE IF NOT EXISTS `wp_solidie_license_keys` (
   `endpoint` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci DEFAULT NULL COMMENT 'Site URL for web, any string for other apps.',
   PRIMARY KEY (`license_id`),
   UNIQUE KEY `license_key` (`license_key`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `wp_solidie_lsessons`
+--
+
+CREATE TABLE IF NOT EXISTS `wp_solidie_lsessons` (
+  `lesson_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `lesson_title` varchar(255) COLLATE utf8mb4_unicode_520_ci NOT NULL,
+  `lesson_content` longtext COLLATE utf8mb4_unicode_520_ci,
+  `parent_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `content_id` bigint(20) NOT NULL,
+  `lesson_status` varchar(10) COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
+  `sequence` int(10) UNSIGNED NOT NULL,
+  PRIMARY KEY (`lesson_id`),
+  KEY `lesson_status` (`lesson_status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 
 -- --------------------------------------------------------

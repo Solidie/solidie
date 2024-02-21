@@ -36,7 +36,7 @@ addFilter(
 		{
 			show_menu: false,
 			path: 'inventory-edit/',
-			full_path: 'inventory/:content_type/editor/:content_id',
+			full_path: 'inventory/:content_type/editor/:content_id/:segment?/:segment_id?/',
 			text: __('Content Editor'),
 			icon: '',
 			component: function(el, data) {

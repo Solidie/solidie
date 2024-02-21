@@ -19,7 +19,7 @@ export function InventoryBackend(props) {
 		<HashRouter>
 			<Routes>
 				<Route path={getDashboardPath("inventory/:content_type?/")} element={<DashboardNavLayer component={Inventory} payload={props}/>} />
-				<Route path={getDashboardPath("inventory/:content_type/editor/:content_id")} element={<DashboardNavLayer component={ContentEditor} payload={props}/>} />
+				<Route path={getDashboardPath("inventory/:content_type/editor/:content_id/:segment?/:segment_id?/")} element={<DashboardNavLayer component={ContentEditor} payload={props}/>} />
 				<Route path={getDashboardPath("*")} element={<Navigate to="inventory" replace />} />
 				<Route path={getDashboardPath("").replace(/\/+$/, '')} element={<Navigate to="inventory" replace />} />
 			</Routes>

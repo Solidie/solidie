@@ -98,11 +98,7 @@ export function InventoryWrapper({children, content_label, gallery_permalink, na
 			}
 		</div>
 		
-		{
-			content_type!=='tutorial' ? children : <div className={'padding-vertical-40 text-align-center'.classNames()}>
-				{__('Tutorial Management is an upcoming feature')}
-			</div>
-		}
+		{children}
 	</div>
 }
 

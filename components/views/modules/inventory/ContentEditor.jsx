@@ -16,6 +16,7 @@ import { InventoryWrapper } from "./index.jsx";
 import { getFlattenedCategories } from "../../admin-dashboard/settings/general/content-type/category-editor.jsx";
 import { ReleaseManager } from "./release-manager/release-manager.jsx";
 import { TutorialManager } from "./tutorial-manager/tutorial-manager.jsx";
+import { getDashboardPath } from "solidie-materials/helpers.jsx";
 
 const {readonly_mode} = window[data_pointer];
 
@@ -51,8 +52,16 @@ const img_extensions = [
 ];
 
 export function ContentEditor({categories=[], navigate, params={}}) {
+
 	const {ajaxToast, addToast} = useContext(ContextToast);
-	const {content_type, content_id: _content_id} = params;
+	
+	const {
+		content_type, 
+		content_id: _content_id, 
+		segment: active_tab='overview',
+		segment_id: active_stuff_id
+	} = params;
+
 	const content_id = isNaN(_content_id) ? 0 : _content_id;
 	
 	const initial_values = {
@@ -67,7 +76,6 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 	}
 
 	const [state, setState] = useState({
-		active_tab: 'overview',
 		submitting: false,
 		slug_editor: false,
 		updating_slug: false,
@@ -182,7 +190,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 
 				// Replace current URL state with content ID to make it update from later attempts
 				if ( ! content_id ) {
-					navigate('/inventory/'+content_type, {replace: true});
+					navigate(getDashboardPath('inventory/'+content_type), {replace: true});
 				} else {
 					window.location.reload();
 				}
@@ -313,34 +321,29 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 							['app', 'tutorial'].indexOf(content_type)===-1 ? null :
 							<div className={'margin-bottom-20'.classNames()}>
 								<Tabs
-									active={state.active_tab}
+									theme="button"
+									active={active_tab}
+									onNavigate={(active_tab) => navigate(getDashboardPath(`inventory/${content_type}/editor/${_content_id}/${active_tab}/`))}
 									tabs={[
 										{
 											id: 'overview',
 											label: __('Overview')
 										},
 										{
-											id: 'details',
+											id: content_type === 'app' ? 'release-manager' : 'lessons',
 											label: content_type === 'app' ? __('Release Management') : __('Lessons')
 										}
 									]}
-									onNavigate={(active_tab) => setState({ ...state, active_tab })}
-									theme="button"
 								/>
 							</div>
 							
 						}
 
+						{(active_tab=='release-manager' && content_type==='app') ? <ReleaseManager content_id={content_id}/> : null}
+						{(active_tab=='lessons' && content_type==='tutorial') ? <TutorialManager content_id={content_id} lesson_id={active_stuff_id} navigate={navigate} content_type={content_type}/> : null}
+						
 						{
-							state.active_tab!=='details' ? null :
-							<>
-								{content_type==='app' ? <ReleaseManager content_id={content_id}/> : null}
-								{content_type==='tutorial' ? <TutorialManager content_id={content_id}/> : null}
-							</>
-						}
-
-						{
-							state.active_tab !== 'overview' ? null :
+							active_tab !== 'overview' ? null :
 							<div className={'border-radius-10 padding-15 border-1 b-color-tertiary'.classNames()}>
 								{
 									fields.map(field=>{
