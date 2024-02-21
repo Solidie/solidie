@@ -74,5 +74,6 @@ class Database {
 		$wpdb->solidie_tokens       = $prefix . 'tokens';
 		$wpdb->solidie_comments     = $prefix . 'comments';
 		$wpdb->solidie_reactions    = $prefix . 'reactions';
+		$wpdb->solidie_lessons      = $prefix . 'lessons';
 	}
 }

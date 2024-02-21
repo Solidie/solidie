@@ -217,7 +217,7 @@ class ContentController {
 	 * @param int $user_id
 	 * @return void
 	 */
-	private static function contentAccessCheck( $content_id, $user_id ) {
+	public static function contentAccessCheck( $content_id, $user_id ) {
 		if ( ! Contents::isUserCapableToManage( $content_id, $user_id ) ) {
 			wp_send_json_error( array( 'message' => __( 'Access denied!', 'solidie' ) ) );
 		}
