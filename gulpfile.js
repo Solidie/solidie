@@ -70,8 +70,8 @@ function i18n_makepot(target_dir) {
 }
 
 function i18n_makepot_init(callback) {
-	i18n_makepot(path.resolve(__dirname) );
-	i18n_makepot(path.resolve(__dirname + '/../Solidie-Pro') );
+	i18n_makepot(path.resolve(__dirname + '/components') );
+	i18n_makepot(path.resolve(__dirname + '/../solidie-pro/components') );
 	i18n_makepot(path.resolve(__dirname + '/../Materials') );
 
 	if ( typeof callback === 'function' ) {
@@ -81,7 +81,7 @@ function i18n_makepot_init(callback) {
 
 gulp.task('makepot', function () {
     return gulp
-        .src('**/*.php')
+        .src(['./classes/**/*.php', '../solidie-pro/classes/**/*.php'])
         .pipe(
             plumber({
                 errorHandler: onError

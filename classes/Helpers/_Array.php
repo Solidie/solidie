@@ -332,4 +332,30 @@ class _Array {
 		}
 		return $new_array;
 	}
+
+	/**
+	 * Equivalent to array_column, but recursive
+	 *
+	 * @param array  $array Nested array
+	 * @param string $column The column name to get
+	 * @param string $children_column The column name that holds children
+	 *
+	 * @return array The Linear array containing column values from nested array
+	 */
+	public static function arrayColumnRecursive( $array, $column, $children_column ) {
+		
+		$values = array();
+
+		foreach ( $array as $element ) {
+			if ( isset( $element[ $column ] ) ) {
+				$values[] = $element[ $column ];
+			}
+
+			if ( is_array( $element[ $children_column ] ?? null ) ) {
+				$values = array_merge( $values, self::arrayColumnRecursive( $element[ $children_column ], $column, $children_column ) );
+			}
+		}
+
+		return $values;
+	}
 }

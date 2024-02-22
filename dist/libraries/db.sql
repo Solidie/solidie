@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Feb 21, 2024 at 05:38 AM
+-- Generation Time: Feb 22, 2024 at 09:39 PM
 -- Server version: 8.0.16
 -- PHP Version: 8.1.23
 
@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS `wp_solidie_categories` (
   `category_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `category_name` varchar(255) COLLATE utf8mb4_unicode_520_ci NOT NULL,
   `content_type` varchar(20) COLLATE utf8mb4_unicode_520_ci NOT NULL,
-  `parent_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `parent_id` bigint(20) UNSIGNED NOT NULL DEFAULT '0',
   PRIMARY KEY (`category_id`),
   KEY `content_type` (`content_type`),
   KEY `parent_id` (`parent_id`)
@@ -69,6 +69,7 @@ CREATE TABLE IF NOT EXISTS `wp_solidie_contents` (
   `content_slug` varchar(255) COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
   `content_description` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci,
   `content_status` varchar(10) COLLATE utf8mb4_unicode_520_ci NOT NULL,
+  `parent_id` bigint(20) UNSIGNED NOT NULL DEFAULT '0',
   `contributor_id` bigint(20) UNSIGNED NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `modified_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -96,6 +97,25 @@ CREATE TABLE IF NOT EXISTS `wp_solidie_content_meta` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `wp_solidie_lessons`
+--
+
+CREATE TABLE IF NOT EXISTS `wp_solidie_lessons` (
+  `lesson_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `lesson_slug` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL,
+  `lesson_title` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL,
+  `lesson_content` longtext COLLATE utf8mb4_unicode_520_ci,
+  `parent_id` bigint(20) UNSIGNED NOT NULL DEFAULT '0',
+  `content_id` bigint(20) NOT NULL,
+  `lesson_status` varchar(10) COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
+  `sequence` int(10) UNSIGNED NOT NULL,
+  PRIMARY KEY (`lesson_id`),
+  KEY `lesson_status` (`lesson_status`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `wp_solidie_license_keys`
 --
 
@@ -106,24 +126,6 @@ CREATE TABLE IF NOT EXISTS `wp_solidie_license_keys` (
   `endpoint` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci DEFAULT NULL COMMENT 'Site URL for web, any string for other apps.',
   PRIMARY KEY (`license_id`),
   UNIQUE KEY `license_key` (`license_key`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `wp_solidie_lsessons`
---
-
-CREATE TABLE IF NOT EXISTS `wp_solidie_lsessons` (
-  `lesson_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `lesson_title` varchar(255) COLLATE utf8mb4_unicode_520_ci NOT NULL,
-  `lesson_content` longtext COLLATE utf8mb4_unicode_520_ci,
-  `parent_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `content_id` bigint(20) NOT NULL,
-  `lesson_status` varchar(10) COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
-  `sequence` int(10) UNSIGNED NOT NULL,
-  PRIMARY KEY (`lesson_id`),
-  KEY `lesson_status` (`lesson_status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 
 -- --------------------------------------------------------
@@ -168,7 +170,7 @@ CREATE TABLE IF NOT EXISTS `wp_solidie_releases` (
   `release_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `content_id` bigint(20) UNSIGNED NOT NULL,
   `file_id` bigint(20) UNSIGNED NOT NULL,
-  `parent_id` bigint(20) UNSIGNED DEFAULT NULL COMMENT 'For release edit review purpose',
+  `parent_id` bigint(20) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'For release edit review purpose',
   `version` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci DEFAULT NULL COMMENT 'Will be null for non-app contents',
   `download_count` bigint(20) UNSIGNED NOT NULL DEFAULT '0',
   `changelog` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci COMMENT 'Will be null for non-app contents',
@@ -190,7 +192,7 @@ CREATE TABLE IF NOT EXISTS `wp_solidie_sales` (
   `product_id` bigint(20) UNSIGNED NOT NULL,
   `order_id` bigint(20) UNSIGNED NOT NULL,
   `variation_id` bigint(20) UNSIGNED NOT NULL,
-  `parent_id` bigint(20) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Parent ID is here to simulate subscription model little bit',
+  `parent_id` bigint(20) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Parent ID is here to simulate subscription model little bit. Subsequent renewal order will be child sales.',
   `order_status` varchar(15) COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
   `sale_price` double UNSIGNED NOT NULL,
   `commission` double NOT NULL COMMENT 'The exact amount site owner will get',

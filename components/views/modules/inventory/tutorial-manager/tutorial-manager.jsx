@@ -4,10 +4,11 @@ import {__} from 'crewhrm-materials/helpers.jsx'
 import {ListManager} from 'crewhrm-materials/list-manager/list-manager.jsx'
 import { request } from "crewhrm-materials/request.jsx";
 import { ContextToast } from "crewhrm-materials/toast/toast.jsx";
+import { LoadingIcon } from "crewhrm-materials/loading-icon/loading-icon";
+import { InitState } from "crewhrm-materials/init-state.jsx";
 
 import { LessonEditor } from "./lesson-editor";
 import { getDashboardPath } from "solidie-materials/helpers";
-import { LoadingIcon } from "crewhrm-materials/loading-icon/loading-icon";
 
 export function TutorialManager({content_id, content_type, lesson_id, navigate}) {
 
@@ -17,7 +18,8 @@ export function TutorialManager({content_id, content_type, lesson_id, navigate})
 		lessons: [],
 		has_changes: false,
 		saving: false,
-		fetching: false
+		fetching: false,
+		error_message: null,
 	});
 	
 	const setLessons=(lessons)=>{
@@ -37,12 +39,34 @@ export function TutorialManager({content_id, content_type, lesson_id, navigate})
 	}
 
 	const fetchLessonsHierarchy=()=>{
-		
+
+		setState({
+			...state,
+			fetching: true
+		});
+
+		request('getLessonsHierarchy', {content_id}, resp=>{
+
+			const {
+				success, 
+				data:{
+					lessons=[], 
+					message=__('Something went wrong!')
+				}
+			} = resp;
+
+			setState({
+				...state,
+				fetching: false,
+				error_message: !success ? message : null,
+				lessons
+			})
+		});
 	}
 
 	const updateLessons=()=>{
 		
-		if ( ! window.confirm(__('If you\'ve removed any lesson, it will delete all its children too. Sure to update?')) ) {
+		if ( ! window.confirm(__('Sure to save the changes?')) ) {
 			return;
 		}
 
@@ -74,39 +98,55 @@ export function TutorialManager({content_id, content_type, lesson_id, navigate})
 		{__('Please save the overview first')}
 	</div> 
 	:
-	(
-		lesson_id ? 
-		<LessonEditor lesson_id={lesson_id}/> 
-		:
-		<div className={'margin-bottom-50'.classNames()}>
-			<ListManager
-				mode="queue"
-				id_key="lesson_id"
-				label_key="lesson_title"
-				list={state.lessons}
-				onChange={setLessons}
-				onEdit={!state.has_changes ? editLesson : null}
-				addText={__('Add Lesson')}
-				nested={true}
+	<>
+		{
+			(state.fetching || state.error_message) ?
+			<InitState 
+				fetching={state.fetching} 
+				error_message={state.error_message}
 			/>
+			:
+			(
+				lesson_id ? 
+				<LessonEditor 
+					content_id={content_id}
+					lesson_id={lesson_id}
+					lessons={state.lessons}
+				/> 
+				:
+				<div className={'margin-bottom-50'.classNames()}>
+					<ListManager
+						mode="queue"
+						id_key="lesson_id"
+						label_key="lesson_title"
+						list={state.lessons}
+						onChange={setLessons}
+						onEdit={!state.has_changes ? editLesson : null}
+						addText={__('Add Lesson')}
+						nested={true}
+					/>
 
-			{
-				!state.has_changes ? null :
-				<div className={'d-flex align-items-center column-gap-15 margin-top-15'.classNames()}>
-					<div className={'flex-1 text-align-right'.classNames()}>
-						<i>{__('To edit lesson contents, you need to save the hierarchy first.')}</i>
-					</div>
-					<div>
-						<button 
-							className={'button button-primary'.classNames()} 
-							onClick={updateLessons}
-							disabled={state.saving || state.fetching}
-						>
-							{__('Save Hierarchy')} <LoadingIcon show={state.saving}/>
-						</button>
+					<div className={'d-flex align-items-center column-gap-15 margin-top-15'.classNames()}>
+						<div className={'flex-1 text-align-right'.classNames()}>
+							{
+								!state.has_changes ? null :
+								<i>
+									{__('To edit lesson contents, you need to save the hierarchy first.')}
+								</i>
+							}
+						</div>
+						<div>
+							<button 
+								className={'button button-primary'.classNames()} 
+								onClick={updateLessons}
+								disabled={state.saving || state.fetching || !state.has_changes}
+							>
+								{__('Save Hierarchy')} <LoadingIcon show={state.saving}/>
+							</button>
+						</div>
 					</div>
 				</div>
-			}
-		</div>
-	)
+			)
+		}
+	</>
 }

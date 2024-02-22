@@ -25,7 +25,7 @@ class Comment {
 		$comment = array(
 			'content_id'        => $args['content_id'],
 			'comment_content'   => $args['comment_content'],
-			'parent_id'         => $args['parent_id'],
+			'parent_id'         => ! empty( $args['parent_id'] ) ? $args['parent_id'] : 0,
 			'user_id'           => $args['user_id'],
 			'comment_edit_date' => gmdate('Y-m-d H:i:s')
 		);

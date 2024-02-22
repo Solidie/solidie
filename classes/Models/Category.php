@@ -22,7 +22,7 @@ class Category {
 	public static function createUpdateCategory( array $category ) {
 		$_category = array(
 			'category_name' => $category['category_name'],
-			'parent_id'     => ! empty( $category['parent_id'] ) ? $category['parent_id'] : null,
+			'parent_id'     => ! empty( $category['parent_id'] ) ? $category['parent_id'] : 0,
 			'content_type'  => $category['content_type'],
 		);
 

@@ -340,7 +340,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 						}
 
 						{(active_tab=='release-manager' && content_type==='app') ? <ReleaseManager content_id={content_id}/> : null}
-						{(active_tab=='lessons' && content_type==='tutorial') ? <TutorialManager content_id={content_id} lesson_id={active_stuff_id} navigate={navigate} content_type={content_type}/> : null}
+						{(active_tab=='lessons' && content_type==='tutorial') ? <TutorialManager content_id={content_id} lesson_id={parseInt(active_stuff_id || 0)} navigate={navigate} content_type={content_type}/> : null}
 						
 						{
 							active_tab !== 'overview' ? null :

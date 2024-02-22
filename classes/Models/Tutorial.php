@@ -6,30 +6,65 @@
 
 namespace Solidie\Models;
 
+use Solidie\Helpers\_Array;
+use Solidie\Helpers\_String;
+
+// To Do: Add image/video support in lesson content
+
 class Tutorial {
 
-	private static function getLinearLessonsHierarchy( $lessons ) {
-		
-		$rows = array();
+	/**
+	 * Insert or update individual lessons structures
+	 *
+	 * @param int      $content_id The content ID of lessons
+	 * @param array    $lessons Nested lessons array
+	 * @param int|null $parent_id Parent ID to set
+	 *
+	 * @return array The IDs that remains after removal of others
+	 */
+	private static function updateLessonsRecursive( $content_id, $lessons, $parent_id = 0 ) {
 
-		foreach ( $lessons as $lesson ) {
+		$remaining_ids = array();
+		
+		global $wpdb;
+
+		foreach ( $lessons as $index => $lesson ) {
+
+			$lesson_id = $lesson['lesson_id'];
 			
-			$rows[] = array(
-				'lessons_id'   => $lesson['lesson_id'],
-				'lesson_title' => $lesson['lesson_title']
+			$payload = array(
+				'lesson_title' => $lesson['lesson_title'],
+				'parent_id'    => $parent_id,
+				'content_id'   => $content_id,
+				'sequence'     => $index + 1
 			);
+
+			if ( is_numeric( $lesson_id ) ) {
+				
+				$wpdb->update(
+					$wpdb->solidie_lessons,
+					$payload,
+					array( 'lesson_id' => $lesson_id )
+				);
+			} else {
+				$wpdb->insert(
+					$wpdb->solidie_lessons,
+					$payload
+				);
+
+				$lesson_id = $wpdb->insert_id;
+			}
+
+			$remaining_ids[] = ( int ) $lesson_id;
 
 			$children = $lesson['children'] ?? array();
 			if ( ! empty( $children ) ) {
-				$rows = array_merge( $rows, self::getLinearLessonsHierarchy( $children ) );
+				$left_over_ids = self::updateLessonsRecursive( $content_id, $children, $lesson_id );
+				$remaining_ids = array_merge( $remaining_ids, $left_over_ids );
 			}
 		}
 
-		return $rows;
-	}
-
-	private static function getNestedLessonsHierarchy() {
-		
+		return $remaining_ids;
 	}
 
 	/**
@@ -40,69 +75,139 @@ class Tutorial {
 	 */
 	public static function updateLessonsHierarchy( $content_id, $lessons ) {
 		
-		$linear = self::getLinearLessonsHierarchy( $lessons );
+		error_log( var_export( $lessons, true ) );
 
-		$existings    = self::getLessonsDefinitions( $content_id );
-		$existing_ids = array_column( $existings, 'lesson_id' );
+		// Update or insert the remaining lessons
+		$remaining_ids = self::updateLessonsRecursive( $content_id, $lessons );
 
-		// Delete removed ones
-		$remaining_ids = array_filter( array_column( $linear, 'lesson_id' ), 'is_numeric' );
-		$to_delete = array_diff( $existing_ids, $remaining_ids );
+		// Get existing lesson IDs of the content
+		global $wpdb;
+		$existing_ids = $wpdb->get_col(
+			$wpdb->prepare(
+				"SELECT lesson_id FROM {$wpdb->solidie_lessons} WHERE content_id=%d",
+				$content_id
+			)
+		);
 
+		// Delete the lessons from DB that were removed
+		$removed_ids = array_diff( array_map( 'intval', $existing_ids ), $remaining_ids );
+		if ( ! empty( $removed_ids ) ) {
 
-		// Update existing ones
-
-		// Create new ones
-		$updates = 
+			$ids_places = _String::getPlaceHolders( $removed_ids );
+			$wpdb->query(
+				$wpdb->prepare(
+					"DELETE FROM {$wpdb->solidie_lessons} WHERE lesson_id IN ({$ids_places})",
+					...$removed_ids
+				)
+			);
+		}
 	}
 
 	/**
-	 * Get lessons hierarchy for a tutorial content id
+	 * Get all the descendents IDs
 	 *
-	 * @param int $content_id
+	 * @param id $id
 	 * @return array
 	 */
-	public static function getLessonsDefinitions( $content_id, $hierarchical = false ) {
+	public static function getLessonsRecursive( $content_id, $lesson_id = 0 ) {
 		
-		global $wpdb;
+		$lessons = array();
 
-		$lessons = $wpdb->get_results(
+		global $wpdb;
+		$results = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT lesson_id, lesson_title, parent_id, sequence FROM {$wpdb->solidie_lessons} WHERE content_id=%d",
+				"SELECT 
+					lesson_id, 
+					lesson_title 
+				FROM 
+					{$wpdb->solidie_lessons} 
+				WHERE 
+					content_id=%d 
+					AND parent_id=%d 
+				ORDER BY sequence ASC",
+				$content_id,
+				$lesson_id
+			),
+			ARRAY_A
+		);
+
+		foreach ( $results as $lesson ) {
+			
+			$lesson_id = ( int ) $lesson['lesson_id'];
+			
+			$lessons[] = array(
+				'lesson_id'    => $lesson_id,
+				'lesson_title' => $lesson['lesson_title'],
+				'children'     => self::getLessonsRecursive( $content_id, $lesson_id )
+			);
+		}
+		
+		return $lessons;
+	}
+
+	/**
+	 * Get single lesson by content and lesson ID
+	 *
+	 * @param int $content_id
+	 * @param int $lesson_id
+	 * @return array
+	 */
+	public static function getLesson( $content_id, $lesson_id, $status = null ) {
+
+		global $wpdb;
+		
+		$where_clause = '';
+
+		// Status filter
+		if ( ! empty( $status ) ) {
+			$where_clause .= $wpdb->prepare( ' AND lesson_status=%s', $status );
+		}
+
+		$lesson = $wpdb->get_row(
+			$wpdb->prepare(
+				"SELECT 
+					lesson_title, 
+					lesson_content, 
+					parent_id 
+				FROM 
+					{$wpdb->solidie_lessons} 
+				WHERE 
+					lesson_id=%d 
+					AND content_id=%d 
+					{$where_clause}
+				LIMIT 1",
+				$lesson_id,
 				$content_id
 			),
 			ARRAY_A
 		);
 
-		return $lessons;
+		return ! empty( $lesson ) ? _Array::castRecursive( $lesson ) : null;
 	}
 
 	/**
-	 * Delete lesson by lesson ID/s
+	 * Update single lesson
 	 *
-	 * @param int|array $lesson_id Lesson ID or array of IDs
-	 *
-	 * @return void
+	 * @param array $lesson
+	 * @return bool
 	 */
-	public static function deleteLesson( $lesson_id ) {
+	public static function updateLessonSingle( array $lesson ) {
 		
-		if ( empty( $lesson_id ) ) {
-			return;
+		$exists = self::getLesson( $lesson['content_id'], $lesson['lesson_id'] );
+		if ( empty( $exists ) ) {
+			return false;
 		}
-
-		$lesson_ids = is_array( $lesson_id ) ? $lesson_id : array( $lesson_id );
 
 		global $wpdb;
-
-		foreach ( $lesson_ids as $id ) {
-			$descendent_ids = self::getDescendentIDs( $id );
-			$ids = array_merge( $id, $descendent_ids );
-
-			$wpdb->delete(
-				$wpdb->sol
+		$wpdb->update(
+			$wpdb->solidie_lessons,
+			$lesson,
+			array( 
+				'lesson_id' => $lesson['lesson_id'], 
+				'content_id' => $lesson['content_id'] 
 			)
-		}
-	}
+		);
 
-	public static function getDescendentIDs(  )
+		return true;
+	}
 }
