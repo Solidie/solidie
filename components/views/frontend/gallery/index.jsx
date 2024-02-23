@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { BrowserRouter, Route, Routes, useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { BrowserRouter, Route, Routes, useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
 
 import { DropDown } from "crewhrm-materials/dropdown/dropdown.jsx";
 import { request } from "crewhrm-materials/request.jsx";
@@ -19,6 +19,7 @@ import { Audio } from "./audio/audio.jsx";
 
 import style from './index.module.scss';
 import { Sidebar } from "./sidebar.jsx";
+import { Tutorial } from "../tutorial/tutorial.jsx";
 
 const renderers = {
 	video: Video,
@@ -224,6 +225,20 @@ function GalleryLayout({categories={}}) {
 	</div>
 }
 
+function LessonWrapper() {
+
+	const {home_path} = window[data_pointer];
+
+	const {content_slug, content_type_slug} = useParams();
+	const {pathname} = useLocation();
+	const sub_paths = pathname.slice(`${home_path}${content_type_slug}/${content_slug}/`.length);
+	
+	return <Tutorial 
+		content_slug={content_slug}
+		path={sub_paths.split('/').filter(p=>p).join('/')}
+	/>
+}
+
 export function Gallery(props) {
 
 	const {home_path} = window[data_pointer];
@@ -232,6 +247,7 @@ export function Gallery(props) {
 		<Routes>
 			<Route path={home_path+':content_type_slug/'} element={<GalleryLayout {...props}/>}/>
 			<Route path={home_path+':content_type_slug/:content_slug/'} element={<SingleWrapper {...props}/>}/>
+			<Route path={home_path+':content_type_slug/:content_slug/*'} element={<LessonWrapper {...props}/>}/>
 		</Routes>
 	</BrowserRouter>
 }

@@ -104,21 +104,32 @@ class Tutorial {
 	}
 
 	/**
-	 * Get all the descendents IDs
+	 * Get nested lessons structure
 	 *
-	 * @param id $id
-	 * @return array
+	 * @param int $content_id
+	 * @param string|null $status
+	 * @param integer $lesson_id For internal call only
+	 * @param string|null $permalink_base For internal call only
+	 *
+	 * @return array Nested lessons array
 	 */
-	public static function getLessonsRecursive( $content_id, $lesson_id = 0 ) {
+	public static function getLessonsRecursive( $content_id, $lesson_id = 0, $permalink_base = null ) {
 		
 		$lessons = array();
 
+		if ( empty( $permalink_base ) ) {
+			$permalink_base = Contents::getPermalink( $content_id );
+		}
+
 		global $wpdb;
+		
 		$results = $wpdb->get_results(
 			$wpdb->prepare(
 				"SELECT 
 					lesson_id, 
-					lesson_title 
+					lesson_title,
+					lesson_slug,
+					lesson_status
 				FROM 
 					{$wpdb->solidie_lessons} 
 				WHERE 
@@ -133,12 +144,16 @@ class Tutorial {
 
 		foreach ( $results as $lesson ) {
 			
-			$lesson_id = ( int ) $lesson['lesson_id'];
+			$lesson_id        = ( int ) $lesson['lesson_id'];
+			$lesson_permalink = $permalink_base . $lesson['lesson_slug'] . '/';
 			
 			$lessons[] = array(
-				'lesson_id'    => $lesson_id,
-				'lesson_title' => $lesson['lesson_title'],
-				'children'     => self::getLessonsRecursive( $content_id, $lesson_id )
+				'lesson_id'        => $lesson_id,
+				'lesson_permalink' => $lesson_permalink,
+				'lesson_title'     => $lesson['lesson_title'],
+				'lesson_slug'      => $lesson['lesson_slug'],
+				'lesson_status'    => $lesson['lesson_status'],
+				'children'         => self::getLessonsRecursive( $content_id, $lesson_id, $lesson_permalink )
 			);
 		}
 		
@@ -168,6 +183,7 @@ class Tutorial {
 				"SELECT 
 					lesson_title, 
 					lesson_content, 
+					lesson_slug,
 					parent_id 
 				FROM 
 					{$wpdb->solidie_lessons} 
@@ -209,5 +225,40 @@ class Tutorial {
 		);
 
 		return true;
+	}
+
+	/**
+	 * Get lesson ID by lesson slug 
+	 *
+	 * @param string $path
+	 * @return void
+	 */
+	public static function getLessonIdByPath( string $path ) {
+
+		$segments = explode( '/', $path );
+		$lesson_id = null;
+
+		global $wpdb;
+
+		foreach ( $segments as $segment ) {
+
+			$where = '';
+			if ( ! empty( $lesson_id ) ) {
+				$where .= $wpdb->prepare( ' AND parent_id=%d', $lesson_id );
+			}
+
+			$lesson_id = $wpdb->get_var(
+				$wpdb->prepare(
+					"SELECT lesson_id FROM {$wpdb->solidie_lessons} WHERE lesson_slug=%s {$where} LIMIT 1",
+					$segment
+				)
+			);
+
+			if ( empty( $lesson_id ) ) {
+				break;
+			}
+		}
+
+		return ! empty( $lesson_id ) ? ( int ) $lesson_id : null;
 	}
 }

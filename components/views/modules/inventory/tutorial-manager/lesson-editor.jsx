@@ -130,7 +130,7 @@ export function LessonEditor({content_id, lesson_id, lessons=[]}) {
 			fetching: true
 		});
 
-		request('fetchLessonSingle', {lesson_id, content_id, is_editor: true}, resp=>{
+		request('fetchLessonForEditor', {lesson_id, content_id, is_editor: true}, resp=>{
 
 			const {
 				success, 

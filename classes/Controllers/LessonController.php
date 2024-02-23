@@ -7,6 +7,7 @@
 
 namespace Solidie\Controllers;
 
+use Solidie\Models\Contents;
 use Solidie\Models\Tutorial;
 
 class LessonController {
@@ -17,11 +18,14 @@ class LessonController {
 		'getLessonsHierarchy' => array(
 
 		),
-		'fetchLessonSingle' => array(
-			'nopriv' => true
+		'fetchLessonForEditor' => array(
+
 		),
 		'updateLessonSingle' => array(
 
+		),
+		'loadLessonInTutorial' => array(
+			'nopriv' => true
 		)
 	);
 
@@ -53,23 +57,19 @@ class LessonController {
 	}
 
 	/**
-	 * Get single lesson content and data by lesson ID
+	 * Get single lesson content and data by lesson ID for editor only
 	 *
 	 * @param integer $content_id
 	 * @param integer $lesson_id
 	 * @return void
 	 */
-	public static function fetchLessonSingle( int $content_id, int $lesson_id, bool $is_editor = false ) {
+	public static function fetchLessonForEditor( int $content_id, int $lesson_id ) {
 		
-		// If editor, then must be admin or the author
-		if ( $is_editor ) {
-			ContentController::contentAccessCheck( $content_id, get_current_user_id() );
-		
-		} else {
-			// To Do: If not editor, then make sure either free or purchased the content is
-		}
-
-		$lesosn = Tutorial::getLesson( $content_id, $lesson_id, ! $is_editor ? 'publish' : null );
+		// Content access check
+		ContentController::contentAccessCheck( $content_id, get_current_user_id() );
+			
+		// Get lesson
+		$lesosn = Tutorial::getLesson( $content_id, $lesson_id );
 
 		if ( empty( $lesosn ) ) {
 			wp_send_json_error( array( 'message' => __( 'Lesson not found', 'solidie' ) ) );
@@ -103,5 +103,35 @@ class LessonController {
 		}
 
 		wp_send_json_success( array( 'message' => __( 'Lesson has been published successfully!', 'solidie' ) ) );
+	}
+
+	/**
+	 * Get lesson structure and single content for public view
+	 *
+	 * @param string $content_slug
+	 * @param string $lesson_path
+	 * @return void
+	 */
+	public static function loadLessonInTutorial( string $content_slug, string $lesson_path = '' ) {
+		
+		// To Do: Check paid content
+
+		$content_id = Contents::getContentIdBySlug( $content_slug );
+		if ( empty( $content_id ) ) {
+			wp_send_json_error( array( 'message' => __( 'Content not found!', 'solidie' ) ) );
+		}
+
+		$lesson = null;
+		if ( ! empty( $lesson_path ) ) {
+			$lesson_id = Tutorial::getLessonIdByPath( $lesson_path );
+			$lesson    = $lesson_id ? Tutorial::getLesson( $content_id, $lesson_id, 'publish' ) : null;
+		}
+		
+		wp_send_json_success(
+			array(
+				'lessons' => Tutorial::getLessonsRecursive( $content_id, 'publish' ),
+				'lesson'  => $lesson,
+			)
+		);
 	}
 }

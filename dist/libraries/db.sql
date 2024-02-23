@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Feb 22, 2024 at 09:39 PM
+-- Generation Time: Feb 23, 2024 at 12:56 AM
 -- Server version: 8.0.16
 -- PHP Version: 8.1.23
 
@@ -110,6 +110,7 @@ CREATE TABLE IF NOT EXISTS `wp_solidie_lessons` (
   `lesson_status` varchar(10) COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
   `sequence` int(10) UNSIGNED NOT NULL,
   PRIMARY KEY (`lesson_id`),
+  UNIQUE KEY `lesson_slug` (`lesson_slug`),
   KEY `lesson_status` (`lesson_status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 

@@ -1,0 +1,47 @@
+.tutorial {
+	display: flex;
+	column-gap: 20px;
+	row-gap: 20px;
+	
+	.sidebar {
+		width: 230px;
+
+		.toggle {
+			display: none;
+			align-items: center;
+			column-gap: 15;
+			cursor: pointer;
+		}
+	}
+
+	.content {
+		flex: 1;
+	}
+
+	@media (max-width: 500px) {
+
+		flex-direction: column;
+
+		.sidebar {
+			width: auto;
+			
+			border: 1px solid var(--crewmat-color-tertiary);
+			border-radius: 5px;
+			padding: 10px 15px;
+
+			.toggle {
+				display: flex;
+			}
+
+			.menu-wrapper {
+				margin-top: 10px;
+				border-top: 1px solid var(--crewmat-color-tertiary);
+				padding-top: 20px;
+
+				&:not(.expanded) {
+					display: none;
+				}
+			}
+		}
+	}
+}
