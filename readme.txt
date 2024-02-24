@@ -60,6 +60,7 @@ You can [create issue](https://github.com/Solidie/Solidie/issues) on Github repo
 = v1.0.3 -> Feb 25, 2024 =
 --------------------------
 * Fix: Content description formatting gets removed
+* Fix: Number gets removed from content slug
 * Update: Plain text has been preferred for changelogs
 * Update: Anchor tag and youtube video link support added in content description
 * Update: Prev Next navigation added in sample image previewer

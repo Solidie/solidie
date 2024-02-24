@@ -234,6 +234,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 				values.preview                  = content.media.preview;
 				values.sample_images            = content.media.sample_images;
 				values.product                  = content.product;
+				values.meta_data                = content.meta_data || {};
 
 				if ( release ) {
 					values.downloadable_file = {
@@ -457,6 +458,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 									payload={{
 										content: state.values,
 										content_type,
+										content_type_label: _content.label,
 										onChange: setVal
 									}}
 								/>

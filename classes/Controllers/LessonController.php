@@ -24,6 +24,9 @@ class LessonController {
 		'updateLessonSingle' => array(
 
 		),
+		'updateLessonSlug' => array(
+
+		),
 		'loadLessonInTutorial' => array(
 			'nopriv' => true
 		)
@@ -131,6 +134,29 @@ class LessonController {
 			array(
 				'lessons' => Tutorial::getLessonsRecursive( $content_id, 'publish' ),
 				'lesson'  => $lesson,
+			)
+		);
+	}
+
+	/**
+	 * Update lesson slug
+	 *
+	 * @param integer $content_id
+	 * @param integer $lesson_id
+	 * @param string $lesson_slug
+	 * @return void
+	 */
+	public static function updateLessonSlug( int $content_id, int $lesson_id, string $lesson_slug ) {
+		
+		// Check content slug update access
+		ContentController::contentAccessCheck( $content_id, get_current_user_id() );
+
+		$new_slug = Tutorial::updateLessonSlug( $content_id, $lesson_id, $lesson_slug );
+
+		wp_send_json_success(
+			array(
+				'lesson_slug'      => $new_slug,
+				'lesson_permalink' => Tutorial::getLessonPermalink( $lesson_id )
 			)
 		);
 	}

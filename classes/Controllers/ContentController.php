@@ -202,10 +202,14 @@ class ContentController {
 		}
 		
 		wp_send_json_success(
-			array(
-				'content'                       => $content,
-				'free_download_label'       => apply_filters( 'solidie_free_download_label', $free_label, $content ),
-				'free_download_description' => apply_filters( 'solidie_free_download_description', $free_desc, $content ),
+			apply_filters(
+				'solidie_single_content_response',
+				array(
+					'content'                   => $content,
+					'free_download_label'       => apply_filters( 'solidie_free_download_label', $free_label, $content ),
+					'free_download_description' => apply_filters( 'solidie_free_download_description', $free_desc, $content ),
+				),
+				$is_editor
 			)
 		);
 	}

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Feb 23, 2024 at 12:56 AM
+-- Generation Time: Feb 23, 2024 at 08:39 PM
 -- Server version: 8.0.16
 -- PHP Version: 8.1.23
 
@@ -66,7 +66,7 @@ CREATE TABLE IF NOT EXISTS `wp_solidie_contents` (
   `content_type` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL COMMENT 'app, audio, video, image, 3d, font, document, tutorial',
   `category_id` bigint(20) UNSIGNED DEFAULT NULL,
   `content_title` mediumtext COLLATE utf8mb4_unicode_520_ci,
-  `content_slug` varchar(255) COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
+  `content_slug` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci DEFAULT NULL COMMENT 'Fillable immediately after creating entry',
   `content_description` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci,
   `content_status` varchar(10) COLLATE utf8mb4_unicode_520_ci NOT NULL,
   `parent_id` bigint(20) UNSIGNED NOT NULL DEFAULT '0',
@@ -102,7 +102,7 @@ CREATE TABLE IF NOT EXISTS `wp_solidie_content_meta` (
 
 CREATE TABLE IF NOT EXISTS `wp_solidie_lessons` (
   `lesson_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `lesson_slug` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL,
+  `lesson_slug` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci DEFAULT NULL COMMENT 'Fillable immediately after entry',
   `lesson_title` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL,
   `lesson_content` longtext COLLATE utf8mb4_unicode_520_ci,
   `parent_id` bigint(20) UNSIGNED NOT NULL DEFAULT '0',

@@ -53,6 +53,9 @@ class Tutorial {
 				);
 
 				$lesson_id = $wpdb->insert_id;
+
+				// Assign a new lesson slug
+				self::setLessonSlug( $lesson_id, $lesson['lesson_title'] );
 			}
 
 			$remaining_ids[] = ( int ) $lesson_id;
@@ -75,8 +78,6 @@ class Tutorial {
 	 */
 	public static function updateLessonsHierarchy( $content_id, $lessons ) {
 		
-		error_log( var_export( $lessons, true ) );
-
 		// Update or insert the remaining lessons
 		$remaining_ids = self::updateLessonsRecursive( $content_id, $lessons );
 
@@ -198,7 +199,51 @@ class Tutorial {
 			ARRAY_A
 		);
 
-		return ! empty( $lesson ) ? _Array::castRecursive( $lesson ) : null;
+		if ( empty( $lesson ) ) {
+			return null;
+		}
+
+		$lesson = _Array::castRecursive( $lesson );
+
+		// Assign lesson permalink
+		$lesson['lesson_permalink'] = self::getLessonPermalink( $lesson_id );
+
+		return $lesson;
+	}
+
+	/**
+	 * Get lesson permalink by lesson ID
+	 *
+	 * @param int $lesson_id
+	 * @return string
+	 */
+	public static function getLessonPermalink( $lesson_id ) {
+		
+		global $wpdb;
+		
+		$slugs      = array();
+		$parent_id  = $lesson_id;
+		$content_id = 0;
+
+		do {
+			$lesson = $wpdb->get_row(
+				$wpdb->prepare(
+					"SELECT content_id, parent_id, lesson_slug FROM {$wpdb->solidie_lessons} WHERE lesson_id=%d",
+					$parent_id
+				),
+				ARRAY_A
+			);
+
+			$parent_id = ( int ) ( $lesson['parent_id'] ?? null );
+
+			if ( ! empty( $lesson ) ) {
+				$content_id = ( int ) $lesson['content_id'];
+				array_unshift( $slugs, $lesson['lesson_slug'] );
+			}
+			
+		} while( ! empty( $parent_id ) );
+
+		return Contents::getPermalink( $content_id ) . implode( '/', $slugs ) . '/';
 	}
 
 	/**
@@ -260,5 +305,76 @@ class Tutorial {
 		}
 
 		return ! empty( $lesson_id ) ? ( int ) $lesson_id : null;
+	}
+
+	/**
+	 * Get content ID by slug
+	 *
+	 * @param string $slug The content slug to get content by
+	 * @param mixed  $fallback The fallback if content ID not found
+	 *
+	 * @return int|null
+	 */
+	public static function getLessonIdBySlug( string $slug, $fallback = null ) {
+		return Field::lessons()->getField( array( 'lesson_slug' => $slug ), 'lesson_id', $fallback );
+	}
+
+	/**
+	 * Set lesson slug
+	 *
+	 * @param int        $lesson_id The content ID to set slug for
+	 * @param string|int $lesson_slug The slug to set for the job
+	 *
+	 * @return string
+	 */
+	public static function setLessonSlug( $lesson_id, $lesson_slug, $update_row = true ) {
+		$lesson_slug = _String::consolidate( (string) $lesson_slug, true );
+		$lesson_slug = strtolower( str_replace( ' ', '-', $lesson_slug ) );
+		$lesson_slug = preg_replace( '/[^A-Za-z0-9\-]/u', '', $lesson_slug );
+		$lesson_slug = empty( $lesson_slug ) ? 'lesson' : $lesson_slug;
+		$lesson_slug = preg_replace( '/-+/', '-', $lesson_slug );
+
+		$new_slug = $lesson_slug;
+		$index    = 0;
+
+		// Get the slug until it's not avaialble in database
+		while ( $lesson_id != self::getLessonIdBySlug( $new_slug, $lesson_id ) ) {
+			$index++;
+			$new_slug = $lesson_slug . '-' . $index;
+		}
+
+		if ( $update_row ) {
+			Field::lessons()->updateField(
+				array( 'lesson_slug' => $new_slug ),
+				array( 'lesson_id' => $lesson_id )
+			);
+		}
+
+		return $new_slug;
+	}
+
+	/**
+	 * Update lesson slug by lesson ID
+	 *
+	 * @param integer $content_id
+	 * @param integer $lesson_id
+	 * @param string $lesson_slug
+	 * @return void
+	 */
+	public static function updateLessonSlug( int $content_id, int $lesson_id, string $lesson_slug ) {
+
+		$new_slug = self::setLessonSlug( $lesson_id, $lesson_slug, false );
+
+		global $wpdb;
+		$wpdb->update(
+			$wpdb->solidie_lessons,
+			array( 'lesson_slug' => $new_slug ),
+			array(
+				'lesson_id'  => $lesson_id,
+				'content_id' => $content_id
+			)
+		);
+
+		return $new_slug;
 	}
 }
