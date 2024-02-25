@@ -171,9 +171,6 @@ class Dispatcher {
 					$args[ $name ] = array();
 
 				} else {
-					error_log( var_export( $name, true ) );
-					error_log( var_export( $value, true ) );
-					error_log( var_export( $arg_type, true ) );
 					wp_send_json_error( array( 'message' => esc_html__( 'Invalid request data!', 'hr-management' ) ) );
 				}
 			}

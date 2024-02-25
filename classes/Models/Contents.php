@@ -558,6 +558,9 @@ class Contents {
 
 			// Contributor avatar URL
 			$contents[ $index ]['contributor_avatar_url'] = ! empty( $content['contributor_id'] ) ? get_avatar_url( $content['contributor_id'] ) : null;
+		
+			// Not necessarily from meta table. Just helper data.
+			$contents[ $index ]['meta_data'] = array();
 		}
 
 		$contents = apply_filters( 'solidie_contents_meta', $contents );
@@ -614,33 +617,35 @@ class Contents {
 	}
 
 	/**
-	 * Get product/s by meta key and value
+	 * Get post ID by meta key-value and post type
 	 *
 	 * @param string $key The meta key
 	 * @param mixed  $value The value to get post by
 	 * @param mixed  $post_type The post type to get by.
-	 * @param bool   $single Whether to return single product object or the array. Defualt true, means the first single product object.
 	 *
-	 * @return object|array|null
+	 * @return int
 	 */
-	public static function getPostByMeta( $key, $value, $post_type, $single = true ) {
+	public static function getPostIDByMeta( $key, $value, $post_type ) {
 
-		$products = get_posts(
-			array(
-				'post_type'      => $post_type,
-				'posts_per_page' => $single ? 1 : -1,
-				'meta_query'     => array(
-					array(
-						'key'     => $key,
-						'value'   => $value,
-						'compare' => '=',
-					),
-				),
+		global $wpdb;
+		$post_id = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT 
+					_post.ID 
+				FROM 
+					{$wpdb->posts} _post
+					INNER JOIN {$wpdb->postmeta} _meta ON _meta.post_id=_post.ID AND _meta.meta_key=%s
+				WHERE 
+					_meta.meta_value=%s
+					AND _post.post_type=%s
+				LIMIT 1",
+				$key,
+				$value,
+				$post_type
 			)
 		);
 
-		// Return first product object if single, otherwise the array of products.
-		return $single ? ( $products[0] ?? null ) : $products;
+		return ( int ) $post_id;
 	}
 
 	/**
