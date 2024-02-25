@@ -65,7 +65,8 @@ export function ContentTypeEditor(props) {
 	const {
 		updateWholeSetting, 
 		settings, 
-		segment: content_type
+		segment: content_type,
+		className=''
 	} = props;
 
 	const onChange=(name, value)=>{
@@ -81,7 +82,7 @@ export function ContentTypeEditor(props) {
 		});
 	}
 
-	return <div>
+	return <div className={className}>
 		<OptionFields 
 			fields={fields} 
 			settings={settings.contents[content_type]}
@@ -99,6 +100,7 @@ export function ContentTypeEditor(props) {
 				<CategoryEditor content_type={content_type}/>
 			</div>
 		</div>
+		
 		<DoAction 
 			action="single_content_type_settings" 
 			payload={{

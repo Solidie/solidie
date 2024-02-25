@@ -7,6 +7,7 @@
 
 namespace Solidie\Controllers;
 
+use Solidie\Helpers\_Array;
 use Solidie\Models\AdminSetting;
 use Solidie\Models\Contents;
 use Solidie\Models\FileManager;
@@ -157,7 +158,7 @@ class ContentController {
 	 * 
 	 * @return void
 	 */
-	public static function getSingleContent( string $content_slug = '', int $content_id = 0, bool $is_editor = false ) {
+	public static function getSingleContent( string $content_slug = '', int $content_id = 0, string $content_type='', bool $is_editor = false ) {
 
 		// Get the content ID by slug if slug is not empty
 		if ( ! empty( $content_slug ) ) {
@@ -169,6 +170,21 @@ class ContentController {
 		
 
 		if ( empty( $content ) ) {
+			if ( empty( $content_id ) && $is_editor ) {
+
+				// Send plans setting for new creation
+				$plan_settings = _Array::getArray( AdminSetting::get( "contents.{$content_type}.plans" ) );
+
+				wp_send_json_success( 
+					array(
+						'content' => array(
+							'meta_data' => array(
+								'content_type_plans' => $plan_settings
+							)
+						)
+					)
+				);
+			}
 			wp_send_json_error( array( 'message' => esc_html__( 'Content not found', 'solidie' ) ) );
 			exit;
 		}

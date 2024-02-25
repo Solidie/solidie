@@ -15,3 +15,14 @@
 .section {
     max-width: 100%;
 }
+
+.fields-wrapper {
+	&>div {
+		
+		padding: 20px 0;
+
+		&:not(:last-child) {
+			border-bottom: 1px solid var(--crewmat-color-tertiary);
+		}
+	}
+}

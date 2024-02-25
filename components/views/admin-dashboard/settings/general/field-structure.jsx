@@ -1,31 +1,5 @@
-import React from 'react';
-import { __, data_pointer } from 'crewhrm-materials/helpers.jsx';
+import { __ } from 'crewhrm-materials/helpers.jsx';
 import { applyFilters } from 'crewhrm-materials/hooks.jsx';
-
-const _contents = window[data_pointer].settings?.contents || {};
-
-const conte_dropdown = Object.keys(_contents).map(content_type=>{
-	const {enable, label} = _contents[content_type];
-	return ! enable ? null : {
-		id: content_type,
-		label: label
-	}
-}).filter(f=>f);
-
-const reaction_modes = [
-	{
-		id: 'like',
-		label: __('Like')
-	},
-	{
-		id: 'rating',
-		label: __('Rating')
-	},
-	{
-		id: 'none',
-		label: __('None')
-	}
-];
 
 export const settings_fields = applyFilters(
 	'solidie_setting_fields',

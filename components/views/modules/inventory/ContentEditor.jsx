@@ -64,25 +64,23 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 
 	const content_id = isNaN(_content_id) ? 0 : _content_id;
 	
-	const initial_values = {
-		content_type: content_type,
-		content_title: '',
-		kses_content_description: '',
-		category_id: 0,
-		thumbnail: null, // General purpose content thumbnail, video poster
-		sample_images:[], // Sample images for fonts, photo templates, apps
-		preview: null, // Preview file for pdf, audio, video etc that can be seen on the website directly
-		downloadable_file: null, // The actual file to be downloaded by user, it holds all the resouce. Maybe zip, rar, tar, video etc.
-	}
-
 	const [state, setState] = useState({
 		submitting: false,
 		slug_editor: false,
 		updating_slug: false,
 		fetching: false,
 		error_message: null,
-		values: initial_values,
 		update_title: null,
+		values: {
+			content_type: content_type,
+			content_title: '',
+			kses_content_description: '',
+			category_id: 0,
+			thumbnail: null, // General purpose content thumbnail, video poster
+			sample_images:[], // Sample images for fonts, photo templates, apps
+			preview: null, // Preview file for pdf, audio, video etc that can be seen on the website directly
+			downloadable_file: null, // The actual file to be downloaded by user, it holds all the resouce. Maybe zip, rar, tar, video etc.
+		},
 	});
 
 	const fields = [
@@ -201,17 +199,10 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 	}
 
 	const fetchContent=()=>{
-		if ( ! content_id ) {
-			setState({
-				...state,
-				values: initial_values
-			})
-			return;
-		}
-
+		
 		setState({...state, fetching: true});
 
-		request('getSingleContent', {content_id, is_editor: true}, resp=>{
+		request('getSingleContent', {content_id, content_type, is_editor: true}, resp=>{
 			const {
 				success,
 				data: {
@@ -225,16 +216,16 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 				
 				const release = content.release || null;
 
-				values.content_title            = content.content_title;
-				values.kses_content_description = content.content_description;
-				values.content_permalink        = content.content_permalink;
-				values.content_slug             = content.content_slug;
-				values.category_id              = content.category_id;
-				values.thumbnail                = content.media.thumbnail;
-				values.preview                  = content.media.preview;
-				values.sample_images            = content.media.sample_images;
-				values.product                  = content.product;
-				values.meta_data                = content.meta_data || {};
+				values.content_title            = content.content_title ?? '';
+				values.kses_content_description = content.content_description ?? '';
+				values.content_permalink        = content.content_permalink ?? '';
+				values.content_slug             = content.content_slug ?? '';
+				values.category_id              = content.category_id ?? 0;
+				values.thumbnail                = content.media?.thumbnail ?? null;
+				values.preview                  = content.media?.preview ?? null;
+				values.sample_images            = content.media?.sample_images ?? [];
+				values.product                  = content.product ?? {};
+				values.meta_data                = content.meta_data ?? {};
 
 				if ( release ) {
 					values.downloadable_file = {

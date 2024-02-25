@@ -59,17 +59,7 @@ export function OptionFields({fields=[], settings, onChange: _onChange}) {
     };
 
     return fields.map((field, i) => {
-		// Render grouped fields in same line horizontally
-		if ( Array.isArray(field) ) {
-			return <div key={i} className={'d-flex align-items-end column-gap-20'.classNames()}>
-				{field.map(f=>{
-					return <div key={f.name} className={'flex-1'.classNames()}>
-						<OptionFields fields={[f]} is_group={true} vertical={true}/>
-					</div> 
-				})}
-			</div>
-		}
-
+		
 		const { 
 			name,
 			label, 
@@ -92,18 +82,25 @@ export function OptionFields({fields=[], settings, onChange: _onChange}) {
 
 		const label_text = (
 			<div>
-				<span className={label_class}>{label}</span>
-				{(hint && <span className={hint_class}>{hint}</span>) || null}
+				<span className={label_class}>
+					{label}
+				</span>
+				{
+					!hint ? null :
+					<span className={hint_class}>
+						{hint}
+					</span>
+				}
 			</div>
 		);
 
 		return (
 			<div
 				key={name}
-				className={`d-flex ${direction === 'column' ? 'flex-direction-column' : 'flex-direction-row align-items-center'} flex-wrap-wrap padding-vertical-10 ${when ? 'fade-in' : ''}`.classNames()}
+				className={`d-flex ${direction === 'column' ? 'flex-direction-column' : 'flex-direction-row align-items-center'} flex-wrap-wrap ${when ? 'fade-in' : ''}`.classNames()}
 			>
-				{/* Toggle switch option */}
-				{(type === 'switch' && (
+				{
+					type !== 'switch' ? null :
 					<>
 						<div className={'flex-1 margin-bottom-10'.classNames()}>
 							{label_text}
@@ -118,11 +115,10 @@ export function OptionFields({fields=[], settings, onChange: _onChange}) {
 							</span>
 						</div>
 					</>
-				)) ||
-					null}
+				}
 
-				{/* Text input field */}
-				{(['text', 'url', 'email', 'textarea'].indexOf(type)>-1 && (
+				{
+					['text', 'url', 'email', 'textarea'].indexOf(type)===-1 ? null :
 					<>
 						<div className={'flex-1'.classNames()}>{label_text}</div>
 						<div className={'flex-1'.classNames()}>
@@ -135,11 +131,10 @@ export function OptionFields({fields=[], settings, onChange: _onChange}) {
 							<small>{hint ? hint2(values[name] || 'custom-path') : null}</small>
 						</div>
 					</>
-				)) ||
-					null}
+				}
 
-				{/* Image upload */}
-				{type === 'image' ? (
+				{
+					type !== 'image' ? null :
 					<>
 						<div className={'flex-1'.classNames()}>{label_text}</div>
 						<div className={'flex-1'.classNames()}>
@@ -159,10 +154,10 @@ export function OptionFields({fields=[], settings, onChange: _onChange}) {
 							)}
 						</div>
 					</>
-				) : null}
+				}
 
-				{/* Checkbox options */}
-				{((type === 'checkbox' || type == 'radio') && (
+				{
+					!(type === 'checkbox' || type == 'radio') ? null :
 					<>
 						<div className={'margin-bottom-15'.classNames()}>
 							{label_text}
@@ -180,13 +175,14 @@ export function OptionFields({fields=[], settings, onChange: _onChange}) {
 							/>
 						</div>
 					</>
-				)) ||
-					null}
+				}
 
-				{/* Number field options */}
-				{type === 'number' ? (
+				{
+					type !== 'number' ? null :
 					<>
-						<div className={'flex-5'.classNames()}>{label_text}</div>
+						<div className={'flex-5'.classNames()}>
+							{label_text}
+						</div>
 						<div className={'flex-2'.classNames()}>
 							<NumberField
 								min={min}
@@ -197,11 +193,14 @@ export function OptionFields({fields=[], settings, onChange: _onChange}) {
 							/>
 						</div>
 					</>
-				) : null}
+				}
 
-				{type == 'dropdown' ? (
+				{
+					type !== 'dropdown' ? null :
 					<>
-						<div className={'flex-5'.classNames()}>{label_text}</div>
+						<div className={'flex-5'.classNames()}>
+							{label_text}
+						</div>
 						<div className={'flex-2'.classNames()}>
 							<DropDown
 								value={values[name]}
@@ -212,7 +211,7 @@ export function OptionFields({fields=[], settings, onChange: _onChange}) {
 							/>
 						</div>
 					</>
-				) : null}
+				}
 			</div>
 		);
 	});
@@ -265,8 +264,12 @@ export function Options() {
 					component ? 
 					<RenderExternal 
 						component={component} 
-						payload={{updateWholeSetting, settings, segment: sub_segment}}/> :
-					<OptionFields fields={fields}/>
+						payload={{updateWholeSetting, settings, segment: sub_segment}}
+						className={'fields-wrapper'.classNames(style)}/> 
+					:
+					<div className={'fields-wrapper'.classNames(style)}>
+						<OptionFields fields={fields}/>
+					</div>
 				}
 			</div>
 		</div>
