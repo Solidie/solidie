@@ -165,7 +165,7 @@ export function Inventory({navigate, params={}}) {
 	}
 
 	const deleteContent=(content_id)=>{
-		if ( ! window.confirm('Sure to delete?') ) {
+		if ( ! window.confirm('Sure to delete? All the linked data also will be deleted permanently.') ) {
 			return;
 		}
 

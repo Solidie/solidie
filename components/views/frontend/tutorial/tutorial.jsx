@@ -139,11 +139,11 @@ export function Tutorial({path, content_slug}) {
 
 	useEffect(()=>{
 		// Load first lesson if currently it is first screen
-		if ( path == '0' && state.lessons.length>0 ) {
+		if ( path == '0' && state.lessons?.length ) {
 			const {lesson_permalink} = state.lessons[0];
 			navigate(new URL(lesson_permalink).pathname, {replace: true});
 		}
-	}, [state.lessons.length]);
+	}, [state.lessons?.length]);
 
 	if ( state.fetching && isEmpty( state.lessons ) ) {
 		// Still loading first request of getting lessons

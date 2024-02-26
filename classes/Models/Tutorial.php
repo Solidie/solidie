@@ -92,15 +92,52 @@ class Tutorial {
 
 		// Delete the lessons from DB that were removed
 		$removed_ids = array_diff( array_map( 'intval', $existing_ids ), $remaining_ids );
-		if ( ! empty( $removed_ids ) ) {
+		self::deleteLessons( $removed_ids );
+	}
 
-			$ids_places = _String::getPlaceHolders( $removed_ids );
-			$wpdb->query(
-				$wpdb->prepare(
-					"DELETE FROM {$wpdb->solidie_lessons} WHERE lesson_id IN ({$ids_places})",
-					...$removed_ids
-				)
-			);
+	/**
+	 * Delete lessons row and related data
+	 *
+	 * @param int|array $lesson_ids Lesson ID or array of lesson IDs
+	 * @return void
+	 */
+	public static function deleteLessons( $lesson_ids ) {
+		if ( empty( $lesson_ids ) ) {
+			return;
+		}
+
+		$lesson_ids = ! is_array( $lesson_ids ) ? array( $lesson_ids ) : $lesson_ids;
+		$ids_places = _String::getPlaceHolders( $lesson_ids );
+
+		global $wpdb;
+		$wpdb->query(
+			$wpdb->prepare(
+				"DELETE FROM {$wpdb->solidie_lessons} WHERE lesson_id IN ({$ids_places})",
+				...$lesson_ids
+			)
+		);
+	}
+
+	/**
+	 * Delete lessons under a content ID
+	 *
+	 * @param int $content_id
+	 * @return void
+	 */
+	public static function deleteLessonsByContentId( $content_id ) {
+
+		// Retrieving first as we might need to delete linked data first in future
+		
+		global $wpdb;
+		$lessons_ids = $wpdb->get_col(
+			$wpdb->prepare(
+				"SELECT lesson_id FROM {$wpdb->solidie_lessons} WHERE content_id=%d",
+				$content_id
+			)
+		);
+
+		if ( ! empty( $lessons_ids ) ) {
+			self::deleteLessons( $lessons_ids );
 		}
 	}
 

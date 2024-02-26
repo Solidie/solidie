@@ -57,6 +57,7 @@ class Category {
 			ARRAY_A
 		);
 
+
 		foreach ( $cats as $index => $cat ) {
 			$cats[ $index ][ 'id' ]    = ( int ) $cat['category_id'];
 			$cats[ $index ][ 'label' ] = $cat['category_name'];
@@ -64,8 +65,9 @@ class Category {
 
 		$cats = _Array::getArray( $cats );
 		$cats = _Array::groupRows( $cats, 'content_type' );
-		foreach ( $cats as $index => $cat ) {
-			$cats[ $index ] = _Array::buildNestedArray( $cat, null, 'parent_id', 'category_id' );
+
+		foreach ( $cats as $content_type => $cat ) {
+			$cats[ $content_type ] = _Array::buildNestedArray( $cat, 0, 'parent_id', 'category_id' );
 		}
 
 		return (object) $cats;
@@ -79,8 +81,6 @@ class Category {
 	 */
 	public static function deleteCategory( $category_id ) {
 
-		// To Do: Delete sub categories too and un assigned all the deleted category IDs from content
-
 		// Update content categories to null where it is used
 		Field::contents()->updateField(
 			array( 'category_id' => null ),
@@ -89,6 +89,21 @@ class Category {
 
 		// Delete category itself
 		Field::categories()->deleteField( array( 'category_id' => $category_id ) );
+
+		// Delete sub categories
+		global $wpdb;
+		$sub_ids = $wpdb->get_col(
+			$wpdb->prepare(
+				"SELECT category_id FROM {$wpdb->solidie_categories} WHERE parent_id=%d",
+				$category_id
+			)
+		);
+
+		if ( ! empty( $sub_ids ) && is_array( $sub_ids ) ) {
+			foreach ( $sub_ids as $id ) {
+				self::deleteCategory( $id );
+			}
+		}
 	}
 
 	/**

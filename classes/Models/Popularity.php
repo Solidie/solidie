@@ -26,4 +26,14 @@ class Popularity {
 			array( 'content_id' => $content_id )
 		);
 	}
+
+	/**
+	 * Delete by content ID
+	 *
+	 * @param int $content_id
+	 * @return void
+	 */
+	public static function deleteByContentId( $content_id ) {
+		Field::popularity()->deleteField( array( 'content_id' => $content_id ) );
+	}
 }

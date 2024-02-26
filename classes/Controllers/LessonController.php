@@ -54,8 +54,6 @@ class LessonController {
 	 * @return void
 	 */
 	public static function getLessonsHierarchy( int $content_id ) {
-		// To Do: Restrict paid tutorial if not purchased
-		// To Do: Add a setting to enable login requirement to download/read free contents.
 		wp_send_json_success( array( 'lessons' => Tutorial::getLessonsRecursive( $content_id ) ) );
 	}
 
@@ -117,12 +115,13 @@ class LessonController {
 	 */
 	public static function loadLessonInTutorial( string $content_slug, string $lesson_path = '' ) {
 		
-		// To Do: Check paid content
-
+		// Check if content exists
 		$content_id = Contents::getContentIdBySlug( $content_slug );
 		if ( empty( $content_id ) ) {
 			wp_send_json_error( array( 'message' => __( 'Content not found!', 'solidie' ) ) );
 		}
+
+		do_action( 'solidie_load_lesson_before', $content_id, $lesson_path );
 
 		$lesson = null;
 		if ( ! empty( $lesson_path ) ) {

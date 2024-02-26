@@ -163,4 +163,14 @@ class Comment {
 			$args
 		);
 	}
+
+	/**
+	 * Delete comment by content ID
+	 *
+	 * @param int $content_id
+	 * @return void
+	 */
+	public static function deleteCommentByContentId( $content_id ) {
+		Field::comments()->deleteField( array( 'content_id' => $content_id ) );
+	}
 }

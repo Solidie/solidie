@@ -221,4 +221,14 @@ class Reaction {
 
 		return $stats;
 	}
+
+	/**
+	 * Delete reactions by content ID, no matter what the type is.
+	 *
+	 * @param int $content_id
+	 * @return void
+	 */
+	public static function deleteByContentId( $content_id ) {
+		Field::reactions()->deleteField( array( 'content_id' => $content_id ) );
+	}
 }

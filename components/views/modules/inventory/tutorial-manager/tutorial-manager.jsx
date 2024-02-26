@@ -68,7 +68,7 @@ export function TutorialManager({content_id, content_type, lesson_id, navigate})
 
 	const updateLessons=()=>{
 		
-		if ( ! window.confirm(__('Sure to save the changes?')) ) {
+		if ( ! window.confirm(__('Sure to save the changes? Removed lessons will be deleted permanently, if any.')) ) {
 			return;
 		}
 

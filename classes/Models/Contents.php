@@ -21,6 +21,11 @@ class Contents {
 	const MEDIA_IDS_KEY = 'content-media-ids';
 
 	/**
+	 * Meta key for product to store corresponding content ID
+	 */
+	const PRODUCT_META_KEY_FOR_CONTENT = 'solidie-content-id';
+
+	/**
 	 * Create or update content
 	 *
 	 * @param array $content_data Content data array to create or update
@@ -191,6 +196,20 @@ class Contents {
 		}
 
 		return $new_slug;
+	}
+
+	/**
+	 * Get connected product ID to a content. 
+	 * In some cases we can't rely on the 'product_id' field from contents table since it will be set null to mark a content as free.
+	 * So if the user wants to make a content back to paid, we need to resurrect the content ID from product itself. 
+	 * And put the product ID in contents table again to mark it as paid. 
+	 *
+	 * @param int $content_id
+	 * @return int|null
+	 */
+	public static function resurrectProductID( $content_id ) {
+		$product_id = self::getPostIDByMeta( self::PRODUCT_META_KEY_FOR_CONTENT, $content_id, 'product' );
+		return empty( $product_id ) ? null : $product_id;
 	}
 
 	/**
@@ -576,6 +595,19 @@ class Contents {
 	 */
 	public static function deleteContent( $content_id ) {
 
+		global $wpdb;
+		$content = $wpdb->get_row(
+			$wpdb->prepare(
+				"SELECT * FROM {$wpdb->solidie_contents} WHERE content_id=%d",
+				$content_id
+			),
+			ARRAY_A
+		);
+		$content    = is_array( $content ) ? _Array::castRecursive( $content ) : array();
+		$product_id = ! empty( $content['product_id'] ) ? $content['product_id'] : self::resurrectProductID( $content_id );
+
+		do_action( 'solidie_content_delete', $content_id, $content );
+
 		// Meta object
 		$meta = Meta::content( $content_id );
 
@@ -591,11 +623,25 @@ class Contents {
 		// Delete releases
 		Release::deleteReleaseByContentId( $content_id );
 
-		// To Do: Delete sales and connected license keys
+		// Delete linked license keys and sales together
+		Sale::deleteSaleByContentId( $content_id );
 
-		// To Do: Delete associated tags
+		// Delete Reactions
+		Reaction::deleteByContentId( $content_id );
 
-		// To Do: Delete associated product
+		// Delete comments
+		Comment::deleteCommentByContentId( $content_id );
+
+		// Delete associated woocommerce product
+		if ( ! empty( $product_id ) ) {
+			wp_delete_post( $product_id, true );
+		}
+
+		// Delete popularity trend
+		Popularity::deleteByContentId( $content_id );
+
+		// Delete lessons
+		Tutorial::deleteLessonsByContentId( $content_id );
 
 		// Delete the directory created for this content
 		FileManager::deleteDirectory( FileManager::getContentDir( $content_id ) );
