@@ -6,7 +6,7 @@ import {MountPoint} from 'crewhrm-materials/mountpoint.jsx';
 import {__, data_pointer} from 'crewhrm-materials/helpers.jsx';
 
 import { Inventory } from "../modules/inventory/index.jsx";
-import { ContentEditor } from "../modules/inventory/ContentEditor.jsx";
+import { ContentEditor } from "../modules/inventory/editor/ContentEditor.jsx";
 
 addFilter(
 	'solidie_pro_fe_dashboard_menus',

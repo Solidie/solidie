@@ -82,8 +82,6 @@ class FileManager {
 			file_put_contents( $htaccess_path, 'deny from all' );
 		}
 
-		// To Do: nginx doesn't restrict per directory, rather show instruction in dashboard how to restrict directory.
-
 		return $rel_path;
 	}
 

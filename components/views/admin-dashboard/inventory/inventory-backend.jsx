@@ -5,7 +5,7 @@ import {RenderExternal} from 'crewhrm-materials/render-external.jsx';
 import {getDashboardPath} from 'solidie-materials/helpers.jsx';
 
 import { Inventory } from "../../modules/inventory";
-import { ContentEditor } from "../../modules/inventory/ContentEditor";
+import { ContentEditor } from "../../modules/inventory/editor/ContentEditor";
 
 
 function DashboardNavLayer({component, payload}) {

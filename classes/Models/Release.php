@@ -182,8 +182,6 @@ class Release {
 			$file_url  = wp_get_attachment_url( $release['file_id'] );
 			$file_path = get_attached_file( $release['file_id'] );
 
-			// To Do: Check if the file really exists in file system or cloud
-			// To Do: Remove file_path and absolute url from response. Rather use a proxy url for direct download in dashboard.
 			if ( ! $file_url ) {
 				continue;
 			}

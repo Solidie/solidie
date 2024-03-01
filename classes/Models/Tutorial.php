@@ -9,8 +9,6 @@ namespace Solidie\Models;
 use Solidie\Helpers\_Array;
 use Solidie\Helpers\_String;
 
-// To Do: Add image/video support in lesson content
-
 class Tutorial {
 
 	/**

@@ -12,11 +12,14 @@ import { InitState } from "crewhrm-materials/init-state.jsx";
 import { DoAction } from "crewhrm-materials/mountpoint.jsx";
 import { Tabs } from "crewhrm-materials/tabs/tabs.jsx";
 
-import { InventoryWrapper } from "./index.jsx";
-import { getFlattenedCategories } from "../../admin-dashboard/settings/general/content-type/category-editor.jsx";
-import { ReleaseManager } from "./release-manager/release-manager.jsx";
-import { TutorialManager } from "./tutorial-manager/tutorial-manager.jsx";
 import { getDashboardPath } from "solidie-materials/helpers.jsx";
+
+import { InventoryWrapper } from "../index.jsx";
+import { getFlattenedCategories } from "../../../admin-dashboard/settings/general/content-type/category-editor.jsx";
+import { ReleaseManager } from "../release-manager/release-manager.jsx";
+import { TutorialManager } from "../tutorial-manager/tutorial-manager.jsx";
+
+import style from './editor.module.scss';
 
 const {readonly_mode} = window[data_pointer];
 
@@ -71,6 +74,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 		fetching: false,
 		error_message: null,
 		update_title: null,
+		thumbnail_url: null,
 		values: {
 			content_type: content_type,
 			content_title: '',
@@ -89,7 +93,15 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 			name: 'content_title',
 			label: __('Title'),
 			placeholder: __('Give it a title'),
-			required: true
+			required: true,
+			render: false,
+		},
+		{
+			type: 'file',
+			name: 'thumbnail',
+			label: __('Thumbnail Image'),
+			accept: img_extensions,
+			render: false,
 		},
 		{
 			type: 'textarea_rich',
@@ -97,12 +109,6 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 			label: __('Description'),
 			placeholder: __('Write some description here'),
 			required: true
-		},
-		{
-			type: 'file',
-			name: 'thumbnail',
-			label: __('Thumbnail Image'),
-			accept: img_extensions
 		},
 		(['audio', 'video'].indexOf(content_type) === -1 ? null : {
 			type: 'file',
@@ -116,7 +122,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 			label: __('Sample Images'),
 			accept: img_extensions,
 			maxlength: 5,
-			removable: true
+			removable: true,
 		}),
 		(['audio', 'video', 'image', '3d', 'document', 'font'].indexOf(content_type)===-1 ? null : {
 			type: 'file',
@@ -134,8 +140,11 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 	].filter(f=>f);
 
 	const setVal=(name, value)=>{
+
+
 		setState({
 			...state,
+			thumbnail_url: name=='thumbnail' ? URL.createObjectURL(value) : state.thumbnail_url,
 			values: {
 				...state.values,
 				[name]: value
@@ -282,6 +291,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 	}, [content_id]);
 	
 	const _content = window[data_pointer]?.settings?.contents[content_type] || {};
+	const thumbnail_url = state.thumbnail_url || state.values.thumbnail?.file_url;
 	
 	return <InventoryWrapper navigate={navigate} params={params}>
 		{
@@ -290,7 +300,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 				fetching={state.fetching} 
 				error_message={state.error_message}/> 
 			:
-			<div style={{maxWidth: '600px', margin: '20px auto'}}>
+			<div className={'content-editor'.classNames(style)} style={{maxWidth: '600px', margin: '20px auto'}}>
 				{/* Header */}
 				<div className={"margin-top-20 margin-bottom-30 d-flex align-items-center column-gap-10".classNames()}>
 					<i onClick={()=>window.history.back()} className={"ch-icon ch-icon-arrow-left cursor-pointer".classNames()}></i>
@@ -337,6 +347,80 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 						{
 							active_tab !== 'overview' ? null :
 							<div className={'border-radius-10 padding-15 border-1 b-color-tertiary'.classNames()}>
+								<div className={'d-flex align-items-center column-gap-15 margin-bottom-15'.classNames()}>
+									<div>
+										<FileUpload
+											accept={img_extensions}
+											onChange={img=>setVal('thumbnail', img)}
+											layoutComp={
+												({onClick})=> {
+													return <div 
+														className={'content-thumbnail'.classNames(style) + 'cursor-pointer'.classNames()} 
+														onClick={onClick}
+														style={thumbnail_url ? {backgroundImage: `url(${thumbnail_url})`} : {}}
+													>
+														{
+															thumbnail_url ? null :
+															<span className={'font-size-16 font-weight-500'.classNames()}>
+																Thumbnail
+															</span>
+														}
+													</div>
+												}
+											}
+										/>
+									</div>
+									<div className={'flex-1'.classNames()}>
+										<strong className={'d-block font-weight-600 margin-bottom-5'.classNames()}>
+											{__('Title')} <span className={'color-error'.classNames()}>*</span>
+										</strong>
+										<TextField 
+											placeholder={__('e.g My first content')} 
+											onChange={v=>setVal('content_title', v)}
+											value={state.values.content_title}
+										/>
+
+										{
+											!state.values.content_slug ? null : 
+											<div className={'d-flex align-items-center flex-wrap-wrap'.classNames()} style={{height: '30px', marginTop: '5px'}}>
+											
+												<div 
+													className={'d-flex align-items-center flex-wrap-wrap flex-direction-row column-gap-5'.classNames()}
+												>
+													<a 
+														href={state.values.content_permalink} 
+														target='_blank'
+													>
+														{window[data_pointer].permalinks.gallery[content_type]}{state.slug_editor ? null : <><strong>{state.values.content_slug}</strong>/</>}
+													</a>
+												</div>
+
+												{
+													!state.slug_editor ? 
+														<i 
+															className={'ch-icon ch-icon-edit-2 cursor-pointer font-size-18'.classNames()}
+															onClick={()=>setState({...state, slug_editor: true})}></i>
+														:
+														<>
+															<TextField 
+																style={{width: '170px', height: '30px', padding: '0 9px'}}
+																value={state.values.content_slug}
+																autofocus={true}
+																onChange={content_slug=>setVal('content_slug', content_slug)}
+															/>
+															<button 
+																className={'button button-primary button-outlined button-small'.classNames()}
+																onClick={updateSlug}
+																disabled={readonly_mode}
+															>
+																{__('Update')} <LoadingIcon show={state.updating_slug}/>
+															</button>
+														</>
+												}
+											</div>
+										}
+									</div>
+								</div>
 								{
 									fields.map(field=>{
 										
@@ -350,12 +434,14 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 											removable=false,
 											hint, 
 											maxlength, 
-											options=[]
+											options=[],
+											render = true
 										} = field;
 
-										return (type=='dropdown' && isEmpty(options)) ? null : <div key={name}>
-											<div className={`${name=='content_title' ? '' : 'margin-bottom-15'}`.classNames()}>
-												<strong className={'d-block font-weight-600'.classNames()}>
+										return (!render || (type=='dropdown' && isEmpty(options))) ? null : 
+										<div key={name}>
+											<div className={`margin-bottom-15`.classNames()}>
+												<strong className={'d-block font-weight-600 margin-bottom-5'.classNames()}>
 													{label}{required ? <span className={'color-error'.classNames()}>*</span> : null}
 												</strong>
 
@@ -402,44 +488,6 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 														onChange={value=>setVal(name, value)}/>
 												}
 											</div>
-
-											{
-												(name != 'content_title' || !state.values.content_slug) ? null : 
-												<div 
-													className={'d-flex align-items-center flex-wrap-wrap flex-direction-row column-gap-5'.classNames()}
-													style={{margin: '3px 0 15px', height: '34px'}}
-												>
-													<a 
-														href={state.values.content_permalink} 
-														target='_blank'
-													>
-														{window[data_pointer].permalinks.gallery[content_type]}{state.slug_editor ? null : <><strong>{state.values.content_slug}</strong>/</>}
-													</a>
-
-													{
-														!state.slug_editor ? 
-															<i 
-																className={'ch-icon ch-icon-edit-2 cursor-pointer font-size-18'.classNames()}
-																onClick={()=>setState({...state, slug_editor: true})}></i>
-															:
-															<>
-																<TextField 
-																	style={{width: '170px', height: '30px', padding: '0 9px'}}
-																	value={state.values.content_slug}
-																	autofocus={true}
-																	onChange={content_slug=>setVal('content_slug', content_slug)}
-																/>
-																<button 
-																	className={'button button-primary button-outlined button-small'.classNames()}
-																	onClick={updateSlug}
-																	disabled={readonly_mode}
-																>
-																	{__('Update')} <LoadingIcon show={state.updating_slug}/>
-																</button>
-															</>
-													}
-												</div>
-											}
 										</div>
 									})
 								}

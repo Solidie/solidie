@@ -13,11 +13,6 @@ use Solidie\Main;
 use Solidie\Models\AdminSetting;
 use Solidie\Models\Contents;
 
-// To Do: Load frontend scripts only in gallery and single content page when not in development mode
-// To Do: Load frontend dashboard script only in the dashboard
-// To Do: Load backend dashboard script only in solidie backend pages
-// To Do: Pass sales data to solidie (if the plan is reveneue share) from only JS as it is encoded and hard to reverse engineer. TBD how to get the data in JS first.
-
 /**
  * Script class
  */
@@ -55,7 +50,7 @@ class Scripts {
 		}
 		?>
 			<style>
-				[id^="Solidie_"],[id^="solidie_"],#crewhrm-popup-root{
+				[id^="Solidie_"],[id^="solidie_"],[class^="Solidie_"],[id^="solidie_"],#crewhrm-popup-root{
 					<?php echo esc_html( $_colors ); ?>
 				}
 			</style>
@@ -84,6 +79,7 @@ class Scripts {
 				'date_format'      => get_option( 'date_format' ),
 				'time_format'      => get_option( 'time_format' ),
 				'readonly_mode'    => apply_filters( 'solidie_readonly_mode', false ), // It's for solidie demo site only. No other use is expected.
+				'is_apache'        => is_admin() ? strpos( sanitize_text_field( $_SERVER['SERVER_SOFTWARE'] ?? '' ), 'Apache' ) !== false : null,
 				'user'             => array(
 					'id' => get_current_user_id()
 				),

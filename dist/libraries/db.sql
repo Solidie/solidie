@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Feb 23, 2024 at 08:39 PM
+-- Generation Time: Mar 01, 2024 at 03:12 AM
 -- Server version: 8.0.16
 -- PHP Version: 8.1.23
 
@@ -202,6 +202,7 @@ CREATE TABLE IF NOT EXISTS `wp_solidie_sales` (
   `downloads_in_season` mediumint(8) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Downloads in a subscription period/season. It is supposed to be used in content pack only. ',
   `expires_on` date DEFAULT NULL COMMENT 'When the subscription of app or content pack expires',
   `purchase_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Order date time',
+  `enabled` tinyint(1) UNSIGNED NOT NULL DEFAULT '1',
   PRIMARY KEY (`sale_id`),
   KEY `app_id` (`content_id`,`variation_id`),
   KEY `order_id` (`order_id`)

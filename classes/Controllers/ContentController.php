@@ -15,11 +15,6 @@ use Solidie\Models\Reaction;
 use Solidie\Models\Release;
 use Solidie\Models\User;
 
-// To Do: Add three custom rules;
-// finance-manager who disburse payments,
-// content-reviewer who review submissions from contributors,
-// and contributor who uploads their contents.
-
 /**
  * Content manager class
  */

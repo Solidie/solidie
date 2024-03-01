@@ -1,0 +1,13 @@
+.content-editor {
+	.content-thumbnail {
+		width: 105px;
+		height: 105px;
+		border: 6px solid rgb(243, 243, 243);
+		border-radius: 5px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background-size: cover;
+		background-position: center center;
+	}
+}

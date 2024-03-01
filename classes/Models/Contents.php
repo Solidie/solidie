@@ -447,8 +447,6 @@ class Contents {
 		$limit        = DB::getLimit( $args['limit'] ?? null );
 		$offset       = absint( $page - 1 ) * $limit;
 
-		// To Do: Validate paramaters for the user as per context.
-
 		$where_clause = '';
 
 		// Content type filter

@@ -1,12 +1,12 @@
 import React from "react";
 
-import {__, data_pointer, sprintf} from 'crewhrm-materials/helpers.jsx';
+import {__, data_pointer} from 'crewhrm-materials/helpers.jsx';
 
 import { ProInstaller } from "./pro-installer.jsx";
 
 import logo_svg from '../../../images/logo.svg';
 
-const {permalinks} = window[data_pointer];
+const {permalinks, is_apache, is_pro_active} = window[data_pointer];
 
 const quick_links = [
 	{
@@ -25,11 +25,6 @@ const quick_links = [
 
 export function HomeBackend() {
 	
-	const {
-		is_pro_installed, 
-		is_pro_active
-	} = window[data_pointer];
-
 	return <div className={'padding-15 margin-auto padding-vertical-40'.classNames()} style={{maxWidth: '900px'}}>
 
 		<div className={'text-align-center'.classNames()}>
@@ -75,15 +70,28 @@ export function HomeBackend() {
 			</>
 		}
 
+		{
+			(!is_pro_active || is_apache) ? null : <>
+				<br/>
+				<br/>
+				<div>
+					<strong className={'d-block font-size-16 font-weight-500 margin-bottom-10'.classNames()}>
+						{__('Attention:')}
+					</strong>
+					<span className={'font-size-14'.classNames()}>
+						It seems that the server you're using is not running Apache. To safeguard your monetized content, you'll need to configure it to ensure that the directory <code>~/wp-content/uploads/solidie-content-files/</code> is not accessible via absolute URLs.
+					</span>
+				</div>
+			</>
+		}
+
 		<br/>
 		<br/>
-		<div className={'d-flex'.classNames()}>
-			<div className={'flex-1'.classNames()}>
-				<strong className={'d-block font-size-16 font-weight-500 margin-bottom-10'.classNames()}>
-					Enjoying Solidie? &#128512;
-				</strong>
-				<span className={'font-size-14'.classNames()}>Please <a href="https://wordpress.org/plugins/solidie/#reviews" target="_blank"><strong>provide your feedback</strong></a> to help us improve.</span>
-			</div>
+		<div>
+			<strong className={'d-block font-size-16 font-weight-500 margin-bottom-10'.classNames()}>
+				{__('Enjoying Solidie?')} &#128512;
+			</strong>
+			<span className={'font-size-14'.classNames()}>Please <a href="https://wordpress.org/plugins/solidie/#reviews" target="_blank"><strong>provide your feedback</strong></a> to help us improve.</span>
 		</div>
 	</div>
 }
