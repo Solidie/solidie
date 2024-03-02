@@ -5,8 +5,6 @@ import {request} from 'crewhrm-materials/request.jsx';
 import {LoadingIcon} from 'crewhrm-materials/loading-icon/loading-icon.jsx';
 import {ContextToast} from 'crewhrm-materials/toast/toast.jsx';
 
-import tbl_style from 'solidie-materials/styles/table.module.scss';
-
 function isLocalHost() {
 	var hostname = window.location.hostname;
 	var port     = window.location.port;
@@ -101,7 +99,7 @@ export function ProInstaller() {
 						{__('What you\'re missing in Free:')}
 					</strong>
 					
-					<table className={'table no-responsive'.classNames(tbl_style)}>
+					<table className={'table no-responsive'.classNames()}>
 						<thead>
 							<tr>
 								<th>Feature</th>

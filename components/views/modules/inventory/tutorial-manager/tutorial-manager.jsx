@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 
-import {__, data_pointer} from 'crewhrm-materials/helpers.jsx'
+import {__, data_pointer, getDashboardPath} from 'crewhrm-materials/helpers.jsx'
 import {ListManager} from 'crewhrm-materials/list-manager/list-manager.jsx'
 import { request } from "crewhrm-materials/request.jsx";
 import { ContextToast } from "crewhrm-materials/toast/toast.jsx";
@@ -8,7 +8,6 @@ import { LoadingIcon } from "crewhrm-materials/loading-icon/loading-icon";
 import { InitState } from "crewhrm-materials/init-state.jsx";
 
 import { LessonEditor } from "./lesson-editor.jsx";
-import { getDashboardPath } from "solidie-materials/helpers.jsx";
 
 const {readonly_mode} = window[data_pointer];
 

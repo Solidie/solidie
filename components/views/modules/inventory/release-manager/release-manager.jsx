@@ -7,8 +7,6 @@ import { FileUpload } from "crewhrm-materials/file-upload/file-upload.jsx";
 import { TextField } from "crewhrm-materials/text-field/text-field.jsx";
 import { ContextToast } from "crewhrm-materials/toast/toast.jsx";
 
-import table_style from 'solidie-materials/styles/table.module.scss';
-
 import style from './release.module.scss';
 
 function Form({values, onChange, onSubmit, saving, onCancel}) {
@@ -218,7 +216,7 @@ export function ReleaseManager({content_id}) {
 					{__('Previous Release')}
 				</strong>
 
-				<table className={'table no-responsive'.classNames(table_style)}>
+				<table className={'table no-responsive'.classNames()}>
 					<thead>
 						<tr>
 							<th>{__('Version')}</th>

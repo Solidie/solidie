@@ -1,17 +1,14 @@
 import React, { useContext, useEffect, useState } from 'react'
 
 import { request } from 'crewhrm-materials/request.jsx';
-import { __, data_pointer, sprintf, formatDate, isEmpty } from 'crewhrm-materials/helpers.jsx';
+import { __, data_pointer, sprintf, formatDate, isEmpty, getDashboardPath } from 'crewhrm-materials/helpers.jsx';
 import { ContextToast } from 'crewhrm-materials/toast/toast.jsx';
 import { LoadingIcon } from 'crewhrm-materials/loading-icon/loading-icon.jsx';
 import { Pagination } from 'crewhrm-materials/pagination/pagination.jsx';
 import { TextField } from 'crewhrm-materials/text-field/text-field.jsx';
+import { Tabs } from 'crewhrm-materials/tabs/tabs.jsx';
+import { TableStat } from 'crewhrm-materials/table-stat.jsx';
 
-import { Tabs } from 'solidie-materials/tabs/tabs.jsx';
-import { TableStat } from 'solidie-materials/table-stat.jsx';
-import { getDashboardPath } from 'solidie-materials/helpers.jsx';
-
-import table_style from 'solidie-materials/styles/table.module.scss';
 import style from './inventory.module.scss';
 
 const {readonly_mode, is_admin, is_pro_active} = window[data_pointer];
@@ -81,7 +78,7 @@ export function InventoryWrapper({children, content_label, gallery_permalink, na
 		</div>
 	}
 
-	return <div>
+	return <div style={{maxWidth: '1200px', margin: 'auto', padding: '20px 10px'}}>
 		<div>
 			<strong className={"d-flex align-items-center column-gap-8 color-text padding-vertical-10 position-sticky top-0".classNames()}>
 				<span className={'font-size-24 font-weight-600 letter-spacing-3'.classNames()}>
@@ -92,9 +89,10 @@ export function InventoryWrapper({children, content_label, gallery_permalink, na
 			{
 				enabled_contents.length < 2 ? null :
 				<Tabs 
+					theme="transparent"
 					tabs={enabled_contents} 
 					active={content_type} 
-					onChange={tab=>navigate(getDashboardPath('inventory/'+tab))}/>
+					onNavigate={tab=>navigate(getDashboardPath('inventory/'+tab))}/>
 			}
 		</div>
 		
@@ -258,7 +256,7 @@ export function Inventory({navigate, params={}}) {
 					</div>
 
 					<table 
-						className={'table'.classNames(style) + 'table'.classNames(table_style)} 
+						className={'table'.classNames(style) + 'table'.classNames()} 
 						style={{background: 'rgb(128 128 128 / 3.5%)'}}
 					>
 						<thead>

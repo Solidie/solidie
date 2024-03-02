@@ -6,10 +6,6 @@ const to_sync = [
 	{
 		from: './node_modules/crewhrm-materials',
 		to: '../Materials'
-	},
-	{
-		from: './node_modules/solidie-materials',
-		to: '../Solidie-Materials'
 	}
 ];
 

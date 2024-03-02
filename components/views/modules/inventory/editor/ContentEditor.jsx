@@ -4,15 +4,13 @@ import {TextField} from 'crewhrm-materials/text-field/text-field.jsx';
 import {FileUpload} from 'crewhrm-materials/file-upload/file-upload.jsx';
 import {request} from 'crewhrm-materials/request.jsx';
 import {LoadingIcon} from 'crewhrm-materials/loading-icon/loading-icon.jsx';
-import { __, data_pointer, isEmpty, sprintf } from "crewhrm-materials/helpers.jsx";
+import { __, data_pointer, isEmpty, sprintf, getDashboardPath } from "crewhrm-materials/helpers.jsx";
 import { ContextToast } from "crewhrm-materials/toast/toast.jsx";
 import { DropDown } from "crewhrm-materials/dropdown/dropdown.jsx";
 import { TextEditor } from "crewhrm-materials/text-editor/text-editor.jsx";
 import { InitState } from "crewhrm-materials/init-state.jsx";
 import { DoAction } from "crewhrm-materials/mountpoint.jsx";
 import { Tabs } from "crewhrm-materials/tabs/tabs.jsx";
-
-import { getDashboardPath } from "solidie-materials/helpers.jsx";
 
 import { InventoryWrapper } from "../index.jsx";
 import { getFlattenedCategories } from "../../../admin-dashboard/settings/general/content-type/category-editor.jsx";

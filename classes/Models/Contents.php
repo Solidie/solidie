@@ -43,7 +43,7 @@ class Contents {
 		$content['content_description'] = ! empty( $content_data['content_description'] ) ? $content_data['content_description'] : null;
 		$content['content_type']        = $content_data['content_type'];
 		$content['category_id']         = $content_data['category_id'] ?? null;
-		$content['content_status']      = 'publish'; // To Do: Introduce other statuses in pro add on.
+		$content['content_status']      = 'publish';
 		$content['contributor_id']      = $content_data['contributor_id'] ?? get_current_user_id();
 		$content['modified_at']         = $gmdate;
 
