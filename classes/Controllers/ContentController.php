@@ -162,14 +162,12 @@ class ContentController {
 
 		// Now get the content by content ID
 		$content = $content_id ? Contents::getContentByContentID( $content_id, null, false ) : null;
-		
+
+		// Send plans setting for new creation
+		$plan_settings = _Array::getArray( AdminSetting::get( "contents.{$content_type}.plans" ) );
 
 		if ( empty( $content ) ) {
 			if ( empty( $content_id ) && $is_editor ) {
-
-				// Send plans setting for new creation
-				$plan_settings = _Array::getArray( AdminSetting::get( "contents.{$content_type}.plans" ) );
-
 				wp_send_json_success( 
 					array(
 						'content' => array(
@@ -180,9 +178,13 @@ class ContentController {
 					)
 				);
 			}
+			
 			wp_send_json_error( array( 'message' => esc_html__( 'Content not found', 'solidie' ) ) );
 			exit;
 		}
+
+		// Add the plan structure to meta data
+		$content['meta_data']['content_type_plans'] = $plan_settings;
 
 		// If editor, make sure the autor requested, or the admin who can do anything
 		if ( $is_editor ) {

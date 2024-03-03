@@ -64,16 +64,17 @@ class Database {
 		// WP and Plugin prefix
 		$prefix = $wpdb->prefix . Main::$configs->db_prefix;
 
-		$wpdb->solidie_categories   = $prefix . 'categories';
-		$wpdb->solidie_contents     = $prefix . 'contents';
-		$wpdb->solidie_content_meta = $prefix . 'content_meta';
-		$wpdb->solidie_license_keys = $prefix . 'license_keys';
-		$wpdb->solidie_popularity   = $prefix . 'popularity';
-		$wpdb->solidie_releases     = $prefix . 'releases';
-		$wpdb->solidie_sales        = $prefix . 'sales';
-		$wpdb->solidie_tokens       = $prefix . 'tokens';
-		$wpdb->solidie_comments     = $prefix . 'comments';
-		$wpdb->solidie_reactions    = $prefix . 'reactions';
-		$wpdb->solidie_lessons      = $prefix . 'lessons';
+		$wpdb->solidie_categories        = $prefix . 'categories';
+		$wpdb->solidie_contents          = $prefix . 'contents';
+		$wpdb->solidie_content_meta      = $prefix . 'content_meta';
+		$wpdb->solidie_license_keys      = $prefix . 'license_keys';
+		$wpdb->solidie_popularity        = $prefix . 'popularity';
+		$wpdb->solidie_releases          = $prefix . 'releases';
+		$wpdb->solidie_sales             = $prefix . 'sales';
+		$wpdb->solidie_tokens            = $prefix . 'tokens';
+		$wpdb->solidie_comments          = $prefix . 'comments';
+		$wpdb->solidie_reactions         = $prefix . 'reactions';
+		$wpdb->solidie_lessons           = $prefix . 'lessons';
+		$wpdb->solidie_content_pack_link = $prefix . 'content_pack_link';
 	}
 }

@@ -18,6 +18,7 @@ import { Audio } from "./audio/audio.jsx";
 import style from './index.module.scss';
 import { Sidebar } from "./sidebar.jsx";
 import { Tutorial } from "../tutorial/tutorial.jsx";
+import { applyFilters } from "crewhrm-materials/hooks.jsx";
 
 const renderers = {
 	video: Video,
@@ -26,7 +27,7 @@ const renderers = {
 	other: GenericCard
 }
 
-const filterList = {
+const sorting_list = {
 	order_by: {
 		section_label: __('Sort'),
 		selection_type: 'radio',
@@ -43,7 +44,8 @@ const filterList = {
 	}
 };
 
-function GalleryLayout({categories={}}) {
+function GalleryLayout({resources={}}) {
+	const {categories={}} = resources;
 	const {settings={}} = window[data_pointer];
 	const {contents={}} = settings;
 	const {content_type_slug} = useParams();
@@ -177,14 +179,21 @@ function GalleryLayout({categories={}}) {
 				filters={queryParams}
 				setFilter={setFilter}
 				is_mobile={is_mobile}
-				filterList={{
-					category_ids: {
-						section_label: __('Category'),
-						selection_type: 'checkbox',
-						options: categories[content_type] || []
-					},
-					...filterList
-				}}
+				filterList={
+					applyFilters(
+						'gallery_sidebar_filter_list',
+						{
+							category_ids: {
+								section_label: __('Category'),
+								selection_type: 'checkbox',
+								options: categories[content_type] || []
+							},
+							...sorting_list
+						},
+						resources,
+						content_type
+					)
+				}
 			/>
 
 			<div className={'list'.classNames(style)}>

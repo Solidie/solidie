@@ -9,6 +9,7 @@ namespace Solidie\Models;
 
 use Solidie\Helpers\_Array;
 use Solidie\Helpers\_String;
+use Solidie_Pro\Models\ContentPack;
 
 /**
  * Content manager class
@@ -449,9 +450,6 @@ class Contents {
 
 		$where_clause = '';
 
-		// Content type filter
-		$where_clause .= ! empty( $content_type ) ? $wpdb->prepare( ' AND content.content_type=%s', $content_type ) : '';
-
 		// Search filter
 		if ( ! empty( $keyword ) ) {
 			$where_clause .= $wpdb->prepare(
@@ -484,6 +482,33 @@ class Contents {
 			$where_clause .= $wpdb->prepare( ' AND content.contributor_id=%d', $args['contributor_id'] );
 		}
 
+		// Filter content type
+		if ( ! empty( $content_type ) ) {
+
+			$where_clause .= $wpdb->prepare( ' AND content.content_type=%s', $content_type );
+			
+			// Filter content bundle, it works only content type is specified as it needs to determine the logic
+			if ( ! empty( $args['content_pack_plan'] ) ) {
+				
+				$is_auto = ContentPack::isPackAutoEnabled( $args['content_pack_plan'] );
+
+				if ( $is_auto ) {
+					$where_clause .= $wpdb->prepare( 
+						' AND (pack.pack_id IS NULL OR (pack.pack_id=%s AND pack.enabled=1))', 
+						$args['content_pack_plan'] 
+					);
+				} else {
+					$where_clause .= $wpdb->prepare( 
+						' AND pack.pack_id=%s AND pack.enabled=1', 
+						$args['content_pack_plan'] 
+					);
+				}
+
+				// Include only paid in bundle filter, bundle can't be free
+				$where_clause .= ' AND content.product_id IS NOT NULL';
+			}
+		}
+
 		// If it is segmentation
 		if ( $segmentation ) {
 
@@ -495,6 +520,7 @@ class Contents {
 						{$wpdb->solidie_contents} content 
 						LEFT JOIN {$wpdb->solidie_categories} cat ON content.category_id=cat.category_id
 						LEFT JOIN {$wpdb->solidie_popularity} pop ON content.content_id=pop.content_id
+						LEFT JOIN {$wpdb->solidie_content_pack_link} pack ON content.content_id=pack.content_id
 					WHERE 1=1 {$where_clause}",
 					...$category_ids_in
 				)
@@ -536,6 +562,7 @@ class Contents {
 					LEFT JOIN {$wpdb->solidie_categories} cat ON content.category_id=cat.category_id
 					LEFT JOIN {$wpdb->solidie_popularity} pop ON content.content_id=pop.content_id
 					LEFT JOIN {$wpdb->users} contributor ON content.contributor_id=contributor.ID
+					LEFT JOIN {$wpdb->solidie_content_pack_link} pack ON content.content_id=pack.content_id
 				WHERE 1=1 {$where_clause} {$order_clause} {$limit_offset}",
 				...$category_ids_in
 			),
