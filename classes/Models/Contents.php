@@ -577,12 +577,13 @@ class Contents {
 	}
 
 	/**
-	 * Undocumented function
+	 * Assign content meta like permalink, latest release, contributor_avatar_url etc.
 	 *
 	 * @param array $contents Content array to append content meta to
 	 * @return array
 	 */
 	public static function assignContentMeta( $contents ) {
+		
 		if ( empty( $contents ) ) {
 			return $contents;
 		}

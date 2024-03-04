@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Mar 01, 2024 at 03:12 AM
+-- Generation Time: Mar 04, 2024 at 02:08 AM
 -- Server version: 8.0.16
 -- PHP Version: 8.1.23
 
@@ -92,6 +92,21 @@ CREATE TABLE IF NOT EXISTS `wp_solidie_content_meta` (
   `meta_key` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL,
   `meta_value` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL,
   PRIMARY KEY (`meta_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `wp_solidie_content_pack_link`
+--
+
+CREATE TABLE IF NOT EXISTS `wp_solidie_content_pack_link` (
+  `link_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `content_id` bigint(20) UNSIGNED NOT NULL,
+  `pack_id` varchar(50) COLLATE utf8mb4_unicode_520_ci NOT NULL,
+  `enabled` tinyint(1) UNSIGNED NOT NULL,
+  PRIMARY KEY (`link_id`),
+  KEY `content_id` (`content_id`,`pack_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 
 -- --------------------------------------------------------

@@ -106,7 +106,7 @@ function MobileFilter({_setFilter, filterList, filters}) {
 			</div>
 		}
 
-		<div className={'d-flex align-items-center column-gap-10'.classNames()}>
+		<div className={'d-flex flex-wrap-wrap align-items-center column-gap-10 row-gap-10'.classNames()}>
 			<div 
 				className={`filter-control ${Object.keys(filters).length>1 ? 'has-change' : ''}`.classNames(style)} 
 				onClick={()=>setFilter(true)}

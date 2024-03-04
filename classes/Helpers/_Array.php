@@ -300,13 +300,13 @@ class _Array {
 		$grouped_array = array();
 
 		foreach ( $array as $item ) {
-			$content_type = $item[ $col_name ];
+			$group_key = $item[ $col_name ];
 
-			if ( ! isset( $grouped_array[ $content_type ] ) ) {
-				$grouped_array[ $content_type ] = array();
+			if ( ! isset( $grouped_array[ $group_key ] ) ) {
+				$grouped_array[ $group_key ] = array();
 			}
 
-			$grouped_array[ $content_type ][] = $item;
+			$grouped_array[ $group_key ][] = $item;
 		}
 
 		return $grouped_array;
