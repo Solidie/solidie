@@ -76,5 +76,6 @@ class Database {
 		$wpdb->solidie_reactions         = $prefix . 'reactions';
 		$wpdb->solidie_lessons           = $prefix . 'lessons';
 		$wpdb->solidie_content_pack_link = $prefix . 'content_pack_link';
+		$wpdb->solidie_withdrawals       = $prefix . 'withdrawals';
 	}
 }

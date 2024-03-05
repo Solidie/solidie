@@ -66,7 +66,7 @@ export function OptionFields({fields=[], settings, onChange: _onChange}) {
 			type, 
 			options, 
 			when, 
-			direction, 
+			direction = 'column',
 			hint, 
 			hint2, 
 			placeholder, 
@@ -97,7 +97,7 @@ export function OptionFields({fields=[], settings, onChange: _onChange}) {
 		return (
 			<div
 				key={name}
-				className={`d-flex ${direction === 'column' ? 'flex-direction-column' : 'flex-direction-row align-items-center'} flex-wrap-wrap ${when ? 'fade-in' : ''}`.classNames()}
+				className={`d-flex ${direction === 'column' ? 'flex-direction-column' : 'flex-direction-row align-items-center column-gap-15'} flex-wrap-wrap ${when ? 'fade-in' : ''}`.classNames()}
 			>
 				{
 					type !== 'switch' ? null :
@@ -189,6 +189,7 @@ export function OptionFields({fields=[], settings, onChange: _onChange}) {
 								max={max}
 								disabled={disabled}
 								value={values[name]}
+								placeholder={placeholder}
 								onChange={(v) => onChange(name, v)}
 							/>
 						</div>
@@ -232,7 +233,8 @@ export function Options() {
 		overflow=true, 
 		width='582px', 
 		label,
-		description
+		description,
+		separator=true, 
 	} = settings_fields[segment].segments[sub_segment];
 
 	return <div>
@@ -265,9 +267,9 @@ export function Options() {
 					<RenderExternal 
 						component={component} 
 						payload={{updateWholeSetting, settings, segment: sub_segment}}
-						className={'fields-wrapper'.classNames(style)}/> 
+						className={`fields-wrapper ${separator ? 'separator' : ''}`.classNames(style)}/> 
 					:
-					<div className={'fields-wrapper'.classNames(style)}>
+					<div className={`fields-wrapper ${separator ? 'separator' : ''}`.classNames(style)}>
 						<OptionFields fields={fields}/>
 					</div>
 				}

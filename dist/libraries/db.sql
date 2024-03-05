@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Mar 04, 2024 at 02:08 AM
+-- Generation Time: Mar 04, 2024 at 11:55 PM
 -- Server version: 8.0.16
 -- PHP Version: 8.1.23
 
@@ -235,6 +235,24 @@ CREATE TABLE IF NOT EXISTS `wp_solidie_tokens` (
   `token` varchar(500) COLLATE utf8mb4_unicode_520_ci NOT NULL,
   `expires_on` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`token_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `wp_solidie_withdrawals`
+--
+
+CREATE TABLE IF NOT EXISTS `wp_solidie_withdrawals` (
+  `withdrawal_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `amount` int(10) UNSIGNED NOT NULL,
+  `contributor_id` bigint(20) UNSIGNED NOT NULL,
+  `withdrawal_status` varchar(10) COLLATE utf8mb4_unicode_520_ci NOT NULL COMMENT 'pending, completed, rejected',
+  `withdrawal_note` text COLLATE utf8mb4_unicode_520_ci NOT NULL COMMENT 'Note from withdrawal request manager AKA reviewer',
+  `request_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `completed_date` timestamp NOT NULL,
+  PRIMARY KEY (`withdrawal_id`),
+  KEY `contributor_id` (`contributor_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 COMMIT;
 

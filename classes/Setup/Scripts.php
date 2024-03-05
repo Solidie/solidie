@@ -58,6 +58,7 @@ class Scripts {
 
 		$nonce_action = '_solidie_' . str_replace( '-', '_', gmdate( 'Y-m-d' ) );
 		$nonce        = wp_create_nonce( $nonce_action );
+		$user         = wp_get_current_user();
 
 		// Load data
 		$data = apply_filters(
@@ -81,7 +82,10 @@ class Scripts {
 				'readonly_mode'    => apply_filters( 'solidie_readonly_mode', false ), // It's for solidie demo site only. No other use is expected.
 				'is_apache'        => is_admin() ? strpos( sanitize_text_field( $_SERVER['SERVER_SOFTWARE'] ?? '' ), 'Apache' ) !== false : null,
 				'user'             => array(
-					'id' => get_current_user_id()
+					'id'           => get_current_user_id(),
+					'first_name'   => $user ? $user->first_name : null,
+					'last_name'    => $user ? $user->last_name : null,
+					'display_name' => $user ? $user->display_name : null,
 				),
 				'settings'         => array(
 					'contents' => AdminSetting::getContentSettings(),

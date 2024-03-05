@@ -11,6 +11,7 @@ export const settings_fields = applyFilters(
 				gallery: {
 					label: __('Gallery'),
 					description: __('Gallery and single page settings'),
+					separator: false,
 					fields: [
 						{
 							name: 'free_download_label',

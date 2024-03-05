@@ -1,7 +1,6 @@
 import React from "react";
 
 import {__} from 'crewhrm-materials/helpers.jsx';
-import { TextField } from 'crewhrm-materials/text-field/text-field.jsx';
 import { DoAction } from 'crewhrm-materials/mountpoint.jsx';
 
 import { CategoryEditor } from "./category-editor.jsx";
@@ -27,34 +26,36 @@ const fields = [
 		name: 'slug',
 		label: __('Base Slug'),
 		type: 'text',
-		direction: 'column'
+	},
+	{
+		name: 'api_slug',
+		label: __('API Slug'),
+		type: 'text',
+		placeholder: __('e.g update-distributor-api'),
+		supports: 'app'
 	},
 	{
 		name: 'enable_comment',
 		label: __('Enable commenting'),
 		type: 'switch',
-		direction: 'column',
 		placeholder: __('Enable')
 	},
 	{
 		name: 'show_contributor_info',
 		label: __('Show contributor info'),
 		type: 'switch',
-		direction: 'column',
 		placeholder: __('Enable')
 	},
 	{
 		name: 'reaction_type',
 		label: __('Reaction Type'),
 		type: 'radio',
-		direction: 'column',
 		options: reaction_types
 	},
 	{
 		name: 'enable_dislike',
 		label: __('Would you like to show dislike too?'),
 		type: 'switch',
-		direction: 'column',
 		placeholder: __('Enable dislike'),
 		when: ['reaction_type', 'like' ]
 	}
@@ -84,7 +85,7 @@ export function ContentTypeEditor(props) {
 
 	return <div className={className}>
 		<OptionFields 
-			fields={fields} 
+			fields={fields.filter(f=>!f.supports || content_type==f.supports)} 
 			settings={settings.contents[content_type]}
 			onChange={onChange}
 		/>
