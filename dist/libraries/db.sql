@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Mar 04, 2024 at 11:55 PM
+-- Generation Time: Mar 08, 2024 at 04:50 AM
 -- Server version: 8.0.16
 -- PHP Version: 8.1.23
 
@@ -245,14 +245,17 @@ CREATE TABLE IF NOT EXISTS `wp_solidie_tokens` (
 
 CREATE TABLE IF NOT EXISTS `wp_solidie_withdrawals` (
   `withdrawal_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `amount` int(10) UNSIGNED NOT NULL,
+  `amount` double NOT NULL,
   `contributor_id` bigint(20) UNSIGNED NOT NULL,
-  `withdrawal_status` varchar(10) COLLATE utf8mb4_unicode_520_ci NOT NULL COMMENT 'pending, completed, rejected',
-  `withdrawal_note` text COLLATE utf8mb4_unicode_520_ci NOT NULL COMMENT 'Note from withdrawal request manager AKA reviewer',
+  `withdrawal_status` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL COMMENT 'pending, processing, completed, rejected, cancelled',
+  `rejection_note` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci COMMENT 'Note from withdrawal request manager AKA reviewer',
   `request_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `completed_date` timestamp NOT NULL,
+  `completed_date` timestamp NULL DEFAULT NULL,
+  `withdrawal_method` varchar(10) COLLATE utf8mb4_unicode_520_ci NOT NULL COMMENT 'wise, paypal, payoneer, interac, bank etc.',
+  `method_details` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL COMMENT 'Online payment account email or bank details.',
   PRIMARY KEY (`withdrawal_id`),
-  KEY `contributor_id` (`contributor_id`)
+  KEY `contributor_id` (`contributor_id`),
+  KEY `withdrawal_status` (`withdrawal_status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 COMMIT;
 

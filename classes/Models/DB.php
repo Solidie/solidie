@@ -7,6 +7,7 @@
 
 namespace Solidie\Models;
 
+use Solidie\Helpers\_Number;
 use Solidie\Main;
 
 /**
@@ -160,11 +161,10 @@ class DB {
 	 * @return int
 	 */
 	public static function getLimit( $limit = null ) {
-		$limit = absint( (int) $limit );
-		if ( empty( $limit ) ) {
-			$limit = 25;
+		if ( ! is_numeric( $limit ) ) {
+			$limit = 20;
 		}
-		return apply_filters( 'solidie_query_result_count', $limit );
+		return apply_filters( 'solidie_query_result_count', _Number::getInt( $limit, 1 ) );
 	}
 
 	/**
@@ -174,10 +174,6 @@ class DB {
 	 * @return int
 	 */
 	public static function getPage( $page = null ) {
-		$page = absint( (int) $page );
-		if ( empty( $page ) ) {
-			$page = 1;
-		}
-		return $page;
+		return _Number::getInt( $page, 1 );
 	}
 }

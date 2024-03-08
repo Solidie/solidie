@@ -82,10 +82,11 @@ class Scripts {
 				'readonly_mode'    => apply_filters( 'solidie_readonly_mode', false ), // It's for solidie demo site only. No other use is expected.
 				'is_apache'        => is_admin() ? strpos( sanitize_text_field( $_SERVER['SERVER_SOFTWARE'] ?? '' ), 'Apache' ) !== false : null,
 				'user'             => array(
-					'id'           => get_current_user_id(),
+					'id'           => $user ? $user->ID : 0,
 					'first_name'   => $user ? $user->first_name : null,
 					'last_name'    => $user ? $user->last_name : null,
 					'display_name' => $user ? $user->display_name : null,
+					'avatar_url'   => $user ? get_avatar_url( $user->ID ) : null,
 				),
 				'settings'         => array(
 					'contents' => AdminSetting::getContentSettings(),
@@ -98,6 +99,7 @@ class Scripts {
 					'settings'          => Utilities::getBackendPermalink( AdminPage::SETTINGS_SLUG ),
 					'dashboard'         => Utilities::getBackendPermalink( Main::$configs->root_menu_slug ),
 					'gallery'           => Contents::getGalleryPermalink(),
+					'logout'            => htmlspecialchars_decode( wp_logout_url( get_home_url() ) ),
 				),
 			)
 		);

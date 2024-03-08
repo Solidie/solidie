@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 
 import { request } from 'crewhrm-materials/request.jsx';
-import { __, data_pointer, sprintf, formatDate, isEmpty, getDashboardPath } from 'crewhrm-materials/helpers.jsx';
+import { __, data_pointer, sprintf, formatDateTime, isEmpty, getDashboardPath } from 'crewhrm-materials/helpers.jsx';
 import { ContextToast } from 'crewhrm-materials/toast/toast.jsx';
 import { LoadingIcon } from 'crewhrm-materials/loading-icon/loading-icon.jsx';
 import { Pagination } from 'crewhrm-materials/pagination/pagination.jsx';
@@ -78,7 +78,7 @@ export function InventoryWrapper({children, content_label, gallery_permalink, na
 		</div>
 	}
 
-	return <div style={{maxWidth: '1200px', margin: 'auto', padding: '20px 10px'}}>
+	return <div style={{maxWidth: '1200px', margin: 'auto'}}>
 		<div>
 			<strong className={"d-flex align-items-center column-gap-8 color-text padding-vertical-10 position-sticky top-0".classNames()}>
 				<span className={'font-size-24 font-weight-600 letter-spacing-3'.classNames()}>
@@ -248,7 +248,7 @@ export function Inventory({navigate, params={}}) {
 								placeholder={__('Enter Keyword')}
 								onChange={key=>setFilter('search', key)}
 								value={filterState.search}
-								style={{height: '35px'}}
+								style={{height: '35px', padding: '3px 15px'}}
 								iconClass={'ch-icon ch-icon-search-normal-1'.classNames()}
 								icon_position='right'
 							/>
@@ -371,7 +371,7 @@ export function Inventory({navigate, params={}}) {
 											</div>
 										</td>
 										<td data-th={__('Created')}>
-											{formatDate(created_at, window[data_pointer]?.date_format + ' ' + window[data_pointer]?.time_format)}
+											{formatDateTime(created_at)}
 										</td>
 									</tr>
 								})

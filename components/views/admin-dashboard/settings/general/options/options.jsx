@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useRef } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useContext } from 'react';
+import { useParams, Link } from 'react-router-dom';
 
 import { ToggleSwitch } from 'crewhrm-materials/toggle-switch/ToggleSwitch.jsx';
 import { TextField } from 'crewhrm-materials/text-field/text-field.jsx';
@@ -244,9 +244,11 @@ export function Options() {
 				className={'d-flex align-items-center column-gap-10 font-size-17 font-weight-600 color-text margin-bottom-10'.classNames()}
 			>
 				<span className={'d-flex align-items-center column-gap-10'.classNames()}>
-					<i 
-						className={'ch-icon ch-icon-arrow-left cursor-pointer'.classNames()} 
-						onClick={()=>window.history.back()}></i>
+					
+					<Link 
+						to={'/settings/'}
+						className={'ch-icon ch-icon-arrow-left cursor-pointer color-text'.classNames()} 
+					/>
 					{label}
 				</span>
 			</span>

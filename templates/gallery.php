@@ -5,12 +5,18 @@
  * @package solidie
  */
 
+use Solidie\Models\Contents;
+
 if ( ! defined( 'ABSPATH' ) ) { exit;
 }
 
-// $type and $setting comes from ~/templates/index.php
+// $type and $setting comes from ./index.php
 $content_type     = $type;
 $content_settings = $setting;
+$content_slug     = $content_slug;
+$content          = ! empty( $content_slug ) ? Contents::getContentByField( 'content_slug', $content_slug ) : null;
+
+$GLOBALS['solidie_gallery_data'] = compact( 'content_type', 'content_settings', 'content_slug', 'content' );
 
 get_header(); 
 

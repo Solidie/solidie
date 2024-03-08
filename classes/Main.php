@@ -9,6 +9,7 @@ namespace Solidie;
 
 use Solidie\Helpers\_Array;
 use Solidie\Helpers\Utilities;
+use Solidie\Setup\OpenGraph;
 use Solidie\Setup\Dispatcher;
 use Solidie\Setup\Scripts;
 use Solidie\Setup\AdminPage;
@@ -67,6 +68,7 @@ class Main {
 		new Scripts();
 		new AdminPage();
 		new Media();
+		new OpenGraph();
 		new Cron();
 		new Promotion();
 

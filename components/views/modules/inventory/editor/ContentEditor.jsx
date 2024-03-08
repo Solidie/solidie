@@ -301,7 +301,10 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 			<div className={'content-editor'.classNames(style)} style={{maxWidth: '600px', margin: '20px auto'}}>
 				{/* Header */}
 				<div className={"margin-top-20 margin-bottom-30 d-flex align-items-center column-gap-10".classNames()}>
-					<i onClick={()=>window.history.back()} className={"ch-icon ch-icon-arrow-left cursor-pointer".classNames()}></i>
+					<i 
+						onClick={()=>navigate(getDashboardPath(`inventory/${content_type}/`))} 
+						className={"ch-icon ch-icon-arrow-left cursor-pointer".classNames()}
+					></i>
 					<span>
 						{
 							!content_id ? 
