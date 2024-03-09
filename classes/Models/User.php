@@ -71,4 +71,14 @@ class User {
 	public static function getSolidieAdminRole() {
 		return apply_filters( 'solidie_administrative_role', 'administrator' );
 	}
+
+	/**
+	 * Check if a user has administrative access to solidie functionalities
+	 *
+	 * @param int $user_id
+	 * @return boolean
+	 */
+	public static function hasAdministrativeRole( $user_id ) {
+		return self::validateRole( $user_id, self::getSolidieAdminRole() );
+	}
 }

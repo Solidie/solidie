@@ -19,7 +19,7 @@ import { TutorialManager } from "../tutorial-manager/tutorial-manager.jsx";
 
 import style from './editor.module.scss';
 
-const {readonly_mode} = window[data_pointer];
+const {readonly_mode, is_admin} = window[data_pointer];
 
 const audio_extensions = [
 	'.mp3',
@@ -172,7 +172,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 			}
 		});
 
-		request('createOrUpdateContent', {content, ...files}, resp=>{
+		request('createOrUpdateContent', {content, is_admin, ...files}, resp=>{
 			const {
 				success, 
 				data:{

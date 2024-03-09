@@ -203,7 +203,7 @@ export function Inventory({navigate, params={}}) {
 	const _content = window[data_pointer]?.settings?.contents[content_type] || {};
 	const _content_label = _content.label || __('Content');
 	
-	const show_monetization = is_admin && is_pro_active;
+	const show_monetization = is_pro_active;
 
 	return <InventoryWrapper 
 		content_label={_content_label} 

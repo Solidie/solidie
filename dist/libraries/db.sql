@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Mar 08, 2024 at 04:50 AM
+-- Generation Time: Mar 09, 2024 at 03:57 AM
 -- Server version: 8.0.16
 -- PHP Version: 8.1.23
 
@@ -211,12 +211,13 @@ CREATE TABLE IF NOT EXISTS `wp_solidie_sales` (
   `parent_id` bigint(20) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Parent ID is here to simulate subscription model little bit. Subsequent renewal order will be child sales.',
   `order_status` varchar(15) COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
   `sale_price` double UNSIGNED NOT NULL,
-  `commission` double NOT NULL COMMENT 'The exact amount site owner will get',
-  `commission_rate` double NOT NULL COMMENT 'Commission percentage site owner gets',
+  `commission` double NOT NULL COMMENT 'The exact amount contributor will get',
+  `commission_rate` double NOT NULL COMMENT 'Commission percentage the contributor gets',
   `license_or_content_limit` mediumint(8) UNSIGNED DEFAULT NULL COMMENT 'The limit per subscription period/season',
   `downloads_in_season` mediumint(8) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Downloads in a subscription period/season. It is supposed to be used in content pack only. ',
   `expires_on` date DEFAULT NULL COMMENT 'When the subscription of app or content pack expires',
   `purchase_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Order date time',
+  `order_complete_date` timestamp NULL DEFAULT NULL,
   `enabled` tinyint(1) UNSIGNED NOT NULL DEFAULT '1',
   PRIMARY KEY (`sale_id`),
   KEY `app_id` (`content_id`,`variation_id`),
@@ -247,10 +248,10 @@ CREATE TABLE IF NOT EXISTS `wp_solidie_withdrawals` (
   `withdrawal_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `amount` double NOT NULL,
   `contributor_id` bigint(20) UNSIGNED NOT NULL,
-  `withdrawal_status` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL COMMENT 'pending, processing, completed, rejected, cancelled',
+  `withdrawal_status` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL COMMENT 'pending, processing, sent, rejected, cancelled',
   `rejection_note` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci COMMENT 'Note from withdrawal request manager AKA reviewer',
-  `request_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `completed_date` timestamp NULL DEFAULT NULL,
+  `request_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'The date contributor requested withdrawal on',
+  `sent_date` timestamp NULL DEFAULT NULL COMMENT 'The date payment sent out on',
   `withdrawal_method` varchar(10) COLLATE utf8mb4_unicode_520_ci NOT NULL COMMENT 'wise, paypal, payoneer, interac, bank etc.',
   `method_details` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL COMMENT 'Online payment account email or bank details.',
   PRIMARY KEY (`withdrawal_id`),

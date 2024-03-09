@@ -21,6 +21,20 @@ export const label_class =
 export const hint_class =
     'd-block margin-top-3 font-size-15 font-weight-400 line-height-24 letter-spacing--15 color-text-light'.classNames();
 
+function isTwoDimensionalArray(arr) {
+    if (!Array.isArray(arr)) {
+        return false; // Not an array
+    }
+
+    for (let i = 0; i < arr.length; i++) {
+        if (!Array.isArray(arr[i])) {
+            return false; // Element at index i is not an array
+        }
+    }
+
+    return true; // All elements are arrays
+}
+
 export function OptionFields({fields=[], settings, onChange: _onChange}) {
 
     const { segment } = useParams();
@@ -33,7 +47,11 @@ export function OptionFields({fields=[], settings, onChange: _onChange}) {
 		_onChange ? _onChange(name, value) : dispatchChange(segment, name, value);
 	}
 
-    const satisfyLogic = (when) => {
+    const satisfyLogic = (when=[]) => {
+		if ( isTwoDimensionalArray(when) ) {
+			return when.filter(w=>satisfyLogic(w)).length===when.length;
+		}
+
         const pointer = when[0];
         const operator = when.length > 2 ? when[1] : '===';
         const operand = when[when.length > 2 ? 2 : 1];
@@ -51,7 +69,8 @@ export function OptionFields({fields=[], settings, onChange: _onChange}) {
                 break;
 
             case 'in_array':
-                _return = operand.indexOf(value)>-1;
+				const _value = Array.isArray(value) ? value : [];
+                _return = Array.isArray(operand) ? operand.filter(o=>_value.indexOf(o)>-1).length : _value.indexOf(operand)>-1;
                 break;
         }
 

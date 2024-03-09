@@ -81,6 +81,8 @@ class ContentController {
 	 */
 	public static function createOrUpdateContent( array $content, array $thumbnail = array(), array $sample_images = array(), array $sample_image_ids = array(), array $downloadable_file = array(), array $preview = array() ) {
 
+		do_action( 'solidie_before_create_update_content', func_get_args() );
+
 		// If it is edit, make sure the user is privileged to.
 		if ( ! empty( $content['content_id'] ) ) {
 			self::contentAccessCheck( $content['content_id'], get_current_user_id() );
@@ -163,8 +165,13 @@ class ContentController {
 		// Now get the content by content ID
 		$content = $content_id ? Contents::getContentByContentID( $content_id, null, false ) : null;
 
+		if ( empty( $content_type ) && ! empty( $content ) ) {
+			$content_type = $content['content_type'];
+		}
+
 		// Send plans setting for new creation
-		$plan_settings = _Array::getArray( AdminSetting::get( "contents.{$content_type}.plans" ) );
+		$plan_settings            = _Array::getArray( AdminSetting::get( "contents.{$content_type}.plans" ) );
+		$contributor_plan_control = ( bool ) AdminSetting::get( "general.contributor_content_plan_control" );
 
 		if ( empty( $content ) ) {
 			if ( empty( $content_id ) && $is_editor ) {
@@ -172,7 +179,8 @@ class ContentController {
 					array(
 						'content' => array(
 							'meta_data' => array(
-								'content_type_plans' => $plan_settings
+								'content_type_plans'       => $plan_settings,
+								'contributor_plan_control' => $contributor_plan_control
 							)
 						)
 					)
@@ -184,7 +192,8 @@ class ContentController {
 		}
 
 		// Add the plan structure to meta data
-		$content['meta_data']['content_type_plans'] = $plan_settings;
+		$content['meta_data']['content_type_plans']       = $plan_settings;
+		$content['meta_data']['contributor_plan_control'] = $contributor_plan_control;
 
 		// If editor, make sure the autor requested, or the admin who can do anything
 		if ( $is_editor ) {
@@ -232,7 +241,7 @@ class ContentController {
 	 */
 	public static function contentAccessCheck( $content_id, $user_id ) {
 		if ( ! Contents::isUserCapableToManage( $content_id, $user_id ) ) {
-			wp_send_json_error( array( 'message' => __( 'Access denied!', 'solidie' ) ) );
+			wp_send_json_error( array( 'message' => __( 'You are not authorized!', 'solidie' ) ) );
 		}
 	}
 

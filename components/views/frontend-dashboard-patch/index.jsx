@@ -13,7 +13,7 @@ addFilter(
 	function (menus=[]) {
 
 		// Do not show inventory page if public contribution is disabled
-		if ( ! window[data_pointer].public_contribution_enabled ) {
+		if ( ! window[data_pointer].public_contribution ) {
 			return menus;
 		}
 
