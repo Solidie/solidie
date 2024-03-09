@@ -41,6 +41,8 @@ class ContentController {
 		),
 		'deleteAppRelease' => array(
 		),
+		'changeContentStatus' => array(
+		),
 	);
 
 	/**
@@ -96,6 +98,16 @@ class ContentController {
 			'sample_image_ids'
 		);
 
+		// Determine the content status
+		$approval       = AdminSetting::get('general.public_contribution_approval');
+		$administrative = User::hasAdministrativeRole( get_current_user_id() );
+		if ( ! $administrative && ( $approval === 'new_update' || ( $approval === 'new' && empty( $content['content_id'] ) ) ) ) {
+			$content['content_status'] = 'pending';
+			
+		} else if ( empty( $content['content_id'] ) ) {
+			$content['content_status'] = 'publish';
+		}
+		
 		$content_id = Contents::updateContent( $content, $files );
 
 		if ( ! empty( $content_id ) ) {
@@ -340,5 +352,45 @@ class ContentController {
 		Release::deleteRelease( $release_id );
 
 		wp_send_json_success( array( 'message' => __( 'The release has been deleted', 'solidie' ) ) );
+	}
+
+	/**
+	 * Change content status
+	 *
+	 * @param integer $content_id
+	 * @param string $status
+	 * @param boolean $is_admin
+	 * @return void
+	 */
+	public static function changeContentStatus( int $content_id, string $status, bool $is_admin ) {
+		// Check content access
+		self::contentAccessCheck( $content_id, get_current_user_id() );
+
+		$content = Contents::getContentByContentID( $content_id );
+
+		// Contributor can only unpublish from published status
+		if ( ! $is_admin ) {
+			if ( $status != 'unpublish' ) {
+				wp_send_json_error( array( 'message' => __( 'You are not authorized for the action!', 'solidie' ) ) );
+			}
+
+			if ( $content['content_status'] != 'publish' ) {
+				wp_send_json_error( array( 'message' => __( 'Could not change status! Try reloading the page.', 'solidie' ) ) );
+			}
+		} else {
+			// As it is admin action, validate role
+			if ( ! User::hasAdministrativeRole( get_current_user_id() ) ) {
+				wp_send_json_error( array( 'message' => __( 'You are not authorized for the action!', 'solidie' ) ) );
+			}
+		}
+
+		if ( ! in_array( $status, Contents::CONTENT_STATUSES ) ) {
+			wp_send_json_error( array( 'message' => __( 'Invalid content status', 'solidie' ) ) );
+		}
+
+		// Looks ok
+		Contents::changeContentStatus( $content_id, $status );
+
+		wp_send_json_success( array( 'message' => __( 'Content status has been changes', 'solidie' ) ) );
 	}
 }

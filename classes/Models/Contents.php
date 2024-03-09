@@ -27,6 +27,16 @@ class Contents {
 	const PRODUCT_META_KEY_FOR_CONTENT = 'solidie-content-id';
 
 	/**
+	 * Possible content statuses
+	 */
+	const CONTENT_STATUSES = array(
+		'publish', 
+		'unpublish', 
+		'pending', 
+		'rejected'	
+	);
+
+	/**
 	 * Create or update content
 	 *
 	 * @param array $content_data Content data array to create or update
@@ -44,9 +54,12 @@ class Contents {
 		$content['content_description'] = ! empty( $content_data['content_description'] ) ? $content_data['content_description'] : null;
 		$content['content_type']        = $content_data['content_type'];
 		$content['category_id']         = $content_data['category_id'] ?? null;
-		$content['content_status']      = 'publish';
 		$content['contributor_id']      = $content_data['contributor_id'] ?? get_current_user_id();
 		$content['modified_at']         = $gmdate;
+
+		if ( ! empty( $content_data['content_status'] ) ) {
+			$content['content_status'] = $content_data['content_status'];
+		}
 
 		$is_update = false;
 
@@ -730,5 +743,19 @@ class Contents {
 	public static function isUserCapableToManage( $content_id, $user_id ) {
 		$contributor_id = Field::contents()->getField( array( 'content_id' => $content_id ), 'contributor_id' );
 		return ! empty( $contributor_id ) && ( $contributor_id == $user_id || User::validateRole( $user_id, User::getSolidieAdminRole() ) );
+	}
+
+	/**
+	 * Change content status
+	 *
+	 * @param int $content_id
+	 * @param string $status
+	 * @return void
+	 */
+	public static function changeContentStatus( $content_id, $status ) {
+		Field::contents()->updateField(
+			array( 'content_status' => $status ),
+			array( 'content_id' => $content_id )
+		);
 	}
 }

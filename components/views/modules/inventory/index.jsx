@@ -8,10 +8,18 @@ import { Pagination } from 'crewhrm-materials/pagination/pagination.jsx';
 import { TextField } from 'crewhrm-materials/text-field/text-field.jsx';
 import { Tabs } from 'crewhrm-materials/tabs/tabs.jsx';
 import { TableStat } from 'crewhrm-materials/table-stat.jsx';
+import { DropDown } from 'crewhrm-materials/dropdown/dropdown.jsx';
 
 import style from './inventory.module.scss';
 
 const {readonly_mode, is_admin, is_pro_active} = window[data_pointer];
+
+export const content_statuses = {
+	publish: __('Published'), 
+	unpublish: __('Unpublished'), 
+	pending: __('Pending'), 
+	rejected: __('Rejected')
+}
 
 export function InventoryWrapper({children, content_label, gallery_permalink, navigate, params={}}) {
 
@@ -107,6 +115,7 @@ export function Inventory({navigate, params={}}) {
 
 	const [state, setState] = useState({
 		fetching: false,
+		changing_status_for: null,
 		contents: [],
 		segmentation: null,
 		gallery_permalink: null,
@@ -173,6 +182,29 @@ export function Inventory({navigate, params={}}) {
 			} else {
 				fetchContents();
 			}
+		});
+	}
+
+	const changeContentStatus=(content_id, status)=>{
+
+		if ( ! window.confirm(__('Sure to change status?')) ) {
+			return;
+		}
+
+		setState({
+			...state,
+			changing_status_for: content_id
+		});
+		
+		request('changeContentStatus', {content_id, status, is_admin}, resp=>{
+
+			ajaxToast(resp);
+
+			setState({
+				...state,
+				changing_status_for: null,
+				contents: resp.success ? state.contents.map(c=>c.content_id==content_id ? {...c, content_status: status} : c) : state.contents
+			});
 		});
 	}
 
@@ -263,7 +295,6 @@ export function Inventory({navigate, params={}}) {
 							<tr>
 								<th>{__('Title')}</th>
 								{!is_admin ? null : <th>{__('Contributor')}</th>}
-								<th>{__('Downloads')}</th>
 								<th>{__('Category')}</th>
 								{!show_monetization ? null : <th>{__('Monetization')}</th>}
 								<th>{__('Status')}</th>
@@ -325,14 +356,17 @@ export function Inventory({navigate, params={}}) {
 														</span>
 														
 														<span className={'color-text-lighter'.classNames()}>|</span>
-														<a 
-															className={'action'.classNames(style) + 'cursor-pointer d-inline-flex align-items-center column-gap-8'.classNames()} 
-															title={__('Download')}
-															href={release?.download_url || '#'}
-															target='_blank'
-														>
-															<i className={'ch-icon ch-icon-download font-size-15'.classNames()}></i>
-														</a>
+														<span className={'d-inline-flex align-items-center column-gap-8'.classNames()}>
+															<a 
+																className={'action'.classNames(style) + 'cursor-pointer ch-icon ch-icon-download font-size-15'.classNames()} 
+																title={__('Download')}
+																href={release?.download_url || '#'}
+																target='_blank'
+															></a>
+															<span className={'font-size-14 color-text-light'.classNames()}>
+																{download_count}
+															</span>
+														</span>
 													</div>
 												</div>
 											</div>
@@ -350,10 +384,6 @@ export function Inventory({navigate, params={}}) {
 											</td>
 										}
 
-										<td data-th={__('Downloads')}>
-											{download_count}
-										</td>
-
 										<td data-th={__('Category')}>
 											{category_name || <>&nbsp;</>}
 										</td>
@@ -366,8 +396,26 @@ export function Inventory({navigate, params={}}) {
 										}
 										
 										<td data-th={__('Status')}>
-											<div>
-												{content_status}
+											<div className={'d-flex align-items-center column-gap-10'.classNames()}>
+												{
+													!is_admin ? 
+														content_statuses[content_status] :
+														<DropDown
+															value={content_status}
+															onChange={v=>changeContentStatus(content_id, v)}
+															disabled={state.changing_status_for}
+															clearable={false}
+															options={
+																Object.keys(content_statuses).filter(s=>s!='unpublish').map(status=>{
+																	return {
+																		id: status,
+																		label: content_statuses[status]
+																	}
+																})
+															}
+														/>
+												}
+												<LoadingIcon show={state.changing_status_for==content_id}/>
 											</div>
 										</td>
 										<td data-th={__('Created')}>
