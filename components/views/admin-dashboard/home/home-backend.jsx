@@ -3,7 +3,7 @@ import React from "react";
 import {__, data_pointer} from 'crewhrm-materials/helpers.jsx';
 
 import { ProInstaller } from "./pro-installer.jsx";
-
+import { NewsletterSubscription } from "./news-letter-subscription.jsx";
 import logo_svg from '../../../images/logo.svg';
 
 const {permalinks, is_apache, is_pro_active} = window[data_pointer];
@@ -93,5 +93,12 @@ export function HomeBackend() {
 			</strong>
 			<span className={'font-size-14'.classNames()}>Please <a href="https://wordpress.org/plugins/solidie/#reviews" target="_blank"><strong>provide your feedback</strong></a> to help us improve.</span>
 		</div>
+
+		<br/>
+		<br/>
+		<br/>
+		<br/>
+		<NewsletterSubscription/>
+		<br/>
 	</div>
 }

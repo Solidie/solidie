@@ -13,14 +13,14 @@ addFilter(
 	function (menus=[]) {
 
 		// Do not show inventory page if public contribution is disabled
-		if ( ! window[data_pointer].public_contribution ) {
+		if ( ! window[data_pointer].contribution?.enabled ) {
 			return menus;
 		}
 
 		menus.splice(1, 0, {
 			path: 'inventory/',
 			full_path: 'inventory/:content_type?/',
-			text: __('Inventory'),
+			text: __('Contribution'),
 			icon: '',
 			component: function(el, data) {
 				mountExternal(

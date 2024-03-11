@@ -100,6 +100,7 @@ class Scripts {
 					'dashboard'         => Utilities::getBackendPermalink( Main::$configs->root_menu_slug ),
 					'gallery'           => Contents::getGalleryPermalink(),
 					'logout'            => htmlspecialchars_decode( wp_logout_url( get_home_url() ) ),
+					'api_host'          => Main::$configs->api_host,
 				),
 			)
 		);
