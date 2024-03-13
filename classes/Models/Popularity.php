@@ -23,7 +23,10 @@ class Popularity {
 		global $wpdb;
 		$wpdb->insert(
 			$wpdb->solidie_popularity,
-			array( 'content_id' => $content_id )
+			array( 
+				'content_id'    => $content_id,
+				'download_date' => gmdate( 'Y-m-d H:i:s' )
+			)
 		);
 	}
 

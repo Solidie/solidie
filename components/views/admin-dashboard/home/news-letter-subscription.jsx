@@ -46,7 +46,10 @@ export function NewsletterSubscription() {
 		});
 	}
 	
-	return <div style={{maxWidth: '500px'}} className={'bg-color-white border-radius-5 margin-auto padding-25'.classNames()}>
+	return <div 
+		style={{maxWidth: '500px', borderTop: '3px solid lightgray'}} 
+		className={'bg-color-white border-radius-5 margin-auto padding-25 box-shadow-thin'.classNames()}
+	>
 		<strong className={'d-block font-size-20 font-weight-500 margin-bottom-10'.classNames()}>
 			{__('Subscribe to Newsletter')}
 		</strong>

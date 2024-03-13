@@ -59,8 +59,8 @@ class OpenGraph {
 			'title'         => $content['content_title'],
 			'url'           => $content['content_permalink'],
 			'thumbnail_url' => ( $content['media']['thumbnail'] ?? array() )['file_url'] ?? null,
-			'create_time'   => $content['created_at'],
-			'modified_time' => $content['modified_at'],
+			'create_time'   => date( 'Y-m-d H:i:s', $content['created_at'] ) . ' UTC',
+			'modified_time' => date( 'Y-m-d H:i:s', $content['modified_at'] ) . ' UTC',
 		);
 		
 		include Main::$configs->dir . 'templates/meta-data.php';

@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 
 import { request } from "crewhrm-materials/request.jsx";
 import { LoadingIcon } from "crewhrm-materials/loading-icon/loading-icon.jsx";
-import { __, formatDate, sprintf } from "crewhrm-materials/helpers.jsx";
+import { __, formatDate, formatDateTime, sprintf } from "crewhrm-materials/helpers.jsx";
 import { FileUpload } from "crewhrm-materials/file-upload/file-upload.jsx";
 import { TextField } from "crewhrm-materials/text-field/text-field.jsx";
 import { ContextToast } from "crewhrm-materials/toast/toast.jsx";
@@ -248,7 +248,7 @@ export function ReleaseManager({content_id}) {
 													{version}
 												</span>
 												<small className={'d-block margin-bottom-10'.classNames()}>
-													{__('Date:')} {formatDate( release_date )}
+													{__('Date:')} {formatDateTime( release_date )}
 												</small>
 												<span className={'actions'.classNames(style) + 'd-flex align-items-center column-gap-15'.classNames()}>
 													<i 

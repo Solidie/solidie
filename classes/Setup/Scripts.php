@@ -25,10 +25,19 @@ class Scripts {
 	 */
 	public function __construct() {
 
+		// Load scripts
 		add_action( 'admin_enqueue_scripts', array( $this, 'adminScripts' ), 11 );
 		add_action( 'wp_enqueue_scripts', array( $this, 'frontendScripts' ), 11 );
 
+		// Register script translations
+		add_action( 'admin_enqueue_scripts', array( $this, 'scriptTranslation' ), 9 );
+		add_action( 'wp_enqueue_scripts', array( $this, 'scriptTranslation' ), 9 );
+
+		// Load script for pro dashboard, especially for the indentory page.
 		add_action( 'solidie_fe_dashboard_js_enqueue_before', array( $this, 'loadScriptForProDashboard' ) );
+
+		// Load text domain
+		add_action( 'init', array( $this, 'loadTextDomain' ) );
 
 		// Vars
 		add_action( 'wp_head', array( $this, 'loadVariables' ), 1000 );
@@ -122,7 +131,7 @@ class Scripts {
 	 */
 	public function adminScripts() {
 		if ( Utilities::isAdminDashboard() ) {
-			wp_enqueue_script( 'solidie-admin-script', Main::$configs->dist_url . 'admin-dashboard.js', array( 'jquery' ), Main::$configs->version, true );
+			wp_enqueue_script( 'solidie-backend', Main::$configs->dist_url . 'admin-dashboard.js', array( 'jquery' ), Main::$configs->version, true );
 		}
 	}
 
@@ -132,7 +141,7 @@ class Scripts {
 	 * @return void
 	 */
 	public function frontendScripts() {
-		wp_enqueue_script( 'solidie-frontend-script', Main::$configs->dist_url . 'frontend.js', array( 'jquery' ), Main::$configs->version, true );
+		wp_enqueue_script( 'solidie-frontend', Main::$configs->dist_url . 'frontend.js', array( 'jquery' ), Main::$configs->version, true );
 	}
 
 	/**
@@ -141,6 +150,29 @@ class Scripts {
 	 * @return void
 	 */
 	public function loadScriptForProDashboard() {
-		wp_enqueue_script( 'solidie-frontend-dashboard-patch-script', Main::$configs->dist_url . 'frontend-dashboard-patch.js', array( 'jquery' ), Main::$configs->version, true );
+		wp_enqueue_script( 'solidie-frontend-patch', Main::$configs->dist_url . 'frontend-dashboard-patch.js', array( 'jquery' ), Main::$configs->version, true );
+	}
+
+	/**
+	 * Load text domain for translations
+	 *
+	 * @return void
+	 */
+	public function loadTextDomain() {
+		load_plugin_textdomain( Main::$configs->text_domain, false, Main::$configs->dir . 'languages' );
+	}
+
+	/**
+	 * Load translations
+	 *
+	 * @return void
+	 */
+	public function scriptTranslation() {
+
+		$domain = Main::$configs->text_domain;
+		$dir    = Main::$configs->dir . 'languages/';
+
+		wp_enqueue_script( 'solidie-translations', Main::$configs->dist_url . 'libraries/translation-loader.js', array( 'jquery' ), Main::$configs->version, true );
+		wp_set_script_translations( 'solidie-translations', $domain, $dir );
 	}
 }

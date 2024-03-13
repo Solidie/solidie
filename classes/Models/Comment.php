@@ -110,6 +110,7 @@ class Comment {
 			$wpdb->prepare(
 				"SELECT 
 					_comment.*,
+					UNIX_TIMESTAMP(_comment.comment_date) AS comment_date,
 					_user.display_name
 				FROM
 					{$wpdb->solidie_comments} _comment

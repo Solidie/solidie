@@ -33,7 +33,8 @@ class Contents {
 		'publish', 
 		'unpublish', 
 		'pending', 
-		'rejected'	
+		'rejected',
+		'banned',
 	);
 
 	/**
@@ -264,6 +265,8 @@ class Contents {
 			$wpdb->prepare(
 				"SELECT 
 					content.*, 
+					UNIX_TIMESTAMP(content.created_at) AS created_at,
+					UNIX_TIMESTAMP(content.modified_at) AS modified_at,
 					content.contributor_id as author_id 
 				FROM {$wpdb->solidie_contents} content 
 					LEFT JOIN {$wpdb->users} _user ON content.contributor_id=_user.ID 
@@ -495,6 +498,11 @@ class Contents {
 			$where_clause .= $wpdb->prepare( ' AND content.contributor_id=%d', $args['contributor_id'] );
 		}
 
+		// Filter content status
+		if ( ! empty( $args['status'] ) ) {
+			$where_clause .= $wpdb->prepare( ' AND content.content_status=%s', $args['status'] );
+		}
+
 		// Filter content type
 		if ( ! empty( $content_type ) ) {
 
@@ -567,8 +575,9 @@ class Contents {
 					content.contributor_id,
 					contributor.display_name AS contributor_name,
 					COUNT(pop.download_id) AS download_trend,
-					pop.download_date,
+					UNIX_TIMESTAMP(pop.download_date) AS download_date,
 					UNIX_TIMESTAMP(content.created_at) AS created_at,
+					UNIX_TIMESTAMP(content.modified_at) AS modified_at,
 					cat.category_name
 				FROM 
 					{$wpdb->solidie_contents} content 

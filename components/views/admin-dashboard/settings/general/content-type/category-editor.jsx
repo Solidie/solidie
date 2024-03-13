@@ -98,7 +98,7 @@ export function CategoryEditor({content_type}) {
 	}
 
 	const deleteCategory=(category_id)=>{
-		if ( ! window.confirm( __( 'Sure to delete the category and it\'s children?' ) ) ) {
+		if ( ! window.confirm( __( 'Sure to delete the category including children?' ) ) ) {
 			return;
 		}
 

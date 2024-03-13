@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 
-import { data_pointer, __ } from "crewhrm-materials/helpers.jsx";
+import { data_pointer, __, formatDate, formatDateTime } from "crewhrm-materials/helpers.jsx";
 import { DangerouslySet } from "crewhrm-materials/dangerously-set.jsx";
 import { TextField } from "crewhrm-materials//text-field/text-field.jsx";
 import { LoadingIcon } from "crewhrm-materials/loading-icon/loading-icon.jsx";
@@ -211,7 +211,7 @@ export function Comments({content_id}) {
 										{display_name}
 									</strong>
 									<span>
-										{comment_date}
+										{formatDateTime(comment_date)}
 									</span>
 								</div>
 							</div>

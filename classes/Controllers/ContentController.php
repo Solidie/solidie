@@ -79,11 +79,24 @@ class ContentController {
 	 * @param array $sample_image_ids Existing sample image IDs to delete removed ones
 	 * @param array $downloadable_file Main downloadable file
 	 * @param array $preview Preview file
+	 * @param bool  $is_admin Whether the request came from admin screen or contributor dashboard editor
+	 *
 	 * @return void
 	 */
-	public static function createOrUpdateContent( array $content, array $thumbnail = array(), array $sample_images = array(), array $sample_image_ids = array(), array $downloadable_file = array(), array $preview = array() ) {
+	public static function createOrUpdateContent( array $content, array $thumbnail = array(), array $sample_images = array(), array $sample_image_ids = array(), array $downloadable_file = array(), array $preview = array(), bool $is_admin = false ) {
 
-		do_action( 'solidie_before_create_update_content', func_get_args() );
+		do_action(
+			'solidie_before_create_update_content', 
+			compact( 
+				'content', 
+				'thumbnail', 
+				'sample_images', 
+				'sample_image_ids', 
+				'downloadable_file', 
+				'preview',
+				'is_admin'
+			)
+		);
 
 		// If it is edit, make sure the user is privileged to.
 		if ( ! empty( $content['content_id'] ) ) {
@@ -150,7 +163,12 @@ class ContentController {
 	 */
 	public static function deleteContent( int $content_id ) {
 
-		self::contentAccessCheck( $content_id, get_current_user_id() );
+		// Only administrative user can delete permanently
+		if ( ! User::hasAdministrativeRole( get_current_user_id() ) ) {
+			wp_send_json_error( array( 'You are not authorized to delete content permanently!', 'solidie' ) );
+		}
+
+		// self::contentAccessCheck( $content_id, get_current_user_id() );
 
 		Contents::deleteContent( $content_id );
 		wp_send_json_success();
@@ -366,16 +384,17 @@ class ContentController {
 		// Check content access
 		self::contentAccessCheck( $content_id, get_current_user_id() );
 
-		$content = Contents::getContentByContentID( $content_id );
+		$content        = Contents::getContentByContentID( $content_id );
+		$current_status = $content['content_status'];
 
 		// Contributor can only unpublish from published status
 		if ( ! $is_admin ) {
-			if ( $status != 'unpublish' ) {
+			if ( 
+				! in_array( $status, array( 'publish', 'unpublish' ) ) 
+				|| ( $status === 'unpublish' && $current_status !== 'publish' ) 
+				|| ( $status === 'publish' && $current_status !== 'unpublish' )
+			) {
 				wp_send_json_error( array( 'message' => __( 'You are not authorized for the action!', 'solidie' ) ) );
-			}
-
-			if ( $content['content_status'] != 'publish' ) {
-				wp_send_json_error( array( 'message' => __( 'Could not change status! Try reloading the page.', 'solidie' ) ) );
 			}
 		} else {
 			// As it is admin action, validate role

@@ -31,7 +31,7 @@ export const settings_fields = applyFilters(
 		},
 		contents: {
 			label: __('Content Types'),
-			description: __('Configure the content types you\'d like to showcase'),
+			description: __('Configure the content types to showcase'),
 			segments: {
 				
 			}

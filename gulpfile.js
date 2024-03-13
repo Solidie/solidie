@@ -21,7 +21,6 @@ var onError = function (err) {
 
 var added_texts = [];
 const regex = /__\(\s*'([^']*)'\s*\)/g;
-const js_files = ['frontend', 'admin-dashboard'].map((f) => 'dist/' + f + '.js:1').join(', ');
 
 function i18n_makepot(target_dir) {
     const parent_dir = target_dir || __dirname;
@@ -56,7 +55,7 @@ function i18n_makepot(target_dir) {
 
                 added_texts.push(text);
                 translation_texts +=
-                    '\n#: ' + js_files + '\nmsgid "' + text + '"\nmsgstr ""' + '\n';
+                    `\n#: dist/libraries/translation-loader.js:1\nmsgid "${text}"\nmsgstr ""\n`;
             }
         }
     });
