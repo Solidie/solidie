@@ -22,8 +22,8 @@ import { Tutorial } from "../tutorial/tutorial.jsx";
 import { createContext } from "react";
 
 const renderers = {
-	video: Video,
 	audio: Audio,
+	video: Video,
 	image: Image,
 	other: GenericCard
 }

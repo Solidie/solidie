@@ -151,21 +151,25 @@ export function Comments({content_id}) {
 				</div>
 				:
 				<div className={"comment-box".classNames(style)}>
-					<TextField 
-						type='textarea' 
-						placeholder={__("Write your comment")} 
-						onChange={new_comment=>setState({...state, new_comment})}
-						disabled={state.fetching || state.submitting}
-						value={state.new_comment}
-					/>
-						
-					<button 
-						className={'button button-primary button-small'.classNames()}
-						onClick={submitComment}
-						disabled={state.fetching || state.submitting || ! /\S+/.test(state.new_comment || '')}
-					>
-						{__('Submit')} <LoadingIcon show={state.submitting}/>
-					</button>
+					<div className={'margin-bottom-15'.classNames()}>
+						<TextField 
+							type='textarea' 
+							placeholder={__("Write your comment")} 
+							onChange={new_comment=>setState({...state, new_comment})}
+							disabled={state.fetching || state.submitting}
+							value={state.new_comment}
+						/>
+					</div>
+					
+					<div>
+						<button 
+							className={'button button-primary button-small'.classNames()}
+							onClick={submitComment}
+							disabled={state.fetching || state.submitting || ! /\S+/.test(state.new_comment || '')}
+						>
+							{__('Submit')} <LoadingIcon show={state.submitting}/>
+						</button>
+					</div>
 				</div>
 			}
 			

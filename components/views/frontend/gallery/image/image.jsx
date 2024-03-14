@@ -41,10 +41,16 @@ export function ImageLayout({contents=[]}) {
 								content_permalink
 							} = content;
 
-							return <Link key={content_id} to={content_permalink}>
+							return <Link 
+								key={content_id} 
+								to={content_permalink}
+								className={'image-single'.classNames(style)}
+							>
 								<div className={'position-relative cursor-pointer'.classNames()}>
 									<img className={'d-block width-p-100 height-auto'.classNames()} src={media.thumbnail?.file_url}/>
-									<ImageVideoDetails content={content}/>
+									<div className={'meta'.classNames(style)}>
+										<ImageVideoDetails content={content}/>
+									</div>
 								</div>
 							</Link>
 						})
