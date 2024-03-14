@@ -1,6 +1,12 @@
 .like-wrapper {
-	border: 1px solid rgba(0, 0, 0, 0.067);
+	backdrop-filter: blur(3px);
+	background-color: rgba(0, 0, 0, 0.048);
+	border: 1px solid rgba(0, 0, 0, 0.106);
     border-radius: 50px;
     padding: 0 10px;
     height: 27px;
+
+	&.white {
+		border-color: white;
+	}
 }

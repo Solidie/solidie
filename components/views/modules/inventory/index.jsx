@@ -216,7 +216,10 @@ export function Inventory({navigate, params={}}) {
 			className={className} 
 			title={title} 
 			href={to}
-			onClick={e=>{e.preventDefault(); navigate(to);}}
+			onClick={e=>{
+				e.preventDefault(); 
+				navigate(to);
+			}}
 		>
 			{children}
 		</a>
@@ -308,8 +311,10 @@ export function Inventory({navigate, params={}}) {
 							category_name,
 							product_id,
 							download_count,
-							contributor_name,
-							contributor_avatar_url,
+							contributor:{
+								display_name, 
+								avatar_url
+							},
 							release
 						} = content;
 
@@ -376,9 +381,9 @@ export function Inventory({navigate, params={}}) {
 								!is_admin ? null :
 								<td data-th={__('Contributor')}>
 									<div className={'d-flex align-items-center column-gap-8'.classNames()}>
-										<img src={contributor_avatar_url} style={{width: '25px', borderRadius: '50%', overflow: 'hidden'}}/>
+										<img src={avatar_url} style={{width: '25px', borderRadius: '50%', overflow: 'hidden'}}/>
 										<span>
-											{contributor_name}
+											{display_name}
 										</span>
 									</div>
 								</td>

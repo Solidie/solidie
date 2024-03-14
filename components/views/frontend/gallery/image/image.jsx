@@ -4,6 +4,7 @@ import { ColCounter, ContextColCounter } from "crewhrm-materials/col-counter.jsx
 
 import style from './image.module.scss';
 import { Link } from "react-router-dom";
+import { ImageVideoDetails } from "../video/video.jsx";
 
 export function chunkArray(contents=[], column_length){
 	
@@ -33,18 +34,17 @@ export function ImageLayout({contents=[]}) {
 				return <div className={'flex-1 d-flex flex-direction-column row-gap-5'.classNames()} key={index}>
 					{
 						images.map(content=>{
-							const {media={}, content_id, content_slug, content_permalink} = content;
+							
+							const {
+								media={}, 
+								content_id, 
+								content_permalink
+							} = content;
+
 							return <Link key={content_id} to={content_permalink}>
-								<div className={'position-relative cursor-pointer'.classNames() + 'single-image'.classNames(style)}>
+								<div className={'position-relative cursor-pointer'.classNames()}>
 									<img className={'d-block width-p-100 height-auto'.classNames()} src={media.thumbnail?.file_url}/>
-									{/* <div className={'position-absolute left-0 top-0 right-0 bottom-0 d-flex flex-direction-column justify-content-space-between'.classNames() + 'details'.classNames(style)}>
-										<div className={'d-flex align-items-center justify-content-end'.classNames()}>
-											top
-										</div>
-										<div>
-											bott
-										</div>
-									</div> */}
+									<ImageVideoDetails content={content}/>
 								</div>
 							</Link>
 						})

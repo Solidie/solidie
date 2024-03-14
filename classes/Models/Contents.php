@@ -573,7 +573,6 @@ class Contents {
 					content.content_status, 
 					content.content_slug,
 					content.contributor_id,
-					contributor.display_name AS contributor_name,
 					COUNT(pop.download_id) AS download_trend,
 					UNIX_TIMESTAMP(pop.download_date) AS download_date,
 					UNIX_TIMESTAMP(content.created_at) AS created_at,
@@ -599,7 +598,7 @@ class Contents {
 	}
 
 	/**
-	 * Assign content meta like permalink, latest release, contributor_avatar_url etc.
+	 * Assign content meta like permalink, latest release, contributor etc.
 	 *
 	 * @param array $contents Content array to append content meta to
 	 * @return array
@@ -624,7 +623,9 @@ class Contents {
 			$contents[ $index ]['release'] = Release::getRelease( (int) $content['content_id'] );
 
 			// Contributor avatar URL
-			$contents[ $index ]['contributor_avatar_url'] = ! empty( $content['contributor_id'] ) ? get_avatar_url( $content['contributor_id'] ) : null;
+			$contents[ $index ]['contributor'] = ! empty( $content['contributor_id'] ) ? User::getUserData( $content['contributor_id'] ) : null;
+			
+			$contents[ $index ]['reactions'] = Reaction::getStats( $content['content_id'], get_current_user_id() );
 		
 			// Not necessarily from meta table. Just helper data.
 			$contents[ $index ]['meta_data'] = array();

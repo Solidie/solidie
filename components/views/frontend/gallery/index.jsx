@@ -7,6 +7,7 @@ import { __, data_pointer, filterObject, isEmpty, parseParams, getPath } from "c
 import { ErrorBoundary } from "crewhrm-materials/error-boundary.jsx";
 import { LoadingIcon } from "crewhrm-materials/loading-icon/loading-icon.jsx";
 import { Pagination } from "crewhrm-materials/pagination/pagination.jsx";
+import { applyFilters } from "crewhrm-materials/hooks.jsx";
 
 import { GenericCard } from "./generic-card/generic-card.jsx";
 import { SingleWrapper } from "../single/index.jsx";
@@ -18,7 +19,7 @@ import { Audio } from "./audio/audio.jsx";
 import style from './index.module.scss';
 import { Sidebar } from "./sidebar.jsx";
 import { Tutorial } from "../tutorial/tutorial.jsx";
-import { applyFilters } from "crewhrm-materials/hooks.jsx";
+import { createContext } from "react";
 
 const renderers = {
 	video: Video,
@@ -43,6 +44,8 @@ const sorting_list = {
 		]
 	}
 };
+
+export const ContextGallery = createContext();
 
 function GalleryLayout({resources={}}) {
 	const {categories={}} = resources;
@@ -117,6 +120,14 @@ function GalleryLayout({resources={}}) {
 		});
 	}
 
+	const updateReactions=(content_id, reactions)=>{
+		const {contents=[]} = state;
+		setState({
+			...state,
+			contents: contents.map(c=>c.content_id==content_id ? {...c, reactions} : c)
+		});
+	}
+
 	useEffect(()=>{
 		getContents(true);
 	}, [content_type_slug]);
@@ -145,91 +156,93 @@ function GalleryLayout({resources={}}) {
 		}
 	}).filter(content=>content!==null);
 
-	return <div className={'gallery'.classNames(style)}>
-		<div className={'d-flex align-items-center position-sticky border-1 border-radius-8 b-color-tertiary margin-bottom-15'.classNames()}>
-			<div 
-				className={'border-right-1 b-color-tertiary'.classNames()} 
-				style={content_options.length<2 ? {width: 0, visibility: 'hidden'} : {}}
-			>
-				<DropDown
-					value={contents[content_type]?.slug}
-					onChange={v=>navigate(getPath(v+'/'))}
-					variant="borderless"
-					clearable={false}
-					options={content_options}/>
-			</div>
-
-			{/* Search field */}
-			<div className={'flex-1 d-flex align-items-center padding-horizontal-15'.classNames()}>
-				<div className={'flex-1'.classNames()}>
-					<input 
-						type='text' 
-						className={"text-field-flat overflow-hidden text-overflow-ellipsis".classNames()}
-						value={queryParams.search || ''}
-						onChange={e=>setFilter('search', e.currentTarget.value)}/>
+	return <ContextGallery.Provider value={{updateContentReactions: updateReactions}}>
+		<div className={'gallery'.classNames(style)}>
+			<div className={'d-flex align-items-center position-sticky border-1 border-radius-8 b-color-tertiary margin-bottom-15'.classNames()}>
+				<div 
+					className={'border-right-1 b-color-tertiary'.classNames()} 
+					style={content_options.length<2 ? {width: 0, visibility: 'hidden'} : {}}
+				>
+					<DropDown
+						value={contents[content_type]?.slug}
+						onChange={v=>navigate(getPath(v+'/'))}
+						variant="borderless"
+						clearable={false}
+						options={content_options}/>
 				</div>
-				<div>
-					<i className={'ch-icon ch-icon-search-normal-1 font-size-16'.classNames()}></i>
+
+				{/* Search field */}
+				<div className={'flex-1 d-flex align-items-center padding-horizontal-15'.classNames()}>
+					<div className={'flex-1'.classNames()}>
+						<input 
+							type='text' 
+							className={"text-field-flat overflow-hidden text-overflow-ellipsis".classNames()}
+							value={queryParams.search || ''}
+							onChange={e=>setFilter('search', e.currentTarget.value)}/>
+					</div>
+					<div>
+						<i className={'ch-icon ch-icon-search-normal-1 font-size-16'.classNames()}></i>
+					</div>
 				</div>
 			</div>
-		</div>
-		
-		<div ref={reff_wrapper} className={`content ${is_mobile ? 'mobile' : ''}`.classNames(style)}>
-			<Sidebar
-				filters={queryParams}
-				setFilter={setFilter}
-				is_mobile={is_mobile}
-				filterList={
-					applyFilters(
-						'gallery_sidebar_filter_list',
-						{
-							category_ids: {
-								section_label: __('Category'),
-								selection_type: 'checkbox',
-								options: categories[content_type] || []
-							},
-							...sorting_list
-						},
-						resources,
-						content_type
-					)
-				}
-			/>
-
-			<div className={'list'.classNames(style)}>
-				{
-					(!state.fetching && !state.contents.length) ? 
-						<div className={'text-align-center'.classNames()}>
-							{__('No result!')}
-						</div> : null
-				}
-
-				{
-					!state.contents.length ? null :
-					<ErrorBoundary>
-						<RenderComp contents={state.contents}/>
-						
-						{
-							(state.segmentation?.page_count || 0) < 2 ? null :
-								<>
-									<br/>
-									<div className={'d-flex justify-content-center'.classNames()}>
-										<div>
-											<Pagination
-												onChange={(page) => setFilter('page', page)}
-												pageNumber={current_page}
-												pageCount={state.segmentation.page_count}/>
-										</div>
-									</div>
-								</>
-						}
-					</ErrorBoundary>
-				}
 			
-				<LoadingIcon center={true} show={state.fetching}/>
+			<div ref={reff_wrapper} className={`content ${is_mobile ? 'mobile' : ''}`.classNames(style)}>
+				<Sidebar
+					filters={queryParams}
+					setFilter={setFilter}
+					is_mobile={is_mobile}
+					filterList={
+						applyFilters(
+							'gallery_sidebar_filter_list',
+							{
+								category_ids: {
+									section_label: __('Category'),
+									selection_type: 'checkbox',
+									options: categories[content_type] || []
+								},
+								...sorting_list
+							},
+							resources,
+							content_type
+						)
+					}
+				/>
+
+				<div className={'list'.classNames(style)}>
+					{
+						(!state.fetching && !state.contents.length) ? 
+							<div className={'text-align-center'.classNames()}>
+								{__('No result!')}
+							</div> : null
+					}
+
+					{
+						!state.contents.length ? null :
+						<ErrorBoundary>
+							<RenderComp contents={state.contents}/>
+							
+							{
+								(state.segmentation?.page_count || 0) < 2 ? null :
+									<>
+										<br/>
+										<div className={'d-flex justify-content-center'.classNames()}>
+											<div>
+												<Pagination
+													onChange={(page) => setFilter('page', page)}
+													pageNumber={current_page}
+													pageCount={state.segmentation.page_count}/>
+											</div>
+										</div>
+									</>
+							}
+						</ErrorBoundary>
+					}
+				
+					<LoadingIcon center={true} show={state.fetching}/>
+				</div>
 			</div>
 		</div>
-	</div>
+	</ContextGallery.Provider>
 }
 
 function LessonWrapper() {

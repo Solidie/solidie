@@ -116,7 +116,8 @@ class Reaction {
 
 		global $wpdb;
 
-		// Delete the reaction  the value is negative
+		// Delete the reaction if the value is negative. 
+		// For example when someone will remove wishlist, the incoming value will be -1.
 		if ( $value < 0 ) {
 			$wpdb->delete(
 				$wpdb->solidie_reactions,
@@ -217,7 +218,8 @@ class Reaction {
 			);
 		}
 
-		$stats['commenting'] = $feedback_settings['comment'];
+		$stats['wishlisted']    = ( bool ) self::wishlist( $content_id )->getReaction( $user_id, 'value' );
+		$stats['comment_count'] = $feedback_settings['comment'] ? Comment::getCount( $content_id ) : null;
 
 		return $stats;
 	}
@@ -230,5 +232,48 @@ class Reaction {
 	 */
 	public static function deleteByContentId( $content_id ) {
 		Field::reactions()->deleteField( array( 'content_id' => $content_id ) );
+	}
+
+	/**
+	 * Get reactions
+	 *
+	 * @param array $args
+	 * @return array
+	 */
+	public function getReactions( $user_id )  {
+		
+		global $wpdb;
+
+		$reactions = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT
+					_reaction.reaction_id,
+					_reaction.content_id,
+					_reaction.value AS reaction_value,
+					UNIX_TIMESTAMP(_reaction.reaction_date) AS reaction_date,
+					_content.content_title
+				FROM 
+					{$wpdb->solidie_reactions} _reaction
+					INNER JOIN {$wpdb->solidie_contents} _content ON _reaction.content_id=_content.content_id
+				WHERE 
+					_reaction.reaction_type=%s
+					AND _reaction.user_id=%d
+				ORDER BY 
+					_reaction.reaction_date DESC",
+				$this->type,
+				$user_id
+			),
+			ARRAY_A
+		);
+
+		$reactions = _Array::castRecursive( $reactions );
+		$reactions = Contents::assignContentMedia( $reactions );
+
+		// Assign content permalink
+		foreach ( $reactions as $index => $reaction ) {
+			$reactions[ $index ]['content_permalink'] = Contents::getPermalink( $reaction['content_id'] );
+		}
+
+		return $reactions;
 	}
 }

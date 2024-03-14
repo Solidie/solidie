@@ -144,7 +144,7 @@ export function SingleWrapper() {
 				}
 
 				{
-					(!state.content?.content_id || !state.content?.reactions?.commenting) ? null : 
+					(!state.content?.content_id || isNaN(state.content?.reactions?.comment_count)) ? null : 
 					<Comments content_id={state.content.content_id}/>
 				}
 			</div>

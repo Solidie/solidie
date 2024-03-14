@@ -1,7 +1,6 @@
-.single-video {
-	&:not(:hover) {
-		.details {
-			display: none;
-		}
+.details {
+
+	&, * {
+		line-height: normal;
 	}
 }

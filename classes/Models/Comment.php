@@ -174,4 +174,22 @@ class Comment {
 	public static function deleteCommentByContentId( $content_id ) {
 		Field::comments()->deleteField( array( 'content_id' => $content_id ) );
 	}
+
+	/**
+	 * Get comment count
+	 *
+	 * @return int
+	 */
+	public static function getCount( $content_id, $parent = 0 ) {
+
+		global $wpdb;
+
+		return ( int ) $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT COUNT(comment_id) FROM {$wpdb->solidie_comments} WHERE content_id=%d AND parent_id=%d",
+				$content_id,
+				$parent
+			)
+		);
+	}
 }
