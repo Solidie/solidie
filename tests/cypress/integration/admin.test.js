@@ -1,7 +1,7 @@
 describe('Admin can login and make sure plugin is activated', () => {
-	before(() => {
+	/* before(() => {
 		cy.login();
-	});
+	}); */
 
 	it('Can activate plugin if it is deactivated', () => {
 		cy.activatePlugin('solidie');

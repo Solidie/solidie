@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
+import {__} from 'crewhrm-materials/helpers.jsx';
 import {ResponsiveLayout} from 'crewhrm-materials/responsive-layout.jsx';
 import {Ratio} from 'crewhrm-materials/responsive-layout.jsx';
 import { currency_symbol } from "crewhrm-materials/helpers";
@@ -30,18 +31,23 @@ const getMinPrice=plans=>{
 export function DownloadOrPrice({content, is_overlayer}) {
 
 	const {
-		product:{monetization, plans=[]},
+		product:{monetization, plans=[]}={},
+		content_type,
+		content_permalink,
 		release={}
 	} = content;
 
-	const is_free = monetization != 'paid';
+	const is_free                     = monetization != 'paid';
+	const is_tutorial                 = content_type === 'tutorial';
 	const {sale_price, regular_price} = getMinPrice(plans);
-	const color_class = is_overlayer ? 'color-white color-hover-white' : 'color-text color-hover-text';
-
+	const color_class                 = is_overlayer ? 'color-white color-hover-white' : 'color-text color-hover-text';
+	const access_url                  = is_tutorial ? content_permalink+'0/' : (release?.download_url || '#');
+	
 	return is_free ? 
 		<span 
-			className={`ch-icon ch-icon-download font-size-16 ${color_class} cursor-pointer`.classNames()}
-			onClick={()=>window.location.assign(release?.download_url || '#')}
+			className={`ch-icon ${is_tutorial ? 'ch-icon-book-open' : 'ch-icon-download'} font-size-16 ${color_class} cursor-pointer`.classNames()}
+			onClick={()=>window.location.assign(access_url)}
+			title={is_tutorial ? __('Start Learning') : __('Download')}
 		></span>
 	:
 	<div className={`font-size-16 color-primary font-weight-500 white-space-nowrap ${color_class}`.classNames()}>

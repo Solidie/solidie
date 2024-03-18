@@ -89,11 +89,18 @@ function MobileFilter({_setFilter, filterList, filters}) {
 								setFilter(null);
 							}}
 						>
-							{__('Reset')}
+							{__('Clear')}
 						</span>
-						<i 
-							className={'ch-icon ch-icon-times font-size-20 color-text-lighter cursor-pointer'.classNames()} 
-							onClick={()=>setFilter(null)}></i>
+						<span className={`border-left-1 b-color-text-lighter`.classNames()} style={{paddingLeft: '20px'}}>
+							<span 
+								className={'color-secondary font-size-16 font-weight-500 line-height-24 letter-spacing--16 cursor-pointer'.classNames()}
+								onClick={()=>{
+									setFilter(null);
+								}}
+							>
+								{__('Done')}
+							</span>
+						</span>
 					</div>
 					<div className={'filters'.classNames(style)}>
 						<Filters {...{

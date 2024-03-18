@@ -232,9 +232,9 @@ class ContentController {
 
 		$feedback_settings = AdminSetting::getFeedbackSettings( $content['content_type'] );
 
-		// Get contributor info
-		if ( $feedback_settings['contributor'] ) {
-			$content['contributor'] = User::getUserData( $content['contributor_id'] );
+		// Remove contributor info from single content view if not enabled
+		if ( ! $feedback_settings['contributor'] && isset( $content['contributor'] ) ) {
+			unset( $content['contributor'] );
 		}
 
 		$content['reactions'] = ( object ) Reaction::getStats( $content_id, get_current_user_id() );

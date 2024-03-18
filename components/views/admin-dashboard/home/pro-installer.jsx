@@ -83,7 +83,7 @@ export function ProInstaller() {
 			 <div className={'padding-vertical-40 padding-horizontal-20 border-1 b-color-tertiary font-size-14 font-weight-400 border-radius-8 bg-color-white color-text'.classNames()}>
 				<div className={'text-align-center'.classNames()}>
 					<strong className={'font-size-16 font-weight-600'.classNames()}>
-						{__('Try Solidie Pro for Free')}
+						{__('Solidie Pro: A game changer')}
 					</strong>
 					<br/>
 				</div>
@@ -109,17 +109,17 @@ export function ProInstaller() {
 						</thead>
 						<tbody>
 							<tr>
-								<td>Supports Audio, Video, Image, Apps, Documents, 3D Contents, Fonts</td>
+								<td>Supports Audio, Video, Image, Apps, Documents, 3D Contents, Fonts and Tutorials</td>
 								<td>√</td>
 								<td>√</td>
 							</tr>
 							<tr>
-								<td>Content Management Admin Dashboard</td>
+								<td>Content Management Dashboard</td>
 								<td>√</td>
 								<td>√</td>
 							</tr>
 							<tr>
-								<td>Gallery and Single Page</td>
+								<td>Gallery and Single Content Page</td>
 								<td>√</td>
 								<td>√</td>
 							</tr>
@@ -129,17 +129,17 @@ export function ProInstaller() {
 								<td>√</td>
 							</tr>
 							<tr>
-								<td>Like, comment, share, rating</td>
+								<td>Like, comment, share, rating, wishlist</td>
 								<td>√</td>
 								<td>√</td>
 							</tr>
 							<tr>
-								<td>Content Monetization (Admin only for now)</td>
+								<td>Content Monetization</td>
 								<td>√</td>
 								<td></td>
 							</tr>
 							<tr>
-								<td>Third party contributions (Free only for now)</td>
+								<td>Third party contributions</td>
 								<td>√</td>
 								<td></td>
 							</tr>
@@ -149,7 +149,7 @@ export function ProInstaller() {
 								<td></td>
 							</tr>
 							<tr>
-								<td>Contributors revenue share (Upcoming)</td>
+								<td>Contributors revenue share</td>
 								<td>√</td>
 								<td></td>
 							</tr>
@@ -159,7 +159,7 @@ export function ProInstaller() {
 								<td></td>
 							</tr>
 							<tr>
-								<td>Subscription Sale</td>
+								<td>Bundle and Subscription Sale</td>
 								<td>√</td>
 								<td></td>
 							</tr>
@@ -176,6 +176,7 @@ export function ProInstaller() {
 						</tbody>
 					</table>
 
+
 					<div className={'text-align-right margin-top-10'.classNames()}>
 						<i>{__('To be continued..')}</i>
 					</div>
@@ -184,27 +185,22 @@ export function ProInstaller() {
 				<br/>
 				<br/>
 				<div className={'text-align-center'.classNames()}>
-					<strong className={'d-block margin-bottom-20 font-size-14 font-weight-500'.classNames()}>
-						{__('You are eligible to try Pro version without buying for a limited time.')}
-					</strong>
-					<div>
-						<a 
-							className={'button button-primary'.classNames()}
-							href={'https://demo.solidie.com'}
-							style={{marginRight: '20px'}}
-							target="_blank"
-						>
-							{__('Live Demo')} <LoadingIcon show={state.in_progress}/>
-						</a>
-						
-						<a 
-							className={'button button-primary'.classNames()}
-							href='https://solidie.com'
-							target="_blank"
-						>
-							{__('Learn More')}
-						</a>
-					</div>
+					<a 
+						className={'button button-primary'.classNames()}
+						href={'https://demo.solidie.com'}
+						style={{marginRight: '20px'}}
+						target="_blank"
+					>
+						{__('Live Demo')} <LoadingIcon show={state.in_progress}/>
+					</a>
+					
+					<a 
+						className={'button button-primary'.classNames()}
+						href='https://solidie.com'
+						target="_blank"
+					>
+						{__('Upgrade Now')}
+					</a>
 				</div>
 			</div>
 		}

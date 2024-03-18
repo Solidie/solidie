@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 
-import { data_pointer, __, formatDate, formatDateTime } from "crewhrm-materials/helpers.jsx";
+import { data_pointer, __, sprintf, formatDateTime } from "crewhrm-materials/helpers.jsx";
 import { DangerouslySet } from "crewhrm-materials/dangerously-set.jsx";
 import { TextField } from "crewhrm-materials//text-field/text-field.jsx";
 import { LoadingIcon } from "crewhrm-materials/loading-icon/loading-icon.jsx";
@@ -10,8 +10,9 @@ import { Options } from "crewhrm-materials/dropdown/dropdown.jsx";
 
 import style from './comment.module.scss';
 
-export function Comments({content_id}) {
+export function Comments({content={}}) {
 
+	const {content_id, reactions: {comment_count}={}} = content;
 	const {ajaxToast} = useContext(ContextToast);
 	
 	const {
@@ -139,7 +140,7 @@ export function Comments({content_id}) {
 			className={'d-flex align-items-center column-gap-8 padding-vertical-15 margin-top-10'.classNames() + 'comments-control'.classNames(style)}
 			onClick={()=>setState({...state, show_in_mobile: !state.show_in_mobile})}
 		>
-			{__('Comments')}
+			{comment_count>1 ? sprintf(__('%s Comments'), comment_count) : sprintf(__('%s Comment'), comment_count)}
 			<i className={'ch-icon ch-icon-arrow-right'.classNames() + 'commnents-arrow'.classNames(style)}></i>
 		</strong>
 		<div className={`comments`.classNames(style)}>

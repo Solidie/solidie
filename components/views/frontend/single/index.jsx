@@ -29,7 +29,17 @@ const preview_renderers = {
 }
 
 function FreeDownlod( props ) {
-	const {content, free_download_label, free_download_description} = props;
+
+	const {
+		content:{content_type, content_permalink, release={}}={}, 
+		free_download_label, 
+		free_download_description
+	} = props;
+
+
+	const is_tutorial = content_type === 'tutorial';
+	const access_url  = is_tutorial ? content_permalink+'0/' : (release?.download_url || '#');
+
 	return <div className={'border-1 b-color-tertiary border-radius-5 padding-horizontal-15 padding-vertical-20'.classNames()}>
 		<strong className={'d-block font-size-15 color-text font-weight-500 margin-bottom-15'.classNames()}>
 			{free_download_label}
@@ -38,10 +48,19 @@ function FreeDownlod( props ) {
 			{free_download_description}
 		</span>
 		<a 
-			href={content?.release?.download_url} 
+			href={access_url} 
 			className={'button button-primary button-outlined button-full-width'.classNames()}
 		>
-			{__('Download')}
+			<span 
+				className={'d-inline-flex align-items-flex-end column-gap-15'.classNames()}
+			>
+				<span style={{lineHeight: '23px'}}>
+					{is_tutorial ? __('Start Learning') : __('Download')}
+				</span>
+				<span>
+					<i className={`ch-icon ${is_tutorial ? 'ch-icon-book-open' : 'ch-icon-download'} font-size-14`.classNames()}></i>
+				</span>
+			</span>
 		</a>
 	</div>
 }
@@ -144,8 +163,8 @@ export function SingleWrapper() {
 				}
 
 				{
-					(!state.content?.content_id || isNaN(state.content?.reactions?.comment_count)) ? null : 
-					<Comments content_id={state.content.content_id}/>
+					(!state.content?.content_id || state.content?.reactions?.comment_count===null) ? null : 
+					<Comments content={state.content}/>
 				}
 			</div>
 			

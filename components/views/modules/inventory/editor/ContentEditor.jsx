@@ -4,7 +4,7 @@ import {TextField} from 'crewhrm-materials/text-field/text-field.jsx';
 import {FileUpload} from 'crewhrm-materials/file-upload/file-upload.jsx';
 import {request} from 'crewhrm-materials/request.jsx';
 import {LoadingIcon} from 'crewhrm-materials/loading-icon/loading-icon.jsx';
-import { __, data_pointer, isEmpty, sprintf, getDashboardPath } from "crewhrm-materials/helpers.jsx";
+import { __, data_pointer, isEmpty, sprintf, getDashboardPath, hasTextInHTML } from "crewhrm-materials/helpers.jsx";
 import { ContextToast } from "crewhrm-materials/toast/toast.jsx";
 import { DropDown } from "crewhrm-materials/dropdown/dropdown.jsx";
 import { TextEditor } from "crewhrm-materials/text-editor/text-editor.jsx";
@@ -362,8 +362,13 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 													>
 														{
 															thumbnail_url ? null :
-															<span className={'font-size-16 font-weight-500'.classNames()}>
-																Thumbnail
+															<span className={'font-size-14 font-weight-500'.classNames()}>
+																<span className={'d-block margin-bottom-10 text-align-center'.classNames()}>
+																	<i className={'ch-icon ch-icon-camera-plus font-size-24 color-text-light'.classNames()}></i>
+																</span>
+																<span>
+																	Thumbnail<span className={'color-error'.classNames()}>*</span>
+																</span>
 															</span>
 														}
 													</div>
@@ -505,9 +510,15 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 								
 								<div className={'text-align-right'.classNames()}>
 									<button 
-										disabled={readonly_mode || state.submitting} 
 										className={'button button-primary'.classNames()} 
 										onClick={submit}
+										disabled={
+											readonly_mode || 
+											state.submitting || 
+											!thumbnail_url ||
+											isEmpty((state.values.content_title || '').trim()) || 
+											!hasTextInHTML(state.values.kses_content_description || '')
+										} 
 									>
 										{content_id ? __('Update') : __('Create')} <LoadingIcon show={state.submitting}/>
 									</button>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Mar 09, 2024 at 03:57 AM
+-- Generation Time: Mar 18, 2024 at 02:21 AM
 -- Server version: 8.0.16
 -- PHP Version: 8.1.23
 
@@ -68,11 +68,12 @@ CREATE TABLE IF NOT EXISTS `wp_solidie_contents` (
   `content_title` mediumtext COLLATE utf8mb4_unicode_520_ci,
   `content_slug` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci DEFAULT NULL COMMENT 'Fillable immediately after creating entry',
   `content_description` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci,
-  `content_status` varchar(10) COLLATE utf8mb4_unicode_520_ci NOT NULL,
+  `content_status` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci DEFAULT NULL COMMENT 'publish, unpublish, pending, rejected',
   `parent_id` bigint(20) UNSIGNED NOT NULL DEFAULT '0',
   `contributor_id` bigint(20) UNSIGNED NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `modified_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `rejection_note` text COLLATE utf8mb4_unicode_520_ci,
   PRIMARY KEY (`content_id`),
   UNIQUE KEY `product_id` (`product_id`),
   UNIQUE KEY `content_slug` (`content_slug`),
@@ -214,11 +215,11 @@ CREATE TABLE IF NOT EXISTS `wp_solidie_sales` (
   `commission` double NOT NULL COMMENT 'The exact amount contributor will get',
   `commission_rate` double NOT NULL COMMENT 'Commission percentage the contributor gets',
   `license_or_content_limit` mediumint(8) UNSIGNED DEFAULT NULL COMMENT 'The limit per subscription period/season',
-  `downloads_in_season` mediumint(8) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Downloads in a subscription period/season. It is supposed to be used in content pack only. ',
+  `downloads_in_season` bigint(20) NOT NULL DEFAULT '0' COMMENT 'Downloads in a subscription period/season. It is supposed to be used in content pack only. ',
   `expires_on` date DEFAULT NULL COMMENT 'When the subscription of app or content pack expires',
   `purchase_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Order date time',
   `order_complete_date` timestamp NULL DEFAULT NULL,
-  `enabled` tinyint(1) UNSIGNED NOT NULL DEFAULT '1',
+  `enabled` tinyint(1) UNSIGNED DEFAULT '1',
   PRIMARY KEY (`sale_id`),
   KEY `app_id` (`content_id`,`variation_id`),
   KEY `order_id` (`order_id`)
