@@ -42,7 +42,7 @@ class SettingsController {
 	 */
 	public static function saveGeneralSettings( array $settings ) {
 		
-		if ( empty( $settings['general'] ) || empty( $settings['contents'] ) ) {
+		if ( ! is_array( $settings['general'] ?? null ) || ! is_array( $settings['contents'] ?? null ) ) {
 			wp_send_json_error( array( 'message' => __( 'Invalid settings data', 'solidie' ) ) );
 			exit;
 		}
