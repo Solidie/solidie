@@ -199,31 +199,10 @@ class ContentController {
 			$content_type = $content['content_type'];
 		}
 
-		// Send plans setting for new creation
-		$plan_settings            = _Array::getArray( AdminSetting::get( "contents.{$content_type}.plans" ) );
-		$contributor_plan_control = ( bool ) AdminSetting::get( "general.contributor_content_plan_control" );
-
 		if ( empty( $content ) ) {
-			if ( empty( $content_id ) && $is_editor ) {
-				wp_send_json_success( 
-					array(
-						'content' => array(
-							'meta_data' => array(
-								'content_type_plans'       => $plan_settings,
-								'contributor_plan_control' => $contributor_plan_control
-							)
-						)
-					)
-				);
-			}
-			
 			wp_send_json_error( array( 'message' => esc_html__( 'Content not found', 'solidie' ) ) );
 			exit;
 		}
-
-		// Add the plan structure to meta data
-		$content['meta_data']['content_type_plans']       = $plan_settings;
-		$content['meta_data']['contributor_plan_control'] = $contributor_plan_control;
 
 		// If editor, make sure the autor requested, or the admin who can do anything
 		if ( $is_editor ) {

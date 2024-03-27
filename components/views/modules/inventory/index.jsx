@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 
 import { request } from 'crewhrm-materials/request.jsx';
-import { __, data_pointer, sprintf, formatDateTime, isEmpty, getDashboardPath } from 'crewhrm-materials/helpers.jsx';
+import { __, data_pointer, sprintf, formatDateTime, isEmpty, getDashboardPath, currency_symbol } from 'crewhrm-materials/helpers.jsx';
 import { ContextToast } from 'crewhrm-materials/toast/toast.jsx';
 import { LoadingIcon } from 'crewhrm-materials/loading-icon/loading-icon.jsx';
 import { Pagination } from 'crewhrm-materials/pagination/pagination.jsx';
@@ -11,6 +11,7 @@ import { TableStat } from 'crewhrm-materials/table-stat.jsx';
 import { DropDown } from 'crewhrm-materials/dropdown/dropdown.jsx';
 
 import style from './inventory.module.scss';
+import { getPriceRange } from '../../frontend/gallery/generic-card/generic-card';
 
 const {readonly_mode, is_admin, is_pro_active} = window[data_pointer];
 
@@ -241,8 +242,6 @@ export function Inventory({navigate, params={}}) {
 	const _content = window[data_pointer]?.settings?.contents[content_type] || {};
 	const _content_label = _content.label || __('Content');
 	
-	const show_monetization = is_pro_active;
-
 	return <InventoryWrapper 
 		content_label={_content_label} 
 		content_type={content_type}
@@ -293,7 +292,7 @@ export function Inventory({navigate, params={}}) {
 					<th>{__('Title')}</th>
 					{!is_admin ? null : <th>{__('Contributor')}</th>}
 					<th>{__('Category')}</th>
-					{!show_monetization ? null : <th>{__('Monetization')}</th>}
+					{!is_pro_active ? null : <th>{__('Price')}</th>}
 					<th>{__('Status')}</th>
 					<th>{__('Created')}</th>
 				</tr>
@@ -315,11 +314,23 @@ export function Inventory({navigate, params={}}) {
 								display_name, 
 								avatar_url
 							},
-							release
+							release,
+							product:{
+								monetization='free',
+								plans=[],
+							}={},
 						} = content;
 
 						const thumbnail_url = media?.thumbnail?.file_url;
 						const status_readonly = !is_admin ? contributors_status.indexOf(content_status)===-1 : content_status=='unpublish';
+						
+						// Get price range
+						const price_range = getPriceRange(plans, true);
+						const {
+							min:{sale_price: min_price},
+							max: {sale_price: max_price},
+							packs=[]
+						} = price_range;
 
 						return <tr key={content_id}>
 							<td data-th={__('Content')} style={{paddingTop: '20px', paddingBottom: '20px'}}>
@@ -394,9 +405,34 @@ export function Inventory({navigate, params={}}) {
 							</td>
 							
 							{
-								!show_monetization ? null :
-								<td data-th={__('Monetization')}>
-									{product_id ? __('Paid') : __('Free')}
+								!is_pro_active ? null :
+								<td data-th={__('Price')}>
+									<div>
+										{
+											monetization !== 'paid' ? __('Free') :
+											<>
+												<div>
+													{currency_symbol}{min_price} {max_price>min_price ? <> - {currency_symbol}{max_price}</> : null}
+												</div>
+
+												{
+													! packs.length ? null :
+													<div className={'margin-top-10'.classNames()}>
+														<strong className={'d-block'.classNames()}>{__('Supported Bundles')}:</strong>
+														<ul>
+															{
+																packs.map(plan=>{
+																	const {plan_name} = plan?.plan || {};
+																	return !plan_name ? null : <li key={plan.variation_id}>
+																		{plan_name}
+																	</li>
+																})}
+														</ul>
+													</div>
+												}
+											</>
+										}
+									</div>
 								</td>
 							}
 							

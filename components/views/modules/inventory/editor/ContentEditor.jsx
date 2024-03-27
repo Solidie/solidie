@@ -232,7 +232,6 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 				values.preview                  = content.media?.preview ?? null;
 				values.sample_images            = content.media?.sample_images ?? [];
 				values.product                  = content.product ?? {};
-				values.meta_data                = content.meta_data ?? {};
 
 				if ( release ) {
 					values.downloadable_file = {

@@ -54,6 +54,7 @@ class OpenGraph {
 			return;
 		}
 
+		// This variable is used inside the meta-data.php file
 		$meta_data = array(
 			'description'   => _String::consolidate( strip_tags( $content['content_description'], '' ) ),
 			'title'         => $content['content_title'],

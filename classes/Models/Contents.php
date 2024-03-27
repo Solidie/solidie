@@ -626,9 +626,6 @@ class Contents {
 			$contents[ $index ]['contributor'] = ! empty( $content['contributor_id'] ) ? User::getUserData( $content['contributor_id'] ) : null;
 			
 			$contents[ $index ]['reactions'] = Reaction::getStats( $content['content_id'], get_current_user_id() );
-		
-			// Not necessarily from meta table. Just helper data.
-			$contents[ $index ]['meta_data'] = array();
 		}
 
 		$contents = apply_filters( 'solidie_contents_meta', $contents );

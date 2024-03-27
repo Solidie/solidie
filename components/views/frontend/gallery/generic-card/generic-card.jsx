@@ -11,20 +11,54 @@ import { MetaData } from "../../single/meta-data/meta-data";
 import vid_style from '../video/video.module.scss';
 import style from './generic.module.scss';
 
-const getMinPrice=plans=>{
-	let regular_price;
+export const getPriceRange=(plans, exclude_pack=false)=>{
+	
 	let sale_price;
+	let regular_price;
+
+	let sale_price_max;
+	let regular_price_max;
+
+	let packs = [];
 
 	plans.forEach(plan=>{
-		if ( sale_price === undefined || sale_price<plan.sale_price ) {
+
+		const {sales_model} = plan.plan || {};
+
+		if ( ! plan.enable ) {
+			return;
+		}
+		
+		if ( sales_model != 'single' ) {
+
+			packs.push(plan);
+
+			if (exclude_pack) {
+				return;
+			}
+		}
+
+		if ( sale_price === undefined || sale_price>plan.sale_price ) {
 			sale_price    = plan.sale_price;
 			regular_price = plan.regular_price;
+		}
+
+		if ( sale_price_max === undefined || sale_price<plan.sale_price ) {
+			sale_price_max = plan.sale_price;
+			regular_price_max = plan.regular_price;
 		}
 	});
 
 	return {
-		sale_price,
-		regular_price
+		min: {
+			sale_price,
+			regular_price
+		},
+		max: {
+			sale_price: sale_price_max,
+			regular_price: regular_price_max
+		},
+		packs
 	}
 }
 
@@ -39,9 +73,15 @@ export function DownloadOrPrice({content, is_overlayer}) {
 
 	const is_free                     = monetization != 'paid';
 	const is_tutorial                 = content_type === 'tutorial';
-	const {sale_price, regular_price} = getMinPrice(plans);
 	const color_class                 = is_overlayer ? 'color-white color-hover-white' : 'color-text color-hover-text';
 	const access_url                  = is_tutorial ? content_permalink+'0/' : (release?.download_url || '#');
+	
+	const {
+		min:{
+			sale_price, 
+			regular_price
+		}
+	} = getPriceRange(plans);
 	
 	return is_free ? 
 		<span 
