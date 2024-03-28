@@ -1,3 +1,20 @@
+const timestamp = new Date().getTime();
+
+const contents = {
+	app_free: {
+		content_type: 'app',
+		content_title: `Demo App Free ${timestamp}`,
+		content_description: `Demo content description for app ${timestamp}`,
+		monetization: 'free'
+	},
+	app_paid: {
+		content_type: 'app',
+		content_title: `Demo App Paid ${timestamp}`,
+		content_description: `Demo content description for app ${timestamp}`,
+		monetization: 'paid'
+	}
+}
+
 describe('Admin can login and make sure plugin is activated', () => {
 	
 	it('Can activate plugin if it is deactivated', () => {
@@ -12,22 +29,14 @@ describe('Admin can login and make sure plugin is activated', () => {
 describe('Check if content can be created in free version', ()=>{
 	
 	it('Enable content types', ()=>{
-		cy.toggleContentTypes({
-			app: true,
-			audio: true,
-			video: true,
-			image: true,
-			'3d': true,
-			document: true,
-			font: true,
-			tutorial: true,
-		});
+		cy.setUpContentSettings();
 	});
 
 	it('Create free app', ()=>{
-		cy.createContent({
-			content_type: 'app',
-			content_title: 'Demo content'
-		});
+		cy.createContent(contents.app_free);
 	});
+
+	/* it('Create paid app', ()=> {
+		cy.createContent(contents.app_paid);
+	}); */
 });

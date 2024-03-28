@@ -17,7 +17,7 @@ export function Segments() {
 		<div 
 			key={key} 
 			className={'margin-bottom-20'.classNames()}
-			data-solidie={`segment-${key}`}
+			data-cylector={`segment-${key}`}
 		>
 			<div className={'padding-vertical-5'.classNames()}>
 				<span
@@ -51,7 +51,7 @@ export function Segments() {
 								!onToggle ? null :
 								<div 
 									onClick={e=>e.stopPropagation()}
-									data-solidie={`segment-toggle-${segment_key}`}
+									data-cylector={`segment-toggle-${segment_key}`}
 								>
 									<ToggleSwitch 
 										onChange={checked=>onToggle(key, segment_key, checked)}

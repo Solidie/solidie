@@ -34,31 +34,18 @@ Cypress.Commands.add('selectImageOnClick', (btn, form_page, has_image_confirmed 
 });
 
 // Type text field, select dropdown, check-uncheck checkbox
-Cypress.Commands.add('fillInputFields', (fields, action) => {
+Cypress.Commands.add('toggleCheck', (fields) => {
+	
 	Object.keys(fields).forEach((selector) => {
+
 		const value = fields[selector];
+
 		cy.get(selector).as('input-field');
 
-		switch (action) {
-			case 'type':
-				cy.get('@input-field').clear();
-				cy.get('@input-field').type(value);
-				break;
-
-			case 'select':
-				cy.get('@input-field').select(value);
-				break;
-
-			case 'checkbox':
-				if (value === true) {
-					cy.get('@input-field').check({force: true});
-				} else {
-					cy.get('@input-field').uncheck({force: true});
-				}
-				break;
-
-			default:
-				break;
+		if (value === true) {
+			cy.get('@input-field').check({force: true});
+		} else {
+			cy.get('@input-field').uncheck({force: true});
 		}
 	});
 });

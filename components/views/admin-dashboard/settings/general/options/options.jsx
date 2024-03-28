@@ -117,6 +117,7 @@ export function OptionFields({fields=[], settings, onChange: _onChange}) {
 			<div
 				key={name}
 				className={`d-flex ${direction === 'column' ? 'flex-direction-column' : 'flex-direction-row align-items-center column-gap-15'} flex-wrap-wrap ${when ? 'fade-in' : ''}`.classNames()}
+				data-cylector={`option-${name}`}
 			>
 				{
 					type !== 'switch' ? null :
@@ -125,10 +126,12 @@ export function OptionFields({fields=[], settings, onChange: _onChange}) {
 							{label_text}
 						</div>
 						<div className={'d-flex align-items-center column-gap-10'.classNames()}>
-							<ToggleSwitch
-								checked={values[name] ? true : false}
-								onChange={(enabled) => onChange(name, enabled)}
-							/> 
+							<div>
+								<ToggleSwitch
+									checked={values[name] ? true : false}
+									onChange={(enabled) => onChange(name, enabled)}
+								/> 
+							</div>
 							<span className={'font-size-15 font-weight-400 line-height-24 letter-spacing--15 color-text'.classNames()}>
 								{placeholder}
 							</span>

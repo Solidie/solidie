@@ -108,12 +108,12 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 			name: 'kses_content_description',
 			label: __('Description'),
 			placeholder: __('Write some description here'),
-			required: true
 		},
 		(['audio', 'video'].indexOf(content_type) === -1 ? null : {
 			type: 'file',
 			name: 'preview',
 			label: __('Preview File'),
+			required: true,
 			accept: content_type === 'audio' ? audio_extensions : video_extensions
 		}),
 		(['app', '3d', 'document', 'font', 'tutorial'].indexOf(content_type)===-1 ? null : {
@@ -128,7 +128,8 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 			type: 'file',
 			name: 'downloadable_file',
 			label: __('Downloadable File (zip)'),
-			accept: ['application/zip']
+			accept: ['application/zip'],
+			required: true,
 		}),
 		{
 			type: 'dropdown',
@@ -140,7 +141,6 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 	].filter(f=>f);
 
 	const setVal=(name, value)=>{
-
 
 		setState({
 			...state,
@@ -358,7 +358,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 							active_tab !== 'overview' ? null :
 							<div className={'border-radius-10 padding-15 border-1 b-color-tertiary'.classNames()}>
 								<div className={'d-flex align-items-center column-gap-15 margin-bottom-15'.classNames()}>
-									<div>
+									<div data-cylector="content-thumbnail">
 										<FileUpload
 											accept={img_extensions}
 											onChange={img=>setVal('thumbnail', img)}
@@ -389,12 +389,15 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 										<strong className={'d-block font-weight-600 margin-bottom-5'.classNames()}>
 											{__('Title')} <span className={'color-error'.classNames()}>*</span>
 										</strong>
-										<TextField 
-											placeholder={__('e.g My first content')} 
-											onChange={v=>setVal('content_title', v)}
-											value={state.values.content_title}
-										/>
 
+										<div data-cylector="content-title">
+											<TextField 
+												placeholder={__('e.g My first content')} 
+												onChange={v=>setVal('content_title', v)}
+												value={state.values.content_title}
+											/>
+										</div>
+										
 										{
 											!state.values.content_slug ? null : 
 											<div className={'d-flex align-items-center flex-wrap-wrap'.classNames()} style={{height: '30px', marginTop: '5px'}}>
@@ -519,14 +522,14 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 								
 								<div className={'text-align-right'.classNames()}>
 									<button 
+										data-cylector="content-save"
 										className={'button button-primary'.classNames()} 
 										onClick={submit}
 										disabled={
 											readonly_mode || 
 											state.submitting || 
 											!thumbnail_url ||
-											isEmpty((state.values.content_title || '').trim()) || 
-											!hasTextInHTML(state.values.kses_content_description || '')
+											isEmpty((state.values.content_title || '').trim())
 										} 
 									>
 										{content_id ? __('Update') : __('Create')} <LoadingIcon show={state.submitting}/>
