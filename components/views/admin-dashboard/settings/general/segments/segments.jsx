@@ -13,8 +13,12 @@ export function Segments() {
 		const { segments = {}, component, label, description } = settings_fields[key];
 		const segment_keys = Object.keys(segments);
 
-		return (!segment_keys.length && !component) ? null : <div key={key} className={'margin-bottom-20'.classNames()}>
-
+		return (!segment_keys.length && !component) ? null : 
+		<div 
+			key={key} 
+			className={'margin-bottom-20'.classNames()}
+			data-solidie={`segment-${key}`}
+		>
 			<div className={'padding-vertical-5'.classNames()}>
 				<span
 					className={'d-flex align-items-center column-gap-10 font-size-17 font-weight-600 color-text margin-bottom-10'.classNames()}
@@ -45,7 +49,10 @@ export function Segments() {
 						<div className={'flex-1 d-flex align-items-center column-gap-10'.classNames()}>
 							{
 								!onToggle ? null :
-								<div onClick={e=>e.stopPropagation()}>
+								<div 
+									onClick={e=>e.stopPropagation()}
+									data-solidie={`segment-toggle-${segment_key}`}
+								>
 									<ToggleSwitch 
 										onChange={checked=>onToggle(key, segment_key, checked)}
 										checked={is_enabled}

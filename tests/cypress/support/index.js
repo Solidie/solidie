@@ -15,8 +15,9 @@
 
 import '@10up/cypress-wp-utils';
 
-// Import commands.js using ES2015 syntax:
-import './commands';
+import './helpers';
+import './settings';
+import './content';
 
 beforeEach(() => {
 	cy.session('solidie-login',  ()=>{

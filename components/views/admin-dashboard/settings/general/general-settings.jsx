@@ -136,11 +136,12 @@ export function GeneralSettings({settings={}, content_list={}, categories={}}) {
 			
 			<div className={'text-align-right'.classNames()}>
 				<button
+					data-solidie="save-settings"
 					className={'button button-primary'.classNames()}
 					onClick={saveSettings}
 					disabled={readonly_mode || !state.has_change || state.saving}
 				>
-					{__('Save All Changes')} <LoadingIcon show={state.saving}/>
+					{__('Save Changes')} <LoadingIcon show={state.saving}/>
 				</button>
 			</div>
 		</div>

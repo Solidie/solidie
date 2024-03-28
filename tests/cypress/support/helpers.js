@@ -1,34 +1,7 @@
-// ***********************************************
-// This example commands.js shows you how to
-// create various custom commands and overwrite
-// existing commands.
-//
-// For more comprehensive examples of custom
-// commands please read more here:
-// https://on.cypress.io/custom-commands
-// ***********************************************
-//
-//
-// -- This is a parent command --
-// Cypress.Commands.add('login', (email, password) => { ... })
-//
-//
-// -- This is a child command --
-// Cypress.Commands.add('drag', { prevSubject: 'element'}, (subject, options) => { ... })
-//
-//
-// -- This is a dual command --
-// Cypress.Commands.add('dismiss', { prevSubject: 'optional'}, (subject, options) => { ... })
-//
-//
-// -- This will overwrite an existing command --
-// Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
-
 import 'cypress-file-upload';
 
+// Check and upload at least one media file.
 Cypress.Commands.add('atleastOneMedia', () => {
-	cy.login();
-	// Check and upload at least one media file.
 	cy.visit('/wp-admin/upload.php?mode=list');
 	cy.get('body').then(($body) => {
 		if ($body.find('.no-items').length !== 0) {
@@ -60,10 +33,7 @@ Cypress.Commands.add('selectImageOnClick', (btn, form_page, has_image_confirmed 
 	});
 });
 
-Cypress.Commands.add('selectTab', (id) => {
-	cy.get(`[href="#${id}"]`).click();
-});
-
+// Type text field, select dropdown, check-uncheck checkbox
 Cypress.Commands.add('fillInputFields', (fields, action) => {
 	Object.keys(fields).forEach((selector) => {
 		const value = fields[selector];
@@ -81,9 +51,9 @@ Cypress.Commands.add('fillInputFields', (fields, action) => {
 
 			case 'checkbox':
 				if (value === true) {
-					cy.get('@input-field').check();
+					cy.get('@input-field').check({force: true});
 				} else {
-					cy.get('@input-field').uncheck();
+					cy.get('@input-field').uncheck({force: true});
 				}
 				break;
 
@@ -91,10 +61,4 @@ Cypress.Commands.add('fillInputFields', (fields, action) => {
 				break;
 		}
 	});
-});
-
-Cypress.Commands.add('visitFirstPost', () => {
-	// Visit the post list page and click view of first one
-	cy.visit('wp-admin/edit.php');
-	cy.get('table.posts .view a').first().click({ force: true });
 });
