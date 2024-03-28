@@ -1,3 +1,9 @@
 {
-  "plugins": [".", "../solidie-pro", "https://downloads.wordpress.org/plugin/woocommerce.latest-stable.zip"]
+  	"plugins": [
+		".", 
+		"../solidie-pro", 
+		"./tests/cypress/solidie-cleanup", 
+		"https://downloads.wordpress.org/plugin/woocommerce.latest-stable.zip",
+		"https://downloads.wordpress.org/plugin/wp-phpmyadmin-extension.latest-stable.zip"
+	]
 }

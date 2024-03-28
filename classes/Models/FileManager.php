@@ -26,7 +26,7 @@ class FileManager {
 	 *
 	 * @var string
 	 */
-	const SOLIDIE_COTNENTS_DIR = 'solidie-content-files';
+	const SOLIDIE_CONTENTS_DIR = 'solidie-content-files';
 
 	/**
 	 * Replacable relapath for the content to make available in upload_dir hook callback
@@ -68,9 +68,9 @@ class FileManager {
 		$wp_upload_dir = wp_upload_dir(); // Get the path and URL of the wp-uploads directory
 
 		// Create the full path of the custom directory
-		$rel_path        = self::SOLIDIE_COTNENTS_DIR . '/' . $content_id;
+		$rel_path        = self::SOLIDIE_CONTENTS_DIR . '/' . $content_id;
 		$custom_dir_path = $wp_upload_dir['basedir'] . '/' . $rel_path;
-		$htaccess_path   = $wp_upload_dir['basedir'] . '/' . self::SOLIDIE_COTNENTS_DIR . '/.htaccess';
+		$htaccess_path   = $wp_upload_dir['basedir'] . '/' . self::SOLIDIE_CONTENTS_DIR . '/.htaccess';
 
 		// Create the directory if it doesn't exist
 		if ( ! is_dir( $custom_dir_path ) ) {
@@ -97,7 +97,7 @@ class FileManager {
 		}
 
 		$wp_upload_dir = wp_upload_dir();
-		return $wp_upload_dir['basedir'] . '/' . self::SOLIDIE_COTNENTS_DIR . '/' . $content_id;
+		return $wp_upload_dir['basedir'] . '/' . self::SOLIDIE_CONTENTS_DIR . '/' . $content_id;
 	}
 
 	/**
