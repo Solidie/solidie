@@ -84,19 +84,19 @@ add_action(
 			deleteAllWPploadedMediaFiles();
 
 			// Clear all the solidie tables
-			$wpdb->query( "DROP TABLE {$wpdb->solidie_categories}" );
-			$wpdb->query( "DROP TABLE {$wpdb->solidie_contents}" );
-			$wpdb->query( "DROP TABLE {$wpdb->solidie_content_meta}" );
-			$wpdb->query( "DROP TABLE {$wpdb->solidie_license_keys}" );
-			$wpdb->query( "DROP TABLE {$wpdb->solidie_popularity}" );
-			$wpdb->query( "DROP TABLE {$wpdb->solidie_releases}" );
-			$wpdb->query( "DROP TABLE {$wpdb->solidie_sales}" );
-			$wpdb->query( "DROP TABLE {$wpdb->solidie_tokens}" );
-			$wpdb->query( "DROP TABLE {$wpdb->solidie_comments}" );
-			$wpdb->query( "DROP TABLE {$wpdb->solidie_reactions}" );
-			$wpdb->query( "DROP TABLE {$wpdb->solidie_lessons}" );
-			$wpdb->query( "DROP TABLE {$wpdb->solidie_content_pack_link}" );
-			$wpdb->query( "DROP TABLE {$wpdb->solidie_withdrawals}" );
+			$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->solidie_categories}" );
+			$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->solidie_contents}" );
+			$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->solidie_content_meta}" );
+			$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->solidie_license_keys}" );
+			$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->solidie_popularity}" );
+			$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->solidie_releases}" );
+			$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->solidie_sales}" );
+			$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->solidie_tokens}" );
+			$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->solidie_comments}" );
+			$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->solidie_reactions}" );
+			$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->solidie_lessons}" );
+			$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->solidie_content_pack_link}" );
+			$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->solidie_withdrawals}" );
 
 			// Delete all the woocommerce product and related data
 			deleteAllWooCommerceData();

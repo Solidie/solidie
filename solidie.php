@@ -7,7 +7,7 @@
  * Author: Solidie
  * Author URI: https://solidie.com/
  * Requires at least: 5.3
- * Tested up to: 6.4.3
+ * Tested up to: 6.5.2
  * Requires PHP: 7.4
  * License: GPLv3
  * License URI: https://opensource.org/licenses/GPL-3.0
