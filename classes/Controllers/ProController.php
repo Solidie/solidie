@@ -7,6 +7,7 @@
 
 namespace Solidie\Controllers;
 
+use Solidie\Helpers\_Array;
 use Solidie\Helpers\Utilities;
 use Solidie\Main;
 
@@ -14,6 +15,7 @@ use Solidie\Main;
  * Pro controller class
  */
 class ProController {
+
 	const PREREQUISITES = array(
 		'proVersionAction' => array(
 			'role' => 'administrator',
@@ -22,6 +24,8 @@ class ProController {
 			'nopriv' => true
 		)
 	);
+
+	const SUBSCRIBED_MAILS = 'solidie-subscribed-emails';
 
 	/**
 	 * Do action for pro version like installing and activating through custom UI
@@ -77,6 +81,12 @@ class ProController {
 		$response->data    = $response->data ?? new \stdClass();
 		
 		if ( $response->success ) {
+
+			$subscribeds = _Array::getArray( get_option( self::SUBSCRIBED_MAILS ) );
+			$subscribeds[] = $email;
+
+			update_option( self::SUBSCRIBED_MAILS, $subscribeds );
+
 			wp_send_json_success( $response->data );
 		} else {
 			wp_send_json_error( $response->data );

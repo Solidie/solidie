@@ -73,7 +73,6 @@ export function GeneralSettings({settings={}, content_list={}, categories={}}) {
     };
 
 	const onToggle=(store, name, enable)=>{
-		// console.log(store, name, enabled);
 		setState({
 			...state,
 			has_change: true,

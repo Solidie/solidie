@@ -14,14 +14,20 @@ const quick_links = [
 		link: permalinks.inventory_backend
 	},
 	{
-		label: __('Content Types'),
-		link: permalinks.settings
-	},
-	{
 		label: __('Settings'),
 		link: permalinks.settings
 	}
 ];
+
+// Add the gallery url
+const first_gallery = Object.values(permalinks.gallery || {})[0];
+if ( first_gallery ) {
+	quick_links.push({
+		label: __('Gallery'),
+		link: first_gallery,
+		in_new: true
+	});
+}
 
 export function HomeBackend() {
 	
@@ -53,6 +59,7 @@ export function HomeBackend() {
 						return <a 
 							key={index} 
 							href={link.link}
+							target={link.in_new ? '_blank' : '_self'}
 							className={'flex-1 d-block padding-vertical-40 border-1 b-color-tertiary cursor-pointer text-align-center font-size-14 font-weight-400 border-radius-8 bg-color-white color-text'.classNames()}
 						>
 							{link.label}

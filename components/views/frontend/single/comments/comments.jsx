@@ -17,7 +17,7 @@ export function Comments({content={}}) {
 	
 	const {
 		user:{id: user_id},
-		home_url
+		permalinks:{home_url}
 	} = window[data_pointer];
 
 	const [state, setState] = useState({

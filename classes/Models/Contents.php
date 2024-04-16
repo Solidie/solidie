@@ -429,7 +429,7 @@ class Contents {
 	 * Get gallery url for content type
 	 *
 	 * @param string $content_type The content type to get gallery permalink for
-	 * @return string
+	 * @return array
 	 */
 	public static function getGalleryPermalink( $content_type = null ) {
 
@@ -438,7 +438,9 @@ class Contents {
 		$permalinks = array();
 
 		foreach ( $contents as $type => $content ) {
-			$permalinks[ $type ] = $home . '/' . $content['slug'] . '/';
+			if ( $content['enable'] ?? false ) {
+				$permalinks[ $type ] = $home . '/' . $content['slug'] . '/';
+			}
 		}
 
 		return $content_type ? ( $permalinks[ $content_type ] ?? null ) : $permalinks;

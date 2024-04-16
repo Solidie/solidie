@@ -38,7 +38,10 @@ class Database {
 		$last_version = get_option( self::DB_VERSION_KEY );
 		
 		if ( empty( $last_version ) || version_compare( $last_version, Main::$configs->version, '<' ) ) {
+
 			$this->importDB();
+
+			do_action( 'solidie_db_deployed' );
 		}
 	}
 

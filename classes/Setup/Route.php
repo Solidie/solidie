@@ -27,9 +27,12 @@ class Route {
 	public function __construct() {
 		add_filter( 'query_vars', array( $this, 'registerPagename' ) );
 		add_action( 'rewrite_rules_array', array( $this, 'rebuildPermalinks' ) );
-		add_action( 'solidie_pro_activated', array( $this, 'triggerRewrite' ), 100 );
-		add_action( 'solidie_settings_updated', array( $this, 'triggerRewrite' ), 100 );
 		add_filter( 'template_include', array( $this, 'registerTemplate' ) );
+
+		// Trigger flush rewrite
+		add_action( 'solidie_pro_activated', array( $this, 'triggerRewrite' ), 100 );
+		add_action( 'solidie_db_deployed', array( $this, 'triggerRewrite' ), 100 );
+		add_action( 'solidie_settings_updated', array( $this, 'triggerRewrite' ), 100 );
 	}
 
 	/**

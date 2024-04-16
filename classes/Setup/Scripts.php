@@ -7,6 +7,8 @@
 
 namespace Solidie\Setup;
 
+use Solidie\Controllers\ProController;
+use Solidie\Helpers\_Array;
 use Solidie\Helpers\Colors;
 use Solidie\Helpers\Utilities;
 use Solidie\Main;
@@ -69,12 +71,13 @@ class Scripts {
 		$nonce        = wp_create_nonce( $nonce_action );
 		$user         = wp_get_current_user();
 
+		// Check if email subscribed
+		$subscribeds = _Array::getArray( get_option( ProController::SUBSCRIBED_MAILS ) );
+
 		// Load data
 		$data = apply_filters(
 			'solidie_frontend_variables',
 			array(
-				'ajaxurl'          => admin_url( 'admin-ajax.php' ),
-				'home_url'         => get_home_url(),
 				'is_admin'         => is_admin(),
 				'action_hooks'     => array(),
 				'filter_hooks'     => array(),
@@ -91,11 +94,13 @@ class Scripts {
 				'readonly_mode'    => apply_filters( 'solidie_readonly_mode', false ), // It's for solidie demo site only. No other use is expected.
 				'is_apache'        => is_admin() ? strpos( sanitize_text_field( $_SERVER['SERVER_SOFTWARE'] ?? '' ), 'Apache' ) !== false : null,
 				'user'             => array(
-					'id'           => $user ? $user->ID : 0,
-					'first_name'   => $user ? $user->first_name : null,
-					'last_name'    => $user ? $user->last_name : null,
-					'display_name' => $user ? $user->display_name : null,
-					'avatar_url'   => $user ? get_avatar_url( $user->ID ) : null,
+					'id'                    => $user ? $user->ID : 0,
+					'first_name'            => $user ? $user->first_name : null,
+					'last_name'             => $user ? $user->last_name : null,
+					'email'                 => $user ? $user->user_email : null,
+					'display_name'          => $user ? $user->display_name : null,
+					'avatar_url'            => $user ? get_avatar_url( $user->ID ) : null,
+					'newsletter_subscribed' => $user && in_array( $user->user_email, $subscribeds ),
 				),
 				'settings'         => array(
 					'contents' => AdminSetting::getContentSettings(),
@@ -104,10 +109,12 @@ class Scripts {
 					),
 				),
 				'permalinks'       => array(
+					'home_url'          => get_home_url(),
+					'ajaxurl'           => admin_url( 'admin-ajax.php' ),
 					'inventory_backend' => Utilities::getBackendPermalink( AdminPage::INVENTORY_SLUG ),
 					'settings'          => Utilities::getBackendPermalink( AdminPage::SETTINGS_SLUG ),
 					'dashboard'         => Utilities::getBackendPermalink( Main::$configs->root_menu_slug ),
-					'gallery'           => Contents::getGalleryPermalink(),
+					'gallery'           => ( object ) Contents::getGalleryPermalink(),
 					'logout'            => htmlspecialchars_decode( wp_logout_url( get_home_url() ) ),
 					'api_host'          => Main::$configs->api_host,
 				),

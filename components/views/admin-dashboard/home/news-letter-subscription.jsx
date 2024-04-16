@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 
 import {TextField} from 'crewhrm-materials/text-field/text-field.jsx';
-import { __, data_pointer } from "crewhrm-materials/helpers.jsx";
+import { __, data_pointer, isEmpty } from "crewhrm-materials/helpers.jsx";
 import { patterns } from "crewhrm-materials/data.jsx";
 import { LoadingIcon } from "crewhrm-materials/loading-icon/loading-icon.jsx";
 import { ContextToast } from "crewhrm-materials/toast/toast.jsx";
@@ -9,13 +9,14 @@ import { request } from "crewhrm-materials/request.jsx";
 
 export function NewsletterSubscription() {
 
+	const {user: {first_name, last_name, email, newsletter_subscribed}} = window[data_pointer];
 	const {ajaxToast} = useContext(ContextToast);
 
 	const [state, setState] = useState({
 		subscribing: false,
 		subscription: {
-			name: '',
-			email: ''
+			name: newsletter_subscribed ? '' : `${first_name} ${last_name}`,
+			email: newsletter_subscribed ? '' : email
 		}
 	});
 
@@ -82,7 +83,7 @@ export function NewsletterSubscription() {
 		<div className={'text-align-right'.classNames()}>
 			<button 
 				className={'button button-primary'.classNames()}
-				disabled={state.subscribing || !patterns.email.test(state.subscription.email || '')}
+				disabled={state.subscribing || isEmpty( (state.subscription.name || '').trim() ) || !patterns.email.test(state.subscription.email || '')}
 				onClick={subscribeNow}
 			>
 				{__('Subscribe')} <LoadingIcon show={state.subscribing}/>
