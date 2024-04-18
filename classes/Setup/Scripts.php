@@ -81,6 +81,7 @@ class Scripts {
 				'is_admin'         => is_admin(),
 				'action_hooks'     => array(),
 				'filter_hooks'     => array(),
+				'mountpoints'      => ( object ) array(),
 				'home_path'        => rtrim( wp_parse_url( get_home_url() )['path'] ?? '/', '/' ) . '/',
 				'app_name'         => Main::$configs->app_id,
 				'nonce'            => $nonce,
