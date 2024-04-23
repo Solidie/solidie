@@ -2,12 +2,12 @@ import React, { useContext, useEffect, useMemo, useState } from "react";
 
 import {__, data_pointer, isEmpty} from 'crewhrm-materials/helpers.jsx'
 import {TextField} from 'crewhrm-materials/text-field/text-field.jsx';
-import {TextEditor} from 'crewhrm-materials/text-editor/text-editor.jsx';
 import { DropDown } from "crewhrm-materials/dropdown/dropdown.jsx";
 import { request } from "crewhrm-materials/request.jsx";
 import { InitState } from "crewhrm-materials/init-state.jsx";
 import { ContextToast } from "crewhrm-materials/toast/toast.jsx";
 import { LoadingIcon } from "crewhrm-materials/loading-icon/loading-icon";
+import { TinyEditor } from "../editor/Tiny.jsx";
 
 const {readonly_mode} = window[data_pointer];
 
@@ -108,13 +108,15 @@ export function LessonEditor({content_id, lesson_id, lessons=[]}) {
 			...state,
 			saving: true
 		});
-
-
+		
 		const payload = {
-			...state.values, 
-			kses_lesson_content: state.values.lesson_content, 
-			content_id,
-			lesson_id
+			lesson: {
+				...state.values, 
+				content_id,
+				lesson_id,
+				lesson_content: undefined,
+				kses_lesson_content: state.values.lesson_content, 
+			}
 		}
 
 		request('updateLessonSingle', payload, resp=>{
@@ -266,7 +268,8 @@ export function LessonEditor({content_id, lesson_id, lessons=[]}) {
 			<strong className={'d-block font-weight-600'.classNames()}>
 				{__('Lesson Content')}
 			</strong>
-			<TextEditor
+			<TinyEditor
+				content_id={content_id}
 				value={state.values.lesson_content || ''}
 				onChange={v=>dispatchChange('lesson_content', v)}
 			/>

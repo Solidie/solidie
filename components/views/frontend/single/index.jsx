@@ -7,7 +7,6 @@ import { request } from "crewhrm-materials/request.jsx";
 import { applyFilters } from "crewhrm-materials/hooks.jsx";
 import { RenderExternal } from "crewhrm-materials/render-external.jsx";
 import { InitState } from "crewhrm-materials/init-state.jsx";
-import { DangerouslySet } from "crewhrm-materials/dangerously-set.jsx";
 import { RenderMedia } from "crewhrm-materials/render-media/render-media.jsx";
 
 import { GenericPreview } from "./previews/generic.jsx";
@@ -116,6 +115,12 @@ export function SingleWrapper() {
 		getContent();
 	}, [content_slug]);
 
+	useEffect(()=>{
+		if( window.Prism ) {
+			window.Prism.highlightAll();
+		}
+	}, [state.content]);
+
 	const {content_type} = state.content || {};
 	const PreviewComp = preview_renderers[content_type] || preview_renderers.other;
 
@@ -140,17 +145,14 @@ export function SingleWrapper() {
 		</div>
 		
 		<div className={'d-flex column-gap-15 row-gap-15'.classNames() + 'content-wrapper'.classNames(style)}>
-			<div className={'flex-1'.classNames() + 'content'.classNames(style)}>
+			<div className={'flex-1'.classNames()}>
 				<div>
 					<ErrorBoundary>
 						<PreviewComp content={state.content}/>
 					</ErrorBoundary>
 				</div>
-				<div>
-					<DangerouslySet>
-						{state.content?.content_description || ''}
-					</DangerouslySet>
-				</div>
+
+				<div dangerouslySetInnerHTML={{__html: state.content?.content_description || ''}}></div>
 
 				{
 					!sample_images.length ? null : 

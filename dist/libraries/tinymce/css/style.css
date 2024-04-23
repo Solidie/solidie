@@ -2,3 +2,7 @@
 .tox-statusbar__branding {
     display: none !important;
 }
+
+.tox.tox-silver-sink.tox-tinymce-aux {
+	z-index: 9999;
+}

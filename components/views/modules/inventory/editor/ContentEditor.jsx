@@ -17,7 +17,7 @@ import { ReleaseManager } from "../release-manager/release-manager.jsx";
 import { TutorialManager } from "../tutorial-manager/tutorial-manager.jsx";
 
 import style from './editor.module.scss';
-import { TextEditor } from "./Tiny.jsx";
+import { TinyEditor as TextEditor } from "./Tiny.jsx";
 
 const {readonly_mode, is_admin} = window[data_pointer];
 
@@ -532,7 +532,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 									<button 
 										data-cylector="content-save"
 										className={'button button-primary'.classNames()} 
-										onClick={submit}
+										onClick={()=>submit()}
 										disabled={
 											readonly_mode || 
 											state.submitting || 

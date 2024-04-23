@@ -1,12 +1,12 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 
-import {getRandomString, __, isEmpty} from 'crewhrm-materials/helpers.jsx';
+import {getRandomString, __} from 'crewhrm-materials/helpers.jsx';
 import {request} from 'crewhrm-materials/request.jsx';
 import { ContextToast } from "crewhrm-materials/toast/toast.jsx";
 
 const getMediaMarkup=(file_id, file_url, mime)=>{
 
-	const style   = `style="max-width: 100%; width:auto; height:auto;"`;
+	const style   = `style="max-width:100%; width:100%; height:auto;"`;
 	const data    = `data-solidie-file-id="${file_id}"`;
 	const control = `controls="controls" preload="auto"`;
 	
@@ -15,7 +15,7 @@ const getMediaMarkup=(file_id, file_url, mime)=>{
 	}
 
 	if ( mime.indexOf('audio/') === 0 ) {
-		return `<audio style="width:100%;" ${control}>
+		return `<audio style="max-width:100%; width:100%;" ${control}>
 			<source src="${file_url}" ${data}/>
 		</audio>`;
 	}
@@ -27,7 +27,10 @@ const getMediaMarkup=(file_id, file_url, mime)=>{
 	}
 }
 
-export function TextEditor({value, onChange, content_id}) {
+/**
+ * This component requires you to load tinymce library separately.
+ */
+export function TinyEditor({value, onChange, content_id}) {
 
 	const input_reff = useRef();
 	const {ajaxToast, addToast} = useContext(ContextToast);
@@ -111,6 +114,7 @@ export function TextEditor({value, onChange, content_id}) {
 			license_key: 'gpl',
 			height: 500,
 			menubar: false,
+			contextmenu: 'table',
 			plugins: 'directionality searchreplace autolink image media link codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount',
 			toolbar: 'undo redo styles fontsize bold italic strikethrough  superscript subscript ltr rtl link align numlist bullist outdent indent table codesample removeformat custom-media-upload',
 			setup: function (editor) {
@@ -143,6 +147,13 @@ export function TextEditor({value, onChange, content_id}) {
 				}
 			}
 		});
+
+		return ()=>{
+			const editor = tinymce.get(state.id);
+			if ( editor ) {
+				editor.remove();
+			}
+		}
 	}, []);
 	
   	return <div>

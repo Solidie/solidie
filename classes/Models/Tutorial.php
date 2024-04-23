@@ -104,10 +104,22 @@ class Tutorial {
 			return;
 		}
 
+		global $wpdb;
 		$lesson_ids = ! is_array( $lesson_ids ) ? array( $lesson_ids ) : $lesson_ids;
 		$ids_places = _String::getPlaceHolders( $lesson_ids );
 
-		global $wpdb;
+		// Get lesson contents to delete attached media
+		$contents = $wpdb->get_col(
+			$wpdb->prepare(
+				"SELECT lesson_content FROM {$wpdb->solidie_lessons} WHERE lesson_id IN ({$ids_places}) AND lesson_content IS NOT NULL",
+				...$lesson_ids
+			)
+		);
+		foreach ( $contents as $content ) {
+			FileManager::deleteFilesFromContent( $content );
+		}
+
+		// Delete lesson entries
 		$wpdb->query(
 			$wpdb->prepare(
 				"DELETE FROM {$wpdb->solidie_lessons} WHERE lesson_id IN ({$ids_places})",
@@ -294,13 +306,20 @@ class Tutorial {
 			return false;
 		}
 
+		$payload = array(
+			'lesson_title'   => $lesson['lesson_title'] ?? 'Untitled',
+			'lesson_content' => $lesson['lesson_content'] ?? '',
+			'lesson_status'  => 'publish',
+			'parent_id'      => $lesson['parent_id'],
+		);
+
 		global $wpdb;
 		$wpdb->update(
 			$wpdb->solidie_lessons,
-			$lesson,
+			$payload,
 			array( 
 				'lesson_id' => $lesson['lesson_id'], 
-				'content_id' => $lesson['content_id'] 
+				'content_id' => $lesson['content_id'],
 			)
 		);
 

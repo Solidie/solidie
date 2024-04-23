@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 
 import { data_pointer, __, sprintf, formatDateTime } from "crewhrm-materials/helpers.jsx";
-import { DangerouslySet } from "crewhrm-materials/dangerously-set.jsx";
 import { TextField } from "crewhrm-materials//text-field/text-field.jsx";
 import { LoadingIcon } from "crewhrm-materials/loading-icon/loading-icon.jsx";
 import { request } from "crewhrm-materials/request.jsx";
@@ -220,11 +219,7 @@ export function Comments({content={}}) {
 									</span>
 								</div>
 							</div>
-							<div>
-								<DangerouslySet>
-									{comment_content}
-								</DangerouslySet>
-							</div>
+							<div dangerouslySetInnerHTML={{__html: comment_content}}></div>
 						</div>
 
 						{

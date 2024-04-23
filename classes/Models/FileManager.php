@@ -183,6 +183,30 @@ class FileManager {
 	}
 
 	/**
+	 * Parse files IDs from content description, lesson and delete them
+	 *
+	 * @param string $html
+	 * @return void
+	 */
+	public static function deleteFilesFromContent( $html ) {
+
+		$ids = array();
+
+		// Define the regex pattern to match data-solidie-file-id attributes
+		$pattern = '/data-solidie-file-id\s*=\s*["\']([^"\']+)["\']/';
+		
+		// Perform the regex match
+		preg_match_all($pattern, $html, $matches);
+		
+		// Extract the matched IDs
+		if ( ! empty( $matches[1] ) ) {
+			$ids = $matches[1];
+		}
+
+		self::deleteFile( array_map( 'intval', $ids ) );
+	}
+
+	/**
 	 * Delete directory
 	 *
 	 * @param string $dir Dir path to delete including files and sub folders

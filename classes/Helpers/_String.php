@@ -87,9 +87,9 @@ class _String {
 	public static function applyKses( string $string, $echo = false ) {
 		
 		// For now return direct string. Because users might write code snippet for content, articles, comments etc.
-		return $string;
+		$string = preg_replace( '#<script(.*?)>(.*?)</script>#is', '', $string );
 
-		static $allowed = null;
+		/* static $allowed = null;
 
 		// Prepare allowed array only once by defining as static
 		if ( null === $allowed ) {
@@ -102,12 +102,14 @@ class _String {
 				// And assign supported attributes per tag
 				$allowed[ $tag ] = self::$allowed_attributes;
 			}
-		}
+		} 
+		
+		$string = wp_kses( $string, $allowed ); */
 
 		if ( $echo ) {
-			echo wp_kses( $string, $allowed );
+			echo $string;
 		} else {
-			return wp_kses( $string, $allowed );
+			return $string;
 		}
 	}
 

@@ -41,7 +41,7 @@ class Scripts {
 		// Load text domain
 		add_action( 'init', array( $this, 'loadTextDomain' ) );
 
-		// Vars
+		// JS Variables
 		add_action( 'wp_head', array( $this, 'loadVariables' ), 1000 );
 		add_action( 'admin_head', array( $this, 'loadVariables' ), 1000 );
 	}
@@ -139,11 +139,19 @@ class Scripts {
 	 */
 	public function adminScripts() {
 		if ( Utilities::isAdminDashboard() ) {
-			wp_enqueue_style( 'solidie-backend-tiny-style', Main::$configs->dist_url . 'libraries/tinymce/css/style.css' );
-			wp_enqueue_script( 'solidie-backend-tiny', Main::$configs->dist_url . 'libraries/tinymce/js/tinymce/tinymce.min.js', array( 'jquery' ) );
-			
+			$this->loadTinyMCE();
 			wp_enqueue_script( 'solidie-backend', Main::$configs->dist_url . 'admin-dashboard.js', array( 'jquery' ), Main::$configs->version, true );
 		}
+	}
+
+	/**
+	 * Load resource for TinyMCE editor
+	 *
+	 * @return void
+	 */
+	public function loadTinyMCE() {
+		wp_enqueue_style( 'solidie-backend-tiny-style', Main::$configs->dist_url . 'libraries/tinymce/css/style.css', array(), Main::$configs->version );
+		wp_enqueue_script( 'solidie-backend-tiny', Main::$configs->dist_url . 'libraries/tinymce/js/tinymce/tinymce.min.js', array( 'jquery' ) );
 	}
 
 	/**
@@ -152,6 +160,10 @@ class Scripts {
 	 * @return void
 	 */
 	public function frontendScripts() {
+		if ( ! empty( $GLOBALS['solidie_gallery_data'] ) ) {
+			wp_enqueue_style( 'solidie-tiny-styles-css', Main::$configs->dist_url . 'libraries/prism/prism.css', array(), Main::$configs->version );
+			wp_enqueue_script( 'solidie-tiny-styles-js', Main::$configs->dist_url . 'libraries/prism/prism.js', array(), Main::$configs->version, true );
+		}
 		wp_enqueue_script( 'solidie-frontend', Main::$configs->dist_url . 'frontend.js', array( 'jquery' ), Main::$configs->version, true );
 	}
 
@@ -161,6 +173,7 @@ class Scripts {
 	 * @return void
 	 */
 	public function loadScriptForProDashboard() {
+		$this->loadTinyMCE();
 		wp_enqueue_script( 'solidie-frontend-patch', Main::$configs->dist_url . 'frontend-dashboard-patch.js', array( 'jquery' ), Main::$configs->version, true );
 	}
 

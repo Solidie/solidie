@@ -82,22 +82,17 @@ class LessonController {
 	/**
 	 * Update single lesson info
 	 *
-	 * @param integer $content_id
-	 * @param integer $lesson_id
-	 * @param string $lesson_title
-	 * @param string $lesson_content
-	 * @param integer $parent_id
+	 * @param array $lesson
+	 * 
 	 * @return void
 	 */
-	public static function updateLessonSingle( int $content_id, int $lesson_id, string $lesson_title, string $lesson_content, int $parent_id = 0 ) {
+	public static function updateLessonSingle( array $lesson ) {
 
-		if ( ! empty( $content_id ) ) {
-			ContentController::contentAccessCheck( $content_id, get_current_user_id() );
-		}
+		// Check content access
+		ContentController::contentAccessCheck( $lesson['content_id'], get_current_user_id() );
 
-		$lesson_status  = 'publish';
-		$payload = compact( 'content_id', 'lesson_id', 'lesson_content', 'parent_id', 'lesson_status' );
-		$updated = Tutorial::updateLessonSingle( $payload );
+		$lesson['lesson_status'] = 'publish';
+		$updated                 = Tutorial::updateLessonSingle( $lesson );
 
 		if ( ! $updated ) {
 			wp_send_json_error( array( 'message' => __( 'Something went wrong!', 'solidie' ) ) );

@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
-import { DangerouslySet } from "crewhrm-materials/dangerously-set.jsx";
 import { request } from "crewhrm-materials/request.jsx";
 import { __, isEmpty } from "crewhrm-materials/helpers.jsx";
 
@@ -145,6 +144,12 @@ export function Tutorial({path, content_slug}) {
 		}
 	}, [state.lessons?.length]);
 
+	useEffect(()=>{
+		if( window.Prism ) {
+			window.Prism.highlightAll();
+		}
+	}, [state.lesson]);
+
 	if ( state.fetching && isEmpty( state.lessons ) ) {
 		// Still loading first request of getting lessons
 		return <InitState fetching={state.fetching}/>
@@ -154,8 +159,6 @@ export function Tutorial({path, content_slug}) {
 		// First request completed, but no lessons found
 		return <InitState error_message={state.error_message || er_msg}/>
 	}
-
-
 
 	return <div className={'tutorial'.classNames(style)}>
 		<div className={'sidebar'.classNames(style)}>
@@ -186,11 +189,7 @@ export function Tutorial({path, content_slug}) {
 					<strong>
 						{state.lesson?.lesson_title}
 					</strong>
-					<div>
-						<DangerouslySet>
-							{state.lesson?.lesson_content || ''}
-						</DangerouslySet>
-					</div>
+					<div dangerouslySetInnerHTML={{__html: state.lesson?.lesson_content || ''}}></div>
 				</div>
 			}
 
