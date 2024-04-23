@@ -7,7 +7,6 @@ import {LoadingIcon} from 'crewhrm-materials/loading-icon/loading-icon.jsx';
 import { __, data_pointer, isEmpty, sprintf, getDashboardPath, hasTextInHTML } from "crewhrm-materials/helpers.jsx";
 import { ContextToast } from "crewhrm-materials/toast/toast.jsx";
 import { DropDown } from "crewhrm-materials/dropdown/dropdown.jsx";
-import { TextEditor } from "crewhrm-materials/text-editor/text-editor.jsx";
 import { InitState } from "crewhrm-materials/init-state.jsx";
 import { DoAction } from "crewhrm-materials/mountpoint.jsx";
 import { Tabs } from "crewhrm-materials/tabs/tabs.jsx";
@@ -18,6 +17,7 @@ import { ReleaseManager } from "../release-manager/release-manager.jsx";
 import { TutorialManager } from "../tutorial-manager/tutorial-manager.jsx";
 
 import style from './editor.module.scss';
+import { TextEditor } from "./Tiny.jsx";
 
 const {readonly_mode, is_admin} = window[data_pointer];
 
@@ -152,7 +152,13 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 		});
 	}
 
-	const submit=()=>{
+	const saveOnTitleBlur=()=>{
+		if ( ! content_id ) {
+			submit('draft');
+		}
+	}
+
+	const submit=(content_status)=>{
 		setState({
 			...state,
 			submitting: true
@@ -160,7 +166,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 
 		// Separate files from content object
 		const sample_image_ids = state.values.sample_images.map(img=>img.file_id).filter(id=>id);
-		const content = {content_id};
+		const content = {content_id, content_status};
 		const files = {sample_image_ids};
 		Object.keys(state.values).forEach(key=>{
 			
@@ -395,6 +401,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 												placeholder={__('e.g My first content')} 
 												onChange={v=>setVal('content_title', v)}
 												value={state.values.content_title}
+												onBlur={saveOnTitleBlur}
 											/>
 										</div>
 										
@@ -439,6 +446,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 										}
 									</div>
 								</div>
+								
 								{
 									fields.map(field=>{
 										
@@ -484,7 +492,9 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 													<TextEditor
 														placeholder={__('Write description..')}
 														value={state.values[name]}
-														onChange={v=>setVal(name, v)}/>
+														onChange={v=>setVal(name, v)}
+														content_id={content_id}
+													/>
 												}
 
 												{

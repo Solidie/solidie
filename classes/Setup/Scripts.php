@@ -139,6 +139,9 @@ class Scripts {
 	 */
 	public function adminScripts() {
 		if ( Utilities::isAdminDashboard() ) {
+			wp_enqueue_style( 'solidie-backend-tiny-style', Main::$configs->dist_url . 'libraries/tinymce/css/style.css' );
+			wp_enqueue_script( 'solidie-backend-tiny', Main::$configs->dist_url . 'libraries/tinymce/js/tinymce/tinymce.min.js', array( 'jquery' ) );
+			
 			wp_enqueue_script( 'solidie-backend', Main::$configs->dist_url . 'admin-dashboard.js', array( 'jquery' ), Main::$configs->version, true );
 		}
 	}

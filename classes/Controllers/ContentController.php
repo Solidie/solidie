@@ -114,11 +114,14 @@ class ContentController {
 		// Determine the content status
 		$approval       = AdminSetting::get('general.public_contribution_approval');
 		$administrative = User::hasAdministrativeRole( get_current_user_id() );
-		if ( ! $administrative && ( $approval === 'new_update' || ( $approval === 'new' && empty( $content['content_id'] ) ) ) ) {
-			$content['content_status'] = 'pending';
-			
-		} else if ( empty( $content['content_id'] ) ) {
-			$content['content_status'] = 'publish';
+		
+		if ( ( $content['content_status'] ?? '' ) !== 'draft' ) {
+			if ( ! $administrative && ( $approval === 'new_update' || ( $approval === 'new' && empty( $content['content_id'] ) ) ) ) {
+				$content['content_status'] = 'pending';
+				
+			} else if ( empty( $content['content_id'] ) ) {
+				$content['content_status'] = 'publish';
+			}
 		}
 		
 		$content_id = Contents::updateContent( $content, $files );

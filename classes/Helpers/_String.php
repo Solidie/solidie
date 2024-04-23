@@ -85,6 +85,10 @@ class _String {
 	 * @return string
 	 */
 	public static function applyKses( string $string, $echo = false ) {
+		
+		// For now return direct string. Because users might write code snippet for content, articles, comments etc.
+		return $string;
+
 		static $allowed = null;
 
 		// Prepare allowed array only once by defining as static
