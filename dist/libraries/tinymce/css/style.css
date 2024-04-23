@@ -1,0 +1,4 @@
+.tox-editor-container .tox-promotion,
+.tox-statusbar__branding {
+    display: none !important;
+}
