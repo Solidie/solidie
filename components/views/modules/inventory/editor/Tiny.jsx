@@ -1,29 +1,58 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 
-import {getRandomString} from 'crewhrm-materials/helpers.jsx';
+import {getRandomString, __, isEmpty} from 'crewhrm-materials/helpers.jsx';
 import {request} from 'crewhrm-materials/request.jsx';
+import { ContextToast } from "crewhrm-materials/toast/toast.jsx";
+
+const getMediaMarkup=(file_id, file_url, mime)=>{
+
+	const style   = `style="max-width: 100%; width:auto; height:auto;"`;
+	const data    = `data-solidie-file-id="${file_id}"`;
+	const control = `controls="controls" preload="auto"`;
+	
+	if ( mime.indexOf('image/') === 0 ) {
+		return `<img src="${file_url}" ${style} ${data}/>`;
+	}
+
+	if ( mime.indexOf('audio/') === 0 ) {
+		return `<audio style="width:100%;" ${control}>
+			<source src="${file_url}" ${data}/>
+		</audio>`;
+	}
+
+	if ( mime.indexOf('video/') === 0 ) {
+		return `<video ${style} ${control}>
+			<source src="${file_url}" ${data}/>
+		</video>`;
+	}
+}
 
 export function TextEditor({value, onChange, content_id}) {
 
 	const input_reff = useRef();
+	const {ajaxToast, addToast} = useContext(ContextToast);
 
 	const exts = [
-		'.png', 
-		'.jpg', 
-		'.jpeg', 
-		'.webp', 
-		'.mp3', 
-		'.wav', 
-		'.mp4'
+		'image/png', 
+		'image/jpg', 
+		'image/jpeg', 
+		'image/webp', 
+		'audio/mpeg', 
+		'audio/wave', 
+		'video/mp4'
 	];
 
 	const [state, setState] = useState({
-		id: '_' + getRandomString()
+		id: '_' + getRandomString(),
+		uploading: false
 	});
 
 	const openUploader=()=>{
 		if ( ! content_id ) {
-			alert('Please set content title first');
+			addToast({
+				message: __('Please enter content title first'),
+				status: 'error'
+			});
 			return;
 		}
 		input_reff.current.click();
@@ -39,18 +68,51 @@ export function TextEditor({value, onChange, content_id}) {
 
 		input_reff.value = '';
 
-		request('uploadContentDescMedia', {file}, resp=>{
-			
+		setState({
+			...state,
+			uploading: true
+		})
+
+		request('uploadContentDescMedia', {file, content_id}, resp=>{
+			const  {
+				success,
+				data: {
+					file_id,
+					file_url
+				}
+			} = resp;
+
+			setState({
+				...state,
+				uploading: false
+			});
+
+			if ( ! success ) {
+				ajaxToast( resp );
+				return;
+			}
+
+			const content = getMediaMarkup( file_id, file_url, file.type);
+			if ( ! content ) {
+				addToast({
+					message: __('Invalid content attachment'),
+					status: 'error'
+				});
+				return;
+			}
+
+			tinymce.get(state.id).insertContent(content);
 		});
 	}
   
 	useEffect(()=>{
 		tinymce.init({
 			selector: `#${state.id}`,
+			license_key: 'gpl',
 			height: 500,
 			menubar: false,
-			plugins: 'searchreplace autolink image link codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount',
-			toolbar1: 'undo redo bold italic strikethrough superscript subscript link align numlist bullist outdent indent table codesample removeformat custom-media-upload',
+			plugins: 'directionality searchreplace autolink image media link codesample table charmap pagebreak nonbreaking anchor insertdatetime advlist lists wordcount',
+			toolbar: 'undo redo styles fontsize bold italic strikethrough  superscript subscript ltr rtl link align numlist bullist outdent indent table codesample removeformat custom-media-upload',
 			setup: function (editor) {
 
 				// Set default value
@@ -70,6 +132,15 @@ export function TextEditor({value, onChange, content_id}) {
 						openUploader();
 					},
 				});
+			},
+			paste_preprocess: function(plugin, args) {
+
+				var youtubeRegex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/ ]{11})/;
+				
+				if (youtubeRegex.test(args.content)) {
+					var videoId = args.content.match(youtubeRegex)[1];
+					args.content = '<iframe style="width: 100%; height: 350px;" src="https://www.youtube.com/embed/' + videoId + '" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
+				}
 			}
 		});
 	}, []);

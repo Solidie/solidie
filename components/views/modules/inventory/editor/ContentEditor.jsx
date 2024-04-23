@@ -203,9 +203,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 
 				// Replace current URL state with content ID to make it update from later attempts
 				if ( ! content_id ) {
-					navigate(getDashboardPath('inventory/'+content_type), {replace: true});
-				} else {
-					window.location.reload();
+					navigate(getDashboardPath(`inventory/${content_type}/editor/${content.content_id}/`), {replace: true});
 				}
 			} else {
 				ajaxToast(resp);

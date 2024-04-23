@@ -43,6 +43,8 @@ class ContentController {
 		),
 		'changeContentStatus' => array(
 		),
+		'uploadContentDescMedia' => array(
+		)
 	);
 
 	/**
@@ -393,5 +395,28 @@ class ContentController {
 		Contents::changeContentStatus( $content_id, $status );
 
 		wp_send_json_success( array( 'message' => __( 'Content status has been changes', 'solidie' ) ) );
+	}
+
+	/**
+	 * Store content description attachment
+	 *
+	 * @param integer $content_id
+	 * @param array $file
+	 * @return void
+	 */
+	public static function uploadContentDescMedia( int $content_id, array $file ) {
+
+		$attachment_id = FileManager::uploadFile( $content_id, $file );
+
+		if ( ! empty( $attachment_id ) ) {
+			wp_send_json_success( 
+				array(
+					'file_id'  => $attachment_id, 
+					'file_url' => FileManager::getMediaLink( $attachment_id ) 
+				) 
+			);
+		} else {
+			wp_send_json_error( array( 'message' => __( 'Something went wrong during uploading attachment!', 'solidie' ) ) );
+		}
 	}
 }
