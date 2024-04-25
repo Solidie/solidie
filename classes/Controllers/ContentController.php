@@ -221,7 +221,7 @@ class ContentController {
 		$feedback_settings = AdminSetting::getFeedbackSettings( $content['content_type'] );
 
 		// Remove contributor info from single content view if not enabled
-		if ( ! $feedback_settings['contributor'] && isset( $content['contributor'] ) ) {
+		if ( empty( $feedback_settings['contributor'] ) && isset( $content['contributor'] ) ) {
 			unset( $content['contributor'] );
 		}
 

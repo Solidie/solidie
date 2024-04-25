@@ -34,7 +34,7 @@ function load_404( $message = '' ) {
 
 $page           = get_query_var( Route::KEY );
 $parsed         = wp_parse_url( Main::$configs->current_url );
-$url_path       = $parsed['scheme'] . '://' . $parsed['host'] . ( $parsed['port'] ? ':' . $parsed['port'] : '' ) . ( $parsed['path'] ?? '' );
+$url_path       = $parsed['scheme'] . '://' . $parsed['host'] . ( ! empty( $parsed['port'] ) ? ':' . $parsed['port'] : '' ) . ( $parsed['path'] ?? '' );
 $projected_path = get_home_url() . '/' . $page;
 
 if ( strpos( $url_path, $projected_path ) !== 0 ) {

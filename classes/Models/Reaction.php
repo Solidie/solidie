@@ -198,7 +198,7 @@ class Reaction {
 		$feedback_settings = AdminSetting::getFeedbackSettings( $content_type );
 
 		// Get Rating info
-		if ( $feedback_settings['rating'] ) {
+		if ( ! empty( $feedback_settings['rating'] ) ) {
 			$reaction = self::rating( $content_id );
 			$stats['rating'] = array(
 				'rating_count' => $reaction->getCount(),
@@ -206,20 +206,20 @@ class Reaction {
 				'my_reaction'  => $reaction->getReaction( $user_id, 'value' )
 			);
 
-		} else if ( $feedback_settings['like'] ) {
+		} else if ( ! empty( $feedback_settings['like'] ) ) {
 
 			// Get like dislike info
 			$reaction = self::like( $content_id );
 
 			$stats['like'] = array(
 				'like_count'    => $reaction->getCount(),
-				'dislike_count' => $feedback_settings['dislike'] ? $reaction->getCount( 0, '=' ) : null,
+				'dislike_count' => ! empty( $feedback_settings['dislike'] ) ? $reaction->getCount( 0, '=' ) : null,
 				'my_reaction'   => $reaction->getReaction( $user_id, 'value' )
 			);
 		}
 
 		$stats['wishlisted']    = ( bool ) self::wishlist( $content_id )->getReaction( $user_id, 'value' );
-		$stats['comment_count'] = $feedback_settings['comment'] ? Comment::getCount( $content_id ) : null;
+		$stats['comment_count'] = ! empty( $feedback_settings['comment'] ) ? Comment::getCount( $content_id ) : null;
 
 		return $stats;
 	}
