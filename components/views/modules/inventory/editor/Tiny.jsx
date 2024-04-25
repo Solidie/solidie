@@ -50,6 +50,8 @@ export function TinyEditor({value, onChange, content_id}) {
 		uploading: false
 	});
 
+	const [content, setContent] = useState(value);
+
 	const openUploader=()=>{
 		if ( ! content_id ) {
 			addToast({
@@ -121,12 +123,12 @@ export function TinyEditor({value, onChange, content_id}) {
 
 				// Set default value
 				editor.on('init', function () {
-					editor.setContent(value || '');
+					editor.setContent(content || '');
 				});
 
 				// Set on change event handler
 				editor.on('change', function () {
-					onChange( editor.getContent() );
+					setContent( editor.getContent() );
 				});
 
 				editor.ui.registry.addButton('custom-media-upload', {
@@ -155,6 +157,10 @@ export function TinyEditor({value, onChange, content_id}) {
 			}
 		}
 	}, []);
+
+	useEffect(()=>{
+		onChange(content);
+	}, [content]);
 	
   	return <div>
 

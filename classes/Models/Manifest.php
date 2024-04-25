@@ -20,7 +20,8 @@ class Manifest {
 
 		$manifest = array(
 			'settings' => array(
-				'general'  => array(),
+				'general'  => array(
+				),
 				'contents' => array(
 					// This array will be filled with content types
 				),

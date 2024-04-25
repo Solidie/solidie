@@ -28,11 +28,11 @@ const fields = [
 		type: 'text',
 	},
 	{
-		name: 'api_slug',
-		label: __('API Slug'),
-		type: 'text',
-		placeholder: __('e.g update-distributor-api'),
-		supports: 'app'
+		name: 'show_thumbnail',
+		label: __('Show thumbnail in single page'),
+		type: 'switch',
+		placeholder: __('Enable'),
+		supports: ['app', '3d', 'document', 'font', 'tutorial']
 	},
 	{
 		name: 'enable_comment',
@@ -85,7 +85,7 @@ export function ContentTypeEditor(props) {
 
 	return <div className={className}>
 		<OptionFields 
-			fields={fields.filter(f=>!f.supports || content_type==f.supports)} 
+			fields={fields.filter(f=>!f.supports || f.supports.indexOf(content_type)>-1)} 
 			settings={settings.contents[content_type]}
 			onChange={onChange}
 		/>

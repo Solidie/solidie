@@ -87,6 +87,8 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 		values: initial_values,
 	});
 
+	const content_title = ( state.values.content_title || '' ).trim();
+
 	const fields = [
 		{
 			type: 'text',
@@ -141,7 +143,6 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 	].filter(f=>f);
 
 	const setVal=(name, value)=>{
-
 		setState({
 			...state,
 			thumbnail_url: name=='thumbnail' ? URL.createObjectURL(value) : state.thumbnail_url,
@@ -153,7 +154,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 	}
 
 	const saveOnTitleBlur=()=>{
-		if ( ! content_id ) {
+		if ( ! content_id && ! isEmpty( content_title ) ) {
 			submit('draft');
 		}
 	}
@@ -537,7 +538,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 											readonly_mode || 
 											state.submitting || 
 											!thumbnail_url ||
-											isEmpty((state.values.content_title || '').trim())
+											isEmpty(content_title)
 										} 
 									>
 										{content_id ? __('Update') : __('Create')} <LoadingIcon show={state.submitting}/>
