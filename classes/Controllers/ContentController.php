@@ -86,11 +86,10 @@ class ContentController {
 	 * @param array $sample_image_ids Existing sample image IDs to delete removed ones
 	 * @param array $downloadable_file Main downloadable file
 	 * @param array $preview Preview file
-	 * @param bool  $is_admin Whether the request came from admin screen or contributor dashboard editor
 	 *
 	 * @return void
 	 */
-	public static function createOrUpdateContent( array $content, array $thumbnail = array(), array $sample_images = array(), array $sample_image_ids = array(), array $downloadable_file = array(), array $preview = array(), bool $is_admin = false ) {
+	public static function createOrUpdateContent( array $content, array $thumbnail = array(), array $sample_images = array(), array $sample_image_ids = array(), array $downloadable_file = array(), array $preview = array() ) {
 
 		do_action(
 			'solidie_before_create_update_content', 
@@ -100,8 +99,7 @@ class ContentController {
 				'sample_images', 
 				'sample_image_ids', 
 				'downloadable_file', 
-				'preview',
-				'is_admin'
+				'preview'
 			)
 		);
 

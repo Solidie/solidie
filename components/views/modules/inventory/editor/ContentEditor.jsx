@@ -167,7 +167,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 
 		// Separate files from content object
 		const sample_image_ids = state.values.sample_images.map(img=>img.file_id).filter(id=>id);
-		const content = {content_id, content_status};
+		const content = {content_id, content_status, is_admin};
 		const files = {sample_image_ids};
 		Object.keys(state.values).forEach(key=>{
 			
@@ -181,7 +181,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 			}
 		});
 
-		request('createOrUpdateContent', {content, is_admin, ...files}, resp=>{
+		request('createOrUpdateContent', {content, ...files}, resp=>{
 			const {
 				success, 
 				data:{
