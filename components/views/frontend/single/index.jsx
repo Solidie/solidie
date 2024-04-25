@@ -15,6 +15,7 @@ import { VideoPreview } from "./previews/video.jsx";
 import { AudioPreview } from "./previews/audio.jsx";
 import { Comments } from "./comments/comments.jsx";
 import { MetaData } from "./meta-data/meta-data.jsx";
+import { content_statuses } from "../../modules/inventory/index.jsx";
 
 import style from './single.module.scss';
 
@@ -131,13 +132,13 @@ export function SingleWrapper() {
 
     }
 
-	const {media={}} = state.content || {};
+	const {media={}, content_title, content_status} = state.content || {};
 	const {sample_images=[]} = media || {};
 	
 	return <div className={'single'.classNames(style)}>
 		<div className={'margin-bottom-15'.classNames()}>
 			<strong className={'d-block font-size-24 color-text'.classNames()}>
-				{state.content.content_title}
+				{content_title} {content_status!='publish' ? <i>[{content_statuses[content_status] || content_status}]</i> : null}
 			</strong>
 			<MetaData 
 				content={state.content}

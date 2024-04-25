@@ -256,7 +256,7 @@ class Contents {
 		$current_user_id = get_current_user_id();
 		$status_clause   = $public_only ? $wpdb->prepare( ' AND (content.content_status="publish" OR content.contributor_id=%d) ', $current_user_id ) : '';
 
-		// Admin and editor also can visit products no matter what the status is. Other users can only if the product is public.
+		// Content author, Admin and Editor can visit content regardless of content status.
 		if ( User::validateRole( $current_user_id, array( 'administrator', 'editor' ) ) ) {
 			$status_clause = '';
 		}
@@ -501,8 +501,8 @@ class Contents {
 		}
 
 		// Filter content status
-		if ( ! empty( $args['status'] ) ) {
-			$where_clause .= $wpdb->prepare( ' AND content.content_status=%s', $args['status'] );
+		if ( ! empty( $args['content_status'] ) ) {
+			$where_clause .= $wpdb->prepare( ' AND content.content_status=%s', $args['content_status'] );
 		}
 
 		// Filter content type

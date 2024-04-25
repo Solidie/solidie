@@ -16,6 +16,7 @@ import { getPriceRange } from '../../frontend/gallery/generic-card/generic-card'
 const {readonly_mode, is_admin, is_pro_active} = window[data_pointer];
 
 export const content_statuses = {
+	draft: __('Draft'),
 	publish: __('Published'), 
 	unpublish: __('Unpublished'), 
 	pending: __('Pending'), 
@@ -129,7 +130,7 @@ export function Inventory({navigate, params={}}) {
 	const filterStateInitial = {
 		page: 1,
 		search: '',
-		status: ''
+		content_status: ''
 	}
 	const [filterState, setFilterState] = useState(filterStateInitial);
 
@@ -262,8 +263,8 @@ export function Inventory({navigate, params={}}) {
 				<div>
 					<DropDown
 						placeholder={__('Status')}
-						onChange={v=>setFilter('status', v)}
-						value={filterState.status}
+						onChange={v=>setFilter('content_status', v)}
+						value={filterState.content_status}
 						options={Object.keys(content_statuses).map(status=>{
 							return {
 								id: status,

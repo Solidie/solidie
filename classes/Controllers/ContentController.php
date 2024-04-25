@@ -52,12 +52,17 @@ class ContentController {
 	 *
 	 * @param array $filters Content filter arguments
 	 * @param bool  $is_contributor_inventory Whether it is frontend contributor dashboard
+	 * @param bool  $is_gallery Whether loaded in gallery
 	 * @return void
 	 */
-	public static function getContentList( array $filters, bool $is_contributor_inventory = false ) {
+	public static function getContentList( array $filters, bool $is_contributor_inventory = false, bool $is_gallery = false ) {
 
 		if ( $is_contributor_inventory ) {
 			$filters['contributor_id'] = get_current_user_id();
+		}
+
+		if ( $is_gallery ) {
+			$filters['content_status'] = 'publish';
 		}
 
 		$content_list = Contents::getContents( $filters );
@@ -116,13 +121,14 @@ class ContentController {
 		// Determine the content status
 		$approval       = AdminSetting::get('general.public_contribution_approval');
 		$administrative = User::hasAdministrativeRole( get_current_user_id() );
+		$status         = $content['content_status'] ?? '';
 		
-		if ( ( $content['content_status'] ?? '' ) !== 'draft' ) {
+		if ( $status !== 'draft' ) {
 			if ( ! $administrative && ( $approval === 'new_update' || ( $approval === 'new' && empty( $content['content_id'] ) ) ) ) {
 				$content['content_status'] = 'pending';
 				
-			} else if ( empty( $content['content_id'] ) ) {
-				$content['content_status'] = 'publish';
+			} else {
+				$content['content_status'] = ! empty( $status ) ? $status : 'publish';
 			}
 		}
 		
@@ -198,7 +204,7 @@ class ContentController {
 		}
 
 		// Now get the content by content ID
-		$content = $content_id ? Contents::getContentByContentID( $content_id, null, false ) : null;
+		$content = $content_id ? Contents::getContentByContentID( $content_id, null, ! $is_editor ) : null;
 
 		if ( empty( $content_type ) && ! empty( $content ) ) {
 			$content_type = $content['content_type'];
@@ -209,7 +215,7 @@ class ContentController {
 			exit;
 		}
 
-		// If editor, make sure the autor requested, or the admin who can do anything
+		// If editor, make sure the author requested, or the admin who can do anything
 		if ( $is_editor ) {
 			self::contentAccessCheck( $content['content_id'], get_current_user_id() );
 		}

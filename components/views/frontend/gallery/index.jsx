@@ -114,7 +114,7 @@ function GalleryLayout({resources={}}) {
 			contents: clear_list ? [] : state.contents
 		});
 
-		request('getContentList', {filters:{page: 1, ...queryParams, content_type}}, resp=>{
+		request('getContentList', {filters:{page: 1, ...queryParams, content_type}, is_gallery: true}, resp=>{
 			const {data:{contents=[], segmentation}} = resp;
 			setState({...state, fetching: false, contents, segmentation});
 		});
