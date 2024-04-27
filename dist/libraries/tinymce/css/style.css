@@ -6,3 +6,12 @@
 .tox.tox-silver-sink.tox-tinymce-aux {
 	z-index: 9999;
 }
+
+.solidie-tinymce-ticking {
+	animation: solidieZoomInOut 0.3s infinite alternate; /* 1s duration, infinite loop, alternate direction */
+}
+
+@keyframes solidieZoomInOut {
+	0% { transform: scale(1); } /* Normal size */
+	100% { transform: scale(1.2); } /* Zoomed in by 10% */
+}

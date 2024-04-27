@@ -183,12 +183,12 @@ class FileManager {
 	}
 
 	/**
-	 * Parse files IDs from content description, lesson and delete them
+	 * Extract file IDs from html content
 	 *
 	 * @param string $html
-	 * @return void
+	 * @return array
 	 */
-	public static function deleteFilesFromContent( $html ) {
+	public static function getFileIDsFromContent( $html ) {
 
 		$ids = array();
 
@@ -196,14 +196,38 @@ class FileManager {
 		$pattern = '/data-solidie-file-id\s*=\s*["\']([^"\']+)["\']/';
 		
 		// Perform the regex match
-		preg_match_all($pattern, $html, $matches);
+		preg_match_all( $pattern, ( is_string( $html ) ? $html : '' ), $matches );
 		
 		// Extract the matched IDs
 		if ( ! empty( $matches[1] ) ) {
 			$ids = $matches[1];
 		}
 
-		self::deleteFile( array_map( 'intval', $ids ) );
+		return array_unique( array_map( 'intval', $ids ) );
+	}
+
+	/**
+	 * Parse files IDs from content description, lesson and delete them
+	 *
+	 * @param string $html
+	 * @return void
+	 */
+	public static function deleteFilesFromContent( $html ) {
+		self::deleteFile( self::getFileIDsFromContent( $html ) );
+	}
+
+	/**
+	 * Delete removed media by ID that are no more in updated lesson
+	 *
+	 * @param string $old_html
+	 * @param string $new_html
+	 * @return void
+	 */
+	public static function deleteRemovedFilesFromContent( $old_html, $new_html ) {
+		$existing_ids = FileManager::getFileIDsFromContent( $old_html );
+		$updated_ids  = FileManager::getFileIDsFromContent( $new_html );
+		$removed_ids  = array_diff( $existing_ids, $updated_ids );
+		FileManager::deleteFile( $removed_ids );
 	}
 
 	/**

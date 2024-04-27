@@ -49,7 +49,7 @@ Yes, the features is provided in the pro version. You can release your apps, man
 = Does it support license key activation system for apps? =
 Yes, It does in pro version. Your customers will get license keys after purchaing apps from your website.
 
-= Can I sell seubscription? =
+= Can I sell subscription? =
 Yes, with the pro version. You can sell various plans for apps and all other content types on monthly, yearly and lifetime basis.
 
 = How can I suggest new features? =

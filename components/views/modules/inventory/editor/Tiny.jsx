@@ -67,16 +67,18 @@ export function TinyEditor({value, onChange, content_id}) {
 
 		const file = e.currentTarget.files?.[0];
 
+		input_reff.current.value = '';
+
 		if ( ! file ) {
 			return;
 		}
 
-		input_reff.value = '';
-
 		setState({
 			...state,
 			uploading: true
-		})
+		});
+
+		window.jQuery('[data-mce-name="custom-media-upload"] span').addClass('solidie-tinymce-ticking');
 
 		request('uploadContentDescMedia', {file, content_id}, resp=>{
 			const  {
@@ -86,6 +88,8 @@ export function TinyEditor({value, onChange, content_id}) {
 					file_url
 				}
 			} = resp;
+
+			window.jQuery('[data-mce-name="custom-media-upload"] span').removeClass('solidie-tinymce-ticking');
 
 			setState({
 				...state,
@@ -126,8 +130,8 @@ export function TinyEditor({value, onChange, content_id}) {
 					editor.setContent(content || '');
 				});
 
-				// Set on change event handler
-				editor.on('change', function () {
+				// Set on input event handler
+				editor.on('input', function () {
 					setContent( editor.getContent() );
 				});
 

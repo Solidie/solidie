@@ -120,6 +120,7 @@ export function TutorialManager({content_id, content_type, lesson_id, navigate})
 						mode="queue"
 						id_key="lesson_id"
 						label_key="lesson_title"
+						permalink_key="lesson_permalink"
 						list={state.lessons}
 						onChange={setLessons}
 						onEdit={!state.has_changes ? editLesson : null}

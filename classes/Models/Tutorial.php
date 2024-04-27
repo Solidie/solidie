@@ -306,6 +306,9 @@ class Tutorial {
 			return false;
 		}
 
+		// Delete removed media by ID that are no more in updated lesson
+		FileManager::deleteRemovedFilesFromContent( $exists['lesson_content'] ?? '', $lesson['lesson_content'] ?? '' );
+
 		$payload = array(
 			'lesson_title'   => $lesson['lesson_title'] ?? 'Untitled',
 			'lesson_content' => $lesson['lesson_content'] ?? '',

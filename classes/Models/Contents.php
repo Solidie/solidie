@@ -80,6 +80,11 @@ class Contents {
 				self::setContentSlug( $content['content_id'], $content['content_title'] );
 			}
 		} else {
+
+			// Delete removed files from description
+			$existing_content = Contents::getContentByContentID( $content['content_id'], 'content_description' );
+			FileManager::deleteRemovedFilesFromContent( $existing_content, $content['content_description'] );
+
 			// Update the content as content ID exists
 			Field::contents()->updateField(
 				$content,

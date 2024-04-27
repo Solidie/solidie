@@ -1,26 +1,24 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import { request } from "crewhrm-materials/request.jsx";
-import { __, isEmpty } from "crewhrm-materials/helpers.jsx";
+import { __ } from "crewhrm-materials/helpers.jsx";
 
 import style from './tutorial.module.scss';
 import { InitState } from "crewhrm-materials/init-state";
 import { LoadingIcon } from "crewhrm-materials/loading-icon/loading-icon";
-
-const er_msg = __('Something went wrong!');
 
 function LessonList({lessons=[], level=1, active_slug}) {
 	return <div className={`${level>1 ? 'margin-left-10' : ''}`.classNames()}>
 		{
 			lessons.map(lesson=>{
 
-				const {lesson_id, lesson_slug, lesson_title, lesson_permalink, lesson_status, children=[]} = lesson;
+				const {lesson_id, lesson_slug, lesson_title, lesson_permalink, children=[]} = lesson;
 				const active = active_slug === lesson_slug;
 
-				return lesson_status!='publish' ? null : <div key={lesson_id}>
+				return <div key={lesson_id}>
 					<div className={'margin-bottom-15'.classNames()}>
-						<Link to={lesson_permalink} className={`font-size-16 font-weight-400 color-text-light ${active ? 'color-text font-weight-600' : ''}`.classNames()}>
+						<Link to={lesson_permalink} className={`font-size-16 font-weight-400 color-text-light ${active ? 'color-text font-weight-700 text-decoration-underline' : ''}`.classNames()}>
 							{lesson_title}
 						</Link>
 					</div>
@@ -47,10 +45,6 @@ function getLinearLessions(lessons=[]) {
 
 		const lesson = lessons[i];
 		
-		if ( lesson.lesson_status != 'publish' ) {
-			continue;
-		}
-
 		_lessons.push({...lesson, children: undefined});
 
 		if ( lesson.children?.length ) {
@@ -96,6 +90,9 @@ function Pagination({lessons=[], current_slug}) {
 export function Tutorial({path, content_slug}) {
 
 	const navigate = useNavigate();
+	const {pathname} = useLocation();
+	const path_segments = pathname.split('/').filter(p=>p);
+	const active_slug = path_segments[path_segments.length - 1];
 
 	const [state, setState] = useState({
 		mobile_menu: false,
@@ -150,14 +147,9 @@ export function Tutorial({path, content_slug}) {
 		}
 	}, [state.lesson]);
 
-	if ( state.fetching && isEmpty( state.lessons ) ) {
-		// Still loading first request of getting lessons
-		return <InitState fetching={state.fetching}/>
-	}
-
-	if ( ! state.fetching && isEmpty( state.lessons ) ) {
+	if ( state.fetching || state.error_message ) {
 		// First request completed, but no lessons found
-		return <InitState error_message={state.error_message || er_msg}/>
+		return <InitState fetching={state.fetching} error_message={state.error_message}/>
 	}
 
 	return <div className={'tutorial'.classNames(style)}>
@@ -174,7 +166,7 @@ export function Tutorial({path, content_slug}) {
 			<div className={`menu-wrapper ${state.mobile_menu ? 'expanded' : ''}`.classNames(style)}>
 				<LessonList 
 					lessons={state.lessons} 
-					active_slug={state.lesson?.lesson_slug}
+					active_slug={active_slug}
 				/>
 			</div>
 		</div>
@@ -182,21 +174,27 @@ export function Tutorial({path, content_slug}) {
 		<div className={'content'.classNames(style)}>
 			<LoadingIcon show={state.fetching} center={true}/>
 			{
-				(!state.fetching && !state.lesson) ? 
+				!state.lesson ? 
 				<div>
-					{state.error_message || er_msg}
-				</div> : <div>
+					<i className={'color-error'.classNames()}>
+						{__('Lesson not found or may not be published yet!')}
+					</i>
+				</div> 
+				: 
+				<div>
 					<strong>
-						{state.lesson?.lesson_title}
+						{state.lesson.lesson_title}
 					</strong>
 					<div dangerouslySetInnerHTML={{__html: state.lesson?.lesson_content || ''}}></div>
 				</div>
 			}
 
-			<Pagination 
-				lessons={state.lessons} 
-				current_slug={state.lesson?.lesson_slug}
-			/>
+			<div style={{margin: '20px 0'}}>
+				<Pagination 
+					lessons={state.lessons} 
+					current_slug={active_slug}
+				/>
+			</div>
 		</div>
 	</div>
 }
