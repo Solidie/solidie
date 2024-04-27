@@ -173,6 +173,7 @@ export function Tutorial({path, content_slug}) {
 		
 		<div className={'content'.classNames(style)}>
 			<LoadingIcon show={state.fetching} center={true}/>
+			
 			{
 				!state.lesson ? 
 				<div>
@@ -182,7 +183,7 @@ export function Tutorial({path, content_slug}) {
 				</div> 
 				: 
 				<div>
-					<strong>
+					<strong className={'font-size-24 d-block margin-bottom-15 font-weight-700'.classNames()}>
 						{state.lesson.lesson_title}
 					</strong>
 					<div dangerouslySetInnerHTML={{__html: state.lesson?.lesson_content || ''}}></div>

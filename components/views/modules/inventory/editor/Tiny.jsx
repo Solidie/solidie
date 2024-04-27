@@ -110,7 +110,9 @@ export function TinyEditor({value, onChange, content_id}) {
 				return;
 			}
 
-			tinymce.get(state.id).insertContent(content);
+			const ed = tinymce.get(state.id);
+			ed.insertContent(content);
+			ed.fire('input');
 		});
 	}
   

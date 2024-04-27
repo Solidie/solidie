@@ -104,21 +104,24 @@ export function LessonEditor({content_id, lesson_id, lessons=[]}) {
 	}
 
 	const publishLesson=()=>{
-		setState({
-			...state,
-			saving: true
-		});
 		
+		const {permalinks: {ajaxurl}} = window[data_pointer];
+
 		const payload = {
 			lesson: {
 				...state.values, 
 				content_id,
 				lesson_id,
 				lesson_content: undefined,
-				kses_lesson_content: state.values.lesson_content, 
+				kses_lesson_content: state.values.lesson_content.replaceAll('src="admin-ajax.php?', `src="${ajaxurl}?`), 
 			}
 		}
 
+		setState({
+			...state,
+			saving: true
+		});
+		
 		request('updateLessonSingle', payload, resp=>{
 			
 			ajaxToast(resp);
