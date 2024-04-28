@@ -5,7 +5,7 @@ Tags: image stock, video stock, content marketplace, stock contributors, digital
 Requires at least: 5.3
 Tested up to: 6.5.2
 Requires PHP: 7.4
-Stable tag: 1.0.3
+Stable tag: 1.1.0
 License: GPLv3
 License URI: https://opensource.org/licenses/GPL-3.0
 
@@ -57,13 +57,14 @@ You can [create issue](https://github.com/Solidie/Solidie/issues) on Github repo
 
 == Changelog ==
 
-= v1.0.3 -> Feb 25, 2024 =
+= v1.1.0 -> Apr 28, 2024 =
 --------------------------
+* New: Full fledged stock platform with sales, contributor, withdrawal and so many functionalities
 * Fix: Content description formatting gets removed
 * Fix: Number gets removed from content slug
 * Update: Plain text has been preferred for changelogs
-* Update: Anchor tag and youtube video link support added in content description
-* Update: Prev Next navigation added in sample image previewer
+* Update: Content editor revamped with extensive features
+* Update: Navigation added in sample image previewer
 
 = v1.0.2 -> Feb 18, 2024 =
 --------------------------

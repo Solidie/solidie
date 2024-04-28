@@ -30,7 +30,7 @@ const getMediaMarkup=(file_id, file_url, mime)=>{
 /**
  * This component requires you to load tinymce library separately.
  */
-export function TinyEditor({value, onChange, content_id}) {
+export function TinyEditor({value, onChange, content_id, lesson_id}) {
 
 	const input_reff = useRef();
 	const {ajaxToast, addToast} = useContext(ContextToast);
@@ -80,7 +80,7 @@ export function TinyEditor({value, onChange, content_id}) {
 
 		window.jQuery('[data-mce-name="custom-media-upload"] span').addClass('solidie-tinymce-ticking');
 
-		request('uploadContentDescMedia', {file, content_id}, resp=>{
+		request('uploadContentDescMedia', {file, content_id, lesson_id}, resp=>{
 			const  {
 				success,
 				data: {

@@ -61,14 +61,16 @@ class FileManager {
 	 * Create custom directory for files
 	 *
 	 * @param int $content_id Create directory for specific content, ideally job application.
+	 * @param int $lesson_id The lesson ID
+	 * 
 	 * @return string
 	 */
-	private static function createUploadDir( $content_id ) {
+	private static function createUploadDir( $content_id, $lesosn_id = null ) {
 
 		$wp_upload_dir = wp_upload_dir(); // Get the path and URL of the wp-uploads directory
 
 		// Create the full path of the custom directory
-		$rel_path        = self::SOLIDIE_CONTENTS_DIR . '/' . $content_id;
+		$rel_path        = self::SOLIDIE_CONTENTS_DIR . '/' . $content_id . ( ! empty( $lesosn_id ) ? '/' . $lesosn_id : '' );
 		$custom_dir_path = $wp_upload_dir['basedir'] . '/' . $rel_path;
 		$htaccess_path   = $wp_upload_dir['basedir'] . '/' . self::SOLIDIE_CONTENTS_DIR . '/.htaccess';
 
@@ -89,31 +91,35 @@ class FileManager {
 	 * Get dir path for speficic content
 	 *
 	 * @param int $content_id The content ID to get directory for
+	 * @param int $lesson_id To delete only the lesson directory
+	 *
 	 * @return string
 	 */
-	public static function getContentDir( $content_id ) {
+	public static function getContentDir( $content_id, $lesson_id = null ) {
 		if ( empty( $content_id ) ) {
 			$content_id = 0;
 		}
 
 		$wp_upload_dir = wp_upload_dir();
-		return $wp_upload_dir['basedir'] . '/' . self::SOLIDIE_CONTENTS_DIR . '/' . $content_id;
+		return $wp_upload_dir['basedir'] . '/' . self::SOLIDIE_CONTENTS_DIR . '/' . $content_id . ( ! empty( $lesson_id ) ? '/' . $lesson_id : '' );
 	}
 
 	/**
 	 * Process upload of a file using native WP methods
 	 *
-	 * @param int   $content_id The content/application ID to upload file for
 	 * @param array $file File array with size, tmp_name etc.
+	 * @param int   $content_id The content/application ID to upload file for
+	 * @param int   $lesson_id The lesson id ID to upload file for
+	 * 
 	 * @return int|null
 	 */
-	public static function uploadFile( $content_id, array $file ) {
+	public static function uploadFile( $file, $content_id, $lesosn_id = null ) {
 
 		// File id place holder
 		$attachment_id = null;
 
 		// Create necessary directory if not created already
-		self::$rel_path = self::createUploadDir( $content_id );
+		self::$rel_path = self::createUploadDir( $content_id, $lesosn_id );
 
 		// Add filters
 		add_filter( 'upload_dir', array( __CLASS__, 'customUploadDirectory' ) );
@@ -221,12 +227,22 @@ class FileManager {
 	 *
 	 * @param string $old_html
 	 * @param string $new_html
+	 * @param mixed $name
 	 * @return void
 	 */
-	public static function deleteRemovedFilesFromContent( $old_html, $new_html ) {
+	public static function deleteRemovedFilesFromContent( $old_html, $new_html, $content_id, $lesson_id = 0 ) {
+
+		// Get the IDs that exist in old content, but not in updated
 		$existing_ids = FileManager::getFileIDsFromContent( $old_html );
 		$updated_ids  = FileManager::getFileIDsFromContent( $new_html );
 		$removed_ids  = array_diff( $existing_ids, $updated_ids );
+
+		// Get the IDs that were logged, but the content/lesson was not saved with them
+		// Then merge with removed IDs to delete all at once
+		$logged_ids   = ( new AttachmentLog( $content_id, $lesson_id ) )->getMediaAttachmentLog( true );
+		$unsaved_ids  = array_diff( $logged_ids, $updated_ids );
+		$removed_ids  = array_unique( array_merge( $removed_ids, $unsaved_ids ) );
+		
 		FileManager::deleteFile( $removed_ids );
 	}
 

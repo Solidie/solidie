@@ -114,7 +114,7 @@ class Release {
 			}
 
 			// Upload new one
-			$file_id = FileManager::uploadFile( $data['content_id'], $data['file'] );
+			$file_id = FileManager::uploadFile( $data['file'], $data['content_id'] );
 			if ( ! $file_id ) {
 				return esc_html__( 'Error in file saving!', 'solidie' );
 			}

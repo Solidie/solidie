@@ -109,14 +109,15 @@ class Tutorial {
 		$ids_places = _String::getPlaceHolders( $lesson_ids );
 
 		// Get lesson contents to delete attached media
-		$contents = $wpdb->get_col(
+		$_lessons = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT lesson_content FROM {$wpdb->solidie_lessons} WHERE lesson_id IN ({$ids_places}) AND lesson_content IS NOT NULL",
+				"SELECT content_id, lesson_id FROM {$wpdb->solidie_lessons} WHERE lesson_id IN ({$ids_places})",
 				...$lesson_ids
-			)
+			),
+			ARRAY_A
 		);
-		foreach ( $contents as $content ) {
-			FileManager::deleteFilesFromContent( $content );
+		foreach ( $_lessons as $lesson ) {
+			FileManager::deleteDirectory( FileManager::getContentDir( $lesson['content_id'], $lesson['lesson_id'] ) );
 		}
 
 		// Delete lesson entries
@@ -307,7 +308,7 @@ class Tutorial {
 		}
 
 		// Delete removed media by ID that are no more in updated lesson
-		FileManager::deleteRemovedFilesFromContent( $exists['lesson_content'] ?? '', $lesson['lesson_content'] ?? '' );
+		FileManager::deleteRemovedFilesFromContent( $exists['lesson_content'] ?? '', $lesson['lesson_content'] ?? '', $lesson['content_id'], $lesson['lesson_id'] );
 
 		$payload = array(
 			'lesson_title'   => $lesson['lesson_title'] ?? 'Untitled',

@@ -83,7 +83,7 @@ class Contents {
 
 			// Delete removed files from description
 			$existing_content = Contents::getContentByContentID( $content['content_id'], 'content_description' );
-			FileManager::deleteRemovedFilesFromContent( $existing_content, $content['content_description'] );
+			FileManager::deleteRemovedFilesFromContent( $existing_content, $content['content_description'], $content['content_id'] );
 
 			// Update the content as content ID exists
 			Field::contents()->updateField(
@@ -147,7 +147,7 @@ class Contents {
 				}
 
 				// Now create new file for it
-				$new_file_id = FileManager::uploadFile( $content['content_id'], $file );
+				$new_file_id = FileManager::uploadFile( $file, $content['content_id'] );
 				if ( ! empty( $new_file_id ) ) {
 					if ( is_array( $media_ids[ $name ] ) ) {
 						$media_ids[ $name ][] = $new_file_id;

@@ -7,8 +7,8 @@
 
 namespace Solidie\Controllers;
 
-use Solidie\Helpers\_Array;
 use Solidie\Models\AdminSetting;
+use Solidie\Models\AttachmentLog;
 use Solidie\Models\Contents;
 use Solidie\Models\FileManager;
 use Solidie\Models\Reaction;
@@ -406,12 +406,15 @@ class ContentController {
 	 *
 	 * @param integer $content_id
 	 * @param array $file
+	 * @param int $lesson_id
 	 * @return void
 	 */
-	public static function uploadContentDescMedia( int $content_id, array $file ) {
+	public static function uploadContentDescMedia( int $content_id, array $file, int $lesson_id = 0 ) {
 
-		$attachment_id = FileManager::uploadFile( $content_id, $file );
+		$attachment_id = FileManager::uploadFile( $file, $content_id, $lesson_id );
 
+		( new AttachmentLog( $content_id, $lesson_id ) )->logMediaAttachment( $attachment_id );
+		
 		if ( ! empty( $attachment_id ) ) {
 			wp_send_json_success( 
 				array(

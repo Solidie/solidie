@@ -273,6 +273,7 @@ export function LessonEditor({content_id, lesson_id, lessons=[]}) {
 			</strong>
 			<TinyEditor
 				content_id={content_id}
+				lesson_id={lesson_id}
 				value={state.values.lesson_content || ''}
 				onChange={v=>dispatchChange('lesson_content', v)}
 			/>
