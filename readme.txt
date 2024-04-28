@@ -1,7 +1,7 @@
 === Solidie - Digital Content Stock ===
 Contributors: jayedul
 Donate Link: https://solidie.com/apps/solidie-pro/
-Tags: image stock, video stock, content marketplace, stock contributors, digital content, photography, video making, appstore, playstore, content sales, content subscription, apps subscription
+Tags: content marketplace, stock contributors, digital content stock
 Requires at least: 5.3
 Tested up to: 6.5.2
 Requires PHP: 7.4

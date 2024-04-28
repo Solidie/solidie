@@ -137,6 +137,7 @@ export function ReleaseManager({content_id}) {
 				...state,
 				[save_key]: false,
 				edit_values: key=='edit_values' ? null : state.edit_values,
+				values: key=='edit_values' ? state.values : {...initial_values},
 				releases: resp.success ? ( resp.data?.releases || state.releases ) : state.releases
 			});
 		});
