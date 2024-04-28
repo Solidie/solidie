@@ -93,7 +93,7 @@ function Rating({content={}, applyReaction, is_overlayer}) {
 	</div>
 }
 
-export function MetaData({content={}, is_overlayer, show_price_download=false, updateReactions}) {
+export function MetaData({content={}, settings={}, is_overlayer, show_price_download=false, updateReactions}) {
 	
 	const gallery_context = useContext(ContextGallery);
 	const {updateContentReactions} = gallery_context || {};
@@ -209,7 +209,7 @@ export function MetaData({content={}, is_overlayer, show_price_download=false, u
 		}
 
 		{
-			is_overlayer ? null :
+			(is_overlayer || !settings.sharing) ? null :
 			<div>
 				{!showSharer ? null : <ShareModal url={content.content_permalink} closeModal={()=>setShowSharer(false)}/>}
 				<i 
@@ -220,7 +220,7 @@ export function MetaData({content={}, is_overlayer, show_price_download=false, u
 		}
 
 		{
-			!window[data_pointer].is_pro_active ? null :
+			(!window[data_pointer].is_pro_active || !settings.wishlist) ? null :
 			<div>
 				<i 
 					title={wishlisted ? __('Remove from saved items') : __('Save for later')}

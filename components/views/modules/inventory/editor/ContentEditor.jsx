@@ -381,7 +381,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 																	<i className={'ch-icon ch-icon-camera-plus font-size-24 color-text-light'.classNames()}></i>
 																</span>
 																<span>
-																	Thumbnail<span className={'color-error'.classNames()}>*</span>
+																	Thumbnail
 																</span>
 															</span>
 														}
@@ -392,7 +392,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 									</div>
 									<div className={'flex-1'.classNames()}>
 										<strong className={'d-block font-weight-600 margin-bottom-5'.classNames()}>
-											{__('Title')} <span className={'color-error'.classNames()}>*</span>
+											{__('Title')}<span className={'color-error'.classNames()}>*</span>
 										</strong>
 
 										<div data-cylector="content-title">
@@ -537,7 +537,6 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 										disabled={
 											readonly_mode || 
 											state.submitting || 
-											!thumbnail_url ||
 											isEmpty(content_title)
 										} 
 									>

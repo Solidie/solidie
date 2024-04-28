@@ -243,9 +243,14 @@ class ContentController {
 		
 		wp_send_json_success(
 			array(
-				'content'                   => $content,
-				'free_download_label'       => apply_filters( 'solidie_free_download_label', $free_label, $content ),
-				'free_download_description' => apply_filters( 'solidie_free_download_description', $free_desc, $content ),
+				'content' => $content,
+				'settings' => array_merge(
+					$feedback_settings,
+					array(
+						'free_download_label'       => apply_filters( 'solidie_free_download_label', $free_label, $content ),
+						'free_download_description' => apply_filters( 'solidie_free_download_description', $free_desc, $content ),
+					)
+				) 
 			)
 		);
 	}
@@ -423,7 +428,7 @@ class ContentController {
 				) 
 			);
 		} else {
-			wp_send_json_error( array( 'message' => __( 'Something went wrong during uploading attachment!', 'solidie' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Unsupported file or something went wrong!', 'solidie' ) ) );
 		}
 	}
 }

@@ -32,8 +32,10 @@ function FreeDownlod( props ) {
 
 	const {
 		content:{content_type, content_permalink, release={}}={}, 
-		free_download_label, 
-		free_download_description
+		settings : {
+			free_download_label, 
+			free_download_description
+		}
 	} = props;
 
 
@@ -70,6 +72,7 @@ export function SingleWrapper() {
 
 	const [state, setState] = useState({
 		fetching: false,
+		settings: {},
 		content: {},
 		error_message: null
 	});
@@ -85,17 +88,15 @@ export function SingleWrapper() {
 			const {
 				success, 
 				data:{
-					content, 
-					free_download_label,
-					free_download_description,
+					content={}, 
+					settings={},
 					message=__('Something went wrong')
 				}
 			} = resp;
 
 			setState({
 				...state,
-				free_download_label,
-				free_download_description,
+				settings,
 				content: success ? content : {},
 				error_message: success ? null : message
 			});
@@ -142,6 +143,7 @@ export function SingleWrapper() {
 			</strong>
 			<MetaData 
 				content={state.content}
+				settings={state.settings}
 				updateReactions={updateReactions}/>
 		</div>
 		
@@ -149,7 +151,7 @@ export function SingleWrapper() {
 			<div className={'flex-1'.classNames()}>
 				<div>
 					<ErrorBoundary>
-						<PreviewComp content={state.content}/>
+						<PreviewComp content={state.content} settings={state.settings}/>
 					</ErrorBoundary>
 				</div>
 
@@ -176,8 +178,7 @@ export function SingleWrapper() {
 					component={applyFilters('free_download_button', FreeDownlod, state.content)}
 					payload={{
 						content: state.content, 
-						free_download_label: state.free_download_label,
-						free_download_description: state.free_download_description
+						settings: state.settings
 					}}/>
 			</div>
 		</div>

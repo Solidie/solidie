@@ -126,6 +126,9 @@ class AdminSetting {
 			'dislike'     => $dislike,
 			'rating'      => $rating,
 			'comment'     => ( bool ) ( $content['enable_comment'] ?? false ),
+			'thumbnail'   => ( bool ) ( $content['show_thumbnail'] ?? false ),
+			'wishlist'    => ( bool ) ( $content['enable_wishlist'] ?? false ),
+			'sharing'     => ( bool ) ( $content['enable_sharing'] ?? false ),
 			'contributor' => ( bool ) ( $content['show_contributor_info'] ?? false ),
 		);
 	}

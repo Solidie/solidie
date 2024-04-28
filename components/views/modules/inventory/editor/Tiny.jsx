@@ -1,8 +1,10 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 
-import {getRandomString, __} from 'crewhrm-materials/helpers.jsx';
+import {getRandomString, __, data_pointer, sprintf, isEmpty} from 'crewhrm-materials/helpers.jsx';
 import {request} from 'crewhrm-materials/request.jsx';
 import { ContextToast } from "crewhrm-materials/toast/toast.jsx";
+
+const supported_types = ['image', 'audio', 'video'];
 
 const getMediaMarkup=(file_id, file_url, mime)=>{
 
@@ -32,18 +34,20 @@ const getMediaMarkup=(file_id, file_url, mime)=>{
  */
 export function TinyEditor({value, onChange, content_id, lesson_id}) {
 
+	const {
+		is_admin,
+		settings: {
+			general: {
+				content_lesson_attachment_max_size=1,
+				content_lesson_attachment_supports=[]
+			}
+		}
+	} = window[data_pointer];
+
+	const accept_types = is_admin ? supported_types : content_lesson_attachment_supports.filter(t=>supported_types.indexOf(t)>-1);
+	
 	const input_reff = useRef();
 	const {ajaxToast, addToast} = useContext(ContextToast);
-
-	const exts = [
-		'image/png', 
-		'image/jpg', 
-		'image/jpeg', 
-		'image/webp', 
-		'audio/mpeg', 
-		'audio/wave', 
-		'video/mp4'
-	];
 
 	const [state, setState] = useState({
 		id: '_' + getRandomString(),
@@ -71,6 +75,28 @@ export function TinyEditor({value, onChange, content_id, lesson_id}) {
 
 		if ( ! file ) {
 			return;
+		}
+
+		if ( ! is_admin ) {
+
+			const type = (file.type || '').split('/')[0];
+			if ( accept_types.indexOf( type ) === -1 ) {
+				addToast({
+					message: __('Invalid file selected'),
+					dismissible: true,
+					status: 'error'
+				});
+				return;
+			}
+
+			if ( file.size > content_lesson_attachment_max_size*1024*1024 ) {
+				addToast({
+					message: sprintf(__('Max file size is %s MB'), content_lesson_attachment_max_size),
+					dismissible: true,
+					status: 'error'
+				});
+				return;
+			}
 		}
 
 		setState({
@@ -137,13 +163,15 @@ export function TinyEditor({value, onChange, content_id, lesson_id}) {
 					setContent( editor.getContent() );
 				});
 
-				editor.ui.registry.addButton('custom-media-upload', {
-					icon: 'image',
-					tooltip: 'Insert Media',
-					onAction: (_) => {
-						openUploader();
-					},
-				});
+				if ( ! isEmpty( accept_types ) ) {
+					editor.ui.registry.addButton('custom-media-upload', {
+						icon: 'image',
+						tooltip: 'Insert Media',
+						onAction: (_) => {
+							openUploader();
+						},
+					});
+				}
 			},
 			paste_preprocess: function(plugin, args) {
 
@@ -175,7 +203,7 @@ export function TinyEditor({value, onChange, content_id, lesson_id}) {
 			ref={input_reff}
 			onChange={acceptFiles}
 			multiple={false}
-			accept={exts.join(',')}
+			accept={accept_types.map(c=>c+'/*').join(',')}
 			style={{display: 'none'}}
 		/>
 

@@ -1,6 +1,6 @@
 import React from "react";
 
-import {__} from 'crewhrm-materials/helpers.jsx';
+import {__, data_pointer} from 'crewhrm-materials/helpers.jsx';
 import { DoAction } from 'crewhrm-materials/mountpoint.jsx';
 
 import { CategoryEditor } from "./category-editor.jsx";
@@ -58,8 +58,23 @@ const fields = [
 		type: 'switch',
 		placeholder: __('Enable dislike'),
 		when: ['reaction_type', 'like' ]
-	}
-];
+	},
+	{
+		name: 'enable_sharing',
+		label: __('Show share option'),
+		type: 'switch',
+		placeholder: __('Enable')
+	},
+	(
+		!window[data_pointer].is_pro_active ? null :
+		{
+			name: 'enable_wishlist',
+			label: __('Show wishlist option'),
+			type: 'switch',
+			placeholder: __('Enable')
+		}
+	)
+].filter(o=>o);
 
 export function ContentTypeEditor(props) {
 	
