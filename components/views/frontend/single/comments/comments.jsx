@@ -9,6 +9,8 @@ import { Options } from "crewhrm-materials/dropdown/dropdown.jsx";
 
 import style from './comment.module.scss';
 
+const {readonly_mode} = window[data_pointer];
+
 export function Comments({content={}}) {
 
 	const {content_id, reactions: {comment_count}={}} = content;
@@ -104,6 +106,10 @@ export function Comments({content={}}) {
 
 	const onActionClick=(action, comment_id)=>{
 
+		if ( readonly_mode ) {
+			return;
+		}
+
 		switch( action ) {
 			
 			case 'edit' :
@@ -137,7 +143,10 @@ export function Comments({content={}}) {
 	return <div className={`comments-wrapper ${state.show_in_mobile ? 'show-in-mobile' : ''}`.classNames(style)}> 
 		<strong 
 			className={'d-flex align-items-center column-gap-8 padding-vertical-15 margin-top-10'.classNames() + 'comments-control'.classNames(style)}
-			onClick={()=>setState({...state, show_in_mobile: !state.show_in_mobile})}
+			onClick={()=>setState({
+				...state, 
+				show_in_mobile: !state.show_in_mobile
+			})}
 		>
 			{comment_count>1 ? sprintf(__('%s Comments'), comment_count) : sprintf(__('%s Comment'), comment_count)}
 			<i className={'ch-icon ch-icon-arrow-right'.classNames() + 'commnents-arrow'.classNames(style)}></i>
@@ -165,7 +174,7 @@ export function Comments({content={}}) {
 						<button 
 							className={'button button-primary button-small'.classNames()}
 							onClick={submitComment}
-							disabled={state.fetching || state.submitting || ! /\S+/.test(state.new_comment || '')}
+							disabled={readonly_mode || state.fetching || state.submitting || ! /\S+/.test(state.new_comment || '')}
 						>
 							{__('Submit')} <LoadingIcon show={state.submitting}/>
 						</button>

@@ -7,6 +7,8 @@ import { LoadingIcon } from "crewhrm-materials/loading-icon/loading-icon.jsx";
 import { ContextToast } from "crewhrm-materials/toast/toast.jsx";
 import { request } from "crewhrm-materials/request.jsx";
 
+const {readonly_mode} = window[data_pointer];
+
 export function NewsletterSubscription() {
 
 	const {user: {first_name, last_name, email, newsletter_subscribed}} = window[data_pointer];
@@ -83,7 +85,7 @@ export function NewsletterSubscription() {
 		<div className={'text-align-right'.classNames()}>
 			<button 
 				className={'button button-primary'.classNames()}
-				disabled={state.subscribing || isEmpty( (state.subscription.name || '').trim() ) || !patterns.email.test(state.subscription.email || '')}
+				disabled={readonly_mode || state.subscribing || isEmpty( (state.subscription.name || '').trim() ) || !patterns.email.test(state.subscription.email || '')}
 				onClick={subscribeNow}
 			>
 				{__('Subscribe')} <LoadingIcon show={state.subscribing}/>

@@ -5,6 +5,7 @@ import {request} from 'crewhrm-materials/request.jsx';
 import { ContextToast } from "crewhrm-materials/toast/toast.jsx";
 
 const supported_types = ['image', 'audio', 'video'];
+const {readonly_mode} = window[data_pointer];
 
 const getMediaMarkup=(file_id, file_url, mime)=>{
 
@@ -163,7 +164,7 @@ export function TinyEditor({value, onChange, content_id, lesson_id}) {
 					setContent( editor.getContent() );
 				});
 
-				if ( ! isEmpty( accept_types ) ) {
+				if ( ! readonly_mode && ! isEmpty( accept_types ) ) {
 					editor.ui.registry.addButton('custom-media-upload', {
 						icon: 'image',
 						tooltip: 'Insert Media',
@@ -175,11 +176,14 @@ export function TinyEditor({value, onChange, content_id, lesson_id}) {
 			},
 			paste_preprocess: function(plugin, args) {
 
-				var youtubeRegex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/ ]{11})/;
-				
-				if (youtubeRegex.test(args.content)) {
-					var videoId = args.content.match(youtubeRegex)[1];
-					args.content = '<iframe style="width: 100%; height: 350px;" src="https://www.youtube.com/embed/' + videoId + '" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
+				if ( is_admin || content_lesson_attachment_supports.indexOf('youtube')>-1 ) {
+	
+					var youtubeRegex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/ ]{11})/;
+					
+					if (youtubeRegex.test(args.content)) {
+						var videoId = args.content.match(youtubeRegex)[1];
+						args.content = '<iframe style="width: 100%; height: 350px;" src="https://www.youtube.com/embed/' + videoId + '" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
+					}
 				}
 			}
 		});

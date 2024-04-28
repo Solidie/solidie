@@ -154,7 +154,10 @@ export function CategoryEditor({content_type}) {
 				}
 
 				<div className={'text-align-right'.classNames()}>
-					<button onClick={()=>openCatEditor(null)} className={'button button-outlined'.classNames()}>
+					<button 
+						onClick={()=>openCatEditor(null)} 
+						className={'button button-outlined'.classNames()}
+					>
 						{__('Cancel')}
 					</button>
 					&nbsp;

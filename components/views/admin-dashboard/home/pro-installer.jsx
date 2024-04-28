@@ -5,16 +5,7 @@ import {request} from 'crewhrm-materials/request.jsx';
 import {LoadingIcon} from 'crewhrm-materials/loading-icon/loading-icon.jsx';
 import {ContextToast} from 'crewhrm-materials/toast/toast.jsx';
 
-function isLocalHost() {
-	var hostname = window.location.hostname;
-	var port     = window.location.port;
-
-	var localhostDomains = ["localhost", "127.0.0.1", ".test", ".local"];
-
-	return localhostDomains.some(domain => hostname.includes(domain)) && !!port;
-}
-
-const is_local = isLocalHost();
+const {readonly_mode} = window[data_pointer];
 
 export function ProInstaller() {
 
@@ -73,7 +64,7 @@ export function ProInstaller() {
 				<br/>
 				<button 
 					className={'button button-primary'.classNames()}
-					disabled={state.in_progress}
+					disabled={readonly_mode || state.in_progress}
 					onClick={activatePro}
 				>
 					{__('Activate Now')} <LoadingIcon show={state.in_progress}/>

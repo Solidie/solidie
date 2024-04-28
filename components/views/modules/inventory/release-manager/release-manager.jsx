@@ -2,12 +2,14 @@ import React, { useContext, useEffect, useState } from "react";
 
 import { request } from "crewhrm-materials/request.jsx";
 import { LoadingIcon } from "crewhrm-materials/loading-icon/loading-icon.jsx";
-import { __, formatDate, formatDateTime, sprintf } from "crewhrm-materials/helpers.jsx";
+import { __, data_pointer, formatDateTime, sprintf } from "crewhrm-materials/helpers.jsx";
 import { FileUpload } from "crewhrm-materials/file-upload/file-upload.jsx";
 import { TextField } from "crewhrm-materials/text-field/text-field.jsx";
 import { ContextToast } from "crewhrm-materials/toast/toast.jsx";
 
 import style from './release.module.scss';
+
+const {readonly_mode} = window[data_pointer];
 
 function Form({values, onChange, onSubmit, saving, onCancel}) {
 	return <div>
@@ -61,7 +63,7 @@ function Form({values, onChange, onSubmit, saving, onCancel}) {
 			<button 
 				className={'button button-primary button-small'.classNames()}
 				onClick={()=>onSubmit()}
-				disabled={saving || !/\S+/.test(values.version) || !/\S+/.test(values.changelog) || (!values.release_id && !values.file)}
+				disabled={readonly_mode || saving || !/\S+/.test(values.version) || !/\S+/.test(values.changelog) || (!values.release_id && !values.file)}
 			>
 				{values.release_id ? __('Update') : __('Publish')} <LoadingIcon show={saving}/>
 			</button>
@@ -165,6 +167,10 @@ export function ReleaseManager({content_id}) {
 	}
 
 	const deleteRelease=(release_id)=>{
+
+		if ( readonly_mode ) {
+			return;
+		}
 
 		const {version} = state.releases.find(r=>r.release_id==release_id) || '';
 

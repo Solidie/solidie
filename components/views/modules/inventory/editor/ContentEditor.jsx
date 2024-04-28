@@ -154,6 +154,11 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 	}
 
 	const saveOnTitleBlur=()=>{
+
+		if ( readonly_mode ) {
+			return;
+		}
+
 		if ( ! content_id && ! isEmpty( content_title ) ) {
 			submit('draft');
 		}
