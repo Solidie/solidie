@@ -5,7 +5,7 @@ import {request} from 'crewhrm-materials/request.jsx';
 import { ContextToast } from "crewhrm-materials/toast/toast.jsx";
 
 const supported_types = ['image', 'audio', 'video'];
-const {readonly_mode} = window[data_pointer];
+const {readonly_mode, permalinks: {ajaxurl}} = window[data_pointer];
 
 const getMediaMarkup=(file_id, file_url, mime)=>{
 
@@ -197,7 +197,7 @@ export function TinyEditor({value, onChange, content_id, lesson_id}) {
 	}, []);
 
 	useEffect(()=>{
-		onChange(content);
+		onChange(content.replaceAll('src="admin-ajax.php?', `src="${ajaxurl}?`));
 	}, [content]);
 	
   	return <div>

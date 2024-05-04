@@ -17,7 +17,7 @@ import { ReleaseManager } from "../release-manager/release-manager.jsx";
 import { TutorialManager } from "../tutorial-manager/tutorial-manager.jsx";
 
 import style from './editor.module.scss';
-import { TinyEditor as TextEditor } from "./Tiny.jsx";
+import { TinyEditor } from "./Tiny.jsx";
 
 const {readonly_mode, is_admin} = window[data_pointer];
 
@@ -493,7 +493,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 
 												{
 													'textarea_rich' !== type ? null :
-													<TextEditor
+													<TinyEditor
 														placeholder={__('Write description..')}
 														value={state.values[name]}
 														onChange={v=>setVal(name, v)}

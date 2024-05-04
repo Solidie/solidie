@@ -5,7 +5,7 @@ Tags: content marketplace, stock contributors, digital content stock
 Requires at least: 5.3
 Tested up to: 6.5.2
 Requires PHP: 7.4
-Stable tag: 1.1.0
+Stable tag: 1.1.1
 License: GPLv3
 License URI: https://opensource.org/licenses/GPL-3.0
 
@@ -52,10 +52,17 @@ Yes, It does in pro version. Your customers will get license keys after purchain
 = Can I sell subscription? =
 Yes, with the pro version. You can sell various plans for apps and all other content types on monthly, yearly and lifetime basis.
 
+= Can I build my own pricing and subscription model? =
+Totally. There is no static pricing model. You need to set your own pricing plan details including how many licenses one purchase would support.
+
 = How can I suggest new features? =
 You can [create issue](https://github.com/Solidie/Solidie/issues) on Github repository or write here in [support channel](https://wordpress.org/support/plugin/solidie/).
 
 == Changelog ==
+
+= v1.1.1 -> May 04, 2024 =
+--------------------------
+* Fix: Embeded image in content editor not showing in output
 
 = v1.1.0 -> Apr 28, 2024 =
 --------------------------

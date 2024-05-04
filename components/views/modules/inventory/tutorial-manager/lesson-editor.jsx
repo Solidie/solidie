@@ -105,15 +105,13 @@ export function LessonEditor({content_id, lesson_id, lessons=[]}) {
 
 	const publishLesson=()=>{
 		
-		const {permalinks: {ajaxurl}} = window[data_pointer];
-
 		const payload = {
 			lesson: {
 				...state.values, 
 				content_id,
 				lesson_id,
 				lesson_content: undefined,
-				kses_lesson_content: state.values.lesson_content.replaceAll('src="admin-ajax.php?', `src="${ajaxurl}?`), 
+				kses_lesson_content: state.values.lesson_content, 
 			}
 		}
 
