@@ -358,4 +358,32 @@ class _Array {
 
 		return $values;
 	}
+
+	/**
+	 * Get descendent count
+	 *
+	 * @param array $array
+	 * @param int $count_col
+	 * @param string $add_count_to
+	 * @return array
+	 */
+	public static function getDescendentCount( array $array, string $count_col, string $add_count_to = null ) {
+		foreach ( $array as $index => $element ) {
+			
+			$count = $element[ $count_col ];
+
+			if ( is_array( $element ) && is_array( $element['children'] ?? null ) ) {
+				$children = self::getDescendentCount( $element['children'], $count_col, $add_count_to );
+				$count    = $count + array_sum( array_column( $children, $count_col ) );
+				$array[ $index ]['children'] = $children;
+				$array[ $index ][ $count_col ] = $count;
+
+			}
+
+			if ( ! empty( $count ) && $add_count_to ) {
+				$array[ $index ][ $add_count_to ] = $element[ $add_count_to ] . ' (' . $count . ')';
+			}
+		}
+		return $array;
+	}
 }

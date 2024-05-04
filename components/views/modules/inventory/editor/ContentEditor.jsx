@@ -243,6 +243,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 				
 				const release = content.release || null;
 
+				values.contributor_id           = content.contributor_id ?? null;
 				values.content_title            = content.content_title ?? '';
 				values.kses_content_description = content.content_description ?? '';
 				values.content_permalink        = content.content_permalink ?? '';

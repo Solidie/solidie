@@ -168,7 +168,8 @@ function GalleryLayout({resources={}}) {
 						onChange={v=>navigate(getPath(v+'/'))}
 						variant="borderless"
 						clearable={false}
-						options={content_options}/>
+						options={content_options}
+					/>
 				</div>
 
 				{/* Search field */}

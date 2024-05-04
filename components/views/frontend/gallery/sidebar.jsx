@@ -25,18 +25,16 @@ function Filters({_setFilter, filterList, filters}) {
 			{
 				selection_type !== 'list' ? null :
 				options.map((option) => {
-						let { id, label, count } = option;
-						let is_active = filters[filter_key] == id;
-						return (
-							<span
-								key={id}
-								className={`d-block font-size-14 cursor-pointer margin-bottom-18 font-weight-500 ${is_active ? 'color-text' : 'color-text-light'}`.classNames()}
-								onClick={() => _setFilter(filter_key, id)}
-							>
-								{label} {count ? `(${count})` : null}
-							</span>
-						);
-					})
+					let { id, label, count } = option;
+					let is_active = filters[filter_key] == id;
+					return <span
+						key={id}
+						className={`d-block font-size-14 cursor-pointer margin-bottom-18 font-weight-500 ${is_active ? 'color-text' : 'color-text-light'}`.classNames()}
+						onClick={() => _setFilter(filter_key, id)}
+					>
+						{label} {count ? `(${count})` : null}
+					</span>
+				})
 			}
 
 			{

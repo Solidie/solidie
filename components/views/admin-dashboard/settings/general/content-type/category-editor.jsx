@@ -71,13 +71,13 @@ export function CategoryEditor({content_type}) {
 	}
 
 	const saveCat=()=>{
-		const {editor} = state;
+		const {editor={}} = state;
 		setState({
 			...state,
 			saving: true
 		});
 
-		request('saveCategory', editor, resp=>{
+		request('saveCategory', {...editor, parent_id: editor.parent_id || 0}, resp=>{
 
 			const {
 				success, 

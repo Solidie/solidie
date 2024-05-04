@@ -51,23 +51,29 @@ class Category {
 	 * @return array
 	 */
 	public static function getCategories() {
+
 		global $wpdb;
 		$cats = $wpdb->get_results(
-			"SELECT * FROM {$wpdb->solidie_categories}",
+			"SELECT 
+				_cat.*, 
+				_cat.category_id AS id,
+				_cat.category_name AS label,
+				COUNT(_content.content_id) AS content_count
+			FROM 
+				{$wpdb->solidie_categories} _cat 
+				LEFT JOIN {$wpdb->solidie_contents} _content ON _cat.category_id=_content.category_id
+			GROUP BY 
+				_cat.category_id",
 			ARRAY_A
 		);
 
-
-		foreach ( $cats as $index => $cat ) {
-			$cats[ $index ][ 'id' ]    = ( int ) $cat['category_id'];
-			$cats[ $index ][ 'label' ] = $cat['category_name'];
-		}
-
-		$cats = _Array::getArray( $cats );
+		$cats = _Array::castRecursive( $cats );
 		$cats = _Array::groupRows( $cats, 'content_type' );
 
+		// Build nested array and assign content count to label
 		foreach ( $cats as $content_type => $cat ) {
 			$cats[ $content_type ] = _Array::buildNestedArray( $cat, 0, 'parent_id', 'category_id' );
+			$cats[ $content_type ] = _Array::getDescendentCount( $cats[ $content_type ], 'content_count', 'label' );
 		}
 
 		return (object) $cats;

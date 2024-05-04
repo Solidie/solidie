@@ -91,6 +91,8 @@ class ContentController {
 	 */
 	public static function createOrUpdateContent( array $content, array $thumbnail = array(), array $sample_images = array(), array $sample_image_ids = array(), array $downloadable_file = array(), array $preview = array() ) {
 
+		$user_id = get_current_user_id();
+
 		do_action(
 			'solidie_before_create_update_content', 
 			compact( 
@@ -105,7 +107,7 @@ class ContentController {
 
 		// If it is edit, make sure the user is privileged to.
 		if ( ! empty( $content['content_id'] ) ) {
-			self::contentAccessCheck( $content['content_id'], get_current_user_id() );
+			self::contentAccessCheck( $content['content_id'], $user_id );
 		}
 
 		$files = compact(
@@ -118,7 +120,7 @@ class ContentController {
 
 		// Determine the content status
 		$approval       = AdminSetting::get('general.public_contribution_approval');
-		$administrative = User::hasAdministrativeRole( get_current_user_id() );
+		$administrative = User::hasAdministrativeRole( $user_id );
 		$status         = $content['content_status'] ?? '';
 		
 		if ( $status !== 'draft' ) {
@@ -130,6 +132,10 @@ class ContentController {
 			}
 		}
 		
+		if ( empty( $content['contributor_id'] ) || ! ( $content['is_admin'] ?? false ) || ! $administrative ) {
+			$content['contributor_id'] = $user_id;
+		}
+
 		$content_id = Contents::updateContent( $content, $files );
 
 		if ( ! empty( $content_id ) ) {

@@ -271,8 +271,7 @@ class Contents {
 				"SELECT 
 					content.*, 
 					UNIX_TIMESTAMP(content.created_at) AS created_at,
-					UNIX_TIMESTAMP(content.modified_at) AS modified_at,
-					content.contributor_id as author_id 
+					UNIX_TIMESTAMP(content.modified_at) AS modified_at
 				FROM {$wpdb->solidie_contents} content 
 					LEFT JOIN {$wpdb->users} _user ON content.contributor_id=_user.ID 
 				WHERE content.{$field_name}=%s {$status_clause}",

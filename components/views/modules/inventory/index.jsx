@@ -9,9 +9,10 @@ import { TextField } from 'crewhrm-materials/text-field/text-field.jsx';
 import { Tabs } from 'crewhrm-materials/tabs/tabs.jsx';
 import { TableStat } from 'crewhrm-materials/table-stat.jsx';
 import { DropDown } from 'crewhrm-materials/dropdown/dropdown.jsx';
+import {DropDownStatus} from 'crewhrm-materials/dropdown-status/dropdown-status.jsx';
 
 import style from './inventory.module.scss';
-import { getPriceRange } from '../../frontend/gallery/generic-card/generic-card';
+import { getPriceRange } from '../../frontend/gallery/generic-card/generic-card.jsx';
 
 const {readonly_mode, is_admin, is_pro_active} = window[data_pointer];
 
@@ -291,8 +292,8 @@ export function Inventory({navigate, params={}}) {
 			<thead>
 				<tr>
 					<th>{__('Title')}</th>
-					{!is_admin ? null : <th>{__('Contributor')}</th>}
-					<th>{__('Category')}</th>
+					{!is_admin ? null : <th className={'white-space-nowrap'.classNames()}>{__('Contributor')}</th>}
+					<th className={'white-space-nowrap'.classNames()}>{__('Category')}</th>
 					{!is_pro_active ? null : <th>{__('Price')}</th>}
 					<th>{__('Status')}</th>
 					<th>{__('Created')}</th>
@@ -412,14 +413,16 @@ export function Inventory({navigate, params={}}) {
 										{
 											monetization !== 'paid' ? __('Free') :
 											<>
-												<div>
+												<div className={'white-space-nowrap'.classNames()}>
 													{currency_symbol}{min_price} {max_price>min_price ? <> - {currency_symbol}{max_price}</> : null}
 												</div>
 
 												{
 													! packs.length ? null :
 													<div className={'margin-top-10'.classNames()}>
-														<strong className={'d-block'.classNames()}>{__('Supported Bundles')}:</strong>
+														<strong className={'d-block'.classNames()}>
+															{__('Supported Bundles:')}
+														</strong>
 														<ul>
 															{
 																packs.map(plan=>{
@@ -439,24 +442,20 @@ export function Inventory({navigate, params={}}) {
 							
 							<td data-th={__('Status')}>
 								<div className={'d-flex align-items-center column-gap-10'.classNames()}>
-									{
-										status_readonly ? 
-											content_statuses[content_status] :
-											<DropDown
-												value={content_status}
-												onChange={v=>changeContentStatus(content_id, v)}
-												disabled={state.changing_status_for}
-												clearable={false}
-												options={
-													Object.keys(content_statuses).filter(s=>is_admin ? s!='unpublish' : contributors_status.indexOf(s)>-1).map(status=>{
-														return {
-															id: status,
-															label: content_statuses[status]
-														}
-													})
+									<DropDownStatus
+										placeholder={__('Select Status')}
+										value={content_status}
+										onChange={v=>changeContentStatus(content_id, v)}
+										disabled={status_readonly || state.changing_status_for}
+										options={
+											Object.keys(content_statuses).filter(s=>s!='draft' && (is_admin ? s!='unpublish' : contributors_status.indexOf(s)>-1)).map(status=>{
+												return {
+													id: status,
+													label: content_statuses[status]
 												}
-											/>
-									}
+											})
+										}
+									/>
 									<LoadingIcon show={state.changing_status_for==content_id}/>
 								</div>
 							</td>
