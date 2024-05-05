@@ -48,9 +48,10 @@ class Category {
 	/**
 	 * Get all categories regardless of contents
 	 *
+	 * @param bool $add_count
 	 * @return array
 	 */
-	public static function getCategories() {
+	public static function getCategories( $add_count = false ) {
 
 		global $wpdb;
 		$cats = $wpdb->get_results(
@@ -72,8 +73,13 @@ class Category {
 
 		// Build nested array and assign content count to label
 		foreach ( $cats as $content_type => $cat ) {
+
 			$cats[ $content_type ] = _Array::buildNestedArray( $cat, 0, 'parent_id', 'category_id' );
-			$cats[ $content_type ] = _Array::getDescendentCount( $cats[ $content_type ], 'content_count', 'label' );
+
+			// Add content count per category
+			if ( $add_count ) {
+				$cats[ $content_type ] = _Array::getDescendentCount( $cats[ $content_type ], 'content_count', 'label' );
+			}
 		}
 
 		return (object) $cats;

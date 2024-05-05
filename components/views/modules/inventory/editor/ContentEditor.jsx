@@ -46,10 +46,10 @@ const video_extensions = [
 	'.ogv'
 ];
 
-const img_extensions = [
-	'.png', 
-	'.jpg',
-	'.jpeg'
+const img_mimes = [
+	'image/png', 
+	'image/jpg',
+	'image/jpeg'
 ];
 
 export function ContentEditor({categories=[], navigate, params={}}) {
@@ -102,7 +102,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 			type: 'file',
 			name: 'thumbnail',
 			label: __('Thumbnail Image'),
-			accept: img_extensions,
+			accept: img_mimes,
 			render: false,
 		},
 		{
@@ -122,7 +122,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 			type: 'file',
 			name: 'sample_images',
 			label: __('Sample Images'),
-			accept: img_extensions,
+			accept: img_mimes,
 			maxlength: 5,
 			removable: true,
 		}),
@@ -138,7 +138,8 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 			name: 'category_id',
 			label: __('Category'),
 			placeholder: __('Select category'),
-			options: getFlattenedCategories(categories[content_type] || [])
+			options: getFlattenedCategories(categories[content_type] || []),
+			show_setup_link: true
 		},
 	].filter(f=>f);
 
@@ -310,7 +311,8 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 	
 	const _content = window[data_pointer]?.settings?.contents[content_type] || {};
 	const thumbnail_url = state.thumbnail_url || state.values.thumbnail?.file_url;
-	
+	const setup_link = `${window[data_pointer].permalinks.settings}#/settings/contents/${content_type}/`;
+
 	return <InventoryWrapper navigate={navigate} params={params}>
 		{
 			( state.fetching || state.error_message ) ? 
@@ -371,7 +373,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 								<div className={'d-flex align-items-center column-gap-15 margin-bottom-15'.classNames()}>
 									<div data-cylector="content-thumbnail">
 										<FileUpload
-											accept={img_extensions}
+											accept={img_mimes}
 											onChange={img=>setVal('thumbnail', img)}
 											layoutComp={
 												({onClick})=> {
@@ -466,14 +468,23 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 											hint, 
 											maxlength, 
 											options=[],
-											render = true
+											render = true,
+											show_setup_link = false
 										} = field;
 
 										return (!render || (type=='dropdown' && isEmpty(options))) ? null : 
 										<div key={name}>
 											<div className={`margin-bottom-15`.classNames()}>
-												<strong className={'d-block font-weight-600 margin-bottom-5'.classNames()}>
+												<strong className={'d-flex align-items-center column-gap-5 font-weight-600 margin-bottom-5'.classNames()}>
 													{label}{required ? <span className={'color-error'.classNames()}>*</span> : null}
+													{
+														(!is_admin || !show_setup_link) ? null :
+														<a 
+															href={setup_link}
+															target="_blank"
+															className={'ch-icon ch-icon-settings-gear'.classNames()}
+														></a>
+													}
 												</strong>
 
 												{

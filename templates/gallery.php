@@ -21,7 +21,7 @@ $GLOBALS['solidie_gallery_data'] = compact( 'content_type', 'content_settings', 
 get_header(); 
 
 $resources = array(
-	'categories' => Solidie\Models\Category::getCategories(),
+	'categories' => Solidie\Models\Category::getCategories( true ),
 );
 
 $resources = apply_filters( 'solidie_gallery_resources', $resources, $content_type, $content_settings );

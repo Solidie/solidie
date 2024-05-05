@@ -164,6 +164,11 @@ export function TinyEditor({value, onChange, content_id, lesson_id}) {
 					setContent( editor.getContent() );
 				});
 
+				// Set on change event handler
+				editor.on('change', function () {
+					setContent( editor.getContent() );
+				});
+
 				if ( ! readonly_mode && ! isEmpty( accept_types ) ) {
 					editor.ui.registry.addButton('custom-media-upload', {
 						icon: 'image',

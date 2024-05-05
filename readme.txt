@@ -1,7 +1,7 @@
 === Solidie - Digital Content Stock ===
 Contributors: jayedul
 Donate Link: https://solidie.com/apps/solidie-pro/
-Tags: content marketplace, stock contributors, digital content stock
+Tags: marketplace, contributors, stock
 Requires at least: 5.3
 Tested up to: 6.5.2
 Requires PHP: 7.4
@@ -60,9 +60,14 @@ You can [create issue](https://github.com/Solidie/Solidie/issues) on Github repo
 
 == Changelog ==
 
-= v1.1.1 -> May 04, 2024 =
+= v1.1.1 -> May 05, 2024 =
 --------------------------
 * Fix: Embeded image in content editor not showing in output
+* Fix: Original contributor get replaced if admin updates content
+* Fix: Category can not be updated if parent ID removed
+* Fix: Text formatting doesn't trigger change in content and lesson editor
+* Update: Available content count added per category in gallery
+* Update: Status dropdown in data tables enhanced
 
 = v1.1.0 -> Apr 28, 2024 =
 --------------------------
