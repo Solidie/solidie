@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 
 import { request } from "crewhrm-materials/request.jsx";
 import { __ } from "crewhrm-materials/helpers.jsx";
@@ -7,6 +8,7 @@ import { __ } from "crewhrm-materials/helpers.jsx";
 import style from './tutorial.module.scss';
 import { InitState } from "crewhrm-materials/init-state";
 import { LoadingIcon } from "crewhrm-materials/loading-icon/loading-icon";
+import { getPageTitle } from "../gallery";
 
 function LessonList({lessons=[], level=1, active_slug}) {
 	return <div className={`${level>1 ? 'margin-left-10' : ''}`.classNames()}>
@@ -153,6 +155,11 @@ export function Tutorial({path, content_slug}) {
 	}
 
 	return <div className={'tutorial'.classNames(style)}>
+		<Helmet>
+			<title>
+				{getPageTitle(state.lesson?.lesson_title)}
+			</title>
+		</Helmet>
 		<div className={'sidebar'.classNames(style)}>
 			<div 
 				className={'toggle'.classNames(style)}

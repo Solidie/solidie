@@ -1,5 +1,6 @@
 import React, {createContext, useEffect, useState} from "react";
 import { useParams } from "react-router-dom";
+import { Helmet } from "react-helmet";
 
 import {ErrorBoundary} from 'crewhrm-materials/error-boundary.jsx';
 import { __ } from "crewhrm-materials/helpers.jsx";
@@ -18,6 +19,7 @@ import { MetaData } from "./meta-data/meta-data.jsx";
 import { content_statuses } from "../../modules/inventory/index.jsx";
 
 import style from './single.module.scss';
+import { getPageTitle } from "../gallery/index.jsx";
 
 export const ContextSingleData = createContext();
 
@@ -68,6 +70,7 @@ function FreeDownlod( props ) {
 }
 
 export function SingleWrapper() {
+
 	const {content_slug} = useParams();
 
 	const [state, setState] = useState({
@@ -137,6 +140,11 @@ export function SingleWrapper() {
 	const {sample_images=[]} = media || {};
 	
 	return <div className={'single'.classNames(style)}>
+		<Helmet>
+			<title>
+				{getPageTitle(content_title)}
+			</title>
+		</Helmet>
 		<div className={'margin-bottom-15'.classNames()}>
 			<strong className={'d-block font-size-24 color-text'.classNames()}>
 				{content_title} {content_status!='publish' ? <i>[{content_statuses[content_status] || content_status}]</i> : null}

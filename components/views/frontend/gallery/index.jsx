@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import {Helmet} from "react-helmet";
 import { BrowserRouter, Route, Routes, useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
 
 import { DropDown } from "crewhrm-materials/dropdown/dropdown.jsx";
@@ -45,11 +46,16 @@ const sorting_list = {
 	}
 };
 
+const {home_path, settings={}, bloginfo: {name: site_title}} = window[data_pointer];
+
 export const ContextGallery = createContext();
+
+export const getPageTitle=(...segments)=>{
+	return [...segments, site_title].filter(s=>!isEmpty(s)).join(' - ');
+}
 
 function GalleryLayout({resources={}}) {
 	const {categories={}} = resources;
-	const {settings={}} = window[data_pointer];
 	const {contents={}} = settings;
 	const {content_type_slug} = useParams();
 	const navigate = useNavigate();
@@ -157,6 +163,11 @@ function GalleryLayout({resources={}}) {
 	}).filter(content=>content!==null);
 
 	return <ContextGallery.Provider value={{updateContentReactions: updateReactions}}>
+		<Helmet>
+			<title>
+				{getPageTitle(contents[content_type]?.label)}
+			</title>
+		</Helmet>
 		<div className={'gallery'.classNames(style)}>
 			<div className={'d-flex align-items-center position-sticky border-1 border-radius-8 b-color-tertiary margin-bottom-15'.classNames()}>
 				<div 
@@ -248,8 +259,6 @@ function GalleryLayout({resources={}}) {
 
 function LessonWrapper() {
 
-	const {home_path} = window[data_pointer];
-
 	const {content_slug, content_type_slug} = useParams();
 	const {pathname} = useLocation();
 	const sub_paths = pathname.slice(`${home_path}${content_type_slug}/${content_slug}/`.length);
@@ -261,8 +270,6 @@ function LessonWrapper() {
 }
 
 export function Gallery(props) {
-
-	const {home_path} = window[data_pointer];
 
 	return <BrowserRouter>
 		<Routes>

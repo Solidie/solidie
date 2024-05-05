@@ -94,6 +94,9 @@ class Scripts {
 				'time_format'      => get_option( 'time_format' ),
 				'readonly_mode'    => apply_filters( 'solidie_readonly_mode', false ), // It's for solidie demo site only. No other use is expected.
 				'is_apache'        => is_admin() ? strpos( sanitize_text_field( $_SERVER['SERVER_SOFTWARE'] ?? '' ), 'Apache' ) !== false : null,
+				'bloginfo'         => array(
+					'name' => get_bloginfo( 'name' ),
+				),
 				'user'             => array(
 					'id'                    => $user ? $user->ID : 0,
 					'first_name'            => $user ? $user->first_name : null,

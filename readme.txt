@@ -66,6 +66,8 @@ You can [create issue](https://github.com/Solidie/Solidie/issues) on Github repo
 * Fix: Original contributor get replaced if admin updates content
 * Fix: Category can not be updated if parent ID removed
 * Fix: Text formatting doesn't trigger change in content and lesson editor
+* Fix: Gallery and single content page title are not appropriate
+* Fix: Price field glitch in content editor
 * Update: Available content count added per category in gallery
 * Update: Status dropdown in data tables enhanced
 

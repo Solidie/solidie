@@ -32,10 +32,15 @@ class OpenGraph {
 
 		$data    = $GLOBALS['solidie_gallery_data'] ?? array();
 		$content = $data['content'] ?? null;
+		$type    = $data['content_type'] ?? null;
 		
 		if ( ! empty( $content ) ) {
 			$title_parts['title'] = $content['content_title'];
-			$title_parts['page']  = Manifest::getContentTypeLabel( $data['content_type'] ) . ' - ' . get_bloginfo( 'name' );
+			$title_parts['page']  = get_bloginfo( 'name' );
+
+		} else if ( ! empty( $type ) ) {
+			$title_parts['title'] = Manifest::getContentTypeLabel( $data['content_type'] );
+			$title_parts['page']  = get_bloginfo( 'name' );
 		}
 
 		return $title_parts;

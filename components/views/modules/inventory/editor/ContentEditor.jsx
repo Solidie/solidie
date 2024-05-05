@@ -21,37 +21,6 @@ import { TinyEditor } from "./Tiny.jsx";
 
 const {readonly_mode, is_admin} = window[data_pointer];
 
-const audio_extensions = [
-	'.mp3',
-	'.aac',
-	'.wav',
-	'.flac',
-	'.ogg',
-	'.wma',
-	'.aiff',
-	'.alac',
-];
-
-const video_extensions = [
-	'.mp4',
-	'.webm',
-	'.mkv',
-	'.avi',
-	'.mov',
-	'.wmv',
-	'.flv',
-	'.m4v',
-	'.3gp',
-	'.ogg',
-	'.ogv'
-];
-
-const img_mimes = [
-	'image/png', 
-	'image/jpg',
-	'image/jpeg'
-];
-
 export function ContentEditor({categories=[], navigate, params={}}) {
 
 	const {ajaxToast, addToast} = useContext(ContextToast);
@@ -102,7 +71,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 			type: 'file',
 			name: 'thumbnail',
 			label: __('Thumbnail Image'),
-			accept: img_mimes,
+			accept: 'image/*',
 			render: false,
 		},
 		{
@@ -115,22 +84,27 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 			type: 'file',
 			name: 'preview',
 			label: __('Preview File'),
+			hint: __('Sneak peek for onsite playback'),
 			required: true,
-			accept: content_type === 'audio' ? audio_extensions : video_extensions
+			accept: content_type === 'audio' ? 'audio/*' : 'video/*'
 		}),
 		(['app', '3d', 'document', 'font', 'tutorial'].indexOf(content_type)===-1 ? null : {
 			type: 'file',
 			name: 'sample_images',
 			label: __('Sample Images'),
-			accept: img_mimes,
+			accept: 'image/*',
 			maxlength: 5,
 			removable: true,
 		}),
 		(['audio', 'video', 'image', '3d', 'document', 'font'].indexOf(content_type)===-1 ? null : {
 			type: 'file',
 			name: 'downloadable_file',
-			label: __('Downloadable File (zip)'),
-			accept: ['application/zip'],
+			label: sprintf(__('Downloadable File (%s)'), `Zip${content_type==='audio' ? ', Audio' : ''}${content_type==='video' ? ', Video' : ''}`),
+			accept: [
+				'application/zip', 
+				(content_type==='audio' ? 'audio/*' : null),
+				(content_type==='video' ? 'video/*' : null),
+			].filter(m=>m),
 			required: true,
 		}),
 		{
@@ -373,7 +347,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 								<div className={'d-flex align-items-center column-gap-15 margin-bottom-15'.classNames()}>
 									<div data-cylector="content-thumbnail">
 										<FileUpload
-											accept={img_mimes}
+											accept='image/*'
 											onChange={img=>setVal('thumbnail', img)}
 											layoutComp={
 												({onClick})=> {
