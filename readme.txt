@@ -60,9 +60,9 @@ You can [create issue](https://github.com/Solidie/Solidie/issues) on Github repo
 
 == Changelog ==
 
-= v1.1.1 -> May 05, 2024 =
+= v1.1.1 -> May 06, 2024 =
 --------------------------
-* Fix: Embeded image in content editor not showing in output
+* Fix: Embedded image in content editor not showing in output
 * Fix: Original contributor get replaced if admin updates content
 * Fix: Category can not be updated if parent ID removed
 * Fix: Text formatting doesn't trigger change in content and lesson editor

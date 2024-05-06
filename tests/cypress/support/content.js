@@ -8,6 +8,7 @@ Cypress.Commands.add('createContent', content => {
 	} = content;
 
 	cy.visit(`wp-admin/admin.php?page=solidie-inventory#/inventory/${content_type}/editor/new`);
+	cy.reload({ forceReload: true });
 
 	// Set thumbnail
 	cy.get('[data-cylector="content-thumbnail"] input').attachFile('../assets/book.png');
@@ -18,7 +19,7 @@ Cypress.Commands.add('createContent', content => {
 	// Set monetization
 	cy.get(`[data-cylector="monetization-option"] [value="${monetization}"]`).check();
 
-	// Set pricing info
+	// Modify pricing info
 	if (monetization=='paid') {
 		
 	}

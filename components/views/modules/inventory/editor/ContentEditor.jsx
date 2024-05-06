@@ -353,7 +353,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 												({onClick})=> {
 													return <div 
 														className={'content-thumbnail'.classNames(style) + 'cursor-pointer'.classNames()} 
-														onClick={onClick}
+														onClick={()=>state.submitting ? 0 : onClick()}
 														style={thumbnail_url ? {backgroundImage: `url(${thumbnail_url})`} : {}}
 													>
 														{

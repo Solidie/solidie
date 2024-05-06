@@ -1,4 +1,36 @@
-const timestamp = new Date().getTime();
+const common_plans = [
+	{
+		plan_name: `Standard License`,
+		description: 'Single license standard',
+		sales_model: 'single',
+		default_price: 11
+	},
+	{
+		plan_name: `Extended License`,
+		description: 'Extended license standard',
+		sales_model: 'single',
+		default_price: 51
+	},
+	{
+		plan_name: `Bundle`,
+		description: 'Bundle package',
+		sales_model: 'pack',
+		subscription_model: 'year',
+		auto_enable: true,
+		access_limit: 100,
+		default_price: 15
+	},
+];
+
+const getPlans=(label)=>{
+	return common_plans.map(p=>{
+		return {
+			...p,
+			plan_name: `${label} - ${p.plan_name}`,
+			description: `${label} - ${p.description}`
+		}
+	})
+}
 
 const content_types = {
 	app: {
@@ -6,22 +38,22 @@ const content_types = {
 		reaction: 'rating',
 		plans: [
 			{
-				plan_name: `Monthly 1 License ${timestamp}`,
-				description: 'Get single license for one month',
+				plan_name: `App - Monthly 1 License`,
+				description: 'App - Get single license for one month',
 				subscription_model: 'month',
 				access_limit: 1,
 				default_price: 10
 			},
 			{
-				plan_name: `Yearly 2 License ${timestamp}`,
-				description: 'Get two license for one year',
+				plan_name: `App - Yearly 2 License`,
+				description: 'App - Get two license for one year',
 				subscription_model: 'year',
 				access_limit: 2,
 				default_price: 10
 			},
 			{
-				plan_name: `Lifetime 3 License ${timestamp}`,
-				description: 'Get three license for lifetime',
+				plan_name: `App - Lifetime 3 License`,
+				description: 'App - Get three license for lifetime',
 				subscription_model: 'lifetime',
 				access_limit: 3,
 				default_price: 13
@@ -31,54 +63,38 @@ const content_types = {
 	audio: {
 		comment: true,
 		reaction: 'like',
-		plans: [
-			{
-				plan_name: `Single Standard ${timestamp}`,
-				description: 'Single license standard',
-				sales_model: 'single',
-				default_price: 11
-			},
-			{
-				plan_name: `Bundle ${timestamp}`,
-				description: 'Bundle package',
-				sales_model: 'pack',
-				subscription_model: 'year',
-				auto_enable: true,
-				access_limit: 100,
-				default_price: 15
-			},
-		]
+		plans: getPlans('Audio')
 	},
 	video: {
 		comment: true,
 		reaction: 'like',
-		plans: []
+		plans: getPlans('Video')
 	},
 	image: {
 		comment: true,
 		contributor: true,
 		reaction: 'like',
-		plans: []
+		plans: getPlans('Image')
 	},
 	'3d': {
 		comment: true,
 		reaction: 'like',
-		plans: []
+		plans: getPlans('3D')
 	},
 	document: {
 		comment: true,
 		reaction: 'like',
-		plans: []
+		plans: getPlans('Document')
 	},
 	font: {
 		comment: true,
 		reaction: 'like',
-		plans: []
+		plans: getPlans('Font')
 	},
 	tutorial: {
 		comment: false,
 		reaction: 'rating',
-		plans: []
+		plans: getPlans('Tutorial').map(p=>{return {...p, access_limit: null}})
 	},
 }
 

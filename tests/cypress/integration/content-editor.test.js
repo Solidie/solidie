@@ -1,30 +1,28 @@
 
-const contents = {
-	app_free: {
-		content_type: 'app',
-		content_title: `Demo App Free`,
-		content_description: `Demo content description for app`,
+const content_types = ['app', 'audio', 'video', 'image', '3d', 'document', 'font', 'tutorial']
+const _contents = []; 
+
+content_types.forEach(type=>{
+	_contents.push({
+		content_type: type,
+		content_title: `Demo ${type} Free`,
+		content_description: `Demo content description for ${type} Free`,
 		monetization: 'free'
-	},
-	app_paid: {
-		content_type: 'app',
-		content_title: `Demo App Paid`,
-		content_description: `Demo content description for app`,
+	});
+
+	_contents.push({
+		content_type: type,
+		content_title: `Demo ${type} Paid`,
+		content_description: `Demo content description for ${type} Paid`,
 		monetization: 'paid'
-	}
-}
+	});
+});
 
 describe('Check if content can be created in free version', ()=>{
-	
-	it('Enable content types', ()=>{
-		cy.setUpContentSettings();
-	});
 
-	it('Create free app', ()=>{
-		cy.createContent(contents.app_free);
-	});
-
-	/* it('Create paid app', ()=> {
-		cy.createContent(contents.app_paid);
-	}); */
+	it('Create contents', ()=>{
+		_contents.forEach(content=>{
+			cy.createContent(content);
+		});
+	})
 });
