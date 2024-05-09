@@ -42,6 +42,17 @@ class AdminSetting {
 	}
 
 	/**
+	 * Save a single setting by key and value
+	 *
+	 * @param string $key
+	 * @param mixed $value
+	 * @return void
+	 */
+	public static function saveSingle( $key, $value ) {
+		self::save( array( 'general' => array( $key => $value ) ), true );
+	}
+
+	/**
 	 * Get Solidie option
 	 *
 	 * @param string|null                $key Settings key to get individual value
@@ -62,6 +73,11 @@ class AdminSetting {
 			return $options;
 		}
 
+		// Easy access to general settings
+		if ( $key !== 'contents' && strpos( $key, '.' ) === false ) {
+			$key = 'general.' . $key;
+		}
+
 		// Get options by dot pointer
 		$pointers     = explode( '.', $key );
 		$return_value = $options;
@@ -78,6 +94,16 @@ class AdminSetting {
 		}
 
 		return $return_value;
+	}
+
+	/**
+	 * Get the page ID set for gallery
+	 *
+	 * @param mixed $default
+	 * @return int
+	 */
+	public static function getGalleryPageId( $default = null ) {
+		return self::get( 'gallery_page_id', $default );
 	}
 
 	/**

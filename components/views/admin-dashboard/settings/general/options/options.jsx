@@ -38,9 +38,13 @@ function isTwoDimensionalArray(arr) {
 export function OptionFields({fields=[], settings, onChange: _onChange}) {
 
     const { segment } = useParams();
-    const { settings: settings_context={}, onChange: dispatchChange } = useContext(ContextSettings);
-    const { resources = {} } = {};
-	
+
+    const { 
+		settings: settings_context={}, 
+		onChange: dispatchChange,
+		resources = {}
+	} = useContext(ContextSettings);
+
 	const values = settings || settings_context[segment];
 	
 	const onChange=(name, value)=>{

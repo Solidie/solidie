@@ -7,6 +7,7 @@
 
 namespace Solidie\Setup;
 
+use Solidie\Helpers\Utilities;
 use Solidie\Main;
 use Solidie\Models\AdminSetting;
 use Solidie\Models\Category;
@@ -105,10 +106,16 @@ class AdminPage {
 	 * @return void
 	 */
 	public function settingsPage() {
+
+		$resources = array(
+			'pages' => Utilities::getPageList( -1 ),
+		);
+
 		echo '<div 
 				id="Solidie_Settings" 
 				data-settings="' . esc_attr( wp_json_encode( AdminSetting::get() ) ) . '"
 				data-content_list="' . esc_attr( wp_json_encode( Manifest::getManifest()['contents'] ) ) . '"
-				data-categories="' . esc_attr( wp_json_encode( Category::getCategories() ) ) . '"></div>';
+				data-categories="' . esc_attr( wp_json_encode( Category::getCategories() ) ) . '"
+				data-resources="' . esc_attr( wp_json_encode( $resources ) ) . '"></div>';
 	}
 }

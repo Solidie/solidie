@@ -9,6 +9,7 @@ namespace Solidie\Models;
 
 use Solidie\Helpers\_Array;
 use Solidie\Helpers\_String;
+use Solidie\Helpers\Utilities;
 use Solidie_Pro\Models\ContentPack;
 
 /**
@@ -437,13 +438,19 @@ class Contents {
 	 */
 	public static function getGalleryPermalink( $content_type = null ) {
 
-		$home       = get_home_url();
+		static $_permalink = null;
+
+		if ( null === $_permalink ) {
+			$page_id = AdminSetting::getGalleryPageId();
+			$_permalink = ! empty( $page_id ) ? trailingslashit( get_permalink( $page_id ) ) : '';
+		}
+
 		$contents   = AdminSetting::getContentSettings();
 		$permalinks = array();
 
 		foreach ( $contents as $type => $content ) {
 			if ( $content['enable'] ?? false ) {
-				$permalinks[ $type ] = $home . '/' . $content['slug'] . '/';
+				$permalinks[ $type ] = $_permalink . $content['slug'] . '/';
 			}
 		}
 

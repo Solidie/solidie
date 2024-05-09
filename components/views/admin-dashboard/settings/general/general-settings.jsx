@@ -15,7 +15,7 @@ import { ContentTypeEditor } from './content-type/content-type-editor.jsx';
 const {readonly_mode} = window[data_pointer];
 export const ContextSettings = createContext();
 
-export function GeneralSettings({settings={}, content_list={}, categories={}}) {
+export function GeneralSettings({settings={}, content_list={}, categories={}, resources={}}) {
 
     const { ajaxToast } = useContext(ContextToast);
 
@@ -94,7 +94,8 @@ export function GeneralSettings({settings={}, content_list={}, categories={}}) {
 		onChange,
 		settings_fields: settings_fields,
 		updateWholeSetting,
-		categories
+		categories,
+		resources
 	}
 
 	// Add content types in setting field

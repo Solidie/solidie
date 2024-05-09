@@ -14,16 +14,26 @@ export const settings_fields = applyFilters(
 					separator: false,
 					fields: [
 						{
+							name: 'gallery_page_id',
+							label: __('Gallery Page'),
+							type: 'dropdown',
+							options: 'pages',
+							placeholder: __('Select Page'),
+							direction: 'row'
+						},
+						{
 							name: 'free_download_label',
 							label: __('Free download label'),
 							type: 'text',
-							placeholder: __('Free')
+							placeholder: __('Free'),
+							direction: 'row'
 						},
 						{
 							name: 'free_download_description',
 							label: __('Free download description'),
 							type: 'textarea',
-							placeholder: __('This content is eligible to download for free')
+							placeholder: __('This content is eligible to download for free'),
+							direction: 'row'
 						}
 					]
 				}

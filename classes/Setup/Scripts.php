@@ -74,6 +74,12 @@ class Scripts {
 		// Check if email subscribed
 		$subscribeds = _Array::getArray( get_option( ProController::SUBSCRIBED_MAILS ) );
 
+		// Determine the react react root path
+		$parsed    = wp_parse_url( get_home_url() );
+		$root_site = 'http' . ( is_ssl() ? 's' : '' ) . '://' . $parsed['host'] . ( ! empty( $parsed['port'] ) ? ':' . $parsed['port'] : '' );
+		$home_path = trim( $parsed['path'] ?? '', '/' );
+		$page_path = is_singular() ? trim( str_replace( $root_site, '', get_permalink( get_the_ID() ) ), '/' ) : null;
+
 		// Load data
 		$data = apply_filters(
 			'solidie_frontend_variables',
@@ -82,7 +88,8 @@ class Scripts {
 				'action_hooks'     => array(),
 				'filter_hooks'     => array(),
 				'mountpoints'      => ( object ) array(),
-				'home_path'        => rtrim( wp_parse_url( get_home_url() )['path'] ?? '/', '/' ) . '/',
+				'home_path'        => $home_path,
+				'page_path'        => $page_path,
 				'app_name'         => Main::$configs->app_id,
 				'nonce'            => $nonce,
 				'nonce_action'     => $nonce_action,
@@ -109,7 +116,7 @@ class Scripts {
 				'settings'         => array(
 					'contents' => AdminSetting::getContentSettings(),
 					'general'  => array(
-						'frontend_dashboard_path' => AdminSetting::get( 'general.frontend_dashboard_path' ),
+						'frontend_dashboard_path' => AdminSetting::get( 'frontend_dashboard_path' ),
 					),
 				),
 				'permalinks'       => array(

@@ -1,9 +1,9 @@
-=== Solidie - Digital Content Stock ===
+=== Solidie - Content Marketplace ===
 Contributors: jayedul
 Donate Link: https://solidie.com/apps/solidie-pro/
 Tags: marketplace, contributors, stock
 Requires at least: 5.3
-Tested up to: 6.5.2
+Tested up to: 6.5.3
 Requires PHP: 7.4
 Stable tag: 1.1.1
 License: GPLv3
@@ -59,6 +59,10 @@ Totally. There is no static pricing model. You need to set your own pricing plan
 You can [create issue](https://github.com/Solidie/Solidie/issues) on Github repository or write here in [support channel](https://wordpress.org/support/plugin/solidie/).
 
 == Changelog ==
+
+= v1.1.2 -> May 12, 2024 =
+--------------------------
+* Fix: Gallery and single content does not load Gutenberg header footer
 
 = v1.1.1 -> May 06, 2024 =
 --------------------------

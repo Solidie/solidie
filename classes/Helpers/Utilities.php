@@ -85,4 +85,35 @@ class Utilities {
 			admin_url( 'admin.php' )
 		);
 	}
+
+	/**
+	 * Return page list especially for settings page
+	 *
+	 * @param init $limit How many pages t oget
+	 *
+	 * @return array
+	 */
+	public static function getPageList( $limit ) {
+		// Define arguments for get_posts to retrieve pages
+		$args = array(
+			'post_type'   => 'page',
+			'post_status' => 'publish',
+			'numberposts' => $limit,
+		);
+
+		// Get the list of pages
+		$pages = get_posts( $args );
+
+		$page_list = array_map(
+			function ( $page ) {
+				return array(
+					'id'    => (int) $page->ID,
+					'label' => $page->post_title,
+				);
+			},
+			$pages
+		);
+
+		return $page_list;
+	}
 }

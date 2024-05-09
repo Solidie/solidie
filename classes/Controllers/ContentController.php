@@ -119,7 +119,7 @@ class ContentController {
 		);
 
 		// Determine the content status
-		$approval       = AdminSetting::get('general.public_contribution_approval');
+		$approval       = AdminSetting::get( 'public_contribution_approval' );
 		$administrative = User::hasAdministrativeRole( $user_id );
 		$status         = $content['content_status'] ?? '';
 		
@@ -237,12 +237,12 @@ class ContentController {
 		$free_label = __( 'Free', 'solidie' );
 		$free_desc  = __( 'This content is eligible to download for free', 'solidie' );
 		
-		$saved_label = AdminSetting::get( 'general.free_download_label' );
+		$saved_label = AdminSetting::get( 'free_download_label' );
 		if ( ! empty( $saved_label ) ) {
 			$free_label = $saved_label;
 		}
 
-		$saved_desc = AdminSetting::get( 'general.free_download_description' );
+		$saved_desc = AdminSetting::get( 'free_download_description' );
 		if ( ! empty( $saved_desc ) ) {
 			$free_desc = $saved_desc;
 		}

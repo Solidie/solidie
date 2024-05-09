@@ -22,6 +22,8 @@ import { Sidebar } from "./sidebar.jsx";
 import { Tutorial } from "../tutorial/tutorial.jsx";
 import { createContext } from "react";
 
+const {page_path} = window[data_pointer];
+
 const renderers = {
 	audio: Audio,
 	video: Video,
@@ -46,7 +48,7 @@ const sorting_list = {
 	}
 };
 
-const {home_path, settings={}, bloginfo: {name: site_title}} = window[data_pointer];
+const {settings={}, bloginfo: {name: site_title}} = window[data_pointer];
 
 export const ContextGallery = createContext();
 
@@ -176,7 +178,7 @@ function GalleryLayout({resources={}}) {
 				>
 					<DropDown
 						value={contents[content_type]?.slug}
-						onChange={v=>navigate(getPath(v+'/'))}
+						onChange={v=>navigate(`/${page_path}/${v}/`)}
 						variant="borderless"
 						clearable={false}
 						options={content_options}
@@ -261,7 +263,7 @@ function LessonWrapper() {
 
 	const {content_slug, content_type_slug} = useParams();
 	const {pathname} = useLocation();
-	const sub_paths = pathname.slice(`${home_path}${content_type_slug}/${content_slug}/`.length);
+	const sub_paths = pathname.slice(`/${page_path}/${content_type_slug}/${content_slug}/`.length);
 	
 	return <Tutorial 
 		content_slug={content_slug}
@@ -273,9 +275,9 @@ export function Gallery(props) {
 
 	return <BrowserRouter>
 		<Routes>
-			<Route path={home_path+':content_type_slug/'} element={<GalleryLayout {...props}/>}/>
-			<Route path={home_path+':content_type_slug/:content_slug/'} element={<SingleWrapper {...props}/>}/>
-			<Route path={home_path+':content_type_slug/:content_slug/*'} element={<LessonWrapper {...props}/>}/>
+			<Route path={`/${page_path}/:content_type_slug?/`} element={<GalleryLayout {...props}/>}/>
+			<Route path={`/${page_path}/:content_type_slug/:content_slug/`} element={<SingleWrapper {...props}/>}/>
+			<Route path={`/${page_path}/:content_type_slug/:content_slug/*`} element={<LessonWrapper {...props}/>}/>
 		</Routes>
 	</BrowserRouter>
 }
