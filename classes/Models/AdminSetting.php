@@ -74,7 +74,7 @@ class AdminSetting {
 		}
 
 		// Easy access to general settings
-		if ( $key !== 'contents' && strpos( $key, '.' ) === false ) {
+		if ( ! in_array( $key, array( 'contents', 'general' ) ) && strpos( $key, '.' ) === false ) {
 			$key = 'general.' . $key;
 		}
 

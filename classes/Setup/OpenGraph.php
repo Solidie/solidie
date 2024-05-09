@@ -20,6 +20,7 @@ class OpenGraph {
 			function() {
 				add_filter( 'document_title_parts', array( $this, 'customTitle' ) );
 				add_action( 'wp_head', array( $this, 'addContentMeta' ) );
+				add_filter( 'the_title', array( $this, 'alterPageTitleWithContent' ), 100, 2 );
 			}, 
 			101 
 		);
@@ -41,11 +42,9 @@ class OpenGraph {
 		
 		if ( ! empty( $content ) ) {
 			$title_parts['title'] = $lesson['lesson_title'] ?? $content['content_title'] ?? $title_parts['title'];
-			$title_parts['page']  = get_bloginfo( 'name' );
 
 		} else if ( ! empty( $type ) ) {
 			$title_parts['title'] = Manifest::getContentTypeLabel( $data['content_type'] );
-			$title_parts['page']  = get_bloginfo( 'name' );
 		}
 
 		return $title_parts;
@@ -77,5 +76,23 @@ class OpenGraph {
 		);
 		
 		include Main::$configs->dir . 'templates/meta-data.php';
+	}
+
+	/**
+	 * Alter page title with content title
+	 *
+	 * @param string $title
+	 * @param int $post_id
+	 * @return string
+	 */
+	public function alterPageTitleWithContent( $title, $post_id ) {
+		
+		$data = $GLOBALS['solidie_gallery_data'] ?? array();
+
+		if ( ( $data['gallery_page_id'] ?? null ) === $post_id ) {
+			$title = $data['content']['content_title'] ?? $title;
+		}
+
+		return $title;
 	}
 }

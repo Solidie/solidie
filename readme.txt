@@ -32,6 +32,17 @@ If you have any questions or problems using this plugin, you can write here in [
 
 There are several minified JavaScript file that are built with React JS and compiled with Webpack. If you want to access the unminified files for this plugin, you can do so from [here](https://github.com/Solidie/Solidie)
 
+== Screenshots ==
+
+1. Unified content management panel
+2. Advanced content editor
+3. Content gallery
+4. Content type specific gallery
+5. Single content page
+6. Extensive settings panel
+7. Custom pricing builder
+8. Full fledged contributor and customer dashboard
+
 == Frequently Asked Questions ==
 
 = Any limit on how many content can be created? =

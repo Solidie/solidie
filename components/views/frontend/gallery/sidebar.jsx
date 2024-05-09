@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import { TagField } from 'crewhrm-materials/tag-field/tag-field.jsx';
 import { RadioCheckbox } from 'crewhrm-materials/radio-checkbox.jsx';
 import { __, isEmpty } from 'crewhrm-materials/helpers.jsx';
-import { Conditional } from 'crewhrm-materials/conditional.jsx';
 
 import style from './index.module.scss';
 
@@ -152,21 +151,26 @@ export function Sidebar({ is_mobile, setFilter, filters, filterList }) {
 		filters
 	}
 
-    return (
-        <div data-crew="sidebar" className={'sidebar'.classNames(style)}>
-            <div>
-				{is_mobile? <MobileFilter  {...prop_drill}/> : <Filters {...prop_drill}/>}
-				
-				<Conditional show={!is_mobile && Object.keys(filters).filter(k=>!isEmpty(filters[k])).length}>
-					<span 
-						className={'d-flex align-items-center column-gap-6 font-size-14 color-text-light color-hover-text cursor-pointer'.classNames()} 
-						onClick={()=>setFilter({})} 
-						style={{marginLeft: '-3px'}}
-					>
-						<i className={'ch-icon ch-icon-times font-size-18'.classNames()}></i> {__('Clear Filters')}
-					</span>
-				</Conditional>
-            </div>
-        </div>
-    );
+	const show_clearer = !is_mobile && Object.keys(filters).filter(k=>!isEmpty(filters[k])).length;
+
+    return <div data-crew="sidebar" className={'sidebar'.classNames(style)}>
+		<div>
+			{
+				is_mobile ? 
+					<MobileFilter  {...prop_drill}/> : 
+					<Filters {...prop_drill}/>
+			}
+
+			{
+				!show_clearer ? null :
+				<span 
+					className={'d-flex align-items-center column-gap-6 font-size-14 color-text-light color-hover-text cursor-pointer'.classNames()} 
+					onClick={()=>setFilter({})} 
+					style={{marginLeft: '-3px'}}
+				>
+					<i className={'ch-icon ch-icon-times font-size-18'.classNames()}></i> {__('Clear Filters')}
+				</span>
+			}
+		</div>
+	</div>
 }

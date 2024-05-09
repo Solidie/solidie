@@ -125,7 +125,7 @@ export function ReleaseManager({content_id}) {
 			
 		const release = {
 			version: values.version,
-			kses_changelog: values.changelog,
+			kses_changelog: (values.changelog || '').replace(/ +/g, ' ').replaceAll(/\n{2,}/g, '\n'),
 			release_id: values.release_id,
 			content_id
 		}
@@ -270,7 +270,7 @@ export function ReleaseManager({content_id}) {
 												</span>
 											</td>
 											<td>
-												{changelog}
+												<div dangerouslySetInnerHTML={{__html: (changelog || '').replaceAll('\n', '<br/>')}}></div>
 											</td>
 										</>
 									}

@@ -16,18 +16,18 @@ const quick_links = [
 	{
 		label: __('Settings'),
 		link: permalinks.settings
-	}
-];
-
-// Add the gallery url
-const first_gallery = Object.values(permalinks.gallery || {})[0];
-if ( first_gallery ) {
-	quick_links.push({
-		label: __('Gallery'),
-		link: first_gallery,
-		in_new: true
-	});
-}
+	},
+	(function(){
+		const first_gallery = Object.values(permalinks.gallery || {})[0];
+		if ( first_gallery ) {
+			return {
+				label: __('Gallery'),
+				link: first_gallery,
+				in_new: true
+			}
+		}
+	})()
+].filter(l=>l);
 
 export function HomeBackend() {
 	
@@ -53,7 +53,7 @@ export function HomeBackend() {
 				{__('Quick Links')}
 			</strong>
 
-			<div className={'d-flex column-gap-15'.classNames()}>
+			<div className={'row-gap-15 column-gap-15'.classNames()} style={{display: 'grid', gridTemplateColumns: '1fr 1fr 1fr'}}>
 				{
 					quick_links.map((link, index)=>{
 						return <a 
@@ -94,11 +94,19 @@ export function HomeBackend() {
 
 		<br/>
 		<br/>
-		<div>
-			<strong className={'d-block font-size-16 font-weight-500 margin-bottom-10'.classNames()}>
-				{__('Enjoying Solidie?')} &#128512;
-			</strong>
-			<span className={'font-size-14'.classNames()}>Please <a href="https://wordpress.org/plugins/solidie/#reviews" target="_blank"><strong>provide your feedback</strong></a> to help us improve.</span>
+		<div className={'d-flex justify-content-space-between column-gap-15'.classNames()}>
+			<div>
+				<strong className={'d-block font-size-16 font-weight-500 margin-bottom-10'.classNames()}>
+					{__('Enjoying Solidie?')} &#128512;
+				</strong>
+				<span className={'font-size-14'.classNames()}>Please <a href="https://wordpress.org/plugins/solidie/#reviews" target="_blank"><strong>provide your feedback</strong></a> to help us improve functionalities.</span>
+			</div>
+			<div className={'text-align-right'.classNames()}>
+				<strong className={'d-block font-size-16 font-weight-500 margin-bottom-10'.classNames()}>
+					{__('Got stuck?')}
+				</strong>
+				<span className={'font-size-14'.classNames()}>Check out <a href="https://solidie.com/documentation/solidie/0/" target="_blank"><strong>documentation</strong></a>.</span>
+			</div>
 		</div>
 
 		<br/>

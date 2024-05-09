@@ -9,8 +9,9 @@ import style from './tutorial.module.scss';
 import { InitState } from "crewhrm-materials/init-state";
 import { LoadingIcon } from "crewhrm-materials/loading-icon/loading-icon";
 import { getPageTitle } from "../gallery";
+import { useRef } from "react";
 
-function LessonList({lessons=[], level=1, active_slug}) {
+function LessonList({lessons=[], level=1, active_slug, fetching=false}) {
 	return <div className={`${level>1 ? 'margin-left-10' : ''}`.classNames()}>
 		{
 			lessons.map(lesson=>{
@@ -20,8 +21,8 @@ function LessonList({lessons=[], level=1, active_slug}) {
 
 				return <div key={lesson_id}>
 					<div className={'margin-bottom-15'.classNames()}>
-						<Link to={lesson_permalink} className={`font-size-16 font-weight-400 color-text-light ${active ? 'color-text font-weight-700 text-decoration-underline' : ''}`.classNames()}>
-							{lesson_title}
+						<Link to={lesson_permalink} className={`d-flex align-items-center column-gap-8 font-size-16 font-weight-400 color-text-light ${active ? 'color-text font-weight-700 text-decoration-underline' : ''}`.classNames()}>
+							{lesson_title} <LoadingIcon show={active && fetching}/>
 						</Link>
 					</div>
 
@@ -31,6 +32,7 @@ function LessonList({lessons=[], level=1, active_slug}) {
 							lessons={children} 
 							level={level+1}
 							active_slug={active_slug}
+							fetching={fetching}
 						/>
 					}
 				</div>
@@ -96,6 +98,8 @@ export function Tutorial({path, content_slug}) {
 	const path_segments = pathname.split('/').filter(p=>p);
 	const active_slug = path_segments[path_segments.length - 1];
 
+	const reff_content = useRef();
+
 	const [state, setState] = useState({
 		mobile_menu: false,
 		fetching: true,
@@ -147,9 +151,10 @@ export function Tutorial({path, content_slug}) {
 		if( window.Prism ) {
 			window.Prism.highlightAll();
 		}
+		reff_content.current.scrollIntoView(true);
 	}, [state.lesson]);
 
-	if ( state.fetching || state.error_message ) {
+	if ( state.error_message ) {
 		// First request completed, but no lessons found
 		return <InitState fetching={state.fetching} error_message={state.error_message}/>
 	}
@@ -174,20 +179,25 @@ export function Tutorial({path, content_slug}) {
 				<LessonList 
 					lessons={state.lessons} 
 					active_slug={active_slug}
+					fetching={state.fetching}
 				/>
 			</div>
 		</div>
 		
-		<div className={'content'.classNames(style)}>
+		<div className={'content'.classNames(style)} ref={reff_content}>
+
 			<LoadingIcon show={state.fetching} center={true}/>
 			
 			{
 				!state.lesson ? 
-				<div>
-					<i className={'color-error'.classNames()}>
-						{__('Lesson not found or may not be published yet!')}
-					</i>
-				</div> 
+				(
+					state.fetching ? null :
+					<div>
+						<i className={'color-error'.classNames()}>
+							{__('Lesson not found or may not be published yet!')}
+						</i>
+					</div> 
+				)
 				: 
 				<div>
 					<strong className={'font-size-24 d-block margin-bottom-15 font-weight-700'.classNames()}>

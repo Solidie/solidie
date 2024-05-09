@@ -62,6 +62,7 @@ class Route {
 		$lesson_slug  = count( $segments ) > 2 ? end( $segments ) : null;
 
 		// Load the gallery/single template if the content type is enabled
+		$gallery_page_id  = get_the_ID();
 		$content_settings = AdminSetting::getContentSettings();
 		$content_type     = null;
 		foreach ( $content_settings as $type => $setting ) {
@@ -81,7 +82,8 @@ class Route {
 			'content_slug', 
 			'content',
 			'lesson_slug', 
-			'lesson'
+			'lesson',
+			'gallery_page_id'
 		);
 	}
 
@@ -164,9 +166,9 @@ class Route {
 		$data = $GLOBALS['solidie_gallery_data'] ?? null;
 
 		if ( $data === false ) {
-			$contents = '<div>Not Found</div>';
+			$contents = '<div style="text-align:center;">' . __( 'Content Not Found', 'solidie' ) . '</div>';
 		} else if( is_array( $data ) ) {
-			$contents = '<div id="Solidie_Gallery"></div>';
+			$contents = '<div id="Solidie_Gallery" style="width: 100%; margin: 0; padding: 0; max-width: 100%;"></div>';
 		}
 
 		return $contents;

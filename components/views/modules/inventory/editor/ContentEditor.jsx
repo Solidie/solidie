@@ -93,7 +93,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 			name: 'sample_images',
 			label: __('Sample Images'),
 			accept: 'image/*',
-			maxlength: 5,
+			maxlength: 10,
 			removable: true,
 		}),
 		(['audio', 'video', 'image', '3d', 'document', 'font'].indexOf(content_type)===-1 ? null : {
