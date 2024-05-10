@@ -5,7 +5,7 @@ Tags: marketplace, contributors, stock
 Requires at least: 5.3
 Tested up to: 6.5.3
 Requires PHP: 7.4
-Stable tag: 1.1.1
+Stable tag: 1.1.2
 License: GPLv3
 License URI: https://opensource.org/licenses/GPL-3.0
 
@@ -73,7 +73,10 @@ You can [create issue](https://github.com/Solidie/Solidie/issues) on Github repo
 
 = v1.1.2 -> May 12, 2024 =
 --------------------------
+* New: Updates API path settings field added
+* New: New hook added to register custom menu in frontend dashboard sidebar
 * Fix: Gallery and single content does not load Gutenberg header footer
+* Fix: Changelog line break not showing in release panel in content editor
 
 = v1.1.1 -> May 06, 2024 =
 --------------------------

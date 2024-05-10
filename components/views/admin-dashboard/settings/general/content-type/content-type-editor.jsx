@@ -5,6 +5,9 @@ import { DoAction } from 'crewhrm-materials/mountpoint.jsx';
 
 import { CategoryEditor } from "./category-editor.jsx";
 import { OptionFields, label_class } from "../options/options.jsx";
+import { UpdatesAPINote } from "./updates-api-note.jsx";
+
+const {is_pro_active} = window[data_pointer];
 
 const reaction_types = [
 	{
@@ -27,6 +30,16 @@ const fields = [
 		label: __('Base Slug'),
 		type: 'text',
 	},
+	(
+		!is_pro_active ? null :
+		{
+			name: 'api_path',
+			label: __('Update API Path'),
+			type: 'text',
+			placeholder: 'e.g /updates-api/',
+			hint2: UpdatesAPINote
+		}
+	),
 	{
 		name: 'show_thumbnail',
 		label: __('Show thumbnail in single page'),
@@ -66,7 +79,7 @@ const fields = [
 		placeholder: __('Enable')
 	},
 	(
-		!window[data_pointer].is_pro_active ? null :
+		!is_pro_active ? null :
 		{
 			name: 'enable_wishlist',
 			label: __('Show wishlist option'),
