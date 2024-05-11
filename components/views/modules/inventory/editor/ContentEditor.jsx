@@ -286,6 +286,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 	const _content = window[data_pointer]?.settings?.contents[content_type] || {};
 	const thumbnail_url = state.thumbnail_url || state.values.thumbnail?.file_url;
 	const setup_link = `${window[data_pointer].permalinks.settings}#/settings/contents/${content_type}/`;
+	const stuff_id = parseInt(active_stuff_id || 0);
 
 	return <InventoryWrapper navigate={navigate} params={params}>
 		{
@@ -298,14 +299,14 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 				{/* Header */}
 				<div className={"margin-top-20 margin-bottom-30 d-flex align-items-center column-gap-10".classNames()}>
 					<i 
-						onClick={()=>navigate(getDashboardPath(`inventory/${content_type}/`))} 
+						onClick={()=>navigate(getDashboardPath(`inventory/${content_type}/${stuff_id ? `editor/${content_id}/${active_tab}/` : ''}`))} 
 						className={"ch-icon ch-icon-arrow-left cursor-pointer".classNames()}
 					></i>
 					<span>
 						{
 							!content_id ? 
 								sprintf(__('Add New %s'), _content.label) : 
-								sprintf(__('Update %s'), state.update_title || _content.label)
+								(stuff_id ? __('Back to Lessons') : (state.update_title || _content.label))
 						}
 					</span>
 				</div>
@@ -339,7 +340,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 						}
 
 						{(active_tab=='release-manager' && content_type==='app') ? <ReleaseManager content_id={content_id}/> : null}
-						{(active_tab=='lessons' && content_type==='tutorial') ? <TutorialManager content_id={content_id} lesson_id={parseInt(active_stuff_id || 0)} navigate={navigate} content_type={content_type}/> : null}
+						{(active_tab=='lessons' && content_type==='tutorial') ? <TutorialManager content_id={content_id} lesson_id={stuff_id} navigate={navigate} content_type={content_type}/> : null}
 						
 						{
 							active_tab !== 'overview' ? null :
