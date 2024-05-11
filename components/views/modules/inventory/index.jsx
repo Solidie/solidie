@@ -379,7 +379,6 @@ export function Inventory({navigate, params={}}) {
 													className={'action'.classNames(style) + 'cursor-pointer ch-icon ch-icon-download font-size-15'.classNames()} 
 													title={__('Download')}
 													href={release?.download_url || '#'}
-													target='_blank'
 												></a>
 												<span className={'font-size-14 color-text-light'.classNames()}>
 													{download_count}

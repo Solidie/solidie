@@ -112,7 +112,7 @@ class Route {
 			)
 		);
 
-		if ( ! is_wp_error( $page_id ) ) {
+		if ( is_numeric( $page_id ) ) {
 			AdminSetting::saveSingle( 'gallery_page_id', $page_id );
 		}
 	}

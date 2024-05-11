@@ -4,7 +4,7 @@
 rm -rf ./svn-push/
 
 # Check if zip file argument is provided
-if [ $# -ne 1 ]; then
+if [ -z "$1" ]; then
     echo "Usage: $0 <zip_file>"
     exit 1
 fi

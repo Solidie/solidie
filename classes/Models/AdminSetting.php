@@ -61,9 +61,9 @@ class AdminSetting {
 	 * @return string|int|array|bool|null
 	 */
 	public static function get( $key = null, $default = null ) {
+		
 		// Get all from saved one
-		$options = get_option( self::OPTION_NAME );
-		$options = is_array( $options ) ? $options : array();
+		$options = _Array::getArray( get_option( self::OPTION_NAME ) );
 
 		// Replace default settings in manifest with saved values resursively.
 		$options = array_replace_recursive( Manifest::getManifest()['settings'], $options );

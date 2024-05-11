@@ -75,6 +75,7 @@ You can [create issue](https://github.com/Solidie/Solidie/issues) on Github repo
 --------------------------
 * New: Updates API path settings field added
 * New: New hook added to register custom menu in frontend dashboard sidebar
+* New: Back navigation button in lesson editor
 * Fix: Gallery and single content does not load Gutenberg header footer
 * Fix: Changelog line break not showing in release panel in content editor
 
