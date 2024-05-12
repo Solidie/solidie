@@ -139,7 +139,7 @@ export function SingleWrapper() {
 	const {media={}, content_title, content_status} = state.content || {};
 	const {sample_images=[]} = media || {};
 	
-	return <div className={'single'.classNames(style)}>
+	return <div className={'single'.classNames(style)} data-cylector="content-single-page">
 		<Helmet>
 			<title>
 				{getPageTitle(content_title)}

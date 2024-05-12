@@ -4,7 +4,7 @@ import { AudioPlayer } from "crewhrm-materials/audio-player/audio-player.jsx";
 import { MetaData } from "../../single/meta-data/meta-data.jsx";
 
 export function Audio({contents=[]}) {
-	return <div>
+	return <div data-cylector="content-list-wrapper">
 		{contents.map(content=>{
 			const {content_id} = content;
 

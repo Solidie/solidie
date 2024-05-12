@@ -45,6 +45,7 @@ export function ImageLayout({contents=[]}) {
 								key={content_id} 
 								to={content_permalink}
 								className={'image-single'.classNames(style)}
+								data-cylector="content-single"
 							>
 								<div className={'position-relative cursor-pointer'.classNames()}>
 									<img className={'d-block width-p-100 height-auto'.classNames()} src={media.thumbnail?.file_url}/>

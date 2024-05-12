@@ -61,6 +61,7 @@ export function VideoSingle({content}) {
 		key={content_id} 
 		to={content_permalink}
 		className={'border-radius-5 overflow-hidden'.classNames()}
+		data-cylector="content-single"
 	>
 		<div 
 			className={'position-relative cursor-pointer'.classNames()}

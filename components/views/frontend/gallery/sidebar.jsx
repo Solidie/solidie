@@ -13,6 +13,7 @@ function Filters({_setFilter, filterList, filters}) {
 		return ! options.length ? null :
 		<div
 			key={filter_key}
+			data-cylector={filter_key}
 			className={'margin-bottom-23 overflow-auto'.classNames()}
 		>
 			<span
@@ -167,6 +168,7 @@ export function Sidebar({ is_mobile, setFilter, filters, filterList }) {
 					className={'d-flex align-items-center column-gap-6 font-size-14 color-text-light color-hover-text cursor-pointer'.classNames()} 
 					onClick={()=>setFilter({})} 
 					style={{marginLeft: '-3px'}}
+					data-cylector="clear-content-filter"
 				>
 					<i className={'ch-icon ch-icon-times font-size-18'.classNames()}></i> {__('Clear Filters')}
 				</span>

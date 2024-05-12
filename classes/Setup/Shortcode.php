@@ -17,10 +17,19 @@ class Shortcode {
 
 	const GALLERY_CODE = 'solidie_content_gallery';
 
+	/**
+	 * Register shortcode
+	 */
 	public function __construct() {
 		add_shortcode( self::GALLERY_CODE, array( $this, 'renderGalelry' ) );
 	}
 
+	/**
+	 * Render contents for gallery shortcode
+	 *
+	 * @param array $attrs
+	 * @return string
+	 */
 	public function renderGalelry( $attrs ) {
 
 		if ( ! ( $attrs['_internal_call_'] ?? false ) ) {

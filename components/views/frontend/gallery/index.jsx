@@ -197,7 +197,9 @@ function GalleryLayout({resources={}}) {
 							type='text' 
 							className={"text-field-flat overflow-hidden text-overflow-ellipsis".classNames()}
 							value={queryParams.search || ''}
-							onChange={e=>setFilter('search', e.currentTarget.value)}/>
+							onChange={e=>setFilter('search', e.currentTarget.value)}
+							data-cylector="content-search"
+						/>
 					</div>
 					<div>
 						<i className={'ch-icon ch-icon-search-normal-1 font-size-16'.classNames()}></i>
@@ -227,7 +229,10 @@ function GalleryLayout({resources={}}) {
 					}
 				/>
 
-				<div className={'list'.classNames(style)}>
+				<div 
+					className={'list'.classNames(style)}
+					data-cylector={`content-list-wrapper-${content_type}`}
+				>
 					{
 						(!state.fetching && !state.contents.length) ? 
 							<div className={'text-align-center'.classNames()}>

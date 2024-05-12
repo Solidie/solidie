@@ -73,6 +73,19 @@ function deleteAllWPploadedMediaFiles() {
     }
 }
 
+function deleteGalleryPage() {
+	global $wpdb;
+	$gallery_ids = $wpdb->get_col(
+		"SELECT ID FROM {$wpdb->posts} WHERE post_name LIKE 'gallery%'"
+	);
+
+	if ( ! empty( $gallery_ids ) ) {
+		foreach ( $gallery_ids as $id ) {
+			wp_delete_post( $id, true );
+		}
+	}
+}
+
 add_action(
 	'admin_init', 
 	function() {
@@ -97,6 +110,9 @@ add_action(
 			$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->solidie_lessons}" );
 			$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->solidie_content_pack_link}" );
 			$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->solidie_withdrawals}" );
+
+			// Delete gallery page to create new one
+			deleteGalleryPage();
 
 			// Delete all the woocommerce product and related data
 			deleteAllWooCommerceData();

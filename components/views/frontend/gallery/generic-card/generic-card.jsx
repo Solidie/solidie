@@ -151,7 +151,11 @@ export function GenericCard({contents=[]}) {
 
 					<div className={'d-flex align-items-center justify-content-space-between column-gap-15 padding-vertical-15 padding-horizontal-20'.classNames()}>
 						<div>
-							<Link to={content_permalink} className={'d-block font-size-16 font-weight-500 color-text cursor-pointer'.classNames()}>
+							<Link 
+								to={content_permalink} 
+								className={'d-block font-size-16 font-weight-500 color-text cursor-pointer'.classNames()}
+								data-cylector="content-single"
+							>
 								{content_title}
 							</Link>
 						</div>
