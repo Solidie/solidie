@@ -139,7 +139,8 @@ class DB {
 			// So missing columns doesn't get created automatically.
 			$current_columns = $wpdb->get_col(
 				$wpdb->prepare(
-					'SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = %s',
+					'SELECT DISTINCT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA=%s AND TABLE_NAME = %s',
+					$wpdb->dbname,
 					$query['table']
 				)
 			);

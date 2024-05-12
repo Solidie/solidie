@@ -57,19 +57,31 @@ export const getPageTitle=(...segments)=>{
 }
 
 function GalleryLayout({resources={}}) {
+
+	// Collect data
 	const {categories={}} = resources;
 	const {contents={}} = settings;
 	const {content_type_slug} = useParams();
 	const navigate = useNavigate();
 	
+	const reff_wrapper = useRef();
+	const [is_mobile, setMobile] = useState(false);
+	const [state, setState] = useState({
+		contents:[], 
+		segmentation: null,
+		fetching: true,
+		no_more: false,
+	});
+
+	// Prepare query paramas and determine current page
     const [searchParam, setSearchParam] = useSearchParams();
     const queryParams = parseParams(searchParam);
     const current_page = parseInt( queryParams.page || 1 );
 
-	// Decode category IDs
+	// Decode category IDs collected from query params
 	queryParams.category_ids = (queryParams.category_ids || '').split(',').map(id=>parseInt(id)).filter(c=>c);
 
-	const RenderComp = renderers[content_type] || renderers.other;
+	// Get all the enabled content types for dropdown
 	const content_options = Object.keys(contents).map(c=>{
 		let {label, slug, enable} = contents[c];
 		if ( enable === true ) {
@@ -83,6 +95,7 @@ function GalleryLayout({resources={}}) {
 		}
 	}).filter(content=>content!==null);
 
+	// Determine currently selected content type to render get list for
 	let content_type = content_options[0]?.content_type;
 	for ( let k in contents ) {
 		if (contents[k].slug===content_type_slug) {
@@ -91,15 +104,8 @@ function GalleryLayout({resources={}}) {
 		}
 	}
 
-	const reff_wrapper = useRef();
-	const [is_mobile, setMobile] = useState(false);
-
-	const [state, setState] = useState({
-		contents:[], 
-		segmentation: null,
-		fetching: true,
-		no_more: false,
-	});
+	// Determine which gallery layout component to render based on content type
+	const RenderComp = renderers[content_type] || renderers.other;
 
 	const setLayout=()=>{
 		if ( reff_wrapper?.current ) {
