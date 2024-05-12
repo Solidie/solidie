@@ -214,6 +214,12 @@ class ContentController {
 			$content_type = $content['content_type'];
 		}
 
+		// Check if the content type is enabled
+		if ( ! AdminSetting::get( 'contents.' . $content_type . '.enable' ) ) {
+			wp_send_json_error( array( 'message' => __( 'The content type is not enabled', 'solidie' ) ) );
+		}
+
+		// Check if content exist
 		if ( empty( $content ) ) {
 			wp_send_json_error( array( 'message' => esc_html__( 'Content not found', 'solidie' ) ) );
 			exit;

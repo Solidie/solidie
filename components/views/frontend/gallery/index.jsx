@@ -69,7 +69,21 @@ function GalleryLayout({resources={}}) {
 	// Decode category IDs
 	queryParams.category_ids = (queryParams.category_ids || '').split(',').map(id=>parseInt(id)).filter(c=>c);
 
-	let content_type;
+	const RenderComp = renderers[content_type] || renderers.other;
+	const content_options = Object.keys(contents).map(c=>{
+		let {label, slug, enable} = contents[c];
+		if ( enable === true ) {
+			return {
+				id: slug || c,
+				label: label || slug,
+				content_type: c
+			}
+		} else {
+			return null
+		}
+	}).filter(content=>content!==null);
+
+	let content_type = content_options[0]?.content_type;
 	for ( let k in contents ) {
 		if (contents[k].slug===content_type_slug) {
 			content_type = k;
@@ -151,20 +165,11 @@ function GalleryLayout({resources={}}) {
 		return ()=>window.removeEventListener('resize', setLayout);
 	}, []);
 
-	const RenderComp = renderers[content_type] || renderers.other;
-	const content_options = Object.keys(contents).map(c=>{
-		let {label, slug, enable} = contents[c];
-		if ( enable === true ) {
-			return {
-				id: slug || c,
-				label: label || slug
-			}
-		} else {
-			return null
-		}
-	}).filter(content=>content!==null);
-
-	return <ContextGallery.Provider value={{updateContentReactions: updateReactions}}>
+	return isEmpty( content_options ) ? <div className={'color-error text-align-center'.classNames()}>
+		{__('No content type is enabled')}
+	</div>
+	:
+	<ContextGallery.Provider value={{updateContentReactions: updateReactions}}>
 		<Helmet>
 			<title>
 				{getPageTitle(contents[content_type]?.label)}

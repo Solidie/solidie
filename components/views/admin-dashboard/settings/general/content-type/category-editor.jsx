@@ -128,7 +128,7 @@ export function CategoryEditor({content_type}) {
 				nested={true} 
 				onClose={()=>openCatEditor(null)}
 			>
-				<div>
+				<div data-cylector="category-name-field">
 					<strong className={'d-block margin-bottom-8'.classNames()}>
 						{__('Category Name')}
 					</strong>
@@ -140,7 +140,7 @@ export function CategoryEditor({content_type}) {
 
 				{
 					isEmpty(cat_options) ? null : <>
-						<div>
+						<div data-cylector="category-parent-field">
 							<strong className={'d-block margin-bottom-8'.classNames()}>
 								{__('Parent Category')}
 							</strong>
@@ -166,6 +166,7 @@ export function CategoryEditor({content_type}) {
 						className={'button button-primary'.classNames()} 
 						onClick={saveCat}
 						disabled={readonly_mode || isEmpty(state.editor.category_name)}
+						data-cylector="category-submit"
 					>
 						{!state.editor.category_id ? __('Create') : __('Update')} <LoadingIcon show={state.saving}/>
 					</button>
@@ -190,6 +191,7 @@ export function CategoryEditor({content_type}) {
 					onClick={()=>openCatEditor({content_type})} 
 					className={`cursor-pointer hover-underline ${_categories.length ? 'border-top-1 b-color-tertiary' : ''}`.classNames()}
 					style={_categories.length ? {paddingTop: '6px', marginTop: '6px'} : {}}
+					data-cylector="add-category"
 				>
 					{__('+ Add Category')}
 				</span>

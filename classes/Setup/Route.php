@@ -8,6 +8,7 @@
 namespace Solidie\Setup;
 
 use Solidie\Models\AdminSetting;
+use Solidie\Models\Category;
 use Solidie\Models\Contents;
 use Solidie\Models\Tutorial;
 
@@ -167,8 +168,21 @@ class Route {
 
 		if ( $data === false ) {
 			$contents = '<div style="text-align:center;">' . __( 'Content Not Found', 'solidie' ) . '</div>';
+
 		} else if( is_array( $data ) ) {
-			$contents = '<div id="Solidie_Gallery" style="width: 100%; margin: 0; padding: 0; max-width: 100%;"></div>';
+
+			$resources = apply_filters(
+				'solidie_gallery_resources', 
+				array(
+					'categories' => Category::getCategories( true ),
+				)
+			);
+
+			$contents = '<div 
+							id="Solidie_Gallery" 
+							style="width: 100%; margin: 0; padding: 0; max-width: 100%;"
+							data-resources="' . esc_attr( json_encode( $resources ) ) . '"
+						></div>';
 		}
 
 		return $contents;

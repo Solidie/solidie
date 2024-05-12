@@ -1,11 +1,11 @@
 === Solidie - Content Marketplace ===
 Contributors: jayedul
-Donate Link: https://solidie.com/apps/solidie-pro/
+Donate Link: https://solidie.com
 Tags: marketplace, contributors, stock
 Requires at least: 5.3
 Tested up to: 6.5.3
 Requires PHP: 7.4
-Stable tag: 1.1.2
+Stable tag: 1.1.3
 License: GPLv3
 License URI: https://opensource.org/licenses/GPL-3.0
 
@@ -70,6 +70,13 @@ Totally. There is no static pricing model. You need to set your own pricing plan
 You can [create issue](https://github.com/Solidie/Solidie/issues) on Github repository or write here in [support channel](https://wordpress.org/support/plugin/solidie/).
 
 == Changelog ==
+
+= v1.1.3 -> May 13, 2024 =
+--------------------------
+* Fix: Category filter not showing in gallery
+* Fix: Bundles filter not showing in gallery
+* Fix: Contents are accessible even if the type is disabled
+* Update: First content type auto select in gallery
 
 = v1.1.2 -> May 12, 2024 =
 --------------------------

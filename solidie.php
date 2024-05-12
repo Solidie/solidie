@@ -1,11 +1,11 @@
 <?php
 /**
  * Plugin Name: Solidie - Content Marketplace
- * Plugin URI: https://solidie.com/
+ * Plugin URI: https://solidie.com
  * Description: Multimedia stock plugin to showcase any digital contents like audio, video, image, ebook, apps and so on.
- * Version: 1.1.2
+ * Version: 1.1.3
  * Author: Solidie
- * Author URI: https://solidie.com/
+ * Author URI: https://solidie.com
  * Requires at least: 5.3
  * Tested up to: 6.5.3
  * Requires PHP: 7.4
