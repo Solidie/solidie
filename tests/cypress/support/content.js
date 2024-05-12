@@ -1,4 +1,4 @@
-Cypress.Commands.add('createContent', content => {
+Cypress.Commands.add('createContent', (content, index) => {
 
 	const {
 		content_type,
@@ -19,7 +19,9 @@ Cypress.Commands.add('createContent', content => {
 	// Set monetization
 	cy.get(`[data-cylector="monetization-option"] [value="${monetization}"]`).check();
 
-	// Modify pricing info
+	// To Do: Set a category
+
+	// To Do: Modify pricing info
 	if (monetization=='paid') {
 		
 	}

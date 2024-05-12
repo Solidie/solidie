@@ -1,102 +1,4 @@
-const common_plans = [
-	{
-		plan_name: `Standard License`,
-		description: 'Single license standard',
-		sales_model: 'single',
-		default_price: 11
-	},
-	{
-		plan_name: `Extended License`,
-		description: 'Extended license standard',
-		sales_model: 'single',
-		default_price: 51
-	},
-	{
-		plan_name: `Bundle`,
-		description: 'Bundle package',
-		sales_model: 'pack',
-		subscription_model: 'year',
-		auto_enable: true,
-		access_limit: 100,
-		default_price: 15
-	},
-];
-
-const getPlans=(label)=>{
-	return common_plans.map(p=>{
-		return {
-			...p,
-			plan_name: `${label} - ${p.plan_name}`,
-			description: `${label} - ${p.description}`
-		}
-	})
-}
-
-const content_types = {
-	app: {
-		comment: false,
-		reaction: 'rating',
-		plans: [
-			{
-				plan_name: `App - Monthly 1 License`,
-				description: 'App - Get single license for one month',
-				subscription_model: 'month',
-				access_limit: 1,
-				default_price: 10
-			},
-			{
-				plan_name: `App - Yearly 2 License`,
-				description: 'App - Get two license for one year',
-				subscription_model: 'year',
-				access_limit: 2,
-				default_price: 10
-			},
-			{
-				plan_name: `App - Lifetime 3 License`,
-				description: 'App - Get three license for lifetime',
-				subscription_model: 'lifetime',
-				access_limit: 3,
-				default_price: 13
-			}
-		]
-	},
-	audio: {
-		comment: true,
-		reaction: 'like',
-		plans: getPlans('Audio')
-	},
-	video: {
-		comment: true,
-		reaction: 'like',
-		plans: getPlans('Video')
-	},
-	image: {
-		comment: true,
-		contributor: true,
-		reaction: 'like',
-		plans: getPlans('Image')
-	},
-	'3d': {
-		comment: true,
-		reaction: 'like',
-		plans: getPlans('3D')
-	},
-	document: {
-		comment: true,
-		reaction: 'like',
-		plans: getPlans('Document')
-	},
-	font: {
-		comment: true,
-		reaction: 'like',
-		plans: getPlans('Font')
-	},
-	tutorial: {
-		comment: false,
-		reaction: 'rating',
-		plans: getPlans('Tutorial').map(p=>{return {...p, access_limit: null}})
-	},
-}
+const { common_categories, content_types } = require("./data");
 
 Cypress.Commands.add('toggleContentTypes', (obj) => {
 	
@@ -143,6 +45,22 @@ Cypress.Commands.add('setUpContentSettings', () => {
 		
 		// Set reaction type
 		cy.get(`[data-cylector="option-reaction_type"] [value="${reaction}"]`).check();
+
+		// Set categories
+		common_categories.forEach(category=>{
+
+			const {label, parent} = category;
+
+			cy.get('[data-cylector="add-category"]').click();
+
+			cy.get('[data-cylector="category-name-field"] input').type(label);
+
+			// To Do: Select parent category in dropdown
+
+			cy.get('[data-cylector="category-submit"]').click();
+
+			cy.wait(500);
+		});
 
 		// Set plans
 		plans.forEach(plan=>{

@@ -30,6 +30,35 @@ class AdminPage {
 	 */
 	public function __construct() {
 		add_action( 'admin_menu', array( $this, 'registerMenu' ) );
+		add_action( 'admin_notices', array( $this, 'permalinkNotice' ) );
+	}
+
+	/**
+	 * Show notice that plain permalink structure will not render gallery
+	 *
+	 * @return void
+	 */
+	public function permalinkNotice() {
+		
+		if ( ! Utilities::isAdminDashboard() || ! empty( get_option( 'permalink_structure' ) ) ) {
+			return;
+		}
+
+		?>
+			<div class="notice notice-error">
+				<p>
+					<?php 
+						echo sprintf(
+							__( 'Permalink structure must be something other than %splain%s in favour of Solidie. Please %sChange%s it now.', 'solidie' ), 
+							'<code>', 
+							'</code>', 
+							'<a href="' . admin_url( 'options-permalink.php' ) . '">', 
+							'</a>' 
+						); 
+					?>
+				</p>
+			</div>
+		<?php
 	}
 
 	/**

@@ -73,9 +73,11 @@ You can [create issue](https://github.com/Solidie/Solidie/issues) on Github repo
 
 = v1.1.3 -> May 13, 2024 =
 --------------------------
+* New: Shortcode added for gallery to support other page contents
 * Fix: Category filter not showing in gallery
 * Fix: Bundles filter not showing in gallery
 * Fix: Contents are accessible even if the type is disabled
+* Fix: API path field showing for all content types in settings
 * Update: First content type auto select in gallery
 
 = v1.1.2 -> May 12, 2024 =

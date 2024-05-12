@@ -1,3 +1,4 @@
+import React from 'react';
 import { __ } from 'crewhrm-materials/helpers.jsx';
 import { applyFilters } from 'crewhrm-materials/hooks.jsx';
 
@@ -19,7 +20,8 @@ export const settings_fields = applyFilters(
 							type: 'dropdown',
 							options: 'pages',
 							placeholder: __('Select Page'),
-							direction: 'row'
+							direction: 'row',
+							hint: <small className={'font-size-13'.classNames()}>Add <code className={'font-size-13'.classNames()}>[solidie_content_gallery]</code> in the page to support other contents</small>
 						},
 						{
 							name: 'free_download_label',

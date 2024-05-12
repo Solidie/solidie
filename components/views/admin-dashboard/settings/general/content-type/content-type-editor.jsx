@@ -37,7 +37,8 @@ const fields = [
 			label: __('Update API Path'),
 			type: 'text',
 			placeholder: 'e.g /updates-api/',
-			hint2: UpdatesAPINote
+			hint2: UpdatesAPINote,
+			supports: ['app']
 		}
 	),
 	{

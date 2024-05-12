@@ -107,7 +107,7 @@ class Route {
 		$page_id = wp_insert_post(
 			array(
 				'post_title'   => __( 'Gallery', 'solidie' ),
-				'post_content' => '',
+				'post_content' => '[' . Shortcode::GALLERY_CODE . ']',
 				'post_status'  => 'publish',
 				'post_type'    => 'page',
 			)
@@ -170,19 +170,9 @@ class Route {
 			$contents = '<div style="text-align:center;">' . __( 'Content Not Found', 'solidie' ) . '</div>';
 
 		} else if( is_array( $data ) ) {
-
-			$resources = apply_filters(
-				'solidie_gallery_resources', 
-				array(
-					'categories' => Category::getCategories( true ),
-				)
-			);
-
-			$contents = '<div 
-							id="Solidie_Gallery" 
-							style="width: 100%; margin: 0; padding: 0; max-width: 100%;"
-							data-resources="' . esc_attr( json_encode( $resources ) ) . '"
-						></div>';
+			if ( ! has_shortcode( $contents, Shortcode::GALLERY_CODE ) ) {
+				$contents = do_shortcode( '[' . Shortcode::GALLERY_CODE . ' _internal_call_=1]' );
+			}
 		}
 
 		return $contents;

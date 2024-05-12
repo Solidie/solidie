@@ -49,3 +49,8 @@ Cypress.Commands.add('toggleCheck', (fields) => {
 		}
 	});
 });
+
+// Type text field, select dropdown, check-uncheck checkbox
+Cypress.Commands.add('selectDropdown', (fields) => {
+	
+});
