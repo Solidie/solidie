@@ -126,6 +126,7 @@ class Scripts {
 					'settings'          => Utilities::getBackendPermalink( AdminPage::SETTINGS_SLUG ),
 					'dashboard'         => Utilities::getBackendPermalink( Main::$configs->root_menu_slug ),
 					'gallery'           => ( object ) Contents::getGalleryPermalink(),
+					'gallery_root'      => Contents::getGalleryPermalink( false ),
 					'logout'            => htmlspecialchars_decode( wp_logout_url( get_home_url() ) ),
 					'api_host'          => Main::$configs->api_host,
 				),

@@ -17,16 +17,11 @@ const quick_links = [
 		label: __('Settings'),
 		link: permalinks.settings
 	},
-	(function(){
-		const first_gallery = Object.values(permalinks.gallery || {})[0];
-		if ( first_gallery ) {
-			return {
-				label: __('Gallery'),
-				link: first_gallery,
-				in_new: true
-			}
-		}
-	})()
+	{
+		label: __('Gallery'),
+		link: permalinks.gallery_root,
+		in_new: true
+	}
 ].filter(l=>l);
 
 export function HomeBackend() {

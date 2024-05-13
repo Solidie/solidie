@@ -79,6 +79,7 @@ You can [create issue](https://github.com/Solidie/Solidie/issues) on Github repo
 * Fix: Contents are accessible even if the type is disabled
 * Fix: API path field showing for all content types in settings
 * Fix: Some of DB columns do not get imported
+* Fix: Content slug editor and thumbnail glitch
 * Update: First content type auto select in gallery
 
 = v1.1.2 -> May 12, 2024 =

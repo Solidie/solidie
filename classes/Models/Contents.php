@@ -434,7 +434,7 @@ class Contents {
 	 * Get gallery url for content type
 	 *
 	 * @param string $content_type The content type to get gallery permalink for
-	 * @return array
+	 * @return array|string
 	 */
 	public static function getGalleryPermalink( $content_type = null ) {
 
@@ -443,6 +443,10 @@ class Contents {
 		if ( null === $_permalink ) {
 			$page_id = AdminSetting::getGalleryPageId();
 			$_permalink = ! empty( $page_id ) ? trailingslashit( get_permalink( $page_id ) ) : '';
+		}
+
+		if ( $content_type === false ) {
+			return $_permalink;
 		}
 
 		$contents   = AdminSetting::getContentSettings();
