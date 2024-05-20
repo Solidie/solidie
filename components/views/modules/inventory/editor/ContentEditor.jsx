@@ -4,14 +4,12 @@ import {TextField} from 'crewhrm-materials/text-field/text-field.jsx';
 import {FileUpload} from 'crewhrm-materials/file-upload/file-upload.jsx';
 import {request} from 'crewhrm-materials/request.jsx';
 import {LoadingIcon} from 'crewhrm-materials/loading-icon/loading-icon.jsx';
-import { __, data_pointer, isEmpty, sprintf, getDashboardPath, hasTextInHTML } from "crewhrm-materials/helpers.jsx";
+import { __, data_pointer, isEmpty, sprintf, getDashboardPath } from "crewhrm-materials/helpers.jsx";
 import { ContextToast } from "crewhrm-materials/toast/toast.jsx";
 import { DropDown } from "crewhrm-materials/dropdown/dropdown.jsx";
-import { InitState } from "crewhrm-materials/init-state.jsx";
 import { DoAction } from "crewhrm-materials/mountpoint.jsx";
 import { Tabs } from "crewhrm-materials/tabs/tabs.jsx";
 
-import { InventoryWrapper } from "../index.jsx";
 import { getFlattenedCategories } from "../../../admin-dashboard/settings/general/content-type/category-editor.jsx";
 import { ReleaseManager } from "../release-manager/release-manager.jsx";
 import { TutorialManager } from "../tutorial-manager/tutorial-manager.jsx";
@@ -315,257 +313,258 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 	const setup_link = `${window[data_pointer].permalinks.settings}#/settings/contents/${content_type}/`;
 	const stuff_id = parseInt(active_stuff_id || 0);
 
-	return <InventoryWrapper navigate={navigate} params={params}>
-		{
-			state.error_message ? <div className={'text-align-center color-error'.classNames()}>
-				{state.error_message}
-			</div>
-			:
-			<div className={'content-editor'.classNames(style)} style={{maxWidth: '600px', margin: '20px auto'}}>
-				
-				{/* Header */}
-				<div className={"margin-top-20 margin-bottom-30 d-flex align-items-center column-gap-10".classNames()}>
-					<i 
-						onClick={()=>navigate(getDashboardPath(`inventory/${content_type}/${stuff_id ? `editor/${content_id}/${active_tab}/` : ''}`))} 
-						className={"ch-icon ch-icon-arrow-left cursor-pointer".classNames()}
-					></i>
-					<span>
-						{
-							!content_id ? 
-								sprintf(__('Add New %s'), _content.label) : 
-								(stuff_id ? __('Back to Lessons') : (state.update_title || _content.label))
-						}
-					</span>
-					<LoadingIcon show={state.fetching}/>
-				</div>
+	if ( state.error_message ) {
+		return <div className={'text-align-center color-error'.classNames()}>
+			{state.error_message}
+		</div>
+	}
 
+	return <div 
+		className={'content-editor'.classNames(style)} 
+		style={{maxWidth: '700px', margin: '20px auto'}}
+	>
+				
+		{/* Header */}
+		<div className={"margin-top-20 margin-bottom-30 d-flex align-items-center column-gap-10".classNames()}>
+			<i 
+				onClick={()=>navigate(getDashboardPath(`inventory/${content_type}/${stuff_id ? `editor/${content_id}/${active_tab}/` : ''}`))} 
+				className={"ch-icon ch-icon-arrow-left cursor-pointer".classNames()}
+			></i>
+			<span>
 				{
-					['app', 'tutorial'].indexOf(content_type)===-1 ? null :
-					<div className={'margin-bottom-20'.classNames()}>
-						<Tabs
-							theme="button"
-							active={active_tab}
-							onNavigate={(active_tab) => navigate(getDashboardPath(`inventory/${content_type}/editor/${_content_id}/${active_tab}/`))}
-							tabs={[
-								{
-									id: 'overview',
-									label: __('Overview')
-								},
-								{
-									id: content_type === 'app' ? 'release-manager' : 'lessons',
-									label: content_type === 'app' ? __('Release Management') : __('Lessons')
+					!content_id ? 
+						sprintf(__('Add New %s'), _content.label) : 
+						(stuff_id ? __('Back to Lessons') : (state.update_title || _content.label))
+				}
+			</span>
+			<LoadingIcon show={state.fetching}/>
+		</div>
+
+		{
+			['app', 'tutorial'].indexOf(content_type)===-1 ? null :
+			<div className={'margin-bottom-20'.classNames()}>
+				<Tabs
+					theme="button"
+					active={active_tab}
+					onNavigate={(active_tab) => navigate(getDashboardPath(`inventory/${content_type}/editor/${_content_id}/${active_tab}/`))}
+					tabs={[
+						{
+							id: 'overview',
+							label: __('Overview')
+						},
+						{
+							id: content_type === 'app' ? 'release-manager' : 'lessons',
+							label: content_type === 'app' ? __('Release Management') : __('Lessons')
+						}
+					]}
+				/>
+			</div>
+			
+		}
+
+		{(active_tab=='release-manager' && content_type==='app') ? <ReleaseManager content_id={content_id}/> : null}
+		{(active_tab=='lessons' && content_type==='tutorial') ? <TutorialManager content_id={content_id} lesson_id={stuff_id} navigate={navigate} content_type={content_type}/> : null}
+		
+		{
+			active_tab !== 'overview' ? null :
+			<div className={'border-radius-10 padding-15 border-1 b-color-tertiary'.classNames()}>
+				<div className={'d-flex align-items-center column-gap-15 margin-bottom-15'.classNames()}>
+					<div data-cylector="content-thumbnail">
+						<FileUpload
+							accept='image/*'
+							onChange={img=>setVal('thumbnail', img)}
+							layoutComp={
+								({onClick})=> {
+									return <div 
+										className={'content-thumbnail'.classNames(style) + 'cursor-pointer'.classNames()} 
+										onClick={()=>state.submitting ? 0 : onClick()}
+										style={thumbnail_url ? {backgroundImage: `url(${thumbnail_url})`} : {}}
+									>
+										{
+											thumbnail_url ? null :
+											<span className={'font-size-14 font-weight-500'.classNames()}>
+												<span className={'d-block margin-bottom-10 text-align-center'.classNames()}>
+													<i className={'ch-icon ch-icon-camera-plus font-size-24 color-secondary'.classNames()}></i>
+												</span>
+												<span>
+													Thumbnail
+												</span>
+											</span>
+										}
+									</div>
 								}
-							]}
+							}
 						/>
 					</div>
-					
-				}
+					<div className={'flex-1'.classNames()}>
+						<strong className={'d-block font-weight-600 margin-bottom-5'.classNames()}>
+							{__('Title')}<span className={'color-error'.classNames()}>*</span>
+						</strong>
 
-				{(active_tab=='release-manager' && content_type==='app') ? <ReleaseManager content_id={content_id}/> : null}
-				{(active_tab=='lessons' && content_type==='tutorial') ? <TutorialManager content_id={content_id} lesson_id={stuff_id} navigate={navigate} content_type={content_type}/> : null}
-				
-				{
-					active_tab !== 'overview' ? null :
-					<div className={'border-radius-10 padding-15 border-1 b-color-tertiary'.classNames()}>
-						<div className={'d-flex align-items-center column-gap-15 margin-bottom-15'.classNames()}>
-							<div data-cylector="content-thumbnail">
-								<FileUpload
-									accept='image/*'
-									onChange={img=>setVal('thumbnail', img)}
-									layoutComp={
-										({onClick})=> {
-											return <div 
-												className={'content-thumbnail'.classNames(style) + 'cursor-pointer'.classNames()} 
-												onClick={()=>state.submitting ? 0 : onClick()}
-												style={thumbnail_url ? {backgroundImage: `url(${thumbnail_url})`} : {}}
-											>
-												{
-													thumbnail_url ? null :
-													<span className={'font-size-14 font-weight-500'.classNames()}>
-														<span className={'d-block margin-bottom-10 text-align-center'.classNames()}>
-															<i className={'ch-icon ch-icon-camera-plus font-size-24 color-secondary'.classNames()}></i>
-														</span>
-														<span>
-															Thumbnail
-														</span>
-													</span>
-												}
-											</div>
-										}
-									}
-								/>
-							</div>
-							<div className={'flex-1'.classNames()}>
-								<strong className={'d-block font-weight-600 margin-bottom-5'.classNames()}>
-									{__('Title')}<span className={'color-error'.classNames()}>*</span>
-								</strong>
-
-								<div data-cylector="content-title">
-									<TextField 
-										placeholder={__('e.g My first content')} 
-										onChange={v=>setVal('content_title', v)}
-										value={state.values.content_title}
-										onBlur={saveOnTitleBlur}
-									/>
-								</div>
-								
-								{
-									!state.values.content_slug ? null : 
-									<div className={'d-flex align-items-center flex-wrap-wrap'.classNames()} style={{height: '30px', marginTop: '5px'}}>
-									
-										<div 
-											className={'d-flex align-items-center flex-wrap-wrap flex-direction-row column-gap-5'.classNames()}
-										>
-											<a 
-												href={state.values.content_permalink} 
-												target='_blank'
-											>
-												{window[data_pointer].permalinks.gallery[content_type]}{state.slug_editor ? null : <><strong>{state.values.content_slug}</strong>/</>}
-											</a>
-										</div>
-
-										{
-											!state.slug_editor ? 
-												<i 
-													className={'ch-icon ch-icon-edit-2 cursor-pointer font-size-18'.classNames()}
-													onClick={()=>setState({...state, slug_editor: true})}></i>
-												:
-												<>
-													<TextField 
-														style={{width: '170px', height: '30px', padding: '0 9px'}}
-														value={state.values.content_slug}
-														autofocus={true}
-														onChange={content_slug=>setVal('content_slug', content_slug)}
-													/>
-													<button 
-														className={'button button-primary button-outlined button-small'.classNames()}
-														onClick={updateSlug}
-														disabled={readonly_mode}
-													>
-														{__('Update')} <LoadingIcon show={state.updating_slug}/>
-													</button>
-												</>
-										}
-									</div>
-								}
-							</div>
+						<div data-cylector="content-title">
+							<TextField 
+								placeholder={__('e.g My first content')} 
+								onChange={v=>setVal('content_title', v)}
+								value={state.values.content_title}
+								onBlur={saveOnTitleBlur}
+							/>
 						</div>
 						
 						{
-							fields.map(field=>{
-								
-								const {
-									name, 
-									label, 
-									placeholder, 
-									type, 
-									required, 
-									accept, 
-									removable=false,
-									hint, 
-									maxlength, 
-									options=[],
-									render = true,
-									show_setup_link = false
-								} = field;
-
-								return (!render || (type=='dropdown' && isEmpty(options))) ? null : 
-								<div key={name}>
-									<div className={`margin-bottom-15`.classNames()}>
-										<strong className={'d-flex align-items-center column-gap-5 font-weight-600 margin-bottom-5'.classNames()}>
-											{label}{required ? <span className={'color-error'.classNames()}>*</span> : null}
-											{
-												(!is_admin || !show_setup_link) ? null :
-												<a 
-													href={setup_link}
-													target="_blank"
-													className={'ch-icon ch-icon-settings-gear'.classNames()}
-												></a>
-											}
-										</strong>
-
-										{
-											!hint ? null :
-											<small className={'d-block'.classNames()}>
-												{hint}
-											</small>
-										}
-
-										{
-											('text' !=type && 'textarea' != type ) ? null :
-											<TextField 
-												type={type}
-												placeholder={placeholder} 
-												onChange={v=>setVal(name, v)}
-												value={state.values[name]}/>
-										}
-
-										{
-											'textarea_rich' !== type ? null : (
-												state.fetching ? 
-												<div>
-													{__('Loading...')}
-												</div>
-												:
-												<TinyEditor
-													placeholder={__('Write description..')}
-													value={state.values[name]}
-													onChange={v=>setVal(name, v)}
-													content_id={content_id}
-												/>
-											)
-										}
-
-										{
-											'file' !== type ? null :
-											<FileUpload 
-												accept={accept}
-												onChange={v=>setVal(name, v)}
-												maxlength={maxlength}
-												value={state.values[name] || null}
-												removable={removable}/>
-										}
-
-										{
-											'dropdown' !== type ? null :
-											<DropDown
-												placeholder={placeholder}
-												value={state.values[name]}
-												options={options}
-												onChange={value=>setVal(name, value)}/>
-										}
-									</div>
+							!state.values.content_slug ? null : 
+							<div className={'d-flex align-items-center flex-wrap-wrap'.classNames()} style={{height: '30px', marginTop: '5px'}}>
+							
+								<div 
+									className={'d-flex align-items-center flex-wrap-wrap flex-direction-row column-gap-5'.classNames()}
+								>
+									<a 
+										href={state.values.content_permalink} 
+										target='_blank'
+									>
+										{window[data_pointer].permalinks.gallery[content_type]}{state.slug_editor ? null : <><strong>{state.values.content_slug}</strong>/</>}
+									</a>
 								</div>
-							})
-						}
 
-						<DoAction 
-							action="solidie_content_editor_after_form" 
-							payload={{
-								content: state.values,
-								content_type,
-								content_type_label: _content.label,
-								onChange: setVal
-							}}
-						/>
+								{
+									!state.slug_editor ? 
+										<i 
+											className={'ch-icon ch-icon-edit-2 cursor-pointer font-size-18'.classNames()}
+											onClick={()=>setState({...state, slug_editor: true})}></i>
+										:
+										<>
+											<TextField 
+												style={{width: '170px', height: '30px', padding: '0 9px'}}
+												value={state.values.content_slug}
+												autofocus={true}
+												onChange={content_slug=>setVal('content_slug', content_slug)}
+											/>
+											<button 
+												className={'button button-primary button-outlined button-small'.classNames()}
+												onClick={updateSlug}
+												disabled={readonly_mode}
+											>
+												{__('Update')} <LoadingIcon show={state.updating_slug}/>
+											</button>
+										</>
+								}
+							</div>
+						}
+					</div>
+				</div>
+				
+				{
+					fields.map(field=>{
 						
-						<div className={'text-align-right'.classNames()}>
-							<button 
-								data-cylector="content-save"
-								className={'button button-primary'.classNames()} 
-								onClick={()=>submit()}
-								disabled={
-									readonly_mode || 
-									state.submitting || 
-									isEmpty(content_title)
-								} 
-							>
-								{__('Publish')} <LoadingIcon show={state.submitting}/>
-							</button>
+						const {
+							name, 
+							label, 
+							placeholder, 
+							type, 
+							required, 
+							accept, 
+							removable=false,
+							hint, 
+							maxlength, 
+							options=[],
+							render = true,
+							show_setup_link = false
+						} = field;
+
+						return (!render || (type=='dropdown' && isEmpty(options))) ? null : 
+						<div key={name}>
+							<div className={`margin-bottom-15`.classNames()}>
+								<strong className={'d-flex align-items-center column-gap-5 font-weight-600 margin-bottom-5'.classNames()}>
+									{label}{required ? <span className={'color-error'.classNames()}>*</span> : null}
+									{
+										(!is_admin || !show_setup_link) ? null :
+										<a 
+											href={setup_link}
+											target="_blank"
+											className={'ch-icon ch-icon-settings-gear'.classNames()}
+										></a>
+									}
+								</strong>
+
+								{
+									!hint ? null :
+									<small className={'d-block'.classNames()}>
+										{hint}
+									</small>
+								}
+
+								{
+									('text' !=type && 'textarea' != type ) ? null :
+									<TextField 
+										type={type}
+										placeholder={placeholder} 
+										onChange={v=>setVal(name, v)}
+										value={state.values[name]}/>
+								}
+
+								{
+									'textarea_rich' !== type ? null : (
+										state.fetching ? 
+										<div>
+											{__('Loading...')}
+										</div>
+										:
+										<TinyEditor
+											placeholder={__('Write description..')}
+											value={state.values[name]}
+											onChange={v=>setVal(name, v)}
+											content_id={content_id}
+										/>
+									)
+								}
+
+								{
+									'file' !== type ? null :
+									<FileUpload 
+										accept={accept}
+										onChange={v=>setVal(name, v)}
+										maxlength={maxlength}
+										value={state.values[name] || null}
+										removable={removable}/>
+								}
+
+								{
+									'dropdown' !== type ? null :
+									<DropDown
+										placeholder={placeholder}
+										value={state.values[name]}
+										options={options}
+										onChange={value=>setVal(name, value)}/>
+								}
+							</div>
 						</div>
-					</div>		
+					})
 				}
-			</div>
+
+				<DoAction 
+					action="solidie_content_editor_after_form" 
+					payload={{
+						content: state.values,
+						content_type,
+						content_type_label: _content.label,
+						onChange: setVal
+					}}
+				/>
+				
+				<div className={'text-align-right'.classNames()}>
+					<button 
+						data-cylector="content-save"
+						className={'button button-primary'.classNames()} 
+						onClick={()=>submit()}
+						disabled={
+							readonly_mode || 
+							state.submitting || 
+							isEmpty(content_title)
+						} 
+					>
+						{__('Publish')} <LoadingIcon show={state.submitting}/>
+					</button>
+				</div>
+			</div>		
 		}
-	</InventoryWrapper> 
+	</div>
 }

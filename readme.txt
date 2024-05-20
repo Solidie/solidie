@@ -80,6 +80,8 @@ You can [create issue](https://github.com/Solidie/Solidie/issues) on Github repo
 * Fix: Loading icon not showing in single content page
 * Update: Auto open release manager on content publish
 * Update: Auto open lesson editor on content publish
+* Update: Contributors list page enhanced in admin dashboard
+* Update: Inventory page UI enhanced
 
 = v1.1.3 -> May 13, 2024 =
 --------------------------

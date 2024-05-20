@@ -192,6 +192,7 @@ function GalleryLayout({resources={}}) {
 						onChange={v=>navigate(`/${page_path}/${v}/`)}
 						variant="borderless"
 						clearable={false}
+						transparent={true}
 						options={content_options}
 					/>
 				</div>

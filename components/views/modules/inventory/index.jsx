@@ -96,26 +96,7 @@ export function InventoryWrapper({children, content_label, gallery_permalink, na
 		</div>
 	}
 
-	return <div style={{maxWidth: '1200px', margin: 'auto'}}>
-		<div>
-			<strong className={"d-flex align-items-center column-gap-8 color-text padding-vertical-10 position-sticky top-0".classNames()}>
-				<span className={'font-size-24 font-weight-600 letter-spacing-3'.classNames()}>
-					{__('Inventory')} {content_label ? <> - <a href={gallery_permalink} target='_blank' className={'hover-underline'.classNames()}>{content_label}</a></> : null}
-				</span>
-			</strong>
-
-			{
-				enabled_contents.length < 2 ? null :
-				<Tabs 
-					theme="transparent"
-					tabs={enabled_contents} 
-					active={content_type} 
-					onNavigate={tab=>navigate(getDashboardPath('inventory/'+tab))}/>
-			}
-		</div>
-		
-		{children}
-	</div>
+	return children;
 }
 
 export function Inventory({navigate, params={}}) {
@@ -245,256 +226,290 @@ export function Inventory({navigate, params={}}) {
 		setFilterState(filterStateInitial);
 	}, [content_type]);
 
-	const _content = window[data_pointer]?.settings?.contents[content_type] || {};
-	const _content_label = _content.label || __('Content');
+	const _contents = window[data_pointer]?.settings?.contents || {};
+	const enabled_contents = 
+		Object.keys(_contents)
+		.map(c=>{
+			return _contents[c].enable ? {..._contents[c], content_type:c} : null
+		})
+		.filter(c=>c)
+		.map(c=>{
+			return {...c, id: c.content_type}
+		});
+
+	const _content_label = _contents[content_type]?.label || __('Content');
 	
-	return <InventoryWrapper 
-		content_label={_content_label} 
-		content_type={content_type}
-		gallery_permalink={state.gallery_permalink}
-		navigate={navigate}
-		params={params}
-	>
-		<div className={'d-flex align-items-center margin-top-10 margin-bottom-10'.classNames()}>
-			<div className={'flex-1'.classNames()}>
-				<Link to={getDashboardPath(`inventory/${content_type}/editor/new`)}>
-					<span className={'font-weight-500 cursor-pointer hover-underline'.classNames()}>
-						<i className={'ch-icon ch-icon-add-circle'.classNames()}></i> {sprintf(__('Add New %s'), _content_label)} 
-					</span>
-				</Link>
-			</div>
-			
-			<div className={'d-flex align-items-center column-gap-10'.classNames()}>
-				<div>
-					<DropDown
-						placeholder={__('Status')}
-						onChange={v=>setFilter('content_status', v)}
-						value={filterState.content_status}
-						options={Object.keys(content_statuses).map(status=>{
-							return {
-								id: status,
-								label: content_statuses[status]
-							}
-						})}
-					/>
-				</div>
-				<div>
-					<TextField
-						placeholder={__('Enter Keyword')}
-						onChange={key=>setFilter('search', key)}
-						value={filterState.search}
-						type='search'
-					/>
-				</div>
-			</div>
-		</div>
-
-		<table 
-			className={'table'.classNames(style) + 'table'.classNames()} 
-			style={{background: 'rgb(128 128 128 / 3.5%)'}}
+	return <div style={{maxWidth: '1200px', margin: 'auto'}}>
+		<InventoryWrapper 
+			content_label={_content_label} 
+			content_type={content_type}
+			gallery_permalink={state.gallery_permalink}
+			navigate={navigate}
+			params={params}
 		>
-			<thead>
-				<tr>
-					<th>{__('Title')}</th>
-					{!is_admin ? null : <th className={'white-space-nowrap'.classNames()}>{__('Contributor')}</th>}
-					<th className={'white-space-nowrap'.classNames()}>{__('Category')}</th>
-					{!is_pro_active ? null : <th>{__('Price')}</th>}
-					<th>{__('Status')}</th>
-					<th>{__('Created')}</th>
-				</tr>
-			</thead>
-			<tbody>
-				{
-					state.contents.map((content, idx) =>{
-						let {
-							content_id, 
-							content_title, 
-							content_permalink, 
-							media, 
-							created_at, 
-							content_status, 
-							category_name,
-							product_id,
-							download_count,
-							contributor:{
-								display_name, 
-								avatar_url
-							},
-							release,
-							product:{
-								monetization='free',
-								plans=[],
-							}={},
-						} = content;
+			<div className={'d-flex align-items-center justify-content-space-between flex-wrap-wrap column-gap-15 row-gap-15 margin-top-10 margin-bottom-10'.classNames()}>
+				<div className={'d-flex align-items-center column-gap-8'.classNames()}>
+					<a 
+						href={state.gallery_permalink}
+						className={"d-flex align-items-center column-gap-8 color-text padding-vertical-10 position-sticky top-0".classNames()}
+						target='_blank'
+					>
+						<span className={'font-size-24 font-weight-600 letter-spacing-3'.classNames()}>
+							{sprintf(__('%s Inventory'), _content_label || '')}
+						</span>
+					</a>
 
-						const thumbnail_url = media?.thumbnail?.file_url;
-						const status_readonly = !is_admin ? contributors_status.indexOf(content_status)===-1 : content_status=='unpublish';
-						
-						// Get price range
-						const price_range = getPriceRange(plans, true);
-						const {
-							min:{sale_price: min_price},
-							max: {sale_price: max_price},
-							packs=[]
-						} = price_range;
+					<Link 
+						to={getDashboardPath(`inventory/${content_type}/editor/new`)}
+						className={'ch-icon ch-icon-add-circle font-size-24'.classNames()}
+					/>
+				</div>
+				
+				<div className={'d-flex align-items-center column-gap-10'.classNames()}>
+					{
+						enabled_contents.length < 2 ? null :
+						<div>
+							<DropDown
+								placeholder={__('Content Type')}
+								onChange={v=>navigate(getDashboardPath(`inventory/${v}`))}
+								value={content_type}
+								clearable={false}
+								options={enabled_contents}
+							/>
+						</div>
+					}
+					
+					<div>
+						<DropDown
+							placeholder={__('Status')}
+							onChange={v=>setFilter('content_status', v)}
+							value={filterState.content_status}
+							options={Object.keys(content_statuses).map(status=>{
+								return {
+									id: status,
+									label: content_statuses[status]
+								}
+							})}
+						/>
+					</div>
+					<div>
+						<TextField
+							placeholder={__('Enter Keyword')}
+							onChange={key=>setFilter('search', key)}
+							value={filterState.search}
+							type='search'
+						/>
+					</div>
+				</div>
+			</div>
 
-						return <tr key={content_id}>
-							<td data-th={__('Content')} style={{paddingTop: '20px', paddingBottom: '20px'}}>
-								<div className={'d-flex column-gap-15'.classNames()}>
-									{
-										!thumbnail_url ? null :
-										<div>
-											<img 
-												src={thumbnail_url} 
-												style={{width: '30px', height: 'auto', borderRadius: '2px'}}/>
-										</div>
-									}
-									
-									<div className={'flex-1'.classNames()}>
-										<a href={content_permalink} target='_blank' className={"d-block font-size-14 font-weight-600".classNames()}>
-											{content_title}
-										</a>
-										<div className={'actions'.classNames(style) + 'd-flex align-items-center column-gap-10 margin-top-10'.classNames()}>
-											<Link 
-												className={'action'.classNames(style) + 'cursor-pointer d-inline-flex align-items-center column-gap-8'.classNames()} 
-												title={__('Edit')}
-												to={getDashboardPath(`inventory/${content_type}/editor/${content_id}/`)}
-											>
-												<i className={'ch-icon ch-icon-edit-2 font-size-15'.classNames()}></i>
-											</Link>
-											
-											{
-												!is_admin ? null :
-												<>
-													<span className={'color-text-lighter'.classNames()}>|</span>
-													<span
-														className={'action'.classNames(style) + 'cursor-pointer d-inline-flex align-items-center column-gap-8'.classNames()}
-														title={__('Delete')}
-														onClick={()=>!readonly_mode && deleteContent(content_id)}
-													>
-														<i className={'ch-icon ch-icon-trash color-error font-size-15'.classNames()}></i>
+			<table 
+				className={'table'.classNames(style) + 'table'.classNames()} 
+				style={{background: 'rgb(128 128 128 / 3.5%)'}}
+			>
+				<thead>
+					<tr>
+						<th>{__('Title')}</th>
+						{!is_admin ? null : <th className={'white-space-nowrap'.classNames()}>{__('Contributor')}</th>}
+						<th className={'white-space-nowrap'.classNames()}>{__('Category')}</th>
+						{!is_pro_active ? null : <th>{__('Price')}</th>}
+						<th>{__('Status')}</th>
+						<th>{__('Created')}</th>
+					</tr>
+				</thead>
+				<tbody>
+					{
+						state.contents.map((content, idx) =>{
+							let {
+								content_id, 
+								content_title, 
+								content_permalink, 
+								media, 
+								created_at, 
+								content_status, 
+								category_name,
+								product_id,
+								download_count,
+								contributor:{
+									display_name, 
+									avatar_url
+								},
+								release,
+								product:{
+									monetization='free',
+									plans=[],
+								}={},
+							} = content;
+
+							const thumbnail_url = media?.thumbnail?.file_url;
+							const status_readonly = !is_admin ? contributors_status.indexOf(content_status)===-1 : content_status=='unpublish';
+							
+							// Get price range
+							const price_range = getPriceRange(plans, true);
+							const {
+								min:{sale_price: min_price},
+								max: {sale_price: max_price},
+								packs=[]
+							} = price_range;
+
+							return <tr key={content_id}>
+								<td data-th={__('Content')} style={{paddingTop: '20px', paddingBottom: '20px'}}>
+									<div className={'d-flex column-gap-15'.classNames()}>
+										{
+											!thumbnail_url ? null :
+											<div>
+												<img 
+													src={thumbnail_url} 
+													style={{width: '30px', height: 'auto', borderRadius: '2px'}}/>
+											</div>
+										}
+										
+										<div className={'flex-1'.classNames()}>
+											<a href={content_permalink} target='_blank' className={"d-block font-size-14 font-weight-600".classNames()}>
+												{content_title}
+											</a>
+											<div className={'actions'.classNames(style) + 'd-flex align-items-center column-gap-10 margin-top-10'.classNames()}>
+												<Link 
+													className={'action'.classNames(style) + 'cursor-pointer d-inline-flex align-items-center column-gap-8'.classNames()} 
+													title={__('Edit')}
+													to={getDashboardPath(`inventory/${content_type}/editor/${content_id}/`)}
+												>
+													<i className={'ch-icon ch-icon-edit-2 font-size-15'.classNames()}></i>
+												</Link>
+												
+												{
+													!is_admin ? null :
+													<>
+														<span className={'color-text-lighter'.classNames()}>|</span>
+														<span
+															className={'action'.classNames(style) + 'cursor-pointer d-inline-flex align-items-center column-gap-8'.classNames()}
+															title={__('Delete')}
+															onClick={()=>!readonly_mode && deleteContent(content_id)}
+														>
+															<i className={'ch-icon ch-icon-trash color-error font-size-15'.classNames()}></i>
+														</span>
+													</>
+												}
+												
+												<span className={'color-text-lighter'.classNames()}>|</span>
+												<span className={'d-inline-flex align-items-center column-gap-8'.classNames()}>
+													<a 
+														className={'action'.classNames(style) + 'cursor-pointer ch-icon ch-icon-download font-size-15'.classNames()} 
+														title={__('Download')}
+														href={release?.download_url || '#'}
+													></a>
+													<span className={'font-size-14 color-text-light'.classNames()}>
+														{download_count}
 													</span>
-												</>
-											}
-											
-											<span className={'color-text-lighter'.classNames()}>|</span>
-											<span className={'d-inline-flex align-items-center column-gap-8'.classNames()}>
-												<a 
-													className={'action'.classNames(style) + 'cursor-pointer ch-icon ch-icon-download font-size-15'.classNames()} 
-													title={__('Download')}
-													href={release?.download_url || '#'}
-												></a>
-												<span className={'font-size-14 color-text-light'.classNames()}>
-													{download_count}
 												</span>
+											</div>
+										</div>
+									</div>
+								</td>
+
+								{
+									!is_admin ? null :
+									<td data-th={__('Contributor')}>
+										<div className={'d-flex align-items-center column-gap-8'.classNames()}>
+											<img src={avatar_url} style={{width: '25px', borderRadius: '50%', overflow: 'hidden'}}/>
+											<span>
+												{display_name}
 											</span>
 										</div>
-									</div>
-								</div>
-							</td>
+									</td>
+								}
 
-							{
-								!is_admin ? null :
-								<td data-th={__('Contributor')}>
-									<div className={'d-flex align-items-center column-gap-8'.classNames()}>
-										<img src={avatar_url} style={{width: '25px', borderRadius: '50%', overflow: 'hidden'}}/>
-										<span>
-											{display_name}
-										</span>
-									</div>
+								<td data-th={__('Category')}>
+									{category_name || <>&nbsp;</>}
 								</td>
-							}
-
-							<td data-th={__('Category')}>
-								{category_name || <>&nbsp;</>}
-							</td>
-							
-							{
-								!is_pro_active ? null :
-								<td data-th={__('Price')}>
-									<div>
-										{
-											monetization !== 'paid' ? __('Free') :
-											<>
-												<div className={'white-space-nowrap'.classNames()}>
-													{currency_symbol}{min_price} {max_price>min_price ? <> - {currency_symbol}{max_price}</> : null}
-												</div>
-
-												{
-													! packs.length ? null :
-													<div className={'margin-top-10'.classNames()}>
-														<strong className={'d-block'.classNames()}>
-															{__('Supported Bundles:')}
-														</strong>
-														<ul>
-															{
-																packs.map(plan=>{
-																	const {plan_name} = plan?.plan || {};
-																	return !plan_name ? null : <li key={plan.variation_id}>
-																		{plan_name}
-																	</li>
-																})}
-														</ul>
+								
+								{
+									!is_pro_active ? null :
+									<td data-th={__('Price')}>
+										<div>
+											{
+												monetization !== 'paid' ? __('Free') :
+												<>
+													<div className={'white-space-nowrap'.classNames()}>
+														{currency_symbol}{min_price} {max_price>min_price ? <> - {currency_symbol}{max_price}</> : null}
 													</div>
-												}
-											</>
-										}
+
+													{
+														! packs.length ? null :
+														<div className={'margin-top-10'.classNames()}>
+															<strong className={'d-block'.classNames()}>
+																{__('Supported Bundles:')}
+															</strong>
+															<ul>
+																{
+																	packs.map(plan=>{
+																		const {plan_name} = plan?.plan || {};
+																		return !plan_name ? null : <li key={plan.variation_id}>
+																			{plan_name}
+																		</li>
+																	})}
+															</ul>
+														</div>
+													}
+												</>
+											}
+										</div>
+									</td>
+								}
+								
+								<td data-th={__('Status')}>
+									<div className={'d-flex align-items-center column-gap-10'.classNames()}>
+										<DropDownStatus
+											placeholder={__('Select Status')}
+											value={content_status}
+											onChange={v=>changeContentStatus(content_id, v)}
+											disabled={status_readonly || state.changing_status_for}
+											options={
+												Object.keys(content_statuses).filter(s=>s!='draft' && (is_admin ? s!='unpublish' : contributors_status.indexOf(s)>-1)).map(status=>{
+													return {
+														id: status,
+														label: content_statuses[status]
+													}
+												})
+											}
+										/>
+										<LoadingIcon show={state.changing_status_for==content_id}/>
 									</div>
 								</td>
-							}
-							
-							<td data-th={__('Status')}>
-								<div className={'d-flex align-items-center column-gap-10'.classNames()}>
-									<DropDownStatus
-										placeholder={__('Select Status')}
-										value={content_status}
-										onChange={v=>changeContentStatus(content_id, v)}
-										disabled={status_readonly || state.changing_status_for}
-										options={
-											Object.keys(content_statuses).filter(s=>s!='draft' && (is_admin ? s!='unpublish' : contributors_status.indexOf(s)>-1)).map(status=>{
-												return {
-													id: status,
-													label: content_statuses[status]
-												}
-											})
-										}
-									/>
-									<LoadingIcon show={state.changing_status_for==content_id}/>
-								</div>
-							</td>
-							<td data-th={__('Created')}>
-								{formatDateTime(created_at)}
-							</td>
-						</tr>
-					})
-				}
-				<TableStat 
-					empty={!state.contents.length} 
-					loading={state.fetching}
-					message={
-						<div className={'padding-vertical-40 text-align-center'.classNames()}>
-							<strong className={'d-block font-size-14 margin-bottom-20'.classNames()}>
-								{sprintf(__('No %s found'), _content_label)}
-							</strong>
-							<Link to={getDashboardPath(`inventory/${content_type}/editor/new`)} className={'button button-primary button-small'.classNames()}>
-								{__('Add New')}
-							</Link>
-						</div> 
-					}/>
-			</tbody>
-		</table>
-		{
-			(state.segmentation?.page_count || 0) < 2 ? null :
-			<>
-				<br/>
-				<div className={'d-flex justify-content-end'.classNames()}>
-					<Pagination
-						onChange={(page) => setFilter('page', page)}
-						pageNumber={filterState.page}
-						pageCount={state.segmentation.page_count}
-					/>
-				</div>
-			</>
-		}
-	</InventoryWrapper>
+								<td data-th={__('Created')}>
+									{formatDateTime(created_at)}
+								</td>
+							</tr>
+						})
+					}
+					<TableStat 
+						empty={!state.contents.length} 
+						loading={state.fetching}
+						message={
+							<div className={'padding-vertical-40 text-align-center'.classNames()}>
+								<strong className={'d-block font-size-14 margin-bottom-20'.classNames()}>
+									{sprintf(__('No %s found'), _content_label)}
+								</strong>
+								<Link to={getDashboardPath(`inventory/${content_type}/editor/new`)} className={'button button-primary button-small'.classNames()}>
+									{__('Add New')}
+								</Link>
+							</div> 
+						}/>
+				</tbody>
+			</table>
+			{
+				(state.segmentation?.page_count || 0) < 2 ? null :
+				<>
+					<br/>
+					<div className={'d-flex justify-content-end'.classNames()}>
+						<Pagination
+							onChange={(page) => setFilter('page', page)}
+							pageNumber={filterState.page}
+							pageCount={state.segmentation.page_count}
+						/>
+					</div>
+				</>
+			}
+		</InventoryWrapper>
+	</div>
 }

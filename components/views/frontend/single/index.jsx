@@ -181,13 +181,16 @@ export function SingleWrapper() {
 				}
 			</div>
 			
-			<div className={'pricing'.classNames(style)}>
-				<RenderExternal 
-					component={applyFilters('free_download_button', FreeDownlod, state.content)}
-					payload={{
-						content: state.content, 
-						settings: state.settings
-					}}/>
+			<div className={'pricing'.classNames(style) + 'd-flex flex-direction-column row-gap-15'.classNames()}>
+				<div>
+					<RenderExternal 
+						component={applyFilters('free_download_button', FreeDownlod, state.content)}
+						payload={{
+							content: state.content, 
+							settings: state.settings
+						}}
+					/>
+				</div>
 			</div>
 		</div>
 	</div>
