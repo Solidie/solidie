@@ -58,8 +58,12 @@ export function InventoryWrapper({children, content_label, gallery_permalink, na
 						<span className={'d-block margin-bottom-10'.classNames()}>
 							{__('To showcase your contents, please enable preferred content types first.')}
 						</span>
-						<a href={window[data_pointer]?.permalinks?.settings} className={'button button-primary button-outlined button-small'.classNames()}>
-							{__('Go to Content Types')}
+						<a 
+							href={window[data_pointer]?.permalinks?.settings} 
+							className={'button button-primary button-outlined button-small'.classNames()}
+							target='_blank'
+						>
+							{__('Go to Settings')}
 						</a>
 					</div>
 				});

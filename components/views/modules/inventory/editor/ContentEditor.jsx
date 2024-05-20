@@ -54,6 +54,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 		update_title: null,
 		thumbnail_url: null,
 		values: initial_values,
+		release_lesson_opened: content_id ? true : false,
 	});
 
 	const content_title = ( state.values.content_title || '' ).trim();
@@ -140,6 +141,13 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 	}
 
 	const submit=(content_status)=>{
+
+		const is_draft = content_status === 'draft'
+
+		if ( ! is_draft && !window.confirm(__('Sure to publish?')) ) {
+			return;
+		}
+
 		setState({
 			...state,
 			submitting: true
@@ -170,10 +178,9 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 				}
 			} = resp;
 
-			setState({
-				...state,
+			const new_state = {
 				submitting: false
-			});
+			}
 
 			if ( success ) {
 				addToast({
@@ -182,13 +189,32 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 					status: 'success'
 				});
 
+				const editor_url = `inventory/${content_type}/editor/${content.content_id}/`;
+
 				// Replace current URL state with content ID to make it update from later attempts
 				if ( ! content_id ) {
-					navigate(getDashboardPath(`inventory/${content_type}/editor/${content.content_id}/`), {replace: true});
+					navigate(getDashboardPath(editor_url), {replace: true});
+				}
+
+				if ( ! is_draft && ! state.release_lesson_opened ) {
+
+					if ( content_type === 'app' ) {
+						navigate(getDashboardPath(`${editor_url}release-manager/`));
+						
+					} else if( content_type === 'tutorial' ) {
+						navigate(getDashboardPath(`${editor_url}lessons/`));
+					}
+
+					new_state.release_lesson_opened = true;
 				}
 			} else {
 				ajaxToast(resp);
 			}
+
+			setState({
+				...state,
+				new_state
+			});
 		});
 	}
 
@@ -357,7 +383,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 													thumbnail_url ? null :
 													<span className={'font-size-14 font-weight-500'.classNames()}>
 														<span className={'d-block margin-bottom-10 text-align-center'.classNames()}>
-															<i className={'ch-icon ch-icon-camera-plus font-size-24 color-text-light'.classNames()}></i>
+															<i className={'ch-icon ch-icon-camera-plus font-size-24 color-secondary'.classNames()}></i>
 														</span>
 														<span>
 															Thumbnail
@@ -534,7 +560,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 									isEmpty(content_title)
 								} 
 							>
-								{content_id ? __('Publish Updates') : __('Publish')} <LoadingIcon show={state.submitting}/>
+								{__('Publish')} <LoadingIcon show={state.submitting}/>
 							</button>
 						</div>
 					</div>		

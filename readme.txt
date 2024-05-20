@@ -5,7 +5,7 @@ Tags: marketplace, contributors, stock
 Requires at least: 5.3
 Tested up to: 6.5.3
 Requires PHP: 7.4
-Stable tag: 1.1.3
+Stable tag: 1.1.4
 License: GPLv3
 License URI: https://opensource.org/licenses/GPL-3.0
 
@@ -29,6 +29,8 @@ Manual Installation
 = Documentation and Support =
 
 If you have any questions or problems using this plugin, you can write here in [support channel](https://wordpress.org/support/plugin/solidie/)
+
+Please share your valuable review on [WordPress](https://wordpress.org/plugins/solidie/#reviews), [ProductHunt](https://www.producthunt.com/products/solidie/reviews), or [TrustPilot](https://www.trustpilot.com/review/solidie.com).
 
 There are several minified JavaScript file that are built with React JS and compiled with Webpack. If you want to access the unminified files for this plugin, you can do so from [here](https://github.com/Solidie/Solidie)
 
@@ -70,6 +72,14 @@ Totally. There is no static pricing model. You need to set your own pricing plan
 You can [create issue](https://github.com/Solidie/Solidie/issues) on Github repository or write here in [support channel](https://wordpress.org/support/plugin/solidie/).
 
 == Changelog ==
+
+= v1.1.4 -> May 25, 2024 =
+--------------------------
+* New: Content sitemap
+* Fix: Multiple audio playback issue at the same time
+* Fix: Loading icon not showing in single content page
+* Update: Auto open release manager on content publish
+* Update: Auto open lesson editor on content publish
 
 = v1.1.3 -> May 13, 2024 =
 --------------------------
