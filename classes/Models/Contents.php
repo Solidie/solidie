@@ -197,7 +197,7 @@ class Contents {
 		$content_slug = _String::consolidate( (string) $content_slug, true );
 		$content_slug = strtolower( str_replace( ' ', '-', $content_slug ) );
 		$content_slug = preg_replace( '/[^A-Za-z0-9\-]/u', '', $content_slug );
-		$content_slug = empty( $content_slug ) ? 'content' : $content_slug;
+		$content_slug = empty( $content_slug ) ? 'untitled-content' : $content_slug;
 		$content_slug = preg_replace( '/-+/', '-', $content_slug );
 
 		$new_slug = $content_slug;

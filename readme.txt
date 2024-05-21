@@ -75,13 +75,13 @@ You can [create issue](https://github.com/Solidie/Solidie/issues) on Github repo
 
 = v1.1.4 -> May 25, 2024 =
 --------------------------
-* New: Content sitemap
 * Fix: Multiple audio playback issue at the same time
 * Fix: Loading icon not showing in single content page
 * Update: Auto open release manager on content publish
 * Update: Auto open lesson editor on content publish
 * Update: Contributors list page enhanced in admin dashboard
-* Update: Inventory page UI enhanced
+* Update: Inventory page and content editor UI enhanced
+* Update: Content and lesson slug editor enhanced
 
 = v1.1.3 -> May 13, 2024 =
 --------------------------

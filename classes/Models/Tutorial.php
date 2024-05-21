@@ -389,7 +389,7 @@ class Tutorial {
 		$lesson_slug = _String::consolidate( (string) $lesson_slug, true );
 		$lesson_slug = strtolower( str_replace( ' ', '-', $lesson_slug ) );
 		$lesson_slug = preg_replace( '/[^A-Za-z0-9\-]/u', '', $lesson_slug );
-		$lesson_slug = empty( $lesson_slug ) ? 'lesson' : $lesson_slug;
+		$lesson_slug = empty( $lesson_slug ) ? 'untitled-lesson' : $lesson_slug;
 		$lesson_slug = preg_replace( '/-+/', '-', $lesson_slug );
 
 		$new_slug = $lesson_slug;

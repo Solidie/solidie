@@ -206,7 +206,7 @@ export function LessonEditor({content_id, lesson_id, lessons=[]}) {
 	
 	return <div>
 		
-		<div className={'margin-bottom-15 d-flex column-gap-15'.classNames()}>
+		<div className={'d-flex column-gap-15'.classNames()}>
 			<div className={'flex-1'.classNames()}>
 				<strong className={'d-block font-weight-600'.classNames()}>
 					{__('Lesson Title')}
@@ -215,40 +215,6 @@ export function LessonEditor({content_id, lesson_id, lessons=[]}) {
 					value={state.values.lesson_title || ''}
 					onChange={v=>dispatchChange('lesson_title', v)}
 				/>
-				<div 
-					className={'d-inline-flex align-items-center flex-wrap-wrap flex-direction-row column-gap-5'.classNames()}
-					style={{margin: '3px 0 15px', height: '34px'}}
-				>
-					<a 
-						href={state.values.lesson_permalink} 
-						target='_blank'
-					>
-						{slug_parent}/{state.slug_editor ? null : <><strong>{state.values.lesson_slug}</strong>/</>}
-					</a>
-
-					{
-						!state.slug_editor ? 
-							<i 
-								className={'ch-icon ch-icon-edit-2 cursor-pointer font-size-18'.classNames()}
-								onClick={()=>setState({...state, slug_editor: true})}></i>
-							:
-							<>
-								<TextField 
-									style={{width: '170px', height: '30px', padding: '0 9px'}}
-									value={state.values.lesson_slug}
-									autofocus={true}
-									onChange={v=>dispatchChange('lesson_slug', v)}
-								/>
-								<button 
-									className={'button button-primary button-outlined button-small'.classNames()}
-									onClick={updateSlug}
-									disabled={readonly_mode || state.saving || state.saving_slug || isEmpty((state.values.lesson_slug || '').trim())}
-								>
-									{__('Update')} <LoadingIcon show={state.saving_slug}/>
-								</button>
-							</>
-					}
-				</div>
 			</div>
 			{
 				!parent_options.length ? null :
@@ -263,6 +229,37 @@ export function LessonEditor({content_id, lesson_id, lessons=[]}) {
 					/>
 				</div>
 			}
+		</div>
+
+		<div className={'margin-bottom-15'.classNames()}>
+			<div 
+				className={'d-inline-flex align-items-center flex-wrap-wrap flex-direction-row column-gap-5'.classNames()}
+				style={{margin: '3px 0 15px', height: '34px'}}
+			>
+				<a 
+					href={state.values.lesson_permalink} 
+					target='_blank'
+				>
+					{slug_parent}/{state.slug_editor ? null : <><strong>{state.values.lesson_slug}</strong>/</>}
+				</a>
+
+				{
+					!state.slug_editor ? 
+						<i 
+							className={'ch-icon ch-icon-edit-2 cursor-pointer font-size-18'.classNames()}
+							onClick={()=>setState({...state, slug_editor: true})}></i>
+						:
+						<TextField 
+							style={{width: '170px', height: '30px', padding: '0 9px'}}
+							value={state.values.lesson_slug}
+							autofocus={true}
+							onChange={v=>dispatchChange('lesson_slug', v)}
+							onBlur={updateSlug}
+							onKeyUp={e=>e.key === 'Enter' ? updateSlug() : null}
+							disabled={readonly_mode || state.saving || state.saving_slug}
+						/>
+				}
+			</div>
 		</div>
 
 		<div className={'margin-bottom-15'.classNames()}>

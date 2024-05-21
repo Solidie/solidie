@@ -305,7 +305,6 @@ export function Inventory({navigate, params={}}) {
 
 			<table 
 				className={'table'.classNames(style) + 'table'.classNames()} 
-				style={{background: 'rgb(128 128 128 / 3.5%)'}}
 			>
 				<thead>
 					<tr>

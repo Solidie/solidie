@@ -19,6 +19,36 @@ import { TinyEditor } from "./Tiny.jsx";
 
 const {readonly_mode, is_admin} = window[data_pointer];
 
+const extensions = {
+	audio: [
+		'.mp3',
+		'.wav',
+		'.ogg',
+	],
+	video: [
+		'.mp4',
+		'.mov',
+		'.wmv',
+		'.avi',
+		'.3gp'
+	],
+	image: [
+		'.png',
+		'.jpg',
+		'.jpeg',
+		'.gif'
+	],
+	document: [
+		'.doc',
+		'.docx',
+		'.pdf',
+		'.ppt',
+		'.pptx',
+		'.xls',
+		'.xlsx'
+	]
+}
+
 export function ContentEditor({categories=[], navigate, params={}}) {
 
 	const {ajaxToast, addToast} = useContext(ContextToast);
@@ -56,6 +86,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 	});
 
 	const content_title = ( state.values.content_title || '' ).trim();
+	const support_exts  = (extensions[content_type] || []).map(ext=>ext.replace('.', ''));
 
 	const fields = [
 		{
@@ -70,7 +101,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 			type: 'file',
 			name: 'thumbnail',
 			label: __('Thumbnail Image'),
-			accept: 'image/*',
+			accept: extensions.image,
 			render: false,
 		},
 		{
@@ -83,26 +114,26 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 			type: 'file',
 			name: 'preview',
 			label: __('Preview File'),
-			hint: __('Sneak peek for onsite playback'),
+			hint: sprintf(__('Sneak peek for onsite playback. Supports: %s'), support_exts.join(', ')),
 			required: true,
-			accept: content_type === 'audio' ? 'audio/*' : 'video/*'
+			accept: extensions[content_type]
 		}),
 		(['app', '3d', 'document', 'font', 'tutorial'].indexOf(content_type)===-1 ? null : {
 			type: 'file',
 			name: 'sample_images',
-			label: __('Sample Images'),
-			accept: 'image/*',
+			label: __('Sample Image/Videos (Max 10)'),
+			accept: [...extensions.image, ...extensions.video],
 			maxlength: 10,
 			removable: true,
 		}),
 		(['audio', 'video', 'image', '3d', 'document', 'font'].indexOf(content_type)===-1 ? null : {
 			type: 'file',
 			name: 'downloadable_file',
-			label: sprintf(__('Downloadable File (%s)'), `Zip${content_type==='audio' ? ', Audio' : ''}${content_type==='video' ? ', Video' : ''}`),
+			label: __('Downloadable File'),
+			hint: sprintf(__('Supports: %s'), ['zip', ...support_exts].join(', ')),
 			accept: [
-				'application/zip', 
-				(content_type==='audio' ? 'audio/*' : null),
-				(content_type==='video' ? 'video/*' : null),
+				'.zip', 
+				...(extensions[content_type] || []),
 			].filter(m=>m),
 			required: true,
 		}),
@@ -371,7 +402,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 				<div className={'d-flex align-items-center column-gap-15 margin-bottom-15'.classNames()}>
 					<div data-cylector="content-thumbnail">
 						<FileUpload
-							accept='image/*'
+							accept={extensions.image}
 							onChange={img=>setVal('thumbnail', img)}
 							layoutComp={
 								({onClick})=> {
@@ -411,7 +442,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 						</div>
 						
 						{
-							!state.values.content_slug ? null : 
+							!content_id ? null : 
 							<div className={'d-flex align-items-center flex-wrap-wrap'.classNames()} style={{height: '30px', marginTop: '5px'}}>
 							
 								<div 
@@ -431,21 +462,15 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 											className={'ch-icon ch-icon-edit-2 cursor-pointer font-size-18'.classNames()}
 											onClick={()=>setState({...state, slug_editor: true})}></i>
 										:
-										<>
-											<TextField 
-												style={{width: '170px', height: '30px', padding: '0 9px'}}
-												value={state.values.content_slug}
-												autofocus={true}
-												onChange={content_slug=>setVal('content_slug', content_slug)}
-											/>
-											<button 
-												className={'button button-primary button-outlined button-small'.classNames()}
-												onClick={updateSlug}
-												disabled={readonly_mode}
-											>
-												{__('Update')} <LoadingIcon show={state.updating_slug}/>
-											</button>
-										</>
+										<TextField 
+											style={{width: '170px', height: '30px', padding: '0 9px'}}
+											value={state.values.content_slug}
+											autofocus={true}
+											onChange={content_slug=>setVal('content_slug', content_slug)}
+											onBlur={updateSlug}
+											onKeyUp={e=>e.key === 'Enter' ? updateSlug() : null}
+											disabled={readonly_mode || state.updating_slug}
+										/>
 								}
 							</div>
 						}
@@ -487,7 +512,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 
 								{
 									!hint ? null :
-									<small className={'d-block'.classNames()}>
+									<small className={'d-block font-size-13 margin-bottom-5'.classNames()}>
 										{hint}
 									</small>
 								}
