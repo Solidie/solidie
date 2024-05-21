@@ -9,7 +9,7 @@ namespace Solidie\Models;
 
 use Solidie\Helpers\_Array;
 use Solidie\Helpers\_String;
-use Solidie\Helpers\Utilities;
+use Solidie\Main;
 use Solidie_Pro\Models\ContentPack;
 
 /**
@@ -340,6 +340,8 @@ class Contents {
 			return $contents;
 		}
 
+		$placeholder_url = Main::$configs->dist_url . 'libraries/thumbnail-placeholder.svg';
+		
 		$was_single = ! _Array::isTwoDimensionalArray( $contents );
 		if ( $was_single ) {
 			$contents = array( $contents );
@@ -375,6 +377,16 @@ class Contents {
 
 			// Assign the prepared file info array to contents array
 			$contents[ $index ]['media'] = $media;
+
+			// Assign fallback thumbnail URL
+			if ( empty( $contents[ $index ]['media']['thumbnail'] ) ) {
+				$contents[ $index ]['media']['thumbnail'] = array(
+					'file_id'   => 0,
+					'file_url'  => $placeholder_url,
+					'file_name' => basename( $placeholder_url ),
+					'mime_type' => 'image/svg+xml'
+				);
+			}
 
 			// Assign download count from the download array
 			$contents[ $index ]['download_count'] = $downloads[ $content['content_id'] ] ?? 0;

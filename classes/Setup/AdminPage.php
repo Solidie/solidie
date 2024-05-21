@@ -77,7 +77,8 @@ class AdminPage {
 			$role,
 			Main::$configs->root_menu_slug,
 			array( $this, 'homePage' ),
-			Main::$configs->dist_url . 'libraries/menu-icon.svg'
+			Main::$configs->dist_url . 'libraries/menu-icon.svg',
+			2
 		);
 
 		// Register solidie dashboard home

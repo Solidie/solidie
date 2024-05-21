@@ -1,18 +1,18 @@
 import React, { useContext, useEffect, useState } from 'react'
 
 import { request } from 'crewhrm-materials/request.jsx';
-import { __, data_pointer, sprintf, formatDateTime, isEmpty, getDashboardPath, currency_symbol } from 'crewhrm-materials/helpers.jsx';
+import { __, data_pointer, sprintf, formatDate, formatTime, getDashboardPath, currency_symbol } from 'crewhrm-materials/helpers.jsx';
 import { ContextToast } from 'crewhrm-materials/toast/toast.jsx';
 import { LoadingIcon } from 'crewhrm-materials/loading-icon/loading-icon.jsx';
 import { Pagination } from 'crewhrm-materials/pagination/pagination.jsx';
 import { TextField } from 'crewhrm-materials/text-field/text-field.jsx';
-import { Tabs } from 'crewhrm-materials/tabs/tabs.jsx';
 import { TableStat } from 'crewhrm-materials/table-stat.jsx';
 import { DropDown } from 'crewhrm-materials/dropdown/dropdown.jsx';
 import {DropDownStatus} from 'crewhrm-materials/dropdown-status/dropdown-status.jsx';
+import { Options } from "crewhrm-materials/dropdown/dropdown.jsx";
 
-import style from './inventory.module.scss';
 import { getPriceRange } from '../../frontend/gallery/generic-card/generic-card.jsx';
+import style from './inventory.module.scss';
 
 const {readonly_mode, is_admin, is_pro_active} = window[data_pointer];
 
@@ -26,6 +26,24 @@ export const content_statuses = {
 }
 
 const contributors_status = ['publish', 'unpublish'];
+
+const content_actions = [
+	{
+		id: 'edit', 
+		label: __('Edit'),
+		icon: 'ch-icon ch-icon-edit-2'.classNames()
+	},
+	{
+		id: 'delete', 
+		label: __('Delete'),
+		icon: 'ch-icon ch-icon-trash'.classNames()
+	},
+	{
+		id: 'download', 
+		label: __('Download'),
+		icon: 'ch-icon ch-icon-download'.classNames()
+	}
+];
 
 export function InventoryWrapper({children, content_label, gallery_permalink, navigate, params={}}) {
 
@@ -199,6 +217,32 @@ export function Inventory({navigate, params={}}) {
 		});
 	}
 
+	const onActionClick=(action, content)=>{
+
+		const {
+			content_type, 
+			content_id, 
+			release
+		} = content;
+		
+		switch(action) {
+
+			case 'edit' :
+				navigate(getDashboardPath(`inventory/${content_type}/editor/${content_id}/`))
+				break;
+
+			case 'delete': 
+				if ( !readonly_mode ) {
+					deleteContent(content_id);
+				}
+				break;
+
+			case 'download' : 
+				window.location.assign(release?.download_url);
+				break;
+		}
+	}
+
 	function Link({children, className, title, to}) {
 		return <a 
 			className={className} 
@@ -314,11 +358,12 @@ export function Inventory({navigate, params={}}) {
 						{!is_pro_active ? null : <th>{__('Price')}</th>}
 						<th>{__('Status')}</th>
 						<th>{__('Created')}</th>
+						<th></th>
 					</tr>
 				</thead>
 				<tbody>
 					{
-						state.contents.map((content, idx) =>{
+						state.contents.map((content) =>{
 							let {
 								content_id, 
 								content_title, 
@@ -353,55 +398,26 @@ export function Inventory({navigate, params={}}) {
 
 							return <tr key={content_id}>
 								<td data-th={__('Content')} style={{paddingTop: '20px', paddingBottom: '20px'}}>
-									<div className={'d-flex column-gap-15'.classNames()}>
+									<div className={'d-flex align-items-center column-gap-15'.classNames()}>
 										{
 											!thumbnail_url ? null :
 											<div>
 												<img 
 													src={thumbnail_url} 
-													style={{width: '30px', height: 'auto', borderRadius: '2px'}}/>
+													style={{
+														width: '50px', 
+														height: '30px', 
+														borderRadius: '2px',
+														objectFit: 'cover',
+														objectPosition: 'center'
+													}}/>
 											</div>
 										}
 										
-										<div className={'flex-1'.classNames()}>
+										<div className={'flex-1'.classNames()} style={{maxWidth: '260px'}}>
 											<a href={content_permalink} target='_blank' className={"d-block font-size-14 font-weight-600".classNames()}>
 												{content_title}
 											</a>
-											<div className={'actions'.classNames(style) + 'd-flex align-items-center column-gap-10 margin-top-10'.classNames()}>
-												<Link 
-													className={'action'.classNames(style) + 'cursor-pointer d-inline-flex align-items-center column-gap-8'.classNames()} 
-													title={__('Edit')}
-													to={getDashboardPath(`inventory/${content_type}/editor/${content_id}/`)}
-												>
-													<i className={'ch-icon ch-icon-edit-2 font-size-15'.classNames()}></i>
-												</Link>
-												
-												{
-													!is_admin ? null :
-													<>
-														<span className={'color-text-lighter'.classNames()}>|</span>
-														<span
-															className={'action'.classNames(style) + 'cursor-pointer d-inline-flex align-items-center column-gap-8'.classNames()}
-															title={__('Delete')}
-															onClick={()=>!readonly_mode && deleteContent(content_id)}
-														>
-															<i className={'ch-icon ch-icon-trash color-error font-size-15'.classNames()}></i>
-														</span>
-													</>
-												}
-												
-												<span className={'color-text-lighter'.classNames()}>|</span>
-												<span className={'d-inline-flex align-items-center column-gap-8'.classNames()}>
-													<a 
-														className={'action'.classNames(style) + 'cursor-pointer ch-icon ch-icon-download font-size-15'.classNames()} 
-														title={__('Download')}
-														href={release?.download_url || '#'}
-													></a>
-													<span className={'font-size-14 color-text-light'.classNames()}>
-														{download_count}
-													</span>
-												</span>
-											</div>
 										</div>
 									</div>
 								</td>
@@ -476,7 +492,22 @@ export function Inventory({navigate, params={}}) {
 									</div>
 								</td>
 								<td data-th={__('Created')}>
-									{formatDateTime(created_at)}
+									<span className={'d-block font-size-14 font-weight-500 color-text margin-bottom-5'.classNames()}>
+										{formatDate(created_at)}
+									</span>
+									<span className={'d-block font-size-13 font-weight-400 color-text-light'.classNames()}>
+										{formatTime(created_at)}
+									</span>
+								</td>
+								<td data-th={__('Action')}>
+									<Options
+										onClick={(action) => onActionClick(action, content)}
+										options={content_actions.filter(a=>(is_admin || a.id!=='delete')).filter(a=>(a.id!=='download' || release?.download_url))}
+									>
+										<i
+											className={'ch-icon ch-icon-more color-text-light font-size-20 cursor-pointer d-inline-block'.classNames()}
+										></i>
+									</Options>
 								</td>
 							</tr>
 						})

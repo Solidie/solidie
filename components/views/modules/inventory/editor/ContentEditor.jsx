@@ -85,6 +85,8 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 		release_lesson_opened: content_id ? true : false,
 	});
 
+	const [uploadPercent, setUploadPercent] = useState(0);
+
 	const content_title = ( state.values.content_title || '' ).trim();
 	const support_exts  = (extensions[content_type] || []).map(ext=>ext.replace('.', ''));
 
@@ -244,6 +246,9 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 				...state,
 				new_state
 			});
+		},
+		percent=>{
+			setUploadPercent(percent);
 		});
 	}
 
@@ -586,7 +591,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 							isEmpty(content_title)
 						} 
 					>
-						{__('Publish')} <LoadingIcon show={state.submitting}/>
+						{__('Publish')} {(state.submitting && uploadPercent) ? ` - ${uploadPercent}%` : null} <LoadingIcon show={state.submitting}/>
 					</button>
 				</div>
 			</div>		
