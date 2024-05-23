@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 
 import { request } from 'crewhrm-materials/request.jsx';
-import { __, data_pointer, sprintf, formatDate, formatTime, getDashboardPath, currency_symbol } from 'crewhrm-materials/helpers.jsx';
+import { __, data_pointer, sprintf, formatDate, formatTime, getDashboardPath, currency_symbol, getLocalValue, setLocalValue } from 'crewhrm-materials/helpers.jsx';
 import { ContextToast } from 'crewhrm-materials/toast/toast.jsx';
 import { LoadingIcon } from 'crewhrm-materials/loading-icon/loading-icon.jsx';
 import { Pagination } from 'crewhrm-materials/pagination/pagination.jsx';
@@ -45,9 +45,7 @@ const content_actions = [
 	}
 ];
 
-export function InventoryWrapper({children, content_label, gallery_permalink, navigate, params={}}) {
-
-	const {content_type} = params;
+function InventoryWrapper({children, content_type, content_label, gallery_permalink, navigate, params={}}) {
 
 	const _contents = window[data_pointer]?.settings?.contents || {};
 	const enabled_contents = 
@@ -65,7 +63,7 @@ export function InventoryWrapper({children, content_label, gallery_permalink, na
 	});
 
 	useEffect(()=>{
-		if ( ! content_type ) {
+		if ( ! content_type || !enabled_contents.find(c=>c.content_type==content_type) ) {
 			const first = enabled_contents[0]?.content_type;
 			if ( first ) {
 				navigate(getDashboardPath('inventory/'+first), {replace: true});
@@ -119,7 +117,7 @@ export function InventoryWrapper({children, content_label, gallery_permalink, na
 
 export function Inventory({navigate, params={}}) {
 
-	const {content_type} = params;
+	const {content_type = getLocalValue('selected_inventory_type')} = params;
 	const {ajaxToast} = useContext(ContextToast);
 
 	const [state, setState] = useState({
@@ -315,10 +313,13 @@ export function Inventory({navigate, params={}}) {
 						<div>
 							<DropDown
 								placeholder={__('Content Type')}
-								onChange={v=>navigate(getDashboardPath(`inventory/${v}`))}
 								value={content_type}
 								clearable={false}
 								options={enabled_contents}
+								onChange={type=>{
+									navigate(getDashboardPath(`inventory/${type}`));
+									setLocalValue('selected_inventory_type', type);
+								}}
 							/>
 						</div>
 					}

@@ -3,7 +3,7 @@
 Digital content showcase and sales plugin for WordPress.
 
 ## Production Deployment
-Download production build from [WordPress Plugin Directory](https://wordpress.org/plugins/solidie/).
+Download production build from [WordPress Plugin Directory](https://wordpress.org/plugins/solidie/). Get Pro version from Solidie official [website](https://solidie.com/).
 
 ## Development environment setup
 - Open terminal at <kbd>~/wp-content/plugins/</kbd> directory

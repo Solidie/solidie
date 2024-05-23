@@ -77,6 +77,7 @@ You can [create issue](https://github.com/Solidie/Solidie/issues) on Github repo
 --------------------------
 * Fix: Multiple audio playback issue at the same time
 * Fix: Loading icon not showing in single content page
+* Update: Content type selection made persistent in inventory and gallery
 * Update: Auto open release manager on content publish
 * Update: Auto open lesson editor on content publish
 * Update: Contributors list page enhanced in admin dashboard

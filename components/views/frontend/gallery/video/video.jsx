@@ -74,6 +74,7 @@ export function VideoSingle({content}) {
 				controls={false} 
 				poster={media.thumbnail?.file_url}
 				loop={true}
+				muted={true}
 				preload="auto"
 			>
 				<source src={media.preview?.file_url} type={media.preview?.mime_type}/>
@@ -92,10 +93,10 @@ export function VideoLayout({contents=[]}) {
 	const {column_count=3} = useContext(ContextColCounter);
 	const _contents = chunkArray(contents, column_count);
 
-	return <div className={'d-flex column-gap-5'.classNames()}>
+	return <div className={'d-flex column-gap-15'.classNames()}>
 		{
 			_contents.map((video, index)=>{
-				return <div className={'flex-1 d-flex flex-direction-column row-gap-5'.classNames()} key={index}>
+				return <div className={'flex-1 d-flex flex-direction-column row-gap-15'.classNames()} key={index}>
 					{
 						video.map(content=>{
 							return <VideoSingle key={content.content_id} content={content}/>

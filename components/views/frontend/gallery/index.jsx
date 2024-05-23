@@ -4,7 +4,7 @@ import { BrowserRouter, Route, Routes, useLocation, useNavigate, useParams, useS
 
 import { DropDown } from "crewhrm-materials/dropdown/dropdown.jsx";
 import { request } from "crewhrm-materials/request.jsx";
-import { __, data_pointer, filterObject, isEmpty, parseParams, getPath } from "crewhrm-materials/helpers.jsx";
+import { __, data_pointer, filterObject, isEmpty, parseParams, getPath, getLocalValue, setLocalValue } from "crewhrm-materials/helpers.jsx";
 import { ErrorBoundary } from "crewhrm-materials/error-boundary.jsx";
 import { LoadingIcon } from "crewhrm-materials/loading-icon/loading-icon.jsx";
 import { Pagination } from "crewhrm-materials/pagination/pagination.jsx";
@@ -95,8 +95,10 @@ function GalleryLayout({resources={}}) {
 		}
 	}).filter(content=>content!==null);
 
-	// Determine currently selected content type to render get list for
-	let content_type = content_options[0]?.content_type;
+	// Set default opened content type
+	let content_type = getLocalValue('selected_gallery_type', content_options[0]?.content_type);
+
+	// If any with the slug, then replace the content_type
 	for ( let k in contents ) {
 		if (contents[k].slug===content_type_slug) {
 			content_type = k;
@@ -189,11 +191,14 @@ function GalleryLayout({resources={}}) {
 				>
 					<DropDown
 						value={contents[content_type]?.slug}
-						onChange={v=>navigate(`/${page_path}/${v}/`)}
 						variant="borderless"
 						clearable={false}
 						transparent={true}
 						options={content_options}
+						onChange={slug=>{
+							navigate(`/${page_path}/${slug}/`);
+							setLocalValue('selected_gallery_type', Object.keys(contents).find(key=>contents[key].slug==slug));
+						}}
 					/>
 				</div>
 

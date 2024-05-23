@@ -116,7 +116,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 			type: 'file',
 			name: 'preview',
 			label: __('Preview File'),
-			hint: sprintf(__('Sneak peek for onsite playback. Supports: %s'), support_exts.join(', ')),
+			hint: <>{sprintf(__('Sneak peek for onsite playback. Supports: %s'), support_exts.join(', '))}. {content_type==='video' ? <><br/>{__('Please make sure the  aspect ratio of video and thumbnail is same.')}</> : null}</>,
 			required: true,
 			accept: extensions[content_type]
 		}),
@@ -357,9 +357,8 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 
 	return <div 
 		className={'content-editor'.classNames(style)} 
-		style={{maxWidth: '700px', margin: '20px auto'}}
+		style={{maxWidth: '800px', margin: '20px auto'}}
 	>
-				
 		{/* Header */}
 		<div className={"margin-top-20 margin-bottom-30 d-flex align-items-center column-gap-10".classNames()}>
 			<i 

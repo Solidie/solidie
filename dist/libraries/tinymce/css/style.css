@@ -7,6 +7,18 @@
 	z-index: 9999;
 }
 
+.tox.tox-silver-sink.tox-tinymce-aux .tox-form > div:first-child {
+	margin-bottom: 20px;
+}
+
+.tox.tox-silver-sink.tox-tinymce-aux .tox-form .tox-label {
+	margin-bottom: 10px;
+}
+
+.tox-dialog__footer {
+	padding-bottom: 20px !important;
+}
+
 .solidie-tinymce-ticking {
 	animation: solidieZoomInOut 0.3s infinite alternate; /* 1s duration, infinite loop, alternate direction */
 }
