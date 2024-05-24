@@ -33,11 +33,11 @@ export function HomeBackend() {
 			<br/>
 			<br/>
 			<br/>
-			<strong className={'d-block font-size-28 color-text margin-bottom-10'.classNames()}>
+			<strong className={'d-block font-size-28 color-text margin-bottom-15'.classNames()}>
 				{__('Welcome to Solidie!')}
 			</strong>
 			<span className={'d-block font-size-16 color-text-light'.classNames()}>
-				{__('Your own Stock Empire')}
+				{__('Your own Marketplace')}
 			</span>
 		</div>
 
@@ -100,7 +100,9 @@ export function HomeBackend() {
 				<strong className={'d-block font-size-16 font-weight-500 margin-bottom-10'.classNames()}>
 					{__('Got stuck?')}
 				</strong>
-				<span className={'font-size-14'.classNames()}>Check out <a href="https://solidie.com/documentation/solidie/0/" target="_blank"><strong>documentation</strong></a>.</span>
+				<span className={'font-size-14'.classNames()}>
+					Check out <a href="https://solidie.com/gallery/documentation/solidie/0/" target="_blank"><strong>documentation</strong></a>.
+				</span>
 			</div>
 		</div>
 

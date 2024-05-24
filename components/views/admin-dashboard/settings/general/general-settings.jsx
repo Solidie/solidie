@@ -111,7 +111,7 @@ export function GeneralSettings({settings={}, content_list={}, categories={}, re
 
     return <WpDashboardFullPage>
 		<div 
-			style={{maxWidth: '582px', margin: '80px auto'}} 
+			style={{maxWidth: '650px', margin: '80px auto'}} 
 			className={'padding-horizontal-15'.classNames()}
 		>
 			<div className={'overflow-auto'.classNames()}>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Apr 25, 2024 at 06:11 AM
+-- Generation Time: May 24, 2024 at 10:06 AM
 -- Server version: 8.0.16
 -- PHP Version: 8.1.23
 
@@ -32,6 +32,7 @@ CREATE TABLE IF NOT EXISTS `wp_solidie_categories` (
   `category_name` varchar(255) COLLATE utf8mb4_unicode_520_ci NOT NULL,
   `content_type` varchar(20) COLLATE utf8mb4_unicode_520_ci NOT NULL,
   `parent_id` bigint(20) UNSIGNED NOT NULL DEFAULT '0',
+  `sequence` bigint(20) NOT NULL DEFAULT '0',
   PRIMARY KEY (`category_id`),
   KEY `content_type` (`content_type`),
   KEY `parent_id` (`parent_id`)
@@ -124,7 +125,7 @@ CREATE TABLE IF NOT EXISTS `wp_solidie_lessons` (
   `parent_id` bigint(20) UNSIGNED NOT NULL DEFAULT '0',
   `content_id` bigint(20) NOT NULL,
   `lesson_status` varchar(10) COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
-  `sequence` int(10) UNSIGNED NOT NULL,
+  `sequence` bigint(20) UNSIGNED NOT NULL DEFAULT '0',
   PRIMARY KEY (`lesson_id`),
   UNIQUE KEY `lesson_slug` (`lesson_slug`),
   KEY `lesson_status` (`lesson_status`)

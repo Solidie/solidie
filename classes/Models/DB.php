@@ -163,7 +163,7 @@ class DB {
 	 */
 	public static function getLimit( $limit = null ) {
 		if ( ! is_numeric( $limit ) ) {
-			$limit = 20;
+			$limit = AdminSetting::get( 'pagination_contents_per_page', 20 );
 		}
 		return apply_filters( 'solidie_query_result_count', _Number::getInt( $limit, 1 ) );
 	}

@@ -213,7 +213,7 @@ function GalleryLayout({resources={}}) {
 							data-cylector="content-search"
 						/>
 					</div>
-					<div>
+					<div className={'d-flex'.classNames()}>
 						<i className={'ch-icon ch-icon-search-normal-1 font-size-16'.classNames()}></i>
 					</div>
 				</div>

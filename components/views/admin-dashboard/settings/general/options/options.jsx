@@ -19,7 +19,7 @@ export const label_class =
     'd-block font-size-15 font-weight-500 line-height-24 letter-spacing--16 color-text'.classNames();
 
 export const hint_class =
-    'd-block margin-top-3 font-size-15 font-weight-400 line-height-24 letter-spacing--15 color-text-light'.classNames();
+    'd-block margin-top-3 font-size-14 font-weight-400 line-height-24 letter-spacing--15 color-text-light'.classNames();
 
 function isTwoDimensionalArray(arr) {
     if (!Array.isArray(arr)) {
@@ -89,7 +89,7 @@ export function OptionFields({fields=[], settings, onChange: _onChange}) {
 			type, 
 			options, 
 			when, 
-			direction = 'column',
+			direction = 'row',
 			hint, 
 			hint2, 
 			placeholder, 
@@ -120,7 +120,7 @@ export function OptionFields({fields=[], settings, onChange: _onChange}) {
 		return (
 			<div
 				key={name}
-				className={`d-flex ${direction === 'column' ? 'flex-direction-column' : 'flex-direction-row align-items-center column-gap-15'} flex-wrap-wrap ${when ? 'fade-in' : ''}`.classNames()}
+				className={`d-flex ${direction === 'column' ? 'flex-direction-column' : 'flex-direction-row column-gap-15'} flex-wrap-wrap ${when ? 'fade-in' : ''}`.classNames()}
 				data-cylector={`option-${name}`}
 			>
 				{
@@ -129,7 +129,7 @@ export function OptionFields({fields=[], settings, onChange: _onChange}) {
 						<div className={'flex-1 margin-bottom-10'.classNames()}>
 							{label_text}
 						</div>
-						<div className={'d-flex align-items-center column-gap-10'.classNames()}>
+						<div className={'flex-1 d-flex align-items-center column-gap-10'.classNames()}>
 							<div>
 								<ToggleSwitch
 									checked={values[name] ? true : false}
@@ -185,11 +185,11 @@ export function OptionFields({fields=[], settings, onChange: _onChange}) {
 				{
 					!(type === 'checkbox' || type == 'radio') ? null :
 					<>
-						<div className={'margin-bottom-15'.classNames()}>
+						<div className={'flex-1 margin-bottom-15'.classNames()}>
 							{label_text}
 						</div>
 						<div
-							className={'d-flex flex-direction-column row-gap-10'.classNames()}
+							className={'flex-1 d-flex flex-direction-column row-gap-10'.classNames()}
 						>
 							<RadioCheckbox
 								type={type}
@@ -213,6 +213,7 @@ export function OptionFields({fields=[], settings, onChange: _onChange}) {
 							<NumberField
 								min={min}
 								max={max}
+								width='130px'
 								disabled={disabled}
 								value={values[name]}
 								placeholder={placeholder}
@@ -257,10 +258,8 @@ export function Options() {
 		fields=[], 
 		component, 
 		overflow=true, 
-		width='582px', 
 		label,
 		description,
-		separator=true, 
 	} = settings_fields[segment].segments[sub_segment];
 
 	return <div>
@@ -285,7 +284,7 @@ export function Options() {
 			</span>
 		</div>
 
-		<div className={'section'.classNames(style) + 'padding-vertical-20 margin-auto'.classNames()} style={{width}}>
+		<div className={'section'.classNames(style) + 'padding-vertical-20 margin-auto'.classNames()}>
 			<div 
 				className={`position-relative ${overflow ? '' : 'overflow-hidden'} padding-30 bg-color-white box-shadow-thin`.classNames()}
 				style={{borderRadius: '5px'}}
@@ -295,9 +294,9 @@ export function Options() {
 					<RenderExternal 
 						component={component} 
 						payload={{updateWholeSetting, settings, segment: sub_segment}}
-						className={`fields-wrapper ${separator ? 'separator' : ''}`.classNames(style)}/> 
+						className={`fields-wrapper`.classNames(style)}/> 
 					:
-					<div className={`fields-wrapper ${separator ? 'separator' : ''}`.classNames(style)}>
+					<div className={`fields-wrapper`.classNames(style)}>
 						<OptionFields fields={fields}/>
 					</div>
 				}

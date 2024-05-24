@@ -501,14 +501,18 @@ export function Inventory({navigate, params={}}) {
 									</span>
 								</td>
 								<td data-th={__('Action')}>
-									<Options
-										onClick={(action) => onActionClick(action, content)}
-										options={content_actions.filter(a=>(is_admin || a.id!=='delete')).filter(a=>(a.id!=='download' || release?.download_url))}
-									>
-										<i
-											className={'ch-icon ch-icon-more color-text-light font-size-20 cursor-pointer d-inline-block'.classNames()}
-										></i>
-									</Options>
+									<div className={'d-flex justify-content-flex-end'.classNames()}>
+										<div>
+											<Options
+												onClick={(action) => onActionClick(action, content)}
+												options={content_actions.filter(a=>(is_admin || a.id!=='delete')).filter(a=>(a.id!=='download' || release?.download_url))}
+											>
+												<i
+													className={'ch-icon ch-icon-more color-text-light font-size-20 cursor-pointer d-inline-block'.classNames()}
+												></i>
+											</Options>
+										</div>
+									</div>
 								</td>
 							</tr>
 						})

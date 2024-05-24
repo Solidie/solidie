@@ -27,14 +27,19 @@ export const settings_fields = applyFilters(
 							name: 'free_download_label',
 							label: __('Free download label'),
 							type: 'text',
-							placeholder: __('Free'),
 							direction: 'row'
 						},
 						{
 							name: 'free_download_description',
 							label: __('Free download description'),
 							type: 'textarea',
-							placeholder: __('This content is eligible to download for free'),
+							direction: 'row'
+						},
+						{
+							name: 'pagination_contents_per_page',
+							label: __('Contents per page'),
+							type: 'number',
+							min: 1,
 							direction: 'row'
 						}
 					]

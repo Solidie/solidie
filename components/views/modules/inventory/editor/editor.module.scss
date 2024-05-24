@@ -10,4 +10,20 @@
 		background-size: cover;
 		background-position: center center;
 	}
+
+	.field-wrapper {
+
+		display: flex;
+		margin-bottom: 35px;
+
+		&>div {
+			&:first-child {
+				width: 25%;
+			}
+
+			&:last-child {
+				flex: 1;
+			}
+		}
+	}
 }

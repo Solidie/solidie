@@ -30,17 +30,6 @@ const fields = [
 		label: __('Base Slug'),
 		type: 'text',
 	},
-	(
-		!is_pro_active ? null :
-		{
-			name: 'api_path',
-			label: __('Update API Path'),
-			type: 'text',
-			placeholder: 'e.g /updates-api/',
-			hint2: UpdatesAPINote,
-			supports: ['app']
-		}
-	),
 	{
 		name: 'show_thumbnail',
 		label: __('Show thumbnail in single page'),
@@ -87,7 +76,19 @@ const fields = [
 			type: 'switch',
 			placeholder: __('Enable')
 		}
-	)
+	),
+	(
+		!is_pro_active ? null :
+		{
+			name: 'api_path',
+			label: __('Update API Path'),
+			type: 'text',
+			placeholder: 'e.g /updates-api/',
+			hint2: UpdatesAPINote,
+			supports: ['app'],
+			direction: 'column'
+		}
+	),
 ].filter(o=>o);
 
 export function ContentTypeEditor(props) {

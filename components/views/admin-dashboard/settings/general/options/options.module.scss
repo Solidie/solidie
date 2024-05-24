@@ -17,19 +17,7 @@
 }
 
 .fields-wrapper {
-
 	&>div {
-		padding: 10px 0;
-	}
-
-	&.separator {
-		&>div {
-		
-			padding: 20px 0;
-
-			&:not(:last-child) {
-				border-bottom: 1px solid var(--crewmat-color-tertiary);
-			}
-		}
+		padding: 15px 0;
 	}
 }
