@@ -15,14 +15,20 @@
 
 		display: flex;
 		margin-bottom: 35px;
+		flex-flow: column;
 
-		&>div {
-			&:first-child {
-				width: 25%;
-			}
+		@media (min-width: 640px) {
 
-			&:last-child {
-				flex: 1;
+			flex-flow: row;
+
+			&>div {
+				&:first-child {
+					width: 25%;
+				}
+
+				&:last-child {
+					flex: 1;
+				}
 			}
 		}
 	}

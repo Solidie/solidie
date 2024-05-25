@@ -15,8 +15,9 @@ use Solidie\Models\Category;
 class CategoryController {
 
 	const PREREQUISITES = array(
-		'saveCategory'   => array(),
-		'deleteCategory' => array(),
+		'saveCategory'         => array(),
+		'saveCategorySequence' => array(),
+		'deleteCategory'       => array(),
 	);
 
 	/**
@@ -48,6 +49,17 @@ class CategoryController {
 		} else {
 			wp_send_json_error( array( 'message' => esc_html__( 'Failed to save category', 'solidie' ) ) );
 		}
+	}
+
+	/**
+	 * Save Category sequence order
+	 *
+	 * @param array $mapping
+	 * @return void
+	 */
+	public static function saveCategorySequence( array $mapping ) {
+		Category::updateSequence( $mapping );
+		wp_send_json_success();
 	}
 
 	/**

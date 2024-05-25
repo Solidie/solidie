@@ -449,7 +449,9 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 											type={type}
 											placeholder={placeholder} 
 											onChange={v=>setVal(name, v)}
-											value={state.values[name]}/>
+											value={state.values[name]}
+											onBlur={name==='content_title' ? saveOnTitleBlur : null}
+										/>
 									}
 
 									{

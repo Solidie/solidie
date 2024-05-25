@@ -75,6 +75,7 @@ You can [create issue](https://github.com/Solidie/Solidie/issues) on Github repo
 
 = v1.1.4 -> May 25, 2024 =
 --------------------------
+* New: Pagination content limit setting added
 * Fix: Multiple audio playback issue at the same time
 * Fix: Loading icon not showing in single content page
 * Update: Content type selection made persistent in inventory and gallery

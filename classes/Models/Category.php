@@ -64,7 +64,9 @@ class Category {
 				{$wpdb->solidie_categories} _cat 
 				LEFT JOIN {$wpdb->solidie_contents} _content ON _cat.category_id=_content.category_id
 			GROUP BY 
-				_cat.category_id",
+				_cat.category_id
+			ORDER BY
+				_cat.sequence ASC",
 			ARRAY_A
 		);
 
@@ -119,6 +121,25 @@ class Category {
 	}
 
 	/**
+	 * Update category order
+	 *
+	 * @param array $mapping
+	 * @return void
+	 */
+	public static function updateSequence( array $mapping ) {
+		
+		global $wpdb;
+
+		foreach ( $mapping as $id => $sequence ) {
+			$wpdb->update(
+				$wpdb->solidie_categories,
+				array( 'sequence' => $sequence ),
+				array( 'category_id' => $id )
+			);
+		}
+	}
+
+	/**
 	 * Get children IDs of a category
 	 *
 	 * @param int  $category_id The category ID to get children of
@@ -131,7 +152,7 @@ class Category {
 
 		global $wpdb;
 		$cats = $wpdb->get_results(
-			"SELECT * FROM {$wpdb->solidie_categories}",
+			"SELECT * FROM {$wpdb->solidie_categories} ORDER BY sequence ASC",
 			ARRAY_A
 		);
 

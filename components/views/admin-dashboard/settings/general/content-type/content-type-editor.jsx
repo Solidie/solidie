@@ -120,14 +120,14 @@ export function ContentTypeEditor(props) {
 			onChange={onChange}
 		/>
 		<div
-			className={`d-flex flex-direction-column align-items-flex-start padding-vertical-10`.classNames()}
+			className={`align-items-flex-start padding-vertical-10`.classNames()}
 		>
-			<div className={'flex-1 margin-bottom-10'.classNames()}>
+			<div className={'margin-bottom-10'.classNames()}>
 				<span className={label_class}>
 					{__('Categories')}
 				</span>
 			</div>
-			<div className={'d-flex flex-1 align-items-center column-gap-10'.classNames()}>
+			<div>
 				<CategoryEditor content_type={content_type}/>
 			</div>
 		</div>

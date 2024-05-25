@@ -7,10 +7,9 @@ import { LoadingIcon } from 'crewhrm-materials/loading-icon/loading-icon.jsx';
 import { Modal } from 'crewhrm-materials/modal.jsx';
 import { DropDown } from 'crewhrm-materials/dropdown/dropdown.jsx';
 import { ContextToast } from 'crewhrm-materials/toast/toast.jsx';
+import { ListManager } from 'crewhrm-materials/list-manager/list-manager.jsx';
 
 import { ContextSettings } from "../general-settings.jsx";
-
-import style from './style.module.scss';
 
 const {readonly_mode} = window[data_pointer];
 
@@ -49,7 +48,7 @@ export function CategoryEditor({content_type}) {
 
 	const [state, setState] = useState({
 		saving: false,
-		categories: {...categories},
+		categories: categories[content_type] || [],
 		editor: null
 	});
 
@@ -82,7 +81,7 @@ export function CategoryEditor({content_type}) {
 			const {
 				success, 
 				data:{
-					categories=state.categories
+					categories={}
 				}
 			} = resp;
 			
@@ -90,10 +89,25 @@ export function CategoryEditor({content_type}) {
 			
 			setState({
 				...state,
-				categories,
+				categories: success ? categories[content_type] ?? [] : state.categories,
 				saving: false,
 				editor: success ? null : state.editor
 			});
+		});
+	}
+
+	const saveSequence=(categories)=>{
+		const flattened = getFlattenedCategories(categories);
+		const mapping = {};
+
+		flattened.forEach((cat, index)=>{
+			mapping[cat.category_id] = index+1;
+		});
+
+		request('saveCategorySequence', {mapping}, resp=>{
+			if ( !resp.success ) {
+				ajaxToast(resp);
+			}
 		});
 	}
 
@@ -103,7 +117,7 @@ export function CategoryEditor({content_type}) {
 		}
 
 		request('deleteCategory', {category_id}, resp=>{
-			const {success, data:{categories=[]}} = resp;
+			const {success, data:{categories={}}} = resp;
 
 			if ( ! success ) {
 				ajaxToast(resp);
@@ -112,15 +126,14 @@ export function CategoryEditor({content_type}) {
 
 			setState({
 				...state,
-				categories
+				categories: categories[content_type] ?? []
 			});
 		});
 	}
 
-	const _categories = getFlattenedCategories(state.categories[content_type] || []);
-	const cat_options = state.editor !== null ? getFlattenedCategories(state.categories[state.editor.content_type], state.editor.category_id) : null;
+	const cat_options = state.editor !== null ? getFlattenedCategories(state.categories, state.editor.category_id) : null;
 
-	return <>
+	return <div>
 		{
 			state.editor===null ? null : 
 			<Modal 
@@ -164,7 +177,7 @@ export function CategoryEditor({content_type}) {
 					&nbsp;
 					<button 
 						className={'button button-primary'.classNames()} 
-						onClick={saveCat}
+						onClick={()=>saveCat()}
 						disabled={readonly_mode || isEmpty(state.editor.category_name)}
 						data-cylector="category-submit"
 					>
@@ -173,29 +186,22 @@ export function CategoryEditor({content_type}) {
 				</div>
 			</Modal>
 		}
-		<div>
-			{
-				_categories.map(category=>{
-					const {label, category_id} = category;
-					return <div key={category_id} className={'d-flex align-items-center column-gap-15'.classNames() + 'category-single'.classNames(style)}>
-						{label} <span className={'d-inline-flex align-items-center column-gap-8'.classNames() + 'actions'.classNames(style)}>
-							<i className={'ch-icon ch-icon-edit-2 cursor-pointer'.classNames()} onClick={()=>!readonly_mode && openCatEditor(category)}></i>
-							<i className={'ch-icon ch-icon-trash cursor-pointer'.classNames()} onClick={()=>!readonly_mode && deleteCategory(category_id)}></i>
-						</span>
-					</div>
-				})
-			}
-
-			<div className={"d-flex align-items-center column-gap-10".classNames()}>
-				<span 
-					onClick={()=>openCatEditor({content_type})} 
-					className={`cursor-pointer hover-underline ${_categories.length ? 'border-top-1 b-color-tertiary' : ''}`.classNames()}
-					style={_categories.length ? {paddingTop: '6px', marginTop: '6px'} : {}}
-					data-cylector="add-category"
-				>
-					{__('+ Add Category')}
-				</span>
-			</div>
-		</div>
-	</>
+		
+		<ListManager
+			mode="queue"
+			id_key="category_id"
+			nested={false}
+			label_key="category_name"
+			list={state.categories}
+			addText={__('Add Category')}
+			rename={false}
+			onAdd={()=>openCatEditor({content_type})}
+			onEdit={c=>openCatEditor(c)}
+			deleteItem={id=>deleteCategory(id)}
+			onChange={categories=>{
+				setState({...state, categories});
+				saveSequence(categories);
+			}}
+		/>
+	</div>
 }
