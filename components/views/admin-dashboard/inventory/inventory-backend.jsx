@@ -14,7 +14,7 @@ function DashboardNavLayer({component, payload}) {
 }
 
 export function InventoryBackend(props) {
-	return <div className={'padding-15 bg-color-white'.classNames()}>
+	return <div className={'padding-15 bg-color-white height-p-100'.classNames()}>
 		<HashRouter>
 			<Routes>
 				<Route path={getDashboardPath("inventory/:content_type?/")} element={<DashboardNavLayer component={Inventory} payload={props}/>} />

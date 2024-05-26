@@ -513,6 +513,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 											maxlength={maxlength}
 											value={state.values[name] || null}
 											removable={removable}
+											imageMaxWidth={1200}
 										/>
 									}
 

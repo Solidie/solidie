@@ -21,3 +21,17 @@ $light: rgba(0, 0, 0, 0);
 		line-height: normal;
 	}
 }
+
+.video-wrapper {
+	
+	.poster{
+		background-size: cover;
+		background-position: center;
+	}
+
+	&:hover {
+		.poster {
+			display: none;
+		}
+	}
+}

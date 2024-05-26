@@ -160,29 +160,6 @@ export function OptionFields({fields=[], settings, onChange: _onChange}) {
 				}
 
 				{
-					type !== 'image' ? null :
-					<>
-						<div className={'flex-1'.classNames()}>{label_text}</div>
-						<div className={'flex-1'.classNames()}>
-							{!values[name] ? (
-								<FileUpload
-									accept="image/*"
-									WpMedia={WpMedia}
-									onChange={(file) => onChange(name, file)}
-								/>
-							) : (
-								<RenderMedia
-									theme="singular"
-									media={values[name]}
-									onDelete={() => onChange(name, null)}
-									overlay={false}
-								/>
-							)}
-						</div>
-					</>
-				}
-
-				{
 					!(type === 'checkbox' || type == 'radio') ? null :
 					<>
 						<div className={'flex-1 margin-bottom-15'.classNames()}>

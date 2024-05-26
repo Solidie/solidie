@@ -55,7 +55,9 @@ export function VideoSingle({content}) {
 
 	useEffect(()=>{
 		vid_ref.current[state.mouse_over ? 'play' : 'pause']();
-	}, [state.mouse_over])
+	}, [state.mouse_over]);
+
+	const poster = media.thumbnail?.file_url;
 
 	return <Link 
 		key={content_id} 
@@ -64,7 +66,7 @@ export function VideoSingle({content}) {
 		data-cylector="content-single"
 	>
 		<div 
-			className={'position-relative cursor-pointer'.classNames()}
+			className={'position-relative cursor-pointer'.classNames() + 'video-wrapper'.classNames(style)}
 			onMouseOver={()=>setState({...state, mouse_over: true})}
 			onMouseOut={()=>setState({...state, mouse_over: false})}
 		>
@@ -72,7 +74,6 @@ export function VideoSingle({content}) {
 				ref={vid_ref}
 				className={'d-block width-p-100 height-auto'.classNames()} 
 				controls={false} 
-				poster={media.thumbnail?.file_url}
 				loop={true}
 				muted={true}
 				preload="auto"
@@ -80,6 +81,20 @@ export function VideoSingle({content}) {
 				<source src={media.preview?.file_url} type={media.preview?.mime_type}/>
 				Your browser does not support the video tag.
 			</video>
+			
+			{
+				!poster ? null :
+				<div 
+					className={
+						'position-absolute left-0 top-0 right-0 bottom-0'.classNames() + 
+						'poster'.classNames(style)
+					}
+					style={{
+						backgroundImage: `url(${poster})`
+					}}
+				></div>
+			}
+
 			{
 				!state.mouse_over ? null :
 				<ImageVideoDetails content={content}/>

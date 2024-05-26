@@ -1,14 +1,15 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, createContext } from "react";
 import {Helmet} from "react-helmet";
 import { BrowserRouter, Route, Routes, useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
 
 import { DropDown } from "crewhrm-materials/dropdown/dropdown.jsx";
 import { request } from "crewhrm-materials/request.jsx";
-import { __, data_pointer, filterObject, isEmpty, parseParams, getPath, getLocalValue, setLocalValue } from "crewhrm-materials/helpers.jsx";
+import { __, data_pointer, filterObject, isEmpty, parseParams, getLocalValue, setLocalValue } from "crewhrm-materials/helpers.jsx";
 import { ErrorBoundary } from "crewhrm-materials/error-boundary.jsx";
 import { LoadingIcon } from "crewhrm-materials/loading-icon/loading-icon.jsx";
 import { Pagination } from "crewhrm-materials/pagination/pagination.jsx";
 import { applyFilters } from "crewhrm-materials/hooks.jsx";
+import { TextField } from "crewhrm-materials/text-field/text-field.jsx";
 
 import { GenericCard } from "./generic-card/generic-card.jsx";
 import { SingleWrapper } from "../single/index.jsx";
@@ -17,10 +18,10 @@ import { Image } from "./image/image.jsx";
 import { Video } from "./video/video.jsx";
 import { Audio } from "./audio/audio.jsx";
 
-import style from './index.module.scss';
 import { Sidebar } from "./sidebar.jsx";
 import { Tutorial } from "../tutorial/tutorial.jsx";
-import { createContext } from "react";
+
+import style from './index.module.scss';
 
 const {page_path} = window[data_pointer];
 
@@ -184,41 +185,6 @@ function GalleryLayout({resources={}}) {
 			</title>
 		</Helmet>
 		<div className={'gallery'.classNames(style)}>
-			<div className={'d-flex align-items-center position-sticky border-1 border-radius-8 b-color-tertiary margin-bottom-15'.classNames()}>
-				<div 
-					className={'border-right-1 b-color-tertiary'.classNames()} 
-					style={content_options.length<2 ? {width: 0, visibility: 'hidden'} : {}}
-				>
-					<DropDown
-						value={contents[content_type]?.slug}
-						variant="borderless"
-						clearable={false}
-						transparent={true}
-						options={content_options}
-						onChange={slug=>{
-							navigate(`/${page_path}/${slug}/`);
-							setLocalValue('selected_gallery_type', Object.keys(contents).find(key=>contents[key].slug==slug));
-						}}
-					/>
-				</div>
-
-				{/* Search field */}
-				<div className={'flex-1 d-flex align-items-center padding-horizontal-15'.classNames()}>
-					<div className={'flex-1'.classNames()}>
-						<input 
-							type='text' 
-							className={"text-field-flat overflow-hidden text-overflow-ellipsis".classNames()}
-							value={queryParams.search || ''}
-							onChange={e=>setFilter('search', e.currentTarget.value)}
-							data-cylector="content-search"
-						/>
-					</div>
-					<div className={'d-flex'.classNames()}>
-						<i className={'ch-icon ch-icon-search-normal-1 font-size-16'.classNames()}></i>
-					</div>
-				</div>
-			</div>
-			
 			<div ref={reff_wrapper} className={`content ${is_mobile ? 'mobile' : ''}`.classNames(style)}>
 				<Sidebar
 					filters={queryParams}
@@ -245,9 +211,38 @@ function GalleryLayout({resources={}}) {
 					className={'list'.classNames(style)}
 					data-cylector={`content-list-wrapper-${content_type}`}
 				>
+					<div className={'d-flex column-gap-15 align-items-center margin-bottom-15 justify-content-flex-end'.classNames()}>
+						<div 
+							style={content_options.length<2 ? {width: 0, visibility: 'hidden'} : {}}
+						>
+							<DropDown
+								value={contents[content_type]?.slug}
+								clearable={false}
+								transparent={true}
+								options={content_options}
+								onChange={slug=>{
+									navigate(`/${page_path}/${slug}/`);
+									setLocalValue('selected_gallery_type', Object.keys(contents).find(key=>contents[key].slug==slug));
+								}}
+							/>
+						</div>
+
+						{/* Search field */}
+						<div className={'d-flex align-items-center'.classNames()}>
+							<div className={'flex-1'.classNames()}>
+								<TextField 
+									value={queryParams.search || ''}
+									type="search" 
+									placeholder="Search.."
+									onChange={v=>setFilter('search', v)}
+								/>
+							</div>
+						</div>
+					</div>
+					
 					{
 						(!state.fetching && !state.contents.length) ? 
-							<div className={'text-align-center'.classNames()}>
+							<div className={'text-align-center margin-top-20'.classNames()}>
 								{__('No result!')}
 							</div> : null
 					}
