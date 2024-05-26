@@ -151,7 +151,7 @@ export function Tutorial({path, content_slug}) {
 		if( window.Prism ) {
 			window.Prism.highlightAll();
 		}
-		reff_content.current.scrollIntoView(true);
+		window.jQuery(reff_content.current).closest('article').get(0).scrollIntoView(true);
 	}, [state.lesson]);
 
 	if ( state.error_message ) {

@@ -12,10 +12,16 @@ use Solidie\Models\Tutorial;
 
 class LessonController {
 	const PREREQUISITES = array(
-		'updateLessonsHierarchy' => array(
+		'saveNewLesson' => array(
+
+		),
+		'saveLessonSequence' => array(
 
 		),
 		'getLessonsHierarchy' => array(
+
+		),
+		'deleteLesson' => array(
 
 		),
 		'fetchLessonForEditor' => array(
@@ -37,12 +43,33 @@ class LessonController {
 	 *
 	 * @return void
 	 */
-	public static function updateLessonsHierarchy( array $lessons, int $content_id ) {
+	public static function saveLessonSequence( int $content_id, array $sequence ) {
 		
 		// Content authentication
 		ContentController::contentAccessCheck( $content_id, get_current_user_id() );
 
-		Tutorial::updateLessonsHierarchy( $content_id, $lessons );
+		Tutorial::saveLessonSequence( $content_id, array_map( 'intval', $sequence ) );
+
+		wp_send_json_success();
+	}
+
+	/**
+	 * Create new lesson
+	 *
+	 * @param integer $content_id
+	 * @param string $lesson_title
+	 * @param integer $parent_id
+	 * @return void
+	 */
+	public static function saveNewLesson( int $content_id, string $lesson_title, int $parent_id = 0) {
+
+		Tutorial::updateLessonSingle(
+			array(
+				'content_id'   => $content_id,
+				'lesson_title' => $lesson_title,
+				'parent_id'    => $parent_id
+			)
+		);
 
 		wp_send_json_success( array( 'lessons' => Tutorial::getLessonsRecursive( $content_id ) ) );
 	}
@@ -55,6 +82,29 @@ class LessonController {
 	 */
 	public static function getLessonsHierarchy( int $content_id ) {
 		wp_send_json_success( array( 'lessons' => Tutorial::getLessonsRecursive( $content_id ) ) );
+	}
+
+	/**
+	 * Delete single lesson
+	 *
+	 * @param integer $content_id
+	 * @param integer $lesson_id
+	 *
+	 * @return void
+	 */
+	public static function deleteLesson( int $content_id, int $lesson_id ) {
+
+		// Content access check
+		ContentController::contentAccessCheck( $content_id, get_current_user_id() );
+
+		Tutorial::deleteLessons( $lesson_id );
+
+		wp_send_json_success(
+			array( 
+				'message' => __( 'Lesson delete', 'solidie' ),
+				'lessons' => Tutorial::getLessonsRecursive( $content_id )
+			) 
+		);
 	}
 
 	/**

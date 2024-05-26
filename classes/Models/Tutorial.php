@@ -12,85 +12,26 @@ use Solidie\Helpers\_String;
 class Tutorial {
 
 	/**
-	 * Insert or update individual lessons structures
-	 *
-	 * @param int      $content_id The content ID of lessons
-	 * @param array    $lessons Nested lessons array
-	 * @param int|null $parent_id Parent ID to set
-	 *
-	 * @return array The IDs that remains after removal of others
-	 */
-	private static function updateLessonsRecursive( $content_id, $lessons, $parent_id = 0 ) {
-
-		$remaining_ids = array();
-		
-		global $wpdb;
-
-		foreach ( $lessons as $index => $lesson ) {
-
-			$lesson_id = $lesson['lesson_id'];
-			
-			$payload = array(
-				'lesson_title' => $lesson['lesson_title'],
-				'parent_id'    => $parent_id,
-				'content_id'   => $content_id,
-				'sequence'     => $index + 1
-			);
-
-			if ( is_numeric( $lesson_id ) ) {
-				
-				$wpdb->update(
-					$wpdb->solidie_lessons,
-					$payload,
-					array( 'lesson_id' => $lesson_id )
-				);
-			} else {
-				$wpdb->insert(
-					$wpdb->solidie_lessons,
-					$payload
-				);
-
-				$lesson_id = $wpdb->insert_id;
-
-				// Assign a new lesson slug
-				self::setLessonSlug( $lesson_id, $lesson['lesson_title'] );
-			}
-
-			$remaining_ids[] = ( int ) $lesson_id;
-
-			$children = $lesson['children'] ?? array();
-			if ( ! empty( $children ) ) {
-				$left_over_ids = self::updateLessonsRecursive( $content_id, $children, $lesson_id );
-				$remaining_ids = array_merge( $remaining_ids, $left_over_ids );
-			}
-		}
-
-		return $remaining_ids;
-	}
-
-	/**
 	 * Update lessons hierarchy
 	 *
-	 * @param array $lessons Nested array of lessons
+	 * @param int $content_id
+	 * @param array $sequence
 	 * @return void
 	 */
-	public static function updateLessonsHierarchy( $content_id, $lessons ) {
+	public static function saveLessonSequence( $content_id, $sequence ) {
 		
-		// Update or insert the remaining lessons
-		$remaining_ids = self::updateLessonsRecursive( $content_id, $lessons );
-
-		// Get existing lesson IDs of the content
 		global $wpdb;
-		$existing_ids = $wpdb->get_col(
-			$wpdb->prepare(
-				"SELECT lesson_id FROM {$wpdb->solidie_lessons} WHERE content_id=%d",
-				$content_id
-			)
-		);
 
-		// Delete the lessons from DB that were removed
-		$removed_ids = array_diff( array_map( 'intval', $existing_ids ), $remaining_ids );
-		self::deleteLessons( $removed_ids );
+		foreach ( $sequence as $id => $value ) {
+			$wpdb->update(
+				$wpdb->solidie_lessons,
+				array( 'sequence' => $value ),
+				array( 
+					'content_id' => $content_id,
+					'lesson_id'  => $id 
+				)
+			);
+		}
 	}
 
 	/**
@@ -100,12 +41,13 @@ class Tutorial {
 	 * @return void
 	 */
 	public static function deleteLessons( $lesson_ids ) {
+		
 		if ( empty( $lesson_ids ) ) {
 			return;
 		}
 
 		global $wpdb;
-		$lesson_ids = ! is_array( $lesson_ids ) ? array( $lesson_ids ) : $lesson_ids;
+		$lesson_ids = _Array::getArray( $lesson_ids, true );
 		$ids_places = _String::getPlaceHolders( $lesson_ids );
 
 		// Get lesson contents to delete attached media
@@ -302,32 +244,58 @@ class Tutorial {
 	 */
 	public static function updateLessonSingle( array $lesson ) {
 		
-		$exists = self::getLesson( $lesson['content_id'], $lesson['lesson_id'] );
-		if ( empty( $exists ) ) {
+		$lesson_id      = ( int ) ( $lesson['lesson_id'] ?? 0 );
+		$content_id     = $lesson['content_id'];
+		$current_lesson = $lesson_id ? self::getLesson( $content_id, $lesson_id ) : null;
+
+		// Check if the lesson exists if the lesson id is non empty
+		if ( $lesson_id && ! $current_lesson ) {
 			return false;
 		}
 
 		// Delete removed media by ID that are no more in updated lesson
-		FileManager::deleteRemovedFilesFromContent( $exists['lesson_content'] ?? '', $lesson['lesson_content'] ?? '', $lesson['content_id'], $lesson['lesson_id'] );
+		if ( $current_lesson ) {
+			FileManager::deleteRemovedFilesFromContent(
+				$current_lesson['lesson_content'] ?? '', 
+				$lesson['lesson_content'] ?? '', 
+				$content_id, 
+				$lesson_id
+			);
+		}
 
 		$payload = array(
 			'lesson_title'   => $lesson['lesson_title'] ?? 'Untitled',
 			'lesson_content' => $lesson['lesson_content'] ?? '',
 			'lesson_status'  => 'publish',
 			'parent_id'      => $lesson['parent_id'],
+			'content_id'     => $content_id
 		);
 
 		global $wpdb;
-		$wpdb->update(
-			$wpdb->solidie_lessons,
-			$payload,
-			array( 
-				'lesson_id' => $lesson['lesson_id'], 
-				'content_id' => $lesson['content_id'],
-			)
-		);
 
-		return true;
+		if ( $lesson_id ) {
+			$wpdb->update(
+				$wpdb->solidie_lessons,
+				$payload,
+				array( 
+					'lesson_id' => $lesson_id, 
+					'content_id' => $content_id,
+				)
+			);
+		} else {
+			$wpdb->insert(
+				$wpdb->solidie_lessons,
+				$payload
+			);
+
+			$lesson_id = ! empty( $wpdb->insert_id ) ?  $wpdb->insert_id : false;
+			
+			if ( $lesson_id ) {
+				self::setLessonSlug( $lesson_id, $payload['lesson_title'] );
+			}
+		}
+
+		return $lesson_id;
 	}
 
 	/**

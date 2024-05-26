@@ -1,15 +1,23 @@
 import React, { useContext, useEffect, useState } from "react";
 
-import {__, data_pointer, getDashboardPath} from 'crewhrm-materials/helpers.jsx'
+import {__, data_pointer, getDashboardPath, isEmpty} from 'crewhrm-materials/helpers.jsx'
 import {ListManager} from 'crewhrm-materials/list-manager/list-manager.jsx'
 import { request } from "crewhrm-materials/request.jsx";
 import { ContextToast } from "crewhrm-materials/toast/toast.jsx";
 import { LoadingIcon } from "crewhrm-materials/loading-icon/loading-icon";
 import { InitState } from "crewhrm-materials/init-state.jsx";
+import { Modal } from 'crewhrm-materials/modal.jsx';
+import { TextField } from 'crewhrm-materials/text-field/text-field.jsx';
+import { DropDown } from 'crewhrm-materials/dropdown/dropdown.jsx';
 
 import { LessonEditor } from "./lesson-editor.jsx";
+import { getFlattenedArray } from "../../../admin-dashboard/settings/general/content-type/category-editor.jsx";
 
 const {readonly_mode} = window[data_pointer];
+
+const getFlattenedLessons=(lessons)=>{
+	return getFlattenedArray(lessons, 'lesson_id', 'lesson_title')
+}
 
 export function TutorialManager({content_id, content_type, lesson_id, navigate}) {
 
@@ -21,6 +29,7 @@ export function TutorialManager({content_id, content_type, lesson_id, navigate})
 		saving: false,
 		fetching: false,
 		error_message: null,
+		new_lesson: null
 	});
 	
 	const setLessons=(lessons)=>{
@@ -37,6 +46,24 @@ export function TutorialManager({content_id, content_type, lesson_id, navigate})
 
 	const editLesson=(lesson)=>{
 		navigate(getDashboardPath(`inventory/${content_type}/editor/${content_id}/lessons/${lesson.lesson_id}/`))
+	}
+
+	const deleteLesson=(lesson_id)=>{
+		
+		if ( ! window.confirm('Sure to delete?') ) {
+			return;
+		}
+
+		request('deleteLesson', {lesson_id, content_id}, resp=>{
+			ajaxToast(resp);
+
+			if ( resp.success ) {
+				setState({
+					...state,
+					lessons: resp.data.lessons
+				});
+			}
+		});
 	}
 
 	const fetchLessonsHierarchy=()=>{
@@ -65,41 +92,121 @@ export function TutorialManager({content_id, content_type, lesson_id, navigate})
 		});
 	}
 
-	const updateLessons=()=>{
-		
-		if ( ! window.confirm(__('Sure to save the changes? Removed lessons will be deleted permanently, if any.')) ) {
-			return;
-		}
+	const saveSequence=(lessons)=>{
+		const flattened = getFlattenedLessons(lessons);
+		const sequence = {};
+
+		flattened.forEach((lessons, index)=>{
+			sequence[lessons.lesson_id] = index+1;
+		});
+
+		request('saveLessonSequence', {content_id, sequence}, resp=>{
+			if ( !resp.success ) {
+				ajaxToast(resp);
+			}
+		});
+	}
+
+	const saveNewLesson=()=>{
 
 		setState({
 			...state,
 			saving: true
 		});
 
-		request('updateLessonsHierarchy', {lessons: state.lessons, content_id}, resp=>{
-			
-			const {success, data:{lessons=[]}} = resp;
+		request('saveNewLesson', {...state.new_lesson, content_id}, resp=>{
 
 			ajaxToast(resp);
 
 			setState({
-				...state,
 				saving: false,
-				has_changes: !success,
-				lessons: success ? lessons : state.lessons
-			})
-		})
+				new_lesson: resp.success ? null : state.new_lesson,
+				lessons: resp.success ? resp.data.lessons : state.lessons
+			});
+		});
+	}
+
+	const closeModal=()=>{
+		setState({
+			...state, 
+			new_lesson: null
+		});
+	}
+
+	const setNewLesson=(name, value)=>{
+		setState({
+			...state,
+			new_lesson: {
+				...state.new_lesson,
+				[name]: value
+			}
+		});
 	}
 
 	useEffect(()=>{
 		fetchLessonsHierarchy();
 	}, [lesson_id]);
 
+	const lesson_options = state.new_lesson !== null ? getFlattenedLessons(state.lessons) : null;
+
 	return  ! content_id ? <div className={'text-align-center color-warning'.classNames()}>
 		{__('Please save the overview first')}
 	</div> 
 	:
 	<>
+		{
+			state.new_lesson===null ? null : 
+			<Modal 
+				closeOnDocumentClick={true} 
+				nested={true} 
+				onClose={closeModal}
+			>
+				<div data-cylector="lesson-title-field">
+					<strong className={'d-block margin-bottom-8'.classNames()}>
+						{__('Lesson Title')}
+					</strong>
+					<TextField
+						value={state.new_lesson?.lesson_title || ''}
+						onChange={v=>setNewLesson('lesson_title', v)}/>
+				</div>
+				<br/>
+
+				{
+					isEmpty(state.lessons) ? null : <>
+						<div data-cylector="lesson-parent-field">
+							<strong className={'d-block margin-bottom-8'.classNames()}>
+								{__('Parent Lesson')}
+							</strong>
+							<DropDown 
+								value={state.new_lesson?.parent_id}
+								options={lesson_options}
+								onChange={id=>setNewLesson('parent_id', id)}/>
+						</div>
+						<br/>
+					</>
+				}
+
+				<div className={'text-align-right'.classNames()}>
+					<button 
+						onClick={closeModal} 
+						className={'button button-outlined'.classNames()}
+					>
+						{__('Cancel')}
+					</button>
+					&nbsp;
+					&nbsp;
+					<button 
+						className={'button button-primary'.classNames()} 
+						onClick={saveNewLesson}
+						disabled={readonly_mode || isEmpty(state.new_lesson?.lesson_title)}
+						data-cylector="lesson-submit"
+					>
+						{__('Create')} <LoadingIcon show={state.saving}/>
+					</button>
+				</div>
+			</Modal>
+		}
+
 		{
 			(state.fetching || state.error_message) ?
 			<InitState 
@@ -119,34 +226,20 @@ export function TutorialManager({content_id, content_type, lesson_id, navigate})
 					<ListManager
 						mode="queue"
 						id_key="lesson_id"
+						nested={false}
 						label_key="lesson_title"
 						permalink_key="lesson_permalink"
 						list={state.lessons}
-						onChange={setLessons}
-						onEdit={!state.has_changes ? editLesson : null}
 						addText={__('Add Lesson')}
-						nested={true}
+						rename={false}
+						onAdd={()=>setState({...state, new_lesson: {}})}
+						onEdit={editLesson}
+						deleteItem={deleteLesson}
+						onChange={lessons=>{
+							setState({...state, lessons});
+							saveSequence(lessons);
+						}}
 					/>
-
-					<div className={'d-flex align-items-center column-gap-15 margin-top-15'.classNames()}>
-						<div className={'flex-1 text-align-right'.classNames()}>
-							{
-								!state.has_changes ? null :
-								<i>
-									{__('To edit lesson contents, you need to save the hierarchy first.')}
-								</i>
-							}
-						</div>
-						<div>
-							<button 
-								className={'button button-primary'.classNames()} 
-								onClick={updateLessons}
-								disabled={state.saving || state.fetching || !state.has_changes || readonly_mode}
-							>
-								{__('Save Hierarchy')} <LoadingIcon show={state.saving}/>
-							</button>
-						</div>
-					</div>
 				</div>
 			)
 		}

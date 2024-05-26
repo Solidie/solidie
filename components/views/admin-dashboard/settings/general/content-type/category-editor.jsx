@@ -13,32 +13,40 @@ import { ContextSettings } from "../general-settings.jsx";
 
 const {readonly_mode} = window[data_pointer];
 
-export const getFlattenedCategories=(categories=[], exclude_level=null)=>{
-
+export const getFlattenedArray=(array, id_key, label_key, exclude_level=null)=>{
 	const options = [];
 
 	// Flatten nested array to linear
 	const flattener = (cats=[], level=0) => {
 		for ( let i=0; i<cats.length; i++ ) {
-			const {category_id, category_name, children=[]} = cats[i];
+			
+			const {children=[]} = cats[i];
+
+			const _id = cats[i][id_key];
+			const _label = cats[i][label_key];
 
 			// Exclude self and children for editor dropdown
-			if ( exclude_level == category_id ) {
+			if ( exclude_level == _id ) {
 				continue;
 			}
 
 			options.push({
 				...cats[i],
-				id: category_id,
-				label: '—'.repeat(level)+ ' ' + category_name,
+				id: _id,
+				label: '—'.repeat(level)+ ' ' + _label,
 				level
 			});
 			flattener(children, level+1);
 		}
 	}
-	flattener(categories);
+
+	flattener(array);
 
 	return options;
+}
+
+export const getFlattenedCategories=(categories=[], exclude_level=null)=>{
+	return getFlattenedArray(categories, 'category_id', 'category_name', exclude_level);
 }
 
 export function CategoryEditor({content_type}) {
