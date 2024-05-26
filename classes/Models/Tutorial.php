@@ -291,6 +291,22 @@ class Tutorial {
 			$lesson_id = ! empty( $wpdb->insert_id ) ?  $wpdb->insert_id : false;
 			
 			if ( $lesson_id ) {
+
+				// Assign sequence
+				$new_index = $wpdb->get_var(
+					$wpdb->prepare(
+						"SELECT MAX(sequence)+1 FROM {$wpdb->solidie_lessons} WHERE content_id=%d",
+						$content_id
+					)
+				);
+				
+				$wpdb->update(
+					$wpdb->solidie_lessons,
+					array( 'sequence' => $new_index ),
+					array( 'lesson_id' => $lesson_id )
+				);
+				
+				// Assign lesson slug
 				self::setLessonSlug( $lesson_id, $payload['lesson_title'] );
 			}
 		}
