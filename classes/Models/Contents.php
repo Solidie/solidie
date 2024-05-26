@@ -671,6 +671,8 @@ class Contents {
 	public static function deleteContent( $content_id ) {
 
 		global $wpdb;
+
+		// Get the content which is gonna be deleted
 		$content = $wpdb->get_row(
 			$wpdb->prepare(
 				"SELECT * FROM {$wpdb->solidie_contents} WHERE content_id=%d",
@@ -698,9 +700,6 @@ class Contents {
 		// Delete releases
 		Release::deleteReleaseByContentId( $content_id );
 
-		// Delete linked license keys and sales together
-		Sale::deleteSaleByContentId( $content_id );
-
 		// Delete Reactions
 		Reaction::deleteByContentId( $content_id );
 
@@ -711,6 +710,12 @@ class Contents {
 		if ( ! empty( $product_id ) ) {
 			wp_delete_post( $product_id, true );
 		}
+
+		// Delete content pack linking
+		$wpdb->delete(
+			$wpdb->solidie_content_pack_link,
+			array( 'content_id' => $content_id )
+		);
 
 		// Delete popularity trend
 		Popularity::deleteByContentId( $content_id );

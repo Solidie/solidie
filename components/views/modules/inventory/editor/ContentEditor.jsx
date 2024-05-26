@@ -512,7 +512,8 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 											onChange={v=>setVal(name, v)}
 											maxlength={maxlength}
 											value={state.values[name] || null}
-											removable={removable}/>
+											removable={removable}
+										/>
 									}
 
 									{
