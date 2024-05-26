@@ -19,6 +19,7 @@ use Solidie\Setup\Media;
 use Solidie\Setup\Promotion;
 use Solidie\Setup\Route;
 use Solidie\Setup\Shortcode;
+use Solidie\Setup\User;
 
 /**
  * Main class to initiate app
@@ -68,6 +69,7 @@ class Main {
 		new Shortcode();
 		new AdminPage();
 		new Media();
+		new User();
 		new OpenGraph();
 		new Cron();
 		new Promotion();

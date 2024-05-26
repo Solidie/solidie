@@ -10,7 +10,6 @@ namespace Solidie\Models;
 use Solidie\Helpers\_Array;
 use Solidie\Helpers\_String;
 use Solidie\Main;
-use Solidie_Pro\Models\ContentPack;
 
 /**
  * Content manager class
@@ -534,30 +533,10 @@ class Contents {
 
 		// Filter content type
 		if ( ! empty( $content_type ) ) {
-
 			$where_clause .= $wpdb->prepare( ' AND content.content_type=%s', $content_type );
-			
-			// Filter content bundle, it works only content type is specified as it needs to determine the logic
-			if ( ! empty( $args['content_pack_plan'] ) ) {
-				
-				$is_auto = ContentPack::isPackAutoEnabled( $args['content_pack_plan'] );
-
-				if ( $is_auto ) {
-					$where_clause .= $wpdb->prepare( 
-						' AND (pack.pack_id IS NULL OR (pack.pack_id=%s AND pack.enabled=1))', 
-						$args['content_pack_plan'] 
-					);
-				} else {
-					$where_clause .= $wpdb->prepare( 
-						' AND pack.pack_id=%s AND pack.enabled=1', 
-						$args['content_pack_plan'] 
-					);
-				}
-
-				// Include only paid in bundle filter, bundle can't be free
-				$where_clause .= ' AND content.product_id IS NOT NULL';
-			}
 		}
+
+		$where_clause = apply_filters( 'solidie_get_contents_where_clause', $where_clause, $args );
 
 		// If it is segmentation
 		if ( $segmentation ) {
@@ -680,8 +659,7 @@ class Contents {
 			),
 			ARRAY_A
 		);
-		$content    = is_array( $content ) ? _Array::castRecursive( $content ) : array();
-		$product_id = ! empty( $content['product_id'] ) ? $content['product_id'] : self::resurrectProductID( $content_id );
+		$content = is_array( $content ) ? _Array::castRecursive( $content ) : array();
 
 		do_action( 'solidie_content_delete', $content_id, $content );
 
@@ -706,17 +684,6 @@ class Contents {
 		// Delete comments
 		Comment::deleteCommentByContentId( $content_id );
 
-		// Delete associated woocommerce product
-		if ( ! empty( $product_id ) ) {
-			wp_delete_post( $product_id, true );
-		}
-
-		// Delete content pack linking
-		$wpdb->delete(
-			$wpdb->solidie_content_pack_link,
-			array( 'content_id' => $content_id )
-		);
-
 		// Delete popularity trend
 		Popularity::deleteByContentId( $content_id );
 
@@ -728,6 +695,35 @@ class Contents {
 
 		// Delete the content itself at the end
 		Field::contents()->deleteField( array( 'content_id' => $content_id ) );
+	}
+
+	/**
+	 * Delete content by user id
+	 *
+	 * @param int $user_id
+	 * @return void
+	 */
+	public static function deleteContentsByContributor( $user_id ) {
+
+		global $wpdb;
+
+		$content_ids = $wpdb->get_col(
+			$wpdb->prepare(
+				"SELECT 
+					content_id 
+				FROM 
+					{$wpdb->solidie_contents} 
+				WHERE 
+					contributor_id=%d",
+				$user_id
+			)
+		);
+		
+		if ( ! empty( $content_ids ) ) {
+			foreach ( $content_ids as $id ) {
+				self::deleteContent( $id );
+			}
+		}
 	}
 
 	/**

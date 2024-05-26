@@ -148,21 +148,28 @@ class Comment {
 	 * @param int $commenter_id Optional
 	 * @return bool
 	 */
-	public static function deleteComment( $comment_id, $commenter_id = null ) {
+	public static function deleteComment( $comment_id = null, $commenter_id = null ) {
 
-		$args = array(
-			'comment_id' => $comment_id
-		);
+		$args = array();
 
+		// Where comment ID
+		if ( null !== $comment_id ) {
+			$args['comment_id'] = $comment_id;
+		}
+
+		// Where commenter ID
 		if ( null !== $commenter_id ) {
 			$args[ 'user_id' ] = $commenter_id;
 		}
 
 		global $wpdb;
-		$wpdb->delete(
-			$wpdb->solidie_comments,
-			$args
-		);
+
+		if ( ! empty( $args ) ) {
+			$wpdb->delete(
+				$wpdb->solidie_comments,
+				$args
+			);
+		}
 	}
 
 	/**
