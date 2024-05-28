@@ -206,7 +206,7 @@ export function ReleaseManager({content_id}) {
 	</div> 
 	:
 	<div className={'release-wrapper'.classNames(style)}>
-		<div className={'border-1 b-color-tertiary padding-15 border-radius-10 margin-bottom-20'.classNames()}>
+		<div className={'border-1 b-color-tertiary bg-color-white padding-30 border-radius-10 margin-bottom-20'.classNames()}>
 			<Form 
 				onChange={onChange} 
 				values={state.values}
@@ -219,11 +219,11 @@ export function ReleaseManager({content_id}) {
 
 		{
 			!state.releases.length ? null : <div>
-				<strong className={'d-block font-weight-600'.classNames()}>
+				<strong className={'d-block font-weight-600 margin-bottom-10'.classNames()}>
 					{__('Previous Release')}
 				</strong>
 
-				<table className={'table no-responsive'.classNames()}>
+				<table className={'table no-responsive bg-color-white'.classNames()}>
 					<thead>
 						<tr>
 							<th>{__('Version')}</th>
@@ -255,7 +255,7 @@ export function ReleaseManager({content_id}) {
 													{version}
 												</span>
 												<small className={'d-block margin-bottom-10'.classNames()}>
-													{__('Date:')} {formatDateTime( release_date )}
+													{formatDateTime( release_date )}
 												</small>
 												<span className={'actions'.classNames(style) + 'd-flex align-items-center column-gap-15'.classNames()}>
 													<i 
