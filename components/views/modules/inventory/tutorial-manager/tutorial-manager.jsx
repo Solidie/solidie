@@ -116,13 +116,19 @@ export function TutorialManager({content_id, content_type, lesson_id, navigate})
 
 		request('saveNewLesson', {...state.new_lesson, content_id}, resp=>{
 
+			const {success, data: {lessons=[], lesson_id}} = resp;
+
 			ajaxToast(resp);
 
 			setState({
 				saving: false,
-				new_lesson: resp.success ? null : state.new_lesson,
-				lessons: resp.success ? resp.data.lessons : state.lessons
+				new_lesson: success ? null : state.new_lesson,
+				lessons: success ? lessons : state.lessons
 			});
+
+			if ( success ) {
+				navigate(getDashboardPath(`inventory/${content_type}/editor/${content_id}/lessons/${lesson_id}/`));
+			}
 		});
 	}
 

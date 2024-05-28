@@ -63,7 +63,7 @@ class LessonController {
 	 */
 	public static function saveNewLesson( int $content_id, string $lesson_title, int $parent_id = 0) {
 
-		Tutorial::updateLessonSingle(
+		$lesson_id = Tutorial::updateLessonSingle(
 			array(
 				'content_id'   => $content_id,
 				'lesson_title' => $lesson_title,
@@ -71,7 +71,13 @@ class LessonController {
 			)
 		);
 
-		wp_send_json_success( array( 'lessons' => Tutorial::getLessonsRecursive( $content_id ) ) );
+		wp_send_json_success( 
+			array( 
+				'message'   => __( 'New lesson created. Add contents now..', 'solidie' ),
+				'lessons'   => Tutorial::getLessonsRecursive( $content_id ),
+				'lesson_id' => $lesson_id
+			) 
+		);
 	}
 
 	/**
