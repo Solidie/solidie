@@ -119,7 +119,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 			required: true,
 			accept: extensions[content_type]
 		}),
-		(['app', '3d', 'document', 'font', 'tutorial'].indexOf(content_type)===-1 ? null : {
+		(['app', '3d', 'font', 'tutorial'].indexOf(content_type)===-1 ? null : {
 			type: 'file',
 			name: 'sample_images',
 			label: __('Sample Image/Videos (Max 10)'),

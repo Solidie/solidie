@@ -21,7 +21,7 @@ class Manifest {
 		$manifest = array(
 			'settings' => array(
 				'general'  => array(
-					'free_download_label'          => 'Free Download',
+					'free_download_label'          => 'Free',
 					'free_download_description'    => 'This content is eligible to download for free',
 					'pagination_contents_per_page' => 20,
 				),

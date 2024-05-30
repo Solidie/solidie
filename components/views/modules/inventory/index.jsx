@@ -445,9 +445,25 @@ export function Inventory({navigate, params={}}) {
 										{
 											monetization !== 'paid' ? __('Free') :
 											<>
-												<div className={'white-space-nowrap'.classNames()}>
-													{currency_symbol}{min_price} {max_price>min_price ? <> - {currency_symbol}{max_price}</> : null}
-												</div>
+												{
+													!min_price ? null :
+													<div className={'d-flex align-items-center column-gap-8'.classNames()}>
+														<span className={'font-weight-600'.classNames()}>
+															{currency_symbol}{min_price}
+														</span>
+														{
+															!(max_price>min_price) ? null : 
+															<>
+																<span className={'color-text-light'.classNames()}>
+																	to
+																</span>
+																<span className={'font-weight-600'.classNames()}>
+																	{currency_symbol}{max_price}
+																</span>
+															</>
+														}
+													</div>
+												}
 
 												{
 													! packs.length ? null :

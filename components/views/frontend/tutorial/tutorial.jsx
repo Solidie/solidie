@@ -97,6 +97,7 @@ export function Tutorial({path, content_slug}) {
 	const {pathname} = useLocation();
 	const path_segments = pathname.split('/').filter(p=>p);
 	const active_slug = path_segments[path_segments.length - 1];
+	const ref_wrapper = useRef();
 
 	const reff_content = useRef();
 
@@ -151,7 +152,11 @@ export function Tutorial({path, content_slug}) {
 		if( window.Prism ) {
 			window.Prism.highlightAll();
 		}
-		window.jQuery(reff_content.current).closest('article').get(0).scrollIntoView(true);
+
+		/* if ( ref_wrapper?.current ) {
+			ref_wrapper.current.scrollIntoView(true);
+		} */
+		
 	}, [state.lesson]);
 
 	if ( state.error_message ) {
@@ -159,7 +164,7 @@ export function Tutorial({path, content_slug}) {
 		return <InitState fetching={state.fetching} error_message={state.error_message}/>
 	}
 
-	return <div className={'tutorial'.classNames(style)}>
+	return <div className={'tutorial'.classNames(style)} ref={ref_wrapper}>
 		<Helmet>
 			<title>
 				{getPageTitle(state.lesson?.lesson_title)}

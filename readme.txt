@@ -73,9 +73,11 @@ You can [create issue](https://github.com/Solidie/Solidie/issues) on Github repo
 
 == Changelog ==
 
-= v1.1.4 -> May 25, 2024 =
+= v1.1.4 -> May 30, 2024 =
 --------------------------
 * New: Pagination content limit setting added
+* New: Default sale price field added in pricing settings
+* Fix: Pricing plan list glitch
 * Fix: Multiple audio playback issue at the same time
 * Fix: Loading icon not showing in single content page
 * Fix: Inconsistent video and thumbnail ratio in gallery

@@ -45,10 +45,10 @@ function FreeDownlod( props ) {
 	const access_url  = is_tutorial ? content_permalink+'0/' : (release?.download_url || '#');
 
 	return <div className={'border-1 b-color-tertiary border-radius-5 padding-horizontal-15 padding-vertical-20'.classNames()}>
-		<strong className={'d-block font-size-15 color-text font-weight-500 margin-bottom-15'.classNames()}>
+		<strong className={'d-block font-size-15 color-text font-weight-500 margin-bottom-10'.classNames()}>
 			{free_download_label}
 		</strong>
-		<span className={'d-block'.classNames()}>
+		<span className={'d-block margin-bottom-20'.classNames()}>
 			{free_download_description}
 		</span>
 		<a 
