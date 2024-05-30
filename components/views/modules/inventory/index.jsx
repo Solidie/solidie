@@ -551,7 +551,7 @@ export function Inventory({navigate, params={}}) {
 			(state.segmentation?.page_count || 0) < 2 ? null :
 			<>
 				<br/>
-				<div className={'d-flex justify-content-end'.classNames()}>
+				<div className={'d-flex justify-content-center'.classNames()}>
 					<Pagination
 						onChange={(page) => setFilter('page', page)}
 						pageNumber={filterState.page}

@@ -13,7 +13,9 @@ The ultimate plugin for showcasing all kind of digital contents to the world and
 
 == Description ==
 
-No matter if you are an app developer, photographer, video maker, 3d modeler, writer, or you create any kind of digital contents, Solidie has all the features you need to present your creations to the world and start earning from them. See [Live Demo](https://demo.solidie.com)
+No matter if you are an app developer, photographer, video maker, 3d modeler, writer, or you create any kind of digital contents, Solidie has all the features you need to present your creations to the world and start earning from them. 
+
+See [Live Demo](https://demo.solidie.com)
 
 == Installation ==
 From WordPress Dashboard
@@ -33,17 +35,6 @@ If you have any questions or problems using this plugin, you can write here in [
 Please share your valuable review on [WordPress](https://wordpress.org/plugins/solidie/#reviews), [ProductHunt](https://www.producthunt.com/products/solidie/reviews), or [TrustPilot](https://www.trustpilot.com/review/solidie.com).
 
 There are several minified JavaScript file that are built with React JS and compiled with Webpack. If you want to access the unminified files for this plugin, you can do so from [here](https://github.com/Solidie/Solidie)
-
-== Screenshots ==
-
-1. Unified content management panel
-2. Advanced content editor
-3. Content gallery
-4. Content type specific gallery
-5. Single content page
-6. Extensive settings panel
-7. Custom pricing builder
-8. Full fledged contributor and customer dashboard
 
 == Frequently Asked Questions ==
 
