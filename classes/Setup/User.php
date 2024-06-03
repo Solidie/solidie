@@ -17,7 +17,7 @@ use Solidie\Models\Field;
 class User {
 
 	public function __construct() {
-		add_action( 'delete_user', array( $this, 'processUserDeletion' ), 10 );
+		add_action( 'delete_user', array( $this, 'processUserDeletion' ), 10, 3 );
 	}
 	
 	/**

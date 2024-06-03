@@ -512,7 +512,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 												accept={accept}
 												onChange={v=>setVal(name, v)}
 												maxlength={maxlength}
-												value={state.values[name] || null}
+												value={(name === 'thumbnail' && !(state.values[name] instanceof File) && !state.values[name]?.file_id) ? null : (state.values[name] || null)}
 												removable={removable}
 												imageMaxWidth={1200}
 											/>

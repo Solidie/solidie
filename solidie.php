@@ -3,7 +3,7 @@
  * Plugin Name: Solidie - Content Marketplace
  * Plugin URI: https://solidie.com
  * Description: Multimedia stock plugin to showcase any digital contents like audio, video, image, ebook, apps and so on.
- * Version: 1.1.4
+ * Version: 1.1.5
  * Author: Solidie
  * Author URI: https://solidie.com
  * Requires at least: 5.3

@@ -57,7 +57,7 @@ export function VideoSingle({content}) {
 		vid_ref.current[state.mouse_over ? 'play' : 'pause']();
 	}, [state.mouse_over]);
 
-	const poster = media.thumbnail?.file_url;
+	const poster = media.thumbnail?.file_id ? media.thumbnail?.file_url : null;
 
 	return <Link 
 		key={content_id} 
