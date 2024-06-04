@@ -14,7 +14,16 @@ import { Options } from "crewhrm-materials/dropdown/dropdown.jsx";
 import { getPriceRange } from '../../frontend/gallery/generic-card/generic-card.jsx';
 import style from './inventory.module.scss';
 
-const {readonly_mode, is_admin, is_pro_active} = window[data_pointer];
+const {
+	readonly_mode, 
+	is_admin, 
+	is_pro_active, 
+	settings:{
+		general:{
+			public_contribution_deletion
+		}
+	}
+} = window[data_pointer];
 
 export const content_statuses = {
 	draft: __('Draft'),
@@ -27,23 +36,55 @@ export const content_statuses = {
 
 const contributors_status = ['publish', 'unpublish'];
 
-const content_actions = [
-	{
-		id: 'edit', 
-		label: __('Edit'),
-		icon: 'ch-icon ch-icon-edit-2'.classNames()
-	},
-	{
-		id: 'delete', 
-		label: __('Delete'),
-		icon: 'ch-icon ch-icon-trash'.classNames()
-	},
-	{
-		id: 'download', 
-		label: __('Download'),
-		icon: 'ch-icon ch-icon-download'.classNames()
+const getContentActions = content=>{
+
+	const actions = [
+		{
+			id: 'edit', 
+			label: __('Edit'),
+			icon: 'ch-icon ch-icon-edit-2'.classNames()
+		},
+		
+	];
+
+	// Add delete option for admin or if public deletion enabled
+	if ( is_admin || public_contribution_deletion ) {
+		actions.push({
+			id: 'delete', 
+			label: __('Delete'),
+			icon: 'ch-icon ch-icon-trash'.classNames()
+		});
 	}
-];
+
+	// Add download option if download link available
+	if ( content.release?.download_url ) {
+		actions.push({
+			id: 'download', 
+			label: __('Download'),
+			icon: 'ch-icon ch-icon-download'.classNames()
+		});
+	}
+
+	// Add release manager URL if it is app
+	if (content.content_type==='app') {
+		actions.push({
+			id: 'release', 
+			label: __('Releases'),
+			icon: 'ch-icon ch-icon-hierarchy'.classNames()
+		});
+	}
+
+	// Add lesson manager URL if it is tutorial
+	if (content.content_type==='tutorial') {
+		actions.push({
+			id: 'tutorial', 
+			label: __('Lessons'),
+			icon: 'ch-icon ch-icon-book-open'.classNames()
+		});
+	}
+
+	return actions;
+}
 
 function InventoryWrapper({children, content_type, content_label, gallery_permalink, navigate, params={}}) {
 
@@ -179,7 +220,7 @@ export function Inventory({navigate, params={}}) {
 	}
 
 	const deleteContent=(content_id)=>{
-		if ( ! window.confirm('Sure to delete? All the linked data also will be deleted permanently.') ) {
+		if ( ! window.confirm('Sure to delete? All the associated data also will be deleted permanently.') ) {
 			return;
 		}
 
@@ -226,7 +267,7 @@ export function Inventory({navigate, params={}}) {
 		switch(action) {
 
 			case 'edit' :
-				navigate(getDashboardPath(`inventory/${content_type}/editor/${content_id}/`))
+				navigate(getDashboardPath(`inventory/${content_type}/editor/${content_id}/`));
 				break;
 
 			case 'delete': 
@@ -237,6 +278,14 @@ export function Inventory({navigate, params={}}) {
 
 			case 'download' : 
 				window.location.assign(release?.download_url);
+				break;
+
+			case 'release' :
+				navigate(getDashboardPath(`inventory/${content_type}/editor/${content_id}/release-manager/`));
+				break;
+
+			case 'tutorial' :
+				navigate(getDashboardPath(`inventory/${content_type}/editor/${content_id}/lessons/`));
 				break;
 		}
 	}
@@ -520,7 +569,7 @@ export function Inventory({navigate, params={}}) {
 									<div>
 										<Options
 											onClick={(action) => onActionClick(action, content)}
-											options={content_actions.filter(a=>(is_admin || a.id!=='delete')).filter(a=>(a.id!=='download' || release?.download_url))}
+											options={getContentActions(content)}
 										>
 											<i
 												className={'ch-icon ch-icon-more color-text-light font-size-20 cursor-pointer d-inline-block'.classNames()}

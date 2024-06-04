@@ -66,6 +66,8 @@ You can [create issue](https://github.com/Solidie/Solidie/issues) on Github repo
 
 = v1.1.5 -> Jun 10, 2024 =
 --------------------------
+* New: Release and lessons menu option added in inventory
+* New: Contributors content deletion setting added
 * Fix: User deletion throws error
 * Update: Default content thumbnail removed for video
 * Update: File uploader text updated

@@ -178,15 +178,19 @@ class ContentController {
 	 */
 	public static function deleteContent( int $content_id ) {
 
-		// Only administrative user can delete permanently
-		if ( ! User::hasAdministrativeRole( get_current_user_id() ) ) {
-			wp_send_json_error( array( 'You are not authorized to delete content permanently!', 'solidie' ) );
+		// Admin can delete no matter the condition
+		// Contributor can only if deletion enabled for them
+		if ( 
+			User::hasAdministrativeRole( get_current_user_id() ) || 
+			( AdminSetting::get( 'public_contribution_deletion' ) && self::contentAccessCheck( $content_id, get_current_user_id() ) ) 
+		) {
+			
+			Contents::deleteContent( $content_id );
+			wp_send_json_success();
+		
+		} else {
+			wp_send_json_error( array( 'message' => __( 'You are not authorized to delete!', 'solidie' ) ) );
 		}
-
-		// self::contentAccessCheck( $content_id, get_current_user_id() );
-
-		Contents::deleteContent( $content_id );
-		wp_send_json_success();
 	}
 
 	/**
@@ -272,12 +276,13 @@ class ContentController {
 	 *
 	 * @param int $content_id
 	 * @param int $user_id
-	 * @return void
+	 * @return bool
 	 */
 	public static function contentAccessCheck( $content_id, $user_id ) {
 		if ( ! Contents::isUserCapableToManage( $content_id, $user_id ) ) {
 			wp_send_json_error( array( 'message' => __( 'You are not authorized!', 'solidie' ) ) );
 		}
+		return true;
 	}
 
 	/**

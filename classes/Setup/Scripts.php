@@ -116,7 +116,8 @@ class Scripts {
 				'settings'         => array(
 					'contents' => AdminSetting::getContentSettings(),
 					'general'  => array(
-						'frontend_dashboard_path' => AdminSetting::get( 'frontend_dashboard_path' ),
+						'frontend_dashboard_path'      => AdminSetting::get( 'frontend_dashboard_path' ),
+						'public_contribution_deletion' => AdminSetting::get( 'public_contribution_deletion' ),
 					),
 				),
 				'permalinks'       => array(
