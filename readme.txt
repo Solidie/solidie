@@ -9,32 +9,81 @@ Stable tag: 1.1.5
 License: GPLv3
 License URI: https://opensource.org/licenses/GPL-3.0
 
-The ultimate plugin for showcasing all kind of digital contents to the world and earn from them.
-
 == Description ==
 
-No matter if you are an app developer, photographer, video maker, 3d modeler, writer, or you create any kind of digital contents, Solidie has all the features you need to present your creations to the world and start earning from them. 
+Solidie is a powerful WordPress plugin designed to transform your simple website into a full-fledged digital content stock platform, also known as a marketplace. With Solidie, you can showcase and monetize a wide variety of content, including audio, video, images, apps, tutorials, fonts, and more, directly from your own website.
 
 See [Live Demo](https://demo.solidie.com)
 
-== Installation ==
-From WordPress Dashboard
-1. Log in to your WordPress Admin Dashboard.
-2. Go to Plugins > Add New
-3. The search box should be in the top right corner. Write 'Solidie'.
-4. Click on Install and then Activate.
+https://www.youtube.com/watch?v=jo1r2QDZCCk
 
-Manual Installation
-1. Upload the plugin folder to the `/wp-content/plugins/` directory.
-2. Activate the plugin from the WordPress admin dashboard.
+Here's the main features:
+
+* **Contents:** Supports Audio, Video, Image, Apps, Documents, 3D Contents, Fonts, Tutorials and so on.
+* **Dashboard:** Advanced dashboard to manage contents.
+* **Gallery:** Unified content gallery with advanced filtering.
+* **Single Page:** Single content details page with social reactions, download and purchase options.
+* **Monetization:** Free version supports showcasing only free contents.
+* **Content React:** Supports like, comment, rating, share and wishlist.
+* **App Management:** Provides app release management and automatic update distribution.
+* **Tutorial:** This special content type supports sequential article writing, making it perfect for creating detailed documentation and workflows.
+
+===Additional features in Pro version===
+
+* **Monetization:** Supports paid contents in addition to free.
+* **Frontend Dashboard:** Dedicated frontend dashboard for customers and contributors to manage their account, contents and purchases.
+* **Contribution:** Supports third party contributions and revenue sharing.
+* **Pricing:** Advanced pricing plan builder with single, bundle on monthly, yearly and lifetime basis including content access limit.
+* **License:** Robust license key management, ensuring secure distribution and updates for your paid apps.
+
+== Who Can Use Solidie? ==
+
+* **Individual content creators** can use this plugin to showcase and monetize their contents on their own website and stop loosing earning percentage to bigger platform.
+* **Small to large scale businesses** can use this plugin to build full featured content marketplace including third party contributors and revenue sharing.
+* **Freelancers** can use the plugin to showcase their contents to attract clients and demonstrate their work area.
+* **Content Creators** like photographer, videographer, developers and so on can build their local, global or genre based exhibition community.
+* **No Limit** on the usage in fact as long as you create digital contents and would like to showcase to the world and/or turn them into cash.
+
+==Get In Touch==
+
+Please get in touch with us with any questions or for support to make sure you make the most out of Solidie.
+[Click Here to Contact Us](https://solidie.com/#contact)
+
+Please share your valuable review [here](https://wordpress.org/plugins/solidie/#reviews).
 
 = Documentation and Support =
 
+Here you could find solution on critical topics at [Solidie Docs](https://solidie.com/gallery/documentation/solidie/introduction/).
+
 If you have any questions or problems using this plugin, you can write here in [support channel](https://wordpress.org/support/plugin/solidie/)
 
-Please share your valuable review on [WordPress](https://wordpress.org/plugins/solidie/#reviews), [ProductHunt](https://www.producthunt.com/products/solidie/reviews), or [TrustPilot](https://www.trustpilot.com/review/solidie.com).
+There are several minified JavaScript file that are built with React JS and compiled with Webpack. If you want to access the unminified files for this plugin, you can do so from [here](https://github.com/Solidie/Solidie).
 
-There are several minified JavaScript file that are built with React JS and compiled with Webpack. If you want to access the unminified files for this plugin, you can do so from [here](https://github.com/Solidie/Solidie)
+== Installation ==
+
+You can download the basic version of Solidie from this page. Or, find `Solidie` in your website admin dashboard and install directly.
+However, the Pro version needs to be purchased from [Solidie Website](https://solidie.com/) and installed manually to add premium features to the basic one.
+
+Here’s the manual installation steps:
+
+1. Login to your WordPress admin dashboard
+2. Go to `Plugins` > `Add` New from the left sidebar menus
+3. Upload the downloaded zip file
+4. Click `Activate`
+
+If you do not find the menu `Add New` for some reason, then
+
+1. Unzip  the downloaded file to the `~/wp-content/plugins/` directory.
+2. Login to WordPress admin dashboard
+3. Go to `Plugins` page from the left sidebar menus
+4. Find `Solidie`
+5. Click `Activate`
+
+Then a new menu `Solidie` will appear in the left sidebar in admin dashboard where can manage contents, contributions and so on..
+
+== Third Party Integrations ==
+
+To use the Pro version, please note that you need to install WooCommerce as well. Solidie relies on this plugin for its payment and order processing capabilities in the background.
 
 == Frequently Asked Questions ==
 
@@ -68,6 +117,7 @@ You can [create issue](https://github.com/Solidie/Solidie/issues) on Github repo
 --------------------------
 * New: Release and lessons menu option added in inventory
 * New: Contributors content deletion setting added
+* New: Decimal point support in pricing fields
 * Fix: User deletion throws error
 * Update: Default content thumbnail removed for video
 * Update: File uploader text updated

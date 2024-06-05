@@ -19,9 +19,6 @@ class ProController {
 	const PREREQUISITES = array(
 		'proVersionAction' => array(
 			'role' => 'administrator',
-		),
-		'subscribeToNewsLetter' => array(
-			'nopriv' => true
 		)
 	);
 
@@ -55,41 +52,5 @@ class ProController {
 		}
 
 		wp_send_json_error( array( 'message' => __( 'Invalid Action', 'solidie' ) ) );
-	}
-
-	/**
-	 * Subscribe to new letter
-	 *
-	 * @param string $name
-	 * @param string $email
-	 * @return void
-	 */
-	public static function subscribeToNewsLetter( string $name, string $email ) {
-
-		$payload = array(
-			'name'   => $name,
-			'email'  => $email,
-			'action' => 'solidieSubscribeToNewsLetter'
-		);
-
-		$request  = wp_remote_post( Main::$configs->api_host . '/wp-admin/admin-ajax.php', array( 'body' => $payload ) );
-		$response = ( ! is_wp_error( $request ) && is_array( $request ) ) ? @json_decode( $request['body'] ?? null ) : null;
-
-		// Set fall back
-		$response          = is_object( $response ) ? $response : new \stdClass();
-		$response->success = $response->success ?? false;
-		$response->data    = $response->data ?? new \stdClass();
-		
-		if ( $response->success ) {
-
-			$subscribeds = _Array::getArray( get_option( self::SUBSCRIBED_MAILS ) );
-			$subscribeds[] = $email;
-
-			update_option( self::SUBSCRIBED_MAILS, $subscribeds );
-
-			wp_send_json_success( $response->data );
-		} else {
-			wp_send_json_error( $response->data );
-		}
 	}
 }

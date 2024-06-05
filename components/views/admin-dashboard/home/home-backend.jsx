@@ -3,7 +3,6 @@ import React from "react";
 import {__, data_pointer} from 'crewhrm-materials/helpers.jsx';
 
 import { ProInstaller } from "./pro-installer.jsx";
-import { NewsletterSubscription } from "./news-letter-subscription.jsx";
 import logo_svg from '../../../images/logo.svg';
 
 const {permalinks, is_apache, is_pro_active} = window[data_pointer];
@@ -106,11 +105,6 @@ export function HomeBackend() {
 			</div>
 		</div>
 
-		<br/>
-		<br/>
-		<br/>
-		<br/>
-		<NewsletterSubscription/>
 		<br/>
 	</div>
 }

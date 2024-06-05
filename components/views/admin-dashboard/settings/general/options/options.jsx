@@ -3,12 +3,10 @@ import { useParams, Link } from 'react-router-dom';
 
 import { ToggleSwitch } from 'crewhrm-materials/toggle-switch/ToggleSwitch.jsx';
 import { TextField } from 'crewhrm-materials/text-field/text-field.jsx';
-import { FileUpload } from 'crewhrm-materials/file-upload/file-upload.jsx';
 import { __ } from 'crewhrm-materials/helpers.jsx';
 import { NumberField } from 'crewhrm-materials/number-field/index.js';
 import { RadioCheckbox } from 'crewhrm-materials/radio-checkbox.jsx';
 import { DropDown } from 'crewhrm-materials/dropdown/dropdown.jsx';
-import { RenderMedia } from 'crewhrm-materials/render-media/render-media.jsx';
 import { RenderExternal } from 'crewhrm-materials/render-external.jsx';
 
 import { ContextSettings } from '../general-settings.jsx';
@@ -95,8 +93,8 @@ export function OptionFields({fields=[], settings, onChange: _onChange}) {
 			placeholder, 
 			min, 
 			max, 
-			disabled,
-			WpMedia
+			decimal_point,
+			disabled
 		} = field;
 
 		if (when && !satisfyLogic(when)) {
@@ -190,6 +188,7 @@ export function OptionFields({fields=[], settings, onChange: _onChange}) {
 							<NumberField
 								min={min}
 								max={max}
+								decimal_point={decimal_point}
 								width='130px'
 								disabled={disabled}
 								value={values[name]}
