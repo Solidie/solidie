@@ -3,7 +3,7 @@ Contributors: jayedul
 Donate Link: https://solidie.com
 Tags: marketplace, contributors, stock
 Requires at least: 5.3
-Tested up to: 6.5.3
+Tested up to: 6.5.4
 Requires PHP: 7.4
 Stable tag: 1.1.5
 License: GPLv3
@@ -118,9 +118,11 @@ You can [create issue](https://github.com/Solidie/Solidie/issues) on Github repo
 * New: Release and lessons menu option added in inventory
 * New: Contributors content deletion setting added
 * New: Decimal point support in pricing fields
+* New: Dashboard link in order details page
 * Fix: User deletion throws error
+* Fix: Variation remains enabled after plan deleted from content settings
 * Update: Default content thumbnail removed for video
-* Update: File uploader text updated
+* Update: File uploader text enhanced
 
 = v1.1.4 -> May 30, 2024 =
 --------------------------
