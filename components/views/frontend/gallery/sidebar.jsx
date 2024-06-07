@@ -17,7 +17,7 @@ function Filters({_setFilter, filterList, filters}) {
 			className={'margin-bottom-23 overflow-auto'.classNames()}
 		>
 			<span
-				className={'d-block font-size-14 font-weight-700 line-height-24 letter-spacing--14 color-text-light margin-bottom-16 text-transform-uppercase'.classNames()}
+				className={'d-block font-size-14 font-weight-700 line-height-24 letter-spacing--14 color-text-50 margin-bottom-16 text-transform-uppercase'.classNames()}
 			>
 				{section_label}
 			</span>
@@ -29,7 +29,7 @@ function Filters({_setFilter, filterList, filters}) {
 					let is_active = filters[filter_key] == id;
 					return <span
 						key={id}
-						className={`d-block font-size-14 cursor-pointer margin-bottom-18 font-weight-500 ${is_active ? 'color-text' : 'color-text-light'}`.classNames()}
+						className={`d-block font-size-14 cursor-pointer margin-bottom-18 font-weight-500 ${is_active ? 'color-text' : 'color-text-50'}`.classNames()}
 						onClick={() => _setFilter(filter_key, id)}
 					>
 						{label} {count ? `(${count})` : null}
@@ -89,7 +89,7 @@ function MobileFilter({_setFilter, filterList, filters}) {
 						>
 							{__('Clear')}
 						</span>
-						<span className={`border-left-1 b-color-text-lighter`.classNames()} style={{paddingLeft: '20px'}}>
+						<span className={`border-left-1 b-color-line-40`.classNames()} style={{paddingLeft: '20px'}}>
 							<span 
 								className={'color-secondary font-size-16 font-weight-500 line-height-24 letter-spacing--16 cursor-pointer'.classNames()}
 								onClick={()=>{
@@ -165,7 +165,7 @@ export function Sidebar({ is_mobile, setFilter, filters, filterList }) {
 			{
 				!show_clearer ? null :
 				<span 
-					className={'d-flex align-items-center column-gap-6 font-size-14 color-text-light color-hover-text cursor-pointer'.classNames()} 
+					className={'d-flex align-items-center column-gap-6 font-size-14 color-text-50 color-hover-text cursor-pointer'.classNames()} 
 					onClick={()=>setFilter({})} 
 					style={{marginLeft: '-3px'}}
 					data-cylector="clear-content-filter"

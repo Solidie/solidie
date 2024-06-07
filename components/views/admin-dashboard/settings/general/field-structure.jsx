@@ -9,6 +9,41 @@ export const settings_fields = applyFilters(
 			label: __('General Settings'),
 			description: __('Configure all the content management, sales and contributor related settings in one place'),
 			segments: {
+				general: {
+					label: __('General'),
+					description: __('Global Settings Applied to the Entire Plugin'),
+					separator: false,
+					fields: [
+						{
+							name: 'pagination_contents_per_page',
+							label: __('Contents per page'),
+							type: 'number',
+							min: 1,
+							direction: 'row'
+						},
+						{
+							name: 'color_scheme_materials',
+							label: __('Materials Color'),
+							hint: __('Set color for materials like button, radio, checkbox etc.'),
+							type: 'color',
+							direction: 'row'
+						},
+						{
+							name: 'color_scheme_texts',
+							label: __('Texts Color'),
+							hint: __('Set color for all the independent texts'),
+							type: 'color',
+							direction: 'row'
+						},
+						{
+							name: 'color_scheme_lines',
+							label: __('Lines Color'),
+							hint: __('Set color for all the borders, separator lines etc.'),
+							type: 'color',
+							direction: 'row'
+						},
+					]
+				},
 				gallery: {
 					label: __('Gallery'),
 					description: __('Gallery and single page settings'),
@@ -35,13 +70,6 @@ export const settings_fields = applyFilters(
 							type: 'textarea',
 							direction: 'row'
 						},
-						{
-							name: 'pagination_contents_per_page',
-							label: __('Contents per page'),
-							type: 'number',
-							min: 1,
-							direction: 'row'
-						}
 					]
 				}
 			}

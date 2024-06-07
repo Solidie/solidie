@@ -26,14 +26,14 @@ export function Segments() {
 					{label}
 				</span>
 				<span
-					className={'d-block font-size-14 font-weight-400 line-height-22 letter-spacing--14 color-text-light'.classNames()}
+					className={'d-block font-size-14 font-weight-400 line-height-22 letter-spacing--14 color-text-50'.classNames()}
 				>
 					{description}
 				</span>
 			</div>
 
 			<div
-				className={'border-1-5 b-color-tertiary border-radius-10 bg-color-white'.classNames()}
+				className={'border-1-5 b-color-line-40 border-radius-10 bg-color-white'.classNames()}
 			>
 				{segment_keys.map((segment_key, index) => {
 					const { icon, label, onToggle, is_enabled } = segments[segment_key];
@@ -43,7 +43,7 @@ export function Segments() {
 						key={segment_key}
 						to={`/settings/${key}/${segment_key}/`}
 						className={`d-flex align-items-center column-gap-10 cursor-pointer padding-vertical-10 padding-horizontal-15 ${
-							!is_last ? 'border-bottom-1-5 b-color-tertiary' : ''
+							!is_last ? 'border-bottom-1-5 b-color-line-40' : ''
 						} color-hover-parent`.classNames()}
 					>
 						<div className={'flex-1 d-flex align-items-center column-gap-10'.classNames()}>

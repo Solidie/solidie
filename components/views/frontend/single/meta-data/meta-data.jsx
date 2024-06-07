@@ -21,7 +21,7 @@ function LikeDislike({content={}, applyReaction, is_overlayer}) {
 	const liked    = my_reaction===1;
 	const disliked = my_reaction===0;
 
-	const color_class = is_overlayer ? 'color-white' : 'color-text-light';
+	const color_class = is_overlayer ? 'color-white' : 'color-text-50';
 
 	if ( is_overlayer ) {
 		return <div>
@@ -87,7 +87,7 @@ function Rating({content={}, applyReaction, is_overlayer}) {
 			style={{height: '25px'}}
 		/>
 		&nbsp;
-		<span className={`font-size-14 color-text-light ${is_overlayer ? 'color-white' : 'color-text-light'}`.classNames()}>
+		<span className={`font-size-14 color-text-50 ${is_overlayer ? 'color-white' : 'color-text-50'}`.classNames()}>
 			({average}/{rating_count})
 		</span>
 	</div>
@@ -167,7 +167,7 @@ export function MetaData({content={}, settings={}, is_overlayer, show_price_down
 					src={contributor.avatar_url} 
 					style={{width: '22px', height: '22px', borderRadius: '50%'}}
 				/>
-				<span className={`font-size-14 ${is_overlayer ? 'color-white text-shadow-thin' : 'color-text-light'}`.classNames()}>
+				<span className={`font-size-14 ${is_overlayer ? 'color-white text-shadow-thin' : 'color-text-50'}`.classNames()}>
 					{contributor.display_name}
 				</span>
 			</div>

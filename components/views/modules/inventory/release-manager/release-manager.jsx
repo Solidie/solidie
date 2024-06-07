@@ -206,7 +206,7 @@ export function ReleaseManager({content_id}) {
 	</div> 
 	:
 	<div className={'release-wrapper'.classNames(style)}>
-		<div className={'border-1 b-color-tertiary bg-color-white padding-30 border-radius-10 margin-bottom-20'.classNames()}>
+		<div className={'border-1 b-color-line-40 bg-color-white padding-30 border-radius-10 margin-bottom-20'.classNames()}>
 			<Form 
 				onChange={onChange} 
 				values={state.values}

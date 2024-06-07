@@ -21,7 +21,7 @@ function LessonList({lessons=[], level=1, active_slug, fetching=false}) {
 
 				return <div key={lesson_id}>
 					<div className={'margin-bottom-15'.classNames()}>
-						<Link to={lesson_permalink} className={`d-flex align-items-center column-gap-8 font-size-16 font-weight-400 color-text-light ${active ? 'color-text font-weight-700 text-decoration-underline' : ''}`.classNames()}>
+						<Link to={lesson_permalink} className={`d-flex align-items-center column-gap-8 font-size-16 font-weight-400 color-text-50 ${active ? 'color-text font-weight-700 text-decoration-underline' : ''}`.classNames()}>
 							{lesson_title} <LoadingIcon show={active && fetching}/>
 						</Link>
 					</div>

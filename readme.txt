@@ -115,6 +115,7 @@ You can [create issue](https://github.com/Solidie/Solidie/issues) on Github repo
 
 = v1.1.5 -> Jun 10, 2024 =
 --------------------------
+* New: Full color scheme customization
 * New: Release and lessons menu option added in inventory
 * New: Contributors content deletion setting added
 * New: Decimal point support in pricing fields

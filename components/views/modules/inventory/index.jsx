@@ -503,7 +503,7 @@ export function Inventory({navigate, params={}}) {
 														{
 															!(max_price>min_price) ? null : 
 															<>
-																<span className={'color-text-light'.classNames()}>
+																<span className={'color-text-50'.classNames()}>
 																	to
 																</span>
 																<span className={'font-weight-600'.classNames()}>
@@ -560,7 +560,7 @@ export function Inventory({navigate, params={}}) {
 								<span className={'d-block font-size-14 font-weight-500 color-text margin-bottom-5'.classNames()}>
 									{formatDate(created_at)}
 								</span>
-								<span className={'d-block font-size-13 font-weight-400 color-text-light'.classNames()}>
+								<span className={'d-block font-size-13 font-weight-400 color-text-50'.classNames()}>
 									{formatTime(created_at)}
 								</span>
 							</td>
@@ -572,7 +572,7 @@ export function Inventory({navigate, params={}}) {
 											options={getContentActions(content)}
 										>
 											<i
-												className={'ch-icon ch-icon-more color-text-light font-size-20 cursor-pointer d-inline-block'.classNames()}
+												className={'ch-icon ch-icon-more color-text-50 font-size-20 cursor-pointer d-inline-block'.classNames()}
 											></i>
 										</Options>
 									</div>

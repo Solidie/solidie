@@ -54,7 +54,7 @@ export function ProInstaller() {
 		</strong>
 
 		{
-			is_pro_installed ? <div className={'padding-vertical-40 padding-horizontal-15 border-1 b-color-tertiary text-align-center font-size-14 font-weight-400 border-radius-8 bg-color-white color-text'.classNames()}>
+			is_pro_installed ? <div className={'padding-vertical-40 padding-horizontal-15 border-1 b-color-line-40 text-align-center font-size-14 font-weight-400 border-radius-8 bg-color-white color-text'.classNames()}>
 				<div>
 					{__('It looks like you have Solidie Pro installed.')} 
 					<br/>
@@ -71,7 +71,7 @@ export function ProInstaller() {
 				</button>
 			</div>
 			:
-			 <div className={'padding-vertical-40 padding-horizontal-20 border-1 b-color-tertiary font-size-14 font-weight-400 border-radius-8 bg-color-white color-text'.classNames()}>
+			 <div className={'padding-vertical-40 padding-horizontal-20 border-1 b-color-line-40 font-size-14 font-weight-400 border-radius-8 bg-color-white color-text'.classNames()}>
 				<div className={'text-align-center'.classNames()}>
 					<strong className={'font-size-16 font-weight-600'.classNames()}>
 						{__('Solidie Pro: A game changer')}

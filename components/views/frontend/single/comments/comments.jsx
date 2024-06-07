@@ -239,7 +239,7 @@ export function Comments({content={}}) {
 									options={comment_actions}
 								>
 									<i
-										className={'ch-icon ch-icon-more color-text-light font-size-20 cursor-pointer d-inline-block'.classNames()}
+										className={'ch-icon ch-icon-more color-text-50 font-size-20 cursor-pointer d-inline-block'.classNames()}
 									></i>
 								</Options>
 							</div>

@@ -7,6 +7,8 @@
 
 namespace Solidie\Helpers;
 
+use Solidie\Models\AdminSetting;
+
 /**
  * Color helper class
  */
@@ -71,6 +73,26 @@ class Colors {
 
 		// Provide some necessary opacity
 		$colors['secondary-15'] = self::hexToRgba( $colors['secondary'], 0.15 );
+
+		$shades = array( 1, 0.5, 0.4 );
+
+		$schemes = array(
+			'color_scheme_materials',
+			'color_scheme_texts',
+			'color_scheme_lines',
+		);
+
+		foreach ( $schemes as $scheme ) {
+			
+			$color  = AdminSetting::get( $scheme );
+			$prefix = str_replace( 's', '', str_replace( 'color_scheme_', '', $scheme ) );
+			
+			foreach ( $shades as $shade ) {
+				$intensity                     = ( $shade / 1 ) * 100;
+				$postfix                       = $intensity === 100 ? '' : '-' . $intensity;
+				$colors[  $prefix . $postfix ] = self::hexToRgba( $color, $shade );
+			}
+		}
 
 		return $colors;
 	}

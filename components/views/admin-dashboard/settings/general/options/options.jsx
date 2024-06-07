@@ -17,7 +17,7 @@ export const label_class =
     'd-block font-size-15 font-weight-500 line-height-24 letter-spacing--16 color-text'.classNames();
 
 export const hint_class =
-    'd-block margin-top-3 font-size-14 font-weight-400 line-height-24 letter-spacing--15 color-text-light'.classNames();
+    'd-block margin-top-3 font-size-14 font-weight-400 line-height-24 letter-spacing--15 color-text-50'.classNames();
 
 function isTwoDimensionalArray(arr) {
     if (!Array.isArray(arr)) {
@@ -200,6 +200,22 @@ export function OptionFields({fields=[], settings, onChange: _onChange}) {
 				}
 
 				{
+					type !== 'color' ? null :
+					<>
+						<div className={'flex-5'.classNames()}>
+							{label_text}
+						</div>
+						<div className={'flex-2'.classNames()}>
+							<input 
+								type='color'
+								value={values[name]}
+								onChange={e=>onChange(name, e.currentTarget.value)}
+							/>
+						</div>
+					</>
+				}
+
+				{
 					type !== 'dropdown' ? null :
 					<>
 						<div className={'flex-5'.classNames()}>
@@ -254,7 +270,7 @@ export function Options() {
 				</span>
 			</span>
 			<span
-				className={'d-block font-size-14 font-weight-400 line-height-22 letter-spacing--14 color-text-light'.classNames()}
+				className={'d-block font-size-14 font-weight-400 line-height-22 letter-spacing--14 color-text-50'.classNames()}
 			>
 				{description}
 			</span>

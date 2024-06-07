@@ -24,6 +24,9 @@ class Manifest {
 					'free_download_label'          => 'Free',
 					'free_download_description'    => 'This content is eligible to download for free',
 					'pagination_contents_per_page' => 20,
+					'color_scheme_materials'       => '#236BFE',
+					'color_scheme_texts'           => '#1A1A1A',
+					'color_scheme_lines'           => '#1A1A1A'
 				),
 				'contents' => array(
 					// This array will be filled with content types

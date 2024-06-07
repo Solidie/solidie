@@ -35,7 +35,7 @@ export function HomeBackend() {
 			<strong className={'d-block font-size-28 color-text margin-bottom-15'.classNames()}>
 				{__('Welcome to Solidie!')}
 			</strong>
-			<span className={'d-block font-size-16 color-text-light'.classNames()}>
+			<span className={'d-block font-size-16 color-text-50'.classNames()}>
 				{__('Your own Marketplace')}
 			</span>
 		</div>
@@ -54,7 +54,7 @@ export function HomeBackend() {
 							key={index} 
 							href={link.link}
 							target={link.in_new ? '_blank' : '_self'}
-							className={'flex-1 d-block padding-vertical-40 border-1 b-color-tertiary cursor-pointer text-align-center font-size-14 font-weight-400 border-radius-8 bg-color-white color-text'.classNames()}
+							className={'flex-1 d-block padding-vertical-40 border-1 b-color-line-40 cursor-pointer text-align-center font-size-14 font-weight-400 border-radius-8 bg-color-white color-text'.classNames()}
 						>
 							{link.label}
 						</a>
