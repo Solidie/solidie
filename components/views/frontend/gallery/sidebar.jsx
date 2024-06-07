@@ -89,7 +89,7 @@ function MobileFilter({_setFilter, filterList, filters}) {
 						>
 							{__('Clear')}
 						</span>
-						<span className={`border-left-1 b-color-line-40`.classNames()} style={{paddingLeft: '20px'}}>
+						<span className={`border-left-1 b-color-text-40`.classNames()} style={{paddingLeft: '20px'}}>
 							<span 
 								className={'color-secondary font-size-16 font-weight-500 line-height-24 letter-spacing--16 cursor-pointer'.classNames()}
 								onClick={()=>{

@@ -13,29 +13,23 @@ use Solidie\Models\AdminSetting;
  * Color helper class
  */
 class Colors {
+
 	/**
-	 * Array of color pallete
-	 *
+	 * Available color opacities
+	 * 
 	 * @var array
 	 */
-	const BASE_COLORS = array(
-		'primary'      => '#1A1A1A',
-		'secondary'    => '#236BFE',
-		'tertiary'     => '#E3E5E8',
-		'quaternary'   => '#F9F9F9',
-
-		'text'         => '#1A1A1A',
-		'text-light'   => '#72777B',
-		'text-lighter' => '#BBBFC3',
-		'text-hint'    => '#757C8E',
-
-		'success'      => '#5B9215',
-		'warning'      => '#F57A08',
-		'error'        => '#EA4545',
-
-		'black'        => '#000000',
-		'white'        => '#FFFFFF',
-		'transparent'  => 'rgba(0, 0, 0, 0)',
+	const COLOR_OPACITIES = array( 
+		1, 
+		0.9,
+		0.8,
+		0.7,
+		0.6,
+		0.5, 
+		0.4,
+		0.3,
+		0.2,
+		0.1,
 	);
 
 	/**
@@ -45,7 +39,7 @@ class Colors {
 	 * @param float  $opacity Opacity to achieve
 	 * @return string
 	 */
-	private static function hexToRgba( $hex_color, $opacity ) {
+	private static function hexToRgba( $hex_color, $opacity = 1 ) {
 		// Remove any leading '#' from the hex color code
 		$hex_color = ltrim( $hex_color, '#' );
 
@@ -63,23 +57,65 @@ class Colors {
 		return $rgba_color;
 	}
 
+	private static function increaseContrast($hex, $factor = 128) {
+		// Ensure the input is a valid hex color code
+		$hex = ltrim($hex, '#');
+		if (strlen($hex) == 3) {
+			$hex = $hex[0] . $hex[0] . $hex[1] . $hex[1] . $hex[2] . $hex[2];
+		}
+
+		if (strlen($hex) != 6) {
+			throw new \Exception("Invalid hex color code.");
+		}
+
+		// Convert hex to RGB
+		list($r, $g, $b) = sscanf($hex, "%02x%02x%02x");
+
+		// Adjust contrast for each color component
+		$r = self::adjustContrast($r, $factor);
+		$g = self::adjustContrast($g, $factor);
+		$b = self::adjustContrast($b, $factor);
+
+		// Convert back to hex
+		$newHex = sprintf("#%02x%02x%02x", $r, $g, $b);
+		return $newHex;
+	}
+
+	private static function adjustContrast($color, $factor) {
+		$factor = (259 * ($factor + 255)) / (255 * (259 - $factor));
+		$newColor = $factor * ($color - 128) + 128;
+
+		// Ensure the value is within 0-255 range
+		return max(0, min(255, round($newColor)));
+	}
+
 	/**
 	 * Get the colors to render in frontend
 	 *
 	 * @return array
 	 */
 	public static function getColors() {
-		$colors = self::BASE_COLORS;
 
-		// Provide some necessary opacity
-		$colors['secondary-15'] = self::hexToRgba( $colors['secondary'], 0.15 );
+		$colors = array(
+			'success'      => '#5B9215',
+			'warning'      => '#F57A08',
+			'error'        => '#EA4545',
+			'black'        => '#000000',
+			'white'        => '#FFFFFF',
+			'transparent'  => 'rgba(0, 0, 0, 0)',
+		);
 
-		$shades = array( 1, 0.5, 0.4 );
+		// Assign contrasted color to constant colors
+		foreach ( $colors as $key => $color ) {
+			if ( strpos( $color, '#' ) === 0 ) {
+				$colors[ $key . '-150' ] =  self::increaseContrast( $color );
+			}
+		}
 
+		// Prepare colors from dynamically set from settings page
 		$schemes = array(
 			'color_scheme_materials',
 			'color_scheme_texts',
-			'color_scheme_lines',
 		);
 
 		foreach ( $schemes as $scheme ) {
@@ -87,11 +123,14 @@ class Colors {
 			$color  = AdminSetting::get( $scheme );
 			$prefix = str_replace( 's', '', str_replace( 'color_scheme_', '', $scheme ) );
 			
-			foreach ( $shades as $shade ) {
-				$intensity                     = ( $shade / 1 ) * 100;
-				$postfix                       = $intensity === 100 ? '' : '-' . $intensity;
-				$colors[  $prefix . $postfix ] = self::hexToRgba( $color, $shade );
+			foreach ( self::COLOR_OPACITIES as $shade ) {
+				$intensity                    = ( $shade / 1 ) * 100;
+				$postfix                      = $intensity === 100 ? '' : '-' . $intensity;
+				$colors[ $prefix . $postfix ] = self::hexToRgba( $color, $shade );
 			}
+
+			// Contrasted color for hover and active effect
+			$colors[ $prefix . '-150' ] = self::increaseContrast( $color );
 		}
 
 		return $colors;

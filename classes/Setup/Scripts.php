@@ -57,11 +57,11 @@ class Scripts {
 		$dynamic_colors = Colors::getColors();
 		$_colors        = '';
 		foreach ( $dynamic_colors as $name => $code ) {
-			$_colors .= '--crewmat-color-' . esc_attr( $name ) . ':' . esc_attr( $code ) . ';';
+			$_colors .= '--solidie-color-' . esc_attr( $name ) . ':' . esc_attr( $code ) . ';';
 		}
 		?>
 			<style>
-				[id^="Solidie_"],[id^="solidie_"],[class^="Solidie_"],[id^="solidie_"],#crewhrm-popup-root{
+				:root{
 					<?php echo esc_html( $_colors ); ?>
 				}
 			</style>
@@ -96,6 +96,7 @@ class Scripts {
 				'is_pro_installed' => Utilities::isProInstalled( false ),
 				'is_pro_active'    => Utilities::isProInstalled( true ),
 				'colors'           => $dynamic_colors,
+				'opacities'        => Colors::COLOR_OPACITIES,
 				'text_domain'      => Main::$configs->text_domain,
 				'date_format'      => get_option( 'date_format' ),
 				'time_format'      => get_option( 'time_format' ),

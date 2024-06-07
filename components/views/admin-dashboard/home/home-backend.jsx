@@ -43,7 +43,7 @@ export function HomeBackend() {
 		<br/>
 		<br/>
 		<div>
-			<strong className={'d-block font-size-16 font-weight-500 margin-bottom-10'.classNames()}>
+			<strong className={'d-block font-size-16 font-weight-500 margin-bottom-10 color-text'.classNames()}>
 				{__('Quick Links')}
 			</strong>
 
@@ -54,7 +54,7 @@ export function HomeBackend() {
 							key={index} 
 							href={link.link}
 							target={link.in_new ? '_blank' : '_self'}
-							className={'flex-1 d-block padding-vertical-40 border-1 b-color-line-40 cursor-pointer text-align-center font-size-14 font-weight-400 border-radius-8 bg-color-white color-text'.classNames()}
+							className={'flex-1 d-block padding-vertical-40 border-1 b-color-text-20 cursor-pointer text-align-center font-size-14 font-weight-400 border-radius-8 bg-color-white color-text interactive'.classNames()}
 						>
 							{link.label}
 						</a>
@@ -90,17 +90,19 @@ export function HomeBackend() {
 		<br/>
 		<div className={'d-flex justify-content-space-between column-gap-15'.classNames()}>
 			<div>
-				<strong className={'d-block font-size-16 font-weight-500 margin-bottom-10'.classNames()}>
+				<strong className={'d-block font-size-16 font-weight-500 margin-bottom-10 color-text'.classNames()}>
 					{__('Enjoying Solidie?')} &#128512;
 				</strong>
-				<span className={'font-size-14'.classNames()}>Please <a href="https://wordpress.org/plugins/solidie/#reviews" target="_blank"><strong>provide your feedback</strong></a> to help us improve functionalities.</span>
+				<span className={'font-size-14 color-text-70'.classNames()}>
+					Please <a href="https://wordpress.org/plugins/solidie/#reviews" target="_blank" className={'color-material-80 font-weight-500 interactive'.classNames()}><strong>provide your feedback</strong></a> to help us improve functionalities.
+				</span>
 			</div>
 			<div className={'text-align-right'.classNames()}>
-				<strong className={'d-block font-size-16 font-weight-500 margin-bottom-10'.classNames()}>
+				<strong className={'d-block font-size-16 font-weight-500 margin-bottom-10 color-text'.classNames()}>
 					{__('Got stuck?')}
 				</strong>
-				<span className={'font-size-14'.classNames()}>
-					Check out <a href="https://solidie.com/gallery/documentation/solidie/0/" target="_blank"><strong>documentation</strong></a>.
+				<span className={'font-size-14 color-text-70'.classNames()}>
+					Check out <a href="https://solidie.com/gallery/documentation/solidie/0/" target="_blank" className={'color-material-80 font-weight-500 interactive'.classNames()}><strong>documentation</strong></a>.
 				</span>
 			</div>
 		</div>

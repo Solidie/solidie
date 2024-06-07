@@ -35,13 +35,6 @@ export const settings_fields = applyFilters(
 							type: 'color',
 							direction: 'row'
 						},
-						{
-							name: 'color_scheme_lines',
-							label: __('Lines Color'),
-							hint: __('Set color for all the borders, separator lines etc.'),
-							type: 'color',
-							direction: 'row'
-						},
 					]
 				},
 				gallery: {

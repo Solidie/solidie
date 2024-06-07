@@ -25,7 +25,7 @@
 		.sidebar {
 			width: auto;
 			
-			border: 1px solid var(--crewmat-color-tertiary);
+			border: 1px solid var(--solidie-color-tertiary);
 			border-radius: 5px;
 			padding: 10px 15px;
 
@@ -35,7 +35,7 @@
 
 			.menu-wrapper {
 				margin-top: 10px;
-				border-top: 1px solid var(--crewmat-color-tertiary);
+				border-top: 1px solid var(--solidie-color-tertiary);
 				padding-top: 20px;
 
 				&:not(.expanded) {

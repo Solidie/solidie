@@ -351,7 +351,7 @@ export function Inventory({navigate, params={}}) {
 
 				<Link 
 					to={getDashboardPath(`inventory/${content_type}/editor/new`)}
-					className={'ch-icon ch-icon-add-circle font-size-24'.classNames()}
+					className={'ch-icon ch-icon-add-circle font-size-24 color-material'.classNames()}
 				/>
 			</div>
 			

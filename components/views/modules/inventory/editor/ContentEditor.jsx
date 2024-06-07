@@ -402,7 +402,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 		{
 			active_tab !== 'overview' ? null :
 			<>
-				<div className={'border-radius-10 padding-30 border-1 b-color-line-40 bg-color-white'.classNames()}>
+				<div className={'border-radius-10 padding-30 border-1 b-color-text-40 bg-color-white'.classNames()}>
 					{
 						fields.map(field=>{
 							
