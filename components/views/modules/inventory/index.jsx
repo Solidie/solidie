@@ -341,7 +341,7 @@ export function Inventory({navigate, params={}}) {
 			<div className={'d-flex align-items-center column-gap-8'.classNames()}>
 				<a 
 					href={state.gallery_permalink}
-					className={"d-flex align-items-center column-gap-8 color-text padding-vertical-10 position-sticky top-0".classNames()}
+					className={"d-flex align-items-center column-gap-8 color-text-90 padding-vertical-10 position-sticky top-0".classNames()}
 					target='_blank'
 				>
 					<span className={'font-size-24 font-weight-600 letter-spacing-3'.classNames()}>
@@ -464,7 +464,7 @@ export function Inventory({navigate, params={}}) {
 									}
 									
 									<div className={'flex-1'.classNames()} style={{maxWidth: '260px'}}>
-										<a href={content_permalink} target='_blank' className={"d-block font-size-14 font-weight-600".classNames()}>
+										<a href={content_permalink} target='_blank' className={"d-block font-size-14 font-weight-600 color-text-80".classNames()}>
 											{content_title}
 										</a>
 									</div>
@@ -476,7 +476,7 @@ export function Inventory({navigate, params={}}) {
 								<td data-th={__('Contributor')}>
 									<div className={'d-flex align-items-center column-gap-8'.classNames()}>
 										<img src={avatar_url} style={{width: '25px', borderRadius: '50%', overflow: 'hidden'}}/>
-										<span>
+										<span className={'color-text-70'.classNames()}>
 											{display_name}
 										</span>
 									</div>
@@ -484,13 +484,15 @@ export function Inventory({navigate, params={}}) {
 							}
 
 							<td data-th={__('Category')}>
-								{category_name || <>&nbsp;</>}
+								<span className={'color-text-70'.classNames()}>
+									{category_name || <>&nbsp;</>}
+								</span>
 							</td>
 							
 							{
 								!is_pro_active ? null :
 								<td data-th={__('Price')}>
-									<div>
+									<div className={'color-text-70'.classNames()}>
 										{
 											monetization !== 'paid' ? __('Free') :
 											<>
@@ -557,12 +559,14 @@ export function Inventory({navigate, params={}}) {
 								</div>
 							</td>
 							<td data-th={__('Created')}>
-								<span className={'d-block font-size-14 font-weight-500 color-text margin-bottom-5'.classNames()}>
-									{formatDate(created_at)}
-								</span>
-								<span className={'d-block font-size-13 font-weight-400 color-text-50'.classNames()}>
-									{formatTime(created_at)}
-								</span>
+								<div>
+									<span className={'d-block font-size-14 font-weight-400 color-text-70 margin-bottom-5'.classNames()}>
+										{formatDate(created_at)}
+									</span>
+									<span className={'d-block font-size-13 font-weight-400 color-text-50'.classNames()}>
+										{formatTime(created_at)}
+									</span>
+								</div>
 							</td>
 							<td data-th={__('Action')}>
 								<div className={'d-flex justify-content-flex-end'.classNames()}>

@@ -33,6 +33,23 @@ class Colors {
 	);
 
 	/**
+	 * Get color shades, technically opacity
+	 *
+	 * @return array
+	 */
+	public static function getOpacities() {
+		
+		$ops = array();
+
+		for ( $i = 1; $i >= 0.1; $i = $i - 0.1 ) {
+			$ops[] = $i;
+			$ops[] = $i/10;
+		}
+		
+		return $ops;
+	}
+
+	/**
 	 * Convert hexa to rgba color
 	 *
 	 * @param string $hex_color The color to convert
@@ -123,7 +140,7 @@ class Colors {
 			$color  = AdminSetting::get( $scheme );
 			$prefix = str_replace( 's', '', str_replace( 'color_scheme_', '', $scheme ) );
 			
-			foreach ( self::COLOR_OPACITIES as $shade ) {
+			foreach ( self::getOpacities() as $shade ) {
 				$intensity                    = ( $shade / 1 ) * 100;
 				$postfix                      = $intensity === 100 ? '' : '-' . $intensity;
 				$colors[ $prefix . $postfix ] = self::hexToRgba( $color, $shade );

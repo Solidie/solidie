@@ -17,7 +17,7 @@ function Filters({_setFilter, filterList, filters}) {
 			className={'margin-bottom-23 overflow-auto'.classNames()}
 		>
 			<span
-				className={'d-block font-size-14 font-weight-700 line-height-24 letter-spacing--14 color-text-50 margin-bottom-16 text-transform-uppercase'.classNames()}
+				className={'d-block font-size-14 font-weight-700 line-height-24 letter-spacing--14 color-text-80 margin-bottom-16 text-transform-uppercase'.classNames()}
 			>
 				{section_label}
 			</span>
@@ -29,7 +29,7 @@ function Filters({_setFilter, filterList, filters}) {
 					let is_active = filters[filter_key] == id;
 					return <span
 						key={id}
-						className={`d-block font-size-14 cursor-pointer margin-bottom-18 font-weight-500 ${is_active ? 'color-text' : 'color-text-50'}`.classNames()}
+						className={`d-block font-size-14 cursor-pointer margin-bottom-18 font-weight-500 ${is_active ? 'color-text' : 'color-text-80'}`.classNames()}
 						onClick={() => _setFilter(filter_key, id)}
 					>
 						{label} {count ? `(${count})` : null}
@@ -59,6 +59,7 @@ function Filters({_setFilter, filterList, filters}) {
 						options={options}
 						value={filters[filter_key]}
 						onChange={(v) => _setFilter(filter_key, v)}
+						spanClassName={'color-text-60'.classNames()}
 					/>
 				</div>
 			}
@@ -81,7 +82,7 @@ function MobileFilter({_setFilter, filterList, filters}) {
 							</strong>
 						</div>
 						<span 
-							className={'color-secondary font-size-16 font-weight-500 line-height-24 letter-spacing--16  cursor-pointer'.classNames()}
+							className={'color-material font-size-16 font-weight-500 line-height-24 letter-spacing--16  cursor-pointer'.classNames()}
 							onClick={()=>{
 								_setFilter({});
 								setFilter(null);
@@ -91,7 +92,7 @@ function MobileFilter({_setFilter, filterList, filters}) {
 						</span>
 						<span className={`border-left-1 b-color-text-40`.classNames()} style={{paddingLeft: '20px'}}>
 							<span 
-								className={'color-secondary font-size-16 font-weight-500 line-height-24 letter-spacing--16 cursor-pointer'.classNames()}
+								className={'color-material font-size-16 font-weight-500 line-height-24 letter-spacing--16 cursor-pointer'.classNames()}
 								onClick={()=>{
 									setFilter(null);
 								}}
@@ -165,7 +166,7 @@ export function Sidebar({ is_mobile, setFilter, filters, filterList }) {
 			{
 				!show_clearer ? null :
 				<span 
-					className={'d-flex align-items-center column-gap-6 font-size-14 color-text-50 color-hover-text cursor-pointer'.classNames()} 
+					className={'d-flex align-items-center column-gap-6 font-size-14 color-text-80 cursor-pointer'.classNames()} 
 					onClick={()=>setFilter({})} 
 					style={{marginLeft: '-3px'}}
 					data-cylector="clear-content-filter"

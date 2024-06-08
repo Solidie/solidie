@@ -44,13 +44,14 @@ function FreeDownlod( props ) {
 	const is_tutorial = content_type === 'tutorial';
 	const access_url  = is_tutorial ? content_permalink+'0/' : (release?.download_url || '#');
 
-	return <div className={'border-1 b-color-text-40 border-radius-5 padding-horizontal-15 padding-vertical-20'.classNames()}>
-		<strong className={'d-block font-size-15 color-text font-weight-500 margin-bottom-10'.classNames()}>
+	return <div className={'border-1 b-color-material-20 border-radius-5 padding-horizontal-15 padding-vertical-20'.classNames()}>
+		<strong className={'d-block font-size-16 color-text-80 font-weight-600 margin-bottom-8'.classNames()}>
 			{free_download_label}
 		</strong>
-		<span className={'d-block margin-bottom-20'.classNames()}>
+		<span className={'d-block  font-size-14 margin-bottom-20 font-weight-400 color-text-60'.classNames()}>
 			{free_download_description}
 		</span>
+		
 		<a 
 			href={access_url} 
 			className={'button button-primary button-outlined button-full-width'.classNames()}

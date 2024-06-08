@@ -5,6 +5,8 @@ import {ToggleSwitch} from 'crewhrm-materials/toggle-switch/ToggleSwitch.jsx';
 
 import { ContextSettings } from '../general-settings.jsx';
 
+import style from './segments.module.scss';
+
 export function Segments() {
 
 	const {settings_fields} = useContext(ContextSettings);
@@ -42,9 +44,10 @@ export function Segments() {
 					return <Link
 						key={segment_key}
 						to={`/settings/${key}/${segment_key}/`}
-						className={`d-flex align-items-center column-gap-10 cursor-pointer padding-vertical-10 padding-horizontal-15 ${
-							!is_last ? 'border-bottom-1 b-color-text-20' : ''
-						} bg-color-white interactive`.classNames()}
+						className={
+							`d-flex align-items-center column-gap-10 cursor-pointer padding-vertical-10 padding-horizontal-15 ${!is_last ? 'border-bottom-1 b-color-text-20' : ''}`.classNames() +
+							`single-item`.classNames(style)
+						}
 					>
 						<div className={'flex-1 d-flex align-items-center column-gap-10'.classNames()}>
 							{
@@ -61,7 +64,9 @@ export function Segments() {
 							}
 							<div className={'flex-1'.classNames()}>
 								<span
-									className={'d-block font-size-15 font-weight-500 line-height-25 color-text'.classNames()}
+									className={
+										'd-block font-size-15 font-weight-500 line-height-25'.classNames()
+									}
 								>
 									{label}
 								</span>
@@ -69,7 +74,10 @@ export function Segments() {
 						</div>
 						<div>
 							<i
-								className={'ch-icon ch-icon-arrow-right font-size-24 color-text'.classNames()}
+								className={
+									'ch-icon ch-icon-arrow-right font-size-24'.classNames() +
+									`icon`.classNames(style)
+								}
 							></i>
 						</div>
 					</Link>
