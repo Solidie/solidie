@@ -46,6 +46,12 @@ export function OptionFields({fields=[], settings, onChange: _onChange}) {
 	const values = settings || settings_context[segment];
 	
 	const onChange=(name, value)=>{
+		
+		const {modifier} = fields.find(f=>f.name==name);
+		if ( typeof modifier === 'function' ) {
+			value = modifier(value);
+		}
+
 		_onChange ? _onChange(name, value) : dispatchChange(segment, name, value);
 	}
 
@@ -118,7 +124,7 @@ export function OptionFields({fields=[], settings, onChange: _onChange}) {
 		return (
 			<div
 				key={name}
-				className={`d-flex ${direction === 'column' ? 'flex-direction-column' : 'flex-direction-row column-gap-15'} flex-wrap-wrap ${when ? 'fade-in' : ''}`.classNames()}
+				className={`d-flex ${direction === 'column' ? 'flex-direction-column row-gap-5' : 'flex-direction-row column-gap-15'} flex-wrap-wrap ${when ? 'fade-in' : ''}`.classNames()}
 				data-cylector={`option-${name}`}
 			>
 				{
@@ -144,15 +150,25 @@ export function OptionFields({fields=[], settings, onChange: _onChange}) {
 				{
 					['text', 'url', 'email', 'textarea'].indexOf(type)===-1 ? null :
 					<>
-						<div className={'flex-1'.classNames()}>{label_text}</div>
 						<div className={'flex-1'.classNames()}>
-							<TextField
-								type={type}
-								value={values[name] || ''}
-								onChange={(v) => onChange(name, v)}
-								placeholder={placeholder}
-							/>
-							<small>{hint2 ? hint2(values[name] || '') : null}</small>
+							{label_text}
+						</div>
+						<div className={'flex-1'.classNames()}>
+							<div>
+								<TextField
+									type={type}
+									value={values[name] || ''}
+									onChange={(v) => onChange(name, v)}
+									placeholder={placeholder}
+								/>
+							</div>
+							
+							{
+								!hint2 ? null :
+								<div className={'d-block margin-top-5'.classNames()}>
+									{hint2(values[name] || '')}
+								</div>
+							}
 						</div>
 					</>
 				}
@@ -252,6 +268,8 @@ export function Options() {
 		overflow=true, 
 		label,
 		description,
+		onToggle,
+		is_enabled
 	} = settings_fields[segment].segments[sub_segment];
 
 	return <div>
@@ -266,7 +284,24 @@ export function Options() {
 						to={'/settings/'}
 						className={'ch-icon ch-icon-arrow-left cursor-pointer color-text'.classNames()} 
 					/>
-					{label}
+
+					<span>
+						{label}
+					</span>
+
+					{
+						!onToggle ? null :
+						<div 
+							onClick={e=>e.stopPropagation()}
+							data-cylector='segment-toggle'
+							className={`d-flex`.classNames()}
+						>
+							<ToggleSwitch 
+								onChange={checked=>onToggle(segment, sub_segment, checked)}
+								checked={is_enabled}
+							/>
+						</div>
+					}
 				</span>
 			</span>
 			<span

@@ -15,24 +15,6 @@ use Solidie\Models\AdminSetting;
 class Colors {
 
 	/**
-	 * Available color opacities
-	 * 
-	 * @var array
-	 */
-	const COLOR_OPACITIES = array( 
-		1, 
-		0.9,
-		0.8,
-		0.7,
-		0.6,
-		0.5, 
-		0.4,
-		0.3,
-		0.2,
-		0.1,
-	);
-
-	/**
 	 * Get color shades, technically opacity
 	 *
 	 * @return array
@@ -42,8 +24,8 @@ class Colors {
 		$ops = array();
 
 		for ( $i = 1; $i >= 0.1; $i = $i - 0.1 ) {
-			$ops[] = $i;
-			$ops[] = $i/10;
+			$ops[] = ( float ) number_format( $i, 1, '.', '' );
+			$ops[] = ( float ) number_format( $i / 10, 2, '.', '' );
 		}
 		
 		return $ops;
@@ -113,16 +95,19 @@ class Colors {
 	 */
 	public static function getColors() {
 
+		// Get possible opacities
+		$opacities = self::getOpacities();
+
+		// Define the static colors
 		$colors = array(
 			'success'      => '#5B9215',
 			'warning'      => '#F57A08',
 			'error'        => '#EA4545',
-			'black'        => '#000000',
 			'white'        => '#FFFFFF',
 			'transparent'  => 'rgba(0, 0, 0, 0)',
 		);
 
-		// Assign contrasted color to constant colors
+		// Assign contrasted synamic colors
 		foreach ( $colors as $key => $color ) {
 			if ( strpos( $color, '#' ) === 0 ) {
 				$colors[ $key . '-150' ] =  self::increaseContrast( $color );
@@ -135,14 +120,15 @@ class Colors {
 			'color_scheme_texts',
 		);
 
+		// Loop through dynamic colors and assign shades
 		foreach ( $schemes as $scheme ) {
 			
 			$color  = AdminSetting::get( $scheme );
 			$prefix = str_replace( 's', '', str_replace( 'color_scheme_', '', $scheme ) );
 			
-			foreach ( self::getOpacities() as $shade ) {
+			foreach ( $opacities as $shade ) {
 				$intensity                    = ( $shade / 1 ) * 100;
-				$postfix                      = $intensity === 100 ? '' : '-' . $intensity;
+				$postfix                      = $intensity == 100 ? '' : '-' . $intensity;
 				$colors[ $prefix . $postfix ] = self::hexToRgba( $color, $shade );
 			}
 

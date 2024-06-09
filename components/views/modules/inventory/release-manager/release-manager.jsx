@@ -15,7 +15,7 @@ function Form({values, onChange, onSubmit, saving, onCancel}) {
 	return <div>
 
 		<div className={'margin-bottom-15'.classNames()}>
-			<strong className={'d-block font-weight-600'.classNames()}>
+			<strong className={'d-block font-weight-600 margin-bottom-5 color-text-80'.classNames()}>
 				{__('Version')}
 			</strong>
 			<TextField
@@ -25,7 +25,7 @@ function Form({values, onChange, onSubmit, saving, onCancel}) {
 		</div>
 		
 		<div className={'margin-bottom-15'.classNames()}>
-			<strong className={'d-block font-weight-600'.classNames()}>
+			<strong className={'d-block font-weight-600 margin-bottom-5 color-text-80'.classNames()}>
 				{__('Changelog')}
 			</strong>
 			<TextField
@@ -36,7 +36,7 @@ function Form({values, onChange, onSubmit, saving, onCancel}) {
 		</div>
 
 		<div className={'margin-bottom-15'.classNames()}>
-			<strong className={'d-block font-weight-600'.classNames()}>
+			<strong className={'d-block font-weight-600 margin-bottom-5 color-text-80'.classNames()}>
 				{__('New file')}
 			</strong>
 			<FileUpload

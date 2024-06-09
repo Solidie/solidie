@@ -96,7 +96,7 @@ class Scripts {
 				'is_pro_installed' => Utilities::isProInstalled( false ),
 				'is_pro_active'    => Utilities::isProInstalled( true ),
 				'colors'           => $dynamic_colors,
-				'opacities'        => Colors::COLOR_OPACITIES,
+				'opacities'        => Colors::getOpacities(),
 				'text_domain'      => Main::$configs->text_domain,
 				'date_format'      => get_option( 'date_format' ),
 				'time_format'      => get_option( 'time_format' ),

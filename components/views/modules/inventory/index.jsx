@@ -405,6 +405,7 @@ export function Inventory({navigate, params={}}) {
 					{!is_admin ? null : <th className={'white-space-nowrap'.classNames()}>{__('Contributor')}</th>}
 					<th className={'white-space-nowrap'.classNames()}>{__('Category')}</th>
 					{!is_pro_active ? null : <th>{__('Price')}</th>}
+					{(!is_pro_active || content_type=='app') ? null : <th>{__('Bundled In')}</th>}
 					<th>{__('Status')}</th>
 					<th>{__('Created')}</th>
 					<th></th>
@@ -515,27 +516,34 @@ export function Inventory({navigate, params={}}) {
 														}
 													</div>
 												}
-
-												{
-													! packs.length ? null :
-													<div className={'margin-top-10'.classNames()}>
-														<strong className={'d-block'.classNames()}>
-															{__('Supported Bundles:')}
-														</strong>
-														<ul>
-															{
-																packs.map(plan=>{
-																	const {plan_name} = plan?.plan || {};
-																	return !plan_name ? null : <li key={plan.variation_id}>
-																		{plan_name}
-																	</li>
-																})}
-														</ul>
-													</div>
-												}
 											</>
 										}
 									</div>
+								</td>
+							}
+
+							{
+								(!is_pro_active || content_type=='app') ? null :
+								<td data-th={__('Bundled In')}>
+									{
+										(monetization !== 'paid' || !packs.length) ? null :
+											<div className={'d-flex flex-direction-column row-gap-8'.classNames()}>
+												{
+													packs.map(plan=>{
+														const {plan_name} = plan?.plan || {};
+														return !plan_name ? null : 
+														<div key={plan.variation_id}>
+															<div 
+																className={'bg-color-material-10 border-1 b-color-material-20 d-inline-block font-size-13'.classNames()} 
+																style={{padding: '4px 17px', borderRadius: '50px'}}
+															>
+																{plan_name}
+															</div>
+														</div>
+													})
+												}
+											</div>
+									}
 								</td>
 							}
 							

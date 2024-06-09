@@ -1,6 +1,6 @@
 import React from "react";
 
-import {__, data_pointer} from 'crewhrm-materials/helpers.jsx';
+import {__, data_pointer, purgeBasePath} from 'crewhrm-materials/helpers.jsx';
 import { DoAction } from 'crewhrm-materials/mountpoint.jsx';
 
 import { CategoryEditor } from "./category-editor.jsx";
@@ -29,6 +29,18 @@ const fields = [
 		name: 'slug',
 		label: __('Base Slug'),
 		type: 'text',
+		modifier: purgeBasePath,
+		hint2: v=>{
+			return <small>
+				<a 
+					href={`${window[data_pointer].permalinks.gallery_root}${v}/`} 
+					target='_blank'
+					className={'color-material-80 font-size-13 interactive'.classNames()}
+				>
+					{window[data_pointer].permalinks.gallery_root}<strong>{v}</strong>/
+				</a>
+			</small>
+		}
 	},
 	{
 		name: 'show_thumbnail',
@@ -83,10 +95,11 @@ const fields = [
 			name: 'api_path',
 			label: __('Update API Path'),
 			type: 'text',
-			placeholder: 'e.g /updates-api/',
+			placeholder: 'e.g app-updates-api',
 			hint2: UpdatesAPINote,
 			supports: ['app'],
-			direction: 'column'
+			direction: 'column',
+			modifier: purgeBasePath
 		}
 	),
 ].filter(o=>o);

@@ -13,9 +13,9 @@ import { Tabs } from "crewhrm-materials/tabs/tabs.jsx";
 import { getFlattenedCategories } from "../../../admin-dashboard/settings/general/content-type/category-editor.jsx";
 import { ReleaseManager } from "../release-manager/release-manager.jsx";
 import { TutorialManager } from "../tutorial-manager/tutorial-manager.jsx";
+import { TinyEditor } from "./Tiny.jsx";
 
 import style from './editor.module.scss';
-import { TinyEditor } from "./Tiny.jsx";
 
 const {readonly_mode, is_admin} = window[data_pointer];
 
@@ -214,9 +214,18 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 
 			if ( success ) {
 				addToast({
-					message: <span>{message} <a href={content.content_permalink} target="_blank">{__('Visit Now')}</a></span>,
 					dismissible: true,
-					status: 'success'
+					status: 'success',
+					message: <span>
+						{message}&nbsp;
+						<a 
+							href={content.content_permalink} 
+							target="_blank"
+							className={'color-material-80 interactive'.classNames()}
+						>
+							{__('Visit Now')}
+						</a>
+					</span>,
 				});
 
 				const editor_url = `inventory/${content_type}/editor/${content.content_id}/`;
@@ -426,13 +435,15 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 								<div className={'field-wrapper'.classNames(style)}>
 									<div>
 										<strong className={'d-flex align-items-center column-gap-5 font-weight-600 margin-bottom-5'.classNames()}>
-											{label}{required ? <span className={'color-error'.classNames()}>*</span> : null}
+											<span className={'color-text-80'.classNames()}>
+												{label}{required ? <span className={'color-error'.classNames()}>*</span> : null}
+											</span>
 											{
 												(!is_admin || !show_setup_link) ? null :
 												<a 
 													href={setup_link}
 													target="_blank"
-													className={'ch-icon ch-icon-settings-gear'.classNames()}
+													className={'ch-icon ch-icon-settings-gear color-material-80 interactive'.classNames()}
 												></a>
 											}
 										</strong>
@@ -466,8 +477,13 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 													<a 
 														href={state.values.content_permalink} 
 														target='_blank'
+														className={'color-material-80 font-size-3 interactive'.classNames()}
 													>
-														{window[data_pointer].permalinks.gallery[content_type]}{state.slug_editor ? null : <><strong>{state.values.content_slug}</strong>/</>}
+														{
+															window[data_pointer].permalinks.gallery[content_type]}{state.slug_editor ? null : <>
+																<strong>{state.values.content_slug}</strong>/
+															</>
+														}
 													</a>
 												</div>
 

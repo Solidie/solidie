@@ -115,7 +115,7 @@ You can [create issue](https://github.com/Solidie/Solidie/issues) on Github repo
 
 = v1.1.5 -> Jun 10, 2024 =
 --------------------------
-* New: Full color scheme customization
+* New: Color scheme customization settings added
 * New: Release and lessons menu option added in inventory
 * New: Contributors content deletion setting added
 * New: Decimal point support in pricing fields
@@ -124,6 +124,7 @@ You can [create issue](https://github.com/Solidie/Solidie/issues) on Github repo
 * Fix: Variation remains enabled after plan deleted from content settings
 * Update: Default content thumbnail removed for video
 * Update: File uploader text enhanced
+* Update: Overall UI and UX enhancements
 
 = v1.1.4 -> May 30, 2024 =
 --------------------------

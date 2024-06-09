@@ -420,7 +420,7 @@ class ContentController {
 		// Looks ok
 		Contents::changeContentStatus( $content_id, $status );
 
-		wp_send_json_success( array( 'message' => __( 'Content status has been changes', 'solidie' ) ) );
+		wp_send_json_success( array( 'message' => __( 'Content status has been changed', 'solidie' ) ) );
 	}
 
 	/**

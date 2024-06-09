@@ -23,7 +23,7 @@ function DataTabs({data}) {
 				}
 			/>
 		</div>
-		<pre>
+		<pre className={'color-text-80'.classNames()}>
 			{JSON.stringify(data[tab].data, null, 2)}
 		</pre>
 	</div>
@@ -95,9 +95,9 @@ export function UpdatesAPINote(api_path) {
 		}
 	}
 
-	return <div className={'overflow-auto'.classNames()}>
+	return <div className={'overflow-auto font-size-13'.classNames()}>
 		<span 
-			className={'hover-underline cursor-pointer'.classNames()}
+			className={'hover-underline cursor-pointer color-text-60'.classNames()}
 			onClick={()=>setExpand(!expand)}
 		>
 			{!expand ? __('See API Request Data Structure') : __('Hide Data')} 
@@ -111,7 +111,9 @@ export function UpdatesAPINote(api_path) {
 				<tbody>
 					<tr>
 						<th>
-							{__('License Key Activation')}
+							<strong className={'color-text-60 font-weight-500'.classNames()}>
+								{__('License Key Activation')}
+							</strong>
 						</th>
 						<td>
 							<DataTabs data={data.activate}/>
@@ -119,7 +121,9 @@ export function UpdatesAPINote(api_path) {
 					</tr>
 					<tr>
 						<th>
-							{__('Update Check')}
+							<strong className={'color-text-60 font-weight-500'.classNames()}>
+								{__('Update Check')}
+							</strong>
 						</th>
 						<td>
 							<DataTabs data={data.update}/>
