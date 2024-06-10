@@ -43,7 +43,10 @@ function hexToRgba(hex, opacity) {
     return `rgba(${r}, ${g}, ${b}, ${opacity})`;
 }
 
-function increaseContrast(hex, factor = 50) {
+function increaseContrast(hex, factor = null) {
+
+	factor = factor || window[data_pointer].contrast || 88;
+
     // Ensure the input is a valid hex color code
     hex = hex.replace(/^#/, '');
     if (hex.length === 3) {

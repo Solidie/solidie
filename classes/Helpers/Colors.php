@@ -14,6 +14,8 @@ use Solidie\Models\AdminSetting;
  */
 class Colors {
 
+	const CONTRAST_FACTOR = 88;
+
 	/**
 	 * Get color shades, technically opacity
 	 *
@@ -56,7 +58,10 @@ class Colors {
 		return $rgba_color;
 	}
 
-	private static function increaseContrast($hex, $factor = 128) {
+	private static function increaseContrast($hex, $factor = null) {
+
+		$factor = $factor ? $factor : self::CONTRAST_FACTOR;
+
 		// Ensure the input is a valid hex color code
 		$hex = ltrim($hex, '#');
 		if (strlen($hex) == 3) {

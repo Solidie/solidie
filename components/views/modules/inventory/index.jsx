@@ -341,7 +341,7 @@ export function Inventory({navigate, params={}}) {
 			<div className={'d-flex align-items-center column-gap-8'.classNames()}>
 				<a 
 					href={state.gallery_permalink}
-					className={"d-flex align-items-center column-gap-8 color-text-90 padding-vertical-10 position-sticky top-0".classNames()}
+					className={"d-flex align-items-center column-gap-8 color-text-90 interactive padding-vertical-10 position-sticky top-0".classNames()}
 					target='_blank'
 				>
 					<span className={'font-size-24 font-weight-600 letter-spacing-3'.classNames()}>
@@ -465,7 +465,7 @@ export function Inventory({navigate, params={}}) {
 									}
 									
 									<div className={'flex-1'.classNames()} style={{maxWidth: '260px'}}>
-										<a href={content_permalink} target='_blank' className={"d-block font-size-14 font-weight-600 color-text-80".classNames()}>
+										<a href={content_permalink} target='_blank' className={"d-block font-size-14 font-weight-600 color-text-80 interactive".classNames()}>
 											{content_title}
 										</a>
 									</div>
