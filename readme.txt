@@ -122,6 +122,7 @@ You can [create issue](https://github.com/Solidie/Solidie/issues) on Github repo
 * New: Dashboard link in order details page
 * Fix: User deletion throws error
 * Fix: Variation remains enabled after plan deleted from content settings
+* Fix: Invlaid extra pagination count in inventory and some other place
 * Update: Default content thumbnail removed for video
 * Update: File uploader text enhanced
 * Update: Overall UI and UX enhancements

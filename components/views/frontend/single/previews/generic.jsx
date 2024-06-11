@@ -3,8 +3,9 @@ import React from 'react';
 export function GenericPreview({content={}, settings={}}){
 
 	const {thumbnail=true} = settings;
+	const {file_id, file_url} = content.media?.thumbnail || {};
 
-	return !thumbnail ? null : <div className={"width-p-100 height-p-100 color-text-50 d-flex justify-content-center margin-bottom-15".classNames()}>
+	return (!thumbnail || !file_id || !file_url) ? null : <div className={"width-p-100 height-p-100 color-text-50 d-flex justify-content-center margin-bottom-15".classNames()}>
 		<img 
 			style={{width:'auto', maxWidth: '100%', height: 'auto', maxHeight: '400px', margin: 'auto'}} 
 			src={content.media?.thumbnail?.file_url}

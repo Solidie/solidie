@@ -77,7 +77,7 @@ class Manifest {
 				'tutorial' => array(
 					'label'       => esc_html__( 'Tutorial', 'solidie' ),
 					'slug'        => 'tutorials',
-					'description' => esc_html__( 'Full fledged tutorial management system. It is an upcoming feature.', 'solidie' ),
+					'description' => esc_html__( 'Full fledged tutorial management system.', 'solidie' ),
 					'plans'       => array(),
 				),
 			),

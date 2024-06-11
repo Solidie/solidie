@@ -87,7 +87,10 @@ function Rating({content={}, applyReaction, is_overlayer}) {
 			style={{height: '25px'}}
 		/>
 		&nbsp;
-		<span className={`font-size-14 color-text-50 ${is_overlayer ? 'color-white' : 'color-text-50'}`.classNames()}>
+		<span 
+			className={`font-size-14 color-text-50 ${is_overlayer ? 'color-white' : 'color-text-50'}`.classNames()}
+			style={is_overlayer ? {color: 'white'} : {}}
+		>
 			({average}/{rating_count})
 		</span>
 	</div>
@@ -156,7 +159,10 @@ export function MetaData({content={}, settings={}, is_overlayer, show_price_down
 		{
 			!show_price_download ? null :
 			<div>
-				<DownloadOrPrice content={content} is_overlayer={is_overlayer}/>
+				<DownloadOrPrice 
+					content={content} 
+					is_overlayer={is_overlayer}
+				/>
 			</div>
 		}
 
@@ -201,7 +207,7 @@ export function MetaData({content={}, settings={}, is_overlayer, show_price_down
 			reactions.comment_count===null ? null :
 			<div className={`${is_overlayer ? 'color-white text-shadow-thin' : 'color-text'}`.classNames()}>
 				<i 
-					className={`ch-icon ch-icon-message font-size-14 cursor-pointer ${is_overlayer ? 'color-white color-hover-tertiary' : 'color-text color-hover-text-light'}`.classNames()}
+					className={`ch-icon ch-icon-message font-size-14 cursor-pointer ${is_overlayer ? 'color-white' : 'color-text'}`.classNames()}
 				></i>
 				&nbsp;
 				{reactions.comment_count}
@@ -213,7 +219,7 @@ export function MetaData({content={}, settings={}, is_overlayer, show_price_down
 			<div>
 				{!showSharer ? null : <ShareModal url={content.content_permalink} closeModal={()=>setShowSharer(false)}/>}
 				<i 
-					className={`ch-icon ch-icon-share1 font-size-14 cursor-pointer ${is_overlayer ? 'color-white color-hover-tertiary text-shadow-thin' : 'color-text color-hover-text-light'}`.classNames()}
+					className={`ch-icon ch-icon-share1 font-size-14 cursor-pointer ${is_overlayer ? 'color-white text-shadow-thin' : 'color-text'}`.classNames()}
 					onClick={()=>setShowSharer(true)}
 				></i>
 			</div>
@@ -224,7 +230,7 @@ export function MetaData({content={}, settings={}, is_overlayer, show_price_down
 			<div>
 				<i 
 					title={wishlisted ? __('Remove from saved items') : __('Save for later')}
-					className={`ch-icon ${content.reactions?.wishlisted ? 'ch-icon-heart' : 'ch-icon-heart-o'} font-size-16 cursor-pointer ${is_overlayer ? 'color-white color-hover-tertiary text-shadow-thin' : 'color-text color-hover-text-light'}`.classNames()}
+					className={`ch-icon ${content.reactions?.wishlisted ? 'ch-icon-heart' : 'ch-icon-heart-o'} font-size-16 cursor-pointer ${is_overlayer ? 'color-white text-shadow-thin' : 'color-text'}`.classNames()}
 					onClick={()=>applyReaction(content.reactions?.wishlisted ? -1 : 1, 'wishlist')}
 				></i>
 			</div>

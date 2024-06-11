@@ -1,11 +1,14 @@
+$comment-bg: var(--solidie-color-material-3);
+$comment-bg-darker: var(--solidie-color-material-10);
+
 .comments-wrapper {
 
 	.comments-control {
-		@media (max-width: 659px) {
+		@media (max-width: 767px) {
 			cursor: pointer;
 		}
 
-		@media (min-width: 660px) {
+		@media (min-width: 768px) {
 			.commnents-arrow {
 				display: none;
 			}
@@ -60,7 +63,7 @@
 
 		.comment {
 			padding: 15px;
-			background-color: rgba(211, 211, 211, 0.172);
+			background-color: $comment-bg;
 			margin-bottom: 15px;
 			border-radius: 6px;
 
@@ -69,11 +72,11 @@
 			
 				@keyframes crewHighlight {
 					from {
-						background-color: rgba(211, 211, 211, 0.837);
+						background-color: $comment-bg-darker;
 					}
 					
 					to {
-						background-color: rgba(211, 211, 211, 0.172);
+						background-color: $comment-bg;
 					}
 				}
 			}
@@ -83,41 +86,10 @@
 					visibility: hidden;
 				}
 			}
-
-			.commenter {
-				display: flex;
-				align-items: flex-start;
-				column-gap: 15px;
-				margin-bottom: 8px;
-
-				.avatar {
-					img {
-						width: 50px;
-						height: 50px;
-						border-radius: 50%;
-					}
-				}
-
-				.name-date{
-					flex: 1;
-
-					strong {
-						font-size: 20px;
-						font-weight: 600;
-						display: block;
-						color: #1a1a1a;
-					}
-					
-					span {
-						font-size: 15px;
-						color: #bbb;
-					}
-				}
-			}
 		}
 	}
 
-	@media (max-width: 659px) {
+	@media (max-width: 767px) {
 		&:not(.show-in-mobile) {
 			.comments {
 				display: none;

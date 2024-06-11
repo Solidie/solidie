@@ -112,10 +112,6 @@ export function Comments({content={}}) {
 
 		switch( action ) {
 			
-			case 'edit' :
-				
-				break;
-
 			case 'delete' :
 				if ( ! window.confirm(__('Sure to delete the comment?')) ) {
 					return;
@@ -197,11 +193,6 @@ export function Comments({content={}}) {
 
 
 					const comment_actions = [
-						/* {
-							id: 'edit', 
-							label: __('Edit'),
-							show: user_id == commenter_id
-						}, */
 						{
 							id: 'delete', 
 							label: __('Delete'),
@@ -215,15 +206,22 @@ export function Comments({content={}}) {
 						className={`comment ${highlight ? 'highlight' : ''}`.classNames(style) + 'd-flex'.classNames()}
 					>
 						<div className={'flex-1'.classNames()}>
-							<div className={"commenter".classNames(style)}>
-								<div className={"avatar".classNames(style)}>
-									<img src={avatar_url}/>
+							<div className={'d-flex align-items-center column-gap-15 margin-bottom-8'.classNames()}>
+								<div>
+									<img 
+										src={avatar_url} 
+										style={{
+											width: '50px', 
+											height: '50px', 
+											borderRadius: '50%'
+										}}
+									/>
 								</div>
-								<div className={"name-date".classNames(style)}>
-									<strong>
+								<div className={'flex-1'.classNames()}>
+									<strong className={'d-block font-weight-600 font-size-18 color-text-80'.classNames()}>
 										{display_name}
 									</strong>
-									<span>
+									<span className={'d-block font-weight-600 font-size-14 color-text-50'.classNames()}>
 										{formatDateTime(comment_date)}
 									</span>
 								</div>
@@ -255,7 +253,7 @@ export function Comments({content={}}) {
 						className={'cursor-pointer hover-underline'.classNames()}
 						onClick={fetchComments}
 					>
-						{__('More Comments')} <LoadingIcon show={state.fetching}/>
+						{__('Load More..')} <LoadingIcon show={state.fetching}/>
 					</span>
 				</div>
 			}

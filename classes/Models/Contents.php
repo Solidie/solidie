@@ -544,7 +544,7 @@ class Contents {
 			$total_count = (int) $wpdb->get_var(
 				$wpdb->prepare(
 					"SELECT 
-						COUNT(content.content_id)
+						COUNT(DISTINCT content.content_id)
 					FROM 
 						{$wpdb->solidie_contents} content 
 						LEFT JOIN {$wpdb->solidie_categories} cat ON content.category_id=cat.category_id

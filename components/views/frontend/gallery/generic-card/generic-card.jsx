@@ -71,10 +71,10 @@ export function DownloadOrPrice({content, is_overlayer}) {
 		release={}
 	} = content;
 
-	const is_free                     = monetization != 'paid';
-	const is_tutorial                 = content_type === 'tutorial';
-	const color_class                 = is_overlayer ? 'color-white color-hover-white' : 'color-text color-hover-text';
-	const access_url                  = is_tutorial ? content_permalink+'0/' : (release?.download_url || '#');
+	const is_free     = monetization != 'paid';
+	const is_tutorial = content_type === 'tutorial';
+	const color_class = `${is_overlayer ? 'color-white' : 'color-text-90'}`;
+	const access_url  = is_tutorial ? content_permalink+'0/' : (release?.download_url || '#');
 	
 	const {
 		min:{
@@ -85,12 +85,12 @@ export function DownloadOrPrice({content, is_overlayer}) {
 	
 	return is_free ? 
 		<span 
-			className={`ch-icon ${is_tutorial ? 'ch-icon-book-open' : 'ch-icon-download'} font-size-16 ${color_class} cursor-pointer`.classNames()}
+			className={`ch-icon ${is_tutorial ? 'ch-icon-book-open' : 'ch-icon-download'} font-size-16 ${color_class} interactive cursor-pointer`.classNames()}
 			onClick={()=>window.location.assign(access_url)}
 			title={is_tutorial ? __('Start Learning') : __('Download')}
 		></span>
 	:
-	<div className={`font-size-16 color-primary font-weight-500 white-space-nowrap ${color_class}`.classNames()}>
+	<div className={`font-size-16 font-weight-500 white-space-nowrap ${color_class}`.classNames()}>
 		{currency_symbol}
 		<span>{sale_price}</span>
 		{

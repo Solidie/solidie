@@ -54,7 +54,7 @@ export function HomeBackend() {
 							key={index} 
 							href={link.link}
 							target={link.in_new ? '_blank' : '_self'}
-							className={'flex-1 d-block padding-vertical-40 border-1 b-color-text-20 cursor-pointer text-align-center font-size-14 font-weight-400 border-radius-8 bg-color-white color-text interactive'.classNames()}
+							className={'flex-1 d-block padding-vertical-40 border-1 b-color-text-20 cursor-pointer text-align-center font-size-14 font-weight-400 border-radius-8 bg-color-white color-text interactive scalable'.classNames()}
 						>
 							{link.label}
 						</a>
