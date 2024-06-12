@@ -6,6 +6,12 @@ $light: rgba(0, 0, 0, 0);
     background: -webkit-linear-gradient(top, $dark, $light);
     background: -moz-linear-gradient(top, $dark, $light);
     background: -o-linear-gradient(top, $dark, $light);
+	padding: 10px 10px 30px;
+	pointer-events: none;
+
+	&:empty {
+		display: none;
+	}
 }
 
 .gradient-bottom {

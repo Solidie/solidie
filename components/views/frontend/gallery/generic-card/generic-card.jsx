@@ -139,12 +139,10 @@ export function GenericCard({contents=[]}) {
 									+ 'gradient-top'.classNames(vid_style)
 								} 
 							>
-								<div className={'padding-10'.classNames()}>
-									<MetaData 
-										content={content} 
-										is_overlayer={true} 
-									/>
-								</div>
+								<MetaData 
+									content={content} 
+									is_overlayer={true} 
+								/>
 							</div>
 						</div>
 					</Ratio>
@@ -153,7 +151,7 @@ export function GenericCard({contents=[]}) {
 						<div>
 							<Link 
 								to={content_permalink} 
-								className={'d-block font-size-16 font-weight-500 color-text cursor-pointer'.classNames()}
+								className={'d-block font-size-16 font-weight-500 color-text-90 interactive cursor-pointer'.classNames()}
 								data-cylector="content-single"
 							>
 								{content_title}

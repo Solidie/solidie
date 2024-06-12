@@ -1,7 +1,7 @@
 .like-wrapper {
 	backdrop-filter: blur(3px);
-	background-color: rgba(0, 0, 0, 0.048);
-	border: 1px solid rgba(0, 0, 0, 0.106);
+	background-color: var(--solidie-color-text-4);
+	border: 1px solid var(--solidie-color-text-10);
     border-radius: 50px;
     padding: 0 10px;
     height: 27px;

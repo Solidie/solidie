@@ -3,14 +3,21 @@ import { Rating as RatingComp } from 'react-simple-star-rating'
 
 import {request} from 'crewhrm-materials/request.jsx';
 import {ContextToast} from 'crewhrm-materials/toast/toast.jsx';
-import { __, data_pointer } from "crewhrm-materials/helpers.jsx";
+import { __, data_pointer, isEmpty } from "crewhrm-materials/helpers.jsx";
 import { ShareModal } from "crewhrm-materials/share-modal.jsx";
 
-import style from './meta.module.scss';
-import { ContextGallery } from "../../gallery";
-import { DownloadOrPrice } from "../../gallery/generic-card/generic-card";
+import { ContextGallery } from "../../gallery/index.jsx";
+import { DownloadOrPrice } from "../../gallery/generic-card/generic-card.jsx";
 
-const {user:{id: is_logged_in}, readonly_mode} = window[data_pointer];
+import style from './meta.module.scss';
+
+const {
+	user:{
+		id: is_logged_in
+	}, 
+	readonly_mode
+} = window[data_pointer];
+
 const readonly = !is_logged_in || readonly_mode;
 
 function LikeDislike({content={}, applyReaction, is_overlayer}) {
@@ -26,7 +33,7 @@ function LikeDislike({content={}, applyReaction, is_overlayer}) {
 	if ( is_overlayer ) {
 		return <div>
 			<i 
-				className={`ch-icon ${liked ? 'ch-icon-thumbs-up color-secondary' : `ch-icon-thumbs-o-up ${color_class}`} font-size-14 cursor-pointer`.classNames()}
+				className={`ch-icon ${liked ? 'ch-icon-thumbs-up color-material-90' : `ch-icon-thumbs-o-up ${color_class}`} font-size-14 cursor-pointer`.classNames()}
 				onClick={()=>applyReaction(liked ? -1 : 1)}
 			></i>
 			&nbsp;
@@ -43,7 +50,7 @@ function LikeDislike({content={}, applyReaction, is_overlayer}) {
 			</span> 
 			&nbsp;
 			<i 
-				className={`ch-icon ${liked ? 'ch-icon-thumbs-up color-secondary' : `ch-icon-thumbs-o-up ${color_class}`} font-size-14 cursor-pointer`.classNames()}
+				className={`ch-icon ${liked ? 'ch-icon-thumbs-up color-material-90' : `ch-icon-thumbs-o-up ${color_class}`} font-size-14 cursor-pointer`.classNames()}
 				onClick={()=>applyReaction(liked ? -1 : 1)}
 			></i>
 		</span>
@@ -59,7 +66,7 @@ function LikeDislike({content={}, applyReaction, is_overlayer}) {
 				</span>
 				<span>
 					<i 
-						className={`ch-icon ${disliked ? 'ch-icon-thumbs-down color-secondary' : `ch-icon-thumbs-o-down ${color_class}`} font-size-14 cursor-pointer`.classNames()}
+						className={`ch-icon ${disliked ? 'ch-icon-thumbs-down color-material-90' : `ch-icon-thumbs-o-down ${color_class}`} font-size-14 cursor-pointer`.classNames()}
 						onClick={()=>applyReaction(disliked ? -1 : 0)}
 					></i>&nbsp;
 					<span className={`${color_class}`.classNames()}>
@@ -80,7 +87,7 @@ function Rating({content={}, applyReaction, is_overlayer}) {
 		<RatingComp
 			initialValue={my_reaction || average}
 			onClick={applyReaction}
-			readonly={readonly}
+			readonly={readonly || is_overlayer}
 			size={19}
 			fillColor={my_reaction ? window[data_pointer].colors.secondary : undefined}
 			emptyColor={is_overlayer ? 'white' : 'gray'}
@@ -88,15 +95,26 @@ function Rating({content={}, applyReaction, is_overlayer}) {
 		/>
 		&nbsp;
 		<span 
-			className={`font-size-14 color-text-50 ${is_overlayer ? 'color-white' : 'color-text-50'}`.classNames()}
-			style={is_overlayer ? {color: 'white'} : {}}
+			className={`font-size-14 color-text-50`.classNames()}
+			style={{
+				letterSpacing: '2.2px', 
+				color: is_overlayer ? 'var(--solidie-color-white)' : 'var(--solidie-color-text-70)'
+			}}
 		>
 			({average}/{rating_count})
 		</span>
 	</div>
 }
 
-export function MetaData({content={}, settings={}, is_overlayer, show_price_download=false, updateReactions}) {
+export function MetaData(props) {
+
+	const {
+		content={}, 
+		settings={}, 
+		is_overlayer, 
+		show_price_download=false, 
+		updateReactions
+	} = props;
 	
 	const gallery_context = useContext(ContextGallery);
 	const {updateContentReactions} = gallery_context || {};
@@ -145,8 +163,89 @@ export function MetaData({content={}, settings={}, is_overlayer, show_price_down
 	}
 
 	const {wishlisted} = content.reactions || {};
+	const meta = {};
 
-	return <div 
+	if (show_price_download) {
+		meta.price = <div>
+			<DownloadOrPrice 
+				content={content} 
+				is_overlayer={is_overlayer}
+			/>
+		</div>
+	}
+
+	if (!is_overlayer && contributor) {
+		meta.contributor = <div className={'d-inline-flex align-items-center column-gap-10'.classNames()}>
+			<img 
+				src={contributor.avatar_url} 
+				style={{width: '22px', height: '22px', borderRadius: '50%'}}
+			/>
+			<span className={`font-size-14 ${is_overlayer ? 'color-white text-shadow-thin' : 'color-text-50'}`.classNames()}>
+				{contributor.display_name}
+			</span>
+		</div>
+	}
+
+	if (reactions.like) {
+		meta.reaction = <div>
+			<LikeDislike 
+				content={content} 
+				applyReaction={v=>applyReaction(v, 'like')}
+				submiting={state.submiting}
+				is_overlayer={is_overlayer}
+			/>
+		</div>
+	}
+
+	if (reactions.rating) {
+		meta.rating = <div>
+			<Rating 
+				content={content}
+				applyReaction={v=>applyReaction(v, 'rating')}
+				submiting={state.submiting}
+				is_overlayer={is_overlayer}
+			/>
+		</div>
+	}
+
+	if (!(reactions.comment_count===null)) {
+		meta.comment = <div className={`${is_overlayer ? 'color-white text-shadow-thin' : 'color-text'}`.classNames()}>
+			<i 
+				className={`ch-icon ch-icon-message font-size-14 cursor-pointer ${is_overlayer ? 'color-white' : 'color-text'}`.classNames()}
+			></i>
+			&nbsp;
+			{reactions.comment_count}
+		</div>
+	}
+
+	if (!is_overlayer && settings.sharing) {
+		meta.sharing = <div>
+			{
+				!showSharer ? null : 
+				<ShareModal 
+					url={content.content_permalink} 
+					closeModal={()=>setShowSharer(false)}
+				/>
+			}
+
+			<i 
+				className={`ch-icon ch-icon-share1 font-size-14 cursor-pointer ${is_overlayer ? 'color-white text-shadow-thin' : 'color-text'}`.classNames()}
+				onClick={()=>setShowSharer(true)}
+			></i>
+		</div>
+	}
+
+	if (window[data_pointer].is_pro_active && settings.wishlist) {
+		meta.wishlist = <div>
+			<i 
+				title={wishlisted ? __('Remove from saved items') : __('Save for later')}
+				className={`ch-icon ${content.reactions?.wishlisted ? 'ch-icon-heart' : 'ch-icon-heart-o'} font-size-16 cursor-pointer ${is_overlayer ? 'color-white text-shadow-thin' : 'color-text'}`.classNames()}
+				onClick={()=>applyReaction(content.reactions?.wishlisted ? -1 : 1, 'wishlist')}
+			></i>
+		</div>
+	}
+
+	return isEmpty(meta) ? null : <div 
 		className={
 			'd-flex align-items-center flex-wrap-wrap flex-direction-row row-gap-10 column-gap-15 white-space-nowrap'.classNames()
 		}
@@ -157,83 +256,11 @@ export function MetaData({content={}, settings={}, is_overlayer, show_price_down
 		}}
 	>
 		{
-			!show_price_download ? null :
-			<div>
-				<DownloadOrPrice 
-					content={content} 
-					is_overlayer={is_overlayer}
-				/>
-			</div>
-		}
-
-		{
-			(is_overlayer || !contributor) ? null :
-			<div className={'d-inline-flex align-items-center column-gap-10'.classNames()}>
-				<img 
-					src={contributor.avatar_url} 
-					style={{width: '22px', height: '22px', borderRadius: '50%'}}
-				/>
-				<span className={`font-size-14 ${is_overlayer ? 'color-white text-shadow-thin' : 'color-text-50'}`.classNames()}>
-					{contributor.display_name}
-				</span>
-			</div>
-		}
-		
-		{
-			! reactions.like ? null : 
-			<div>
-				<LikeDislike 
-					content={content} 
-					applyReaction={v=>applyReaction(v, 'like')}
-					submiting={state.submiting}
-					is_overlayer={is_overlayer}
-				/>
-			</div>
-		}
-
-		{
-			!reactions.rating ? null : 
-			<div>
-				<Rating 
-					content={content}
-					applyReaction={v=>applyReaction(v, 'rating')}
-					submiting={state.submiting}
-					is_overlayer={is_overlayer}
-				/>
-			</div>
-		}
-
-		{
-			reactions.comment_count===null ? null :
-			<div className={`${is_overlayer ? 'color-white text-shadow-thin' : 'color-text'}`.classNames()}>
-				<i 
-					className={`ch-icon ch-icon-message font-size-14 cursor-pointer ${is_overlayer ? 'color-white' : 'color-text'}`.classNames()}
-				></i>
-				&nbsp;
-				{reactions.comment_count}
-			</div>
-		}
-
-		{
-			(is_overlayer || !settings.sharing) ? null :
-			<div>
-				{!showSharer ? null : <ShareModal url={content.content_permalink} closeModal={()=>setShowSharer(false)}/>}
-				<i 
-					className={`ch-icon ch-icon-share1 font-size-14 cursor-pointer ${is_overlayer ? 'color-white text-shadow-thin' : 'color-text'}`.classNames()}
-					onClick={()=>setShowSharer(true)}
-				></i>
-			</div>
-		}
-
-		{
-			(!window[data_pointer].is_pro_active || !settings.wishlist) ? null :
-			<div>
-				<i 
-					title={wishlisted ? __('Remove from saved items') : __('Save for later')}
-					className={`ch-icon ${content.reactions?.wishlisted ? 'ch-icon-heart' : 'ch-icon-heart-o'} font-size-16 cursor-pointer ${is_overlayer ? 'color-white text-shadow-thin' : 'color-text'}`.classNames()}
-					onClick={()=>applyReaction(content.reactions?.wishlisted ? -1 : 1, 'wishlist')}
-				></i>
-			</div>
+			Object.keys(meta).map(key=>{
+				return <React.Fragment key={key}>
+					{meta[key]}
+				</React.Fragment>
+			})
 		}
 	</div>
 }
