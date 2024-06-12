@@ -206,7 +206,8 @@ class LessonController {
 		wp_send_json_success(
 			array(
 				'lesson_slug'      => $new_slug,
-				'lesson_permalink' => Tutorial::getLessonPermalink( $lesson_id )
+				'lesson_permalink' => Tutorial::getLessonPermalink( $lesson_id ),
+				'message'          => __( 'Lesson slug updated successfully', 'solidie' ),
 			)
 		);
 	}

@@ -3,14 +3,42 @@
 	column-gap: 20px;
 	row-gap: 20px;
 	
+	@media (min-width: 768px) {
+		border-top: 1px solid var(--solidie-color-text-10);
+	}
+	
 	.sidebar {
 		width: 200px;
-
+		
+		@media (min-width: 768px) {
+			border-right: 1px solid var(--solidie-color-text-10);
+		}
+		
 		.toggle {
 			display: none;
 			align-items: center;
 			column-gap: 15;
 			cursor: pointer;
+		}
+
+		.lesson-menu-single {
+
+			transition: all .4s;
+			
+			&:hover {
+				background-color: var(--solidie-color-material-20);
+			}
+
+			&.active {
+				a {
+					color: var(--solidie-color-white);
+				}
+				background-color: var(--solidie-color-material-90);
+			}
+
+			&>a {
+				padding: 8px 13px;
+			}
 		}
 	}
 
@@ -18,14 +46,14 @@
 		flex: 1;
 	}
 
-	@media (max-width: 768px) {
+	@media (max-width: 767px) {
 
 		flex-direction: column;
 
 		.sidebar {
 			width: auto;
 			
-			border: 1px solid var(--solidie-color-tertiary);
+			border: 1px solid var(--solidie-color-text-20);
 			border-radius: 5px;
 			padding: 10px 15px;
 
@@ -35,8 +63,11 @@
 
 			.menu-wrapper {
 				margin-top: 10px;
-				border-top: 1px solid var(--solidie-color-tertiary);
+				border-top: 1px solid var(--solidie-color-text-10);
 				padding-top: 20px;
+				max-height: 370px;
+				overflow-x: hidden;
+				overflow-y: auto;
 
 				&:not(.expanded) {
 					display: none;

@@ -20,8 +20,8 @@ function LessonList({lessons=[], level=1, active_slug, fetching=false}) {
 				const active = active_slug === lesson_slug;
 
 				return <div key={lesson_id}>
-					<div className={'margin-bottom-15'.classNames()}>
-						<Link to={lesson_permalink} className={`d-flex align-items-center column-gap-8 font-size-16 font-weight-400 color-text-50 ${active ? 'color-text font-weight-700 text-decoration-underline' : ''}`.classNames()}>
+					<div className={`lesson-menu-single ${active ? 'active' : ''}`.classNames(style)}>
+						<Link to={lesson_permalink} className={`d-flex align-items-center column-gap-8 font-size-16 ${active ? 'font-weight-600' : 'color-text-80 interactive font-weight-500'}`.classNames()}>
 							{lesson_title} <LoadingIcon show={active && fetching}/>
 						</Link>
 					</div>
@@ -189,9 +189,10 @@ export function Tutorial({path, content_slug}) {
 			</div>
 		</div>
 		
-		<div className={'content'.classNames(style)} ref={reff_content}>
-
-			<LoadingIcon show={state.fetching} center={true}/>
+		<div 
+			className={'content'.classNames(style) + 'margin-top-15 margin-bottom-15'.classNames()} 
+			ref={reff_content}
+		>
 			
 			{
 				!state.lesson ? 
@@ -218,6 +219,8 @@ export function Tutorial({path, content_slug}) {
 					current_slug={active_slug}
 				/>
 			</div>
+
+			<LoadingIcon show={state.fetching} center={true}/>
 		</div>
 	</div>
 }

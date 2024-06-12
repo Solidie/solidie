@@ -203,12 +203,13 @@ export function LessonEditor({content_id, lesson_id, lessons=[]}) {
 
 	const {lesson_permalink=''} = state.values || {};
 	const slug_parent = lesson_permalink.slice(0, lesson_permalink.lastIndexOf('/', lesson_permalink.lastIndexOf('/') - 1 ));
+	const label_class = 'd-block font-weight-600 margin-bottom-5'.classNames();
 	
 	return <div>
 		
 		<div className={'d-flex column-gap-15'.classNames()}>
 			<div className={'flex-1'.classNames()}>
-				<strong className={'d-block font-weight-600'.classNames()}>
+				<strong className={label_class}>
 					{__('Lesson Title')}
 				</strong>
 				<TextField
@@ -219,7 +220,7 @@ export function LessonEditor({content_id, lesson_id, lessons=[]}) {
 			{
 				!parent_options.length ? null :
 				<div style={{width: '220px'}}>
-					<strong className={'d-block font-weight-600'.classNames()}>
+					<strong className={label_class}>
 						{__('Parent Lesson')}
 					</strong>
 					<DropDown 
@@ -239,6 +240,7 @@ export function LessonEditor({content_id, lesson_id, lessons=[]}) {
 				<a 
 					href={state.values.lesson_permalink} 
 					target='_blank'
+					className={'color-material-90 interactive font-size-14'.classNames()}
 				>
 					{slug_parent}/{state.slug_editor ? null : <><strong>{state.values.lesson_slug}</strong>/</>}
 				</a>
@@ -263,7 +265,7 @@ export function LessonEditor({content_id, lesson_id, lessons=[]}) {
 		</div>
 
 		<div className={'margin-bottom-15'.classNames()}>
-			<strong className={'d-block font-weight-600'.classNames()}>
+			<strong className={label_class}>
 				{__('Lesson Content')}
 			</strong>
 			<TinyEditor

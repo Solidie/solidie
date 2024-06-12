@@ -166,6 +166,7 @@ class ContentController {
 			array(
 				'content_permalink' => Contents::getPermalink( $content_id ),
 				'content_slug'      => $new_slug,
+				'message'           => __( 'Content slug updated successfully!', 'solidie' ),
 			)
 		);
 	}
