@@ -120,6 +120,8 @@ You can [create issue](https://github.com/Solidie/Solidie/issues) on Github repo
 * New: Contributors content deletion setting added
 * New: Decimal point support in pricing fields
 * New: Dashboard link in order details page
+* New: Content type label edit field added
+* New: Back buttong in single content page
 * Fix: User deletion throws error
 * Fix: Variation remains enabled after plan deleted from content settings
 * Fix: Invalid extra pagination count in inventory and some other place
@@ -128,6 +130,7 @@ You can [create issue](https://github.com/Solidie/Solidie/issues) on Github repo
 * Update: File uploader text enhanced
 * Update: Overall UI and UX enhancements
 * Update: Content reactions made default enabled
+* Update: Back state navigation enhanced
 
 = v1.1.4 -> May 30, 2024 =
 --------------------------

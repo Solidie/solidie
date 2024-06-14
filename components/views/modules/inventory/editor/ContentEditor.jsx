@@ -51,7 +51,7 @@ const extensions = {
 
 export function ContentEditor({categories=[], navigate, params={}}) {
 
-	const {ajaxToast, addToast} = useContext(ContextToast);
+	const {ajaxToast} = useContext(ContextToast);
 	
 	const {
 		content_type, 
@@ -213,20 +213,8 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 			}
 
 			if ( success ) {
-				addToast({
-					dismissible: true,
-					status: 'success',
-					message: <span>
-						{message}&nbsp;
-						<a 
-							href={content.content_permalink} 
-							target="_blank"
-							className={'color-material-80 interactive'.classNames()}
-						>
-							{__('Visit Now')}
-						</a>
-					</span>,
-				});
+
+				ajaxToast(resp);
 
 				const editor_url = `inventory/${content_type}/editor/${content.content_id}/`;
 
@@ -370,14 +358,20 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 		{/* Header */}
 		<div className={"margin-top-20 margin-bottom-30 d-flex align-items-center column-gap-10".classNames()}>
 			<i 
-				onClick={()=>navigate(getDashboardPath(`inventory/${content_type}/${stuff_id ? `editor/${content_id}/${active_tab}/` : ''}`))} 
 				className={"ch-icon ch-icon-arrow-left cursor-pointer".classNames()}
+				onClick={()=>{
+					if (window.history.state?.idx) {
+						window.history.back();
+						return;
+					}
+					navigate(getDashboardPath(`inventory/${content_type}/${stuff_id ? `editor/${content_id}/${active_tab}/` : ''}`));
+				}} 
 			></i>
 			<span>
 				{
 					!content_id ? 
 						sprintf(__('Add New %s'), _content.label) : 
-						(stuff_id ? __('Back to Lessons') : (state.update_title || _content.label))
+						(stuff_id ? __('Back') : (state.update_title || _content.label))
 				}
 			</span>
 			<LoadingIcon show={state.fetching}/>
@@ -411,7 +405,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 		{
 			active_tab !== 'overview' ? null :
 			<>
-				<div className={'border-radius-10 padding-30 border-1 b-color-text-40 bg-color-white'.classNames()}>
+				<div className={'border-radius-10 padding-30 border-1 b-color-text-10 bg-color-white'.classNames()}>
 					{
 						fields.map(field=>{
 							

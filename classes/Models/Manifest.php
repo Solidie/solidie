@@ -86,6 +86,7 @@ class Manifest {
 		// Add the content type array in content settings
 		foreach ( array_keys( $manifest['contents'] ) as $type ) {
 			$manifest['settings']['contents'][ $type ] = array(
+				'label'                 => $manifest['contents'][ $type ]['label'],
 				'slug'                  => $manifest['contents'][ $type ]['slug'],
 				'enable'                => false,
 				'enable_sharing'        => true,

@@ -118,12 +118,15 @@ class AdminSetting {
 
 		// Assign content type label
 		foreach ( $contents as $type => $content ) {
-
-			$label = Manifest::getContentTypeLabel( $type );
-			if ( ! empty( $label ) ) {
-				$content['label']   = $label;
-				$new_array[ $type ] = $content;
+			
+			if ( empty( $content['label'] ) ) {
+				$label = Manifest::getContentTypeLabel( $type );
+				if ( ! empty( $label ) ) {
+					$content['label']   = $label;
+				}
 			}
+
+			$new_array[ $type ] = $content;
 		}
 
 		return $new_array;

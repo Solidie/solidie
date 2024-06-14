@@ -141,7 +141,7 @@ class ContentController {
 		if ( ! empty( $content_id ) ) {
 			wp_send_json_success(
 				array(
-					'message' => ! empty( $content['content_id'] ) ? esc_html__( 'Saved successfully.', 'solidie' ) : esc_html__( 'Created successfully.', 'solidie' ),
+					'message' => ! empty( $content['content_id'] ) ? esc_html__( 'Published successfully.', 'solidie' ) : esc_html__( 'Created successfully.', 'solidie' ),
 					'content' => Contents::getContentByContentID( $content_id ),
 				)
 			);

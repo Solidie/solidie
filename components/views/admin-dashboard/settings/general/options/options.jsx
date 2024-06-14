@@ -3,7 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 
 import { ToggleSwitch } from 'crewhrm-materials/toggle-switch/ToggleSwitch.jsx';
 import { TextField } from 'crewhrm-materials/text-field/text-field.jsx';
-import { __ } from 'crewhrm-materials/helpers.jsx';
+import { __, getBack } from 'crewhrm-materials/helpers.jsx';
 import { NumberField } from 'crewhrm-materials/number-field/index.js';
 import { RadioCheckbox } from 'crewhrm-materials/radio-checkbox.jsx';
 import { DropDown } from 'crewhrm-materials/dropdown/dropdown.jsx';
@@ -283,6 +283,7 @@ export function Options() {
 					<Link 
 						to={'/settings/'}
 						className={'ch-icon ch-icon-arrow-left cursor-pointer color-text'.classNames()} 
+						onClick={getBack}
 					/>
 
 					<span>

@@ -1,9 +1,9 @@
 import React, {createContext, useEffect, useState} from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
 
 import {ErrorBoundary} from 'crewhrm-materials/error-boundary.jsx';
-import { __ } from "crewhrm-materials/helpers.jsx";
+import { __, data_pointer, getBack } from "crewhrm-materials/helpers.jsx";
 import { request } from "crewhrm-materials/request.jsx";
 import { applyFilters } from "crewhrm-materials/hooks.jsx";
 import { RenderExternal } from "crewhrm-materials/render-external.jsx";
@@ -22,6 +22,7 @@ import style from './single.module.scss';
 import { getPageTitle } from "../gallery/index.jsx";
 
 export const ContextSingleData = createContext();
+const {permalinks={}} = window[data_pointer];
 
 const preview_renderers = {
 	image: ImagePreview,
@@ -146,8 +147,22 @@ export function SingleWrapper() {
 				{getPageTitle(content_title)}
 			</title>
 		</Helmet>
+
 		<div className={'margin-bottom-15'.classNames()}>
-			<strong className={'d-block font-size-24 color-text'.classNames()}>
+			<Link
+				to={permalinks.gallery[content_type]}
+				onClick={getBack}
+				className={'d-flex align-items-center column-gap-8 color-text-60 interactive'.classNames()}
+			>
+				<i className={'ch-icon ch-icon-arrow-left font-size-16'.classNames()}></i>
+				<span className={'font-size-14'.classNames()}>
+					{__('Back')}
+				</span>
+			</Link>
+		</div>
+
+		<div className={'margin-bottom-15'.classNames()}>
+			<strong className={'d-block font-size-24 color-text margin-bottom-5'.classNames()}>
 				{content_title} {content_status!='publish' ? <i>[{content_statuses[content_status] || content_status}]</i> : null}
 			</strong>
 			<MetaData 

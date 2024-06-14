@@ -26,6 +26,11 @@ const reaction_types = [
 
 const fields = [
 	{
+		name: 'label',
+		label: __('Content Type Label'),
+		type: 'text'
+	},
+	{
 		name: 'slug',
 		label: __('Base Slug'),
 		type: 'text',
