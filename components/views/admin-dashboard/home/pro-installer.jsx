@@ -1,5 +1,6 @@
 import React, { useState, useContext } from "react";
 
+import {confirm} from 'crewhrm-materials/prompts.jsx';
 import {__, data_pointer} from 'crewhrm-materials/helpers.jsx';
 import {request} from 'crewhrm-materials/request.jsx';
 import {LoadingIcon} from 'crewhrm-materials/loading-icon/loading-icon.jsx';
@@ -22,29 +23,30 @@ export function ProInstaller() {
 
 	const activatePro=()=>{
 
-		if ( ! window.confirm(__('Sure to activate?')) ) {
-			return;
-		}
+		confirm(
+			__('Sure to activate?'),
+			()=>{
+				setState({
+					...state,
+					in_progress: true
+				});
 
-		setState({
-			...state,
-			in_progress: true
-		});
+				request('proVersionAction', {action_name: 'activate'}, resp=>{
+					
+					ajaxToast(resp);
 
-		request('proVersionAction', {action_name: 'activate'}, resp=>{
-			
-			ajaxToast(resp);
+					if ( resp?.success ) {
+						window.location.reload();
+						return;
+					}
 
-			if ( resp?.success ) {
-				window.location.reload();
-				return;
+					setState({
+						...state,
+						in_progress: false
+					});
+				});
 			}
-
-			setState({
-				...state,
-				in_progress: false
-			});
-		});
+		);
 	}
 
 	return is_pro_active ? null : <div> 

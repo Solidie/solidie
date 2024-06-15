@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 
 import { request } from 'crewhrm-materials/request.jsx';
+import { confirm } from 'crewhrm-materials/prompts.jsx';
 import { __, data_pointer, sprintf, formatDate, formatTime, getDashboardPath, currency_symbol, getLocalValue, setLocalValue } from 'crewhrm-materials/helpers.jsx';
 import { ContextToast } from 'crewhrm-materials/toast/toast.jsx';
 import { LoadingIcon } from 'crewhrm-materials/loading-icon/loading-icon.jsx';
@@ -220,17 +221,20 @@ export function Inventory({navigate, params={}}) {
 	}
 
 	const deleteContent=(content_id)=>{
-		if ( ! window.confirm('Sure to delete? All the associated data also will be deleted permanently.') ) {
-			return;
-		}
-
-		request('deleteContent', {content_id}, resp=>{
-			if (!resp.success) {
-				ajaxToast(resp);
-			} else {
-				fetchContents();
+		
+		confirm(
+			'Sure to delete?',
+			'All the associated data also will be deleted permanently.',
+			()=>{
+				request('deleteContent', {content_id}, resp=>{
+					if (!resp.success) {
+						ajaxToast(resp);
+					} else {
+						fetchContents();
+					}
+				});
 			}
-		});
+		);
 	}
 
 	const changeContentStatus=(content_id, status)=>{

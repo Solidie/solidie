@@ -294,8 +294,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 					}
 
 					// Add latest release info too for downloadable file update feature
-					values.release_id     = release.release_id;
-					values.release_id     = release.release_id;
+					values.release_id = release.release_id;
 				}
 			}
 			

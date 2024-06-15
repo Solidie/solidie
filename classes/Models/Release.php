@@ -174,17 +174,14 @@ class Release {
 			ARRAY_A
 		);
 
-		$new_array = array();
+		$new_array         = array();
+		$content_permalink = Contents::getPermalink( $content_id );
 
 		// Loop through releases and add more data like download URL
 		foreach ( $releases as $release ) {
+			
 			$release   = _Array::castRecursive( $release );
-			$file_url  = wp_get_attachment_url( $release['file_id'] );
 			$file_path = get_attached_file( $release['file_id'] );
-
-			if ( ! $file_url ) {
-				continue;
-			}
 
 			$arg_payload = array(
 				'release'    => $release,
@@ -193,10 +190,9 @@ class Release {
 			);
 
 			$release['download_url']      = apply_filters( 'solidie_release_download_link', FileManager::getMediaLink( 0, array( 'content_slug' => $release['content_slug'] ) ), $arg_payload );
-			$release['file_url']          = $file_url;
 			$release['file_name']         = $file_path ? basename( $file_path ) : null;
 			$release['mime_type']         = get_post_mime_type( $release['file_id'] );
-			$release['content_permalink'] = Contents::getPermalink( $release['content_id'] );
+			$release['content_permalink'] = $content_permalink;
 
 			// Store the release in the new array
 			$new_array[] = $release;

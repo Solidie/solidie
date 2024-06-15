@@ -126,6 +126,7 @@ You can [create issue](https://github.com/Solidie/Solidie/issues) on Github repo
 * Fix: Variation remains enabled after plan deleted from content settings
 * Fix: Invalid extra pagination count in inventory and some other place
 * Fix: Blank overlay in content content gallery
+* Fix: Sale not found issue fix in My Purchases page
 * Update: Default content thumbnail removed for video
 * Update: File uploader text enhanced
 * Update: Overall UI and UX enhancements

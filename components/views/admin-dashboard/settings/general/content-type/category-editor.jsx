@@ -1,6 +1,7 @@
 import React, {useState, useContext} from "react";
 
 import {__, isEmpty, data_pointer} from 'crewhrm-materials/helpers.jsx';
+import {confirm} from 'crewhrm-materials/prompts.jsx';
 import { request } from 'crewhrm-materials/request.jsx';
 import { TextField } from 'crewhrm-materials/text-field/text-field.jsx';
 import { LoadingIcon } from 'crewhrm-materials/loading-icon/loading-icon.jsx';
@@ -120,23 +121,26 @@ export function CategoryEditor({content_type}) {
 	}
 
 	const deleteCategory=(category_id)=>{
-		if ( ! window.confirm( __( 'Sure to delete the category including children?' ) ) ) {
-			return;
-		}
+		
+		confirm(
+			__( 'Sure to delete?' ),
+			__( 'Sub categories also will be deleted if there is any.' ),
+			()=>{
+				request('deleteCategory', {category_id}, resp=>{
+					const {success, data:{categories={}}} = resp;
 
-		request('deleteCategory', {category_id}, resp=>{
-			const {success, data:{categories={}}} = resp;
+					if ( ! success ) {
+						ajaxToast(resp);
+						return;
+					}
 
-			if ( ! success ) {
-				ajaxToast(resp);
-				return;
+					setState({
+						...state,
+						categories: categories[content_type] ?? []
+					});
+				});
 			}
-
-			setState({
-				...state,
-				categories: categories[content_type] ?? []
-			});
-		});
+		);
 	}
 
 	const cat_options = state.editor !== null ? getFlattenedCategories(state.categories, state.editor.category_id) : null;

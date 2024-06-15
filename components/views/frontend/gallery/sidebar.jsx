@@ -73,7 +73,8 @@ function MobileFilter({_setFilter, filterList, filters}) {
 
 	return <div className={'mobile-filter'.classNames(style)}>
 		{
-			!filter ? null : <div className={'mobile-popup'.classNames(style)} onClick={()=>setFilter(null)}>
+			!filter ? null : 
+			<div className={'mobile-popup'.classNames(style)} onClick={()=>setFilter(null)}>
 				<div onClick={e=>e.stopPropagation()}>
 					<div className={'header-bar'.classNames(style) + 'd-flex align-items-center column-gap-20'.classNames()}>
 						<div className={'flex-1'.classNames()}>

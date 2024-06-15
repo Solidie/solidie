@@ -627,8 +627,12 @@ class Contents {
 			// Content permalink
 			$contents[ $index ]['content_permalink'] = self::getPermalink( $content );
 
-			// Releases no matter app or other content type as the structure is same always
-			$contents[ $index ]['release'] = Release::getRelease( (int) $content['content_id'] );
+			// Assign tutorial URL or Download URL
+			if ( $content['content_type'] === 'tutorial' ) {
+				$contents[ $index ]['tutorial_url'] = $contents[ $index ]['content_permalink'] . '0/';
+			} else {
+				$contents[ $index ]['release'] = Release::getRelease( (int) $content['content_id'] );
+			}
 
 			// Contributor avatar URL
 			$contents[ $index ]['contributor'] = ! empty( $content['contributor_id'] ) ? User::getUserData( $content['contributor_id'] ) : null;
