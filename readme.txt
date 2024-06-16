@@ -127,11 +127,12 @@ You can [create issue](https://github.com/Solidie/Solidie/issues) on Github repo
 * Fix: Invalid extra pagination count in inventory and some other place
 * Fix: Blank overlay in content content gallery
 * Fix: Sale not found issue fix in My Purchases page
+* Fix: Customer ID not syncing on order info update
 * Update: Default content thumbnail removed for video
 * Update: File uploader text enhanced
-* Update: Overall UI and UX enhancements
 * Update: Content reactions made default enabled
 * Update: Back state navigation enhanced
+* Update: Overall UI and UX enhancements
 
 = v1.1.4 -> May 30, 2024 =
 --------------------------

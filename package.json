@@ -65,7 +65,6 @@
     "style-loader": "^3.3.3",
     "sweetalert2": "^11.11.1",
     "terser-webpack-plugin": "^5.3.9",
-    "uglifyjs-webpack-plugin": "^2.2.0",
     "webpack": "^5.88.2",
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^4.15.1"
