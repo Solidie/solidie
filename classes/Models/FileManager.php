@@ -401,9 +401,9 @@ class FileManager {
 		header( 'Content-Type: ' . $mime_type . '; charset=utf-8' );
 		header( 'Content-Length: ' . $file_size );
 
-		if ( ! in_array( strtolower( explode( '/', $mime_type )[0] ) , array( 'audio', 'video', 'image' ) ) ) {
+		// if ( ! in_array( strtolower( explode( '/', $mime_type )[0] ) , array( 'audio', 'video', 'image' ) ) ) {
 			header( 'Content-Disposition: attachment; filename=' . basename( $path ) );
-		}
+		// }
 
 		readfile( $path );
 		exit;
