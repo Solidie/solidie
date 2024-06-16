@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 
 import { request } from "crewhrm-materials/request.jsx";
+import {confirm} from 'crewhrm-materials/prompts.jsx';
 import { LoadingIcon } from "crewhrm-materials/loading-icon/loading-icon.jsx";
 import { __, data_pointer, formatDateTime, sprintf } from "crewhrm-materials/helpers.jsx";
 import { FileUpload } from "crewhrm-materials/file-upload/file-upload.jsx";
@@ -175,24 +176,25 @@ export function ReleaseManager({content_id}) {
 
 		const {version} = state.releases.find(r=>r.release_id==release_id) || '';
 
-		if ( ! window.confirm( sprintf( __('Sure to delete %s?'), version ) ) ) {
-			return;
-		}
-		
-		setState({
-			...state,
-			deleting: true
-		});
+		confirm(
+			sprintf( __('Sure to delete %s?'), version ),
+			()=>{
+				setState({
+					...state,
+					deleting: true
+				});
 
-		request('deleteAppRelease', {release_id}, resp=>{
-			ajaxToast(resp);
+				request('deleteAppRelease', {release_id}, resp=>{
+					ajaxToast(resp);
 
-			setState({
-				...state,
-				deleting: false,
-				releases: resp.success ? state.releases.filter(r=>r.release_id!=release_id) : state.releases
-			});
-		});
+					setState({
+						...state,
+						deleting: false,
+						releases: resp.success ? state.releases.filter(r=>r.release_id!=release_id) : state.releases
+					});
+				});
+			}
+		);
 	}
 
 	useEffect(()=>{

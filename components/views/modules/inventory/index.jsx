@@ -223,8 +223,8 @@ export function Inventory({navigate, params={}}) {
 	const deleteContent=(content_id)=>{
 		
 		confirm(
-			'Sure to delete?',
-			'All the associated data also will be deleted permanently.',
+			__('Sure to delete?'),
+			__('All the associated data also will be deleted permanently.'),
 			()=>{
 				request('deleteContent', {content_id}, resp=>{
 					if (!resp.success) {
@@ -239,25 +239,26 @@ export function Inventory({navigate, params={}}) {
 
 	const changeContentStatus=(content_id, status)=>{
 
-		if ( ! window.confirm(__('Sure to change status?')) ) {
-			return;
-		}
+		confirm(
+			__('Sure to change status?'),
+			()=>{
+				setState({
+					...state,
+					changing_status_for: content_id
+				});
+				
+				request('changeContentStatus', {content_id, status, is_admin}, resp=>{
 
-		setState({
-			...state,
-			changing_status_for: content_id
-		});
-		
-		request('changeContentStatus', {content_id, status, is_admin}, resp=>{
+					ajaxToast(resp);
 
-			ajaxToast(resp);
-
-			setState({
-				...state,
-				changing_status_for: null,
-				contents: resp.success ? state.contents.map(c=>c.content_id==content_id ? {...c, content_status: status} : c) : state.contents
-			});
-		});
+					setState({
+						...state,
+						changing_status_for: null,
+						contents: resp.success ? state.contents.map(c=>c.content_id==content_id ? {...c, content_status: status} : c) : state.contents
+					});
+				});
+			}
+		);
 	}
 
 	const onActionClick=(action, content)=>{

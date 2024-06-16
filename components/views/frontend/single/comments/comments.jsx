@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 
 import { data_pointer, __, sprintf, formatDateTime } from "crewhrm-materials/helpers.jsx";
+import {confirm} from 'crewhrm-materials/prompts.jsx';
 import { TextField } from "crewhrm-materials//text-field/text-field.jsx";
 import { LoadingIcon } from "crewhrm-materials/loading-icon/loading-icon.jsx";
 import { request } from "crewhrm-materials/request.jsx";
@@ -113,21 +114,23 @@ export function Comments({content={}}) {
 		switch( action ) {
 			
 			case 'delete' :
-				if ( ! window.confirm(__('Sure to delete the comment?')) ) {
-					return;
-				}
+				confirm(
+					__('Sure to delete the comment?'),
+					()=>{
+							request('deleteComment', {comment_id}, resp=>{
+							
+							ajaxToast(resp);
 
-				request('deleteComment', {comment_id}, resp=>{
-					
-					ajaxToast(resp);
-
-					if ( resp.success ) {
-						setState({
-							...state,
-							comments: state.comments.filter(c=>c.comment_id!=comment_id)
+							if ( resp.success ) {
+								setState({
+									...state,
+									comments: state.comments.filter(c=>c.comment_id!=comment_id)
+								});
+							}
 						});
 					}
-				});
+				);
+
 				break;
 		}
 	}

@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 import {TextField} from 'crewhrm-materials/text-field/text-field.jsx';
 import {FileUpload} from 'crewhrm-materials/file-upload/file-upload.jsx';
 import {request} from 'crewhrm-materials/request.jsx';
+import {confirm} from 'crewhrm-materials/prompts.jsx';
 import {LoadingIcon} from 'crewhrm-materials/loading-icon/loading-icon.jsx';
 import { __, data_pointer, isEmpty, sprintf, getDashboardPath } from "crewhrm-materials/helpers.jsx";
 import { ContextToast } from "crewhrm-materials/toast/toast.jsx";
@@ -170,13 +171,16 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 		}
 	}
 
+	const publish=()=>{
+		confirm(
+			__('Sure to publish?'),
+			submit
+		);
+	}
+
 	const submit=(content_status)=>{
 
 		const is_draft = content_status === 'draft'
-
-		if ( ! is_draft && !window.confirm(__('Sure to publish?')) ) {
-			return;
-		}
 
 		setState({
 			...state,
@@ -470,7 +474,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 													<a 
 														href={state.values.content_permalink} 
 														target='_blank'
-														className={'color-material-80 font-size-3 interactive'.classNames()}
+														className={'color-material-80 font-size-13 interactive'.classNames()}
 													>
 														{
 															window[data_pointer].permalinks.gallery[content_type]}{state.slug_editor ? null : <>
@@ -557,7 +561,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 					<button 
 						data-cylector="content-save"
 						className={'button button-primary'.classNames()} 
-						onClick={()=>submit()}
+						onClick={publish}
 						disabled={
 							readonly_mode || 
 							state.submitting || 

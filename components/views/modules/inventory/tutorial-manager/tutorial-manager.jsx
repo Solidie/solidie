@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 
 import {__, data_pointer, getDashboardPath, isEmpty} from 'crewhrm-materials/helpers.jsx'
 import {ListManager} from 'crewhrm-materials/list-manager/list-manager.jsx'
+import {confirm} from 'crewhrm-materials/prompts.jsx';
 import { request } from "crewhrm-materials/request.jsx";
 import { ContextToast } from "crewhrm-materials/toast/toast.jsx";
 import { LoadingIcon } from "crewhrm-materials/loading-icon/loading-icon";
@@ -50,20 +51,21 @@ export function TutorialManager({content_id, content_type, lesson_id, navigate})
 
 	const deleteLesson=(lesson_id)=>{
 		
-		if ( ! window.confirm('Sure to delete?') ) {
-			return;
-		}
+		confirm(
+			__('Sure to delete?'),
+			()=>{
+				request('deleteLesson', {lesson_id, content_id}, resp=>{
+					ajaxToast(resp);
 
-		request('deleteLesson', {lesson_id, content_id}, resp=>{
-			ajaxToast(resp);
-
-			if ( resp.success ) {
-				setState({
-					...state,
-					lessons: resp.data.lessons
+					if ( resp.success ) {
+						setState({
+							...state,
+							lessons: resp.data.lessons
+						});
+					}
 				});
 			}
-		});
+		);
 	}
 
 	const fetchLessonsHierarchy=()=>{
