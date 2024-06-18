@@ -11,10 +11,10 @@ Cypress.Commands.add('createContent', (content, index) => {
 	cy.reload({ forceReload: true });
 
 	// Set thumbnail
-	cy.get('[data-cylector="content-thumbnail"] input').attachFile('../assets/book.png');
+	cy.get('[data-cylector="content-input-wrapper-thumbnail"] input').attachFile('../assets/book.png');
 
 	// Set content title
-	cy.get('[data-cylector="content-title"] input').clear().type(content_title);
+	cy.get('[data-cylector="content-input-wrapper-content_title"] input').clear().type(content_title);
 
 	// Set monetization
 	cy.get(`[data-cylector="monetization-option"] [value="${monetization}"]`).check();
@@ -29,6 +29,7 @@ Cypress.Commands.add('createContent', (content, index) => {
 	cy.get('[data-cylector="content-save"]').then($button => {
 		if ($button.is(':enabled')) {
 			cy.wrap($button).click();
+			cy.get('.solidie-swal button').contains('Yes').click();
 			cy.wait(1500);
 		}
 	});

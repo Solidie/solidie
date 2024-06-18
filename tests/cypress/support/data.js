@@ -48,13 +48,15 @@ module.exports.common_plans = [
 		plan_name: `Standard License`,
 		description: 'Single license standard',
 		sales_model: 'single',
-		default_price: 11
+		default_price: 11,
+		default_sale_price: 9,
 	},
 	{
 		plan_name: `Extended License`,
 		description: 'Extended license standard',
 		sales_model: 'single',
-		default_price: 51
+		default_price: 51,
+		default_sale_price: 50,
 	},
 	{
 		plan_name: `Bundle`,
@@ -63,7 +65,8 @@ module.exports.common_plans = [
 		subscription_model: 'year',
 		auto_enable: true,
 		access_limit: 100,
-		default_price: 15
+		default_price: 15,
+		default_sale_price: 12,
 	},
 ];
 
@@ -87,21 +90,24 @@ module.exports.content_types = {
 				description: 'App - Get single license for one month',
 				subscription_model: 'month',
 				access_limit: 1,
-				default_price: 10
+				default_price: 15,
+				default_sale_price: 12,
 			},
 			{
 				plan_name: `App - Yearly 2 License`,
 				description: 'App - Get two license for one year',
 				subscription_model: 'year',
 				access_limit: 2,
-				default_price: 10
+				default_price: 15,
+				default_sale_price: 12,
 			},
 			{
 				plan_name: `App - Lifetime 3 License`,
 				description: 'App - Get three license for lifetime',
 				subscription_model: 'lifetime',
 				access_limit: 3,
-				default_price: 13
+				default_price: 15,
+				default_sale_price: 12,
 			}
 		]
 	},

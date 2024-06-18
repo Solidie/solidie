@@ -17,9 +17,10 @@ describe('Test content gallery', ()=>{
 			cy.get('[data-cylector="order_by"] input:last').click();
 
 			// Enter search keyword
-			cy.get('[data-cylector="content-search"]').type('Free');
-			cy.get('[data-cylector="content-search"]').clear();
-			cy.get('[data-cylector="content-search"]').type('Paid');
+			const search_field = cy.get('[data-cylector="content-search"] input');
+			search_field.type('Free');
+			search_field.clear();
+			search_field.type('Paid');
 
 			// Filter by category
 			cy.get('[data-cylector="category_ids"] input:first').click();

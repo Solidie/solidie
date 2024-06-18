@@ -51,9 +51,9 @@ Cypress.Commands.add('setUpContentSettings', () => {
 
 			const {label, parent} = category;
 
-			cy.get('[data-cylector="add-category"]').click();
+			cy.get('[data-cylector="add-list-item"]').click();
 
-			cy.get('[data-cylector="category-name-field"] input').type(label);
+			cy.get('[data-cylector="category-name-field"] input').clear().type(label);
 
 			// To Do: Select parent category in dropdown
 
@@ -71,7 +71,8 @@ Cypress.Commands.add('setUpContentSettings', () => {
 				sales_model,
 				subscription_model,
 				access_limit,
-				default_price
+				default_price,
+				default_sale_price,
 			} = plan;
 			
 			// Add a new plan box
@@ -100,7 +101,8 @@ Cypress.Commands.add('setUpContentSettings', () => {
 				cy.get('[data-cylector="access-limit"] input').clear().type(access_limit.toString());
 			}
 
-			cy.get('[data-cylector="default-price"]').clear().type(default_price);
+			cy.get('[data-cylector="default-price"] input').clear().type(default_price);
+			cy.get('[data-cylector="default-sale-price"] input').clear().type(default_sale_price);
 		});
 
 		// Save settings

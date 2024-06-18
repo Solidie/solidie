@@ -451,7 +451,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 											</small>
 										}
 									</div>
-									<div>
+									<div data-cylector={`content-input-wrapper-${name}`}>
 										{
 											('text' !=type && 'textarea' != type ) ? null :
 											<TextField 

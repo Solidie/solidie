@@ -229,7 +229,7 @@ function GalleryLayout({resources={}}) {
 
 						{/* Search field */}
 						<div className={'d-flex align-items-center'.classNames()}>
-							<div className={'flex-1'.classNames()}>
+							<div className={'flex-1'.classNames()} data-cylector="content-search">
 								<TextField 
 									value={queryParams.search || ''}
 									type="search" 
