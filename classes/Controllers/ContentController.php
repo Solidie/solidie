@@ -214,12 +214,12 @@ class ContentController {
 
 		// Now get the content by content ID
 		$content = $content_id ? Contents::getContentByContentID( $content_id, null, ! $is_editor ) : null;
-
-		if ( empty( $content_type ) && ! empty( $content ) ) {
-			$content_type = $content['content_type'];
+		if ( empty( $content ) ) {
+			wp_send_json_error( array( 'message' => __( 'The content was not found', 'solidie' ) ) );
 		}
 
 		// Check if the content type is enabled
+		$content_type = empty( $content_type ) ? $content['content_type'] : $content_type;
 		if ( ! AdminSetting::get( 'contents.' . $content_type . '.enable' ) ) {
 			wp_send_json_error( array( 'message' => __( 'The content type is not enabled', 'solidie' ) ) );
 		}

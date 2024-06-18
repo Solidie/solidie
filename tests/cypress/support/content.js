@@ -10,14 +10,17 @@ Cypress.Commands.add('createContent', (content, index) => {
 	cy.visit(`wp-admin/admin.php?page=solidie-inventory#/inventory/${content_type}/editor/new`);
 	cy.reload({ forceReload: true });
 
-	// Set thumbnail
-	cy.get('[data-cylector="content-input-wrapper-thumbnail"] input').attachFile('../assets/book.png');
-
 	// Set content title
-	cy.get('[data-cylector="content-input-wrapper-content_title"] input').clear().type(content_title);
+	const ttl_field = cy.get('[data-cylector="content-input-wrapper-content_title"] input');
+	ttl_field.clear().type(content_title);
+	ttl_field.blur();
+	cy.wait(2000);
+
+	// Set thumbnail
+	cy.get('[data-cylector="content-input-wrapper-thumbnail"] input').attachFile('../assets/book.jpg');
 
 	// Set monetization
-	cy.get(`[data-cylector="monetization-option"] [value="${monetization}"]`).check();
+	cy.get(`[name="monetization"]`).check(monetization);
 
 	// To Do: Set a category
 
@@ -26,11 +29,7 @@ Cypress.Commands.add('createContent', (content, index) => {
 		
 	}
 
-	cy.get('[data-cylector="content-save"]').then($button => {
-		if ($button.is(':enabled')) {
-			cy.wrap($button).click();
-			cy.get('.solidie-swal button').contains('Yes').click();
-			cy.wait(1500);
-		}
-	});
+	cy.get('[data-cylector="content-save"]').click();
+	cy.get('.solidie-swal button').contains('Yes').click();
+	cy.wait(1500);
 });

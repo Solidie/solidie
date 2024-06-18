@@ -112,8 +112,8 @@ function InventoryWrapper({children, content_type, content_label, gallery_permal
 			} else {
 				setState({
 					...state, 
-					error_message: <div className={'text-align-center padding-vertical-40'.classNames()}>
-						<span className={'d-block margin-bottom-10'.classNames()}>
+					error_message: is_admin ? <div className={'text-align-center padding-vertical-40'.classNames()}>
+						<span className={'d-block margin-bottom-10 font-size-16 color-text'.classNames()}>
 							{__('To showcase your contents, please enable preferred content types first.')}
 						</span>
 						<a 
@@ -123,6 +123,14 @@ function InventoryWrapper({children, content_type, content_label, gallery_permal
 						>
 							{__('Go to Settings')}
 						</a>
+					</div> :
+					<div className={'text-align-center padding-vertical-40'.classNames()}>
+						<span className={'d-block margin-bottom-10 font-size-16 color-text'.classNames()}>
+							{__('No content type is enabled.')}
+						</span>
+						<span className={'d-block margin-bottom-10 font-size-14 color-text-70'.classNames()}>
+							{__('Please contact the site administrator.')}
+						</span>
 					</div>
 				});
 			}

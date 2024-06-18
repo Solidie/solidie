@@ -18,6 +18,7 @@ import '@10up/cypress-wp-utils';
 import './helpers';
 import './settings';
 import './content';
+import './user';
 
 beforeEach(() => {
 	cy.session('solidie-login',  ()=>{

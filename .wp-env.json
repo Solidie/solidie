@@ -1,6 +1,7 @@
 {
   	"plugins": [
 		"https://downloads.wordpress.org/plugin/woocommerce.latest-stable.zip",
+		"https://downloads.wordpress.org/plugin/woocommerce-gateway-stripe.latest-stable.zip",
 		"https://downloads.wordpress.org/plugin/wp-phpmyadmin-extension.latest-stable.zip",
 		".", 
 		"../solidie-pro", 

