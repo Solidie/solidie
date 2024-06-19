@@ -1,4 +1,4 @@
-Cypress.Commands.add('createUser', (email, username, pass) => {
+Cypress.Commands.add('createUser', ({email, username, pass}) => {
 	
 	cy.visit('wp-admin/user-new.php');
 
@@ -15,7 +15,10 @@ Cypress.Commands.add('createUser', (email, username, pass) => {
 	cy.get('#createusersub').click();
 });
 
-Cypress.Commands.add('loginCustom', (username, pass)=>{
+Cypress.Commands.add('loginCustom', (data)=>{
+	
+	const {username='admin', pass='password'} = data || {};
+
 	cy.visit('wp-login.php');
 	cy.wait(1000);
 	cy.get('#user_login').clear().type(username);

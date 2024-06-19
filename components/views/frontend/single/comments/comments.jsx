@@ -159,7 +159,7 @@ export function Comments({content={}}) {
 				</div>
 				:
 				<div className={"comment-box".classNames(style)}>
-					<div className={'margin-bottom-15'.classNames()}>
+					<div className={'margin-bottom-15'.classNames()} data-cylector="comment-box">
 						<TextField 
 							type='textarea' 
 							placeholder={__("Write your comment")} 
@@ -174,6 +174,7 @@ export function Comments({content={}}) {
 							className={'button button-primary button-small'.classNames()}
 							onClick={submitComment}
 							disabled={readonly_mode || state.fetching || state.submitting || ! /\S+/.test(state.new_comment || '')}
+							data-cylector="comment-submit"
 						>
 							{__('Submit')} <LoadingIcon show={state.submitting}/>
 						</button>
@@ -229,7 +230,9 @@ export function Comments({content={}}) {
 									</span>
 								</div>
 							</div>
-							<div dangerouslySetInnerHTML={{__html: comment_content}}></div>
+							<div data-cylector="comment-single">
+								{comment_content}
+							</div>
 						</div>
 
 						{

@@ -1,4 +1,4 @@
-Cypress.Commands.add('createContent', (content, index) => {
+Cypress.Commands.add('createContent', (content, fe_dashboard=false) => {
 
 	const {
 		content_type,
@@ -7,7 +7,7 @@ Cypress.Commands.add('createContent', (content, index) => {
 		monetization
 	} = content;
 
-	cy.visit(`wp-admin/admin.php?page=solidie-inventory#/inventory/${content_type}/editor/new`);
+	cy.visit(fe_dashboard ? `my-dashboard/inventory/${content_type}/editor/new/` : `wp-admin/admin.php?page=solidie-inventory#/inventory/${content_type}/editor/new`);
 	cy.reload({ forceReload: true });
 
 	// Set content title
@@ -18,6 +18,7 @@ Cypress.Commands.add('createContent', (content, index) => {
 
 	// Set thumbnail
 	cy.get('[data-cylector="content-input-wrapper-thumbnail"] input').attachFile('../assets/book.jpg');
+	cy.wait(1000);
 
 	// Set monetization
 	cy.get(`[name="monetization"]`).check(monetization);

@@ -210,6 +210,7 @@ export function OptionFields({fields=[], settings, onChange: _onChange}) {
 								value={values[name]}
 								placeholder={placeholder}
 								onChange={(v) => onChange(name, v)}
+								name={name}
 							/>
 						</div>
 					</>

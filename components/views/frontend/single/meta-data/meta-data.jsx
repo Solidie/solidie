@@ -52,6 +52,7 @@ function LikeDislike({content={}, applyReaction, is_overlayer}) {
 			<i 
 				className={`ch-icon ${liked ? 'ch-icon-thumbs-up color-material-90' : `ch-icon-thumbs-o-up ${color_class}`} font-size-14 cursor-pointer`.classNames()}
 				onClick={()=>applyReaction(liked ? -1 : 1)}
+				data-cylector="thumbs-up"
 			></i>
 		</span>
 
@@ -231,6 +232,7 @@ export function MetaData(props) {
 			<i 
 				className={`ch-icon ch-icon-share1 font-size-14 cursor-pointer ${is_overlayer ? 'color-white text-shadow-thin' : 'color-text'}`.classNames()}
 				onClick={()=>setShowSharer(true)}
+				data-cylector="share-opener"
 			></i>
 		</div>
 	}
@@ -241,6 +243,7 @@ export function MetaData(props) {
 				title={wishlisted ? __('Remove from saved items') : __('Save for later')}
 				className={`ch-icon ${content.reactions?.wishlisted ? 'ch-icon-heart' : 'ch-icon-heart-o'} font-size-16 cursor-pointer ${is_overlayer ? 'color-white text-shadow-thin' : 'color-text'}`.classNames()}
 				onClick={()=>applyReaction(content.reactions?.wishlisted ? -1 : 1, 'wishlist')}
+				data-cylector="add-to-wishlist"
 			></i>
 		</div>
 	}

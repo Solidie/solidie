@@ -54,3 +54,12 @@ Cypress.Commands.add('toggleCheck', (fields) => {
 Cypress.Commands.add('selectDropdown', (fields) => {
 	
 });
+
+// Cypress custom command to access iframe content
+Cypress.Commands.add('getIframeElement', (iframeSelector) => {
+  return cy
+    .get(iframeSelector)
+    .its('0.contentDocument').should('exist')
+    .its('body').should('not.be.empty')
+    .then(cy.wrap);
+});

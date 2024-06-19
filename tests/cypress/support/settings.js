@@ -24,6 +24,18 @@ Cypress.Commands.add('toggleContentTypes', (obj) => {
 
 Cypress.Commands.add('setUpContentSettings', () => {
 
+	// Enable public contribution
+	cy.visit('wp-admin/admin.php?page=solidie-settings#/settings/general/contributor/');
+	cy.wait(2500);
+	cy.get('[name="contribution_distribute_model"]').check(['free', 'paid']);
+
+	// Set commision
+	cy.get('[name="contributor_revenue_percentage"]').clear().type('55');
+
+	// Save settings
+	cy.get('[data-cylector="save-settings"]').click();
+	cy.wait(1500);
+	
 	cy.toggleContentTypes(Object.assign({}, ...Object.keys(content_types).map(type=>{return {[type]: true}})));
 	
 	for (let content_type in content_types) {
@@ -106,11 +118,7 @@ Cypress.Commands.add('setUpContentSettings', () => {
 		});
 
 		// Save settings
-		cy.get('[data-cylector="save-settings"]').then($button => {
-			if ($button.is(':enabled')) {
-				cy.wrap($button).click();
-				cy.wait(1500);
-			}
-		});
+		cy.get('[data-cylector="save-settings"]').click();
+		cy.wait(1500);
 	}
 });

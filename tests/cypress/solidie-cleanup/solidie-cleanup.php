@@ -145,3 +145,21 @@ add_action(
 	},
 	0
 );
+
+add_action( 
+	'woocommerce_thankyou',
+	function ( $order_id ) {
+
+		if ( ! $order_id ) {
+			return;
+		}
+
+		$order = wc_get_order( $order_id );
+
+		// Ensure order is paid and it is a COD payment
+		if ( $order->get_payment_method() === 'cod' ) {
+			// Mark order as complete
+			$order->update_status( 'completed' );
+		}
+	}
+);
