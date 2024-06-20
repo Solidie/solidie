@@ -547,7 +547,7 @@ export function Inventory({navigate, params={}}) {
 														return !plan_name ? null : 
 														<div key={plan.variation_id}>
 															<div 
-																className={'bg-color-material-10 border-1 b-color-material-20 d-inline-block font-size-13'.classNames()} 
+																className={'bg-color-material-3 border-1 b-color-material-20 d-inline-block font-size-13'.classNames()} 
 																style={{padding: '4px 17px', borderRadius: '50px'}}
 															>
 																{plan_name}

@@ -89,7 +89,7 @@ export function ProInstaller() {
 				<br/>
 				<div>
 					<strong className={'d-block margin-bottom-10 font-size-14 font-weight-700'.classNames()}>
-						{__('Missing features in Free version:')}
+						{__('Pro features:')}
 					</strong>
 					
 					<table className={'table no-responsive'.classNames()}>

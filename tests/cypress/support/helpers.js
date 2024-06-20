@@ -1,3 +1,5 @@
+import 'cypress-file-upload';
+
 // Type text field, select dropdown, check-uncheck checkbox
 Cypress.Commands.add('toggleCheck', (fields) => {
 	

@@ -1,4 +1,4 @@
-Cypress.Commands.add('createContent', (content, fe_dashboard=false) => {
+Cypress.Commands.add('createContent', (content, fe_dashboard) => {
 
 	const {
 		content_type,
@@ -7,7 +7,8 @@ Cypress.Commands.add('createContent', (content, fe_dashboard=false) => {
 		monetization
 	} = content;
 
-	cy.visit(fe_dashboard ? `my-dashboard/inventory/${content_type}/editor/new/` : `wp-admin/admin.php?page=solidie-inventory#/inventory/${content_type}/editor/new`);
+	const url = fe_dashboard ? `my-dashboard/inventory/${content_type}/editor/new/` : `wp-admin/admin.php?page=solidie-inventory#/inventory/${content_type}/editor/new`;
+	cy.visit(url);
 	cy.reload({ forceReload: true });
 
 	// Set content title

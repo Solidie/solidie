@@ -113,7 +113,7 @@ You can [create issue](https://github.com/Solidie/Solidie/issues) on Github repo
 
 == Changelog ==
 
-= v1.1.5 -> Jun 10, 2024 =
+= v1.1.5 -> Jun 20, 2024 =
 --------------------------
 * New: Color scheme customization settings added
 * New: Release and lessons menu option added in inventory
