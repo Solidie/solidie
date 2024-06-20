@@ -27,12 +27,15 @@ const content = {
 	content_type: 'audio',
 	content_title: `Audio Monetization Test`,
 	content_description: `Demo audio content description, testing monetization`,
-	monetization: 'paid'
+	monetization: 'paid',
+	content_permalink: 'gallery/audios/audio-monetization-test/'
 }
+
+const comment = 'This is a sample dummy comment';
 
 describe('Test frontend dashboard with contributor user', ()=>{
 
-	it('Create contributor user, login and apply to become contributor', ()=>{
+	it('Create contributor users, login and apply to become contributor', ()=>{
 
 		// Create contributor users
 		for (let i=0; i<contributors.length; i++) {
@@ -84,7 +87,6 @@ describe('Test frontend dashboard with contributor user', ()=>{
 		cy.get('[data-cylector="thumbs-up"]').click();
 
 		// Test commenting
-		const comment = 'This is a sample dummy comment';
 		cy.get('[data-cylector="comment-box"] textarea').clear().type(comment);
 		cy.get('[data-cylector="comment-submit"]').click();
 		cy.wait(2000);
@@ -115,13 +117,13 @@ describe('Test frontend dashboard with contributor user', ()=>{
 		cy.createContent(content, true);
 	});
 
-	it('Login to second contributor and purchase the product and do sruffs', ()=>{
+	it('Login to second contributor and purchase the product', ()=>{
 		// Login to second contributor
 		cy.logout();
 		cy.loginCustom(contributors[1]);
 
-		// Add a paid content to cart
-		cy.visit('gallery/audios/audio-monetization-test/');
+		// Add paid content to cart
+		cy.visit(content.content_permalink);
 		cy.wait(1000);
 		cy.get('[data-cylector="add-to-cart"]').click();
 		cy.wait(1000);
@@ -165,5 +167,34 @@ describe('Test frontend dashboard with contributor user', ()=>{
 
 		// Make withdrawal request
 		cy.get('[data-cylector="withdraw-btn"]').click();
+		cy.get('[data-cylector="method"] [data-cylector="trigger-point"]').click();
+		cy.get('[data-cylector="options-wrapper"]>div').contains('Paypal').click();
+		cy.get('[data-cylector="submit-withdrawal"]').click();
+		cy.wait(1500);
+
+		// Check if the withdrawal request placed
+		cy.visit('my-dashboard/earnings/withdrawals/');
+		cy.wait(1500);
+		cy.get('[data-cylector="withdrawal-single"]').should('exist');
+	});
+
+	it('Login to admin and approve the request', ()=>{
+
+		// Login to second contributor
+		cy.logout();
+		cy.loginCustom();
+
+		cy.visit('wp-admin/admin.php?page=solidie-withdrawal-requests');
+		cy.wait(1500);
+
+		// Set as processing
+		cy.get('[data-cylector="withdrawal-status"] select:first').select('processing');
+		cy.get('.solidie-swal button').contains('Yes').click();
+		cy.wait(1000);
+
+		// Set as sent
+		cy.get('[data-cylector="withdrawal-status"] select:first').select('sent');
+		cy.get('.solidie-swal button').contains('Yes').click();
+		cy.wait(1000);
 	});
 });

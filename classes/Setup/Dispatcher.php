@@ -158,11 +158,14 @@ class Dispatcher {
 			// Check if request data type and accepted type matched
 			if ( $arg_type != $param_type ) {
 
-				// If not matched, however accpets string but passed int, then convert the int to string and pass to the method.
-				// Because in some cases both content ID and content slug maybe passed to same variable, especially when visiting single content page.
-				// And in fact there's no issue to treat a numeric value as string in this plugin so far.
-				if ( 'string' === $param_type && 'integer' === $arg_type ) {
-					$args[ $name ] = (string) $value;
+				if ( 'string' === $param_type && is_numeric( $value ) ) {
+					$args[ $name ] = ( string ) $value;
+
+				} else if ( 'double' === $param_type && is_numeric( $value ) ) {
+					$args[ $name ] = ( float ) $value;
+
+				} else if ( 'integer' === $param_type && is_numeric( $value ) ) {
+					$args[ $name ] = ( int ) $value;
 
 				} else if ( 'array' === $param_type && 'integer' === $arg_type ) {
 					// Sometimes 0 can be passed instead of array
@@ -171,7 +174,14 @@ class Dispatcher {
 					$args[ $name ] = array();
 
 				} else {
-					wp_send_json_error( array( 'message' => __( 'Invalid request data!', 'hr-management' ) ) );
+					wp_send_json_error(
+						array( 
+							'message'  => __( 'Invalid request data!', 'hr-management' ),
+							'param'    => $name,
+							'accepts'  => $param_type,
+							'received' => $arg_type,
+						) 
+					);
 				}
 			}
 		}
