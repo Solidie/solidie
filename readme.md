@@ -11,7 +11,7 @@ Download production build from [WordPress Plugin Directory](https://wordpress.or
 - Run <kbd>cd solidie</kbd>
 - Run <kbd>npm install</kbd>
 - Run <kbd>npm run build</kbd> to compile scirpts in production mode and create releasable zip file.
-- Or, Run <kbd>npm run watch-core</kbd> if you'd like the codes to be compiled in development mode and need continuous compilation on code changes.
+- Or, Run <kbd>npm run watch</kbd> if you'd like the codes to be compiled in development mode and need continuous compilation on code changes.
 
 If it is cloned already
 - open terminal at <kbd>~wp-content/plugins/solidie/</kbd>
@@ -19,4 +19,3 @@ If it is cloned already
 - and then <kbd>npm run build</kbd> or <kbd>npm run watch</kbd>
 
 Whenever you pull updates to local repository, don't forget to run <kbd>npm install</kbd> and <kbd>npm run build</kbd> or <kbd>watch</kbd> again.
-

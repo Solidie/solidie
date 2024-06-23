@@ -71,9 +71,6 @@ class Scripts {
 		$nonce        = wp_create_nonce( $nonce_action );
 		$user         = wp_get_current_user();
 
-		// Check if email subscribed
-		$subscribeds = _Array::getArray( get_option( ProController::SUBSCRIBED_MAILS ) );
-
 		// Determine the react react root path
 		$parsed    = wp_parse_url( get_home_url() );
 		$root_site = 'http' . ( is_ssl() ? 's' : '' ) . '://' . $parsed['host'] . ( ! empty( $parsed['port'] ) ? ':' . $parsed['port'] : '' );
@@ -113,7 +110,6 @@ class Scripts {
 					'email'                 => $user ? $user->user_email : null,
 					'display_name'          => $user ? $user->display_name : null,
 					'avatar_url'            => $user ? get_avatar_url( $user->ID ) : null,
-					'newsletter_subscribed' => $user && in_array( $user->user_email, $subscribeds ),
 				),
 				'settings'         => array(
 					'contents' => AdminSetting::getContentSettings(),

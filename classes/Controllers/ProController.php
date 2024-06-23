@@ -7,9 +7,7 @@
 
 namespace Solidie\Controllers;
 
-use Solidie\Helpers\_Array;
 use Solidie\Helpers\Utilities;
-use Solidie\Main;
 
 /**
  * Pro controller class
@@ -21,8 +19,6 @@ class ProController {
 			'role' => 'administrator',
 		)
 	);
-
-	const SUBSCRIBED_MAILS = 'solidie-subscribed-emails';
 
 	/**
 	 * Do action for pro version like installing and activating through custom UI

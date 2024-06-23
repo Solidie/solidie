@@ -27,9 +27,6 @@ module.exports = (env, options) => {
 		},
 		resolve: {
 			extensions: ['.js', '.jsx', '.json'],
-			alias: {
-				'solidie-pro': path.resolve(__dirname, '../solidie-pro/components'),
-			},
 		},
         module: {
             rules: [
