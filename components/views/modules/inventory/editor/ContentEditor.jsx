@@ -61,17 +61,6 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 		segment_id: active_stuff_id
 	} = params;
 
-	const initial_values = {
-		content_type: content_type,
-		content_title: '',
-		kses_content_description: '',
-		category_id: 0,
-		thumbnail: null, // General purpose content thumbnail, video poster
-		sample_images:[], // Sample images for fonts, photo templates, apps
-		preview: null, // Preview file for pdf, audio, video etc that can be seen on the website directly
-		downloadable_file: null, // The actual file to be downloaded by user, it holds all the resouce. Maybe zip, rar, tar, video etc.
-	}
-
 	const content_id = isNaN(_content_id) ? 0 : _content_id;
 	
 	const [state, setState] = useState({
@@ -82,7 +71,16 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 		error_message: null,
 		update_title: null,
 		thumbnail_url: null,
-		values: initial_values,
+		values: {
+			content_type: content_type,
+			content_title: sprintf(__('Untitled %s'), (window[data_pointer].settings.contents[content_type]?.label || __('Content'))),
+			kses_content_description: '',
+			category_id: 0,
+			thumbnail: null, // General purpose content thumbnail, video poster
+			sample_images:[], // Sample images for fonts, photo templates, apps
+			preview: null, // Preview file for pdf, audio, video etc that can be seen on the website directly
+			downloadable_file: null, // The actual file to be downloaded by user, it holds all the resouce. Maybe zip, rar, tar, video etc.
+		},
 		release_lesson_opened: content_id ? true : false,
 	});
 
@@ -160,17 +158,6 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 		});
 	}
 
-	const saveOnTitleBlur=()=>{
-
-		if ( readonly_mode ) {
-			return;
-		}
-
-		if ( ! content_id && ! isEmpty( content_title ) ) {
-			submit('draft');
-		}
-	}
-
 	const publish=()=>{
 		confirm(
 			__('Sure to publish?'),
@@ -244,7 +231,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 
 			setState({
 				...state,
-				new_state
+				...new_state
 			});
 		},
 		percent=>{
@@ -255,10 +242,9 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 	const fetchContent=()=>{
 
 		if ( content_id === 0 ) {
-			setState({
-				...state,
-				values: initial_values
-			});
+			if ( ! readonly_mode ) {
+				submit('draft');
+			}
 			return;
 		}
 		
@@ -459,7 +445,6 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 												placeholder={placeholder} 
 												onChange={v=>setVal(name, v)}
 												value={state.values[name]}
-												onBlur={name==='content_title' ? saveOnTitleBlur : null}
 											/>
 										}
 

@@ -22,7 +22,20 @@ import style from './single.module.scss';
 import { getPageTitle } from "../gallery/index.jsx";
 
 export const ContextSingleData = createContext();
-const {permalinks={}} = window[data_pointer];
+
+const swapObjectKey=(obj, target_key, replace_key)=>{
+	
+	const new_ob = {};
+
+	for ( let k in obj ) {
+		new_ob[ obj[k][target_key] ] = {...obj[k], [replace_key]: k}
+	}
+
+	return new_ob;
+}
+
+const {permalinks={}, settings: {contents={}}} = window[data_pointer];
+const contents_by_slug = swapObjectKey(contents, 'slug', 'content_type');
 
 const preview_renderers = {
 	image: ImagePreview,
@@ -73,7 +86,7 @@ function FreeDownlod( props ) {
 
 export function SingleWrapper() {
 
-	const {content_slug} = useParams();
+	const {content_slug, content_type_slug} = useParams();
 
 	const [state, setState] = useState({
 		fetching: false,
@@ -128,14 +141,25 @@ export function SingleWrapper() {
 		}
 	}, [state.content]);
 
-	const {content_type} = state.content || {};
+	const {content_type} = contents_by_slug[content_type_slug];
 	const PreviewComp = preview_renderers[content_type] || preview_renderers.other;
 
     if ( state.fetching || state.error_message ) {
         return <InitState 
-				fetching={state.fetching} 
-				error_message={state.error_message} />
-
+			fetching={state.fetching} 
+			error_message={<>
+				<p>
+					{state.error_message}
+				</p>
+				<Link
+					to={permalinks.gallery[content_type]}
+					onClick={getBack}
+					className={'button button-primary button-outlined button-small'.classNames()}
+				>
+					{__('Back to Gallery')}
+				</Link>
+			</>}
+		/>
     }
 
 	const {media={}, content_title, content_status} = state.content || {};

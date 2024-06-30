@@ -121,6 +121,9 @@ You can [create issue](https://github.com/Solidie/Solidie/issues) on Github repo
 * New: Confirmation popup on lesson publish
 * Fix: Empty page on incorrect user dashboard route
 * Fix: Duplicate sales entry on plan renewal
+* Fix: Pricing plan not showing in new content single page if not toggled once in editor
+* Fix: Always open release and lesosn manager right after publish
+* Fix: Content editor flickering on first time title input blur
 
 = v1.1.5 -> Jun 20, 2024 =
 --------------------------
