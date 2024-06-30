@@ -1,13 +1,15 @@
-=== Solidie - Content Marketplace ===
+=== Solidie - Digital Content Marketplace ===
 Contributors: jayedul
 Donate Link: https://solidie.com
 Tags: marketplace, contributors, stock
 Requires at least: 5.3
-Tested up to: 6.5.4
+Tested up to: 6.5.5
 Requires PHP: 7.4
-Stable tag: 1.1.5
+Stable tag: 1.1.6
 License: GPLv3
 License URI: https://opensource.org/licenses/GPL-3.0
+
+Turn your simple WordPress site into a full fledged digital content stock platform.
 
 == Description ==
 
@@ -31,7 +33,7 @@ Here's the main features:
 ===Additional features in Pro version===
 
 * **Monetization:** Supports paid contents in addition to free.
-* **Frontend Dashboard:** Dedicated frontend dashboard for customers and contributors to manage their account, contents and purchases.
+* **User Dashboard:** Dedicated custom unified dashboard for customers and contributors to manage their account, contents and purchases.
 * **Contribution:** Supports third party contributions and revenue sharing.
 * **Pricing:** Advanced pricing plan builder with single, bundle on monthly, yearly and lifetime basis including content access limit.
 * **License:** Robust license key management, ensuring secure distribution and updates for your paid apps.
@@ -113,6 +115,13 @@ You can [create issue](https://github.com/Solidie/Solidie/issues) on Github repo
 
 == Changelog ==
 
+= v1.1.6 -> Jul 10, 2024 =
+--------------------------
+* New: Confirmation popup on withdrawal request submission
+* New: Confirmation popup on lesson publish
+* Fix: Empty page on incorrect user dashboard route
+* Fix: Duplicate sales entry on plan renewal
+
 = v1.1.5 -> Jun 20, 2024 =
 --------------------------
 * New: Color scheme customization settings added
@@ -163,7 +172,7 @@ You can [create issue](https://github.com/Solidie/Solidie/issues) on Github repo
 = v1.1.2 -> May 12, 2024 =
 --------------------------
 * New: Updates API path settings field added
-* New: New hook added to register custom menu in frontend dashboard sidebar
+* New: New hook added to register custom menu in user dashboard sidebar
 * New: Back navigation button in lesson editor
 * Fix: Gallery and single content does not load Gutenberg header footer
 * Fix: Changelog line break not showing in release panel in content editor

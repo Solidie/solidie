@@ -14,7 +14,6 @@ fs.readdir(directory, (err, files) => {
       if (stat.isFile()) {
         fs.unlink(filePath, err => {
           if (err) throw err;
-          console.log(`Deleted file: ${filePath}`);
         });
       }
     });

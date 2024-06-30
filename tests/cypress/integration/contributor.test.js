@@ -33,7 +33,7 @@ const content = {
 
 const comment = 'This is a sample dummy comment';
 
-describe('Test frontend dashboard with contributor user', ()=>{
+describe('Test user dashboard with contributor user', ()=>{
 
 	it('Create contributor users, login and apply to become contributor', ()=>{
 

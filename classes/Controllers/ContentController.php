@@ -51,7 +51,7 @@ class ContentController {
 	 * Provide content list for various area like dashboard, gallery and so on.
 	 *
 	 * @param array $filters Content filter arguments
-	 * @param bool  $is_contributor_inventory Whether it is frontend contributor dashboard
+	 * @param bool  $is_contributor_inventory Whether it is user dashboard
 	 * @param bool  $is_gallery Whether loaded in gallery
 	 * @return void
 	 */
@@ -78,7 +78,7 @@ class ContentController {
 	}
 
 	/**
-	 * Create or update content from frontend dashboard
+	 * Create or update content from user dashboard
 	 *
 	 * @param array $content Content data
 	 * @param array $thumbnail Thumbnail file

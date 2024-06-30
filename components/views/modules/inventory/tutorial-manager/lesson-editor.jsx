@@ -6,7 +6,9 @@ import { DropDown } from "crewhrm-materials/dropdown/dropdown.jsx";
 import { request } from "crewhrm-materials/request.jsx";
 import { InitState } from "crewhrm-materials/init-state.jsx";
 import { ContextToast } from "crewhrm-materials/toast/toast.jsx";
-import { LoadingIcon } from "crewhrm-materials/loading-icon/loading-icon";
+import { LoadingIcon } from "crewhrm-materials/loading-icon/loading-icon.jsx";
+import { confirm } from "crewhrm-materials/prompts.jsx";
+
 import { TinyEditor } from "../editor/Tiny.jsx";
 
 const {readonly_mode} = window[data_pointer];
@@ -104,31 +106,36 @@ export function LessonEditor({content_id, lesson_id, lessons=[]}) {
 	}
 
 	const publishLesson=()=>{
-		
-		const payload = {
-			lesson: {
-				...state.values, 
-				content_id,
-				lesson_id,
-				lesson_content: undefined,
-				kses_lesson_content: state.values.lesson_content, 
+
+		confirm(
+			__('Sure to publish?'),
+			()=>{
+				const payload = {
+					lesson: {
+						...state.values, 
+						content_id,
+						lesson_id,
+						lesson_content: undefined,
+						kses_lesson_content: state.values.lesson_content, 
+					}
+				}
+
+				setState({
+					...state,
+					saving: true
+				});
+				
+				request('updateLessonSingle', payload, resp=>{
+					
+					ajaxToast(resp);
+
+					setState({
+						...state,
+						saving: false
+					});
+				});
 			}
-		}
-
-		setState({
-			...state,
-			saving: true
-		});
-		
-		request('updateLessonSingle', payload, resp=>{
-			
-			ajaxToast(resp);
-
-			setState({
-				...state,
-				saving: false
-			});
-		});
+		);
 	}
 
 	const fetchLesson=()=>{
