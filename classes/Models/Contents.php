@@ -168,7 +168,7 @@ class Contents {
 			Release::pushRelease(
 				array(
 					'version'      => $content_data['version'] ?? null,
-					'changelog'    => ! empty( $content_data['changelog'] ) ? strip_tags( $content_data['changelog'] ) : null,
+					'changelog'    => strip_tags( ( string ) ( $content_data['changelog'] ?? '' ) ),
 					'content_id'   => $content_id,
 					'release_id'   => (int) ( $content_data['release_id'] ?? 0 ),
 					'file'         => $files['downloadable_file'] ?? null,

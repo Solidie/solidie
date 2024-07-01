@@ -99,7 +99,7 @@ class Release {
 		
 		$release = array(
 			'version'      => $data['version'],
-			'changelog'    => $data['changelog'],
+			'changelog'    => ( string ) ( $data['changelog'] ?? '' ),
 			'content_id'   => $data['content_id'],
 			'release_date' => ! empty( $data['release_date'] ) ? $data['release_date'] : gmdate('Y-m-d H:i:s')
 		);
@@ -192,6 +192,7 @@ class Release {
 			$release['download_url']      = apply_filters( 'solidie_release_download_link', FileManager::getMediaLink( 0, array( 'content_slug' => $release['content_slug'] ) ), $arg_payload );
 			$release['file_name']         = $file_path ? basename( $file_path ) : null;
 			$release['mime_type']         = get_post_mime_type( $release['file_id'] );
+			$release['changelog']         = $release['changelog'] ? ( string ) $release['changelog'] : '';
 			$release['content_permalink'] = $content_permalink;
 
 			// Store the release in the new array

@@ -108,7 +108,7 @@ class AdminPage {
 			esc_html__( 'Settings', 'solidie' ),
 			$role,
 			self::SETTINGS_SLUG,
-			array( $this, 'settingsPage' )
+			array( $this, 'settingsPage' ),
 		);
 	}
 

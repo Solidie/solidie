@@ -352,7 +352,7 @@ class ContentController {
 		$release = array(
 			'content_id' => $release['content_id'],
 			'version'    => $release['version'],
-			'changelog'  => strip_tags( $release['changelog'] ),
+			'changelog'  => strip_tags( ( string ) ( $release['changelog'] ?? '' ) ),
 			'release_id' => $release['release_id'],
 			'file'       => $file
 		);
