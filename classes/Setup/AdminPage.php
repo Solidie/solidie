@@ -19,9 +19,9 @@ use Solidie\Models\User;
  */
 class AdminPage {
 
-	const HOME_SLUG          = 'solidie-home';
-	const SETTINGS_SLUG      = 'solidie-settings';
-	const INVENTORY_SLUG     = 'solidie-inventory';
+	const HOME_SLUG      = 'solidie-home';
+	const SETTINGS_SLUG  = 'solidie-settings';
+	const INVENTORY_SLUG = 'solidie-inventory';
 
 	/**
 	 * Admin page setup hooks register
@@ -101,6 +101,8 @@ class AdminPage {
 			array( $this, 'inventoryPage' )
 		);
 
+		do_action( 'solidie_admin_menu_before_settings' );
+
 		// General settings page
 		add_submenu_page(
 			Main::$configs->root_menu_slug,
@@ -108,8 +110,10 @@ class AdminPage {
 			esc_html__( 'Settings', 'solidie' ),
 			$role,
 			self::SETTINGS_SLUG,
-			array( $this, 'settingsPage' ),
+			array( $this, 'settingsPage' )
 		);
+
+		do_action( 'solidie_admin_menu_after_settings' );
 	}
 
 	/**

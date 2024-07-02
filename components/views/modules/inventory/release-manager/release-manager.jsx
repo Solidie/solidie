@@ -222,13 +222,14 @@ export function ReleaseManager({content_id}) {
 		{
 			!state.releases.length ? null : <div>
 				<strong className={'d-block font-weight-600 margin-bottom-10'.classNames()}>
-					{__('Previous Release')}
+					{__('Releases')}
 				</strong>
 
 				<table className={'table no-responsive bg-color-white'.classNames()}>
 					<thead>
 						<tr>
 							<th>{__('Version')}</th>
+							<th>{__('Downloads')}</th>
 							<th>{__('Changelog')}</th>
 						</tr>
 					</thead>
@@ -270,6 +271,9 @@ export function ReleaseManager({content_id}) {
 														href={release.download_url} 
 														className={'ch-icon ch-icon-download font-size-16 cursor-pointer '.classNames()}></a>
 												</span>
+											</td>
+											<td>
+												{release.download_count}
 											</td>
 											<td>
 												<div dangerouslySetInnerHTML={{__html: (changelog || '').replaceAll('\n', '<br/>')}}></div>

@@ -230,6 +230,7 @@ class _Array {
 	 * @return array|object
 	 */
 	public static function getManifestArray( string $path, $ret_type = OBJECT ) {
+		
 		$result = [];
 
 		// Use regular expressions to match the first PHP comment block
@@ -256,8 +257,7 @@ class _Array {
 		$result['dir']      = dirname( $path ) . '/';
 		$result['url']      = plugin_dir_url( $path );
 		$result['dist_url'] = $result['url'] . 'dist/';
-
-		$result = self::castRecursive( $result );
+		$result['dist_url'] = $result['url'] . 'dist/';
 
 		return ARRAY_A === $ret_type ? $result : (object) $result;
 	}

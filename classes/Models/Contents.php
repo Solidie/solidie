@@ -315,7 +315,9 @@ class Contents {
 					content_id 
 				FROM 
 					{$wpdb->solidie_releases} 
-				WHERE content_id IN ({$ids_places}) GROUP BY content_id",
+				WHERE 
+					content_id IN ({$ids_places}) 
+				GROUP BY content_id",
 				...$content_ids
 			),
 			ARRAY_A

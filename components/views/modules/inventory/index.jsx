@@ -419,6 +419,7 @@ export function Inventory({navigate, params={}}) {
 					<th className={'white-space-nowrap'.classNames()}>{__('Category')}</th>
 					{!is_pro_active ? null : <th>{__('Price')}</th>}
 					{(!is_pro_active || content_type=='app') ? null : <th>{__('Bundled In')}</th>}
+					{content_type == 'tutorial' ? null : <th>{__('Downloads')}</th>}
 					<th>{__('Status')}</th>
 					<th>{__('Created')}</th>
 					<th></th>
@@ -557,6 +558,15 @@ export function Inventory({navigate, params={}}) {
 												}
 											</div>
 									}
+								</td>
+							}
+
+							{
+								content_type == 'tutorial' ? null :
+								<td data-th={__('Downloads')}>
+									<span className={'color-text-70'.classNames()}>
+										{download_count}
+									</span>
 								</td>
 							}
 							

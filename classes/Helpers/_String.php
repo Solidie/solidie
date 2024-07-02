@@ -186,4 +186,24 @@ class _String {
 		$pattern = $replace_newlines ? '/[\s\t\r\n]+/' : '/[\s\t]+/';
 		return preg_replace( $pattern, ' ', trim( $input_string ) );
 	}
+
+	/**
+	 * Clean base path
+	 *
+	 * @param string $str
+	 * @return string
+	 */
+	public static function purgeBasePath( $str ) {
+		// Remove non-alphanumeric characters (except spaces and hyphens)
+		$cleaned_str = preg_replace('/[^a-zA-Z0-9\s-]/', '', $str);
+
+		// Replace spaces with hyphens
+		$cleaned_str = preg_replace('/\s+/', '-', $cleaned_str);
+
+		// Consolidate multiple hyphens into a single hyphen
+		$cleaned_str = preg_replace('/-+/', '-', $cleaned_str);
+
+		// Return the cleaned string
+		return $cleaned_str;
+	}
 }

@@ -119,6 +119,9 @@ You can [create issue](https://github.com/Solidie/Solidie/issues) on Github repo
 --------------------------
 * New: Confirmation popup on withdrawal request submission
 * New: Confirmation popup on lesson publish
+* New: Show content download count in inventory
+* Update: Admin menu order
+* New: Show download count per app release in releases table
 * Fix: Empty page on incorrect user dashboard route
 * Fix: Duplicate sales entry on plan renewal
 * Fix: Pricing plan not showing in new content single page if not toggled once in editor
@@ -134,43 +137,43 @@ You can [create issue](https://github.com/Solidie/Solidie/issues) on Github repo
 * New: Dashboard link in order details page
 * New: Content type label edit field added
 * New: Back buttong in single content page
+* Update: Default content thumbnail removed for video
+* Update: File uploader text enhanced
+* Update: Content reactions made default enabled
+* Update: Back state navigation enhanced
+* Update: Overall UI and UX enhancements
 * Fix: User deletion throws error
 * Fix: Variation remains enabled after plan deleted from content settings
 * Fix: Invalid extra pagination count in inventory and some other place
 * Fix: Blank overlay in content content gallery
 * Fix: Sale not found issue fix in My Purchases page
 * Fix: Customer ID not syncing on order info update
-* Update: Default content thumbnail removed for video
-* Update: File uploader text enhanced
-* Update: Content reactions made default enabled
-* Update: Back state navigation enhanced
-* Update: Overall UI and UX enhancements
 
 = v1.1.4 -> May 30, 2024 =
 --------------------------
 * New: Pagination content limit setting added
 * New: Default sale price field added in pricing settings
-* Fix: Pricing plan list glitch
-* Fix: Multiple audio playback issue at the same time
-* Fix: Loading icon not showing in single content page
-* Fix: Inconsistent video and thumbnail ratio in gallery
 * Update: Content type selection made persistent in inventory and gallery
 * Update: Auto open release manager on content publish
 * Update: Auto open lesson editor on content publish
 * Update: Contributors list page enhanced in admin dashboard
 * Update: Inventory page and content editor UI enhanced
 * Update: Content and lesson slug editor enhanced
+* Fix: Pricing plan list glitch
+* Fix: Multiple audio playback issue at the same time
+* Fix: Loading icon not showing in single content page
+* Fix: Inconsistent video and thumbnail ratio in gallery
 
 = v1.1.3 -> May 13, 2024 =
 --------------------------
 * New: Shortcode added for gallery to support other page contents
+* Update: First content type auto select in gallery
 * Fix: Category filter not showing in gallery
 * Fix: Bundles filter not showing in gallery
 * Fix: Contents are accessible even if the type is disabled
 * Fix: API path field showing for all content types in settings
 * Fix: Some of DB columns do not get imported
 * Fix: Content slug editor and thumbnail glitch
-* Update: First content type auto select in gallery
 
 = v1.1.2 -> May 12, 2024 =
 --------------------------
@@ -182,30 +185,30 @@ You can [create issue](https://github.com/Solidie/Solidie/issues) on Github repo
 
 = v1.1.1 -> May 06, 2024 =
 --------------------------
+* Update: Available content count added per category in gallery
+* Update: Status dropdown in data tables enhanced
 * Fix: Embedded image in content editor not showing in output
 * Fix: Original contributor get replaced if admin updates content
 * Fix: Category can not be updated if parent ID removed
 * Fix: Text formatting doesn't trigger change in content and lesson editor
 * Fix: Gallery and single content page title are not appropriate
 * Fix: Price field glitch in content editor
-* Update: Available content count added per category in gallery
-* Update: Status dropdown in data tables enhanced
 
 = v1.1.0 -> Apr 28, 2024 =
 --------------------------
 * New: Full fledged stock platform with sales, contributor, withdrawal and so many functionalities
-* Fix: Content description formatting gets removed
-* Fix: Number gets removed from content slug
 * Update: Plain text has been preferred for changelogs
 * Update: Content editor revamped with extensive features
 * Update: Navigation added in sample image previewer
+* Fix: Content description formatting gets removed
+* Fix: Number gets removed from content slug
 
 = v1.0.2 -> Feb 18, 2024 =
 --------------------------
 * New: Like, Dislike, Rating, Comment, Share functionalities
-* Fix: Some content type not loading in single page
 * Update: Content type configuration page merged into general settings
 * Update: Gallery and single page made responsive
+* Fix: Some content type not loading in single page
 
 = v1.0.1 -> Feb 10, 2024 =
 --------------------------
