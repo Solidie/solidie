@@ -10,7 +10,7 @@ import { ContentEditor } from "../../modules/inventory/editor/ContentEditor";
 function DashboardNavLayer({component, payload}) {
 	const navigate = useNavigate();
 	const params = useParams();
-	return <div className={`padding-15 ${!params.content_id ? 'bg-color-white' : ''} height-p-100`.classNames()}>
+	return <div className={`padding-15 height-p-100`.classNames()}>
 		<RenderExternal component={component} payload={{...payload, navigate, params}}/>
 	</div>
 }

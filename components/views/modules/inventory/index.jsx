@@ -8,9 +8,8 @@ import { LoadingIcon } from 'crewhrm-materials/loading-icon/loading-icon.jsx';
 import { Pagination } from 'crewhrm-materials/pagination/pagination.jsx';
 import { TextField } from 'crewhrm-materials/text-field/text-field.jsx';
 import { TableStat } from 'crewhrm-materials/table-stat.jsx';
-import { DropDown } from 'crewhrm-materials/dropdown/dropdown.jsx';
+import { DropDown, Options } from "crewhrm-materials/dropdown/dropdown.jsx";
 import {DropDownStatus} from 'crewhrm-materials/dropdown-status/dropdown-status.jsx';
-import { Options } from "crewhrm-materials/dropdown/dropdown.jsx";
 
 import { getPriceRange } from '../../frontend/gallery/generic-card/generic-card.jsx';
 import style from './inventory.module.scss';
@@ -351,6 +350,7 @@ export function Inventory({navigate, params={}}) {
 		params={params}
 	>
 		<div className={'d-flex align-items-center justify-content-space-between flex-wrap-wrap column-gap-15 row-gap-15 margin-top-10 margin-bottom-10'.classNames()}>
+			
 			<div className={'d-flex align-items-center column-gap-8'.classNames()}>
 				<a 
 					href={state.gallery_permalink}
@@ -410,7 +410,7 @@ export function Inventory({navigate, params={}}) {
 		</div>
 
 		<table 
-			className={'table'.classNames(style) + 'table'.classNames()} 
+			className={'table'.classNames(style) + 'table '.classNames()} 
 		>
 			<thead>
 				<tr>
