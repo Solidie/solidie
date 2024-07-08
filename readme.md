@@ -7,7 +7,7 @@ Download production build from [WordPress Plugin Directory](https://wordpress.or
 
 ## Development environment setup
 - Open terminal at <kbd>~/wp-content/plugins/</kbd> directory
-- Run <kbd>git clone https://github.com/Solidie/Solidie.git solidie</kbd>
+- Run <kbd>git clone https://github.com/Solidie/solidie.git</kbd>
 - Run <kbd>cd solidie</kbd>
 - Run <kbd>npm install</kbd>
 - Run <kbd>npm run build</kbd> to compile scirpts in production mode and create releasable zip file.

@@ -117,11 +117,12 @@ You can [create issue](https://github.com/Solidie/Solidie/issues) on Github repo
 
 = v1.1.6 -> Jul 10, 2024 =
 --------------------------
+* New: Report page added to show sales and download stats (Pro)
 * New: Confirmation popup on withdrawal request submission
 * New: Confirmation popup on lesson publish
 * New: Show content download count in inventory
-* Update: Admin menu order
 * New: Show download count per app release in releases table
+* Update: Admin menu order updated as priority
 * Fix: Empty page on incorrect user dashboard route
 * Fix: Duplicate sales entry on plan renewal
 * Fix: Pricing plan not showing in new content single page if not toggled once in editor
