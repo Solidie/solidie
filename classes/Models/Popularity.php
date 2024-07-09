@@ -8,6 +8,7 @@
 namespace Solidie\Models;
 
 use Solidie\Helpers\_Array;
+use Solidie\Helpers\_DateTime;
 
 /**
  * Popularity class
@@ -79,6 +80,11 @@ class Popularity {
 		foreach ( $trends as $trend ) {
 			$trend_arry['data'][]   = $trend['total_download'];
 			$trend_arry['labels'][] = $trend['download_month'];
+		}
+
+		if ( count( $trend_arry['data'] ) === 1 ) {
+			array_unshift( $trend_arry['data'], 0 );
+			array_unshift( $trend_arry['labels'], _DateTime::getPreviousYearMonth( $trend_arry['labels'][0] ) );
 		}
 
 		return $trend_arry;

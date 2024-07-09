@@ -296,7 +296,7 @@ class _Array {
 	 * @param string $col_name The column name to group by
 	 * @return array
 	 */
-	public static function groupRows( $array, $col_name ) {
+	public static function groupRows( $array, $col_name, $singular_field = null, $is_unique = false, ) {
 		$grouped_array = array();
 
 		foreach ( $array as $item ) {
@@ -306,7 +306,12 @@ class _Array {
 				$grouped_array[ $group_key ] = array();
 			}
 
-			$grouped_array[ $group_key ][] = $item;
+			$value = $singular_field ? $item[ $singular_field ] : $item;
+			if ( $is_unique ) {
+				$grouped_array[ $group_key ] = $value;
+			} else {
+				$grouped_array[ $group_key ][] = $value;
+			}
 		}
 
 		return $grouped_array;
