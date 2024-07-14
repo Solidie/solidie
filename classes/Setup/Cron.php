@@ -7,6 +7,7 @@
 
 namespace Solidie\Setup;
 
+use Solidie\Models\Popularity;
 use Solidie\Models\Token;
 
 /**
@@ -15,13 +16,24 @@ use Solidie\Models\Token;
 class Cron {
 
 	/**
+	 * The key for token deletion
+	 */
+	const TOKEN_CRON = 'solidie_clear_expired_tokens';
+
+	/**
+	 * The key to delete content popularity indexes which are older
+	 */
+	const POPULARITY_CRON = 'solidie_clear_popularity_indexes';
+
+	/**
 	 * The constructor to register hooks
 	 *
 	 * @return void
 	 */
 	public function __construct() {
-		add_action( 'solidie_clear_expired_tokens', array( $this, 'clearTokens' ) );
-		add_action( 'init', array( $this, 'tokenDeletion' ) );
+		add_action( self::TOKEN_CRON, array( $this, 'clearTokens' ) );
+		add_action( self::POPULARITY_CRON, array( $this, 'clearPopularity' ) );
+		add_action( 'init', array( $this, 'registerCrons' ) );
 	}
 
 	/**
@@ -29,9 +41,14 @@ class Cron {
 	 *
 	 * @return void
 	 */
-	public function tokenDeletion() {
-		if ( ! wp_next_scheduled( 'solidie_clear_expired_tokens' ) ) {
-			wp_schedule_event( time(), 'twicedaily', 'solidie_clear_expired_tokens' );
+	public function registerCrons() {
+
+		if ( ! wp_next_scheduled( self::TOKEN_CRON ) ) {
+			wp_schedule_event( time(), 'twicedaily', self::TOKEN_CRON );
+		}
+
+		if ( ! wp_next_scheduled( self::POPULARITY_CRON ) ) {
+			wp_schedule_event( time(), 'weekly', self::POPULARITY_CRON );
 		}
 	}
 
@@ -42,5 +59,14 @@ class Cron {
 	 */
 	public function clearTokens() {
 		Token::deleteExpired();
+	}
+
+	/**
+	 * Delete expired tokens
+	 *
+	 * @return void
+	 */
+	public function clearPopularity() {
+		Popularity::deleteExpired();
 	}
 }

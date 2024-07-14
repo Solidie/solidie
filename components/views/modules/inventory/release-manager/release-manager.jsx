@@ -265,11 +265,11 @@ export function ReleaseManager({content_id}) {
 														className={'ch-icon ch-icon-edit-2 font-size-16 cursor-pointer '.classNames()}
 														onClick={()=>openEditor(release)}></i>
 													<i 
-														className={'ch-icon ch-icon-trash font-size-16 cursor-pointer '.classNames()}
+														className={'ch-icon ch-icon-trash font-size-16 cursor-pointer color-error'.classNames()}
 														onClick={()=>deleteRelease(release_id)}></i>
 													<a 
 														href={release.download_url} 
-														className={'ch-icon ch-icon-download font-size-16 cursor-pointer '.classNames()}></a>
+														className={'ch-icon ch-icon-download font-size-16 cursor-pointer color-success'.classNames()}></a>
 												</span>
 											</td>
 											<td>

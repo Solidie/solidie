@@ -42,9 +42,8 @@ const getContentActions = content=>{
 		{
 			id: 'edit', 
 			label: __('Edit'),
-			icon: 'ch-icon ch-icon-edit-2'.classNames()
+			icon: 'ch-icon ch-icon-edit-2 color-material'.classNames()
 		},
-		
 	];
 
 	// Add delete option for admin or if public deletion enabled
@@ -52,7 +51,7 @@ const getContentActions = content=>{
 		actions.push({
 			id: 'delete', 
 			label: __('Delete'),
-			icon: 'ch-icon ch-icon-trash'.classNames()
+			icon: 'ch-icon ch-icon-trash color-error'.classNames()
 		});
 	}
 
@@ -61,7 +60,7 @@ const getContentActions = content=>{
 		actions.push({
 			id: 'download', 
 			label: __('Download'),
-			icon: 'ch-icon ch-icon-download'.classNames()
+			icon: 'ch-icon ch-icon-download color-success'.classNames()
 		});
 	}
 
@@ -514,16 +513,16 @@ export function Inventory({navigate, params={}}) {
 												{
 													!min_price ? null :
 													<div className={'d-flex align-items-center column-gap-8'.classNames()}>
-														<span className={'font-weight-600'.classNames()}>
+														<span className={'font-weight-600 white-space-nowrap'.classNames()}>
 															{currency_symbol}{min_price}
 														</span>
 														{
 															!(max_price>min_price) ? null : 
 															<>
-																<span className={'color-text-50'.classNames()}>
+																<span className={'color-text-50 white-space-nowrap'.classNames()}>
 																	to
 																</span>
-																<span className={'font-weight-600'.classNames()}>
+																<span className={'font-weight-600 white-space-nowrap'.classNames()}>
 																	{currency_symbol}{max_price}
 																</span>
 															</>

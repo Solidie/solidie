@@ -44,12 +44,6 @@ class Popularity {
 	}
 
 	/**
-	 * Get download trend graph especially for reports page
-	 *
-	 * @return array
-	 */
-	
-	/**
 	 * Get sales trend per month
 	 *
 	 * @return array
@@ -88,5 +82,17 @@ class Popularity {
 		}
 
 		return $trend_arry;
+	}
+
+	/**
+	 * Delete expired popularity indexes
+	 *
+	 * @return void
+	 */
+	public static function deleteExpired() {
+		global $wpdb;
+		$wpdb->query(
+			"DELETE FROM {$wpdb->solidie_popularity} WHERE download_date < DATE_SUB(NOW(), INTERVAL 3 MONTH)"
+		);
 	}
 }

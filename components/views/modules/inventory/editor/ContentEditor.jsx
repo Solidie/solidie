@@ -507,10 +507,11 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 										{
 											'file' !== type ? null :
 											<FileUpload 
+												layout={name==='thumbnail' ? 'thumbnail' : null}
 												accept={accept}
 												onChange={v=>setVal(name, v)}
 												maxlength={maxlength}
-												value={(name === 'thumbnail' && !(state.values[name] instanceof File) && !state.values[name]?.file_id) ? null : (state.values[name] || null)}
+												value={state.values[name] || null}
 												removable={removable}
 												imageMaxWidth={1200}
 											/>
