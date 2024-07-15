@@ -30,6 +30,7 @@ class Contents {
 	 * Possible content statuses
 	 */
 	const CONTENT_STATUSES = array(
+		'draft', 
 		'publish', 
 		'unpublish', 
 		'pending', 

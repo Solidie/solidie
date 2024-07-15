@@ -64,7 +64,6 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 	const content_id = isNaN(_content_id) ? 0 : _content_id;
 	
 	const [state, setState] = useState({
-		submitting: false,
 		slug_editor: false,
 		updating_slug: false,
 		fetching: false,
@@ -81,6 +80,10 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 			preview: null, // Preview file for pdf, audio, video etc that can be seen on the website directly
 			downloadable_file: null, // The actual file to be downloaded by user, it holds all the resouce. Maybe zip, rar, tar, video etc.
 		},
+	});
+
+	const [state2, setState2] = useState({
+		submitting: false,
 		release_lesson_opened: content_id ? true : false,
 	});
 
@@ -158,19 +161,20 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 		});
 	}
 
-	const publish=()=>{
-		confirm(
-			__('Sure to publish?'),
-			submit
-		);
-	}
-
-	const submit=(content_status)=>{
+	const submit=(content_status='publish')=>{
 
 		const is_draft = content_status === 'draft'
 
 		setState({
 			...state,
+			values: {
+				...state.values,
+				content_status
+			}
+		});
+
+		setState2({
+			...state2,
 			submitting: true
 		});
 
@@ -190,6 +194,8 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 			}
 		});
 
+		content.content_status = content_status;
+		
 		request('createOrUpdateContent', {content, ...files}, resp=>{
 			const {
 				success, 
@@ -214,7 +220,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 					navigate(getDashboardPath(editor_url), {replace: true});
 				}
 
-				if ( ! is_draft && ! state.release_lesson_opened ) {
+				if ( ! is_draft && ! state2.release_lesson_opened ) {
 
 					if ( content_type === 'app' ) {
 						navigate(getDashboardPath(`${editor_url}release-manager/`));
@@ -229,8 +235,8 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 				ajaxToast(resp);
 			}
 
-			setState({
-				...state,
+			setState2({
+				...state2,
 				...new_state
 			});
 		},
@@ -266,6 +272,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 
 				values.contributor_id           = content.contributor_id ?? null;
 				values.content_title            = content.content_title ?? '';
+				values.content_status           = content.content_status ?? 'draft';
 				values.kses_content_description = content.content_description ?? '';
 				values.content_permalink        = content.content_permalink ?? '';
 				values.content_slug             = content.content_slug ?? '';
@@ -330,9 +337,10 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 	}, [content_id]);
 	
 	const _content = window[data_pointer]?.settings?.contents[content_type] || {};
-	const thumbnail_url = state.thumbnail_url || state.values.thumbnail?.file_url;
 	const setup_link = `${window[data_pointer].permalinks.settings}#/settings/contents/${content_type}/`;
 	const stuff_id = parseInt(active_stuff_id || 0);
+	const upload_progress = (state2.submitting && uploadPercent) ? ` - ${uploadPercent}%` : null;
+	const {content_status} = state.values;
 
 	if ( state.error_message ) {
 		return <div className={'text-align-center color-error'.classNames()}>
@@ -543,18 +551,31 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 					/>
 					
 				</div>	
-				<div className={'text-align-right margin-top-15'.classNames()}>
+				<div className={'d-flex align-items-center justify-content-flex-end column-gap-15 margin-top-15'.classNames()}>
+					
+					<LoadingIcon show={state2.submitting}/>
+					
+					{
+						content_status !== 'draft' ? null :
+						<button 
+							className={'button button-outlined'.classNames()}
+							onClick={()=>submit('draft')}
+						>
+							{__('Save Draft')} {upload_progress}
+						</button>
+					}
+
 					<button 
 						data-cylector="content-save"
 						className={'button button-primary'.classNames()} 
-						onClick={publish}
+						onClick={()=>confirm(__('Sure to publish?'), submit)}
 						disabled={
 							readonly_mode || 
-							state.submitting || 
+							state2.submitting || 
 							isEmpty(content_title)
 						} 
 					>
-						{__('Publish')} {(state.submitting && uploadPercent) ? ` - ${uploadPercent}%` : null} <LoadingIcon show={state.submitting}/>
+						{__('Publish')} {content_status=='publish' ? upload_progress : null} 
 					</button>
 				</div>	
 			</>

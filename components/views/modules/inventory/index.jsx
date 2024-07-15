@@ -572,12 +572,11 @@ export function Inventory({navigate, params={}}) {
 							<td data-th={__('Status')}>
 								<div className={'d-flex align-items-center column-gap-10'.classNames()}>
 									<DropDownStatus
-										placeholder={__('Select Status')}
 										value={content_status}
 										onChange={v=>changeContentStatus(content_id, v)}
 										disabled={status_readonly || state.changing_status_for}
 										options={
-											Object.keys(content_statuses).filter(s=>s!='draft' && (is_admin ? s!='unpublish' : contributors_status.indexOf(s)>-1)).map(status=>{
+											Object.keys(content_statuses).filter(s=>(is_admin ? s!='unpublish' : contributors_status.indexOf(s)>-1)).map(status=>{
 												return {
 													id: status,
 													label: content_statuses[status]

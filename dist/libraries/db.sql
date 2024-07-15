@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: May 24, 2024 at 10:06 AM
+-- Generation Time: Jul 15, 2024 at 08:50 AM
 -- Server version: 8.0.16
 -- PHP Version: 8.1.23
 
@@ -69,7 +69,7 @@ CREATE TABLE IF NOT EXISTS `wp_solidie_contents` (
   `content_title` mediumtext COLLATE utf8mb4_unicode_520_ci,
   `content_slug` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci DEFAULT NULL COMMENT 'Fillable immediately after creating entry',
   `content_description` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci,
-  `content_status` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci DEFAULT NULL COMMENT 'publish, unpublish, pending, rejected',
+  `content_status` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci DEFAULT NULL COMMENT 'draft, publish, unpublish, pending, rejected',
   `parent_id` bigint(20) UNSIGNED NOT NULL DEFAULT '0',
   `contributor_id` bigint(20) UNSIGNED NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
