@@ -122,7 +122,7 @@ class AdminPage {
 	 * @return void
 	 */
 	public function homePage() {
-		echo '<div id="Solidie_Backend_Dashboard"></div>';
+		include Main::$configs->dir . 'templates/plugin-home/plugin-home.php';
 	}
 
 	/**
