@@ -1,6 +1,7 @@
 <?php
 
-	use Solidie\Main;
+use Solidie\Helpers\Changelog;
+use Solidie\Main;
 	use Solidie\Models\Contents;
 	use Solidie\Setup\AdminPage;
 
@@ -15,10 +16,6 @@
 <!-- Icon Font Stylesheet -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
-
-<!-- Libraries Stylesheet -->
-<link href="<?php echo $temp_url; ?>lib/animate/animate.min.css" rel="stylesheet">
-<link href="<?php echo $temp_url; ?>lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
 
 <!-- Customized Bootstrap Stylesheet -->
 <link href="<?php echo $temp_url; ?>css/bootstrap.min.css" rel="stylesheet">
@@ -53,7 +50,7 @@
 <div class="container-fluid bg-light mt-5 py-5 searvice-container">
 	<div class="container py-5">
 		<div class="row g-5 align-items-center">
-			<div class="col-lg-5 wow fadeIn" data-wow-delay="0.1s">
+			<div class="col-lg-5">
 				<h1 class="mb-4">
 					<?php printf( __( 'Howdy, %s' ), wp_get_current_user()->display_name ) ?>
 				</h1>
@@ -70,7 +67,7 @@
 				<div class="row g-4">
 					<div class="col-md-6">
 						<div class="row g-4">
-							<a class="col-12 wow fadeIn" data-wow-delay="0.1s" href="<?php echo add_query_arg( array( 'page' => AdminPage::INVENTORY_SLUG ), admin_url( 'admin.php' ) ); ?>">
+							<a class="col-12" href="<?php echo add_query_arg( array( 'page' => AdminPage::INVENTORY_SLUG ), admin_url( 'admin.php' ) ); ?>">
 								<div class="service-item d-flex flex-column justify-content-center text-center rounded">
 									<div class="service-icon btn-square">
 										<i class="fa fa-edit fa-2x"></i>
@@ -79,7 +76,7 @@
 									<p><?php _e( 'Manage all your contents in a convenient place', 'solidie' ); ?></p>
 								</div>
 							</a>
-							<a class="col-12 wow fadeIn" data-wow-delay="0.5s" href="<?php echo add_query_arg( array( 'page' => AdminPage::SETTINGS_SLUG ), admin_url( 'admin.php' ) ); ?>">
+							<a class="col-12" href="<?php echo add_query_arg( array( 'page' => AdminPage::SETTINGS_SLUG ), admin_url( 'admin.php' ) ); ?>">
 								<div class="service-item d-flex flex-column justify-content-center text-center rounded">
 									<div class="service-icon btn-square">
 										<i class="fa fa-cog fa-2x"></i>
@@ -92,7 +89,7 @@
 					</div>
 					<div class="col-md-6 pt-md-4">
 						<div class="row g-4">
-							<a class="col-12 wow fadeIn" data-wow-delay="0.3s" href="<?php echo Contents::getGalleryPermalink( false ); ?>">
+							<a class="col-12" href="<?php echo Contents::getGalleryPermalink( false ); ?>">
 								<div class="service-item d-flex flex-column justify-content-center text-center rounded">
 									<div class="service-icon btn-square">
 										<i class="fa fa-images fa-2x"></i>
@@ -104,7 +101,7 @@
 							<?php
 								echo apply_filters( 
 									'solidie_pro_upgrade_card_home',
-									'<a class="col-12 wow fadeIn" data-wow-delay="0.7s" href="https://solidie.com/" target="_blank">
+									'<a class="col-12" href="https://solidie.com/" target="_blank">
 										<div class="service-item d-flex flex-column justify-content-center text-center rounded">
 											<div class="service-icon btn-square">
 												<i class="fa fa-dollar-sign fa-2x"></i>
@@ -124,7 +121,33 @@
 </div>
 <!-- Service End -->
 
-<!-- FAQs Start -->
+<!-- Feature Start -->
+<div class="container-fluid bg-primary feature pt-5">
+	<div class="container pt-5">
+		<div class="row g-5">
+			<div class="col-lg-6 align-self-center mb-md-5 pb-md-5" style="margin-bottom: 0 !important;">
+				<div class="btn btn-sm border rounded-pill text-white px-3 mb-3">v<?php echo Main::$configs->version; ?></div>
+				<h1 class="text-white mb-4">What's new!</h1>
+				<p class="text-light mb-4"><?php _e( 'This version comes with several enhancements and new features. Here\'s a sneak peek...', 'solidie' ); ?></p>
+				
+				<?php foreach ( Changelog::getLatestChangelog() as $line ): ?>
+					<div class="d-flex align-items-center text-white mb-3">
+						<div class="btn-sm-square bg-white text-primary rounded-circle me-3" style="flex-shrink: 0;">
+							<i class="fa fa-check"></i>
+						</div>
+						<span><?php echo $line; ?></span>
+					</div>
+				<?php endforeach; ?>
+			</div>
+			<div class="col-lg-6 align-self-end text-center text-md-end" style="margin-top: 0;">
+				<img class="img-fluid" style="max-width: 500px;" src="<?php echo $temp_url ?>img/kids.png" alt="">
+			</div>
+		</div>
+	</div>
+</div>
+<!-- Feature End -->
+
+
 <div class="container-fluid py-5">
 	<div class="container py-5">
 		<div class="row">
@@ -148,16 +171,3 @@
 		</div>
 	</div>
 </div>
-<!-- FAQs Start -->
-
-<!-- JavaScript Libraries -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-<script src="<?php echo $temp_url; ?>lib/wow/wow.min.js"></script>
-<script src="<?php echo $temp_url; ?>lib/easing/easing.min.js"></script>
-<script src="<?php echo $temp_url; ?>lib/waypoints/waypoints.min.js"></script>
-<script src="<?php echo $temp_url; ?>lib/counterup/counterup.min.js"></script>
-<script src="<?php echo $temp_url; ?>lib/owlcarousel/owl.carousel.min.js"></script>
-
-<!-- Template Javascript -->
-<script src="<?php echo $temp_url; ?>js/main.js"></script>
