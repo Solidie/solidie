@@ -32,7 +32,7 @@ class AdminSetting {
 
 		// In case you need to update only on option inside the array
 		if ( true === $merge ) {
-			$settings = array_merge( self::get(), $settings );
+			$settings = array_replace_recursive( self::get(), $settings );
 		}
 
 		update_option( self::OPTION_NAME, $settings, true );

@@ -14,9 +14,8 @@ use Solidie\Controllers\ContentController;
 use Solidie\Controllers\SettingsController;
 use Solidie\Controllers\CategoryController;
 use Solidie\Controllers\CommentController;
-use Solidie\Controllers\ProController;
-use Error;
 use Solidie\Controllers\LessonController;
+use Error;
 
 /**
  * Dispatcher class
@@ -32,7 +31,6 @@ class Dispatcher {
 		ContentController::class,
 		SettingsController::class,
 		CategoryController::class,
-		ProController::class,
 		CommentController::class,
 		LessonController::class,
 	);

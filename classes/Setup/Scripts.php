@@ -7,13 +7,12 @@
 
 namespace Solidie\Setup;
 
-use Solidie\Controllers\ProController;
-use Solidie\Helpers\_Array;
 use Solidie\Helpers\Colors;
 use Solidie\Helpers\Utilities;
 use Solidie\Main;
 use Solidie\Models\AdminSetting;
 use Solidie\Models\Contents;
+use Solidie\Models\User;
 
 /**
  * Script class
@@ -110,6 +109,7 @@ class Scripts {
 					'email'                 => $user ? $user->user_email : null,
 					'display_name'          => $user ? $user->display_name : null,
 					'avatar_url'            => $user ? get_avatar_url( $user->ID ) : null,
+					'has_administrative'    => $user ? User::hasAdministrativeRole( $user->ID ) : false, 
 				),
 				'settings'         => array(
 					'contents' => AdminSetting::getContentSettings(),
