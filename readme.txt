@@ -123,6 +123,7 @@ You can [create issue](https://github.com/Solidie/Solidie/issues) on Github repo
 * New: Show content download count in inventory
 * New: Show download count per app release in releases table
 * New: Content draft mode added
+* New: Pricing plan add right inside content editor (Pro)
 * Update: Admin menu order updated as priority
 * Fix: Empty page on incorrect user dashboard route
 * Fix: Duplicate sales entry on plan renewal

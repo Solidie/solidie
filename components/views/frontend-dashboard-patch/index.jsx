@@ -28,7 +28,7 @@ addFilter(
 					el,
 					data.session,
 					<MountPoint>
-						<Inventory is_frontend={true} {...data.payload}/>
+						<Inventory {...data.payload}/>
 					</MountPoint>
 				)
 			}
@@ -45,7 +45,7 @@ addFilter(
 					el,
 					data.session,
 					<MountPoint>
-						<ContentEditor is_frontend={true} {...data.payload}/>
+						<ContentEditor {...data.payload}/>
 					</MountPoint>
 				)
 			}

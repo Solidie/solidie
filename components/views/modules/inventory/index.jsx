@@ -34,7 +34,7 @@ export const content_statuses = {
 	banned: __('Banned')
 }
 
-const contributors_status = ['publish', 'unpublish'];
+const contributors_status = ['publish', 'unpublish', 'draft'];
 
 const getContentActions = content=>{
 
