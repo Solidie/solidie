@@ -7,7 +7,7 @@
 
 namespace Solidie;
 
-use Solidie\Helpers\_Array;
+use SolidieLib\_Array;
 use Solidie\Helpers\Utilities;
 use Solidie\Setup\OpenGraph;
 use Solidie\Setup\Dispatcher;

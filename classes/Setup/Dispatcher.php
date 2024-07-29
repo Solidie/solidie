@@ -128,7 +128,7 @@ class Dispatcher {
 		}
 
 		// Now pass to the action handler function
-		if ( ! class_exists( $class ) || ! method_exists( $class, $method ) ) {
+		if ( ( ! is_object( $class ) && ! class_exists( $class ) ) || ! method_exists( $class, $method ) ) {
 			wp_send_json_error( array( 'message' => esc_html__( 'Invalid Endpoint!', 'solidie' ) ) );
 		}
 
@@ -186,6 +186,10 @@ class Dispatcher {
 
 		// Then pass to method with spread as the parameter count is variable.
 		$args = array_values( $args );
-		$class::$method( ...$args );
+		if ( is_object( $class ) ) {
+			$class->$method( ...$args );
+		} else {
+			$class::$method( ...$args );
+		}
 	}
 }
