@@ -4,9 +4,9 @@
   "description": "Digital content marketplace",
   "main": "index.js",
   "scripts": {
-    "sync-materials": "node ./components/builders/sync-materials.js",
+    "sync-materials": "node ./node_modules/solidie-materials/builders/sync-materials.js",
+    "clear": "node ./node_modules/solidie-materials/builders/clear-dist.js",
     "compile": "webpack --env=build --mode=production",
-    "clear": "node ./components/builders/clear-dist.js",
     "build": "npm run clear && npm run compile && gulp build",
     "watch": "npm run clear && concurrently \"npm run sync-materials\" \"webpack --watch --mode=development\"",
     "lint": "eslint ./components/**/*.jsx",
