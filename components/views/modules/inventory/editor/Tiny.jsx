@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 
-import {getRandomString, __, data_pointer, sprintf, isEmpty} from 'crewhrm-materials/helpers.jsx';
-import {request} from 'crewhrm-materials/request.jsx';
-import { ContextToast } from "crewhrm-materials/toast/toast.jsx";
+import {getRandomString, __, data_pointer, sprintf, isEmpty} from 'solidie-materials/helpers.jsx';
+import {request} from 'solidie-materials/request.jsx';
+import { ContextToast } from "solidie-materials/toast/toast.jsx";
 
 const supported_types = ['image', 'audio', 'video'];
 const {readonly_mode, permalinks: {ajaxurl}} = window[data_pointer];

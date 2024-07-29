@@ -1,8 +1,8 @@
 import React from "react";
 import { HashRouter, Route, Navigate, Routes, useNavigate, useParams } from 'react-router-dom';
 
-import {RenderExternal} from 'crewhrm-materials/render-external.jsx';
-import {getDashboardPath} from 'crewhrm-materials/helpers.jsx';
+import {RenderExternal} from 'solidie-materials/render-external.jsx';
+import {getDashboardPath} from 'solidie-materials/helpers.jsx';
 
 import { Inventory } from "../../modules/inventory";
 import { ContentEditor } from "../../modules/inventory/editor/ContentEditor";

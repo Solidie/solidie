@@ -1,7 +1,7 @@
 import React from "react";
 
-import {__, data_pointer, purgeBasePath} from 'crewhrm-materials/helpers.jsx';
-import { DoAction } from 'crewhrm-materials/mountpoint.jsx';
+import {__, data_pointer, purgeBasePath} from 'solidie-materials/helpers.jsx';
+import { DoAction } from 'solidie-materials/mountpoint.jsx';
 
 import { CategoryEditor } from "./category-editor.jsx";
 import { OptionFields, label_class } from "../options/options.jsx";

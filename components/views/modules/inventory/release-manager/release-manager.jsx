@@ -1,12 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
 
-import { request } from "crewhrm-materials/request.jsx";
-import {confirm} from 'crewhrm-materials/prompts.jsx';
-import { LoadingIcon } from "crewhrm-materials/loading-icon/loading-icon.jsx";
-import { __, data_pointer, formatDateTime, sprintf } from "crewhrm-materials/helpers.jsx";
-import { FileUpload } from "crewhrm-materials/file-upload/file-upload.jsx";
-import { TextField } from "crewhrm-materials/text-field/text-field.jsx";
-import { ContextToast } from "crewhrm-materials/toast/toast.jsx";
+import { request } from "solidie-materials/request.jsx";
+import {confirm} from 'solidie-materials/prompts.jsx';
+import { LoadingIcon } from "solidie-materials/loading-icon/loading-icon.jsx";
+import { __, data_pointer, formatDateTime, sprintf } from "solidie-materials/helpers.jsx";
+import { FileUpload } from "solidie-materials/file-upload/file-upload.jsx";
+import { TextField } from "solidie-materials/text-field/text-field.jsx";
+import { ContextToast } from "solidie-materials/toast/toast.jsx";
 
 import style from './release.module.scss';
 
@@ -262,14 +262,14 @@ export function ReleaseManager({content_id}) {
 												</small>
 												<span className={'actions'.classNames(style) + 'd-flex align-items-center column-gap-15'.classNames()}>
 													<i 
-														className={'ch-icon ch-icon-edit-2 font-size-16 cursor-pointer '.classNames()}
+														className={'sicon sicon-edit-2 font-size-16 cursor-pointer '.classNames()}
 														onClick={()=>openEditor(release)}></i>
 													<i 
-														className={'ch-icon ch-icon-trash font-size-16 cursor-pointer color-error'.classNames()}
+														className={'sicon sicon-trash font-size-16 cursor-pointer color-error'.classNames()}
 														onClick={()=>deleteRelease(release_id)}></i>
 													<a 
 														href={release.download_url} 
-														className={'ch-icon ch-icon-download font-size-16 cursor-pointer color-success'.classNames()}></a>
+														className={'sicon sicon-download font-size-16 cursor-pointer color-success'.classNames()}></a>
 												</span>
 											</td>
 											<td>

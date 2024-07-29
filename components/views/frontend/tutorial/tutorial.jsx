@@ -2,12 +2,12 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 
-import { request } from "crewhrm-materials/request.jsx";
-import { __ } from "crewhrm-materials/helpers.jsx";
+import { request } from "solidie-materials/request.jsx";
+import { __ } from "solidie-materials/helpers.jsx";
 
 import style from './tutorial.module.scss';
-import { InitState } from "crewhrm-materials/init-state";
-import { LoadingIcon } from "crewhrm-materials/loading-icon/loading-icon";
+import { InitState } from "solidie-materials/init-state";
+import { LoadingIcon } from "solidie-materials/loading-icon/loading-icon";
 import { getPageTitle } from "../gallery";
 import { useRef } from "react";
 
@@ -178,7 +178,7 @@ export function Tutorial({path, content_slug}) {
 				<strong className={'font-size-16 font-weight-500 flex-1'.classNames()}>
 					{__('Lessons')}
 				</strong>
-				<i className={'ch-icon ch-icon-row-vertical'.classNames()}></i>
+				<i className={'sicon sicon-row-vertical'.classNames()}></i>
 			</div>
 			<div className={`menu-wrapper ${state.mobile_menu ? 'expanded' : ''}`.classNames(style)}>
 				<LessonList 

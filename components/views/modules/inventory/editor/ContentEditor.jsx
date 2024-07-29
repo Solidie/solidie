@@ -1,15 +1,15 @@
 import React, { useContext, useEffect, useState } from "react";
 
-import {TextField} from 'crewhrm-materials/text-field/text-field.jsx';
-import {FileUpload} from 'crewhrm-materials/file-upload/file-upload.jsx';
-import {request} from 'crewhrm-materials/request.jsx';
-import {confirm} from 'crewhrm-materials/prompts.jsx';
-import {LoadingIcon} from 'crewhrm-materials/loading-icon/loading-icon.jsx';
-import { __, data_pointer, isEmpty, sprintf, getDashboardPath } from "crewhrm-materials/helpers.jsx";
-import { ContextToast } from "crewhrm-materials/toast/toast.jsx";
-import { DropDown } from "crewhrm-materials/dropdown/dropdown.jsx";
-import { DoAction } from "crewhrm-materials/mountpoint.jsx";
-import { Tabs } from "crewhrm-materials/tabs/tabs.jsx";
+import {TextField} from 'solidie-materials/text-field/text-field.jsx';
+import {FileUpload} from 'solidie-materials/file-upload/file-upload.jsx';
+import {request} from 'solidie-materials/request.jsx';
+import {confirm} from 'solidie-materials/prompts.jsx';
+import {LoadingIcon} from 'solidie-materials/loading-icon/loading-icon.jsx';
+import { __, data_pointer, isEmpty, sprintf, getDashboardPath } from "solidie-materials/helpers.jsx";
+import { ContextToast } from "solidie-materials/toast/toast.jsx";
+import { DropDown } from "solidie-materials/dropdown/dropdown.jsx";
+import { DoAction } from "solidie-materials/mountpoint.jsx";
+import { Tabs } from "solidie-materials/tabs/tabs.jsx";
 
 import { getFlattenedCategories } from "../../../admin-dashboard/settings/general/content-type/category-editor.jsx";
 import { ReleaseManager } from "../release-manager/release-manager.jsx";
@@ -355,7 +355,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 		{/* Header */}
 		<div className={"margin-top-20 margin-bottom-30 d-flex align-items-center column-gap-10".classNames()}>
 			<i 
-				className={"ch-icon ch-icon-arrow-left cursor-pointer".classNames()}
+				className={"sicon sicon-arrow-left cursor-pointer".classNames()}
 				onClick={()=>{
 					if (window.history.state?.idx) {
 						window.history.back();
@@ -434,7 +434,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 												<a 
 													href={setup_link}
 													target="_blank"
-													className={'ch-icon ch-icon-settings-gear color-material-80 interactive'.classNames()}
+													className={'sicon sicon-settings-gear color-material-80 interactive'.classNames()}
 												></a>
 											}
 										</strong>
@@ -480,7 +480,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 												{
 													!state.slug_editor ? 
 														<i 
-															className={'ch-icon ch-icon-edit-2 cursor-pointer font-size-18'.classNames()}
+															className={'sicon sicon-edit-2 cursor-pointer font-size-18'.classNames()}
 															onClick={()=>setState({...state, slug_editor: true})}></i>
 														:
 														<TextField 

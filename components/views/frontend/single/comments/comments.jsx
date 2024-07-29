@@ -1,12 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
 
-import { data_pointer, __, sprintf, formatDateTime } from "crewhrm-materials/helpers.jsx";
-import {confirm} from 'crewhrm-materials/prompts.jsx';
-import { TextField } from "crewhrm-materials//text-field/text-field.jsx";
-import { LoadingIcon } from "crewhrm-materials/loading-icon/loading-icon.jsx";
-import { request } from "crewhrm-materials/request.jsx";
-import { ContextToast } from "crewhrm-materials/toast/toast.jsx";
-import { Options } from "crewhrm-materials/dropdown/dropdown.jsx";
+import { data_pointer, __, sprintf, formatDateTime } from "solidie-materials/helpers.jsx";
+import {confirm} from 'solidie-materials/prompts.jsx';
+import { TextField } from "solidie-materials//text-field/text-field.jsx";
+import { LoadingIcon } from "solidie-materials/loading-icon/loading-icon.jsx";
+import { request } from "solidie-materials/request.jsx";
+import { ContextToast } from "solidie-materials/toast/toast.jsx";
+import { Options } from "solidie-materials/dropdown/dropdown.jsx";
 
 import style from './comment.module.scss';
 
@@ -148,7 +148,7 @@ export function Comments({content={}}) {
 			})}
 		>
 			{comment_count>1 ? sprintf(__('%s Comments'), comment_count) : sprintf(__('%s Comment'), comment_count)}
-			<i className={'ch-icon ch-icon-arrow-right'.classNames() + 'commnents-arrow'.classNames(style)}></i>
+			<i className={'sicon sicon-arrow-right'.classNames() + 'commnents-arrow'.classNames(style)}></i>
 		</strong>
 		<div className={`comments`.classNames(style)}>
 			{
@@ -243,7 +243,7 @@ export function Comments({content={}}) {
 									options={comment_actions}
 								>
 									<i
-										className={'ch-icon ch-icon-more color-text-50 font-size-20 cursor-pointer d-inline-block'.classNames()}
+										className={'sicon sicon-more color-text-50 font-size-20 cursor-pointer d-inline-block'.classNames()}
 									></i>
 								</Options>
 							</div>

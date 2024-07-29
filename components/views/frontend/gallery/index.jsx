@@ -2,14 +2,14 @@ import React, { useState, useEffect, useRef, createContext } from "react";
 import {Helmet} from "react-helmet";
 import { BrowserRouter, Route, Routes, useLocation, useNavigate, useParams, useSearchParams } from "react-router-dom";
 
-import { DropDown } from "crewhrm-materials/dropdown/dropdown.jsx";
-import { request } from "crewhrm-materials/request.jsx";
-import { __, data_pointer, filterObject, isEmpty, parseParams, getLocalValue, setLocalValue } from "crewhrm-materials/helpers.jsx";
-import { ErrorBoundary } from "crewhrm-materials/error-boundary.jsx";
-import { LoadingIcon } from "crewhrm-materials/loading-icon/loading-icon.jsx";
-import { Pagination } from "crewhrm-materials/pagination/pagination.jsx";
-import { applyFilters } from "crewhrm-materials/hooks.jsx";
-import { TextField } from "crewhrm-materials/text-field/text-field.jsx";
+import { DropDown } from "solidie-materials/dropdown/dropdown.jsx";
+import { request } from "solidie-materials/request.jsx";
+import { __, data_pointer, filterObject, isEmpty, parseParams, getLocalValue, setLocalValue } from "solidie-materials/helpers.jsx";
+import { ErrorBoundary } from "solidie-materials/error-boundary.jsx";
+import { LoadingIcon } from "solidie-materials/loading-icon/loading-icon.jsx";
+import { Pagination } from "solidie-materials/pagination/pagination.jsx";
+import { applyFilters } from "solidie-materials/hooks.jsx";
+import { TextField } from "solidie-materials/text-field/text-field.jsx";
 
 import { GenericCard } from "./generic-card/generic-card.jsx";
 import { SingleWrapper } from "../single/index.jsx";

@@ -1,15 +1,15 @@
 import React, { useContext, useEffect, useState } from "react";
 
-import {__, data_pointer, getDashboardPath, isEmpty} from 'crewhrm-materials/helpers.jsx'
-import {ListManager} from 'crewhrm-materials/list-manager/list-manager.jsx'
-import {confirm} from 'crewhrm-materials/prompts.jsx';
-import { request } from "crewhrm-materials/request.jsx";
-import { ContextToast } from "crewhrm-materials/toast/toast.jsx";
-import { LoadingIcon } from "crewhrm-materials/loading-icon/loading-icon";
-import { InitState } from "crewhrm-materials/init-state.jsx";
-import { Modal } from 'crewhrm-materials/modal.jsx';
-import { TextField } from 'crewhrm-materials/text-field/text-field.jsx';
-import { DropDown } from 'crewhrm-materials/dropdown/dropdown.jsx';
+import {__, data_pointer, getDashboardPath, isEmpty} from 'solidie-materials/helpers.jsx'
+import {ListManager} from 'solidie-materials/list-manager/list-manager.jsx'
+import {confirm} from 'solidie-materials/prompts.jsx';
+import { request } from "solidie-materials/request.jsx";
+import { ContextToast } from "solidie-materials/toast/toast.jsx";
+import { LoadingIcon } from "solidie-materials/loading-icon/loading-icon";
+import { InitState } from "solidie-materials/init-state.jsx";
+import { Modal } from 'solidie-materials/modal.jsx';
+import { TextField } from 'solidie-materials/text-field/text-field.jsx';
+import { DropDown } from 'solidie-materials/dropdown/dropdown.jsx';
 
 import { LessonEditor } from "./lesson-editor.jsx";
 import { getFlattenedArray } from "../../../admin-dashboard/settings/general/content-type/category-editor.jsx";

@@ -1,10 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-import {__} from 'crewhrm-materials/helpers.jsx';
-import {ResponsiveLayout} from 'crewhrm-materials/responsive-layout.jsx';
-import {Ratio} from 'crewhrm-materials/responsive-layout.jsx';
-import { currency_symbol } from "crewhrm-materials/helpers";
+import {__} from 'solidie-materials/helpers.jsx';
+import {ResponsiveLayout} from 'solidie-materials/responsive-layout.jsx';
+import {Ratio} from 'solidie-materials/responsive-layout.jsx';
+import { currency_symbol } from "solidie-materials/helpers";
 
 import { MetaData } from "../../single/meta-data/meta-data";
 
@@ -85,7 +85,7 @@ export function DownloadOrPrice({content, is_overlayer}) {
 	
 	return is_free ? 
 		<span 
-			className={`ch-icon ${is_tutorial ? 'ch-icon-book-open' : 'ch-icon-download'} font-size-16 ${color_class} interactive cursor-pointer`.classNames()}
+			className={`sicon ${is_tutorial ? 'sicon-book-open' : 'sicon-download'} font-size-16 ${color_class} interactive cursor-pointer`.classNames()}
 			onClick={()=>window.location.assign(access_url)}
 			title={is_tutorial ? __('Start Learning') : __('Download')}
 		></span>

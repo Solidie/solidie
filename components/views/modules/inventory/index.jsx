@@ -1,15 +1,15 @@
 import React, { useContext, useEffect, useState } from 'react'
 
-import { request } from 'crewhrm-materials/request.jsx';
-import { confirm } from 'crewhrm-materials/prompts.jsx';
-import { __, data_pointer, sprintf, formatDate, formatTime, getDashboardPath, currency_symbol, getLocalValue, setLocalValue } from 'crewhrm-materials/helpers.jsx';
-import { ContextToast } from 'crewhrm-materials/toast/toast.jsx';
-import { LoadingIcon } from 'crewhrm-materials/loading-icon/loading-icon.jsx';
-import { Pagination } from 'crewhrm-materials/pagination/pagination.jsx';
-import { TextField } from 'crewhrm-materials/text-field/text-field.jsx';
-import { TableStat } from 'crewhrm-materials/table-stat.jsx';
-import { DropDown, Options } from "crewhrm-materials/dropdown/dropdown.jsx";
-import {DropDownStatus} from 'crewhrm-materials/dropdown-status/dropdown-status.jsx';
+import { request } from 'solidie-materials/request.jsx';
+import { confirm } from 'solidie-materials/prompts.jsx';
+import { __, data_pointer, sprintf, formatDate, formatTime, getDashboardPath, currency_symbol, getLocalValue, setLocalValue } from 'solidie-materials/helpers.jsx';
+import { ContextToast } from 'solidie-materials/toast/toast.jsx';
+import { LoadingIcon } from 'solidie-materials/loading-icon/loading-icon.jsx';
+import { Pagination } from 'solidie-materials/pagination/pagination.jsx';
+import { TextField } from 'solidie-materials/text-field/text-field.jsx';
+import { TableStat } from 'solidie-materials/table-stat.jsx';
+import { DropDown, Options } from "solidie-materials/dropdown/dropdown.jsx";
+import {DropDownStatus} from 'solidie-materials/dropdown-status/dropdown-status.jsx';
 
 import { getPriceRange } from '../../frontend/gallery/generic-card/generic-card.jsx';
 import style from './inventory.module.scss';
@@ -42,7 +42,7 @@ const getContentActions = content=>{
 		{
 			id: 'edit', 
 			label: __('Edit'),
-			icon: 'ch-icon ch-icon-edit-2 color-material'.classNames()
+			icon: 'sicon sicon-edit-2 color-material'.classNames()
 		},
 	];
 
@@ -51,7 +51,7 @@ const getContentActions = content=>{
 		actions.push({
 			id: 'delete', 
 			label: __('Delete'),
-			icon: 'ch-icon ch-icon-trash color-error'.classNames()
+			icon: 'sicon sicon-trash color-error'.classNames()
 		});
 	}
 
@@ -60,7 +60,7 @@ const getContentActions = content=>{
 		actions.push({
 			id: 'download', 
 			label: __('Download'),
-			icon: 'ch-icon ch-icon-download color-success'.classNames()
+			icon: 'sicon sicon-download color-success'.classNames()
 		});
 	}
 
@@ -69,7 +69,7 @@ const getContentActions = content=>{
 		actions.push({
 			id: 'release', 
 			label: __('Releases'),
-			icon: 'ch-icon ch-icon-hierarchy'.classNames()
+			icon: 'sicon sicon-hierarchy'.classNames()
 		});
 	}
 
@@ -78,7 +78,7 @@ const getContentActions = content=>{
 		actions.push({
 			id: 'tutorial', 
 			label: __('Lessons'),
-			icon: 'ch-icon ch-icon-book-open'.classNames()
+			icon: 'sicon sicon-book-open'.classNames()
 		});
 	}
 
@@ -363,7 +363,7 @@ export function Inventory({navigate, params={}}) {
 
 				<Link 
 					to={getDashboardPath(`inventory/${content_type}/editor/new`)}
-					className={'ch-icon ch-icon-add-circle font-size-24 color-material'.classNames()}
+					className={'sicon sicon-add-circle font-size-24 color-material'.classNames()}
 				/>
 			</div>
 			
@@ -605,7 +605,7 @@ export function Inventory({navigate, params={}}) {
 											options={getContentActions(content)}
 										>
 											<i
-												className={'ch-icon ch-icon-more color-text-50 font-size-20 cursor-pointer d-inline-block'.classNames()}
+												className={'sicon sicon-more color-text-50 font-size-20 cursor-pointer d-inline-block'.classNames()}
 											></i>
 										</Options>
 									</div>

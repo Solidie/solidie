@@ -1,13 +1,13 @@
 import React, { useContext, useEffect, useMemo, useState } from "react";
 
-import {__, data_pointer, isEmpty} from 'crewhrm-materials/helpers.jsx'
-import {TextField} from 'crewhrm-materials/text-field/text-field.jsx';
-import { DropDown } from "crewhrm-materials/dropdown/dropdown.jsx";
-import { request } from "crewhrm-materials/request.jsx";
-import { InitState } from "crewhrm-materials/init-state.jsx";
-import { ContextToast } from "crewhrm-materials/toast/toast.jsx";
-import { LoadingIcon } from "crewhrm-materials/loading-icon/loading-icon.jsx";
-import { confirm } from "crewhrm-materials/prompts.jsx";
+import {__, data_pointer, isEmpty} from 'solidie-materials/helpers.jsx'
+import {TextField} from 'solidie-materials/text-field/text-field.jsx';
+import { DropDown } from "solidie-materials/dropdown/dropdown.jsx";
+import { request } from "solidie-materials/request.jsx";
+import { InitState } from "solidie-materials/init-state.jsx";
+import { ContextToast } from "solidie-materials/toast/toast.jsx";
+import { LoadingIcon } from "solidie-materials/loading-icon/loading-icon.jsx";
+import { confirm } from "solidie-materials/prompts.jsx";
 
 import { TinyEditor } from "../editor/Tiny.jsx";
 
@@ -255,7 +255,7 @@ export function LessonEditor({content_id, lesson_id, lessons=[]}) {
 				{
 					!state.slug_editor ? 
 						<i 
-							className={'ch-icon ch-icon-edit-2 cursor-pointer font-size-18'.classNames()}
+							className={'sicon sicon-edit-2 cursor-pointer font-size-18'.classNames()}
 							onClick={()=>setState({...state, slug_editor: true})}></i>
 						:
 						<TextField 

@@ -5,7 +5,7 @@ const { syncDirectory } = require('./sync-directory');
 const to_sync = [
 	{
 		from: './node_modules/crewhrm-materials',
-		to: '../Materials'
+		to: '../solidie-materials'
 	}
 ];
 

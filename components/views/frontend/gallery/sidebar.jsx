@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 
-import { TagField } from 'crewhrm-materials/tag-field/tag-field.jsx';
-import { RadioCheckbox } from 'crewhrm-materials/radio-checkbox.jsx';
-import { __, isEmpty } from 'crewhrm-materials/helpers.jsx';
+import { TagField } from 'solidie-materials/tag-field/tag-field.jsx';
+import { RadioCheckbox } from 'solidie-materials/radio-checkbox.jsx';
+import { __, isEmpty } from 'solidie-materials/helpers.jsx';
 
 import style from './index.module.scss';
 
@@ -118,7 +118,7 @@ function MobileFilter({_setFilter, filterList, filters}) {
 				className={`filter-control ${Object.keys(filters).length>1 ? 'has-change' : ''}`.classNames(style)} 
 				onClick={()=>setFilter(true)}
 			>
-				<i className={'ch-icon ch-icon-candle font-size-20'.classNames()}></i>
+				<i className={'sicon sicon-candle font-size-20'.classNames()}></i>
 			</div>
 			{
 				Object.keys(filterList).map((filter_key) => {
@@ -134,7 +134,7 @@ function MobileFilter({_setFilter, filterList, filters}) {
 						<span className={'font-size-14 font-weight-500 line-height-24 letter-spacing--14'.classNames()}>
 							{selected_label || section_label}
 						</span>
-						<i className={'ch-icon ch-icon-arrow-down font-size-20 vertical-align-middle margin-left-10'.classNames()}></i>
+						<i className={'sicon sicon-arrow-down font-size-20 vertical-align-middle margin-left-10'.classNames()}></i>
 					</div>
 				})
 			}
@@ -172,7 +172,7 @@ export function Sidebar({ is_mobile, setFilter, filters, filterList }) {
 					style={{marginLeft: '-3px'}}
 					data-cylector="clear-content-filter"
 				>
-					<i className={'ch-icon ch-icon-times font-size-18'.classNames()}></i> {__('Clear Filters')}
+					<i className={'sicon sicon-times font-size-18'.classNames()}></i> {__('Clear Filters')}
 				</span>
 			}
 		</div>

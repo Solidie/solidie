@@ -3,7 +3,7 @@ Contributors: jayedul
 Donate Link: https://solidie.com
 Tags: marketplace, contributors, stock
 Requires at least: 5.3
-Tested up to: 6.6
+Tested up to: 6.6.1
 Requires PHP: 7.4
 Stable tag: 1.1.6
 License: GPLv3

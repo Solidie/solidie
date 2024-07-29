@@ -1,13 +1,13 @@
 import React, { useContext } from 'react';
 import { useParams, Link } from 'react-router-dom';
 
-import { ToggleSwitch } from 'crewhrm-materials/toggle-switch/ToggleSwitch.jsx';
-import { TextField } from 'crewhrm-materials/text-field/text-field.jsx';
-import { __, getBack } from 'crewhrm-materials/helpers.jsx';
-import { NumberField } from 'crewhrm-materials/number-field/index.js';
-import { RadioCheckbox } from 'crewhrm-materials/radio-checkbox.jsx';
-import { DropDown } from 'crewhrm-materials/dropdown/dropdown.jsx';
-import { RenderExternal } from 'crewhrm-materials/render-external.jsx';
+import { ToggleSwitch } from 'solidie-materials/toggle-switch/ToggleSwitch.jsx';
+import { TextField } from 'solidie-materials/text-field/text-field.jsx';
+import { __, getBack } from 'solidie-materials/helpers.jsx';
+import { NumberField } from 'solidie-materials/number-field/index.js';
+import { RadioCheckbox } from 'solidie-materials/radio-checkbox.jsx';
+import { DropDown } from 'solidie-materials/dropdown/dropdown.jsx';
+import { RenderExternal } from 'solidie-materials/render-external.jsx';
 
 import { ContextSettings } from '../general-settings.jsx';
 
@@ -283,7 +283,7 @@ export function Options() {
 					
 					<Link 
 						to={'/settings/'}
-						className={'ch-icon ch-icon-arrow-left cursor-pointer color-text'.classNames()} 
+						className={'sicon sicon-arrow-left cursor-pointer color-text'.classNames()} 
 						onClick={getBack}
 					/>
 

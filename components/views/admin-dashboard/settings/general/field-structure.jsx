@@ -1,6 +1,6 @@
 import React from 'react';
-import { __ } from 'crewhrm-materials/helpers.jsx';
-import { applyFilters } from 'crewhrm-materials/hooks.jsx';
+import { __ } from 'solidie-materials/helpers.jsx';
+import { applyFilters } from 'solidie-materials/hooks.jsx';
 
 export const settings_fields = applyFilters(
 	'solidie_setting_fields',

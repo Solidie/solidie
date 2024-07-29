@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 
-import { ColCounter, ContextColCounter } from "crewhrm-materials/col-counter.jsx";
+import { ColCounter, ContextColCounter } from "solidie-materials/col-counter.jsx";
 
 import style from './image.module.scss';
 import { Link } from "react-router-dom";

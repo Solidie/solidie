@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
-import {__, isEmpty, data_pointer} from 'crewhrm-materials/helpers.jsx';
-import {Tabs} from 'crewhrm-materials/tabs/tabs.jsx';
+import {__, isEmpty, data_pointer} from 'solidie-materials/helpers.jsx';
+import {Tabs} from 'solidie-materials/tabs/tabs.jsx';
 
 function DataTabs({data}) {
 	const keys = Object.keys(data);

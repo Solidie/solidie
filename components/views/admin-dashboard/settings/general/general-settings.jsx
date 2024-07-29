@@ -1,11 +1,11 @@
 import React, { createContext, useContext, useState } from 'react';
 import { HashRouter, Navigate, Route, Routes, useParams } from 'react-router-dom';
 
-import { WpDashboardFullPage } from 'crewhrm-materials/backend-dashboard-container/full-page-container.jsx';
-import { __, data_pointer } from 'crewhrm-materials/helpers.jsx';
-import { request } from 'crewhrm-materials/request.jsx';
-import { ContextToast } from 'crewhrm-materials/toast/toast.jsx';
-import { LoadingIcon } from 'crewhrm-materials/loading-icon/loading-icon.jsx';
+import { WpDashboardFullPage } from 'solidie-materials/backend-dashboard-container/full-page-container.jsx';
+import { __, data_pointer } from 'solidie-materials/helpers.jsx';
+import { request } from 'solidie-materials/request.jsx';
+import { ContextToast } from 'solidie-materials/toast/toast.jsx';
+import { LoadingIcon } from 'solidie-materials/loading-icon/loading-icon.jsx';
 
 import { Options } from './options/options.jsx';
 import { Segments } from './segments/segments.jsx';

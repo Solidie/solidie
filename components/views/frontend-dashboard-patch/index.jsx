@@ -1,9 +1,9 @@
 import React from "react";
 
-import {addFilter} from 'crewhrm-materials/hooks.jsx';
-import {mountExternal} from 'crewhrm-materials/render-external.jsx';
-import {MountPoint} from 'crewhrm-materials/mountpoint.jsx';
-import {__, data_pointer} from 'crewhrm-materials/helpers.jsx';
+import {addFilter} from 'solidie-materials/hooks.jsx';
+import {mountExternal} from 'solidie-materials/render-external.jsx';
+import {MountPoint} from 'solidie-materials/mountpoint.jsx';
+import {__, data_pointer} from 'solidie-materials/helpers.jsx';
 
 import { Inventory } from "../modules/inventory/index.jsx";
 import { ContentEditor } from "../modules/inventory/editor/ContentEditor.jsx";

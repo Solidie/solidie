@@ -2,13 +2,13 @@ import React, {createContext, useEffect, useState} from "react";
 import { useParams, Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
 
-import {ErrorBoundary} from 'crewhrm-materials/error-boundary.jsx';
-import { __, data_pointer, getBack } from "crewhrm-materials/helpers.jsx";
-import { request } from "crewhrm-materials/request.jsx";
-import { applyFilters } from "crewhrm-materials/hooks.jsx";
-import { RenderExternal } from "crewhrm-materials/render-external.jsx";
-import { InitState } from "crewhrm-materials/init-state.jsx";
-import { RenderMedia } from "crewhrm-materials/render-media/render-media.jsx";
+import {ErrorBoundary} from 'solidie-materials/error-boundary.jsx';
+import { __, data_pointer, getBack } from "solidie-materials/helpers.jsx";
+import { request } from "solidie-materials/request.jsx";
+import { applyFilters } from "solidie-materials/hooks.jsx";
+import { RenderExternal } from "solidie-materials/render-external.jsx";
+import { InitState } from "solidie-materials/init-state.jsx";
+import { RenderMedia } from "solidie-materials/render-media/render-media.jsx";
 
 import { GenericPreview } from "./previews/generic.jsx";
 import { ImagePreview } from "./previews/image.jsx";
@@ -77,7 +77,7 @@ function FreeDownlod( props ) {
 					{is_tutorial ? __('Start Learning') : __('Download')}
 				</span>
 				<span>
-					<i className={`ch-icon ${is_tutorial ? 'ch-icon-book-open' : 'ch-icon-download'} font-size-14`.classNames()}></i>
+					<i className={`sicon ${is_tutorial ? 'sicon-book-open' : 'sicon-download'} font-size-14`.classNames()}></i>
 				</span>
 			</span>
 		</a>
@@ -178,7 +178,7 @@ export function SingleWrapper() {
 				onClick={getBack}
 				className={'d-flex align-items-center column-gap-8 color-text-60 interactive'.classNames()}
 			>
-				<i className={'ch-icon ch-icon-arrow-left font-size-16'.classNames()}></i>
+				<i className={'sicon sicon-arrow-left font-size-16'.classNames()}></i>
 				<span className={'font-size-14'.classNames()}>
 					{__('Back')}
 				</span>

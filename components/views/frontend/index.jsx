@@ -1,8 +1,8 @@
 import React from 'react';
 import {createRoot} from 'react-dom/client';
 
-import { MountPoint } from 'crewhrm-materials/mountpoint.jsx';
-import { getElementDataSet } from 'crewhrm-materials/helpers.jsx';
+import { MountPoint } from 'solidie-materials/mountpoint.jsx';
+import { getElementDataSet } from 'solidie-materials/helpers.jsx';
 import { Gallery } from './gallery/index.jsx';
 
 // Render content gallery

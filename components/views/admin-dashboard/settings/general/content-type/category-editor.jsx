@@ -1,14 +1,14 @@
 import React, {useState, useContext} from "react";
 
-import {__, isEmpty, data_pointer} from 'crewhrm-materials/helpers.jsx';
-import {confirm} from 'crewhrm-materials/prompts.jsx';
-import { request } from 'crewhrm-materials/request.jsx';
-import { TextField } from 'crewhrm-materials/text-field/text-field.jsx';
-import { LoadingIcon } from 'crewhrm-materials/loading-icon/loading-icon.jsx';
-import { Modal } from 'crewhrm-materials/modal.jsx';
-import { DropDown } from 'crewhrm-materials/dropdown/dropdown.jsx';
-import { ContextToast } from 'crewhrm-materials/toast/toast.jsx';
-import { ListManager } from 'crewhrm-materials/list-manager/list-manager.jsx';
+import {__, isEmpty, data_pointer} from 'solidie-materials/helpers.jsx';
+import {confirm} from 'solidie-materials/prompts.jsx';
+import { request } from 'solidie-materials/request.jsx';
+import { TextField } from 'solidie-materials/text-field/text-field.jsx';
+import { LoadingIcon } from 'solidie-materials/loading-icon/loading-icon.jsx';
+import { Modal } from 'solidie-materials/modal.jsx';
+import { DropDown } from 'solidie-materials/dropdown/dropdown.jsx';
+import { ContextToast } from 'solidie-materials/toast/toast.jsx';
+import { ListManager } from 'solidie-materials/list-manager/list-manager.jsx';
 
 import { ContextSettings } from "../general-settings.jsx";
 

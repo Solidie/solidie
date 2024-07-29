@@ -1,6 +1,6 @@
 import React from "react";
 
-import { AudioPlayer, AudioPlayersWrapper } from "crewhrm-materials/audio-player/audio-player.jsx";
+import { AudioPlayer, AudioPlayersWrapper } from "solidie-materials/audio-player/audio-player.jsx";
 import { MetaData } from "../../single/meta-data/meta-data.jsx";
 
 export function Audio({contents=[]}) {

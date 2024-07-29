@@ -1,10 +1,10 @@
 import React, { useState, useContext } from "react";
 import { Rating as RatingComp } from 'react-simple-star-rating'
 
-import {request} from 'crewhrm-materials/request.jsx';
-import {ContextToast} from 'crewhrm-materials/toast/toast.jsx';
-import { __, data_pointer, isEmpty } from "crewhrm-materials/helpers.jsx";
-import { ShareModal } from "crewhrm-materials/share-modal.jsx";
+import {request} from 'solidie-materials/request.jsx';
+import {ContextToast} from 'solidie-materials/toast/toast.jsx';
+import { __, data_pointer, isEmpty } from "solidie-materials/helpers.jsx";
+import { ShareModal } from "solidie-materials/share-modal.jsx";
 
 import { ContextGallery } from "../../gallery/index.jsx";
 import { DownloadOrPrice } from "../../gallery/generic-card/generic-card.jsx";
@@ -33,7 +33,7 @@ function LikeDislike({content={}, applyReaction, is_overlayer}) {
 	if ( is_overlayer ) {
 		return <div>
 			<i 
-				className={`ch-icon ${liked ? 'ch-icon-thumbs-up color-material-90' : `ch-icon-thumbs-o-up ${color_class}`} font-size-14 cursor-pointer`.classNames()}
+				className={`sicon ${liked ? 'sicon-thumbs-up color-material-90' : `sicon-thumbs-o-up ${color_class}`} font-size-14 cursor-pointer`.classNames()}
 				onClick={()=>applyReaction(liked ? -1 : 1)}
 			></i>
 			&nbsp;
@@ -50,7 +50,7 @@ function LikeDislike({content={}, applyReaction, is_overlayer}) {
 			</span> 
 			&nbsp;
 			<i 
-				className={`ch-icon ${liked ? 'ch-icon-thumbs-up color-material-90' : `ch-icon-thumbs-o-up ${color_class}`} font-size-14 cursor-pointer`.classNames()}
+				className={`sicon ${liked ? 'sicon-thumbs-up color-material-90' : `sicon-thumbs-o-up ${color_class}`} font-size-14 cursor-pointer`.classNames()}
 				onClick={()=>applyReaction(liked ? -1 : 1)}
 				data-cylector="thumbs-up"
 			></i>
@@ -67,7 +67,7 @@ function LikeDislike({content={}, applyReaction, is_overlayer}) {
 				</span>
 				<span>
 					<i 
-						className={`ch-icon ${disliked ? 'ch-icon-thumbs-down color-material-90' : `ch-icon-thumbs-o-down ${color_class}`} font-size-14 cursor-pointer`.classNames()}
+						className={`sicon ${disliked ? 'sicon-thumbs-down color-material-90' : `sicon-thumbs-o-down ${color_class}`} font-size-14 cursor-pointer`.classNames()}
 						onClick={()=>applyReaction(disliked ? -1 : 0)}
 					></i>&nbsp;
 					<span className={`${color_class}`.classNames()}>
@@ -212,7 +212,7 @@ export function MetaData(props) {
 	if (!(reactions.comment_count===null)) {
 		meta.comment = <div className={`${is_overlayer ? 'color-white text-shadow-thin' : 'color-text'}`.classNames()}>
 			<i 
-				className={`ch-icon ch-icon-message font-size-14 cursor-pointer ${is_overlayer ? 'color-white' : 'color-text'}`.classNames()}
+				className={`sicon sicon-message font-size-14 cursor-pointer ${is_overlayer ? 'color-white' : 'color-text'}`.classNames()}
 			></i>
 			&nbsp;
 			{reactions.comment_count}
@@ -230,7 +230,7 @@ export function MetaData(props) {
 			}
 
 			<i 
-				className={`ch-icon ch-icon-share1 font-size-14 cursor-pointer ${is_overlayer ? 'color-white text-shadow-thin' : 'color-text'}`.classNames()}
+				className={`sicon sicon-share1 font-size-14 cursor-pointer ${is_overlayer ? 'color-white text-shadow-thin' : 'color-text'}`.classNames()}
 				onClick={()=>setShowSharer(true)}
 				data-cylector="share-opener"
 			></i>
@@ -241,7 +241,7 @@ export function MetaData(props) {
 		meta.wishlist = <div>
 			<i 
 				title={wishlisted ? __('Remove from saved items') : __('Save for later')}
-				className={`ch-icon ${content.reactions?.wishlisted ? 'ch-icon-heart' : 'ch-icon-heart-o'} font-size-16 cursor-pointer ${is_overlayer ? 'color-white text-shadow-thin' : 'color-text'}`.classNames()}
+				className={`sicon ${content.reactions?.wishlisted ? 'sicon-heart' : 'sicon-heart-o'} font-size-16 cursor-pointer ${is_overlayer ? 'color-white text-shadow-thin' : 'color-text'}`.classNames()}
 				onClick={()=>applyReaction(content.reactions?.wishlisted ? -1 : 1, 'wishlist')}
 				data-cylector="add-to-wishlist"
 			></i>

@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 
-import {ToggleSwitch} from 'crewhrm-materials/toggle-switch/ToggleSwitch.jsx';
+import {ToggleSwitch} from 'solidie-materials/toggle-switch/ToggleSwitch.jsx';
 
 import { ContextSettings } from '../general-settings.jsx';
 
@@ -75,7 +75,7 @@ export function Segments() {
 						<div>
 							<i
 								className={
-									'ch-icon ch-icon-arrow-right font-size-24'.classNames() +
+									'sicon sicon-arrow-right font-size-24'.classNames() +
 									`icon`.classNames(style)
 								}
 							></i>

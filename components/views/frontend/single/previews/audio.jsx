@@ -1,6 +1,6 @@
 import React from "react";
 
-import { AudioPlayer, AudioPlayersWrapper } from "crewhrm-materials/audio-player/audio-player.jsx";
+import { AudioPlayer, AudioPlayersWrapper } from "solidie-materials/audio-player/audio-player.jsx";
 
 export function AudioPreview({content={}}) {
 	return <AudioPlayersWrapper>
