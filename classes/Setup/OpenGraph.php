@@ -7,7 +7,7 @@
 
 namespace Solidie\Setup;
 
-use Solidie\Helpers\_String;
+use SolidieLib\_String;
 use Solidie\Main;
 use Solidie\Models\Manifest;
 

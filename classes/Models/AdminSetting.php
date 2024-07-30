@@ -7,7 +7,7 @@
 
 namespace Solidie\Models;
 
-use Solidie\Helpers\_Array;
+use SolidieLib\_Array;
 
 /**
  * AdminSettings class

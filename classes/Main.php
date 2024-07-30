@@ -72,7 +72,6 @@ class Main {
 
 		// Register Activation/Deactivation Hook
 		register_activation_hook( self::$configs->file, array( $this, 'activate' ) );
-		register_deactivation_hook( self::$configs->file, array( $this, 'deactivate' ) );
 
 		// Core Modules
 		new Database();
@@ -85,8 +84,6 @@ class Main {
 		new OpenGraph();
 		new Cron();
 		new Promotion();
-
-		do_action( 'solidie_loaded' );
 	}
 
 	/**
@@ -150,14 +147,5 @@ class Main {
 	 */
 	public static function activate() {
 		do_action( 'solidie_activated' );
-	}
-
-	/**
-	 * Execute deactivation hook
-	 *
-	 * @return void
-	 */
-	public static function deactivate() {
-		do_action( 'solidie_deactivated' );
 	}
 }

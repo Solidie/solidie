@@ -8,7 +8,7 @@
 
 namespace Solidie\Models;
 
-use Solidie\Helpers\_String;
+use SolidieLib\_String;
 
 /**
  * Token class

@@ -6,8 +6,8 @@
 
 namespace Solidie\Models;
 
-use Solidie\Helpers\_Array;
-use Solidie\Helpers\_String;
+use SolidieLib\_Array;
+use SolidieLib\_String;
 
 class Tutorial {
 
