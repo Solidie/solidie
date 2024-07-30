@@ -59,7 +59,7 @@ class Utilities {
 	/**
 	 * Get unique ID to point solid app in any setup
 	 *
-	 * @return void
+	 * @return string
 	 */
 	public static function getSolidieId( $url ) {
 		$pattern = '/\/([^\/]+)\/wp-content\/(plugins|themes)\/([^\/]+)\/.*/';

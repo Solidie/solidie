@@ -8,9 +8,10 @@
 namespace Solidie;
 
 use SolidieLib\_Array;
+use SolidieLib\Dispatcher;
+
 use Solidie\Helpers\Utilities;
 use Solidie\Setup\OpenGraph;
-use Solidie\Setup\Dispatcher;
 use Solidie\Setup\Scripts;
 use Solidie\Setup\AdminPage;
 use Solidie\Setup\Cron;
@@ -20,6 +21,14 @@ use Solidie\Setup\Promotion;
 use Solidie\Setup\Route;
 use Solidie\Setup\Shortcode;
 use Solidie\Setup\User;
+
+use Solidie\Controllers\ContentController;
+use Solidie\Controllers\SettingsController;
+use Solidie\Controllers\CategoryController;
+use Solidie\Controllers\CommentController;
+use Solidie\Controllers\LessonController;
+
+use Solidie\Models\User as ModelsUser;
 
 /**
  * Main class to initiate app
@@ -31,6 +40,10 @@ class Main {
 	 * @var object
 	 */
 	public static $configs;
+
+	function __construct() {
+		add_action( 'plugins_loaded', array( $this, 'registerControllers' ), 101 );
+	}
 
 	/**
 	 * Initialize Plugin
@@ -64,7 +77,6 @@ class Main {
 		// Core Modules
 		new Database();
 		new Route();
-		new Dispatcher();
 		new Scripts();
 		new Shortcode();
 		new AdminPage();
@@ -75,6 +87,35 @@ class Main {
 		new Promotion();
 
 		do_action( 'solidie_loaded' );
+	}
+
+	/**
+	 * Register controller methods
+	 *
+	 * @return void
+	 */
+	public function registerControllers() {
+
+		new Dispatcher(
+			self::$configs->app_id,
+			array(
+				ContentController::class,
+				SettingsController::class,
+				CategoryController::class,
+				CommentController::class,
+				LessonController::class,
+			)
+		);
+
+		add_filter( 
+			'solidie_controller_roles_' . self::$configs->app_id, 
+			function ( $roles ) {
+				if ( in_array( 'administrator', $roles ) ) {
+					$roles[] = ModelsUser::getSolidieAdminRole();
+				}
+				return $roles;
+			}
+		);
 	}
 
 	/**
