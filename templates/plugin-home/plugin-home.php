@@ -1,11 +1,11 @@
 <?php
-
-use Solidie\Helpers\Changelog;
-use Solidie\Main;
+	use SolidieLib\Readme;
+	use Solidie\Main;
 	use Solidie\Models\Contents;
 	use Solidie\Setup\AdminPage;
 
-	$temp_url = Main::$configs->url . 'templates/plugin-home/';
+	$temp_url  = Main::$configs->url . 'templates/plugin-home/';
+	$changelog = ( new Readme( Main::$configs->dir . 'readme.txt' ) )->getLatestChangelog();
 ?>
 
 <!-- Google Web Fonts -->
@@ -130,7 +130,7 @@ use Solidie\Main;
 				<h1 class="text-white mb-4">What's new!</h1>
 				<p class="text-light mb-4"><?php _e( 'This version comes with several enhancements and new features. Here\'s a sneak peek...', 'solidie' ); ?></p>
 				
-				<?php foreach ( Changelog::getLatestChangelog() as $line ): ?>
+				<?php foreach ( $changelog as $line ): ?>
 					<div class="d-flex align-items-center text-white mb-3">
 						<div class="btn-sm-square bg-white text-primary rounded-circle me-3" style="flex-shrink: 0;">
 							<i class="fa fa-check"></i>

@@ -7,7 +7,7 @@
 
 namespace Solidie\Setup;
 
-use Solidie\Helpers\Colors;
+use SolidieLib\Colors;
 use Solidie\Helpers\Utilities;
 use Solidie\Main;
 use Solidie\Models\AdminSetting;
@@ -52,8 +52,13 @@ class Scripts {
 	 */
 	public function loadVariables() {
 
+		$schemes = array(
+			'color_scheme_materials' => AdminSetting::get( 'color_scheme_materials' ),
+			'color_scheme_texts'     => AdminSetting::get( 'color_scheme_texts' ),
+		);
+
 		// Load dynamic colors
-		$dynamic_colors = Colors::getColors();
+		$dynamic_colors = Colors::getColors( $schemes );
 		$_colors        = '';
 		foreach ( $dynamic_colors as $name => $code ) {
 			$_colors .= '--solidie-color-' . esc_attr( $name ) . ':' . esc_attr( $code ) . ';';
@@ -89,8 +94,8 @@ class Scripts {
 				'app_name'         => Main::$configs->app_id,
 				'nonce'            => $nonce,
 				'nonce_action'     => $nonce_action,
-				'is_pro_installed' => Utilities::isProInstalled( false ),
-				'is_pro_active'    => Utilities::isProInstalled( true ),
+				'is_pro_installed' => Utilities::isPluginInstalled( Promotion::PRO_PATH, false ),
+				'is_pro_active'    => Utilities::isPluginInstalled( Promotion::PRO_PATH, true ),
 				'colors'           => $dynamic_colors,
 				'opacities'        => Colors::getOpacities(),
 				'contrast'         => Colors::CONTRAST_FACTOR,

@@ -8,7 +8,7 @@
 namespace Solidie\Models;
 
 use SolidieLib\_Array;
-use Solidie\Helpers\_DateTime;
+use SolidieLib\_DateTime;
 
 /**
  * Popularity class

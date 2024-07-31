@@ -68,7 +68,7 @@ class Main {
 		self::$configs = (object) array_merge( $manifest, (array) self::$configs );
 
 		// Prepare the unique app name
-		self::$configs->app_id = Utilities::getSolidieId( self::$configs->url );
+		self::$configs->app_id = Utilities::getAppId( self::$configs->url );
 
 		// Register Activation/Deactivation Hook
 		register_activation_hook( self::$configs->file, array( $this, 'activate' ) );

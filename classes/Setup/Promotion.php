@@ -12,6 +12,11 @@ use Solidie\Main;
 
 class Promotion {
 
+	/**
+	 * Pro plugin path constant
+	 */
+	const PRO_PATH = 'solidie-pro/solidie-pro.php';
+
 	public function __construct() {
 		add_filter( 'plugin_action_links_' . Main::$configs->basename, array( $this, 'proInstallLink' ) );
 	}
@@ -25,17 +30,17 @@ class Promotion {
 		</a>';
 
 		// If not even exists in file system
-		if ( ! Utilities::isProInstalled( false ) ) {
+		if ( ! Utilities::isPluginInstalled( self::PRO_PATH, false ) ) {
 			$actions['solidie_pro_action_link'] = '<a href="https://solidie.com" target="_blank">
 				<span style="color: #ff7742; font-weight: bold;">' .
 					__( 'Upgrade to Pro', 'solidie' ) .
 				'</span>
 			</a>';
 
-		} elseif ( ! Utilities::isProInstalled( true ) ) {
+		} elseif ( ! Utilities::isPluginInstalled( self::PRO_PATH, true ) ) {
 
 			// If exists, but not active
-			$action = self::getPluginAction( Utilities::PRO_PATH, __( 'Pro', 'solidie' ) );
+			$action = self::getPluginAction( self::PRO_PATH, __( 'Pro', 'solidie' ) );
 			if ( ! empty( $action ) ) {
 				$actions['solidie_pro_action_link'] = '<a href="' . esc_url( $action['action_link'] ) . '">
 					<span style="color: #ff7742; font-weight: bold;">' .

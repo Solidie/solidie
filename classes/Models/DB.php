@@ -7,7 +7,7 @@
 
 namespace Solidie\Models;
 
-use Solidie\Helpers\_Number;
+use SolidieLib\_Number;
 use Solidie\Main;
 
 /**
