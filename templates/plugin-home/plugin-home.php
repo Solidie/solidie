@@ -60,7 +60,7 @@
 					<?php _e( 'Your own stock Empire.', 'solidie' ); ?>
 				</p>
 				<a class="btn btn-primary rounded-pill px-4" href="<?php echo add_query_arg( array( 'page' => AdminPage::INVENTORY_SLUG ), admin_url( 'admin.php' ) ); ?>">
-					<?php _e( 'Start Using', 'solidie' ); ?>
+					<?php _e( 'Get Started', 'solidie' ); ?>
 				</a>
 			</div>
 			<div class="col-lg-7">
