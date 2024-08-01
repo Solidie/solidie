@@ -6,7 +6,6 @@ use Solidie\Setup\Database;
 use Solidie_Pro\Models\ContentPack;
 use Solidie_Pro\Models\Contributor;
 use Solidie_Pro\Models\Withdrawal;
-use Solidie_Pro\Setup\Updater;
 
 /**
  * Plugin Name: Solidie Cleanup
@@ -119,7 +118,7 @@ add_action(
 
 			// Delete solidie options
 			delete_option( AdminSetting::OPTION_NAME );
-			delete_option( Updater::LICENSE_OPTION_KEY );
+			delete_option( 'solidie-pro-license-data' );
 			delete_option( Database::DB_VERSION_KEY );
 
 			// Delete user meta

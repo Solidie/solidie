@@ -152,21 +152,29 @@
 	<div class="container py-5">
 		<div class="row">
 			<div class="col-12">
-				<strong class="d-block">
-					<?php _e( 'Got stuck?', 'solidie'); ?>
-				</strong>
-				<small>
-					Check out <a href="https://solidie.com/gallery/documentation/solidie/0/" target="_blank"><strong>documentation</strong></a>.
-				</small>
-				<br/>
-				<br/>
+				<div style="display: flex; align-items: flex-end; column-gap: 30px;">
+					<div style="flex: 1;">
+						<strong class="d-block">
+							<?php _e( 'Got stuck?', 'solidie'); ?>
+						</strong>
+						<small>
+							Check out <a href="https://solidie.com/gallery/documentation/solidie/0/" target="_blank"><strong>documentation</strong></a>.
+						</small>
+						<br/>
+						<br/>
 
-				<strong class="d-block">
-					<?php _e( 'Enjoying Solidie?', 'solidie' ); ?> &#128512;
-				</strong>
-				<small>
-					Please <a href="https://wordpress.org/plugins/solidie/#reviews" target="_blank"><strong>provide your feedback</strong></a> to help us improve functionalities.
-				</small>
+						<strong class="d-block">
+							<?php _e( 'Enjoying Solidie?', 'solidie' ); ?> &#128512;
+						</strong>
+						<small>
+							Please <a href="https://wordpress.org/plugins/solidie/#reviews" target="_blank"><strong>provide your feedback</strong></a> to help us improve functionalities.
+						</small>
+					</div>
+					<div style="display: flex; column-gap: 15px;">
+						<a class="fab fa-facebook-square fa-2x" href="https://www.linkedin.com/company/solidie/" target="_blank"></a>
+						<a class="fab fa-linkedin  fa-2x" href="https://facebook.com/SolidieOfficial" target="_blank"></a>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
