@@ -32,7 +32,7 @@ describe('Configure plugin settings', ()=>{
 		cy.get('[name="contribution_distribute_model"]').check(['free', 'paid']);
 
 		// Set commision
-		cy.get('[name="contributor_revenue_percentage"]').clear().type('55');
+		cy.get('[name="contributor_revenue_percentage"]').clear().type('55').blur();
 
 		// Save settings
 		cy.get('[data-cylector="save-settings"]').click();

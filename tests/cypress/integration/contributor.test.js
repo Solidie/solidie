@@ -80,7 +80,7 @@ describe('Test user dashboard with contributor user', ()=>{
 		cy.loginCustom(contributors[0]);
 
 		// Open single audio page
-		cy.visit('gallery/audio/demo-audio-paid/');
+		cy.visit('gallery/audios/demo-audio-paid/');
 		cy.wait(2500);
 
 		// Test like
@@ -134,8 +134,7 @@ describe('Test user dashboard with contributor user', ()=>{
 		cy.get('#billing-last_name').clear().type(contributors[1].last_name);
 		cy.get('#billing-address_1').clear().type(contributors[1].address);
 		cy.get('#billing-city').clear().type(contributors[1].city);
-		cy.get('#billing-postcode').clear().type(contributors[1].postal);
-		cy.get('#billing-postcode').blur();
+		cy.get('#billing-postcode').clear().type(contributors[1].postal).blur();
 		cy.get('.wc-block-components-checkout-place-order-button').click();
 		cy.wait(3000);
 

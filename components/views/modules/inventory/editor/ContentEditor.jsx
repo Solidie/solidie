@@ -481,17 +481,21 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 													!state.slug_editor ? 
 														<i 
 															className={'sicon sicon-edit-2 cursor-pointer font-size-18'.classNames()}
-															onClick={()=>setState({...state, slug_editor: true})}></i>
+															onClick={()=>setState({...state, slug_editor: true})}
+															data-cylector="content-slug-edit"
+														></i>
 														:
-														<TextField 
-															style={{width: '170px', height: '30px', padding: '0 9px'}}
-															value={state.values.content_slug}
-															autofocus={true}
-															onChange={content_slug=>setVal('content_slug', content_slug)}
-															onBlur={updateSlug}
-															onKeyUp={e=>e.key === 'Enter' ? updateSlug() : null}
-															disabled={readonly_mode || state.updating_slug}
-														/>
+														<div data-cylector="content-slug-input">
+															<TextField 
+																style={{width: '170px', height: '30px', padding: '0 9px'}}
+																value={state.values.content_slug}
+																autofocus={true}
+																onChange={content_slug=>setVal('content_slug', content_slug)}
+																onBlur={updateSlug}
+																onKeyUp={e=>e.key === 'Enter' ? updateSlug() : null}
+																disabled={readonly_mode || state.updating_slug}
+															/>
+														</div>
 												}
 											</div>
 										}

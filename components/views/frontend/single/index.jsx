@@ -141,7 +141,7 @@ export function SingleWrapper() {
 		}
 	}, [state.content]);
 
-	const {content_type} = contents_by_slug[content_type_slug];
+	const {content_type} = contents_by_slug[content_type_slug] || {};
 	const PreviewComp = preview_renderers[content_type] || preview_renderers.other;
 
     if ( state.fetching || state.error_message ) {

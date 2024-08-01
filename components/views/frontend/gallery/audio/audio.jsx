@@ -6,15 +6,21 @@ import { MetaData } from "../../single/meta-data/meta-data.jsx";
 export function Audio({contents=[]}) {
 	return <AudioPlayersWrapper>
 		{contents.map(content=>{
-			const {content_id} = content;
+
+			const {
+				content_id, 
+				content_title, 
+				content_permalink,
+				media={}
+			} = content;
 
 			return <div key={content_id} className={'margin-bottom-15'.classNames()}>
 				<AudioPlayer 
-					id={content.content_id}
-					src={content.media?.preview?.file_url} 
-					permalink={content.content_permalink}
-					title={content.content_title}
-					thumbnail={content.media.thumbnail?.file_url}
+					id={content_id}
+					src={media?.preview?.file_url} 
+					permalink={content_permalink}
+					title={content_title}
+					thumbnail={media?.thumbnail?.file_url}
 				>
 					<div>
 						<MetaData 

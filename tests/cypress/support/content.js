@@ -9,13 +9,14 @@ Cypress.Commands.add('createContent', (content, fe_dashboard) => {
 
 	const url = fe_dashboard ? `my-dashboard/inventory/${content_type}/editor/new/` : `wp-admin/admin.php?page=solidie-inventory#/inventory/${content_type}/editor/new`;
 	cy.visit(url);
-	cy.reload({ forceReload: true });
+	cy.wait(1500);
 
 	// Set content title
-	const ttl_field = cy.get('[data-cylector="content-input-wrapper-content_title"] input');
-	ttl_field.clear().type(content_title);
-	ttl_field.blur();
-	cy.wait(2000);
+	cy.get('[data-cylector="content-input-wrapper-content_title"] input').clear().type(content_title);
+
+	// Set the content slug
+	cy.get('[data-cylector="content-slug-edit"]').click();
+	cy.get('[data-cylector="content-slug-input"] input').clear().type(content_title).blur();
 
 	// Set thumbnail
 	cy.get('[data-cylector="content-input-wrapper-thumbnail"] input').attachFile('../assets/book.jpg');
