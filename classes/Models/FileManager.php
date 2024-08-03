@@ -8,11 +8,12 @@
 namespace Solidie\Models;
 
 use Solidie\Main;
+use SolidieLib\FileManager as SolidieLibFileManager;
 
 /**
  * File and directory handler class
  */
-class FileManager {
+class FileManager extends SolidieLibFileManager {
 
 	/**
 	 * Custom uploaded file identifier meta key
@@ -170,25 +171,6 @@ class FileManager {
 	}
 
 	/**
-	 * Delete WP files
-	 *
-	 * @param int|array $file_id File ID or array of files IDs
-	 * @return void
-	 */
-	public static function deleteFile( $file_id ) {
-		if ( ! is_array( $file_id ) ) {
-			$file_id = array( $file_id );
-		}
-
-		// Loop through file IDs and delete
-		foreach ( $file_id as $id ) {
-			if ( ! empty( $id ) && is_numeric( $id ) ) {
-				wp_delete_attachment( $id, true );
-			}
-		}
-	}
-
-	/**
 	 * Extract file IDs from html content
 	 *
 	 * @param string $html
@@ -247,68 +229,6 @@ class FileManager {
 	}
 
 	/**
-	 * Delete directory
-	 *
-	 * @param string $dir Dir path to delete including files and sub folders
-	 * @return bool
-	 */
-	public static function deleteDirectory( string $dir ) {
-		if ( ! is_dir( $dir ) ) {
-			return false;
-		}
-
-		$files = glob( $dir . '/*' );
-		foreach ( $files as $file ) {
-			is_dir( $file ) ? self::deleteDirectory( $file ) : unlink( $file );
-		}
-
-		return rmdir( $dir );
-	}
-
-	/**
-	 * Organize uploaded files hierarchy
-	 *
-	 * @param array $file_s The file holder array to organize
-	 * @return array
-	 */
-	public static function organizeUploadedHierarchy( array $file_s ) {
-		$new_array = array();
-
-		$columns = array( 'name', 'size', 'type', 'tmp_name', 'error' );
-
-		// Loop through data types like name, tmp_name etc.
-		foreach ( $columns as $column ) {
-
-			if ( ! isset( $file_s[ $column ] ) ) {
-				continue;
-			}
-
-			// Loop through data
-			foreach ( $file_s[ $column ] as $post_name => $data_list ) {
-
-				if ( ! isset( $new_array[ $post_name ] ) ) {
-					$new_array[ $post_name ] = array();
-				}
-
-				if ( ! is_array( $data_list ) ) {
-					$new_array[ $post_name ][ $column ] = $data_list;
-					continue;
-				}
-
-				foreach ( $data_list as $index => $data ) {
-					if ( ! isset( $new_array[ $post_name ][ $index ] ) ) {
-						$new_array[ $post_name ][ $index ] = array();
-					}
-
-					$new_array[ $post_name ][ $index ][ $column ] = $data;
-				}
-			}
-		}
-
-		return $new_array;
-	}
-
-	/**
 	 * Generate restricted file link to access application files
 	 *
 	 * @param integer $file_id  File ID to generate URL for
@@ -330,31 +250,6 @@ class FileManager {
 		);
 
 		return add_query_arg( array_merge( $args, $add_args ), $ajaxurl );
-	}
-
-	/**
-	 * List files in a directory
-	 *
-	 * @param string $directory The directory to list files in
-	 * @return array
-	 */
-	public static function getFilesInDirectory( string $directory ) {
-
-		$files = array();
-
-		// Check if the directory exists
-		if ( is_dir( $directory ) ) {
-			$iterator = new \DirectoryIterator( $directory );
-
-			foreach ( $iterator as $file_info ) {
-				if ( $file_info->isFile() ) {
-					$filename           = pathinfo( $file_info->getFilename(), PATHINFO_FILENAME );
-					$files[ $filename ] = $file_info->getPathname();
-				}
-			}
-		}
-
-		return $files;
 	}
 
 	/**
