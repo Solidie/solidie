@@ -9,7 +9,7 @@ Stable tag: 1.1.6
 License: GPLv3
 License URI: https://opensource.org/licenses/GPL-3.0
 
-Turn your simple WordPress site into a full fledged digital content stock platform.
+Turn your simple WordPress site into a full fledged digital content marketplace.
 
 == Description ==
 
