@@ -242,7 +242,7 @@ export function ReleaseManager({content_id}) {
 								return <tr key={release_id}>
 									{
 										state.edit_values?.release_id==release_id ?
-										<td colSpan={2}>
+										<td colSpan='100%'>
 											<Form 
 												values={state.edit_values} 
 												onChange={(name, value)=>onChange(name, value, 'edit_values')}

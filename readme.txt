@@ -1,7 +1,7 @@
 === Solidie - Digital Content Marketplace ===
 Contributors: jayedul
 Donate Link: https://solidie.com
-Tags: marketplace, contributors, stock
+Tags: marketplace, contributors, stock, contents
 Requires at least: 5.3
 Tested up to: 6.6.1
 Requires PHP: 7.4
@@ -115,7 +115,7 @@ You can [create issue](https://github.com/Solidie/Solidie/issues) on Github repo
 
 == Changelog ==
 
-= v1.1.6 -> Jul 10, 2024 =
+= v1.1.6 -> Aug 06, 2024 =
 --------------------------
 * New: Report page added to show sales and download stats (Pro)
 * New: Confirmation popup on withdrawal request submission
@@ -128,7 +128,7 @@ You can [create issue](https://github.com/Solidie/Solidie/issues) on Github repo
 * Fix: Empty page on incorrect user dashboard route
 * Fix: Duplicate sales entry on plan renewal
 * Fix: Pricing plan not showing in new content single page if not toggled once in editor
-* Fix: Always open release and lesosn manager right after publish
+* Fix: Always open release and lesson manager right after publish
 * Fix: Content editor flickering on first time title input blur
 
 = v1.1.5 -> Jun 20, 2024 =
