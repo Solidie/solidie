@@ -17,6 +17,7 @@ import { TutorialManager } from "../tutorial-manager/tutorial-manager.jsx";
 import { TinyEditor } from "./Tiny.jsx";
 
 import style from './editor.module.scss';
+import { contact_formats } from "../../../frontend/single/index.jsx";
 
 const {readonly_mode, is_admin} = window[data_pointer];
 
@@ -92,6 +93,16 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 	const content_title = ( state.values.content_title || '' ).trim();
 	const support_exts  = (extensions[content_type] || []).map(ext=>ext.replace('.', ''));
 
+	const classifieds_fields = content_type !== 'classifieds' ? [] : Object.keys(contact_formats).map(name=>{
+		const {label, placeholder} = contact_formats[name];
+		return {
+			name,
+			label,
+			placeholder,
+			type: 'text',
+		}
+	})
+
 	const fields = [
 		{
 			type: 'text',
@@ -148,6 +159,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 			options: getFlattenedCategories(categories[content_type] || []),
 			show_setup_link: true
 		},
+		...classifieds_fields
 	].filter(f=>f);
 
 	const setVal=(name, value)=>{
@@ -281,6 +293,11 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 				values.preview                  = content.media?.preview ?? null;
 				values.sample_images            = content.media?.sample_images ?? [];
 				values.product                  = content.product ?? {};
+
+				// Add meta data to the values
+				Object.keys(contact_formats).forEach(name=>{
+					values[ name ] = content.meta[name];
+				});
 
 				if ( release ) {
 					values.downloadable_file = {

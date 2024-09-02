@@ -249,6 +249,10 @@ class ContentController {
 			unset( $content['contributor'] );
 		}
 
+		// Add content meta data
+		$content['meta'] = Contents::getAllMetaData( $content_id );
+
+		// Add content reactions
 		$content['reactions'] = ( object ) Reaction::getStats( $content_id, get_current_user_id() );
 
 		// Determine free download label and description
@@ -260,6 +264,7 @@ class ContentController {
 			$free_label = $saved_label;
 		}
 
+		// Add description for free contents
 		$saved_desc = AdminSetting::get( 'free_download_description' );
 		if ( ! empty( $saved_desc ) ) {
 			$free_desc = $saved_desc;

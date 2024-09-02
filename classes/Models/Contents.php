@@ -38,6 +38,16 @@ class Contents {
 		'banned',
 	);
 
+	const CONTENT_META_KEYS = array(
+		'telegram_number',
+		'whatsapp_number',
+		'skype_number',
+		'sms_number',
+		'call_number',
+		'facetime_number',
+		'contact_email'
+	);
+
 	/**
 	 * Create or update content
 	 *
@@ -161,6 +171,18 @@ class Contents {
 
 		// Eventually update the media meta
 		$meta->updateMeta( self::MEDIA_IDS_KEY, $media_ids );
+
+		// Update content meta data
+		foreach ( self::CONTENT_META_KEYS as $key ) {
+			
+			$meta_value = $content_data[ $key ] ?? null;
+
+			if ( empty( $meta_value ) ) {
+				$meta->deleteMeta( $key );
+			} else {
+				$meta->updateMeta( $key, $content_data[ $key ] ?? null );
+			}
+		}
 
 		// -------------- Create or update the main downloadable file (if not app and tutorial. App has dedicated release management system and tutorial doesn't need downloadable file) --------------
 		if ( ! in_array( $content['content_type'], array( 'app', 'tutorial' ) ) ) {
@@ -787,6 +809,24 @@ class Contents {
 	public static function isUserCapableToManage( $content_id, $user_id ) {
 		$contributor_id = Field::contents()->getField( array( 'content_id' => $content_id ), 'contributor_id' );
 		return ! empty( $contributor_id ) && ( $contributor_id == $user_id || User::validateRole( $user_id, User::getSolidieAdminRole() ) );
+	}
+
+	/**
+	 * Get meta data defined in the array
+	 *
+	 * @param int $content_id
+	 * @return array
+	 */
+	public static function getAllMetaData( $content_id ) {
+
+		$meta_array = array();
+		$meta = Meta::content( $content_id );
+
+		foreach ( self::CONTENT_META_KEYS as $key ) {
+			$meta_array[ $key ] = $meta->getMeta( $key );
+		}
+
+		return $meta_array;
 	}
 
 	/**

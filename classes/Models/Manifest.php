@@ -74,6 +74,12 @@ class Manifest {
 					'description' => esc_html__( 'Various type of fonts', 'solidie' ),
 					'plans'       => array(),
 				),
+				'classifieds' => array(
+					'label'       => esc_html__( 'Classified', 'solidie' ),
+					'slug'        => 'listings',
+					'description' => esc_html__( 'Classified listings', 'solidie' ),
+					'plans'       => array(),
+				),
 				'tutorial' => array(
 					'label'       => esc_html__( 'Tutorial', 'solidie' ),
 					'slug'        => 'tutorials',
