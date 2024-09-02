@@ -89,7 +89,14 @@ class ContentController {
 	 *
 	 * @return void
 	 */
-	public static function createOrUpdateContent( array $content, array $thumbnail = array(), array $sample_images = array(), array $sample_image_ids = array(), array $downloadable_file = array(), array $preview = array() ) {
+	public static function createOrUpdateContent( 
+		array $content, 
+		array $thumbnail = array(), 
+		array $sample_images = array(), 
+		array $sample_image_ids = array(), 
+		array $downloadable_file = array(), 
+		array $preview = array() 
+	) {
 
 		$user_id = get_current_user_id();
 

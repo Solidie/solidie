@@ -29,6 +29,7 @@ use Solidie\Controllers\CommentController;
 use Solidie\Controllers\LessonController;
 
 use Solidie\Models\User as ModelsUser;
+use Solidie\Setup\Sitemap;
 
 /**
  * Main class to initiate app
@@ -83,6 +84,7 @@ class Main {
 		new OpenGraph();
 		new Cron();
 		new Promotion();
+		new Sitemap();
 	}
 
 	/**

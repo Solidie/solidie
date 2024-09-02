@@ -55,10 +55,13 @@ class Shortcode {
 			)
 		);
 
+		$data                = $GLOBALS['solidie_gallery_data'] ?? array();
+		$content_description = ( is_array( $data ) && is_array( $data['content'] ?? null ) ) ? $data['content']['content_description'] : '';
+
 		return '<div 
 			id="Solidie_Gallery" 
 			style="width: 100%; margin: 0; padding: 0; max-width: 100%;"
 			data-resources="' . esc_attr( json_encode( $resources ) ) . '"
-		></div>';
+		><article>' . $content_description . '</article></div>';
 	}
 }

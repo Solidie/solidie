@@ -13,6 +13,7 @@ import {DropDownStatus} from 'solidie-materials/dropdown-status/dropdown-status.
 
 import { getPriceRange } from '../../frontend/gallery/generic-card/generic-card.jsx';
 import style from './inventory.module.scss';
+import { ToolTip } from 'solidie-materials/tooltip.jsx';
 
 const {
 	readonly_mode, 
@@ -416,7 +417,7 @@ export function Inventory({navigate, params={}}) {
 					<th>{__('Title')}</th>
 					{!is_admin ? null : <th className={'white-space-nowrap'.classNames()}>{__('Contributor')}</th>}
 					<th className={'white-space-nowrap'.classNames()}>{__('Category')}</th>
-					{!is_pro_active ? null : <th>{__('Price')}</th>}
+					<th>{__('Price')}</th>
 					{(!is_pro_active || content_type=='app') ? null : <th>{__('Bundled In')}</th>}
 					{content_type == 'tutorial' ? null : <th>{__('Downloads')}</th>}
 					<th>{__('Status')}</th>
@@ -503,38 +504,52 @@ export function Inventory({navigate, params={}}) {
 								</span>
 							</td>
 							
-							{
-								!is_pro_active ? null :
-								<td data-th={__('Price')}>
-									<div className={'color-text-70'.classNames()}>
-										{
-											monetization !== 'paid' ? __('Free') :
-											<>
-												{
-													!min_price ? null :
-													<div className={'d-flex align-items-center column-gap-8'.classNames()}>
-														<span className={'font-weight-600 white-space-nowrap'.classNames()}>
-															{currency_symbol}{min_price}
-														</span>
-														{
-															!(max_price>min_price) ? null : 
-															<>
-																<span className={'color-text-50 white-space-nowrap'.classNames()}>
-																	to
-																</span>
-																<span className={'font-weight-600 white-space-nowrap'.classNames()}>
-																	{currency_symbol}{max_price}
-																</span>
-															</>
-														}
-													</div>
-												}
-											</>
-										}
-									</div>
-								</td>
-							}
-
+							<td data-th={__('Price')}>
+								{
+									!is_pro_active ? 
+										<div className={'cursor-pointer'.classNames()}>
+											<ToolTip tooltip={
+												<a 
+													className={'color-material font-weight-600 font-size-14'.classNames()} 
+													href='https://solidie.com/' 
+													target='_blank'
+												>
+													<i>Upgrade to Pro</i>
+												</a>
+											}>
+												N\A
+											</ToolTip>
+										</div>
+										:
+										<div className={'color-text-70'.classNames()}>
+											{
+												monetization !== 'paid' ? __('Free') :
+												<>
+													{
+														!min_price ? null :
+														<div className={'d-flex align-items-center column-gap-8'.classNames()}>
+															<span className={'font-weight-600 white-space-nowrap'.classNames()}>
+																{currency_symbol}{min_price}
+															</span>
+															{
+																!(max_price>min_price) ? null : 
+																<>
+																	<span className={'color-text-50 white-space-nowrap'.classNames()}>
+																		to
+																	</span>
+																	<span className={'font-weight-600 white-space-nowrap'.classNames()}>
+																		{currency_symbol}{max_price}
+																	</span>
+																</>
+															}
+														</div>
+													}
+												</>
+											}
+										</div>
+								}
+							</td>
+							
 							{
 								(!is_pro_active || content_type=='app') ? null :
 								<td data-th={__('Bundled In')}>

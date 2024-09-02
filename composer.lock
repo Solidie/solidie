@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:Solidie/solidie-lib.git",
-                "reference": "31c1050010fb518d9d7ec496668543b4151e8ff0"
+                "reference": "e21368da2af622efd2045d4f852132b3dcf14a92"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Solidie/solidie-lib/zipball/31c1050010fb518d9d7ec496668543b4151e8ff0",
-                "reference": "31c1050010fb518d9d7ec496668543b4151e8ff0",
+                "url": "https://api.github.com/repos/Solidie/solidie-lib/zipball/e21368da2af622efd2045d4f852132b3dcf14a92",
+                "reference": "e21368da2af622efd2045d4f852132b3dcf14a92",
                 "shasum": ""
             },
             "require-dev": {
@@ -43,7 +43,7 @@
                 "source": "https://github.com/Solidie/solidie-lib/tree/main",
                 "issues": "https://github.com/Solidie/solidie-lib/issues"
             },
-            "time": "2024-08-06T09:40:46+00:00"
+            "time": "2024-08-15T18:48:45+00:00"
         }
     ],
     "packages-dev": [

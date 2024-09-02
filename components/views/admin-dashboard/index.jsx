@@ -8,7 +8,6 @@ import {WpDashboardFullPage} from 'solidie-materials/backend-dashboard-container
 import { InventoryBackend } from './inventory/inventory-backend.jsx';
 import { GeneralSettings } from './settings/general/general-settings.jsx';
 
-// Render hrm settings
 const settings = document.getElementById('Solidie_Settings');
 if (settings) {
     createRoot(settings).render(

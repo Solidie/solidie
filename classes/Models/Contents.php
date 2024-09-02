@@ -437,7 +437,7 @@ class Contents {
 			);
 		}
 
-		if ( ! is_array( $content ) || empty( $content['content_type'] ) || empty( $content['content_slug'] ) ) {
+		if ( ! is_array( $content ) || empty( $content['content_type'] ) || empty( $content['content_slug'] ) || ! self::isContentTypeEnabled( $content['content_type'] ) ) {
 			return null;
 		}
 
