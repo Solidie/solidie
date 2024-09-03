@@ -8,6 +8,7 @@
 namespace Solidie\Models;
 
 use Solidie\Main;
+use SolidieLib\_Array;
 use SolidieLib\FileManager as SolidieLibFileManager;
 
 /**
@@ -21,6 +22,13 @@ class FileManager extends SolidieLibFileManager {
 	 * @var string
 	 */
 	const SOLIDIE_FILE_IDENTIFIER_META_KEY = 'solidie_content_file';
+
+	/**
+	 * Custom uploaded file identifier meta key
+	 *
+	 * @var string
+	 */
+	const SOLIDIE_FILE_CLOUD_KEY = 'solidie_content_file_cloud_data';
 
 	/**
 	 * Specify where to store files
@@ -116,19 +124,33 @@ class FileManager extends SolidieLibFileManager {
 	 */
 	public static function uploadFile( $file, $content_id, $lesosn_id = null ) {
 
-		// File id place holder
 		$attachment_id = null;
-
-		// Create necessary directory if not created already
-		self::$rel_path = self::createUploadDir( $content_id, $lesosn_id );
-
-		// Add filters
-		add_filter( 'upload_dir', array( __CLASS__, 'customUploadDirectory' ) );
+		$is_cloud      = AdminSetting::get( 'do_space_enable' );
+		$upload        = null;
 
 		// Alter the name and handle upload
-		$upload = wp_handle_upload( $file, array( 'test_form' => false ) );
+		if ( $is_cloud ) {
+			$cloud = ( new CloudStorage() )->uploadFile( $file, sprintf( '/%s/%s/%d/', self::SOLIDIE_CONTENTS_DIR, date( 'Y-m' ), $content_id ) );
+			if ( ! empty( $cloud ) && is_array( $cloud ) ) {
+				$upload = array(
+					'file'      => false,
+					'url'       => $cloud['file_url'],
+					'type'      => $cloud['mime_type'],
+					'cloud_key' => $cloud['file_id']
+				);
+			}
+		} else {
 
-		if ( isset( $upload['file'] ) ) {
+			// Create necessary directory if not created already
+			self::$rel_path = self::createUploadDir( $content_id, $lesosn_id );
+
+			// Add filters
+			add_filter( 'upload_dir', array( __CLASS__, 'customUploadDirectory' ) );
+
+			$upload = wp_handle_upload( $file, array( 'test_form' => false ) );
+		}
+
+		if ( is_array( $upload ) && isset( $upload['file'] ) ) {
 			// Create a post for the file
 			$attachment    = array(
 				'post_mime_type' => $upload['type'],
@@ -140,14 +162,27 @@ class FileManager extends SolidieLibFileManager {
 			$attachment_id = wp_insert_attachment( $attachment, $upload['file'] );
 			require_once ABSPATH . 'wp-admin/includes/image.php';
 
-			// Generate meta data for the file
-			$attachment_data = wp_generate_attachment_metadata( $attachment_id, $upload['file'] );
-			wp_update_attachment_metadata( $attachment_id, $attachment_data );
 			update_post_meta( $attachment_id, self::SOLIDIE_FILE_IDENTIFIER_META_KEY, true );
-		} else {
-			$attachment_id = null;
-		}
 
+			// Store the cloud file key in attachment meta data
+			if ( $is_cloud ) {
+				
+				$meta_data = array(
+					'file'     => str_replace( ' ', '-', sanitize_text_field( $file['name'] ) ),
+					'filesize' => $file['size']
+				);
+				
+				update_post_meta( $attachment_id, self::SOLIDIE_FILE_CLOUD_KEY, $upload );
+				update_post_meta( $attachment_id, '_wp_attachment_metadata', $meta_data );
+				update_post_meta( $attachment_id, '_wp_attached_file', $meta_data['file'] );
+
+			} else {
+				// Generate meta data for the file
+				$attachment_data = wp_generate_attachment_metadata( $attachment_id, $upload['file'] );
+				wp_update_attachment_metadata( $attachment_id, $attachment_data );
+			}
+		}
+		
 		// Remove filters
 		remove_filter( 'upload_dir', array( __CLASS__, 'customUploadDirectory' ) );
 
@@ -165,7 +200,7 @@ class FileManager extends SolidieLibFileManager {
 		return array(
 			'file_id'   => $file_id,
 			'file_url'  => self::getMediaLink( $file_id ),
-			'file_name' => basename( get_attached_file( $file_id ) ),
+			'file_name' => basename( get_attached_file( $file_id, true ) ),
 			'mime_type' => get_post_mime_type( $file_id ),
 		);
 	}
@@ -267,40 +302,52 @@ class FileManager extends SolidieLibFileManager {
 			exit;
 		}
 
+		$cloud     = _Array::getArray( get_post_meta( $file_id, self::SOLIDIE_FILE_CLOUD_KEY, true ) );
+		$meta      = _Array::getArray( maybe_unserialize( get_post_meta( $file_id, '_wp_attachment_metadata', true ) ) );
+		$read_path = $cloud['url'] ?? $path;
+
 		do_action( 'solidie_load_file_before', $file_id );
 		Release::increaseDownloadCount( $file_id );
 
-		$mime_type = mime_content_type( $path );
-		$file_size = filesize( $path );
+		$mime_type = $cloud['type'] ?? mime_content_type( $path );
+		$file_size = $meta['filesize'] ?? filesize( $path );
 
 		// Set the headers for caching
-		$last_modified = gmdate( 'D, d M Y H:i:s', filemtime( $path ) ) . ' GMT';
-		$etag          = md5_file( $path );
-
+		$last_modified = gmdate( 'D, d M Y H:i:s', strtotime( get_post_field( 'post_modified', $file_id ) )  ) . ' GMT';
+		
 		header( 'Last-Modified: ' . $last_modified );
-		header( 'ETag: ' . $etag );
 		header( 'Cache-Control: public, max-age=86400' );
 		header( 'Expires: 86400' );
 
-		// Check if the file has been modified
-		if ( isset( $_SERVER['HTTP_IF_MODIFIED_SINCE'] ) && strtotime( sanitize_text_field( wp_unslash( $_SERVER['HTTP_IF_MODIFIED_SINCE'] ) ) ) >= filemtime( $path ) ) {
-			header( 'HTTP/1.1 304 Not Modified' );
-			exit;
-		}
-
-		if ( isset( $_SERVER['HTTP_IF_NONE_MATCH'] ) && trim( sanitize_text_field( wp_unslash( $_SERVER['HTTP_IF_NONE_MATCH'] ) ) ) === $etag ) {
-			header( 'HTTP/1.1 304 Not Modified' );
-			exit;
-		}
-
 		header( 'Content-Type: ' . $mime_type . '; charset=utf-8' );
 		header( 'Content-Length: ' . $file_size );
+		header( 'Content-Disposition: attachment; filename=' . basename( $path ) );
 
-		// if ( ! in_array( strtolower( explode( '/', $mime_type )[0] ) , array( 'audio', 'video', 'image' ) ) ) {
-			header( 'Content-Disposition: attachment; filename=' . basename( $path ) );
-		// }
-
-		readfile( $path );
+		readfile( $read_path );
 		exit;
+	}
+
+	/**
+	 * Delete file middleare to delete cloud file if it is
+	 *
+	 * @param int|array $file_id
+	 * @return void
+	 */
+	public static function deleteFile( $file_ids ) {
+
+		$file_ids = _Array::getArray( $file_ids, true );
+
+		foreach ( $file_ids as $file_id ) {
+	
+			$cloud = get_post_meta( $file_id, self::SOLIDIE_FILE_CLOUD_KEY, true );
+			if ( empty( $cloud ) || ! is_array( $cloud ) ) {
+				parent::deleteFile( $file_id );
+			}
+
+			// Delete from cloud if it is not stored locally
+			if ( ! empty( $cloud['file_id'] ) ) {
+				( new CloudStorage() )->deleteFile( $cloud['file_id'] );
+			}
+		}
 	}
 }

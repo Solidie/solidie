@@ -9,7 +9,8 @@
         "lint:fix": "phpcbf --extensions=php ."
     },
 	"require": {
-		"solidie/solidie-lib": "dev-main"
+		"solidie/solidie-lib": "dev-main",
+		"aws/aws-sdk-php": "^3.320"
 	},
     "require-dev": {
         "10up/phpcs-composer": "dev-master"

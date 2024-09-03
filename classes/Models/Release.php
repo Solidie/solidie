@@ -181,7 +181,7 @@ class Release {
 		foreach ( $releases as $release ) {
 			
 			$release   = _Array::castRecursive( $release );
-			$file_path = get_attached_file( $release['file_id'] );
+			$file_path = get_attached_file( $release['file_id'], true );
 
 			$arg_payload = array(
 				'release'    => $release,

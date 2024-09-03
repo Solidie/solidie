@@ -2,6 +2,8 @@ import React from 'react';
 import { __ } from 'solidie-materials/helpers.jsx';
 import { applyFilters } from 'solidie-materials/hooks.jsx';
 
+const bucket_when = ['do_space_enable', '==', true];
+
 export const settings_fields = applyFilters(
 	'solidie_setting_fields',
 	{
@@ -64,6 +66,48 @@ export const settings_fields = applyFilters(
 							label: __('Free download description'),
 							type: 'textarea',
 							direction: 'row'
+						},
+					]
+				},
+				cloudstorage: {
+					label: __('Cloud Storage'),
+					description: __('Currently we support only Digital Ocean Space'),
+					separator: false,
+					fields: [
+						{
+							name: 'do_space_enable',
+							label: __('Enable Digital Ocean Space'),
+							type: 'switch',
+							placeholder: __('Enable'),
+							direction: 'row'
+						},
+						{
+							name: 'do_space_bucket_name',
+							label: __('Bucket Name'),
+							type: 'text',
+							direction: 'row',
+							when: bucket_when
+						},
+						{
+							name: 'do_space_bucket_region',
+							label: __('Bucket Region'),
+							type: 'text',
+							direction: 'row',
+							when: bucket_when
+						},
+						{
+							name: 'do_space_access_key',
+							label: __('Access Key'),
+							type: 'text',
+							direction: 'row',
+							when: bucket_when
+						},
+						{
+							name: 'do_space_secret_key',
+							label: __('Secret Key'),
+							type: 'text',
+							direction: 'row',
+							when: bucket_when
 						},
 					]
 				}
