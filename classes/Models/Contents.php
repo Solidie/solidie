@@ -701,6 +701,9 @@ class Contents {
 		$media_ids = _Array::flattenArray( $media_ids );
 		FileManager::deleteFile( $media_ids );
 
+		// Delete files embedded in content description
+		FileManager::deleteFilesFromContent( $content['content_description'] ?? '' );
+
 		// Delete all the meta
 		$meta->deleteBulkMeta( $content_id );
 

@@ -125,8 +125,9 @@ class FileManager extends SolidieLibFileManager {
 	public static function uploadFile( $file, $content_id, $lesosn_id = null ) {
 
 		$attachment_id = null;
-		$is_cloud      = AdminSetting::get( 'do_space_enable' );
 		$upload        = null;
+		$cloud         = null;
+		$is_cloud      = AdminSetting::get( 'do_space_enable' );
 
 		// Alter the name and handle upload
 		if ( $is_cloud ) {
@@ -169,10 +170,11 @@ class FileManager extends SolidieLibFileManager {
 				
 				$meta_data = array(
 					'file'     => str_replace( ' ', '-', sanitize_text_field( $file['name'] ) ),
-					'filesize' => $file['size']
+					'filesize' => $file['size'],
+					'sizes'    => array()
 				);
 				
-				update_post_meta( $attachment_id, self::SOLIDIE_FILE_CLOUD_KEY, $upload );
+				update_post_meta( $attachment_id, self::SOLIDIE_FILE_CLOUD_KEY, $cloud );
 				update_post_meta( $attachment_id, '_wp_attachment_metadata', $meta_data );
 				update_post_meta( $attachment_id, '_wp_attached_file', $meta_data['file'] );
 
@@ -273,6 +275,13 @@ class FileManager extends SolidieLibFileManager {
 	 */
 	public static function getMediaLink( int $file_id, array $add_args = array() ) {
 
+		if ( apply_filters( 'solidie_is_content_free', $file_id, true ) ) {
+			$cloud = _Array::getArray( get_post_meta( $file_id, self::SOLIDIE_FILE_CLOUD_KEY, true ) );
+			if ( ! empty( $cloud['file_url'] ) ) {
+				return $cloud['file_url'];
+			}
+		}
+
 		$ajaxurl      = admin_url( 'admin-ajax.php' );
 		$nonce_action = '_solidie_' . str_replace( '-', '_', gmdate( 'Y-m-d' ) );
 		$nonce        = wp_create_nonce( $nonce_action );
@@ -302,14 +311,13 @@ class FileManager extends SolidieLibFileManager {
 			exit;
 		}
 
-		$cloud     = _Array::getArray( get_post_meta( $file_id, self::SOLIDIE_FILE_CLOUD_KEY, true ) );
-		$meta      = _Array::getArray( maybe_unserialize( get_post_meta( $file_id, '_wp_attachment_metadata', true ) ) );
-		$read_path = $cloud['url'] ?? $path;
-
 		do_action( 'solidie_load_file_before', $file_id );
 		Release::increaseDownloadCount( $file_id );
 
-		$mime_type = $cloud['type'] ?? mime_content_type( $path );
+		$cloud     = _Array::getArray( get_post_meta( $file_id, self::SOLIDIE_FILE_CLOUD_KEY, true ) );
+		$meta      = _Array::getArray( maybe_unserialize( get_post_meta( $file_id, '_wp_attachment_metadata', true ) ) );
+		$read_path = $cloud['file_url'] ?? $path;
+		$mime_type = $cloud['mime_type'] ?? mime_content_type( $path );
 		$file_size = $meta['filesize'] ?? filesize( $path );
 
 		// Set the headers for caching
@@ -318,12 +326,12 @@ class FileManager extends SolidieLibFileManager {
 		header( 'Last-Modified: ' . $last_modified );
 		header( 'Cache-Control: public, max-age=86400' );
 		header( 'Expires: 86400' );
-
 		header( 'Content-Type: ' . $mime_type . '; charset=utf-8' );
 		header( 'Content-Length: ' . $file_size );
 		header( 'Content-Disposition: attachment; filename=' . basename( $path ) );
 
 		readfile( $read_path );
+
 		exit;
 	}
 
@@ -340,6 +348,7 @@ class FileManager extends SolidieLibFileManager {
 		foreach ( $file_ids as $file_id ) {
 	
 			$cloud = get_post_meta( $file_id, self::SOLIDIE_FILE_CLOUD_KEY, true );
+
 			if ( empty( $cloud ) || ! is_array( $cloud ) ) {
 				parent::deleteFile( $file_id );
 			}
