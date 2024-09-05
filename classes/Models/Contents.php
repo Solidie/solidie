@@ -40,8 +40,11 @@ class Contents {
 	);
 
 	const CONTENT_META_KEYS = array(
+		// Fields for classified content post
 		'content_country_code',
 		'content_state_code',
+		'content_classified_price',
+		'content_local_address',
 		'telegram_number',
 		'whatsapp_number',
 		'skype_number',
@@ -311,9 +314,7 @@ class Contents {
 		}
 
 		// Apply content meta
-		$content = _Array::castRecursive( $content );
-		$content = self::assignContentMedia( $content );
-		$content = self::assignContentMeta( $content );
+		$content = self::assignContentMeta( _Array::castRecursive( $content ) );
 
 		return $field ? ( $content[ $field ] ?? null ) : $content;
 	}
@@ -361,7 +362,7 @@ class Contents {
 	 * @param array $contents The content array to add media data to
 	 * @return array
 	 */
-	public static function assignContentMedia( array $contents ) {
+	private static function assignContentMedia( array $contents ) {
 
 		if ( empty( $contents ) ) {
 			return $contents;
@@ -626,11 +627,7 @@ class Contents {
 			ARRAY_A
 		);
 
-		$contents = _Array::castRecursive( $contents );
-		$contents = self::assignContentMedia( $contents );
-		$contents = self::assignContentMeta( $contents );
-
-		return $contents;
+		return self::assignContentMeta( _Array::castRecursive( $contents ) );
 	}
 
 	/**
@@ -668,14 +665,17 @@ class Contents {
 			// Add reaction data
 			$contents[ $index ]['reactions'] = Reaction::getStats( $content['content_id'], get_current_user_id() );
 		
-			// Add location meta
-			$meta = self::getAllMetaData( $content['content_id'] );
-			$meta['content_country_name'] = Utilities::getCountrName( $meta['content_country_code'] ?? null );
-			$meta['content_state_name'] = Utilities::getStateName( $meta['content_country_code'] ?? null, $meta['content_state_code'] ?? null );
-			$contents[ $index ]['meta'] = $meta;
+			// Add location meta (For classifieds actually)
+			$meta                         = self::getAllMetaData( $content['content_id'] );
+			$country_code                 = $meta['content_country_code'] ?? null;
+			$state_code                   = $meta['content_state_code'] ?? null;
+			$meta['content_country_name'] = Utilities::getCountrName( $country_code );
+			$meta['content_state_name']   = Utilities::getStateName( $country_code, $state_code );
+			$meta['currency_code']        = Utilities::getCurrencyCode( $country_code );
+			$contents[ $index ]['meta']   = $meta;
 		}
 
-		$contents = apply_filters( 'solidie_contents_meta', $contents );
+		$contents = apply_filters( 'solidie_contents_meta', self::assignContentMedia( $contents ) );
 
 		return $was_single ? $contents[0] : $contents;
 	}

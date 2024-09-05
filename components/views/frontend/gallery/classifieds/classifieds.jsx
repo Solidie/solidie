@@ -1,7 +1,8 @@
 import React from "react";
 import {Link} from 'react-router-dom';
 
-import {timeAgoOrAfter} from 'solidie-materials/helpers';
+import currency_symbols from 'currency-symbol-map/map';
+import {timeAgoOrAfter, isEmpty} from 'solidie-materials/helpers';
 
 import style from './classified.module.scss';
 
@@ -15,13 +16,17 @@ export function Classifieds({contents=[]}) {
 			media={}, 
 			content_title,
 			created_at,
-			meta={},
-			currency_symbol='$',
-			price=231
+			meta:{
+				currency_code,
+				content_state_name,
+				content_country_name,
+				content_classified_price
+			},
 		} = content;
 
 		const is_last = index === ( contents.length - 1 );
-		const area = [meta.content_state_name, meta.content_country_name].filter(m=>m).join(', ');
+		const area = [content_state_name, content_country_name].filter(m=>!isEmpty(m)).join(', ');
+		const price = content_classified_price;
 
 		return <Link 
 			key={content_id} 
@@ -43,7 +48,7 @@ export function Classifieds({contents=[]}) {
 				</span>
 				<div className={'d-flex align-items-center justify-content-space-between'.classNames()}>
 					<span className={'font-size-14 color-material-80'.classNames()}>
-						{currency_symbol} {price}
+						{!price ? null : <>{currency_symbols[currency_code]} {price}</>}
 					</span>
 					<span className={'font-size-13 color-text-50'.classNames()}>
 						{timeAgoOrAfter(created_at)}

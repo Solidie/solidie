@@ -11,6 +11,7 @@ import { ContextToast } from "solidie-materials/toast/toast.jsx";
 import { DropDown } from "solidie-materials/dropdown/dropdown.jsx";
 import { DoAction } from "solidie-materials/mountpoint.jsx";
 import { Tabs } from "solidie-materials/tabs/tabs.jsx";
+import { NumberField } from "solidie-materials/number-field/number-field.jsx";
 
 import { getFlattenedCategories } from "../../../admin-dashboard/settings/general/content-type/category-editor.jsx";
 import { ReleaseManager } from "../release-manager/release-manager.jsx";
@@ -72,6 +73,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 		error_message: null,
 		update_title: null,
 		thumbnail_url: null,
+		mounted: false,
 		values: {
 			content_type: content_type,
 			content_title: sprintf(__('Untitled %s'), (window[data_pointer].settings.contents[content_type]?.label || __('Content'))),
@@ -93,6 +95,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 		categories:{}, 
 		countries:[], 
 		states: [],
+		currency_code: null
 	});
 
 	const [uploadPercent, setUploadPercent] = useState(0);
@@ -101,11 +104,6 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 	const support_exts  = (extensions[content_type] || []).map(ext=>ext.replace('.', ''));
 
 	const classifieds_fields = content_type !== 'classified' ? [] : [
-		{
-			name: 'content_classified_price',
-			label: `${__('Price/Payment')} (${currencySymbol[state.values?.content_country_code]})`,
-			type: 'number',
-		},
 		{
 			name: 'content_country_code',
 			label: __('Country'),
@@ -119,6 +117,16 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 			placeholder: __( 'Select State' ),
 			type: 'dropdown',
 			options: resourceState.states || []
+		},
+		{
+			name: 'content_local_address',
+			label: __('Address'),
+			type: 'text',
+		},
+		{
+			name: 'content_classified_price',
+			label: `${__('Price/Payment')} (${currencySymbol[resourceState.currency_code]})`,
+			type: 'number',
 		},
 		...Object.keys(contact_formats).map(name=>{
 			const {label, placeholder} = contact_formats[name];
@@ -356,6 +364,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 				values,
 				update_title: values.content_title,
 				fetching: false,
+				mounted: true,
 				error_message: success ? null : message
 			});
 		});
@@ -390,11 +399,12 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 
 	const getResources=()=>{
 		request('getContentEditorResource', {country_code: state.values.content_country_code}, resp=>{
-			const {data:{categories={}, countries=[], states=[]}} = resp;
+			const {data:{categories={}, countries=[], states=[], currency_code}} = resp;
 			setResourceState({
 				categories,
 				countries,
-				states
+				states, 
+				currency_code
 			});
 		});
 	}
@@ -523,7 +533,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 												type={type}
 												placeholder={placeholder} 
 												onChange={v=>setVal(name, v)}
-												value={state.values[name]}
+												value={state.values[name] || ''}
 											/>
 										}
 
@@ -606,6 +616,15 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 												placeholder={placeholder}
 												value={state.values[name]}
 												options={options}
+												onChange={value=>setVal(name, value)}/>
+										}
+
+										{
+											('number' !== type || !state.mounted) ? null :
+											<NumberField
+												min={0}
+												decimal_point={true}
+												value={state.values[name] ?? 0}
 												onChange={value=>setVal(name, value)}/>
 										}
 									</div>

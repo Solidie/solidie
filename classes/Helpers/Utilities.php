@@ -77,11 +77,11 @@ class Utilities extends LibUtils{
 		return ( $states[ $country_code ] ?? array() )[ $state_code ] ?? null;
 	}
 
-	public static function getCurrencySymbol( $country_code ) {
-		
-		$currency_code = include Main::$configs->dir . 'locale-info.php';
+	public static function getCurrencyCode( $country_code ) {
+
+		$currency_code = include Main::$configs->dir . 'data/locale-info.php';
 		$currency_code = ( $currency_code[ $country_code ] ?? array() )['currency_code'] ?? null;
 
-
+		return $currency_code;
 	}
 }

@@ -251,7 +251,10 @@ class Reaction {
 					_reaction.content_id,
 					_reaction.value AS reaction_value,
 					UNIX_TIMESTAMP(_reaction.reaction_date) AS reaction_date,
-					_content.content_title
+					_content.content_title,
+					_content.product_id,
+					_content.content_type,
+					_content.content_slug
 				FROM 
 					{$wpdb->solidie_reactions} _reaction
 					INNER JOIN {$wpdb->solidie_contents} _content ON _reaction.content_id=_content.content_id
@@ -266,14 +269,6 @@ class Reaction {
 			ARRAY_A
 		);
 
-		$reactions = _Array::castRecursive( $reactions );
-		$reactions = Contents::assignContentMedia( $reactions );
-
-		// Assign content permalink
-		foreach ( $reactions as $index => $reaction ) {
-			$reactions[ $index ]['content_permalink'] = Contents::getPermalink( $reaction['content_id'] );
-		}
-
-		return $reactions;
+		return Contents::assignContentMeta( _Array::castRecursive( $reactions ) );
 	}
 }

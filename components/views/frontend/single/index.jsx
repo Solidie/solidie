@@ -1,9 +1,9 @@
-import React, {createContext, useEffect, useState} from "react";
+import React, {createContext, useContext, useEffect, useState} from "react";
 import { useParams, Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
 
 import {ErrorBoundary} from 'solidie-materials/error-boundary.jsx';
-import { __, data_pointer, getBack, isEmpty } from "solidie-materials/helpers.jsx";
+import { __, copyToClipboard, data_pointer, getBack, isEmpty } from "solidie-materials/helpers.jsx";
 import { request } from "solidie-materials/request.jsx";
 import { applyFilters } from "solidie-materials/hooks.jsx";
 import { RenderExternal } from "solidie-materials/render-external.jsx";
@@ -20,6 +20,7 @@ import { content_statuses } from "../../modules/inventory/index.jsx";
 
 import style from './single.module.scss';
 import { getPageTitle } from "../gallery/index.jsx";
+import { ContextToast } from "solidie-materials/toast/toast.jsx";
 
 export const ContextSingleData = createContext();
 
@@ -85,40 +86,54 @@ export const contact_formats = {
 
 function ClassifiedInfo( props ) {
 
+	const {addToast} = useContext(ContextToast);
 	const { content:{meta={}} } = props;
 	const field_keys = Object.keys(contact_formats).filter(name=>!isEmpty(meta[name]));
+
+	const address = [
+		meta.content_local_address, 
+		meta.content_state_name, 
+		meta.content_country_name
+	].filter(m=>!isEmpty(m)).join(', ');
+
+	function Item({icon, value}) {
+		return <div 
+			className={'d-flex align-items-center column-gap-15'.classNames()}
+		>
+			<div className={'d-flex'.classNames()}>
+				<i className={icon + 'font-size-20 color-text-70'.classNames()}></i>
+			</div>
+			<div>
+				<span 
+					className={'color-text interactive font-size-14 cursor-pointer hover-underline'.classNames()}
+					onClick={()=>copyToClipboard(value, addToast)}
+				>
+					{value}
+				</span>
+			</div>
+		</div>
+	}
 
 	return <div className={'d-flex flex-direction-column row-gap-15'.classNames()}>
 		
 		{
-			!field_keys.length ? null :
+			(isEmpty(address) && !field_keys.length) ? null :
 			<div className={'d-flex flex-direction-column row-gap-15 border-1 b-color-text-20 padding-15 border-radius-8'.classNames()}>
 				<span className={'d-flex align-items-center column-gap-8 font-size-18 color-warning font-weight-500'.classNames()}>
-					{__('Contact')}
+					{__('Reach Me')}
 				</span>
+
+				{
+					isEmpty(address) ? null : <Item {...{icon: 'sicon sicon-location'.classNames(), value: address}}/>
+				}
+
 				{
 					field_keys.map(name=>{
 						
 						const value = meta[name];
-						const {icon, pattern} = contact_formats[name] || {};
+						const {icon} = contact_formats[name] || {};
 
-						return !icon ? null : <div 
-							key={name}
-							className={'d-flex align-items-center column-gap-15'.classNames()}
-						>
-							<div className={'d-flex'.classNames()}>
-								<i className={icon + 'font-size-20 color-text-70'.classNames()}></i>
-							</div>
-							<div>
-								<a 
-									href={pattern.replace('{param}', value)} 
-									target="_blank"
-									className={'color-text interactive font-size-14'.classNames()}
-								>
-									{value}
-								</a>
-							</div>
-						</div>
+						return !icon ? null : <Item key={name} {...{icon, value}}/>
 					})
 				}
 			</div>

@@ -192,7 +192,7 @@ class ContentController {
 				'categories'    => Category::getCategories(),
 				'countries'     => Utilities::getCountriesOptions(),
 				'states'        => ! empty( $country_code ) ? Utilities::getStatesOptions( $country_code ) : array(),
-				'currency_code' => Utilities::
+				'currency_code' => Utilities::getCurrencyCode( $country_code )
 			)
 		);
 	}
@@ -267,9 +267,6 @@ class ContentController {
 		if ( empty( $feedback_settings['contributor'] ) && isset( $content['contributor'] ) ) {
 			unset( $content['contributor'] );
 		}
-
-		// Add content meta data
-		$content['meta'] = Contents::getAllMetaData( $content_id );
 
 		// Add content reactions
 		$content['reactions'] = ( object ) Reaction::getStats( $content_id, get_current_user_id() );
