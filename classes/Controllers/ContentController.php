@@ -7,8 +7,10 @@
 
 namespace Solidie\Controllers;
 
+use Solidie\Helpers\Utilities;
 use Solidie\Models\AdminSetting;
 use Solidie\Models\AttachmentLog;
+use Solidie\Models\Category;
 use Solidie\Models\Contents;
 use Solidie\Models\FileManager;
 use Solidie\Models\Reaction;
@@ -26,6 +28,7 @@ class ContentController {
 		),
 		'createOrUpdateContent' => array(),
 		'updateContentSlug'     => array(),
+		'getContentEditorResource'     => array(),
 		'deleteContent'         => array(),
 		'getSingleContent'      => array(
 			'nopriv' => true,
@@ -174,6 +177,20 @@ class ContentController {
 				'content_permalink' => Contents::getPermalink( $content_id ),
 				'content_slug'      => $new_slug,
 				'message'           => __( 'Content slug updated successfully!', 'solidie' ),
+			)
+		);
+	}
+
+	/**
+	 * Get content editor resources
+	 *
+	 * @return void
+	 */
+	public static function getContentEditorResource() {
+		wp_send_json_success(
+			array(
+				'categories' => Category::getCategories(),
+				'countries'  => Utilities::getCountriesOptions()
 			)
 		);
 	}

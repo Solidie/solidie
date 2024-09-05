@@ -94,6 +94,15 @@ const fields = [
 			placeholder: __('Enable')
 		}
 	),
+	{
+		name: 'supported_countries',
+		multiple: true,
+		label: __('Supported Country'),
+		type: 'dropdown',
+		placeholder: __('Select Country'),
+		options: 'countries',
+		supports: ['classified'],
+	},
 	(
 		!is_pro_active ? null :
 		{

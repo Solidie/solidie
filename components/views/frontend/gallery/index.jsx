@@ -22,6 +22,7 @@ import { Sidebar } from "./sidebar.jsx";
 import { Tutorial } from "../tutorial/tutorial.jsx";
 
 import style from './index.module.scss';
+import { Classifieds } from "./classifieds/classifieds.jsx";
 
 const {page_path} = window[data_pointer];
 
@@ -29,6 +30,7 @@ const renderers = {
 	audio: Audio,
 	video: Video,
 	image: Image,
+	classified: Classifieds,
 	other: GenericCard
 }
 

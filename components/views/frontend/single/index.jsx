@@ -149,7 +149,7 @@ function FreeDownlod( props ) {
 	const is_tutorial = content_type === 'tutorial';
 	const access_url  = is_tutorial ? content_permalink+'0/' : (release?.download_url || '#');
 
-	return content_type === 'classifieds' ? <ClassifiedInfo {...props}/> :
+	return content_type === 'classified' ? <ClassifiedInfo {...props}/> :
 	<div className={'border-1 b-color-material-20 border-radius-5 padding-horizontal-15 padding-vertical-20'.classNames()}>
 		<strong className={'d-block font-size-16 color-text-80 font-weight-600 margin-bottom-8'.classNames()}>
 			{free_download_label}

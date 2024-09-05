@@ -3,11 +3,12 @@ import { useParams, Link } from 'react-router-dom';
 
 import { ToggleSwitch } from 'solidie-materials/toggle-switch/ToggleSwitch.jsx';
 import { TextField } from 'solidie-materials/text-field/text-field.jsx';
-import { __, getBack } from 'solidie-materials/helpers.jsx';
+import { __, getBack, isEmpty } from 'solidie-materials/helpers.jsx';
 import { NumberField } from 'solidie-materials/number-field/index.js';
 import { RadioCheckbox } from 'solidie-materials/radio-checkbox.jsx';
 import { DropDown } from 'solidie-materials/dropdown/dropdown.jsx';
 import { RenderExternal } from 'solidie-materials/render-external.jsx';
+import tag_style from 'solidie-materials/tag-field/tag.module.scss';
 
 import { ContextSettings } from '../general-settings.jsx';
 
@@ -91,7 +92,7 @@ export function OptionFields({fields=[], settings, onChange: _onChange}) {
 			name,
 			label, 
 			type, 
-			options, 
+			options: _options, 
 			when, 
 			direction = 'row',
 			hint, 
@@ -100,12 +101,16 @@ export function OptionFields({fields=[], settings, onChange: _onChange}) {
 			min, 
 			max, 
 			decimal_point,
-			disabled
+			disabled,
+			multiple
 		} = field;
 
 		if (when && !satisfyLogic(when)) {
 			return null;
 		}
+
+		const options = typeof _options === 'string' ? resources[_options] : _options;
+		const field_value = !multiple ? values[name] : ( Array.isArray(values[name]) ? values[name] : [] );
 
 		const label_text = (
 			<div>
@@ -186,7 +191,7 @@ export function OptionFields({fields=[], settings, onChange: _onChange}) {
 								type={type}
 								name={name}
 								value={values[name]}
-								options={typeof options === 'string' ? resources[options] : options}
+								options={options}
 								onChange={(value) => onChange(name, value)}
 								spanClassName={'font-size-15 font-weight-400 line-height-24 letter-spacing--15 color-text'.classNames()}
 							/>
@@ -197,10 +202,10 @@ export function OptionFields({fields=[], settings, onChange: _onChange}) {
 				{
 					type !== 'number' ? null :
 					<>
-						<div className={'flex-5'.classNames()}>
+						<div className={'flex-1'.classNames()}>
 							{label_text}
 						</div>
-						<div className={'flex-2'.classNames()}>
+						<div className={'flex-1'.classNames()}>
 							<NumberField
 								min={min}
 								max={max}
@@ -219,10 +224,10 @@ export function OptionFields({fields=[], settings, onChange: _onChange}) {
 				{
 					type !== 'color' ? null :
 					<>
-						<div className={'flex-5'.classNames()}>
+						<div className={'flex-1'.classNames()}>
 							{label_text}
 						</div>
-						<div className={'flex-2'.classNames()}>
+						<div className={'flex-1'.classNames()}>
 							<input 
 								type='color'
 								value={values[name]}
@@ -235,17 +240,34 @@ export function OptionFields({fields=[], settings, onChange: _onChange}) {
 				{
 					type !== 'dropdown' ? null :
 					<>
-						<div className={'flex-5'.classNames()}>
+						<div className={'flex-1'.classNames()}>
 							{label_text}
 						</div>
-						<div className={'flex-2'.classNames()}>
+						<div className={'flex-1'.classNames()}>
 							<DropDown
-								value={values[name]}
-								onChange={(v) => onChange(name, v)}
-								options={typeof options === 'string' ? resources[options] : options}
+								value={!multiple ? values[name] : ''}
+								onChange={(v) => onChange(name,  !multiple ? v : [...field_value, v])}
+								options={!multiple ? options : options.filter(o=>field_value.indexOf(o.id)===-1)}
 								placeholder={placeholder}
 								clearable={false}
 							/>
+
+							{
+								(!multiple || isEmpty(values[name])) ? null : 
+								<div className={'margin-top-15'.classNames() + 'tag theme-tag'.classNames(tag_style)}>
+									{
+										values[name].map(v=>{
+											return <div key={v} className={'d-flex align-items-center column-gap-8'.classNames()}>
+												<span>{options.find(o=>o.id==v).label}</span>
+												<i 
+													className={'sicon sicon-times font-size-16 cursor-pointer'.classNames()}
+													onClick={()=>onChange(name, field_value.filter(fv=>fv!=v))}
+												></i>
+											</div>
+										})
+									}
+								</div>
+							}
 						</div>
 					</>
 				}

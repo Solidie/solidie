@@ -115,9 +115,15 @@ class AdminSetting {
 		// All the settings to get
 		$contents  = self::get( 'contents' );
 		$new_array = array();
+		$content_types = Manifest::getManifest()['contents'];
 
 		// Assign content type label
 		foreach ( $contents as $type => $content ) {
+
+			// Skip the content type that is saved, but not in hardcoded
+			if ( empty( $content_types[ $type ] ) ) {
+				continue;
+			}
 			
 			if ( empty( $content['label'] ) ) {
 				$label = Manifest::getContentTypeLabel( $type );

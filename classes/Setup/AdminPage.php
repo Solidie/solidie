@@ -131,7 +131,9 @@ class AdminPage {
 	 * @return void
 	 */
 	public function inventoryPage() {
-		echo '<div id="Solidie_Backend_Inventory" data-categories="' . esc_attr( wp_json_encode( Category::getCategories() ) ) . '"></div>';
+		echo '<div 
+			id="Solidie_Backend_Inventory" 
+		></div>';
 	}
 
 	/**
@@ -142,7 +144,8 @@ class AdminPage {
 	public function settingsPage() {
 
 		$resources = array(
-			'pages' => Utilities::getPageList( -1 ),
+			'pages'     => Utilities::getPageList( -1 ),
+			'countries' => Utilities::getCountriesOptions()
 		);
 
 		echo '<div 

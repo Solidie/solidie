@@ -24,4 +24,24 @@ class Utilities extends LibUtils{
 	public static function isAdminDashboard( $sub_page = null ) {
 		return self::isAdminScreen( Main::$configs->root_menu_slug, $sub_page );
 	}
+
+	/**
+	 * Countries options
+	 *
+	 * @return void
+	 */
+	public static function getCountriesOptions() {
+
+		$countries = include Main::$configs->dir . 'data/countries.php';
+		$new_array = array();
+
+		foreach ( $countries as $code => $name ) {
+			$new_array[] = array(
+				'id'    => $code,
+				'label' => $name
+			);
+		}
+
+		return $new_array;
+	}
 }

@@ -88,20 +88,30 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 		release_lesson_opened: content_id ? true : false,
 	});
 
+	const [resourceState, setResourceState] = useState({categories:{}, countries:[]});
 	const [uploadPercent, setUploadPercent] = useState(0);
 
 	const content_title = ( state.values.content_title || '' ).trim();
 	const support_exts  = (extensions[content_type] || []).map(ext=>ext.replace('.', ''));
 
-	const classifieds_fields = content_type !== 'classifieds' ? [] : Object.keys(contact_formats).map(name=>{
-		const {label, placeholder} = contact_formats[name];
-		return {
-			name,
-			label,
-			placeholder,
-			type: 'text',
-		}
-	})
+	const classifieds_fields = content_type !== 'classified' ? [] : [
+		{
+			name: 'content_country_code',
+			label: __('Country'),
+			placeholder: __( 'Select Country' ),
+			type: 'dropdown',
+			options: resourceState.countries?.filter?.(c=>window[data_pointer].settings.contents.classified.supported_countries?.indexOf?.(c.id)>-1) || []
+		},
+		...Object.keys(contact_formats).map(name=>{
+			const {label, placeholder} = contact_formats[name];
+			return {
+				name,
+				label,
+				placeholder,
+				type: 'text',
+			}
+		})
+	]
 
 	const fields = [
 		{
@@ -132,7 +142,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 			required: true,
 			accept: extensions[content_type]
 		}),
-		(['app', '3d', 'font', 'tutorial', 'classifieds'].indexOf(content_type)===-1 ? null : {
+		(['app', '3d', 'font', 'tutorial', 'classified'].indexOf(content_type)===-1 ? null : {
 			type: 'file',
 			name: 'sample_images',
 			label: __('Sample Image/Videos (Max 10)'),
@@ -156,7 +166,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 			name: 'category_id',
 			label: __('Category'),
 			placeholder: __('Select category'),
-			options: getFlattenedCategories(categories[content_type] || []),
+			options: getFlattenedCategories(resourceState.categories?.[content_type] || []),
 			show_setup_link: true
 		},
 		...classifieds_fields
@@ -349,9 +359,23 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 		});
 	}
 
+	const getResources=()=>{
+		request('getContentEditorResource', {}, resp=>{
+			const {data:{categories={}, countries=[]}} = resp;
+			setResourceState({
+				categories,
+				countries
+			});
+		});
+	}
+
 	useEffect(()=>{
 		fetchContent();
 	}, [content_id]);
+
+	useEffect(()=>{
+		getResources();
+	}, [state.values.content_country_code])
 	
 	const _content = window[data_pointer]?.settings?.contents[content_type] || {};
 	const setup_link = `${window[data_pointer].permalinks.settings}#/settings/contents/${content_type}/`;
