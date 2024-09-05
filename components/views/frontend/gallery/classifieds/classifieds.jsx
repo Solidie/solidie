@@ -14,13 +14,14 @@ export function Classifieds({contents=[]}) {
 			content_permalink, 
 			media={}, 
 			content_title,
-			area='Milford, Delaware',
 			created_at,
+			meta={},
 			currency_symbol='$',
 			price=231
 		} = content;
 
 		const is_last = index === ( contents.length - 1 );
+		const area = [meta.content_state_name, meta.content_country_name].filter(m=>m).join(', ');
 
 		return <Link 
 			key={content_id} 
@@ -38,7 +39,7 @@ export function Classifieds({contents=[]}) {
 					{content_title}
 				</span>
 				<span className={'d-block margin-bottom-5 font-size-14 font-weight-400 color-text-60'.classNames()}>
-					{area}
+					{area}&nbsp;
 				</span>
 				<div className={'d-flex align-items-center justify-content-space-between'.classNames()}>
 					<span className={'font-size-14 color-material-80'.classNames()}>

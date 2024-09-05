@@ -7,6 +7,7 @@
 
 namespace Solidie\Models;
 
+use Solidie\Helpers\Utilities;
 use SolidieLib\_Array;
 use SolidieLib\_String;
 use Solidie\Main;
@@ -39,6 +40,8 @@ class Contents {
 	);
 
 	const CONTENT_META_KEYS = array(
+		'content_country_code',
+		'content_state_code',
 		'telegram_number',
 		'whatsapp_number',
 		'skype_number',
@@ -662,7 +665,14 @@ class Contents {
 			// Contributor avatar URL
 			$contents[ $index ]['contributor'] = ! empty( $content['contributor_id'] ) ? User::getUserData( $content['contributor_id'] ) : null;
 			
+			// Add reaction data
 			$contents[ $index ]['reactions'] = Reaction::getStats( $content['content_id'], get_current_user_id() );
+		
+			// Add location meta
+			$meta = self::getAllMetaData( $content['content_id'] );
+			$meta['content_country_name'] = Utilities::getCountrName( $meta['content_country_code'] ?? null );
+			$meta['content_state_name'] = Utilities::getStateName( $meta['content_country_code'] ?? null, $meta['content_state_code'] ?? null );
+			$contents[ $index ]['meta'] = $meta;
 		}
 
 		$contents = apply_filters( 'solidie_contents_meta', $contents );

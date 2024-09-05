@@ -186,11 +186,13 @@ class ContentController {
 	 *
 	 * @return void
 	 */
-	public static function getContentEditorResource() {
+	public static function getContentEditorResource( string $country_code = '' ) {
 		wp_send_json_success(
 			array(
-				'categories' => Category::getCategories(),
-				'countries'  => Utilities::getCountriesOptions()
+				'categories'    => Category::getCategories(),
+				'countries'     => Utilities::getCountriesOptions(),
+				'states'        => ! empty( $country_code ) ? Utilities::getStatesOptions( $country_code ) : array(),
+				'currency_code' => Utilities::
 			)
 		);
 	}

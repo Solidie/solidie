@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
+import currencySymbol from "currency-symbol-map/map";
 
 import {TextField} from 'solidie-materials/text-field/text-field.jsx';
 import {FileUpload} from 'solidie-materials/file-upload/file-upload.jsx';
@@ -88,7 +89,12 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 		release_lesson_opened: content_id ? true : false,
 	});
 
-	const [resourceState, setResourceState] = useState({categories:{}, countries:[]});
+	const [resourceState, setResourceState] = useState({
+		categories:{}, 
+		countries:[], 
+		states: [],
+	});
+
 	const [uploadPercent, setUploadPercent] = useState(0);
 
 	const content_title = ( state.values.content_title || '' ).trim();
@@ -96,11 +102,23 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 
 	const classifieds_fields = content_type !== 'classified' ? [] : [
 		{
+			name: 'content_classified_price',
+			label: `${__('Price/Payment')} (${currencySymbol[state.values?.content_country_code]})`,
+			type: 'number',
+		},
+		{
 			name: 'content_country_code',
 			label: __('Country'),
 			placeholder: __( 'Select Country' ),
 			type: 'dropdown',
 			options: resourceState.countries?.filter?.(c=>window[data_pointer].settings.contents.classified.supported_countries?.indexOf?.(c.id)>-1) || []
+		},
+		{
+			name: 'content_state_code',
+			label: __('State/Provice'),
+			placeholder: __( 'Select State' ),
+			type: 'dropdown',
+			options: resourceState.states || []
 		},
 		...Object.keys(contact_formats).map(name=>{
 			const {label, placeholder} = contact_formats[name];
@@ -173,6 +191,17 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 	].filter(f=>f);
 
 	const setVal=(name, value)=>{
+
+		const values = {
+			...state.values,
+			[name]: value
+		}
+
+		// Clear up state selection if country changed
+		if ( name === 'content_country_code' && value !== state.values.content_country_code ) {
+			values.content_state_code = null;
+		}
+
 		setState({
 			...state,
 			thumbnail_url: name=='thumbnail' ? URL.createObjectURL(value) : state.thumbnail_url,
@@ -305,7 +334,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 				values.product                  = content.product ?? {};
 
 				// Add meta data to the values
-				Object.keys(contact_formats).forEach(name=>{
+				classifieds_fields.forEach(({name})=>{
 					values[ name ] = content.meta[name];
 				});
 
@@ -360,11 +389,12 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 	}
 
 	const getResources=()=>{
-		request('getContentEditorResource', {}, resp=>{
-			const {data:{categories={}, countries=[]}} = resp;
+		request('getContentEditorResource', {country_code: state.values.content_country_code}, resp=>{
+			const {data:{categories={}, countries=[], states=[]}} = resp;
 			setResourceState({
 				categories,
-				countries
+				countries,
+				states
 			});
 		});
 	}
