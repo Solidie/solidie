@@ -47,6 +47,9 @@ class ContentController {
 		'changeContentStatus' => array(
 		),
 		'uploadContentDescMedia' => array(
+		),
+		'enableInitialContentType' => array(
+			'role' => 'administrator'
 		)
 	);
 
@@ -476,5 +479,10 @@ class ContentController {
 		} else {
 			wp_send_json_error( array( 'message' => __( 'Unsupported file or something went wrong!', 'solidie' ) ) );
 		}
+	}
+
+	public static function enableInitialContentType( string $content_type ) {
+		AdminSetting::toggleContentType( $content_type, true );
+		wp_send_json_success();
 	}
 }

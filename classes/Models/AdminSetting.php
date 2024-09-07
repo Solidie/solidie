@@ -167,4 +167,21 @@ class AdminSetting {
 			'contributor' => ( bool ) ( $content['show_contributor_info'] ?? false ),
 		);
 	}
+
+	/**
+	 * Enable/disable single content type
+	 *
+	 * @param string $content_type
+	 * @return void
+	 */
+	public static function toggleContentType( string $content_type, bool $enable = true ) {
+		
+		$options = self::get();
+
+		if ( isset( $options['contents'][ $content_type ] ) ) {
+			$options['contents'][ $content_type ]['enable'] = true;
+		}
+
+		self::save( $options, false );
+	}
 }
