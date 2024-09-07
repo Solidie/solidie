@@ -147,7 +147,17 @@ function GalleryLayout({resources={}}) {
 			contents: clear_list ? [] : state.contents
 		});
 
-		request('getContentList', {filters:{page: 1, ...queryParams, content_type}, is_gallery: true}, resp=>{
+		const payload = {
+			filters:{
+				page: 1, 
+				order_by: 'newest', 
+				...queryParams, 
+				content_type
+			}, 
+			is_gallery: true
+		}
+
+		request('getContentList', payload, resp=>{
 			const {data:{contents=[], segmentation}} = resp;
 			setState({...state, fetching: false, contents, segmentation});
 		});
@@ -187,7 +197,10 @@ function GalleryLayout({resources={}}) {
 			</title>
 		</Helmet>
 		<div className={'gallery'.classNames(style)}>
-			<div ref={reff_wrapper} className={`content ${is_mobile ? 'mobile' : ''}`.classNames(style)}>
+			<div 
+				ref={reff_wrapper} 
+				className={`content ${is_mobile ? 'mobile' : ''}`.classNames(style)}
+			>
 				<Sidebar
 					filters={queryParams}
 					setFilter={setFilter}
@@ -201,7 +214,7 @@ function GalleryLayout({resources={}}) {
 									selection_type: 'checkbox',
 									options: categories[content_type] || []
 								},
-								...sorting_list
+								...(content_type!=='classified' ? sorting_list : {})
 							},
 							resources,
 							content_type
@@ -213,7 +226,12 @@ function GalleryLayout({resources={}}) {
 					className={'list'.classNames(style)}
 					data-cylector={`content-list-wrapper-${content_type}`}
 				>
-					<div className={'d-flex column-gap-15 align-items-center margin-bottom-15 justify-content-flex-end'.classNames()}>
+					<div 
+						className={
+							'd-flex column-gap-15 align-items-center justify-content-flex-end'.classNames() +
+							'filter'.classNames(style)
+						}
+					>
 						<div 
 							style={content_options.length<2 ? {width: 0, visibility: 'hidden'} : {}}
 						>
@@ -242,36 +260,46 @@ function GalleryLayout({resources={}}) {
 						</div>
 					</div>
 					
-					{
-						(!state.fetching && !state.contents.length) ? 
-							<div className={'text-align-center margin-top-20'.classNames()}>
-								{__('No result!')}
-							</div> : null
-					}
+					<div className={'items-parent'.classNames(style)}>
+						{
+							(!state.fetching && !state.contents.length) ? 
+								<div className={'text-align-center'.classNames()} style={{padding: '140px 0'}}>
+									<span className={'d-block font-size-16 font-weight-500'.classNames()}>
+										{__('No result!')}
+									</span>
+								</div> : null
+						}
 
-					{
-						!state.contents.length ? null :
-						<ErrorBoundary>
-							<RenderComp contents={state.contents}/>
-							
-							{
-								(state.segmentation?.page_count || 0) < 2 ? null :
-									<>
-										<br/>
-										<div className={'d-flex justify-content-center'.classNames()}>
-											<div>
-												<Pagination
-													onChange={(page) => setFilter('page', page)}
-													pageNumber={current_page}
-													pageCount={state.segmentation.page_count}/>
+						{
+							!state.contents.length ? null :
+							<ErrorBoundary>
+								<RenderComp contents={state.contents}/>
+								
+								{
+									(state.segmentation?.page_count || 0) < 2 ? null :
+										<>
+											<br/>
+											<div className={'d-flex justify-content-center'.classNames()}>
+												<div>
+													<Pagination
+														onChange={(page) => setFilter('page', page)}
+														pageNumber={current_page}
+														pageCount={state.segmentation.page_count}/>
+												</div>
 											</div>
-										</div>
-									</>
-							}
-						</ErrorBoundary>
-					}
-				
-					<LoadingIcon center={true} show={state.fetching}/>
+										</>
+								}
+							</ErrorBoundary>
+						}
+					
+						{
+							!state.fetching ? null :
+							<div style={!state.contents.length ? {padding: '140px 0'} : {}}>
+								<LoadingIcon center={true} show={state.fetching}/>
+							</div>
+						}
+					</div>
+					
 				</div>
 			</div>
 		</div>

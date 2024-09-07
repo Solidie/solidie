@@ -67,6 +67,14 @@ export const settings_fields = applyFilters(
 							type: 'textarea',
 							direction: 'row'
 						},
+						{
+							name: 'enable_content_sitemap',
+							label: __('Enable content sitemap'),
+							placeholder: __('Enable'),
+							hint: __('Applicable if search engine visibility is turned on'),
+							type: 'switch',
+							direction: 'row'
+						},
 					]
 				},
 				cloudstorage: {

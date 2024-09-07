@@ -23,6 +23,7 @@ class Manifest {
 				'general'  => array(
 					'free_download_label'          => 'Free',
 					'free_download_description'    => 'This content is eligible to download for free',
+					'enable_content_sitemap'       => true,
 					'pagination_contents_per_page' => 20,
 					'color_scheme_materials'       => '#236BFE',
 					'color_scheme_texts'           => '#1A1A1A',

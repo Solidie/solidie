@@ -60,9 +60,6 @@ class Main {
 		self::$configs->dir      = dirname( $configs->file ) . '/';
 		self::$configs->basename = plugin_basename( $configs->file );
 
-		// Loading Autoloader
-		spl_autoload_register( array( $this, 'loader' ) );
-
 		// Retrieve plugin info from index
 		$manifest      = _Array::getManifestArray( $configs->file, ARRAY_A );
 		self::$configs = (object) array_merge( $manifest, (array) self::$configs );
@@ -114,31 +111,6 @@ class Main {
 				return $roles;
 			}
 		);
-	}
-
-	/**
-	 * Autload classes
-	 *
-	 * @param string $class_name The class name to load file for
-	 * @return void
-	 */
-	public function loader( $class_name ) {
-		if ( class_exists( $class_name ) ) {
-			return;
-		}
-
-		$class_name = preg_replace(
-			array( '/([a-z])([A-Z])/', '/\\\/' ),
-			array( '$1$2', DIRECTORY_SEPARATOR ),
-			$class_name
-		);
-
-		$class_name = str_replace( 'Solidie' . DIRECTORY_SEPARATOR, 'classes' . DIRECTORY_SEPARATOR, $class_name );
-		$file_name  = self::$configs->dir . $class_name . '.php';
-
-		if ( file_exists( $file_name ) ) {
-			require_once $file_name;
-		}
 	}
 
 	/**

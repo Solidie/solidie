@@ -1,3 +1,5 @@
+$light_color: rgba(0, 0, 0, 0.051);
+
 .gallery {
 	.content {
 
@@ -5,27 +7,41 @@
 
 		&.mobile {
 			flex-direction: column;
+
+
+			.filter {
+				margin: 15px;
+			}
 		}
 
 		&:not(.mobile) {
+
+			border-radius: 8px;
+			box-shadow: 0 0 11px $light_color;
+
 			.sidebar {
-				width: 198px;
-				margin-right: 20px;
+				width: 230px;
+				padding: 15px;
+				border-right: 1px solid $light_color;
+			}
+
+			.filter {
+				padding: 15px;
+				border-bottom: 1px solid $light_color;
+			}
+
+			.items-parent {
+				padding: 15px;
 			}
 		}
 		
 		.sidebar {
 			z-index: 1;
-			& > div {
-				position: sticky;
-				top: 0;
-			}
-
+			
 			.mobile-filter {
 				width: 100%;
 				overflow-x: auto;
 				overflow-y: hidden;
-				margin-bottom: 23px;
 
 				.filter-control {
 					width: 38px;

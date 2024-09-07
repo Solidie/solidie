@@ -7,6 +7,7 @@
 
 namespace Solidie\Setup;
 
+use Solidie\Models\AdminSetting;
 use Solidie\Models\ContentSitemap;
 
 /**
@@ -21,6 +22,8 @@ class Sitemap {
 	}
 
 	public function registerContents() {
-		wp_register_sitemap_provider( self::SITEMAP_KEY, new ContentSitemap( self::SITEMAP_KEY ) );
+		if ( AdminSetting::get( 'enable_content_sitemap' ) ) {
+			wp_register_sitemap_provider( self::SITEMAP_KEY, new ContentSitemap( self::SITEMAP_KEY ) );
+		}
 	}
 }

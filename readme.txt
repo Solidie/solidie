@@ -21,7 +21,7 @@ https://www.youtube.com/watch?v=jo1r2QDZCCk
 
 Here's the main features:
 
-* **Contents:** Supports Audio, Video, Image, Apps, Documents, 3D Contents, Fonts, Tutorials and so on.
+* **Contents:** Supports Audio, Video, Image, Apps, Documents, 3D Contents, Fonts, Tutorials, Classified listings and so on.
 * **Dashboard:** Advanced dashboard to manage contents.
 * **Gallery:** Unified content gallery with advanced filtering.
 * **Single Page:** Single content details page with social reactions, download and purchase options.

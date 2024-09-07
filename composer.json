@@ -2,7 +2,9 @@
     "name": "solidie/solidie",
     "license": "gpl-v3",
     "autoload": {
-        "psr-4": {}
+        "psr-4": {
+      		"Solidie\\": "classes/"
+		}
     },
     "scripts": {
         "lint": "phpcs --extensions=php -s .",
