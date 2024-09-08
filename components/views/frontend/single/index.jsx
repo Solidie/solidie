@@ -21,6 +21,7 @@ import { content_statuses } from "../../modules/inventory/index.jsx";
 import style from './single.module.scss';
 import { getPageTitle } from "../gallery/index.jsx";
 import { ContextToast } from "solidie-materials/toast/toast.jsx";
+import { SimilarContents } from "./similar-contents/similar.jsx";
 
 export const ContextSingleData = createContext();
 
@@ -272,73 +273,84 @@ export function SingleWrapper() {
 	const {media={}, content_title, content_status} = state.content || {};
 	const {sample_images=[]} = media || {};
 	
-	return <div className={'single'.classNames(style)} data-cylector="content-single-page">
+	return <>
+
 		<Helmet>
 			<title>
 				{getPageTitle(content_title)}
 			</title>
 		</Helmet>
 
-		<div className={'margin-bottom-15'.classNames()}>
-			<Link
-				to={permalinks.gallery[content_type]}
-				onClick={getBack}
-				className={'d-flex align-items-center column-gap-8 color-text-60 interactive'.classNames()}
-			>
-				<i className={'sicon sicon-arrow-left font-size-16'.classNames()}></i>
-				<span className={'font-size-14'.classNames()}>
-					{__('Back')}
-				</span>
-			</Link>
-		</div>
+		<div className={'single'.classNames(style)} data-cylector="content-single-page">
+			<div className={'margin-bottom-15'.classNames()}>
+				<Link
+					to={permalinks.gallery[content_type]}
+					onClick={getBack}
+					className={'d-flex align-items-center column-gap-8 color-text-60 interactive'.classNames()}
+				>
+					<i className={'sicon sicon-arrow-left font-size-16'.classNames()}></i>
+					<span className={'font-size-14'.classNames()}>
+						{__('Back')}
+					</span>
+				</Link>
+			</div>
 
-		<div className={'margin-bottom-15'.classNames()}>
-			<strong className={'d-block font-size-24 color-text margin-bottom-5'.classNames()}>
-				{content_title} {content_status!='publish' ? <i>[{content_statuses[content_status] || content_status}]</i> : null}
-			</strong>
-			<MetaData 
-				content={state.content}
-				settings={state.settings}
-				updateReactions={updateReactions}/>
-		</div>
-		
-		<div className={'d-flex column-gap-15 row-gap-15'.classNames() + 'content-wrapper'.classNames(style)}>
-			<div className={'flex-1'.classNames()}>
-				<div>
-					<ErrorBoundary>
-						<PreviewComp content={state.content} settings={state.settings}/>
-					</ErrorBoundary>
-				</div>
-
-				<div dangerouslySetInnerHTML={{__html: state.content?.content_description || ''}}></div>
-
-				{
-					!sample_images.length ? null : 
-					<div>
-						<strong className={'d-block font-size-18 font-weight-500'.classNames()}>
-							{__('Samples')}:
-						</strong>
-						<RenderMedia media={sample_images}/>
-					</div>
-				}
-
-				{
-					(!state.content?.content_id || state.content?.reactions?.comment_count===null) ? null : 
-					<Comments content={state.content}/>
-				}
+			<div className={'margin-bottom-15'.classNames()}>
+				<strong className={'d-block font-size-24 color-text margin-bottom-5'.classNames()}>
+					{content_title} {content_status!='publish' ? <i>[{content_statuses[content_status] || content_status}]</i> : null}
+				</strong>
+				<MetaData 
+					content={state.content}
+					settings={state.settings}
+					updateReactions={updateReactions}/>
 			</div>
 			
-			<div className={'pricing'.classNames(style) + 'd-flex flex-direction-column row-gap-15'.classNames()}>
-				<div>
-					<RenderExternal 
-						component={applyFilters('free_download_button', FreeDownlod, state.content)}
-						payload={{
-							content: state.content, 
-							settings: state.settings
-						}}
-					/>
+			<div className={'d-flex column-gap-15 row-gap-15'.classNames() + 'content-wrapper'.classNames(style)}>
+				<div className={'flex-1'.classNames()}>
+					<div>
+						<ErrorBoundary>
+							<PreviewComp content={state.content} settings={state.settings}/>
+						</ErrorBoundary>
+					</div>
+
+					<div dangerouslySetInnerHTML={{__html: state.content?.content_description || ''}}></div>
+
+					{
+						!sample_images.length ? null : 
+						<div>
+							<strong className={'d-block font-size-18 font-weight-500'.classNames()}>
+								{__('Samples')}:
+							</strong>
+							<RenderMedia media={sample_images}/>
+						</div>
+					}
+
+					{
+						(!state.content?.content_id || state.content?.reactions?.comment_count===null) ? null : 
+						<Comments content={state.content}/>
+					}
+				</div>
+				
+				<div className={'pricing'.classNames(style) + 'd-flex flex-direction-column row-gap-15'.classNames()}>
+					<div>
+						<RenderExternal 
+							component={applyFilters('free_download_button', FreeDownlod, state.content)}
+							payload={{
+								content: state.content, 
+								settings: state.settings
+							}}
+						/>
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
+		
+		{
+			isEmpty(state.content) ? null :
+			<SimilarContents 
+				content_id={state.content.content_id}
+				content_type={state.content.content_type}
+			/>
+		}
+	</> 
 }

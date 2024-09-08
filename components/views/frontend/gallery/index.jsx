@@ -26,7 +26,7 @@ import { Classifieds } from "./classifieds/classifieds.jsx";
 
 const {page_path} = window[data_pointer];
 
-const renderers = {
+export const renderers = {
 	audio: Audio,
 	video: Video,
 	image: Image,

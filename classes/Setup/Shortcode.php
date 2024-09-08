@@ -58,10 +58,19 @@ class Shortcode {
 		$data                = $GLOBALS['solidie_gallery_data'] ?? array();
 		$content_description = ( is_array( $data ) && is_array( $data['content'] ?? null ) ) ? $data['content']['content_description'] : '';
 
-		return '<div 
-			id="Solidie_Gallery" 
-			style="width: 100%; margin: 0; padding: 0; max-width: 100%;"
-			data-resources="' . esc_attr( json_encode( $resources ) ) . '"
-		><article>' . $content_description . '</article></div>';
+		ob_start();
+			?>
+				<div 
+					id="Solidie_Gallery" 
+					style="width: 100%; margin: 0; padding: 0; max-width: 100%; padding: 20px 0;"
+					data-resources="<?php esc_attr_e( json_encode( $resources ) ); ?>"
+				>
+					<article><?php echo strip_tags( $content_description ); ?></article>
+				</div>
+				<div style="display: none; text-align: center;">
+					Powered By <a href="https://solidie.com/">Solidie</a>
+				</div>
+			<?php
+		return ob_get_clean();
 	}
 }

@@ -10,8 +10,7 @@ function Filters({_setFilter, filterList, filters}) {
 	return Object.keys(filterList).map((filter_key) => {
 		let { section_label, selection_type, options = [] } = filterList[filter_key];
 
-		return ! options.length ? null :
-		<div
+		return <div
 			key={filter_key}
 			data-cylector={filter_key}
 			className={'margin-bottom-23 overflow-auto'.classNames()}
@@ -155,26 +154,25 @@ export function Sidebar({ is_mobile, setFilter, filters, filterList }) {
 	}
 
 	const show_clearer = !is_mobile && Object.keys(filters).filter(k=>!isEmpty(filters[k])).length;
+	const is_empty     = !Object.keys(filterList).filter((filter_key) => !isEmpty(filterList[filter_key].options)).length;
 
-    return <div data-crew="sidebar" className={'sidebar'.classNames(style)}>
-		<div>
-			{
-				is_mobile ? 
-					<MobileFilter  {...prop_drill}/> : 
-					<Filters {...prop_drill}/>
-			}
+    return is_empty ? null : <div data-cylector="sidebar" className={'sidebar'.classNames(style)}>
+		{
+			is_mobile ? 
+				<MobileFilter  {...prop_drill}/> : 
+				<Filters {...prop_drill}/>
+		}
 
-			{
-				!show_clearer ? null :
-				<span 
-					className={'d-flex align-items-center column-gap-6 font-size-14 color-text-80 cursor-pointer'.classNames()} 
-					onClick={()=>setFilter({})} 
-					style={{marginLeft: '-3px'}}
-					data-cylector="clear-content-filter"
-				>
-					<i className={'sicon sicon-times font-size-18'.classNames()}></i> {__('Clear Filters')}
-				</span>
-			}
-		</div>
+		{
+			!show_clearer ? null :
+			<span 
+				className={'d-flex align-items-center column-gap-6 font-size-14 color-text-80 cursor-pointer'.classNames()} 
+				onClick={()=>setFilter({})} 
+				style={{marginLeft: '-3px'}}
+				data-cylector="clear-content-filter"
+			>
+				<i className={'sicon sicon-times font-size-18'.classNames()}></i> {__('Clear Filters')}
+			</span>
+		}
 	</div>
 }
