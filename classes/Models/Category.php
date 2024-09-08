@@ -143,22 +143,73 @@ class Category {
 	 * Get children IDs of a category
 	 *
 	 * @param int  $category_id The category ID to get children of
-	 * @param bool $linear Whether to return linear or nested table
 	 * @return array
 	 */
-	public static function getChildren( $category_id, $linear = true ) {
-
-		$category_id = (int) $category_id;
+	public static function getChildren( $category_id, $content_type = null ) {
 
 		global $wpdb;
+		
+		$category_id = (int) $category_id;
+
+		$where_clause = '';
+		if ( ! empty( $content_type ) ) {
+			$where_clause .= $wpdb->prepare( ' AND content_type=%s', $content_type);
+		}
+
 		$cats = $wpdb->get_results(
-			"SELECT * FROM {$wpdb->solidie_categories} ORDER BY sequence ASC",
+			$wpdb->prepare(
+				"SELECT 
+					* 
+				FROM 
+					{$wpdb->solidie_categories} 
+					WHERE
+						1=1
+						AND category_id > %d
+						{$where_clause} 
+				ORDER BY sequence ASC",
+				$category_id
+			),
+			ARRAY_A
+		);
+		
+		return _Array::castRecursive( $cats );
+	}
+
+	/**
+	 * Get descendents of parent of the provided category id
+	 *
+	 * @param int $category_id
+	 * @return array
+	 */
+	public static function getDescendentsOfParent( $category_id, $content_type ) {
+		$parent = _Array::getArray( self::getParent( $category_id ) );
+		return self::getChildren( $parent['category_id'] ?? 0, $content_type );
+	}
+
+	/**
+	 * Get parent category by a child category id
+	 *
+	 * @param int $category_id
+	 * @return array|null
+	 */
+	public static function getParent( $category_id ) {
+
+		global $wpdb;
+
+		$parent = $wpdb->get_row(
+			$wpdb->prepare(
+				"SELECT 
+					* 
+				FROM 
+					{$wpdb->solidie_categories} 
+					WHERE category_id = (
+						SELECT parent_id FROM {$wpdb->solidie_categories} WHERE category_id=%d
+					)",
+				$category_id
+			),
 			ARRAY_A
 		);
 
-		$cats  = _Array::castRecursive( $cats );
-		$table = _Array::buildNestedArray( $cats, $category_id, 'parent_id', 'category_id' );
-
-		return $linear ? _Array::convertToSingleTable( $table, 'children' ) : $table;
+		return ! empty( $parent ) ? _Array::castRecursive( $parent ) : null;
 	}
 }

@@ -65,7 +65,7 @@ class Shortcode {
 					style="width: 100%; margin: 0; padding: 0; max-width: 100%; padding: 20px 0;"
 					data-resources="<?php esc_attr_e( json_encode( $resources ) ); ?>"
 				>
-					<article><?php echo strip_tags( $content_description ); ?></article>
+					<article><?php echo strip_tags( ( string ) ( $content_description ?? '' ) ); ?></article>
 				</div>
 				<div style="display: none; text-align: center;">
 					Powered By <a href="https://solidie.com/">Solidie</a>

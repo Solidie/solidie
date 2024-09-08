@@ -120,6 +120,7 @@ You can [create issue](https://github.com/Solidie/Solidie/issues) on Github repo
 * New: Classified listings
 * New: Content sitemap
 * New: Cloud Storage (Digital Ocean Space) integration
+* New: Similar content suggestion in single content page
 * Update: SEO enhancements
 
 = v1.1.6 -> Aug 06, 2024 =

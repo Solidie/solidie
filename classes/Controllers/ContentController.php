@@ -36,6 +36,9 @@ class ContentController {
 		'loadFile'              => array(
 			'nopriv' => true,
 		),
+		'getSimilarContents'    => array(
+			'nopriv' => true,
+		),
 		'reactToContent' => array(
 		),
 		'fetchReleases' => array(
@@ -484,5 +487,13 @@ class ContentController {
 	public static function enableInitialContentType( string $content_type ) {
 		AdminSetting::toggleContentType( $content_type, true );
 		wp_send_json_success();
+	}
+
+	public static function getSimilarContents( int $content_id, string $content_type ) {
+		wp_send_json_success(
+			array(
+				'contents' => Contents::getSimilarContents( $content_id, $content_type )
+			)
+		);
 	}
 }

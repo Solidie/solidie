@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 
 import {request} from 'solidie-materials/request';
+import {__, isEmpty } from "solidie-materials/helpers";
 
 import { renderers } from "../../gallery";
-import { isEmpty } from "solidie-materials/helpers";
 
 export function SimilarContents({content_id, content_type}) {
 
@@ -22,11 +22,11 @@ export function SimilarContents({content_id, content_type}) {
 		getSimilarContents();
 	}, []);
 
-	const RenderCom = renderers[content_type];
+	const RenderCom = renderers[content_type] ||  renderers.other;
 
 	return isEmpty( state.contents ) ? null :
-		<div className={'padding-vertical-15'.classNames()}>
-			<span className={'d-block margin-bottom-10 font-size-18 font-weight-500 color-text-80'.classNames()}>
+		<div style={{padding: '50px 0 20px'}}>
+			<span className={'d-block margin-bottom-10 font-size-16 font-weight-700 color-text-60'.classNames()}>
 				{__('You might also like')}
 			</span>
 			<RenderCom contents={state.contents}/>

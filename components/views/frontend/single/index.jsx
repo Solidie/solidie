@@ -240,6 +240,7 @@ export function SingleWrapper() {
 	}
 
 	useEffect(()=>{
+		window.scrollTo(0, 0);
 		getContent();
 	}, [content_slug]);
 

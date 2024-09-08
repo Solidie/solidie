@@ -565,6 +565,15 @@ class Contents {
 			$where_clause .= $wpdb->prepare( ' AND content.content_type=%s', $content_type );
 		}
 
+		// Filter content IDs
+		if ( ! empty( $args['content_id'] ) ) {
+			$_content_ids = array_filter( _Array::getArray( $args['content_id'], true ), 'is_numeric' );
+			if ( ! empty( $_content_ids ) ) {
+				$where_clause .= ' AND content.content_id IN (' . implode( ',', $_content_ids ) . ')';
+			}
+		}
+
+		// Filter where clause. So far it is used to add bundle product from pro version.
 		$where_clause = apply_filters( 'solidie_get_contents_where_clause', $where_clause, $args );
 
 		// If it is segmentation
@@ -854,5 +863,123 @@ class Contents {
 			array( 'content_status' => $status ),
 			array( 'content_id' => $content_id )
 		);
+	}
+
+
+	/**
+	 * Get contents by category ID, it will expand query to parent categories until 0 if limit not filled.
+	 *
+	 * @param array|int $category_id
+	 * @param int $limit
+	 * @param array $exclude
+	 * @param string $content_type
+	 * @return array
+	 */
+	private static function getContentIDsByCategory( $category_id, $limit, $exclude, $content_type ) {
+
+		$cats    = Category::getDescendentsOfParent( $category_id, $content_type );
+		$cat_ids = array_column( $cats, 'category_id' );
+		error_log( var_export( $cat_ids, true ) );
+		if ( empty( $cat_ids ) ) {
+			return array();
+		}
+		
+		global $wpdb;
+
+		$where_clause = '';
+
+		// Include contents in the cat IDs
+		$where_clause .= ' AND category_id IN (' . implode( ',', $cat_ids ) . ')';
+
+		// Exclude already collected contents
+		if ( ! empty( $exclude ) ) {
+			$where_clause .= ' AND content_id NOT IN (' . implode( ',', $exclude ) . ')';
+		}
+
+		$content_ids = $wpdb->get_col(
+			$wpdb->prepare(
+				"SELECT 
+					content_id 
+				FROM 
+					{$wpdb->solidie_contents} 
+				WHERE 
+					content_type=%s
+					{$where_clause}
+				ORDER BY 
+					created_at DESC
+				LIMIT %d",
+				$content_type,
+				$limit
+			)
+		);
+
+		$remaining = $limit - count( $content_ids );
+
+		if ( $category_id !== 0 && $remaining ) {
+			$parent      = Category::getParent( min( $cat_ids ) );
+			$parent_id   = is_array( $parent ) ? ( $parent['category_id'] ?? 0 ) : 0;
+			$more_ids    = self::getContentIDsByCategory( $parent_id, $remaining, array_merge( $exclude, $content_ids ), $content_type );
+			$content_ids = array_merge( $content_ids, $more_ids );
+		}
+
+		return $content_ids;
+	}
+
+	/**
+	 * Get similar contents by category, if category filter doesnt fille requirements, then get from same content type.
+	 *
+	 * @param int $content_id
+	 * @param string $content_type
+	 * @return array
+	 */
+	public static function getSimilarContents( $content_id, $content_type ) {
+
+		$content_limit = 10;
+		
+		global $wpdb;
+
+		// Get the category ID of the content
+		$category_id = ( int ) $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT category_id FROM {$wpdb->solidie_contents} WHERE content_id=%d",
+				$content_id
+			)
+		);
+
+		// Get similar contents by the category ID
+		$content_ids = self::getContentIDsByCategory( $category_id, $content_limit, array( $content_id ), $content_type );
+		$remaining   = max( 0, ( $content_limit - count( $content_ids ) ) );
+
+		// If not content found by category, then get using content type
+		if ( $remaining ) {
+
+			$where_clause = '';
+			if ( ! empty( $content_ids ) ) {
+				$where_clause .= ' AND content_id NOT IN (' . implode( ',', $content_ids ) . ')';
+			}
+
+			$more_content_ids = $wpdb->get_col(
+				$wpdb->prepare(
+					"SELECT 
+						content_id 
+					FROM 
+						{$wpdb->solidie_contents} 
+					WHERE 
+						content_type=%s 
+						AND content_id != %d
+						{$where_clause}
+					ORDER BY
+						created_at DESC
+					LIMIT %d",
+					$content_type,
+					$content_id,
+					$remaining
+				)
+			);
+
+			$content_ids = array_unique( array_map( 'intval', array_merge( $content_ids, $more_content_ids ) ) );
+		}
+
+		return ! empty( $content_ids ) ? self::getContents( array( 'content_id' => $content_ids ) ) : array();
 	}
 }
