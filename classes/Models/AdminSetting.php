@@ -28,7 +28,7 @@ class AdminSetting {
 	 *
 	 * @return bool
 	 */
-	public static function save( $settings, $merge = true ) {
+	public static function save( $settings, $merge ) {
 
 		// In case you need to update only on option inside the array
 		if ( true === $merge ) {

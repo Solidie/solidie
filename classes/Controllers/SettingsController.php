@@ -38,7 +38,7 @@ class SettingsController {
 			'contents' => $settings['contents']
 		);
 
-		AdminSetting::save( $settings );
+		AdminSetting::save( $settings, false );
 
 		wp_send_json_success( array( 'message' => esc_html__( 'Settings saved successfully!', 'solidie' ) ) );
 	}
