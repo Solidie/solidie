@@ -7,7 +7,7 @@
 
 namespace Solidie\Controllers;
 
-use Solidie\Helpers\Utilities;
+use Solidie\Helpers\Geo;
 use Solidie\Models\AdminSetting;
 use Solidie\Models\AttachmentLog;
 use Solidie\Models\Category;
@@ -196,9 +196,9 @@ class ContentController {
 		wp_send_json_success(
 			array(
 				'categories'    => Category::getCategories(),
-				'countries'     => Utilities::getCountriesOptions(),
-				'states'        => ! empty( $country_code ) ? Utilities::getStatesOptions( $country_code ) : array(),
-				'currency_code' => Utilities::getCurrencyCode( $country_code )
+				'countries'     => Geo::getCountriesOptions(),
+				'states'        => ! empty( $country_code ) ? Geo::getStatesOptions( $country_code ) : array(),
+				'currency_code' => Geo::getCurrencyCode( $country_code )
 			)
 		);
 	}

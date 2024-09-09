@@ -4,7 +4,7 @@ import { BrowserRouter, Route, Routes, useLocation, useNavigate, useParams, useS
 
 import { DropDown } from "solidie-materials/dropdown/dropdown.jsx";
 import { request } from "solidie-materials/request.jsx";
-import { __, data_pointer, filterObject, isEmpty, parseParams, getLocalValue, setLocalValue } from "solidie-materials/helpers.jsx";
+import { __, data_pointer, filterObject, isEmpty, parseParams, getLocalValue, setLocalValue, getFlag } from "solidie-materials/helpers.jsx";
 import { ErrorBoundary } from "solidie-materials/error-boundary.jsx";
 import { LoadingIcon } from "solidie-materials/loading-icon/loading-icon.jsx";
 import { Pagination } from "solidie-materials/pagination/pagination.jsx";
@@ -62,7 +62,7 @@ export const getPageTitle=(...segments)=>{
 function GalleryLayout({resources={}}) {
 
 	// Collect data
-	const {categories={}} = resources;
+	const {categories={}, content_countries={}} = resources;
 	const {contents={}} = settings;
 	const {content_type_slug} = useParams();
 	const navigate = useNavigate();
@@ -109,8 +109,17 @@ function GalleryLayout({resources={}}) {
 		}
 	}
 
-	// Determine which gallery layout component to render based on content type
+	// Determine renderer and geolocation filter
 	const RenderComp = renderers[content_type] || renderers.other;
+	const country_keys = Object.keys(content_countries[content_type] || {});
+	queryParams.country_code = queryParams.country_code || getLocalValue( 'gallery_country_code' ) || country_keys[0];
+
+	// Store 
+	if ( !content_countries[content_type]?.[queryParams.country_code] ) {
+		queryParams.country_code = country_keys[0];
+		queryParams.state_code = null;
+	}
+	setLocalValue('gallery_country_code', queryParams.country_code);
 
 	const setLayout=()=>{
 		if ( reff_wrapper?.current ) {
@@ -159,7 +168,12 @@ function GalleryLayout({resources={}}) {
 
 		request('getContentList', payload, resp=>{
 			const {data:{contents=[], segmentation}} = resp;
-			setState({...state, fetching: false, contents, segmentation});
+			setState({
+				...state, 
+				fetching: false, 
+				contents, 
+				segmentation
+			});
 		});
 	}
 
@@ -228,10 +242,46 @@ function GalleryLayout({resources={}}) {
 				>
 					<div 
 						className={
-							'd-flex column-gap-15 align-items-center justify-content-flex-end'.classNames() +
+							'd-flex column-gap-15 align-items-center flex-direction-row flex-wrap-wrap justify-content-flex-end'.classNames() +
 							'filter'.classNames(style)
 						}
+						style={{rowGap: '15px'}}
 					>
+						{
+							content_type!=='classified' ? null :
+							<div className={'flex-1 d-flex align-items-center column-gap-15'.classNames()}>
+								{
+									country_keys.length<2 ? null :
+									<div>
+										<DropDown
+											clearable={false}
+											value={queryParams.country_code}
+											onChange={v=>setFilter('country_code', v)}
+											options={country_keys.map(code=>{
+												return {
+													id: code,
+													label: <>{getFlag(code)} {content_countries[content_type][code].country_name}</>
+												}
+											})}
+										/>
+									</div>
+								}
+								
+								{
+									isEmpty(content_countries[content_type]?.[queryParams.country_code]?.states) ? null :
+									<div>
+										<DropDown
+											clearable={false}
+											value={queryParams.state_code}
+											onChange={v=>setFilter('state_code', v)}
+											placeholder={__('- Select State - ')}
+											options={content_countries[content_type][queryParams.country_code].states}
+										/>
+									</div>
+								}
+							</div>
+						}
+						
 						<div 
 							style={content_options.length<2 ? {width: 0, visibility: 'hidden'} : {}}
 						>

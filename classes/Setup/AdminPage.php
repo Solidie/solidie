@@ -7,6 +7,7 @@
 
 namespace Solidie\Setup;
 
+use Solidie\Helpers\Geo;
 use Solidie\Helpers\Utilities;
 use Solidie\Main;
 use Solidie\Models\AdminSetting;
@@ -145,7 +146,7 @@ class AdminPage {
 
 		$resources = array(
 			'pages'     => Utilities::getPageList( -1 ),
-			'countries' => Utilities::getCountriesOptions()
+			'countries' => Geo::getCountriesOptions()
 		);
 
 		echo '<div 

@@ -7,6 +7,7 @@
 
 namespace Solidie\Models;
 
+use Solidie\Helpers\Geo;
 use Solidie\Helpers\Utilities;
 use SolidieLib\_Array;
 use SolidieLib\_String;
@@ -573,8 +574,27 @@ class Contents {
 			}
 		}
 
+		// Filter for classified country and state
+		if ( ! empty( $args['country_code'] ) ) {
+			
+			$where_clause .= $wpdb->prepare( ' AND _country.meta_value=%s', $args['country_code'] );
+
+			if ( ! empty( $args['state_code'] ) ) {
+				$where_clause .= $wpdb->prepare( ' AND _state.meta_value=%s', $args['state_code'] );
+			}
+		}
+
 		// Filter where clause. So far it is used to add bundle product from pro version.
 		$where_clause = apply_filters( 'solidie_get_contents_where_clause', $where_clause, $args );
+
+		$from_tables =
+			"{$wpdb->solidie_contents} content 
+			LEFT JOIN {$wpdb->solidie_categories} cat ON content.category_id=cat.category_id
+			LEFT JOIN {$wpdb->solidie_popularity} pop ON content.content_id=pop.content_id
+			LEFT JOIN {$wpdb->users} contributor ON content.contributor_id=contributor.ID
+			LEFT JOIN {$wpdb->solidie_content_pack_link} pack ON content.content_id=pack.content_id
+			LEFT JOIN {$wpdb->solidie_content_meta} _country ON content.content_id=_country.object_id AND _country.meta_key='content_country_code'
+			LEFT JOIN {$wpdb->solidie_content_meta} _state ON content.content_id=_state.object_id AND _state.meta_key='content_state_code'";
 
 		// If it is segmentation
 		if ( $segmentation ) {
@@ -584,10 +604,7 @@ class Contents {
 					"SELECT 
 						COUNT(DISTINCT content.content_id)
 					FROM 
-						{$wpdb->solidie_contents} content 
-						LEFT JOIN {$wpdb->solidie_categories} cat ON content.category_id=cat.category_id
-						LEFT JOIN {$wpdb->solidie_popularity} pop ON content.content_id=pop.content_id
-						LEFT JOIN {$wpdb->solidie_content_pack_link} pack ON content.content_id=pack.content_id
+						{$from_tables}
 					WHERE 1=1 {$where_clause}",
 					...$category_ids_in
 				)
@@ -625,11 +642,7 @@ class Contents {
 					UNIX_TIMESTAMP(content.modified_at) AS modified_at,
 					cat.category_name
 				FROM 
-					{$wpdb->solidie_contents} content 
-					LEFT JOIN {$wpdb->solidie_categories} cat ON content.category_id=cat.category_id
-					LEFT JOIN {$wpdb->solidie_popularity} pop ON content.content_id=pop.content_id
-					LEFT JOIN {$wpdb->users} contributor ON content.contributor_id=contributor.ID
-					LEFT JOIN {$wpdb->solidie_content_pack_link} pack ON content.content_id=pack.content_id
+					{$from_tables}
 				WHERE 1=1 {$where_clause} {$order_clause} {$limit_offset}",
 				...$category_ids_in
 			),
@@ -678,9 +691,9 @@ class Contents {
 			$meta                         = self::getAllMetaData( $content['content_id'] );
 			$country_code                 = $meta['content_country_code'] ?? null;
 			$state_code                   = $meta['content_state_code'] ?? null;
-			$meta['content_country_name'] = Utilities::getCountrName( $country_code );
-			$meta['content_state_name']   = Utilities::getStateName( $country_code, $state_code );
-			$meta['currency_code']        = Utilities::getCurrencyCode( $country_code );
+			$meta['content_country_name'] = Geo::getCountryName( $country_code );
+			$meta['content_state_name']   = Geo::getStateName( $country_code, $state_code );
+			$meta['currency_code']        = Geo::getCurrencyCode( $country_code );
 			$contents[ $index ]['meta']   = $meta;
 		}
 
