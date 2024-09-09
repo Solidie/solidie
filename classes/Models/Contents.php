@@ -289,7 +289,7 @@ class Contents {
 
 		// Post creator user can preview own product regardless of post status.
 		$current_user_id = get_current_user_id();
-		$status_clause   = $public_only ? $wpdb->prepare( ' AND (content.content_status="publish" OR content.contributor_id=%d) ', $current_user_id ) : '';
+		$status_clause   = $public_only ? $wpdb->prepare( " AND (content.content_status='publish' OR content.contributor_id=%d)", $current_user_id ) : '';
 
 		// Content author, Admin and Editor can visit content regardless of content status.
 		if ( User::validateRole( $current_user_id, array( 'administrator', 'editor' ) ) ) {
