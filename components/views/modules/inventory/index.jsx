@@ -35,7 +35,16 @@ export const content_statuses = {
 	banned: __('Banned')
 }
 
-const contributors_status = ['publish', 'unpublish', 'draft'];
+const status_hints = {
+	draft: __('The content is not yet published'),
+	publish: __('The content is published and is live'), 
+	unpublish: __('The content has been unpublished'), 
+	pending: __('The content is pending for review'), 
+	rejected: __('The content has been rejected, need to fix inappropriate stuffs.'),
+	banned: __('The content is banned and will be deleted soon if inappropriate stuffs are not removed in a week.')
+}
+
+const contributors_status = ['publish', 'unpublish'];
 
 const getContentActions = content=>{
 
@@ -508,7 +517,7 @@ export function Inventory({navigate, params={}}) {
 						} = content;
 
 						const thumbnail_url = media?.thumbnail?.file_url;
-						const status_readonly = !is_admin ? contributors_status.indexOf(content_status)===-1 : content_status=='unpublish';
+						const status_readonly = 'draft' == content_status || ( is_admin ? 'unpublish'==content_status : contributors_status.indexOf(content_status)===-1 );
 						
 						// Get price range
 						const price_range = getPriceRange(plans, true);
@@ -643,13 +652,19 @@ export function Inventory({navigate, params={}}) {
 							}
 							
 							<td data-th={__('Status')}>
-								<div className={'d-flex align-items-center column-gap-10'.classNames()}>
+								<div 
+									className={'d-flex align-items-center column-gap-10'.classNames()}
+									title={status_hints[content_status] || null}
+								>
 									<DropDownStatus
 										value={content_status}
 										onChange={v=>changeContentStatus(content_id, v)}
 										disabled={status_readonly || state.changing_status_for}
 										options={
-											Object.keys(content_statuses).filter(s=>(is_admin ? s!='unpublish' : contributors_status.indexOf(s)>-1)).map(status=>{
+											Object
+												.keys(content_statuses)
+												.filter(s=>is_admin || status_readonly || contributors_status.indexOf(s)>-1)
+												.map(status=>{
 												return {
 													id: status,
 													label: content_statuses[status]

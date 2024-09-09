@@ -59,6 +59,15 @@ export const getPageTitle=(...segments)=>{
 	return [...segments, site_title].filter(s=>!isEmpty(s)).join(' - ');
 }
 
+function excludeEmptyCats( cats ) {
+	return cats.filter(cat=>cat.content_count).map(cat=>{
+		return {
+			...cat,
+			children: excludeEmptyCats(cat.children || [])
+		}
+	})
+}
+
 function GalleryLayout({resources={}}) {
 
 	// Collect data
@@ -226,7 +235,7 @@ function GalleryLayout({resources={}}) {
 								category_ids: {
 									section_label: __('Category'),
 									selection_type: 'checkbox',
-									options: categories[content_type] || []
+									options: excludeEmptyCats( categories[content_type] || [] )
 								},
 								...(content_type!=='classified' ? sorting_list : {})
 							},
@@ -271,7 +280,7 @@ function GalleryLayout({resources={}}) {
 									isEmpty(content_countries[content_type]?.[queryParams.country_code]?.states) ? null :
 									<div>
 										<DropDown
-											clearable={false}
+											clearable={true}
 											value={queryParams.state_code}
 											onChange={v=>setFilter('state_code', v)}
 											placeholder={__('- Select State - ')}

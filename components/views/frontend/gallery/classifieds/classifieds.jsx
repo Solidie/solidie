@@ -27,6 +27,7 @@ export function Classifieds({contents=[]}) {
 		const is_last = index === ( contents.length - 1 );
 		const area = [content_state_name, content_country_name].filter(m=>!isEmpty(m)).join(', ');
 		const price = content_classified_price;
+		const {file_url: thumb_url} = media?.thumbnail || {};
 
 		return <Link 
 			key={content_id} 
@@ -36,9 +37,14 @@ export function Classifieds({contents=[]}) {
 				+ `list-single`.classNames(style)
 			}
 		>
-			<div style={{width: '150px', backgroundImage: `url(${media?.thumbnail?.file_url})`, backgroundSize: 'cover', backgroundPosition: 'center center'}}>
-				
+			<div 
+				style={{
+					width: '150px', 
+					backgroundImage: `url(${media?.thumbnail?.file_url})`, 
+					backgroundSize: 'cover', backgroundPosition: 'center center'}
+				}>
 			</div>
+			
 			<div className={'flex-1'.classNames()}>
 				<span className={'d-block margin-bottom-10 font-size-18 font-weight-700 color-text-80'.classNames()}>
 					{content_title}

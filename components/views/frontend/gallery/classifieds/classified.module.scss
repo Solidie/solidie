@@ -2,4 +2,8 @@
 	&:hover {
 		background-color: rgba(0, 0, 0, 0.027);
 	}
+
+	&:not(:last-child) {
+		border-bottom: 1px solid rgba(0,0,0,0.051);
+	}
 }

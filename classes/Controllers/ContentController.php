@@ -155,10 +155,13 @@ class ContentController {
 		$content_id = Contents::updateContent( $content, $files );
 
 		if ( ! empty( $content_id ) ) {
+			
+			$message = 'pending' === $content['content_status'] ? __( 'Submitted for review successfully', 'solidie' ) : __( 'Saved successfully', 'solidie' );
+
 			wp_send_json_success(
 				array(
-					'message' => ! empty( $content['content_id'] ) ? esc_html__( 'Published successfully.', 'solidie' ) : esc_html__( 'Created successfully.', 'solidie' ),
-					'content' => Contents::getContentByContentID( $content_id ),
+					'message' => ! empty( $content['content_id'] ) ? $message : null,
+					'content' => Contents::getContentByContentID( $content_id, null, false ),
 				)
 			);
 		} else {
@@ -436,8 +439,8 @@ class ContentController {
 		if ( ! $is_admin ) {
 			if ( 
 				! in_array( $status, array( 'publish', 'unpublish' ) ) 
-				|| ( $status === 'unpublish' && $current_status !== 'publish' ) 
-				|| ( $status === 'publish' && $current_status !== 'unpublish' )
+				|| ( $status === 'unpublish' && ! in_array( $current_status, array( 'publish', 'draft' ) ) ) 
+				|| ( $status === 'publish' && ! in_array( $current_status, array( 'draft', 'unpublish' ) ) )
 			) {
 				wp_send_json_error( array( 'message' => __( 'You are not authorized for the action!', 'solidie' ) ) );
 			}

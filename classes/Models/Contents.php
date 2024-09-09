@@ -892,7 +892,7 @@ class Contents {
 
 		$cats    = Category::getDescendentsOfParent( $category_id, $content_type );
 		$cat_ids = array_column( $cats, 'category_id' );
-		error_log( var_export( $cat_ids, true ) );
+
 		if ( empty( $cat_ids ) ) {
 			return array();
 		}
@@ -916,7 +916,8 @@ class Contents {
 				FROM 
 					{$wpdb->solidie_contents} 
 				WHERE 
-					content_type=%s
+					content_status='publish'
+					AND content_type=%s
 					{$where_clause}
 				ORDER BY 
 					created_at DESC
@@ -947,7 +948,7 @@ class Contents {
 	 */
 	public static function getSimilarContents( $content_id, $content_type ) {
 
-		$content_limit = 10;
+		$content_limit = DB::getLimit();
 		
 		global $wpdb;
 
@@ -978,7 +979,8 @@ class Contents {
 					FROM 
 						{$wpdb->solidie_contents} 
 					WHERE 
-						content_type=%s 
+						content_status='publish'
+						AND content_type=%s 
 						AND content_id != %d
 						{$where_clause}
 					ORDER BY

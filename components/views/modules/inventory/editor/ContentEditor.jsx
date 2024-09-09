@@ -109,6 +109,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 			label: __('Country'),
 			placeholder: __( 'Select Country' ),
 			type: 'dropdown',
+			required: true,
 			options: resourceState.countries?.filter?.(c=>window[data_pointer].settings.contents.classified.supported_countries?.indexOf?.(c.id)>-1) || []
 		},
 		{
@@ -158,6 +159,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 			type: 'textarea_rich',
 			name: 'kses_content_description',
 			label: __('Description'),
+			required: true,
 			placeholder: __('Write some description here'),
 		},
 		(['audio', 'video'].indexOf(content_type) === -1 ? null : {
@@ -270,7 +272,9 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 
 			if ( success ) {
 
-				ajaxToast(resp);
+				if ( message ) {
+					ajaxToast(resp);
+				}
 
 				const editor_url = `inventory/${content_type}/editor/${content.content_id}/`;
 
@@ -666,10 +670,12 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 						disabled={
 							readonly_mode || 
 							state2.submitting || 
-							isEmpty(content_title)
+							isEmpty(content_title) ||
+							isEmpty(state.values.kses_content_description) ||
+							(content_type==='classified' && isEmpty(state.values.content_country_code))
 						} 
 					>
-						{__('Publish')} {content_status=='publish' ? upload_progress : null} 
+						{is_admin ? __('Publish') : __('Submit')} {content_status=='publish' ? upload_progress : null} 
 					</button>
 				</div>	
 			</>
