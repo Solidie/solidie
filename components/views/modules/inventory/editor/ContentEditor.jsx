@@ -75,7 +75,6 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 		thumbnail_url: null,
 		mounted: false,
 		values: {
-			content_type: content_type,
 			content_title: sprintf(__('Untitled %s'), (window[data_pointer].settings.contents[content_type]?.label || __('Content'))),
 			kses_content_description: '',
 			category_id: 0,
@@ -241,7 +240,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 
 		// Separate files from content object
 		const sample_image_ids = state.values.sample_images.map(img=>img.file_id).filter(id=>id);
-		const content = {content_id, content_status, is_admin};
+		const content = {content_id, content_status, is_admin, content_type};
 		const files = {sample_image_ids};
 		Object.keys(state.values).forEach(key=>{
 			
@@ -386,7 +385,9 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 
 			const {success, data:{ content_slug, content_permalink }} = resp;
 
-			ajaxToast(resp);
+			if ( ! resp.success ) {
+				ajaxToast(resp);
+			}
 
 			setState({
 				...state,

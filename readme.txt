@@ -122,6 +122,7 @@ You can [create issue](https://github.com/Solidie/Solidie/issues) on Github repo
 * New: Cloud Storage (Digital Ocean Space) integration
 * New: Similar content suggestion in single content page
 * Update: SEO enhancements
+* Update: Overall bug fixes, enhancements and optimizations
 
 = v1.1.6 -> Aug 06, 2024 =
 --------------------------
