@@ -1,3 +1,5 @@
+const { common_categories } = require("./data");
+
 Cypress.Commands.add('createContent', (content, fe_dashboard) => {
 
 	const {
@@ -22,6 +24,12 @@ Cypress.Commands.add('createContent', (content, fe_dashboard) => {
 	cy.get('[data-cylector="content-input-wrapper-thumbnail"] input').attachFile('../assets/book.jpg');
 	cy.wait(1000);
 
+	// Add content to the tiny editor
+	cy.enterTextInTinyMCE('Dummy content description');
+
+	// Set content category
+	cy.selectDropDown('content-input-wrapper-category_id', common_categories[0].label);
+
 	// Set monetization
 	cy.get(`[name="monetization"]`).check(monetization);
 
@@ -35,4 +43,11 @@ Cypress.Commands.add('createContent', (content, fe_dashboard) => {
 	cy.get('[data-cylector="content-save"]').click();
 	cy.get('.solidie-swal button').contains('Yes').click();
 	cy.wait(1500);
+});
+
+Cypress.Commands.add('enterTextInTinyMCE', (text) => {
+  cy.get('iframe').then($iframe => {
+    const body = $iframe.contents().find('body');
+    cy.wrap(body).clear().type(text);
+  });
 });

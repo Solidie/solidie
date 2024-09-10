@@ -166,8 +166,7 @@ describe('Test user dashboard with contributor user', ()=>{
 
 		// Make withdrawal request
 		cy.get('[data-cylector="withdraw-btn"]').click();
-		cy.get('[data-cylector="method"] [data-cylector="trigger-point"]').click();
-		cy.get('[data-cylector="options-wrapper"]>div').contains('Paypal').click();
+		cy.selectDropDown('method', 'Paypal');
 		cy.get('[data-cylector="submit-withdrawal"]').click();
 		cy.wait(1500);
 

@@ -81,7 +81,7 @@ const getPlans=(label)=>{
 	})
 }
 module.exports.content_types = {
-	app: {
+	/* app: {
 		comment: false,
 		reaction: 'rating',
 		plans: [
@@ -110,24 +110,24 @@ module.exports.content_types = {
 				default_sale_price: 12,
 			}
 		]
-	},
+	}, */
 	audio: {
 		comment: true,
 		reaction: 'like',
 		plans: getPlans('Audio')
 	},
-	video: {
+	/* video: {
 		comment: true,
 		reaction: 'like',
 		plans: getPlans('Video')
-	},
+	}, */
 	image: {
 		comment: true,
 		contributor: true,
 		reaction: 'like',
 		plans: getPlans('Image')
 	},
-	'3d': {
+	/* '3d': {
 		comment: true,
 		reaction: 'like',
 		plans: getPlans('3D')
@@ -146,5 +146,5 @@ module.exports.content_types = {
 		comment: false,
 		reaction: 'rating',
 		plans: getPlans('Tutorial').map(p=>{return {...p, access_limit: null}})
-	},
+	}, */
 }

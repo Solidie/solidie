@@ -16,3 +16,8 @@ Cypress.Commands.add('toggleCheck', (fields) => {
 		}
 	});
 });
+
+Cypress.Commands.add('selectDropDown', (parent_cylector, label)=>{
+	cy.get(`[data-cylector="${parent_cylector}"] [data-cylector="trigger-point"]`).click();
+	cy.get('[data-cylector="options-wrapper"]>div').contains(label).click();
+})
