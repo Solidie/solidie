@@ -8,7 +8,13 @@
     },
     "scripts": {
         "lint": "phpcs --extensions=php -s .",
-        "lint:fix": "phpcbf --extensions=php ."
+        "lint:fix": "phpcbf --extensions=php .",
+        "pre-autoload-dump": "Aws\\Script\\Composer\\Composer::removeUnusedServices"
+    },
+    "extra": {
+        "aws/aws-sdk-php": [
+            "S3"
+        ]
     },
 	"require": {
 		"solidie/solidie-lib": "dev-main",

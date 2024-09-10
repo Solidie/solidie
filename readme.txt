@@ -3,7 +3,7 @@ Contributors: jayedul
 Donate Link: https://solidie.com
 Tags: marketplace, contributors, stock, contents
 Requires at least: 5.3
-Tested up to: 6.6.1
+Tested up to: 6.6.2
 Requires PHP: 7.4
 Stable tag: 1.1.7
 License: GPLv3
@@ -115,7 +115,7 @@ You can [create issue](https://github.com/Solidie/Solidie/issues) on Github repo
 
 == Changelog ==
 
-= v1.1.7 -> Sep 09, 2024 =
+= v1.1.7 -> Sep 11, 2024 =
 --------------------------
 * New: Classified listings
 * New: Content sitemap
@@ -123,6 +123,7 @@ You can [create issue](https://github.com/Solidie/Solidie/issues) on Github repo
 * New: Similar content suggestion in single content page
 * Update: SEO enhancements
 * Update: Overall bug fixes, enhancements and optimizations
+* Fix: Duplicate content in user dashboard editor
 
 = v1.1.6 -> Aug 06, 2024 =
 --------------------------

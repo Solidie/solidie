@@ -14,6 +14,8 @@ class CloudStorage {
 	private $space;
 	private $client = null;
 
+	const UNDELETED_FLAG_KEY = 'solidie_cloud_undeleted_files';
+
 	public function __construct() {
 
 		$spaceName = AdminSetting::get( 'do_space_bucket_name' );
@@ -34,7 +36,6 @@ class CloudStorage {
 			),
 			'use_path_style_endpoint' => true
 		));
-
 	}
 
 	public function uploadFile( array $file, string $target_dir = '' ) {
@@ -85,10 +86,9 @@ class CloudStorage {
 			} catch ( AwsException $e ) {
 
 				// Store delete file keys in option to track later
-				$op_key      = 'mateup_undeleted_file_keys';
-				$file_keys   = _Array::getArray( get_option( $op_key ) );
+				$file_keys   = _Array::getArray( get_option( self::UNDELETED_FLAG_KEY ) );
 				$file_keys[] = $key;
-				update_option( $op_key, $file_keys, false );
+				update_option( self::UNDELETED_FLAG_KEY, $file_keys, false );
 
 				// Log
 				error_log( sprintf( 'Error deleting file: %s; %s', $key, $e->getMessage() ) );

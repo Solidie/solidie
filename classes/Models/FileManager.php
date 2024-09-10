@@ -275,7 +275,7 @@ class FileManager extends SolidieLibFileManager {
 	 */
 	public static function getMediaLink( int $file_id, array $add_args = array() ) {
 
-		if ( apply_filters( 'solidie_is_content_free', $file_id, true ) ) {
+		if ( apply_filters( 'solidie_is_file_free', $file_id, true ) ) {
 			$cloud = _Array::getArray( get_post_meta( $file_id, self::SOLIDIE_FILE_CLOUD_KEY, true ) );
 			if ( ! empty( $cloud['file_url'] ) ) {
 				return $cloud['file_url'];
@@ -343,7 +343,8 @@ class FileManager extends SolidieLibFileManager {
 	 */
 	public static function deleteFile( $file_ids ) {
 
-		$file_ids = _Array::getArray( $file_ids, true );
+		$file_ids    = _Array::getArray( $file_ids, true );
+		$cloud_store = new CloudStorage();
 
 		foreach ( $file_ids as $file_id ) {
 	
@@ -355,7 +356,7 @@ class FileManager extends SolidieLibFileManager {
 
 			// Delete from cloud if it is not stored locally
 			if ( ! empty( $cloud['file_id'] ) ) {
-				( new CloudStorage() )->deleteFile( $cloud['file_id'] );
+				$cloud_store->deleteFile( $cloud['file_id'] );
 			}
 		}
 	}

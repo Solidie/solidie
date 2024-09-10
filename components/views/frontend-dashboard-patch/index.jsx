@@ -26,9 +26,8 @@ addFilter(
 				mountExternal(
 					'inventory_dashboard',
 					el,
-					data.session,
 					<MountPoint>
-						<Inventory {...data.payload}/>
+						<Inventory {...data}/>
 					</MountPoint>
 				)
 			}
@@ -43,9 +42,8 @@ addFilter(
 				mountExternal(
 					'inventory_dashboard_edit',
 					el,
-					data.session,
 					<MountPoint>
-						<ContentEditor {...data.payload}/>
+						<ContentEditor {...data}/>
 					</MountPoint>
 				)
 			}
