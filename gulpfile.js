@@ -11,6 +11,7 @@ module.exports = require('solidie-materials/builders/build-release')({
 		'vendor/solidie/solidie-lib/.eslintrc.js',
 		'vendor/solidie/solidie-lib/phpcs.xml',
 		'vendor/solidie/solidie-lib/webpack.config.js',
+		'vendor/phpcompatibility',
 		'vendor/squizlabs',
 		'vendor/sirbrillig',
 		'vendor/wp-coding-standards',

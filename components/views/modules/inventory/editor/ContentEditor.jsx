@@ -373,7 +373,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 		});
 	}
 
-	const updateSlug=()=>{
+	const updateSlug=(_slug)=>{
 		
 		setState({
 			...state,
@@ -381,7 +381,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 		});
 
 		const {content_slug} = state.values;
-		request('updateContentSlug', {content_id, content_slug}, resp=>{
+		request('updateContentSlug', {content_id, content_slug: _slug || content_slug}, resp=>{
 
 			const {success, data:{ content_slug, content_permalink }} = resp;
 
@@ -539,6 +539,11 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 												placeholder={placeholder} 
 												onChange={v=>setVal(name, v)}
 												value={state.values[name] || ''}
+												onBlur={()=>{
+													if (name==='content_title' && state.values.content_slug?.indexOf?.('untitled-')===0) {
+														updateSlug(state.values.content_title);
+													}
+												}}
 											/>
 										}
 
@@ -577,7 +582,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 																value={state.values.content_slug}
 																autofocus={true}
 																onChange={content_slug=>setVal('content_slug', content_slug)}
-																onBlur={updateSlug}
+																onBlur={()=>updateSlug()}
 																onKeyUp={e=>e.key === 'Enter' ? updateSlug() : null}
 																disabled={readonly_mode || state.updating_slug}
 															/>

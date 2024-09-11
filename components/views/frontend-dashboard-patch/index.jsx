@@ -20,7 +20,7 @@ addFilter(
 		menus.splice(1, 0, {
 			path: 'inventory/',
 			full_path: 'inventory/:content_type?/',
-			text: __('Contribution'),
+			text: __('Inventory'),
 			icon: '',
 			component: function(el, data) {
 				mountExternal(
