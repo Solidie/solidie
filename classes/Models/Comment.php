@@ -107,22 +107,20 @@ class Comment {
 		}
 
 		$comments = $wpdb->get_results(
-			$wpdb->prepare(
-				"SELECT 
-					_comment.*,
-					UNIX_TIMESTAMP(_comment.comment_date) AS comment_date,
-					_user.display_name
-				FROM
-					{$wpdb->solidie_comments} _comment
-					INNER JOIN {$wpdb->solidie_contents} _content ON _content.content_id=_comment.content_id
-					INNER JOIN {$wpdb->users} _user ON _comment.user_id=_user.ID
-				WHERE
-					1=1
-					{$where_clause}
-				ORDER BY 
-					_comment.comment_date DESC
-				{$limit_offset}"
-			),
+			"SELECT 
+				_comment.*,
+				UNIX_TIMESTAMP(_comment.comment_date) AS comment_date,
+				_user.display_name
+			FROM
+				{$wpdb->solidie_comments} _comment
+				INNER JOIN {$wpdb->solidie_contents} _content ON _content.content_id=_comment.content_id
+				INNER JOIN {$wpdb->users} _user ON _comment.user_id=_user.ID
+			WHERE
+				1=1
+				{$where_clause}
+			ORDER BY 
+				_comment.comment_date DESC
+			{$limit_offset}",
 			ARRAY_A
 		);
 

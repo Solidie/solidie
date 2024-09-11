@@ -19,6 +19,7 @@ Cypress.Commands.add('createContent', (content, fe_dashboard) => {
 	// Set the content slug
 	cy.get('[data-cylector="content-slug-edit"]').click();
 	cy.get('[data-cylector="content-slug-input"] input').clear().type(content_title).blur();
+	cy.wait(1500);
 
 	// Set thumbnail
 	cy.get('[data-cylector="content-input-wrapper-thumbnail"] input').attachFile('../assets/book.jpg');

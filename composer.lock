@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5a3515006db164ca13d9553adeef2f7d",
+    "content-hash": "59e59bc1a52cbf3e429b06efae92f005",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -62,16 +62,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.321.6",
+            "version": "3.321.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "3dc53a79677dd1f0e682dfc05f9815901ec7bf58"
+                "reference": "df456658bdc2ad84a00cf35a7b5af874fdcc7a53"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/3dc53a79677dd1f0e682dfc05f9815901ec7bf58",
-                "reference": "3dc53a79677dd1f0e682dfc05f9815901ec7bf58",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/df456658bdc2ad84a00cf35a7b5af874fdcc7a53",
+                "reference": "df456658bdc2ad84a00cf35a7b5af874fdcc7a53",
                 "shasum": ""
             },
             "require": {
@@ -154,9 +154,9 @@
             "support": {
                 "forum": "https://forums.aws.amazon.com/forum.jspa?forumID=80",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.321.6"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.321.8"
             },
-            "time": "2024-09-06T18:06:38+00:00"
+            "time": "2024-09-10T18:18:03+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -759,12 +759,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:Solidie/solidie-lib.git",
-                "reference": "3521523c7aabecacca4c5ec0f37d5747239a934d"
+                "reference": "15ccf1bae7fc1d7cf327ce488870016a68c0242d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Solidie/solidie-lib/zipball/3521523c7aabecacca4c5ec0f37d5747239a934d",
-                "reference": "3521523c7aabecacca4c5ec0f37d5747239a934d",
+                "url": "https://api.github.com/repos/Solidie/solidie-lib/zipball/15ccf1bae7fc1d7cf327ce488870016a68c0242d",
+                "reference": "15ccf1bae7fc1d7cf327ce488870016a68c0242d",
                 "shasum": ""
             },
             "require-dev": {
@@ -790,7 +790,7 @@
                 "source": "https://github.com/Solidie/solidie-lib/tree/main",
                 "issues": "https://github.com/Solidie/solidie-lib/issues"
             },
-            "time": "2024-09-09T17:50:54+00:00"
+            "time": "2024-09-11T07:08:56+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",

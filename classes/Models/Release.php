@@ -39,14 +39,11 @@ class Release {
 			return;
 		}
 
-		$ids_places = _String::getPlaceHolders( $release_ids );
+		$ids_places = _String::getSQLImplodesPrepared( $release_ids );
 
 		global $wpdb;
 		$file_ids = $wpdb->get_col(
-			$wpdb->prepare(
-				"SELECT file_id FROM {$wpdb->solidie_releases} WHERE release_id IN ({$ids_places})",
-				$release_ids
-			)
+			"SELECT file_id FROM {$wpdb->solidie_releases} WHERE release_id IN ({$ids_places})"
 		);
 
 		// Delete file IDs from file system

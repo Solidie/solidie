@@ -48,14 +48,11 @@ class Tutorial {
 
 		global $wpdb;
 		$lesson_ids = _Array::getArray( $lesson_ids, true );
-		$ids_places = _String::getPlaceHolders( $lesson_ids );
+		$ids_places = _String::getSQLImplodesPrepared( $lesson_ids );
 
 		// Get lesson contents to delete attached media
 		$_lessons = $wpdb->get_results(
-			$wpdb->prepare(
-				"SELECT content_id, lesson_id FROM {$wpdb->solidie_lessons} WHERE lesson_id IN ({$ids_places})",
-				...$lesson_ids
-			),
+			"SELECT content_id, lesson_id FROM {$wpdb->solidie_lessons} WHERE lesson_id IN ({$ids_places})",
 			ARRAY_A
 		);
 		foreach ( $_lessons as $lesson ) {

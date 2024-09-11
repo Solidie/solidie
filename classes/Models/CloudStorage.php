@@ -4,6 +4,7 @@ namespace Solidie\Models;
 
 use Aws\S3\S3Client;
 use Aws\Exception\AwsException;
+use Error;
 use Solidie\Main;
 use Solidie\Models\AdminSetting;
 use SolidieLib\_Array;
@@ -14,14 +15,21 @@ class CloudStorage {
 	private $space;
 	private $client = null;
 
-	const UNDELETED_FLAG_KEY = 'solidie_cloud_undeleted_files';
-
 	public function __construct() {
+
+		if ( ! AdminSetting::get( 'do_space_enable' ) ) {
+			return;
+		}
 
 		$spaceName = AdminSetting::get( 'do_space_bucket_name' );
 		$region    = AdminSetting::get( 'do_space_bucket_region' );
 		$accessKey = AdminSetting::get( 'do_space_access_key' );
 		$secretKey = AdminSetting::get( 'do_space_secret_key' );
+
+		if ( empty( $spaceName ) || empty( $region ) || empty( $accessKey ) || empty( $secretKey ) ) {
+			trigger_error( 'Solidie: Could not initiate Cloud Client due to missing credentials', E_USER_WARNING );
+			return;
+		}
 
 		$this->space = $spaceName;
 
@@ -39,6 +47,11 @@ class CloudStorage {
 	}
 
 	public function uploadFile( array $file, string $target_dir = '' ) {
+
+		if ( ! is_object( $this->client ) || ! $this->client instanceof S3Client ) {
+			trigger_error( 'Solidie: Could not upload file to cloud', E_USER_WARNING );
+			return;
+		}
 
 		// The file to upload
 		$segments   = explode( '.', $file['name'] );
@@ -74,24 +87,24 @@ class CloudStorage {
 	 */
 	public function deleteFile( $key ) {
 
+		if ( ! is_object( $this->client ) || ! $this->client instanceof S3Client ) {
+			trigger_error( 'Solidie: Could not delete file from cloud', E_USER_WARNING );
+			return;
+		}
+
 		$keys = _Array::getArray( $key, true );
 
 		foreach ( $keys as $key ) {
 			
 			try {
+
 				$this->client->deleteObject([
 					'Bucket' => $this->space,
 					'Key'    => $key,
 				]);
+
 			} catch ( AwsException $e ) {
-
-				// Store delete file keys in option to track later
-				$file_keys   = _Array::getArray( get_option( self::UNDELETED_FLAG_KEY ) );
-				$file_keys[] = $key;
-				update_option( self::UNDELETED_FLAG_KEY, $file_keys, false );
-
-				// Log
-				error_log( sprintf( 'Error deleting file: %s; %s', $key, $e->getMessage() ) );
+				error_log( sprintf( 'Solidie: Error deleting file: %s; %s', $key, $e->getMessage() ) );
 			}
 		}
 	}

@@ -186,51 +186,11 @@ class Meta {
 
 		// IDs in
 		$object_ids = array_values( _Array::getArray( $object_ids, true, 0 ) );
-		$ids_places = _String::getPlaceHolders( $object_ids );
+		$ids_places = _String::getSQLImplodesPrepared( $object_ids );
 
 		$wpdb->query(
-			$wpdb->prepare(
-				"DELETE FROM {$this->table} WHERE 1=1 {$key_clause} AND object_id IN ({$ids_places})",
-				...$object_ids
-			)
+			"DELETE FROM {$this->table} WHERE 1=1 {$key_clause} AND object_id IN ({$ids_places})"
 		);
-	}
-
-	/**
-	 * Assign bulk meta to objects array
-	 *
-	 * @param array  $objects  Array of objects to assign meta into
-	 * @param string $meta_key Optional meta key if needs specific meta data.
-	 * @return array
-	 */
-	public function assignBulkMeta( array $objects, $meta_key = null ) {
-		global $wpdb;
-
-		$objects = _Array::appendColumn( $objects, 'meta', (object) array() );
-
-		// Key clause
-		$key_clause = ! empty( $meta_key ) ? $wpdb->prepare( ' AND meta_key=%s', $meta_key ) : '';
-
-		// IDs in
-		$obj_ids    = _Array::getArray( array_keys( $objects ), false, 0 );
-		$ids_places = _String::getPlaceHolders( $obj_ids );
-
-		$meta = $wpdb->get_results(
-			$wpdb->prepare(
-				"SELECT * FROM {$this->table} WHERE object_id IN({$ids_places}) {$key_clause}",
-				$obj_ids
-			),
-			ARRAY_A
-		);
-
-		foreach ( $meta as $m ) {
-			$_key   = $m['meta_key'];
-			$_value = maybe_unserialize( $m['meta_value'] );
-
-			$objects[ (int) $m['object_id'] ]['meta']->$_key = $_value;
-		}
-
-		return $objects;
 	}
 
 	/**

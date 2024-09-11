@@ -481,6 +481,7 @@ export function Inventory({navigate, params={}}) {
 		>
 			<thead>
 				<tr>
+					<th></th>
 					<th>{__('Title')}</th>
 					{!is_admin ? null : <th className={'white-space-nowrap'.classNames()}>{__('Contributor')}</th>}
 					<th className={'white-space-nowrap'.classNames()}>{__('Category')}</th>
@@ -528,6 +529,9 @@ export function Inventory({navigate, params={}}) {
 						} = price_range;
 
 						return <tr key={content_id}>
+							<td data-th={__('ID')}>
+								{content_id}
+							</td>
 							<td data-th={__('Content')} style={{paddingTop: '20px', paddingBottom: '20px'}}>
 								<div className={'d-flex align-items-center column-gap-15'.classNames()}>
 									{

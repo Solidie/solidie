@@ -333,21 +333,18 @@ class Contents {
 		}
 
 		$content_ids = array_values( $content_ids );
-		$ids_places  = _String::getPlaceHolders( $content_ids );
+		$ids_places  = _String::getSQLImplodesPrepared( $content_ids );
 
 		global $wpdb;
 		$downloads = $wpdb->get_results(
-			$wpdb->prepare(
-				"SELECT 
-					SUM(download_count) AS download_count, 
-					content_id 
-				FROM 
-					{$wpdb->solidie_releases} 
-				WHERE 
-					content_id IN ({$ids_places}) 
-				GROUP BY content_id",
-				...$content_ids
-			),
+			"SELECT 
+				SUM(download_count) AS download_count, 
+				content_id 
+			FROM 
+				{$wpdb->solidie_releases} 
+			WHERE 
+				content_id IN ({$ids_places}) 
+			GROUP BY content_id",
 			ARRAY_A
 		);
 
@@ -526,15 +523,17 @@ class Contents {
 
 		// Search filter
 		if ( ! empty( $keyword ) ) {
+			
+			$id_search = is_numeric( $keyword ) ? $wpdb->prepare( ' OR content.content_id=%d', $keyword ) : '';
+
 			$where_clause .= $wpdb->prepare(
-				' AND (content.content_title LIKE %s OR content.content_description LIKE %s)',
+				" AND (content.content_title LIKE %s OR content.content_description LIKE %s {$id_search})",
 				"%{$wpdb->esc_like( $keyword )}%",
 				"%{$wpdb->esc_like( $keyword )}%"
 			);
 		}
 
 		// Filter category
-		$category_ids_in = array();
 		if ( ! empty( $category_ids ) ) {
 
 			// Get child IDs
@@ -546,7 +545,7 @@ class Contents {
 
 			// Merge and consolidate all the IDs together
 			$category_ids_in = array_values( array_unique( array_merge( $all_ids, $category_ids ) ) );
-			$ids_places      = _String::getPlaceHolders( $category_ids_in );
+			$ids_places      = _String::getSQLImplodesPrepared( $category_ids_in );
 
 			$where_clause .= " AND content.category_id IN ({$ids_places})";
 		}
@@ -600,14 +599,11 @@ class Contents {
 		if ( $segmentation ) {
 
 			$total_count = (int) $wpdb->get_var(
-				$wpdb->prepare(
-					"SELECT 
-						COUNT(DISTINCT content.content_id)
-					FROM 
-						{$from_tables}
-					WHERE 1=1 {$where_clause}",
-					...$category_ids_in
-				)
+				"SELECT 
+					COUNT(DISTINCT content.content_id)
+				FROM 
+					{$from_tables}
+				WHERE 1=1 {$where_clause}"
 			);
 
 			$page_count = ceil( $total_count / $limit );
@@ -627,25 +623,22 @@ class Contents {
 
 		// If not segmentation, return data
 		$contents = $wpdb->get_results(
-			$wpdb->prepare(
-				"SELECT
-					content.content_title, 
-					content.product_id, 
-					content.content_id, 
-					content.content_type, 
-					content.content_status, 
-					content.content_slug,
-					content.contributor_id,
-					COUNT(pop.download_id) AS download_trend,
-					UNIX_TIMESTAMP(pop.download_date) AS download_date,
-					UNIX_TIMESTAMP(content.created_at) AS created_at,
-					UNIX_TIMESTAMP(content.modified_at) AS modified_at,
-					cat.category_name
-				FROM 
-					{$from_tables}
-				WHERE 1=1 {$where_clause} {$order_clause} {$limit_offset}",
-				...$category_ids_in
-			),
+			"SELECT
+				content.content_title, 
+				content.product_id, 
+				content.content_id, 
+				content.content_type, 
+				content.content_status, 
+				content.content_slug,
+				content.contributor_id,
+				COUNT(pop.download_id) AS download_trend,
+				UNIX_TIMESTAMP(pop.download_date) AS download_date,
+				UNIX_TIMESTAMP(content.created_at) AS created_at,
+				UNIX_TIMESTAMP(content.modified_at) AS modified_at,
+				cat.category_name
+			FROM 
+				{$from_tables}
+			WHERE 1=1 {$where_clause} {$order_clause} {$limit_offset}",
 			ARRAY_A
 		);
 

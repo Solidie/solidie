@@ -25,7 +25,7 @@ module.exports.common_categories = [
 	{
 		label: 'Category 2'
 	},
-	{
+	/* {
 		label: 'Category 3'
 	},
 	{
@@ -39,7 +39,7 @@ module.exports.common_categories = [
 	{
 		label: 'Category 1:1:2',
 		parent: '— Category 1:1'
-	},
+	}, */
 ];
 
 // Prepare common pricing plans
@@ -51,7 +51,7 @@ module.exports.common_plans = [
 		default_price: 11,
 		default_sale_price: 9,
 	},
-	{
+	/* {
 		plan_name: `Extended License`,
 		description: 'Extended license standard',
 		sales_model: 'single',
@@ -67,7 +67,7 @@ module.exports.common_plans = [
 		access_limit: 100,
 		default_price: 15,
 		default_sale_price: 12,
-	},
+	}, */
 ];
 
 // Prepare content types for settings
@@ -81,7 +81,18 @@ const getPlans=(label)=>{
 	})
 }
 module.exports.content_types = {
-	app: {
+	audio: {
+		comment: true,
+		reaction: 'like',
+		plans: getPlans('Audio')
+	},
+	image: {
+		comment: true,
+		contributor: true,
+		reaction: 'like',
+		plans: getPlans('Image')
+	},
+	/* app: {
 		comment: false,
 		reaction: 'rating',
 		plans: [
@@ -111,21 +122,10 @@ module.exports.content_types = {
 			}
 		]
 	},
-	audio: {
-		comment: true,
-		reaction: 'like',
-		plans: getPlans('Audio')
-	},
 	video: {
 		comment: true,
 		reaction: 'like',
 		plans: getPlans('Video')
-	},
-	image: {
-		comment: true,
-		contributor: true,
-		reaction: 'like',
-		plans: getPlans('Image')
 	},
 	'3d': {
 		comment: true,
@@ -146,5 +146,5 @@ module.exports.content_types = {
 		comment: false,
 		reaction: 'rating',
 		plans: getPlans('Tutorial').map(p=>{return {...p, access_limit: null}})
-	},
+	}, */
 }
