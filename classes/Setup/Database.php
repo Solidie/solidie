@@ -80,5 +80,7 @@ class Database {
 		$wpdb->solidie_lessons           = $prefix . 'lessons';
 		$wpdb->solidie_content_pack_link = $prefix . 'content_pack_link';
 		$wpdb->solidie_withdrawals       = $prefix . 'withdrawals';
+		$wpdb->solidie_blocks            = $prefix . 'blocks';
+		$wpdb->solidie_messages          = $prefix . 'messages';
 	}
 }

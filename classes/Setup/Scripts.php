@@ -100,6 +100,7 @@ class Scripts {
 				'is_pro_installed' => Utilities::isPluginInstalled( Promotion::PRO_PATH, false ),
 				'is_pro_active'    => Utilities::isPluginInstalled( Promotion::PRO_PATH, true ),
 				'readonly_mode'    => apply_filters( 'solidie_readonly_mode', false ), // It's for solidie demo site only. No other use is expected.
+				'has_admin_bar'    => is_admin_bar_showing(),
 				'user'             => array(
 					'has_administrative'    => User::hasAdministrativeRole( get_current_user_id() ), 
 				),

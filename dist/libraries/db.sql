@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jul 15, 2024 at 08:50 AM
+-- Generation Time: Sep 12, 2024 at 05:24 PM
 -- Server version: 8.0.16
 -- PHP Version: 8.1.23
 
@@ -20,6 +20,22 @@ SET time_zone = "+00:00";
 --
 -- Database: `local`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `wp_solidie_blocks`
+--
+
+CREATE TABLE IF NOT EXISTS `wp_solidie_blocks` (
+  `block_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `blocker_user_id` bigint(20) UNSIGNED NOT NULL,
+  `blocked_user_id` bigint(20) UNSIGNED NOT NULL,
+  `blocked_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`block_id`),
+  KEY `blocker_user_id` (`blocker_user_id`),
+  KEY `blocked_user_id` (`blocked_user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 
 -- --------------------------------------------------------
 
@@ -144,6 +160,26 @@ CREATE TABLE IF NOT EXISTS `wp_solidie_license_keys` (
   `endpoint` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci DEFAULT NULL COMMENT 'Site URL for web, any string for other apps.',
   PRIMARY KEY (`license_id`),
   UNIQUE KEY `license_key` (`license_key`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `wp_solidie_messages`
+--
+
+CREATE TABLE IF NOT EXISTS `wp_solidie_messages` (
+  `message_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `message_content` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL,
+  `message_type` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci DEFAULT NULL COMMENT 'text, media',
+  `sender_id` bigint(20) UNSIGNED NOT NULL,
+  `recipient_id` bigint(20) UNSIGNED NOT NULL,
+  `sent_time` timestamp NOT NULL,
+  `read_time` timestamp NULL DEFAULT NULL,
+  `seen_time` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`message_id`),
+  KEY `sender_id` (`sender_id`),
+  KEY `recipient_id` (`recipient_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 
 -- --------------------------------------------------------

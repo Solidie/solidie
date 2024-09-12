@@ -117,6 +117,7 @@ You can [create issue](https://github.com/Solidie/Solidie/issues) on Github repo
 
 = v1.1.8 -> Sep 23, 2024 =
 --------------------------
+* New: Real time messaging feature among users (Pro)
 * Update: Sync content slug on title blur
 
 = v1.1.7 -> Sep 11, 2024 =

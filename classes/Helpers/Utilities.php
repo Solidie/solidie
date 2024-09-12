@@ -24,4 +24,13 @@ class Utilities extends LibUtils{
 	public static function isAdminDashboard( $sub_page = null ) {
 		return self::isAdminScreen( Main::$configs->root_menu_slug, $sub_page );
 	}
+
+	/**
+	 * Wrapper function for gmdate('Y-m-d H:i:s')
+	 *
+	 * @return string
+	 */
+	public static function gmDate() {
+		return gmdate( 'Y-m-d H:i:s' );
+	}
 }

@@ -81,4 +81,38 @@ class User {
 	public static function hasAdministrativeRole( $user_id ) {
 		return self::validateRole( $user_id, self::getSolidieAdminRole() );
 	}
+
+	/**
+	 * Check if connection is blocked between two user
+	 *
+	 * @param int $user_id_1 First user id
+	 * @param int $user_id_2 Second user id
+	 * @param int $blocker_id The blocker user id to match if the block was made by this user.
+	 * @return boolean
+	 */
+	public static function isConnectionBlocked( $user_id_1, $user_id_2, $blocker_id = null ) {
+		
+		global $wpdb;
+
+		$where_clause = ! empty( $blocker_id ) ? $wpdb->prepare( ' AND blocker_user_id=%d', $blocker_id ) : '';
+
+		$blocked = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT 
+					block_id 
+				FROM 
+					{$wpdb->solidie_blocks} 
+				WHERE 
+					((blocker_user_id=%d AND blocked_user_id=%d)
+					OR (blocker_user_id=%d AND blocked_user_id=%d))
+					{$where_clause}",
+				$user_id_1,
+				$user_id_2,
+				$user_id_2,
+				$user_id_1
+			)
+		);
+
+		return $blocked ? true : false;
+	}
 }

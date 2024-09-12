@@ -9,6 +9,8 @@ import { applyFilters } from "solidie-materials/hooks.jsx";
 import { RenderExternal } from "solidie-materials/render-external.jsx";
 import { InitState } from "solidie-materials/init-state.jsx";
 import { RenderMedia } from "solidie-materials/render-media/render-media.jsx";
+import { ContextToast } from "solidie-materials/toast/toast.jsx";
+import { DoAction } from "solidie-materials/mountpoint.jsx";
 
 import { GenericPreview } from "./previews/generic.jsx";
 import { ImagePreview } from "./previews/image.jsx";
@@ -20,7 +22,6 @@ import { content_statuses } from "../../modules/inventory/index.jsx";
 
 import style from './single.module.scss';
 import { getPageTitle } from "../gallery/index.jsx";
-import { ContextToast } from "solidie-materials/toast/toast.jsx";
 import { SimilarContents } from "./similar-contents/similar.jsx";
 
 export const ContextSingleData = createContext();
@@ -342,6 +343,8 @@ export function SingleWrapper() {
 							}}
 						/>
 					</div>
+					
+					<DoAction action='pricing_panel_after' payload={state.content}/>
 				</div>
 			</div>
 		</div>
