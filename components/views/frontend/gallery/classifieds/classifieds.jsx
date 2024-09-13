@@ -33,32 +33,51 @@ export function Classifieds({contents=[]}) {
 			key={content_id} 
 			to={content_permalink}
 			className={
-				`d-flex align-items-stretch column-gap-15 padding-15 cursor-pointer ${!is_last ? 'border-bottom-1 b-color-text-6' : ''}`.classNames()
+				`d-flex align-items-center column-gap-15 padding-15 cursor-pointer ${!is_last ? 'border-bottom-1 b-color-text-6' : ''}`.classNames()
 				+ `list-single`.classNames(style)
 			}
 		>
-			<div 
-				style={{
-					width: '150px', 
-					backgroundImage: `url(${media?.thumbnail?.file_url})`, 
-					backgroundSize: 'cover', backgroundPosition: 'center center'}
-				}>
+
+			<div style={{width: '150px'}}>
+				<img 
+					src={media?.thumbnail?.file_url}
+					style={{
+						display: 'block',
+						margin: 'auto',
+						width: '100%',
+						height: 'auto'
+					}}
+				/>
 			</div>
 			
 			<div className={'flex-1'.classNames()}>
+
 				<span className={'d-block margin-bottom-10 font-size-18 font-weight-700 color-text-80'.classNames()}>
 					{content_title}
 				</span>
-				<span className={'d-block margin-bottom-5 font-size-14 font-weight-400 color-text-60'.classNames()}>
-					{area}&nbsp;
-				</span>
+
+				<div className={'d-flex align-items-center justify-content-space-between'.classNames()}>
+					<span className={'d-block margin-bottom-5 font-size-14 font-weight-400 color-text-60'.classNames()}>
+						{area}
+					</span>
+					{
+						price ? null :
+						<span className={'font-size-13 color-text-50'.classNames()}>
+							{timeAgoOrAfter(created_at)}
+						</span>
+					}
+				</div>
+				
 				<div className={'d-flex align-items-center justify-content-space-between'.classNames()}>
 					<span className={'font-size-14 color-material-80'.classNames()}>
 						{!price ? null : <>{currency_symbols[currency_code]} {price}</>}
 					</span>
-					<span className={'font-size-13 color-text-50'.classNames()}>
-						{timeAgoOrAfter(created_at)}
-					</span>
+					{
+						!price ? null :
+						<span className={'font-size-13 color-text-50'.classNames()}>
+							{timeAgoOrAfter(created_at)}
+						</span>
+					}
 				</div>
 			</div>
 		</Link>

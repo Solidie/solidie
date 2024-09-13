@@ -1,3 +1,12 @@
+.inventory-link {
+	
+	color: var(--solidie-color-text-80);
+
+	&:hover {
+		color: var(--solidie-color-material);
+	}
+}
+
 .table {
 	@media (min-width: 1200px) {
 		tr:not(:hover) {

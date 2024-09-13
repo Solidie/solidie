@@ -10,10 +10,11 @@ import { TextField } from 'solidie-materials/text-field/text-field.jsx';
 import { TableStat } from 'solidie-materials/table-stat.jsx';
 import { DropDown, Options } from "solidie-materials/dropdown/dropdown.jsx";
 import {DropDownStatus} from 'solidie-materials/dropdown-status/dropdown-status.jsx';
+import { ToolTip } from 'solidie-materials/tooltip.jsx';
 
 import { getPriceRange } from '../../frontend/gallery/generic-card/generic-card.jsx';
+
 import style from './inventory.module.scss';
-import { ToolTip } from 'solidie-materials/tooltip.jsx';
 
 const {
 	readonly_mode, 
@@ -421,7 +422,9 @@ export function Inventory({navigate, params={}}) {
 			<div className={'d-flex align-items-center column-gap-8'.classNames()}>
 				<a 
 					href={state.gallery_permalink}
-					className={"d-flex align-items-center column-gap-8 color-text-90 interactive padding-vertical-10 position-sticky top-0".classNames()}
+					className={
+						"d-flex align-items-center column-gap-8 padding-vertical-10".classNames() + 'inventory-link'.classNames(style)
+					}
 					target='_blank'
 				>
 					<span className={'font-size-24 font-weight-600 letter-spacing-3'.classNames()}>
