@@ -37,7 +37,6 @@ class Contents {
 		'unpublish', 
 		'pending', 
 		'rejected',
-		'banned',
 	);
 
 	const CONTENT_META_KEYS = array(

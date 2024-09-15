@@ -33,7 +33,6 @@ export const content_statuses = {
 	unpublish: __('Unpublished'), 
 	pending: __('Pending'), 
 	rejected: __('Rejected'),
-	banned: __('Banned')
 }
 
 const status_hints = {
@@ -42,7 +41,6 @@ const status_hints = {
 	unpublish: __('The content has been unpublished'), 
 	pending: __('The content is pending for review'), 
 	rejected: __('The content has been rejected, need to fix inappropriate stuffs.'),
-	banned: __('The content is banned and will be deleted soon if inappropriate stuffs are not removed in a week.')
 }
 
 const contributors_status = ['publish', 'unpublish'];

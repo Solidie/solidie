@@ -70,7 +70,6 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 		slug_editor: false,
 		updating_slug: false,
 		fetching: false,
-		error_message: null,
 		update_title: null,
 		thumbnail_url: null,
 		mounted: false,
@@ -87,6 +86,8 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 
 	const [state2, setState2] = useState({
 		submitting: false,
+		blackout: false,
+		error_message: null,
 		release_lesson_opened: content_id ? true : false,
 	});
 
@@ -262,10 +263,13 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 				data:{
 					content={}, 
 					message, 
+					blackout=false,
 				}
 			} = resp;
 
 			const new_state = {
+				blackout,
+				error_message: (!success || blackout) ? message : null,
 				submitting: false
 			}
 
@@ -368,8 +372,12 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 				update_title: values.content_title,
 				fetching: false,
 				mounted: true,
-				error_message: success ? null : message
 			});
+
+			setState2({
+				...state2,
+				error_message: success ? null : message
+			})
 		});
 	}
 
@@ -428,9 +436,9 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 	const upload_progress = (state2.submitting && uploadPercent) ? ` - ${uploadPercent}%` : null;
 	const {content_status} = state.values;
 
-	if ( state.error_message ) {
-		return <div className={'text-align-center color-error'.classNames()}>
-			{state.error_message}
+	if ( state2.blackout || state2.error_message ) {
+		return <div className={'text-align-center color-error bg-color-white border-radius-8 padding-30'.classNames()}>
+			{state2.error_message || __('Something went wrong!')}
 		</div>
 	}
 
