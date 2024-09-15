@@ -117,8 +117,11 @@ You can [create issue](https://github.com/Solidie/Solidie/issues) on Github repo
 
 = v1.1.8 -> Sep 23, 2024 =
 --------------------------
-* New: Real time messaging feature among users (Pro)
+* New: Real time messaging feature between users (Pro)
+* New: Daily post limit for contributors (Pro)
+* New: Bulk content create feature for image, audio and video
 * Update: Sync content slug on title blur
+* Fix: Image gets cropped in downloadable field
 
 = v1.1.7 -> Sep 11, 2024 =
 --------------------------

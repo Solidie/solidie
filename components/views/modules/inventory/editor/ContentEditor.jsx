@@ -6,7 +6,7 @@ import {FileUpload} from 'solidie-materials/file-upload/file-upload.jsx';
 import {request} from 'solidie-materials/request.jsx';
 import {confirm} from 'solidie-materials/prompts.jsx';
 import {LoadingIcon} from 'solidie-materials/loading-icon/loading-icon.jsx';
-import { __, data_pointer, isEmpty, sprintf, getDashboardPath } from "solidie-materials/helpers.jsx";
+import { __, data_pointer, isEmpty, sprintf, getDashboardPath, downScaleImages } from "solidie-materials/helpers.jsx";
 import { ContextToast } from "solidie-materials/toast/toast.jsx";
 import { DropDown } from "solidie-materials/dropdown/dropdown.jsx";
 import { DoAction } from "solidie-materials/mountpoint.jsx";
@@ -17,9 +17,10 @@ import { getFlattenedCategories } from "../../../admin-dashboard/settings/genera
 import { ReleaseManager } from "../release-manager/release-manager.jsx";
 import { TutorialManager } from "../tutorial-manager/tutorial-manager.jsx";
 import { TinyEditor } from "./Tiny.jsx";
+import { contact_formats } from "../../../frontend/single/index.jsx";
+import { bulk_types } from "../index.jsx";
 
 import style from './editor.module.scss';
-import { contact_formats } from "../../../frontend/single/index.jsx";
 
 const {readonly_mode, is_admin} = window[data_pointer];
 
@@ -64,7 +65,9 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 		segment_id: active_stuff_id
 	} = params;
 
+	const _content = window[data_pointer]?.settings?.contents[content_type] || {};
 	const content_id = isNaN(_content_id) ? 0 : _content_id;
+	const is_bulk    = _content_id === 'bulk' && bulk_types.indexOf(content_type)>-1;
 	
 	const [state, setState] = useState({
 		slug_editor: false,
@@ -153,7 +156,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 			name: 'thumbnail',
 			label: __('Thumbnail Image'),
 			accept: extensions.image,
-			render: true,
+			render: !is_bulk,
 		},
 		{
 			type: 'textarea_rich',
@@ -166,9 +169,13 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 			type: 'file',
 			name: 'preview',
 			label: __('Preview File'),
-			hint: <>{sprintf(__('Sneak peek for onsite playback. Supports: %s'), support_exts.join(', '))}. {content_type==='video' ? <><br/>{__('Please make sure the  aspect ratio of video and thumbnail is same.')}</> : null}</>,
+			hint: <>
+				{sprintf(__('Sneak peek for onsite playback. Supports: %s'), support_exts.join(', '))}. 
+				{content_type==='video' ? <><br/>{__('Please make sure the  aspect ratio of video and thumbnail is same.')}</> : null}
+			</>,
 			required: true,
-			accept: extensions[content_type]
+			accept: extensions[content_type],
+			render: !is_bulk
 		}),
 		(['app', '3d', 'font', 'tutorial', 'classified'].indexOf(content_type)===-1 ? null : {
 			type: 'file',
@@ -177,6 +184,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 			accept: [...extensions.image, ...extensions.video],
 			maxlength: 10,
 			removable: true,
+			render: !is_bulk
 		}),
 		(['audio', 'video', 'image', '3d', 'document', 'font'].indexOf(content_type)===-1 ? null : {
 			type: 'file',
@@ -188,7 +196,18 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 				...(extensions[content_type] || []),
 			].filter(m=>m),
 			required: true,
+			render: !is_bulk
 		}),
+		{
+			type: 'file',
+			name: 'bulk_files',
+			label: sprintf(__('%s Files'), _content.label),
+			hint: __('Max Allowed files are 50, however please upload as less files as per your server capability.'),
+			maxlength: 50,
+			accept: extensions[content_type]?.filter?.(m=>m) || [],
+			required: true,
+			render: is_bulk
+		},
 		{
 			type: 'dropdown',
 			name: 'category_id',
@@ -256,65 +275,81 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 		});
 
 		content.content_status = content_status;
-		
-		request('createOrUpdateContent', {content, ...files}, resp=>{
-			const {
-				success, 
-				data:{
-					content={}, 
-					message, 
-					blackout=false,
+
+		const sendRequest=(content, files)=>{
+			request((is_bulk ? 'createBulkContent' : 'createOrUpdateContent'), {content, ...files}, resp=>{
+				const {
+					success, 
+					data:{
+						content={}, 
+						message, 
+						blackout=false,
+					}
+				} = resp;
+
+				const new_state = {
+					blackout,
+					error_message: (!success || blackout) ? message : null,
+					submitting: false
 				}
-			} = resp;
 
-			const new_state = {
-				blackout,
-				error_message: (!success || blackout) ? message : null,
-				submitting: false
-			}
+				if ( success ) {
 
-			if ( success ) {
+					if ( message ) {
+						ajaxToast(resp);
+					}
 
-				if ( message ) {
+					if ( is_bulk ) {
+						navigate(getDashboardPath(`/inventory/${content_type}/`), {replace: true});
+						return;
+					}
+
+					const editor_url = `inventory/${content_type}/editor/${content.content_id}/`;
+
+					// Replace current URL state with content ID to make it update from later attempts
+					if ( ! content_id ) {
+						navigate(getDashboardPath(editor_url), {replace: true});
+					}
+
+					if ( ! is_draft && ! state2.release_lesson_opened ) {
+
+						if ( content_type === 'app' ) {
+							navigate(getDashboardPath(`${editor_url}release-manager/`));
+							
+						} else if( content_type === 'tutorial' ) {
+							navigate(getDashboardPath(`${editor_url}lessons/`));
+						}
+
+						new_state.release_lesson_opened = true;
+					}
+				} else {
 					ajaxToast(resp);
 				}
 
-				const editor_url = `inventory/${content_type}/editor/${content.content_id}/`;
-
-				// Replace current URL state with content ID to make it update from later attempts
-				if ( ! content_id ) {
-					navigate(getDashboardPath(editor_url), {replace: true});
-				}
-
-				if ( ! is_draft && ! state2.release_lesson_opened ) {
-
-					if ( content_type === 'app' ) {
-						navigate(getDashboardPath(`${editor_url}release-manager/`));
-						
-					} else if( content_type === 'tutorial' ) {
-						navigate(getDashboardPath(`${editor_url}lessons/`));
-					}
-
-					new_state.release_lesson_opened = true;
-				}
-			} else {
-				ajaxToast(resp);
-			}
-
-			setState2({
-				...state2,
-				...new_state
+				setState2({
+					...state2,
+					...new_state
+				});
+			},
+			percent=>{
+				setUploadPercent(percent);
 			});
-		},
-		percent=>{
-			setUploadPercent(percent);
-		});
+		}
+
+		if ( is_bulk ) {
+			downScaleImages( files.bulk_files || [], 720, thumbnails => {
+				sendRequest(content, {...files, thumbnails})
+			});
+
+		} else {
+			sendRequest(content, files);
+		}
 	}
 
 	const fetchContent=()=>{
 
 		if ( content_id === 0 ) {
-			if ( ! readonly_mode ) {
+			if ( ! readonly_mode && ! is_bulk ) {
 				submit('draft');
 			}
 			return;
@@ -430,13 +465,12 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 		getResources();
 	}, [state.values.content_country_code])
 	
-	const _content = window[data_pointer]?.settings?.contents[content_type] || {};
 	const setup_link = `${window[data_pointer].permalinks.settings}#/settings/contents/${content_type}/`;
 	const stuff_id = parseInt(active_stuff_id || 0);
 	const upload_progress = (state2.submitting && uploadPercent) ? ` - ${uploadPercent}%` : null;
 	const {content_status} = state.values;
 
-	if ( state2.blackout || state2.error_message ) {
+	if ( state2.blackout && state2.error_message ) {
 		return <div className={'text-align-center color-error bg-color-white border-radius-8 padding-30'.classNames()}>
 			{state2.error_message || __('Something went wrong!')}
 		</div>
@@ -458,11 +492,21 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 					navigate(getDashboardPath(`inventory/${content_type}/${stuff_id ? `editor/${content_id}/${active_tab}/` : ''}`));
 				}} 
 			></i>
-			<span>
+			<span className={'font-size-14 color-text-80'.classNames()}>
 				{
-					!content_id ? 
-						sprintf(__('Add New %s'), _content.label) : 
-						(stuff_id ? __('Back') : (state.update_title || _content.label))
+					is_bulk ? 
+						<>
+							{sprintf(__('Create Bulk %s Contents'), _content.label)}<br/>
+							<i className={'font-size-13 color-text-60'.classNames()}>
+								{__('Once you submit, separate posts will be created per file.')}
+							</i>
+						</> 
+						:
+						(
+							!content_id ? 
+								sprintf(__('Add New %s'), _content.label) : 
+								(stuff_id ? __('Back') : (state.update_title || _content.label))
+						)
 				}
 			</span>
 			<LoadingIcon show={state.fetching}/>
@@ -624,7 +668,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 												maxlength={maxlength}
 												value={state.values[name] || null}
 												removable={removable}
-												imageMaxWidth={1200}
+												imageMaxWidth={name==='thumbnail' ? 720 : null}
 											/>
 										}
 

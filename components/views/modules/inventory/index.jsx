@@ -35,6 +35,8 @@ export const content_statuses = {
 	rejected: __('Rejected'),
 }
 
+export const bulk_types = ['image', 'audio', 'video'];
+
 const status_hints = {
 	draft: __('The content is not yet published'),
 	publish: __('The content is published and is live'), 
@@ -407,6 +409,7 @@ export function Inventory({navigate, params={}}) {
 		});
 
 	const _content_label = _contents[content_type]?.label || __('Content');
+	const is_classified  = content_type === 'classified';
 	
 	return <InventoryWrapper 
 		content_label={_content_label} 
@@ -415,9 +418,9 @@ export function Inventory({navigate, params={}}) {
 		navigate={navigate}
 		params={params}
 	>
-		<div className={'d-flex align-items-center justify-content-space-between flex-wrap-wrap column-gap-15 row-gap-15 margin-top-10 margin-bottom-10'.classNames()}>
+		<div className={'d-flex align-items-center flex-wrap-wrap column-gap-15 row-gap-15 margin-top-10 margin-bottom-10'.classNames()}>
 			
-			<div className={'d-flex align-items-center column-gap-8'.classNames()}>
+			<div className={'flex-1 d-flex align-items-center column-gap-8'.classNames()}>
 				<a 
 					href={state.gallery_permalink}
 					className={
@@ -436,6 +439,18 @@ export function Inventory({navigate, params={}}) {
 				/>
 			</div>
 			
+			{
+				bulk_types.indexOf(content_type)===-1 ? null :
+				<div>
+					<span 
+						className={'hover-underline cursor-pointer color-material-80 font-weight-500 interactive'.classNames()}
+						onClick={()=>navigate(getDashboardPath(`/inventory/${content_type}/editor/bulk/`))}
+					>
+						+ Add Bulk
+					</span>
+				</div>
+			}
+
 			<div className={'d-flex align-items-center column-gap-10'.classNames()}>
 				{
 					enabled_contents.length < 2 ? null :
@@ -486,9 +501,14 @@ export function Inventory({navigate, params={}}) {
 					<th>{__('Title')}</th>
 					{!is_admin ? null : <th className={'white-space-nowrap'.classNames()}>{__('Contributor')}</th>}
 					<th className={'white-space-nowrap'.classNames()}>{__('Category')}</th>
-					<th>{__('Price')}</th>
-					{(!is_pro_active || content_type=='app') ? null : <th>{__('Bundled In')}</th>}
-					{content_type == 'tutorial' ? null : <th>{__('Downloads')}</th>}
+					{
+						is_classified ? null :
+						<>
+							<th>{__('Price')}</th>
+							{(!is_pro_active || content_type=='app') ? null : <th>{__('Bundled In')}</th>}
+							{content_type == 'tutorial' ? null : <th>{__('Downloads')}</th>}
+						</>
+					}
 					<th>{__('Status')}</th>
 					<th>{__('Created')}</th>
 					<th></th>
@@ -530,7 +550,7 @@ export function Inventory({navigate, params={}}) {
 						} = price_range;
 
 						return <tr key={content_id}>
-							<td data-th={__('ID')}>
+							<td data-th={__('ID')} className={'white-space-nowrap'.classNames()}>
 								{content_id}
 							</td>
 							<td data-th={__('Content')} style={{paddingTop: '20px', paddingBottom: '20px'}}>
@@ -576,84 +596,88 @@ export function Inventory({navigate, params={}}) {
 								</span>
 							</td>
 							
-							<td data-th={__('Price')}>
-								{
-									!is_pro_active ? 
-										<div className={'cursor-pointer'.classNames()}>
-											<ToolTip tooltip={
-												<a 
-													className={'color-material font-weight-600 font-size-14'.classNames()} 
-													href='https://solidie.com/' 
-													target='_blank'
-												>
-													<i>Upgrade to Pro</i>
-												</a>
-											}>
-												N\A
-											</ToolTip>
-										</div>
-										:
-										<div className={'color-text-70'.classNames()}>
-											{
-												monetization !== 'paid' ? __('Free') :
-												<>
+							{
+								is_classified ? null :
+								<>
+									<td data-th={__('Price')}>
+										{
+											!is_pro_active ? 
+												<div className={'cursor-pointer'.classNames()}>
+													<ToolTip tooltip={
+														<a 
+															className={'color-material font-weight-600 font-size-14'.classNames()} 
+															href='https://solidie.com/' 
+															target='_blank'
+														>
+															<i>Upgrade to Pro</i>
+														</a>
+													}>
+														N\A
+													</ToolTip>
+												</div>
+												:
+												<div className={'color-text-70'.classNames()}>
 													{
-														!min_price ? null :
-														<div className={'d-flex align-items-center column-gap-8'.classNames()}>
-															<span className={'font-weight-600 white-space-nowrap'.classNames()}>
-																{currency_symbol}{min_price}
-															</span>
+														monetization !== 'paid' ? __('Free') :
+														<>
 															{
-																!(max_price>min_price) ? null : 
-																<>
-																	<span className={'color-text-50 white-space-nowrap'.classNames()}>
-																		to
-																	</span>
+																!min_price ? null :
+																<div className={'d-flex align-items-center column-gap-8'.classNames()}>
 																	<span className={'font-weight-600 white-space-nowrap'.classNames()}>
-																		{currency_symbol}{max_price}
+																		{currency_symbol}{min_price}
 																	</span>
-																</>
+																	{
+																		!(max_price>min_price) ? null : 
+																		<>
+																			<span className={'color-text-50 white-space-nowrap'.classNames()}>
+																				to
+																			</span>
+																			<span className={'font-weight-600 white-space-nowrap'.classNames()}>
+																				{currency_symbol}{max_price}
+																			</span>
+																		</>
+																	}
+																</div>
 															}
-														</div>
+														</>
 													}
-												</>
-											}
-										</div>
-								}
-							</td>
-							
-							{
-								(!is_pro_active || content_type=='app') ? null :
-								<td data-th={__('Bundled In')}>
+												</div>
+										}
+									</td>
 									{
-										(monetization !== 'paid' || !packs.length) ? null :
-											<div className={'d-flex flex-direction-column row-gap-8'.classNames()}>
-												{
-													packs.map(plan=>{
-														const {plan_name} = plan?.plan || {};
-														return !plan_name ? null : 
-														<div key={plan.variation_id}>
-															<div 
-																className={'bg-color-material-3 border-1 b-color-material-20 d-inline-block font-size-13'.classNames()} 
-																style={{padding: '4px 17px', borderRadius: '50px'}}
-															>
-																{plan_name}
-															</div>
-														</div>
-													})
-												}
-											</div>
+										(!is_pro_active || content_type=='app') ? null :
+										<td data-th={__('Bundled In')}>
+											{
+												(monetization !== 'paid' || !packs.length) ? null :
+													<div className={'d-flex flex-direction-column row-gap-8'.classNames()}>
+														{
+															packs.map(plan=>{
+																const {plan_name} = plan?.plan || {};
+																return !plan_name ? null : 
+																<div key={plan.variation_id}>
+																	<div 
+																		className={'bg-color-material-3 border-1 b-color-material-20 d-inline-block font-size-13'.classNames()} 
+																		style={{padding: '4px 17px', borderRadius: '50px'}}
+																	>
+																		{plan_name}
+																	</div>
+																</div>
+															})
+														}
+													</div>
+											}
+										</td>
 									}
-								</td>
-							}
 
-							{
-								content_type == 'tutorial' ? null :
-								<td data-th={__('Downloads')}>
-									<span className={'color-text-70'.classNames()}>
-										{download_count}
-									</span>
-								</td>
+									{
+										content_type == 'tutorial' ? null :
+										<td data-th={__('Downloads')}>
+											<span className={'color-text-70'.classNames()}>
+												{download_count}
+											</span>
+										</td>
+									}
+								</>
 							}
 							
 							<td data-th={__('Status')}>

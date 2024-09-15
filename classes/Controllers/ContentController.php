@@ -16,6 +16,7 @@ use Solidie\Models\FileManager;
 use Solidie\Models\Reaction;
 use Solidie\Models\Release;
 use Solidie\Models\User;
+use SolidieLib\FileManager as SolidieLibFileManager;
 
 /**
  * Content manager class
@@ -27,6 +28,7 @@ class ContentController {
 			'nopriv' => true,
 		),
 		'createOrUpdateContent' => array(),
+		'createBulkContent'     => array(),
 		'updateContentSlug'     => array(),
 		'getContentEditorResource'     => array(),
 		'deleteContent'         => array(),
@@ -87,30 +89,73 @@ class ContentController {
 	}
 
 	/**
+	 * Undocumented function
+	 *
+	 * @param array $content
+	 * @param array $bulk_files
+	 * @return void
+	 */
+	public static function createBulkContent( array $content, array $bulk_files, array $thumbnails = array() ) {
+
+		if ( empty( $bulk_files ) ) {
+			wp_send_json_error( array( 'message' => __( 'Files were not uploaded or there is an error', 'solidie' ) ) );
+			return;
+		}
+
+		$bulk_files = SolidieLibFileManager::organizeUploadedHierarchy( $bulk_files );
+		$thumbnails = ! empty( $thumbnails ) ? SolidieLibFileManager::organizeUploadedHierarchy( $thumbnails ) : array();
+		$content['content_id'] = 0;
+
+		$submitted = 0;
+		$resp      = array();
+
+		error_log( var_export( $bulk_files, true ) );
+		error_log( var_export( $thumbnails, true ) );
+
+		foreach ( $bulk_files as $index => $file ) {
+
+			$resp    = self::createOrUpdateContent( $content, $file, $thumbnails[ $index ], true );
+			$success = $resp === true || ( $resp['success'] ?? false ) === true;
+			
+			if ( $success ) {
+				$submitted++;
+			}
+		}
+
+		if ( $submitted === 0 ) {
+			wp_send_json_error( array( 'message' => $resp['message'] ?? __( 'No content could be created', 'solidie' ) ) );
+		} else {
+			wp_send_json_success( array( 'message' => sprintf( __( '%d content created', 'solidie' ), $submitted ) ) );
+		}
+	}
+
+	/**
 	 * Create or update content from user dashboard
 	 *
-	 * @param array $content Content data
-	 * @param array $thumbnail Thumbnail file
-	 * @param array $sample_images Sample image/video files
-	 * @param array $sample_image_ids Existing sample image IDs to delete removed ones
-	 * @param array $downloadable_file Main downloadable file
-	 * @param array $preview Preview file
-	 *
+	 * @param array $content
+	 * @param array $downloadable_file
+	 * @param array $thumbnail
+	 * @param boolean $return_response
+	 * @param array $sample_images
+	 * @param array $sample_image_ids
+	 * @param array $preview
 	 * @return void
 	 */
 	public static function createOrUpdateContent( 
 		array $content, 
+		array $downloadable_file = array(), 
 		array $thumbnail = array(), 
+		bool $return_response = false,
 		array $sample_images = array(), 
 		array $sample_image_ids = array(), 
-		array $downloadable_file = array(), 
-		array $preview = array() 
+		array $preview = array()
 	) {
 
 		$user_id = get_current_user_id();
 
-		do_action(
+		$proceed = apply_filters(
 			'solidie_before_create_update_content', 
+			true,
 			compact( 
 				'content', 
 				'thumbnail', 
@@ -120,6 +165,14 @@ class ContentController {
 				'preview'
 			)
 		);
+
+		if ( true !== $proceed ) {
+			if ( $return_response === true ) {
+				return $proceed;
+			} else {
+				wp_send_json_error( $proceed );
+			}
+		}
 
 		// If it is edit, make sure the user is privileged to.
 		if ( ! empty( $content['content_id'] ) ) {
@@ -153,19 +206,31 @@ class ContentController {
 		}
 
 		$content_id = Contents::updateContent( $content, $files );
+		$response   = array();
 
 		if ( ! empty( $content_id ) ) {
 			
 			$message = 'pending' === $content['content_status'] ? __( 'Submitted for review successfully', 'solidie' ) : __( 'Saved successfully', 'solidie' );
 
-			wp_send_json_success(
-				array(
-					'message' => ! empty( $content['content_id'] ) ? $message : null,
-					'content' => Contents::getContentByContentID( $content_id, null, false ),
-				)
+			$response = array(
+				'success' => true,
+				'message' => ! empty( $content['content_id'] ) ? $message : null,
+				'content' => Contents::getContentByContentID( $content_id, null, false ),
 			);
 		} else {
-			wp_send_json_error( array( 'message' => esc_html__( 'Something went wrong!', 'solidie' ) ) );
+			$response = array( 
+				'message' => esc_html__( 'Something went wrong!', 'solidie' )
+			);
+		}
+
+		if ( $return_response === true ) {
+			return $response;
+
+		} elseif ( $response['success'] ?? false ) {
+			wp_send_json_success( $response );
+
+		} else {
+			wp_send_json_error( $response );
 		}
 	}
 

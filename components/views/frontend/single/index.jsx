@@ -1,6 +1,7 @@
 import React, {createContext, useContext, useEffect, useState} from "react";
 import { useParams, Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
+import currency_symbols from "currency-symbol-map/map.js";
 
 import {ErrorBoundary} from 'solidie-materials/error-boundary.jsx';
 import { __, copyToClipboard, data_pointer, getBack, isEmpty } from "solidie-materials/helpers.jsx";
@@ -20,9 +21,10 @@ import { Comments } from "./comments/comments.jsx";
 import { MetaData } from "./meta-data/meta-data.jsx";
 import { content_statuses } from "../../modules/inventory/index.jsx";
 
-import style from './single.module.scss';
 import { getPageTitle } from "../gallery/index.jsx";
 import { SimilarContents } from "./similar-contents/similar.jsx";
+
+import style from './single.module.scss';
 
 export const ContextSingleData = createContext();
 
@@ -98,6 +100,8 @@ function ClassifiedInfo( props ) {
 		meta.content_country_name
 	].filter(m=>!isEmpty(m)).join(', ');
 
+	const {content_classified_price, currency_code} = meta;
+
 	function Item({icon, value}) {
 		return <div 
 			className={'d-flex align-items-center column-gap-15'.classNames()}
@@ -119,6 +123,19 @@ function ClassifiedInfo( props ) {
 	return <div className={'d-flex flex-direction-column row-gap-15'.classNames()}>
 		
 		{
+			!content_classified_price ? null :
+			<div className={'text-align-center border-1 b-color-text-20 padding-15 border-radius-8'.classNames()}>
+				<span className={'font-size-18 font-weight-400 color-text-60'.classNames()}>
+					{__('Price:')}
+				</span>
+				&nbsp;&nbsp;
+				<span className={'font-size-18 font-weight-600 color-text'.classNames()}>
+					{currency_symbols[currency_code]} {content_classified_price}
+				</span>
+			</div>
+		}
+
+		{
 			(isEmpty(address) && !field_keys.length) ? null :
 			<div className={'d-flex flex-direction-column row-gap-15 border-1 b-color-text-20 padding-15 border-radius-8'.classNames()}>
 				<span className={'d-flex align-items-center column-gap-8 font-size-18 color-warning font-weight-500'.classNames()}>
@@ -126,7 +143,11 @@ function ClassifiedInfo( props ) {
 				</span>
 
 				{
-					isEmpty(address) ? null : <Item {...{icon: 'sicon sicon-location'.classNames(), value: address}}/>
+					isEmpty(address) ? null : 
+						<Item {...{
+							icon: 'sicon sicon-location'.classNames(), 
+							value: address
+						}}/>
 				}
 
 				{
