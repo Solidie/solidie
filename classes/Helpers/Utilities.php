@@ -33,4 +33,27 @@ class Utilities extends LibUtils{
 	public static function gmDate() {
 		return gmdate( 'Y-m-d H:i:s' );
 	}
+
+	/**
+	 * Convert units to byte
+	 *
+	 * @param string $size Such as 100M
+	 * @return int
+	 */
+	public static function convertToBytes($size) {
+
+		$unit   = strtoupper( substr( $size, -1 ) );
+		$number = (float) substr( $size, 0, -1 );
+
+		switch ( $unit ) {
+			case 'K':
+				return $number * 1024; // Kilobytes to bytes
+			case 'M':
+				return $number * 1024 * 1024; // Megabytes to bytes
+			case 'G':
+				return $number * 1024 * 1024 * 1024; // Gigabytes to bytes
+			default:
+				return $number; // If no unit, assume the value is already in bytes
+		}
+	}
 }

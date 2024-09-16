@@ -11,6 +11,7 @@ import { MetaData } from "../../single/meta-data/meta-data";
 import vid_style from '../video/video.module.scss';
 import style from './generic.module.scss';
 
+// Determine price range from an array of plans
 export const getPriceRange=(plans, exclude_pack=false)=>{
 	
 	let sale_price;
@@ -21,34 +22,40 @@ export const getPriceRange=(plans, exclude_pack=false)=>{
 
 	let packs = [];
 
+	// Loop through individual plans 
 	plans.forEach(plan=>{
 
 		const {sales_model} = plan.plan || {};
 
+		// Skip disabled plans from calculations
 		if ( ! plan.enable ) {
 			return;
 		}
 		
+		// If not single, means bundle, add to pack array. Range is not applicable here.
 		if ( sales_model != 'single' ) {
 
 			packs.push(plan);
 
-			if (exclude_pack) {
+			if ( exclude_pack ) {
 				return;
 			}
 		}
 
+		// Determine sale price and regular price
 		if ( sale_price === undefined || sale_price>plan.sale_price ) {
 			sale_price    = plan.sale_price;
 			regular_price = plan.regular_price;
 		}
 
+		// Determine sale price max and regular price max
 		if ( sale_price_max === undefined || sale_price<plan.sale_price ) {
 			sale_price_max = plan.sale_price;
 			regular_price_max = plan.regular_price;
 		}
 	});
 
+	// Return price ranges
 	return {
 		min: {
 			sale_price,

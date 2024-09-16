@@ -13,6 +13,7 @@ use Solidie\Main;
 use Solidie\Models\AdminSetting;
 use Solidie\Models\Contents;
 use Solidie\Models\User;
+use Solidie_Pro\Setup\Dashboard as FEDashboard;
 use SolidieLib\Variables;
 
 /**
@@ -108,6 +109,7 @@ class Scripts {
 					'contents' => AdminSetting::getContentSettings(),
 					'general'  => array(),
 				),
+				'configs'          => array(),
 				'permalinks'       => array(
 					'inventory_backend' => Utilities::getBackendPermalink( AdminPage::INVENTORY_SLUG ),
 					'settings'          => Utilities::getBackendPermalink( AdminPage::SETTINGS_SLUG ),
@@ -118,6 +120,18 @@ class Scripts {
 			)
 		);
 		
+		// Add file configs for content editor
+		if ( is_user_logged_in() && ( is_admin() || ( class_exists( FEDashboard::class ) && FEDashboard::isFrontDashboard() ) ) ) {
+			$data['configs'] = array_replace(
+				$data['configs'],
+				array(
+					'max_filesize'   => Utilities::convertToBytes( ini_get( 'upload_max_filesize' ) ),
+					'max_post_size'  => Utilities::convertToBytes( ini_get( 'post_max_size' ) ),
+					'execution_time' => (int) ini_get( 'max_execution_time' )
+				)
+			);
+		}
+
 		// Pass the data through filter
 		$data = apply_filters( 'solidie_frontend_variables', $data );
 

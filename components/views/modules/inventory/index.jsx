@@ -621,7 +621,7 @@ export function Inventory({navigate, params={}}) {
 														monetization !== 'paid' ? __('Free') :
 														<>
 															{
-																!min_price ? null :
+																isNaN(min_price) ? null :
 																<div className={'d-flex align-items-center column-gap-8'.classNames()}>
 																	<span className={'font-weight-600 white-space-nowrap'.classNames()}>
 																		{currency_symbol}{min_price}
