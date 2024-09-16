@@ -121,7 +121,9 @@ You can [create issue](https://github.com/Solidie/Solidie/issues) on Github repo
 * New: Daily post limit for contributors (Pro)
 * New: Bulk content create feature for image, audio and video
 * Update: Sync content slug on title blur
+* Update: Default thumbnail for audio
 * Fix: Image gets cropped in downloadable field
+* Fix: Download button not showing for optional purchase
 
 = v1.1.7 -> Sep 11, 2024 =
 --------------------------

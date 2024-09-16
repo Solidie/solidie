@@ -277,7 +277,7 @@ class FileManager extends SolidieLibFileManager {
 
 		if ( apply_filters( 'solidie_is_file_free', $file_id, true ) ) {
 			$cloud = _Array::getArray( get_post_meta( $file_id, self::SOLIDIE_FILE_CLOUD_KEY, true ) );
-			if ( ! empty( $cloud['file_url'] ) ) {
+			if ( ! empty( $cloud['file_url'] ) && false === strpos( ( $cloud['mime_type'] ?? '' ), 'audio' ) ) {
 				return $cloud['file_url'];
 			}
 		}

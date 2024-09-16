@@ -61,6 +61,13 @@ class Shortcode {
 		$content_description = ( is_array( $data ) && is_array( $data['content'] ?? null ) ) ? $data['content']['content_description'] : '';
 
 		ob_start();
+			if ( is_front_page() && current_user_can( 'manage_options' ) ) {
+				?>
+				<div style="text-align: center; color: #aa0000; margin-bottom: 15px;">
+					<i><?php echo esc_html__( 'Individual content URL won\'t work properly if your set this page as home', 'solidie' ); ?></i>
+				</div>
+				<?php
+			}
 			?>
 				<div 
 					id="Solidie_Gallery" 

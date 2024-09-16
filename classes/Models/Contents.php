@@ -365,7 +365,8 @@ class Contents {
 			return $contents;
 		}
 
-		$placeholder_url = Main::$configs->dist_url . 'libraries/thumbnail-placeholder.svg';
+		$placeholder_url       = Main::$configs->dist_url . 'libraries/thumbnail-placeholder.svg';
+		$placeholder_url_audio = Main::$configs->dist_url . 'libraries/thumbnail-placeholder-audio.jpeg';
 		
 		$was_single = ! _Array::isTwoDimensionalArray( $contents );
 		if ( $was_single ) {
@@ -407,7 +408,7 @@ class Contents {
 			if ( empty( $contents[ $index ]['media']['thumbnail'] ) ) {
 				$contents[ $index ]['media']['thumbnail'] = array(
 					'file_id'   => 0,
-					'file_url'  => $placeholder_url,
+					'file_url'  => 'audio' === $content['content_type'] ? $placeholder_url_audio : $placeholder_url,
 					'file_name' => basename( $placeholder_url ),
 					'mime_type' => 'image/svg+xml'
 				);

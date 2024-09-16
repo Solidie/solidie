@@ -309,7 +309,7 @@ export function SingleWrapper() {
 				<Link
 					to={permalinks.gallery[content_type]}
 					onClick={getBack}
-					className={'d-flex align-items-center column-gap-8 color-text-60 interactive'.classNames()}
+					className={'d-inline-flex align-items-center column-gap-8 color-text-60 interactive'.classNames()}
 				>
 					<i className={'sicon sicon-arrow-left font-size-16'.classNames()}></i>
 					<span className={'font-size-14'.classNames()}>
