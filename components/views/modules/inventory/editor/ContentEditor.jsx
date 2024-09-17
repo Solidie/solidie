@@ -54,6 +54,18 @@ const extensions = {
 	]
 }
 
+const tags_placeholders = {
+	audio: '128 BPM, Happy Mode, Piano, 56 s',
+	video: '30 FPS, 4k, 16:9, 5 Minutes',
+	image: '2012*1023, 90 DPI',
+	app: 'WordPress 6.4+, eCommerce, Live Chat',
+	'3d': 'Rigged, Animated, Low Poly, obj, fbx, mtl',
+	document: 'cv, resume, docx, xlsx, slideshow',
+	font: 'Thin, Regular, Bold, Black',
+	classified: 'Negotiable, Trial allowed',
+	tutorial: 'video, live class'
+}
+
 export function ContentEditor({categories=[], navigate, params={}}) {
 
 	const {ajaxToast} = useContext(ContextToast);
@@ -165,6 +177,12 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 			required: true,
 			placeholder: __('Write some description here'),
 		},
+		{
+			type: 'text',
+			name: 'content_tags',
+			label: __('Tags'),
+			placeholder: `e.g ${tags_placeholders[content_type]}`,
+		},
 		(['audio', 'video'].indexOf(content_type) === -1 ? null : {
 			type: 'file',
 			name: 'preview',
@@ -173,7 +191,6 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 				{sprintf(__('Sneak peek for onsite playback. Supports: %s'), support_exts.join(', '))}. 
 				{content_type==='video' ? <><br/>{__('Please make sure the  aspect ratio of video and thumbnail is same.')}</> : null}
 			</>,
-			required: true,
 			accept: extensions[content_type],
 			render: !is_bulk
 		}),
@@ -195,7 +212,6 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 				'.zip', 
 				...(extensions[content_type] || []),
 			].filter(m=>m),
-			required: true,
 			render: !is_bulk
 		}),
 		{
@@ -367,6 +383,8 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 			} = resp;
 
 			const {values={}} = state;
+			const content_meta = ! isEmpty( content.meta ) ? content.meta : {}
+			
 			if ( success ) {
 				
 				const release = content.release || null;
@@ -384,10 +402,11 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 				values.product                  = content.product ?? {};
 
 				// Add meta data to the values
-				classifieds_fields.forEach(({name})=>{
-					values[ name ] = content.meta[name];
+				Object.keys(content_meta).forEach(key=>{
+					values[key] = content_meta[key];
 				});
 
+				// Set release info
 				if ( release ) {
 					values.downloadable_file = {
 						file_id: release.file_id,

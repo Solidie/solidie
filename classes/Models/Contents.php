@@ -40,6 +40,9 @@ class Contents {
 	);
 
 	const CONTENT_META_KEYS = array(
+		// Common meta for all types
+		'content_tags',
+
 		// Fields for classified content post
 		'content_country_code',
 		'content_state_code',

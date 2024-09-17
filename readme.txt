@@ -115,15 +115,16 @@ You can [create issue](https://github.com/Solidie/Solidie/issues) on Github repo
 
 == Changelog ==
 
-= v1.1.8 -> Sep 23, 2024 =
+= v1.1.8 -> Sep 18, 2024 =
 --------------------------
-* New: Real time messaging feature between users (Pro)
+* New: Realtime messaging feature between users (Pro)
 * New: Daily post limit for contributors (Pro)
 * New: Bulk content create feature for image, audio and video
+* New: Content tags field added
 * Update: Sync content slug on title blur
 * Update: Default thumbnail for audio
-* Fix: Image gets cropped in downloadable field
-* Fix: Download button not showing for optional purchase
+* Fix: Original image gets cropped in downloadable field
+* Fix: Download button not showing for optional purchase (Pro)
 
 = v1.1.7 -> Sep 11, 2024 =
 --------------------------

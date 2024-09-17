@@ -1,15 +1,33 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-import {__} from 'solidie-materials/helpers.jsx';
+import {__, isEmpty} from 'solidie-materials/helpers.jsx';
 import {ResponsiveLayout} from 'solidie-materials/responsive-layout.jsx';
 import {Ratio} from 'solidie-materials/responsive-layout.jsx';
 import { currency_symbol } from "solidie-materials/helpers";
+import { TagField } from "solidie-materials/tag-field/tag-field";
 
 import { MetaData } from "../../single/meta-data/meta-data";
 
 import vid_style from '../video/video.module.scss';
 import style from './generic.module.scss';
+
+export function ContentTags({tags}) {
+
+	const _tags = tags?.split?.(',') || [];
+	const tags_array = [...new Set(_tags.map(t=>t.trim()).filter(t=>t))];
+
+	return <TagField
+		theme='tag'
+		value={[]}
+		options={tags_array.map(t=>{
+			return {
+				id: t,
+				label: t
+			}
+		})}
+	/>
+}
 
 // Determine price range from an array of plans
 export const getPriceRange=(plans, exclude_pack=false)=>{
@@ -121,7 +139,10 @@ export function GenericCard({contents=[]}) {
 					content_permalink, 
 					media={}, 
 					content_title,
+					meta: {content_tags=''}={}
 				} = content;
+
+				const tags = content_tags?.trim?.() || '';
 
 				return <div 
 					key={content_id} 
@@ -168,6 +189,13 @@ export function GenericCard({contents=[]}) {
 							<DownloadOrPrice content={content}/>
 						</div>
 					</div>
+
+					{
+						isEmpty(tags) ? null :
+						<div className={'padding-horizontal-20'.classNames()} style={{paddingBottom: '15px'}}>
+							<ContentTags tags={tags}/>
+						</div>
+					}
 				</div>
 			})}
 		</ResponsiveLayout>
