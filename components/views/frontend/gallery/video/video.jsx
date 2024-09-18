@@ -1,15 +1,13 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 
 import { ColCounter, ContextColCounter } from "solidie-materials/col-counter.jsx";
 
 import {chunkArray} from '../image/image.jsx';
-import style from './video.module.scss';
 import { MetaData } from "../../single/meta-data/meta-data.jsx";
-import { useState } from "react";
-import { useEffect } from "react";
-import { useRef } from "react";
-import { DownloadOrPrice } from "../generic-card/generic-card.jsx";
+import { DownloadOrPrice } from "../generic-data.jsx";
+
+import style from './video.module.scss';
 
 export function ImageVideoDetails({content={}}) {
 
@@ -21,6 +19,7 @@ export function ImageVideoDetails({content={}}) {
 				<MetaData 
 					content={content} 
 					is_overlayer={true}
+					show={['price', 'contributor']}
 				/>
 			</div>
 		</div>

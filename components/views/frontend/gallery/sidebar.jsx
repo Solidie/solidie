@@ -10,7 +10,7 @@ function Filters({_setFilter, filterList, filters}) {
 	return Object.keys(filterList).map((filter_key) => {
 		let { section_label, selection_type, options = [] } = filterList[filter_key];
 
-		return <div
+		return isEmpty(options) ? null : <div
 			key={filter_key}
 			data-cylector={filter_key}
 			className={'margin-bottom-23 overflow-auto'.classNames()}
@@ -40,7 +40,6 @@ function Filters({_setFilter, filterList, filters}) {
 				selection_type !== 'tag' ? null :
 				<div>
 					<TagField
-						theme="tag"
 						behavior="radio"
 						options={options}
 						value={filters[filter_key]}
@@ -141,7 +140,7 @@ function MobileFilter({_setFilter, filterList, filters}) {
 	</div>
 }
 
-export function Sidebar({ is_mobile, setFilter, filters, filterList }) {
+export function Sidebar({ is_tablet, setFilter, filters, filterList }) {
 	
     const _setFilter = (name, value) => {
         setFilter(name, filters[name] == value ? null : value);
@@ -153,12 +152,12 @@ export function Sidebar({ is_mobile, setFilter, filters, filterList }) {
 		filters
 	}
 
-	const show_clearer = !is_mobile && Object.keys(filters).filter(k=>!isEmpty(filters[k])).length;
+	const show_clearer = !is_tablet && Object.keys(filters).filter(k=>k!=='country_code' && !isEmpty(filters[k])).length;
 	const is_empty     = !Object.keys(filterList).filter((filter_key) => !isEmpty(filterList[filter_key].options)).length;
 
     return is_empty ? null : <div data-cylector="sidebar" className={'sidebar'.classNames(style)}>
 		{
-			is_mobile ? 
+			is_tablet ? 
 				<MobileFilter  {...prop_drill}/> : 
 				<Filters {...prop_drill}/>
 		}

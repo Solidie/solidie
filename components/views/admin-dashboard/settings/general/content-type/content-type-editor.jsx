@@ -80,21 +80,6 @@ const fields = [
 		when: ['reaction_type', 'like' ]
 	},
 	{
-		name: 'enable_sharing',
-		label: __('Show share option'),
-		type: 'switch',
-		placeholder: __('Enable')
-	},
-	(
-		!is_pro_active ? null :
-		{
-			name: 'enable_wishlist',
-			label: __('Show wishlist option'),
-			type: 'switch',
-			placeholder: __('Enable')
-		}
-	),
-	{
 		name: 'supported_countries',
 		multiple: true,
 		label: __('Supported Country'),

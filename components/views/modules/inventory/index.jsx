@@ -12,7 +12,7 @@ import { DropDown, Options } from "solidie-materials/dropdown/dropdown.jsx";
 import {DropDownStatus} from 'solidie-materials/dropdown-status/dropdown-status.jsx';
 import { ToolTip } from 'solidie-materials/tooltip.jsx';
 
-import { getPriceRange } from '../../frontend/gallery/generic-card/generic-card.jsx';
+import { getPriceRange } from '../../frontend/gallery/generic-data.jsx';
 
 import style from './inventory.module.scss';
 

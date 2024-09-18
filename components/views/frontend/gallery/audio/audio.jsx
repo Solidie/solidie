@@ -26,7 +26,7 @@ export function Audio({contents=[]}) {
 						<MetaData 
 							content={content} 
 							is_overlayer={true}
-							show_price_download={true}
+							show={['price', 'reaction']}
 						/>
 					</div>
 				</AudioPlayer>

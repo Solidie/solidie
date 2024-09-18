@@ -123,6 +123,7 @@ You can [create issue](https://github.com/Solidie/Solidie/issues) on Github repo
 * New: Content tags field added
 * Update: Sync content slug on title blur
 * Update: Default thumbnail for audio
+* Update: Gallery layout enhanced
 * Fix: Original image gets cropped in downloadable field
 * Fix: Download button not showing for optional purchase (Pro)
 

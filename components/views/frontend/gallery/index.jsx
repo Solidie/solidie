@@ -11,7 +11,6 @@ import { Pagination } from "solidie-materials/pagination/pagination.jsx";
 import { applyFilters } from "solidie-materials/hooks.jsx";
 import { TextField } from "solidie-materials/text-field/text-field.jsx";
 
-import { GenericCard } from "./generic-card/generic-card.jsx";
 import { SingleWrapper } from "../single/index.jsx";
 
 import { Image } from "./image/image.jsx";
@@ -30,8 +29,7 @@ export const renderers = {
 	audio: Audio,
 	video: Video,
 	image: Image,
-	classified: Classifieds,
-	other: GenericCard
+	other: Classifieds
 }
 
 const sorting_list = {
@@ -77,6 +75,7 @@ function GalleryLayout({resources={}}) {
 	const navigate = useNavigate();
 	
 	const reff_wrapper = useRef();
+	const [is_tablet, setTablet] = useState(false);
 	const [is_mobile, setMobile] = useState(false);
 	const [state, setState] = useState({
 		contents:[], 
@@ -132,7 +131,8 @@ function GalleryLayout({resources={}}) {
 
 	const setLayout=()=>{
 		if ( reff_wrapper?.current ) {
-			setMobile(reff_wrapper.current.offsetWidth<560);
+			setTablet(reff_wrapper.current.offsetWidth<697);
+			setMobile(reff_wrapper.current.offsetWidth<473);
 		}
 	}
 
@@ -222,12 +222,12 @@ function GalleryLayout({resources={}}) {
 		<div className={'gallery'.classNames(style)}>
 			<div 
 				ref={reff_wrapper} 
-				className={`content ${is_mobile ? 'mobile' : ''}`.classNames(style)}
+				className={`content ${is_tablet ? 'mobile' : ''}`.classNames(style)}
 			>
 				<Sidebar
 					filters={queryParams}
 					setFilter={setFilter}
-					is_mobile={is_mobile}
+					is_tablet={is_tablet}
 					filterList={
 						applyFilters(
 							'gallery_sidebar_filter_list',
@@ -332,7 +332,13 @@ function GalleryLayout({resources={}}) {
 						{
 							!state.contents.length ? null :
 							<ErrorBoundary>
-								<RenderComp contents={state.contents}/>
+								
+								<RenderComp 
+									contents={state.contents} 
+									content_type={content_type} 
+									is_mobile={is_mobile} 
+									is_tablet={is_tablet}
+								/>
 								
 								{
 									(state.segmentation?.page_count || 0) < 2 ? null :

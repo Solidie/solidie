@@ -7,7 +7,7 @@ import { __, data_pointer, isEmpty } from "solidie-materials/helpers.jsx";
 import { ShareModal } from "solidie-materials/share-modal.jsx";
 
 import { ContextGallery } from "../../gallery/index.jsx";
-import { DownloadOrPrice } from "../../gallery/generic-card/generic-card.jsx";
+import { DownloadOrPrice } from "../../gallery/generic-data.jsx";
 
 import style from './meta.module.scss';
 
@@ -19,6 +19,23 @@ const {
 } = window[data_pointer];
 
 const readonly = !is_logged_in || readonly_mode;
+
+function abbreviateNumber(number) {
+    // Ensure the input is a number
+    if (typeof number !== 'number') return number;
+    
+    const absNumber = Math.abs(number);
+
+    if (absNumber >= 1e9) {
+        return (number / 1e9).toFixed(1).replace(/\.0$/, '') + 'B'; // Billions
+    } else if (absNumber >= 1e6) {
+        return (number / 1e6).toFixed(1).replace(/\.0$/, '') + 'M'; // Millions
+    } else if (absNumber >= 1e3) {
+        return (number / 1e3).toFixed(1).replace(/\.0$/, '') + 'K'; // Thousands
+    } else {
+        return number.toString(); // Less than a thousand
+    }
+}
 
 function LikeDislike({content={}, applyReaction, is_overlayer}) {
 
@@ -84,25 +101,28 @@ function Rating({content={}, applyReaction, is_overlayer}) {
 	const {reactions:{rating={}}} = content;
 	const {my_reaction=0, average=0, rating_count=0} = rating;
 
-	return <div className={'d-flex align-items-center'.classNames()}>
-		<RatingComp
-			initialValue={my_reaction || average}
-			onClick={applyReaction}
-			readonly={readonly || is_overlayer}
-			size={19}
-			fillColor={my_reaction ? window[data_pointer].colors.secondary : undefined}
-			emptyColor={is_overlayer ? 'white' : 'gray'}
-			style={{height: '25px'}}
-		/>
-		&nbsp;
+	return <div className={'d-flex align-items-center column-gap-5'.classNames()}>
+		<span style={{position: 'relative', top: '-4px'}}>
+			<RatingComp
+				initialValue={my_reaction || average}
+				onClick={applyReaction}
+				readonly={!applyReaction || readonly || is_overlayer}
+				size={18}
+				fillColor={my_reaction ? window[data_pointer].colors.secondary : undefined}
+				emptyColor={is_overlayer ? 'white' : 'gray'}
+				style={{height: '22px'}}
+			/>
+		</span>
+		
 		<span 
 			className={`font-size-14 color-text-50`.classNames()}
 			style={{
 				letterSpacing: '2.2px', 
 				color: is_overlayer ? 'var(--solidie-color-white)' : 'var(--solidie-color-text-70)'
 			}}
+			title={rating_count}
 		>
-			({average}/{rating_count})
+			({abbreviateNumber(rating_count)})
 		</span>
 	</div>
 }
@@ -111,10 +131,9 @@ export function MetaData(props) {
 
 	const {
 		content={}, 
-		settings={}, 
 		is_overlayer, 
-		show_price_download=false, 
-		updateReactions
+		updateReactions,
+		show=['price', 'contributor', 'reaction', 'sharer', 'wishlist']
 	} = props;
 	
 	const gallery_context = useContext(ContextGallery);
@@ -166,16 +185,7 @@ export function MetaData(props) {
 	const {wishlisted} = content.reactions || {};
 	const meta = {};
 
-	if (show_price_download) {
-		meta.price = <div>
-			<DownloadOrPrice 
-				content={content} 
-				is_overlayer={is_overlayer}
-			/>
-		</div>
-	}
-
-	if (!is_overlayer && contributor) {
+	if (show.indexOf('contributor') > -1 && contributor) {
 		meta.contributor = <div className={'d-inline-flex align-items-center column-gap-10'.classNames()}>
 			<img 
 				src={contributor.avatar_url} 
@@ -187,39 +197,31 @@ export function MetaData(props) {
 		</div>
 	}
 
-	if (reactions.like) {
-		meta.reaction = <div>
-			<LikeDislike 
-				content={content} 
-				applyReaction={v=>applyReaction(v, 'like')}
-				submiting={state.submiting}
-				is_overlayer={is_overlayer}
-			/>
-		</div>
-	}
+	if ( show.indexOf('reaction') > -1 ) {
+		if (reactions.like) {
+			meta.reaction = <div>
+				<LikeDislike 
+					content={content} 
+					applyReaction={v=>applyReaction(v, 'like')}
+					submiting={state.submiting}
+					is_overlayer={is_overlayer}
+				/>
+			</div>
+		}
 
-	if (reactions.rating) {
-		meta.rating = <div>
-			<Rating 
-				content={content}
-				applyReaction={v=>applyReaction(v, 'rating')}
-				submiting={state.submiting}
-				is_overlayer={is_overlayer}
-			/>
-		</div>
+		if (reactions.rating) {
+			meta.rating = <div>
+				<Rating 
+					content={content}
+					applyReaction={v=>applyReaction(v, 'rating')}
+					submiting={state.submiting}
+					is_overlayer={is_overlayer}
+				/>
+			</div>
+		}
 	}
-
-	if (!(reactions.comment_count===null)) {
-		meta.comment = <div className={`${is_overlayer ? 'color-white text-shadow-thin' : 'color-text'}`.classNames()}>
-			<i 
-				className={`sicon sicon-message font-size-14 cursor-pointer ${is_overlayer ? 'color-white' : 'color-text'}`.classNames()}
-			></i>
-			&nbsp;
-			{reactions.comment_count}
-		</div>
-	}
-
-	if (!is_overlayer && settings.sharing) {
+	
+	if ( show.indexOf('sharer') > -1 ) {
 		meta.sharing = <div>
 			{
 				!showSharer ? null : 
@@ -230,27 +232,36 @@ export function MetaData(props) {
 			}
 
 			<i 
-				className={`sicon sicon-share1 font-size-14 cursor-pointer ${is_overlayer ? 'color-white text-shadow-thin' : 'color-text'}`.classNames()}
+				className={`sicon sicon-share1 font-size-13 cursor-pointer ${is_overlayer ? 'color-white text-shadow-thin' : 'color-text-50 interactive'}`.classNames()}
 				onClick={()=>setShowSharer(true)}
 				data-cylector="share-opener"
 			></i>
 		</div>
 	}
 
-	if (window[data_pointer].is_pro_active && settings.wishlist) {
+	if (show.indexOf('wishlist') > -1 && window[data_pointer].is_pro_active) {
 		meta.wishlist = <div>
 			<i 
 				title={wishlisted ? __('Remove from saved items') : __('Save for later')}
-				className={`sicon ${content.reactions?.wishlisted ? 'sicon-heart' : 'sicon-heart-o'} font-size-16 cursor-pointer ${is_overlayer ? 'color-white text-shadow-thin' : 'color-text'}`.classNames()}
+				className={`sicon ${content.reactions?.wishlisted ? 'sicon-heart' : 'sicon-heart-o'} font-size-13 cursor-pointer ${is_overlayer ? 'color-white text-shadow-thin' : 'color-text-50 interactive'}`.classNames()}
 				onClick={()=>applyReaction(content.reactions?.wishlisted ? -1 : 1, 'wishlist')}
 				data-cylector="add-to-wishlist"
 			></i>
 		</div>
 	}
 
+	if (show.indexOf('price') > -1 ) {
+		meta.price = <div>
+			<DownloadOrPrice 
+				content={content} 
+				is_overlayer={is_overlayer}
+			/>
+		</div>
+	}
+
 	return isEmpty(meta) ? null : <div 
 		className={
-			'd-flex align-items-center flex-wrap-wrap flex-direction-row row-gap-10 column-gap-15 white-space-nowrap'.classNames()
+			'd-inline-flex align-items-center flex-wrap-wrap flex-direction-row row-gap-10 column-gap-15 white-space-nowrap'.classNames()
 		}
 		 
 		onClick={e=>{

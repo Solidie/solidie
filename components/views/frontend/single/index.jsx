@@ -324,8 +324,9 @@ export function SingleWrapper() {
 				</strong>
 				<MetaData 
 					content={state.content}
-					settings={state.settings}
-					updateReactions={updateReactions}/>
+					updateReactions={updateReactions}
+					show={['contributor', 'reaction', 'comment', 'sharer', 'wishlist']}
+				/>
 			</div>
 			
 			<div className={'d-flex column-gap-15 row-gap-15'.classNames() + 'content-wrapper'.classNames(style)}>
