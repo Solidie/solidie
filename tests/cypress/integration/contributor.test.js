@@ -98,7 +98,7 @@ describe('Test user dashboard with contributor user', ()=>{
 		cy.get('[data-cylector="sharer"] [data-cylector="close-sharer"]').click();
 		
 		// Test wishlist
-		cy.get('[data-cylector="add-to-wishlist"]').click();
+		cy.get('[data-cylector="add-to-wishlist"]:first').click();
 		cy.wait(1000);
 		cy.visit('my-dashboard/wishlist/');
 		cy.wait(1500);

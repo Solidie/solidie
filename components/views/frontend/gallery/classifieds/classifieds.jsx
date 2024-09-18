@@ -37,6 +37,7 @@ export function Classifieds({contents=[], content_type, is_mobile}) {
 				`d-flex ${is_mobile ? 'flex-direction-column' : 'align-items-center'} column-gap-15 row-gap-15 padding-15 cursor-pointer ${!is_last ? 'border-bottom-1 b-color-text-6' : ''}`.classNames()
 				+ `list-single`.classNames(style)
 			}
+			data-cylector="content-single"
 		>
 			<div style={{width: is_mobile ? '100%' : (!is_classified ? '180px' : '150px')}}>
 				{
