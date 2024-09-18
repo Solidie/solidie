@@ -62,16 +62,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.321.11",
+            "version": "3.321.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "bbd357d246350ffcd0dd8df30951d2d46c5ddadb"
+                "reference": "6330c3367f303ef4430fca605df9e411abe34d48"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/bbd357d246350ffcd0dd8df30951d2d46c5ddadb",
-                "reference": "bbd357d246350ffcd0dd8df30951d2d46c5ddadb",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/6330c3367f303ef4430fca605df9e411abe34d48",
+                "reference": "6330c3367f303ef4430fca605df9e411abe34d48",
                 "shasum": ""
             },
             "require": {
@@ -154,9 +154,9 @@
             "support": {
                 "forum": "https://forums.aws.amazon.com/forum.jspa?forumID=80",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.321.11"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.321.13"
             },
-            "time": "2024-09-13T18:05:10+00:00"
+            "time": "2024-09-17T18:08:34+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -759,12 +759,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:Solidie/solidie-lib.git",
-                "reference": "c02af7e09ffa0feb8e00cc975edaf5d592c79e91"
+                "reference": "a30da624e4780f6d9341695d0e9c559a18d35439"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Solidie/solidie-lib/zipball/c02af7e09ffa0feb8e00cc975edaf5d592c79e91",
-                "reference": "c02af7e09ffa0feb8e00cc975edaf5d592c79e91",
+                "url": "https://api.github.com/repos/Solidie/solidie-lib/zipball/a30da624e4780f6d9341695d0e9c559a18d35439",
+                "reference": "a30da624e4780f6d9341695d0e9c559a18d35439",
                 "shasum": ""
             },
             "require-dev": {
@@ -790,7 +790,7 @@
                 "source": "https://github.com/Solidie/solidie-lib/tree/main",
                 "issues": "https://github.com/Solidie/solidie-lib/issues"
             },
-            "time": "2024-09-16T17:10:40+00:00"
+            "time": "2024-09-18T16:25:34+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",

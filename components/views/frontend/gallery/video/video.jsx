@@ -14,21 +14,19 @@ export function ImageVideoDetails({content={}}) {
 	const { content_title } = content;
 
 	return <div className={'position-absolute left-0 top-0 right-0 bottom-0 d-flex flex-direction-column justify-content-space-between'.classNames() + 'details'.classNames(style)}>
-		<div className={'d-flex align-items-center justify-content-flex-end padding-10'.classNames() + 'gradient-top'.classNames(style)}>
-			<div className={'padding-bottom-30'.classNames()}>
+		<div className={'d-flex align-items-center justify-content-flex-end padding-10'.classNames()}>
+			<div>
 				<MetaData 
 					content={content} 
 					is_overlayer={true}
-					show={['price', 'contributor']}
+					show={['wishlist']}
 				/>
 			</div>
 		</div>
-		<div className={'padding-top-30'.classNames() + 'gradient-bottom'.classNames(style)}>
+		<div className={'gradient-bottom'.classNames(style)}>
 			<div className={'d-flex align-items-center column-gap-15 padding-10'.classNames()}>
-				<div className={'flex-1 d-flex align-items-center column-gap-10'.classNames()}>
-					<strong className={'font-size-16 font-weight-500 color-white text-shadow-thin line-clamp'.classNames()}>
-						{content_title}
-					</strong>
+				<div className={'flex-1 column-gap-10 font-size-16 font-weight-500 color-white text-shadow-thin line-clamp'.classNames()}>
+					{content_title}
 				</div>
 				<div>
 					<DownloadOrPrice content={content} is_overlayer={true}/>
@@ -65,7 +63,7 @@ export function VideoSingle({content}) {
 		data-cylector="content-single"
 	>
 		<div 
-			className={'position-relative cursor-pointer'.classNames() + 'video-wrapper'.classNames(style)}
+			className={'position-relative cursor-pointer  border-radius-8'.classNames() + 'video-wrapper'.classNames(style)}
 			onMouseOver={()=>setState({...state, mouse_over: true})}
 			onMouseOut={()=>setState({...state, mouse_over: false})}
 		>

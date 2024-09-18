@@ -687,7 +687,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 												maxlength={maxlength}
 												value={state.values[name] || null}
 												removable={removable}
-												imageMaxWidth={name==='thumbnail' ? 720 : null}
+												imageMaxWidth={name !== 'downloadable_file' ? 720 : null}
 											/>
 										}
 

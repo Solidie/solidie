@@ -179,6 +179,7 @@ class Release {
 			
 			$release   = _Array::castRecursive( $release );
 			$file_path = get_attached_file( $release['file_id'], true );
+			$mime      = get_post_mime_type( $release['file_id'] );
 
 			$arg_payload = array(
 				'release'    => $release,
@@ -188,10 +189,10 @@ class Release {
 
 			$release['download_url']      = apply_filters( 'solidie_release_download_link', FileManager::getMediaLink( 0, array( 'content_slug' => $release['content_slug'] ) ), $arg_payload );
 			$release['file_name']         = $file_path ? basename( $file_path ) : null;
-			$release['mime_type']         = get_post_mime_type( $release['file_id'] );
 			$release['changelog']         = $release['changelog'] ? ( string ) $release['changelog'] : '';
 			$release['content_permalink'] = $content_permalink;
-
+			$release['mime_type']         = ! empty( $mime ) ? $mime : '';
+			
 			// Store the release in the new array
 			$new_array[] = $release;
 		}

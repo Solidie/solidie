@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 
-import {getRandomString, __, data_pointer, sprintf, isEmpty} from 'solidie-materials/helpers.jsx';
+import {getRandomString, __, data_pointer, sprintf, isEmpty, downscaleImage} from 'solidie-materials/helpers.jsx';
 import {request} from 'solidie-materials/request.jsx';
 import { ContextToast } from "solidie-materials/toast/toast.jsx";
 
@@ -71,12 +71,13 @@ export function TinyEditor({value, onChange, content_id, lesson_id}) {
 	const acceptFiles=(e)=>{
 
 		const file = e.currentTarget.files?.[0];
-
 		input_reff.current.value = '';
 
 		if ( ! file ) {
 			return;
 		}
+
+		const is_image = file.type?.indexOf?.('image/') === 0;
 
 		if ( ! is_admin ) {
 
@@ -90,7 +91,7 @@ export function TinyEditor({value, onChange, content_id, lesson_id}) {
 				return;
 			}
 
-			if ( file.size > content_lesson_attachment_max_size*1024*1024 ) {
+			if ( ! is_image && file.size > content_lesson_attachment_max_size*1024*1024 ) {
 				addToast({
 					message: sprintf(__('Max file size is %s MB'), content_lesson_attachment_max_size),
 					dismissible: true,
@@ -107,40 +108,48 @@ export function TinyEditor({value, onChange, content_id, lesson_id}) {
 
 		window.jQuery('[data-mce-name="custom-media-upload"] span').addClass('solidie-tinymce-ticking');
 
-		request('uploadContentDescMedia', {file, content_id, lesson_id}, resp=>{
-			const  {
-				success,
-				data: {
-					file_id,
-					file_url
-				}
-			} = resp;
+		const sendRequest=(file)=>{
+			request('uploadContentDescMedia', {file, content_id, lesson_id}, resp=>{
+				const  {
+					success,
+					data: {
+						file_id,
+						file_url
+					}
+				} = resp;
 
-			window.jQuery('[data-mce-name="custom-media-upload"] span').removeClass('solidie-tinymce-ticking');
+				window.jQuery('[data-mce-name="custom-media-upload"] span').removeClass('solidie-tinymce-ticking');
 
-			setState({
-				...state,
-				uploading: false
-			});
-
-			if ( ! success ) {
-				ajaxToast( resp );
-				return;
-			}
-
-			const content = getMediaMarkup( file_id, file_url, file.type);
-			if ( ! content ) {
-				addToast({
-					message: __('Invalid content attachment'),
-					status: 'error'
+				setState({
+					...state,
+					uploading: false
 				});
-				return;
-			}
 
-			const ed = tinymce.get(state.id);
-			ed.insertContent(content);
-			ed.fire('input');
-		});
+				if ( ! success ) {
+					ajaxToast( resp );
+					return;
+				}
+
+				const content = getMediaMarkup( file_id, file_url, file.type);
+				if ( ! content ) {
+					addToast({
+						message: __('Invalid content attachment'),
+						status: 'error'
+					});
+					return;
+				}
+
+				const ed = tinymce.get(state.id);
+				ed.insertContent(content);
+				ed.fire('input');
+			});
+		}
+		
+		if ( is_image ) {
+			downscaleImage(file, 720).then(sendRequest);
+		} else {
+			sendRequest(file);
+		}
 	}
   
 	useEffect(()=>{

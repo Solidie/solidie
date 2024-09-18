@@ -34,7 +34,7 @@ export function SimilarContents({content_id, content_type}) {
 		setLayout();
 		window.addEventListener('resize', setLayout);
 		return ()=>window.removeEventListener('resize', setLayout);
-	}, []);
+	}, [state.contents.map(c=>c.content_id)]);
 
 	useEffect(()=>{
 		getSimilarContents();

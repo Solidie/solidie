@@ -207,7 +207,7 @@ function GalleryLayout({resources={}}) {
 		setLayout();
 		window.addEventListener('resize', setLayout);
 		return ()=>window.removeEventListener('resize', setLayout);
-	}, []);
+	}, [state.contents.map(c=>c.content_id)]);
 
 	return isEmpty( content_options ) ? <div className={'color-error text-align-center'.classNames()}>
 		{__('No content type is enabled')}

@@ -1,20 +1,8 @@
 $dark: rgba(0, 0, 0, 0.662);
 $light: rgba(0, 0, 0, 0);
 
-.gradient-top {
-    background: linear-gradient(to bottom, $dark, $light);
-    background: -webkit-linear-gradient(top, $dark, $light);
-    background: -moz-linear-gradient(top, $dark, $light);
-    background: -o-linear-gradient(top, $dark, $light);
-	padding: 10px 10px 30px;
-	pointer-events: none;
-
-	&:empty {
-		display: none;
-	}
-}
-
 .gradient-bottom {
+	padding-top: 40px;
     background: linear-gradient(to top, $dark, $light);
     background: -webkit-linear-gradient(bottom, $dark, $light);
     background: -moz-linear-gradient(bottom, $dark, $light);
@@ -22,7 +10,6 @@ $light: rgba(0, 0, 0, 0);
 }
 
 .details {
-
 	&, * {
 		line-height: normal;
 	}

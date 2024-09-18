@@ -199,11 +199,14 @@ class FileManager extends SolidieLibFileManager {
 	 * @return array
 	 */
 	public static function getFileInfo( $file_id ) {
+
+		$mime = get_post_mime_type( $file_id );
+
 		return array(
 			'file_id'   => $file_id,
 			'file_url'  => self::getMediaLink( $file_id ),
 			'file_name' => basename( get_attached_file( $file_id, true ) ),
-			'mime_type' => get_post_mime_type( $file_id ),
+			'mime_type' => ! empty( $mime ) ? $mime : '',
 		);
 	}
 
