@@ -119,7 +119,6 @@ add_action(
 			// Delete solidie options
 			delete_option( AdminSetting::OPTION_NAME );
 			delete_option( 'solidie-pro-license-data' );
-			delete_option( Database::DB_VERSION_KEY );
 
 			// Delete user meta
 			foreach ( get_users() as $user ) {

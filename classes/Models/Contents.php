@@ -518,8 +518,8 @@ class Contents {
 		$keyword      = $args['search'] ?? '';
 		$category_ids = $args['category_ids'] ?? array();
 		$order_by     = $args['order_by'] ?? 'trending';
-		$page         = DB::getPage( $args['page'] ?? null );
-		$limit        = DB::getLimit( $args['limit'] ?? null );
+		$page         = Utilities::getPage( $args['page'] ?? null );
+		$limit        = Utilities::getLimit( $args['limit'] ?? null );
 		$offset       = absint( $page - 1 ) * $limit;
 
 		$where_clause = '';
@@ -944,7 +944,7 @@ class Contents {
 	 */
 	public static function getSimilarContents( $content_id, $content_type ) {
 
-		$content_limit = DB::getLimit();
+		$content_limit = Utilities::getLimit();
 		
 		global $wpdb;
 

@@ -8,6 +8,8 @@
 namespace Solidie\Helpers;
 
 use Solidie\Main;
+use Solidie\Models\AdminSetting;
+use SolidieLib\_Number;
 use SolidieLib\Utilities as LibUtils;
 
 /**
@@ -55,5 +57,29 @@ class Utilities extends LibUtils{
 			default:
 				return $number; // If no unit, assume the value is already in bytes
 		}
+	}
+
+
+	/**
+	 * Get limit for queries
+	 *
+	 * @param int|null $limit The limit to prepare
+	 * @return int
+	 */
+	public static function getLimit( $limit = null ) {
+		if ( ! is_numeric( $limit ) ) {
+			$limit = AdminSetting::get( 'pagination_contents_per_page', 20 );
+		}
+		return apply_filters( 'solidie_query_result_count', _Number::getInt( $limit, 1 ) );
+	}
+
+	/**
+	 * Get page num to get results for
+	 *
+	 * @param int|null $page The page to prepare
+	 * @return int
+	 */
+	public static function getPage( $page = null ) {
+		return _Number::getInt( $page, 1 );
 	}
 }

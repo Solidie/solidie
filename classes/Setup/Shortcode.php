@@ -81,7 +81,7 @@ class Shortcode {
 					</article>
 				</div>
 				<div style="display: none; text-align: center;">
-					Powered By <a href="https://solidie.com/">Solidie</a>
+					Content Gallery prepared by <a href="https://solidie.com/">Solidie - WordPress Digital Content Marketplace Plugin</a>
 				</div>
 			<?php
 		return ob_get_clean();

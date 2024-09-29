@@ -9,13 +9,13 @@ namespace Solidie;
 
 use SolidieLib\_Array;
 use SolidieLib\Dispatcher;
+use SolidieLib\DB;
 
 use Solidie\Helpers\Utilities;
 use Solidie\Setup\OpenGraph;
 use Solidie\Setup\Scripts;
 use Solidie\Setup\AdminPage;
 use Solidie\Setup\Cron;
-use Solidie\Setup\Database;
 use Solidie\Setup\Media;
 use Solidie\Setup\Promotion;
 use Solidie\Setup\Route;
@@ -27,7 +27,6 @@ use Solidie\Controllers\SettingsController;
 use Solidie\Controllers\CategoryController;
 use Solidie\Controllers\CommentController;
 use Solidie\Controllers\LessonController;
-
 use Solidie\Models\User as ModelsUser;
 use Solidie\Setup\Sitemap;
 
@@ -65,13 +64,16 @@ class Main {
 		self::$configs = (object) array_merge( $manifest, (array) self::$configs );
 
 		// Prepare the unique app name
-		self::$configs->app_id = Utilities::getAppId( self::$configs->url );
+		self::$configs->app_id           = Utilities::getAppId( self::$configs->url );
+		self::$configs->sql_path         = self::$configs->dir . 'dist/libraries/db.sql';
+		self::$configs->activation_hook  = 'solidie_activated';
+		self::$configs->db_deployed_hook = 'solidie_db_deployed';
 
 		// Register Activation/Deactivation Hook
 		register_activation_hook( self::$configs->file, array( $this, 'activate' ) );
 
 		// Core Modules
-		new Database();
+		new DB( self::$configs );
 		new Route();
 		new Scripts();
 		new Shortcode();

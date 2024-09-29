@@ -7,6 +7,7 @@
 
 namespace Solidie\Models;
 
+use Solidie\Helpers\Utilities;
 use SolidieLib\_Array;
 
 /**
@@ -80,8 +81,8 @@ class Comment {
 
 		global $wpdb;
 
-		$limit        = empty( $args['parent_id'] ) ? DB::getLimit() : null; // No limit on sub thread
-		$offset       = ( DB::getPage( $args['page'] ?? null ) - 1 ) * $limit;
+		$limit        = empty( $args['parent_id'] ) ? Utilities::getLimit() : null; // No limit on sub thread
+		$offset       = ( Utilities::getPage( $args['page'] ?? null ) - 1 ) * $limit;
 		$limit_offset = $limit ? $wpdb->prepare( " LIMIT %d OFFSET %d", $limit, $offset ) : '';
 		
 		$where_clause = '';

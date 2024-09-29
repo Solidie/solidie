@@ -7,6 +7,7 @@
 
 namespace Solidie\Models;
 
+use Solidie\Main;
 use SolidieLib\_Array;
 
 /**
@@ -38,11 +39,14 @@ class Field {
 	 * @return self
 	 */
 	public static function __callStatic( $name, $arguments ) {
+
+		global $wpdb;
+
 		// Run time cache
 		static $instances = array();
 
 		if ( ! isset( $instances[ $name ] ) ) {
-			$instances[ $name ] = new self( DB::$name() );
+			$instances[ $name ] = new self( $wpdb->prefix . Main::$configs->db_prefix . $name );
 		}
 
 		return $instances[ $name ];
