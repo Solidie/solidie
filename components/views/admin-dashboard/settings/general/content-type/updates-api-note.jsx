@@ -50,7 +50,7 @@ export function UpdatesAPINote(api_path) {
 					data: {
 						"license_key" : "purchased-license-key",
 						"endpoint"	  : "any_unique_id_string",
-						"app_name"	  : "the-app-content-slug",
+						"app_id"	  : "the-app-content-slug",
 						"action"	  : "activate-license"
 					}
 				}
@@ -77,7 +77,7 @@ export function UpdatesAPINote(api_path) {
 					data: {
 						"license_key" : "purchased-license-key",
 						"endpoint"	  : "any_unique_string",
-						"app_name"	  : "the-app-content-slug",
+						"app_id"	  : "the-app-content-slug",
 						"action"	  : "update-check"
 					}
 				}

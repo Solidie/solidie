@@ -60,12 +60,14 @@ class Scripts {
 
 		// Load dynamic colors
 		$dynamic_colors = Colors::getColors( $this->getColorScheme() );
-		$solidie_colors = '';
+		$solidie_colors = '.' . Main::$configs->app_id . '{';
 		foreach ( $dynamic_colors as $name => $code ) {
 			$solidie_colors .= '--solidie-color-' . esc_attr( $name ) . ':' . esc_attr( $code ) . ';';
 		}
+		$solidie_colors .= '}';
 
-		include Main::$configs->dir . 'templates/style.php';
+		wp_enqueue_style( 'solidie-colors-scheme', Main::$configs->dist_url . 'libraries/colors-loader.css' );
+		wp_add_inline_style( 'solidie-colors-scheme', $solidie_colors );
 	}
 
 	/**
