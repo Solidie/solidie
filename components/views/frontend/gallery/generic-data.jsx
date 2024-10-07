@@ -5,21 +5,25 @@ import {__} from 'solidie-materials/helpers.jsx';
 import { currency_symbol } from "solidie-materials/helpers";
 import { TagField } from "solidie-materials/tag-field/tag-field";
 
-export function ContentTags({tags}) {
+export function ContentTags({tags, style={}, className, is_overlayer=false}) {
 
-	const _tags = tags?.split?.(',') || [];
+	const _tags = tags?.split?.(',')?.filter?.(t=>t) || [];
 	const tags_array = [...new Set(_tags.map(t=>t.trim()).filter(t=>t))];
 
-	return <TagField
-		variant='small'
-		value={[]}
-		options={tags_array.map(t=>{
-			return {
-				id: t,
-				label: t
-			}
-		})}
-	/>
+	return tags_array.length ? <div style={style} className={className}>
+		<TagField
+			variant='small'
+			is_overlayer={is_overlayer}
+			value={[]}
+			className={'align-items-flex-end'.classNames()}
+			options={tags_array.map(t=>{
+				return {
+					id: t,
+					label: t
+				}
+			})}
+		/>
+	</div> : null;
 }
 
 // Determine price range from an array of plans

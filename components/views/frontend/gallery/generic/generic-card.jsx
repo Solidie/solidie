@@ -4,11 +4,12 @@ import {Link} from 'react-router-dom';
 import {timeAgoOrAfter, isEmpty} from 'solidie-materials/helpers';
 import {Ratio} from 'solidie-materials/responsive-layout.jsx';
 
-import style from './classified.module.scss';
 import { ContentTags, DownloadOrPrice } from "../generic-data";
 import { MetaData } from "../../single/meta-data/meta-data";
 
-export function Classifieds({contents=[], content_type, is_mobile}) {
+import style from './generic.module.scss';
+
+export function GenericCard({contents=[], content_type, is_mobile}) {
 
 	return contents.map((content, index)=>{
 
@@ -28,7 +29,6 @@ export function Classifieds({contents=[], content_type, is_mobile}) {
 		const is_last = index === ( contents.length - 1 );
 		const area = [content_state_name, content_country_name].filter(m=>!isEmpty(m)).join(', ');
 		const is_classified = content_type === 'classified';
-		const tags = content_tags?.trim?.() || '';
 
 		return <Link 
 			key={content_id} 
@@ -75,13 +75,8 @@ export function Classifieds({contents=[], content_type, is_mobile}) {
 					{content_title}
 				</div>
 
-				{
-					!tags ? null :
-					<div className={'margin-bottom-10'.classNames()}>
-						<ContentTags tags={tags}/>
-					</div>
-				}
-
+				<ContentTags tags={content_tags} className={'margin-bottom-10'.classNames()}/>
+				
 				<div>
 					<MetaData content={content} show={['reaction']}/>
 				</div>

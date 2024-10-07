@@ -45,29 +45,6 @@ class Scripts {
 		// JS Variables
 		add_action( 'wp_enqueue_scripts', array( $this, 'loadVariables' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'loadVariables' ) );
-
-		// Load css colors and style
-		add_action( 'wp_head', array( $this, 'loadStyles' ) );
-		add_action( 'admin_head', array( $this, 'loadStyles' ) );
-	}
-
-	/**
-	 * Load styles
-	 *
-	 * @return void
-	 */
-	public function loadStyles() {
-
-		// Load dynamic colors
-		$dynamic_colors = Colors::getColors( $this->getColorScheme() );
-		$solidie_colors = '.' . Main::$configs->app_id . '{';
-		foreach ( $dynamic_colors as $name => $code ) {
-			$solidie_colors .= '--solidie-color-' . esc_attr( $name ) . ':' . esc_attr( $code ) . ';';
-		}
-		$solidie_colors .= '}';
-
-		wp_enqueue_style( 'solidie-colors-scheme', Main::$configs->dist_url . 'libraries/colors-loader.css' );
-		wp_add_inline_style( 'solidie-colors-scheme', $solidie_colors );
 	}
 
 	/**
@@ -169,6 +146,11 @@ class Scripts {
 	 * @return void
 	 */
 	public function frontendScripts() {
+
+		if ( is_front_page() || ( ! is_singular() && ! is_single() )) {
+			return;
+		}
+
 		if ( ! empty( $GLOBALS['solidie_gallery_data'] ) ) {
 			wp_enqueue_style( 'solidie-tiny-styles-css', Main::$configs->dist_url . 'libraries/prism/prism.css', array(), Main::$configs->version );
 			wp_enqueue_script( 'solidie-tiny-styles-js', Main::$configs->dist_url . 'libraries/prism/prism.js', array(), Main::$configs->version, true );

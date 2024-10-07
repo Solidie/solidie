@@ -115,9 +115,10 @@ You can [create issue](https://github.com/Solidie/Solidie/issues) on Github repo
 
 == Changelog ==
 
-= v1.1.9 -> Sep 30, 2024 =
+= v1.1.9 -> Oct 10, 2024 =
 --------------------------
-* Fix: TBD
+* Update: My Purchases page UI enhancement
+* Fix: Redundant messages remains after user deletetion (Pro)
 
 = v1.1.8 -> Sep 18, 2024 =
 --------------------------

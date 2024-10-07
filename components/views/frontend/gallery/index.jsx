@@ -21,7 +21,7 @@ import { Sidebar } from "./sidebar.jsx";
 import { Tutorial } from "../tutorial/tutorial.jsx";
 
 import style from './index.module.scss';
-import { Classifieds } from "./classifieds/classifieds.jsx";
+import { GenericCard } from "./generic/generic-card.jsx";
 
 const {page_path} = window[data_pointer];
 
@@ -29,7 +29,7 @@ export const renderers = {
 	audio: Audio,
 	video: Video,
 	image: Image,
-	other: Classifieds
+	other: GenericCard
 }
 
 const sorting_list = {

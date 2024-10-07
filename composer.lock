@@ -759,12 +759,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:Solidie/solidie-lib.git",
-                "reference": "ad529d465d561f86c521a2931a8f97cf134820d9"
+                "reference": "aea75f7272d72d54984a6548e50b70e1b1d983fa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Solidie/solidie-lib/zipball/ad529d465d561f86c521a2931a8f97cf134820d9",
-                "reference": "ad529d465d561f86c521a2931a8f97cf134820d9",
+                "url": "https://api.github.com/repos/Solidie/solidie-lib/zipball/aea75f7272d72d54984a6548e50b70e1b1d983fa",
+                "reference": "aea75f7272d72d54984a6548e50b70e1b1d983fa",
                 "shasum": ""
             },
             "require-dev": {
@@ -790,7 +790,7 @@
                 "source": "https://github.com/Solidie/solidie-lib/tree/main",
                 "issues": "https://github.com/Solidie/solidie-lib/issues"
             },
-            "time": "2024-10-07T13:13:36+00:00"
+            "time": "2024-10-07T16:14:26+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",
