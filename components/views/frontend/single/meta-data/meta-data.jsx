@@ -14,7 +14,7 @@ import style from './meta.module.scss';
 const {
 	user:{
 		id: is_logged_in
-	}, 
+	}={}, 
 	readonly_mode
 } = window[data_pointer];
 

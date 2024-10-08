@@ -49,7 +49,7 @@ const sorting_list = {
 	}
 };
 
-const {settings={}, bloginfo: {name: site_title}} = window[data_pointer];
+const {settings={}, bloginfo: {name: site_title}={}} = window[data_pointer];
 
 export const ContextGallery = createContext();
 

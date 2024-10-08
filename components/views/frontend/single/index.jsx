@@ -39,7 +39,7 @@ const swapObjectKey=(obj, target_key, replace_key)=>{
 	return new_ob;
 }
 
-const {permalinks={}, settings: {contents={}}} = window[data_pointer];
+const {permalinks={}, settings: {contents={}}={}} = window[data_pointer];
 const contents_by_slug = swapObjectKey(contents, 'slug', 'content_type');
 
 const preview_renderers = {

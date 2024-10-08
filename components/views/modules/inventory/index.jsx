@@ -23,8 +23,8 @@ const {
 	settings:{
 		general:{
 			public_contribution_deletion
-		}
-	}
+		}={}
+	}={}
 } = window[data_pointer];
 
 export const content_statuses = {
