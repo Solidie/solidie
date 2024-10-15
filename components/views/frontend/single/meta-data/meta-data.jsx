@@ -188,6 +188,7 @@ export function MetaData(props) {
 	if (show.indexOf('contributor') > -1 && contributor) {
 		meta.contributor = <div className={'d-inline-flex align-items-center column-gap-10'.classNames()}>
 			<img 
+				alt={`Profile Pic - ${contributor.display_name}`}
 				src={contributor.avatar_url} 
 				style={{width: '22px', height: '22px', borderRadius: '50%'}}
 			/>

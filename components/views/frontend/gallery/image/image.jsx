@@ -38,7 +38,8 @@ export function ImageLayout({contents=[]}) {
 							const {
 								media={}, 
 								content_id, 
-								content_permalink
+								content_permalink,
+								content_title
 							} = content;
 
 							return <Link 
@@ -48,7 +49,10 @@ export function ImageLayout({contents=[]}) {
 								data-cylector="content-single"
 							>
 								<div className={'position-relative cursor-pointer border-radius-8'.classNames()}>
-									<img className={'d-block width-p-100 height-auto'.classNames()} src={media.thumbnail?.file_url}/>
+									<img 
+										alt={`Content Thumbnail - ${content_title}`}
+										className={'d-block width-p-100 height-auto'.classNames()} src={media.thumbnail?.file_url}
+									/>
 									<div className={'meta'.classNames(style)}>
 										<ImageVideoDetails content={content}/>
 									</div>

@@ -49,8 +49,9 @@
 <!-- Service Start -->
 <div class="container-fluid bg-light mt-5 py-5 searvice-container">
 	<div class="container py-5">
-		<div class="row g-5 align-items-center">
+		<div class="row g-5 ">
 			<div class="col-lg-5">
+				<img src="<?php echo Main::$configs->dist_url; ?>libraries/menu-icon.svg" style="width: 60px; height: 60px; margin-bottom: 35px;" />
 				<h1 class="mb-4">
 					<?php printf( __( 'Howdy, %s' ), wp_get_current_user()->display_name ) ?>
 				</h1>

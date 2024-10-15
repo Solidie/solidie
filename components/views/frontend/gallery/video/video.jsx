@@ -5,25 +5,24 @@ import { ColCounter, ContextColCounter } from "solidie-materials/col-counter.jsx
 
 import {chunkArray} from '../image/image.jsx';
 import { MetaData } from "../../single/meta-data/meta-data.jsx";
-import { DownloadOrPrice } from "../generic-data.jsx";
+import { ContentTags, DownloadOrPrice } from "../generic-data.jsx";
 
 import style from './video.module.scss';
 
 export function ImageVideoDetails({content={}}) {
 
-	const { content_title } = content;
+	const { content_title, meta:{content_tags=''} } = content;
 
 	return <div className={'position-absolute left-0 top-0 right-0 bottom-0 d-flex flex-direction-column justify-content-space-between'.classNames() + 'details'.classNames(style)}>
-		<div className={'d-flex align-items-center justify-content-flex-end padding-10'.classNames()}>
-			<div>
-				<MetaData 
-					content={content} 
-					is_overlayer={true}
-					show={['wishlist']}
-				/>
-			</div>
+		<div className={'d-flex flex-direction-column align-items-flex-end row-gap-10 padding-10'.classNames()}>
+			<MetaData 
+				content={content} 
+				is_overlayer={true}
+				show={['wishlist']}
+			/>
 		</div>
 		<div className={'gradient-bottom'.classNames(style)}>
+			<ContentTags tags={content_tags} is_overlayer={true} className={'padding-horizontal-10'.classNames()}/>
 			<div className={'d-flex align-items-center column-gap-15 padding-10'.classNames()}>
 				<div className={'flex-1 column-gap-10 font-size-16 font-weight-500 color-white text-shadow-thin line-clamp'.classNames()}>
 					{content_title}

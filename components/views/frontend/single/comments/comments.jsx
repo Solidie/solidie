@@ -213,6 +213,7 @@ export function Comments({content={}}) {
 							<div className={'d-flex align-items-center column-gap-15 margin-bottom-8'.classNames()}>
 								<div>
 									<img 
+										alt={`Profile Pic - ${display_name}`}
 										src={avatar_url} 
 										style={{
 											width: '50px', 

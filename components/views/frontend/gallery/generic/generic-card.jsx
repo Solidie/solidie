@@ -44,6 +44,7 @@ export function GenericCard({contents=[], content_type, is_mobile}) {
 					!is_classified ? 
 						<Ratio x={16} y={9}>
 							<img 
+								alt={`Content Thumbnail - ${content_title}`}
 								src={media?.thumbnail?.file_url}
 								style={{
 									display: 'block',
@@ -57,6 +58,7 @@ export function GenericCard({contents=[], content_type, is_mobile}) {
 						</Ratio>
 						:
 						<img 
+							alt={`Content Thumbnail - ${content_title}`}
 							src={media?.thumbnail?.file_url}
 							style={{
 								display: 'block',

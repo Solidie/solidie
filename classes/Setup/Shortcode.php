@@ -59,31 +59,36 @@ class Shortcode {
 
 		$data                = $GLOBALS['solidie_gallery_data'] ?? array();
 		$content_description = ( is_array( $data ) && is_array( $data['content'] ?? null ) ) ? $data['content']['content_description'] : '';
+		$lesson              = $data['lesson'] ?? null;
+
+		if ( ! empty( $lesson ) ) {
+			$content_description = $lesson['lesson_content'] ?? null;
+		}
 
 		ob_start();
-			if ( is_front_page() && current_user_can( 'manage_options' ) ) {
-				?>
-				<div style="text-align: center; color: #aa0000; margin-bottom: 15px;">
-					<i><?php echo esc_html__( 'Individual content URL won\'t work properly if your set this page as home', 'solidie' ); ?></i>
-				</div>
-				<?php
-			}
+	
+		if ( is_front_page() && current_user_can( 'manage_options' ) ) {
 			?>
-				<div 
-					id="Solidie_Gallery" 
-					style="width: 100%; margin: 0; padding: 0; max-width: 100%; padding: 20px 0;"
-					data-resources="<?php esc_attr_e( json_encode( $resources ) ); ?>"
-				>
-					<article>
-						<?php 
-							echo strip_tags( ( string ) ( $content_description ?? '' ) ); 
-						?>
-					</article>
-				</div>
-				<div style="display: none; text-align: center;">
-					Content Gallery prepared by <a href="https://solidie.com/">Solidie - WordPress Digital Content Marketplace Plugin</a>
-				</div>
+			<div style="text-align: center; color: #aa0000; margin-bottom: 15px;">
+				<i><?php echo esc_html__( 'Individual content URL won\'t work properly if your set this page as home', 'solidie' ); ?></i>
+			</div>
 			<?php
+		}
+		
+		?>
+			<div 
+				id="Solidie_Gallery" 
+				style="width: 100%; margin: 0; padding: 0; max-width: 100%; padding: 20px 0;"
+				data-resources="<?php esc_attr_e( json_encode( $resources ) ); ?>"
+			>
+				<article>
+					<?php 
+						echo strip_tags( ( string ) ( $content_description ?? '' ) ); 
+					?>
+				</article>
+			</div>
+		<?php
+
 		return ob_get_clean();
 	}
 }

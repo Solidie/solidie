@@ -198,6 +198,38 @@ class Tutorial {
 	}
 
 	/**
+	 * Get lesson count by tutorial ID
+	 *
+	 * @param int $content_id
+	 * @return int
+	 */
+	public static function getLessonCount( $content_id, $status = null ) {
+
+		global $wpdb;
+		
+		$where_clause = '';
+
+		// Status filter
+		if ( ! empty( $status ) ) {
+			$where_clause .= $wpdb->prepare( ' AND lesson_status=%s', $status );
+		}
+
+		return (int) $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT 
+					COUNT(lesson_id)
+				FROM 
+					{$wpdb->solidie_lessons} 
+				WHERE 
+					content_id=%d 
+					{$where_clause}
+				LIMIT 1",
+				$content_id
+			)
+		);
+	}
+
+	/**
 	 * Get lesson permalink by lesson ID
 	 *
 	 * @param int $lesson_id

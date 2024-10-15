@@ -497,7 +497,7 @@ export function Inventory({navigate, params={}}) {
 		>
 			<thead>
 				<tr>
-					<th></th>
+					<th>ID</th>
 					<th>{__('Title')}</th>
 					{!is_admin ? null : <th className={'white-space-nowrap'.classNames()}>{__('Contributor')}</th>}
 					<th className={'white-space-nowrap'.classNames()}>{__('Category')}</th>
@@ -527,6 +527,7 @@ export function Inventory({navigate, params={}}) {
 							category_name,
 							product_id,
 							download_count,
+							lesson_count = 0,
 							contributor:{
 								display_name, 
 								avatar_url
@@ -574,6 +575,12 @@ export function Inventory({navigate, params={}}) {
 										<a href={content_permalink} target='_blank' className={"d-block font-size-14 font-weight-600 color-text-80 interactive".classNames()}>
 											{content_title}
 										</a>
+										{
+											content_type!=='tutorial' ? null :
+											<span className={'font-size-13 color-text-50'.classNames()}>
+												Lesson: <strong>{lesson_count}</strong>
+											</span>
+										}
 									</div>
 								</div>
 							</td>

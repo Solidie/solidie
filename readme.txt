@@ -9,13 +9,13 @@ Stable tag: 1.1.9
 License: GPLv3
 License URI: https://opensource.org/licenses/GPL-3.0
 
-Turn your simple WordPress site into a full fledged digital content marketplace.
+Turn your WordPress site into a full featured digital content marketplace/stock platform.
 
 == Description ==
 
-Solidie is a powerful WordPress plugin designed to transform your simple website into a full-fledged digital content stock platform, also known as a marketplace. With Solidie, you can showcase and monetize a wide variety of content, including audio, video, images, apps, tutorials, fonts, and more, directly from your own website.
+Showcase and monetize digital contents such as audio, video, apps, and more directly from your own website and retain 100% of your earnings.
 
-See [Live Demo](https://demo.solidie.com)
+Take a look at [Live Demo](https://demo.solidie.com) to see the features and learn more about the plugin from [here](https://solidie.com).
 
 https://www.youtube.com/watch?v=jo1r2QDZCCk
 
@@ -99,10 +99,10 @@ Yes. however all the monetization features comes with the Pro version.
 Any type of digital contents regardless of app, audio, video, image, tutorial or anything else.
 
 = Can I release apps using it? =
-Yes, the features is provided in the pro version. You can release your apps, manage version, auto update distribution like playstore, appstore, wordpress repository etc. You just need to send API request to your website from your app to check update and download if need. 
+You can release your apps, manage versions, auto update distribution as like as Playstore, Appstore, WordPress repository etc. You just need to hit provided API endpoint from your app to check update and download if need. 
 
 = Does it support license key activation system for apps? =
-Yes, It does in pro version. Your customers will get license keys after purchaing apps from your website.
+Yes, It does in pro version. Your customers will get license keys after purchasing apps from your website.
 
 = Can I sell subscription? =
 Yes, with the pro version. You can sell various plans for apps and all other content types on monthly, yearly and lifetime basis.

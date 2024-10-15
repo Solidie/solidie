@@ -671,8 +671,11 @@ class Contents {
 			$contents[ $index ]['content_permalink'] = self::getPermalink( $content );
 
 			// Assign tutorial URL or Download URL
-			if ( $content['content_type'] === 'tutorial' ) {
+			if ( 'tutorial' === $content['content_type'] ) {
+				
 				$contents[ $index ]['tutorial_url'] = $contents[ $index ]['content_permalink'] . '0/';
+				$contents[ $index ]['lesson_count'] = Tutorial::getLessonCount( $content['content_id'] );
+
 			} else {
 				$contents[ $index ]['release'] = Release::getRelease( (int) $content['content_id'] );
 			}
