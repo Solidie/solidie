@@ -73,7 +73,7 @@ export function GenericCard({contents=[], content_type, is_mobile}) {
 			
 			<div className={'flex-1 d-flex flex-direction-column row-gap-8'.classNames()}>
 
-				<div className={'margin-bottom-5 font-size-18 font-weight-500 color-text-80'.classNames()}>
+				<div className={'margin-bottom-5 font-size-16 font-weight-500 color-text-80'.classNames()}>
 					{content_title}
 				</div>
 

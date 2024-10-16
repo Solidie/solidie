@@ -26,6 +26,7 @@ export function Audio({contents=[]}) {
 					permalink={content_permalink}
 					title={content_title}
 					thumbnail={media?.thumbnail?.file_url}
+					footer={<ContentTags tags={content_tags} is_overlayer={true}/>}
 				>
 					<div className={'d-flex flex-direction-column align-items-flex-end row-gap-10'.classNames()}>
 						<div>
@@ -35,8 +36,6 @@ export function Audio({contents=[]}) {
 								show={['price', 'reaction']}
 							/>
 						</div>
-						
-						<ContentTags tags={content_tags} is_overlayer={true}/>
 					</div>
 				</AudioPlayer>
 			</div>

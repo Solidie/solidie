@@ -115,9 +115,13 @@ You can [create issue](https://github.com/Solidie/Solidie/issues) on Github repo
 
 == Changelog ==
 
-= v1.1.9 -> Oct 10, 2024 =
+= v1.1.9 -> Oct 16, 2024 =
 --------------------------
 * Update: My Purchases page UI enhancement
+* Update: Audio UI mobile view enhance
+* Fix: Content tags not showing in single page
+* Fix: Variations show the generated ID string as name (Pro)
+* Fix: Error during adding non Solidie product to order (Pro)
 * Fix: Redundant messages remains after user deletetion (Pro)
 
 = v1.1.8 -> Sep 18, 2024 =

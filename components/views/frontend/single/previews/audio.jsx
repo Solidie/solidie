@@ -10,7 +10,7 @@ export function AudioPreview({content={}}) {
 				src={content.media?.preview?.file_url} 
 				title={content.content_title}
 				thumbnail={content.media?.thumbnail?.file_url}
-				height={80}/>
+			/>
 		</div>
 	</AudioPlayersWrapper> 
 }

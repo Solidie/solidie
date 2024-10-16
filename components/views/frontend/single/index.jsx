@@ -25,6 +25,7 @@ import { getPageTitle } from "../gallery/index.jsx";
 import { SimilarContents } from "./similar-contents/similar.jsx";
 
 import style from './single.module.scss';
+import { ContentTags } from "../gallery/generic-data.jsx";
 
 export const ContextSingleData = createContext();
 
@@ -331,10 +332,11 @@ export function SingleWrapper() {
 			
 			<div className={'d-flex column-gap-15 row-gap-15'.classNames() + 'content-wrapper'.classNames(style)}>
 				<div className={'flex-1'.classNames()}>
-					<div>
+					<div className={'margin-bottom-10'.classNames()}>
 						<ErrorBoundary>
 							<PreviewComp content={state.content} settings={state.settings}/>
 						</ErrorBoundary>
+						<ContentTags tags={state.content.meta?.content_tags || ''} className={'margin-top-10'.classNames()}/>
 					</div>
 
 					<div dangerouslySetInnerHTML={{__html: state.content?.content_description || ''}}></div>
