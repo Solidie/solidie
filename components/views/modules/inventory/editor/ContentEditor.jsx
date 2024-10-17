@@ -401,6 +401,13 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 				values.sample_images            = content.media?.sample_images ?? [];
 				values.product                  = content.product ?? {};
 
+				// Clear sale prices that are same as regular. Otherwise their is a glitch when increasing regular price in editor. Maybe we need to fix it there directly.
+				values.product.plans?.forEach?.((plan, index)=>{
+					if ( plan.regular_price === plan.sale_price ) {
+						values.product.plans[index].sale_price = '';
+					}
+				});
+
 				// Add meta data to the values
 				Object.keys(content_meta).forEach(key=>{
 					values[key] = content_meta[key];
