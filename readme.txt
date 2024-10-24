@@ -1,6 +1,6 @@
 === Solidie - Digital Content Marketplace ===
 Contributors: jayedul
-Donate Link: https://solidie.com
+Donate Link: https://solidie.com/pricing/
 Tags: marketplace, contributors, stock, contents
 Requires at least: 5.3
 Tested up to: 6.6.2
@@ -115,10 +115,10 @@ You can [create issue](https://github.com/Solidie/Solidie/issues) on Github repo
 
 == Changelog ==
 
-= v1.1.9 -> Oct 16, 2024 =
+= v1.1.9 -> Oct 24, 2024 =
 --------------------------
 * Update: My Purchases page UI enhancement
-* Update: Audio UI mobile view enhance
+* Update: Audio UI mobile view enhanced
 * Fix: Content tags not showing in single page
 * Fix: Variations show the generated ID string as name (Pro)
 * Fix: Error during adding non Solidie product to order (Pro)

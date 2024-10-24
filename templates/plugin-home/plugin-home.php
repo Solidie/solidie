@@ -68,6 +68,33 @@
 				<div class="row g-4">
 					<div class="col-md-6">
 						<div class="row g-4">
+							<?php
+								echo apply_filters( 
+									'solidie_pro_upgrade_card_home',
+									'<a class="col-12" href="https://solidie.com/" target="_blank">
+										<div class="service-item d-flex flex-column justify-content-center text-center rounded">
+											<div class="service-icon btn-square">
+												<i class="fa fa-dollar-sign fa-2x"></i>
+											</div>
+											<h5 class="mb-3">' . __( 'Content Monetization', 'solidie' ) . '</h5>
+											<p>' . __( 'Upgrade to Solidie Pro, monetize contents and elevate your business', 'solidie' ) . '</p>
+										</div>
+									</a>'
+								);
+							?>
+							<a class="col-12" href="<?php echo Contents::getGalleryPermalink( false ); ?>">
+								<div class="service-item d-flex flex-column justify-content-center text-center rounded">
+									<div class="service-icon btn-square">
+										<i class="fa fa-images fa-2x"></i>
+									</div>
+									<h5 class="mb-3"><?php _e( 'Content Gallery', 'solidie' ); ?></h5>
+									<p><?php _e( 'Explore contents in a unified gallery with extensive filter capabilities.', 'solidie' ); ?></p>
+								</div>
+							</a>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="row g-4">
 							<a class="col-12" href="<?php echo add_query_arg( array( 'page' => AdminPage::INVENTORY_SLUG ), admin_url( 'admin.php' ) ); ?>">
 								<div class="service-item d-flex flex-column justify-content-center text-center rounded">
 									<div class="service-icon btn-square">
@@ -86,33 +113,6 @@
 									<p><?php _e( 'Configure plugin and streamline it\'s behaviors as per your needs', 'solidie' ); ?></p>
 								</div>
 							</a>
-						</div>
-					</div>
-					<div class="col-md-6 pt-md-4">
-						<div class="row g-4">
-							<a class="col-12" href="<?php echo Contents::getGalleryPermalink( false ); ?>">
-								<div class="service-item d-flex flex-column justify-content-center text-center rounded">
-									<div class="service-icon btn-square">
-										<i class="fa fa-images fa-2x"></i>
-									</div>
-									<h5 class="mb-3"><?php _e( 'Content Gallery', 'solidie' ); ?></h5>
-									<p><?php _e( 'Explore contents in a unified gallery with extensive filter capabilities.', 'solidie' ); ?></p>
-								</div>
-							</a>
-							<?php
-								echo apply_filters( 
-									'solidie_pro_upgrade_card_home',
-									'<a class="col-12" href="https://solidie.com/" target="_blank">
-										<div class="service-item d-flex flex-column justify-content-center text-center rounded">
-											<div class="service-icon btn-square">
-												<i class="fa fa-dollar-sign fa-2x"></i>
-											</div>
-											<h5 class="mb-3">' . __( 'Content Monetization', 'solidie' ) . '</h5>
-											<p>' . __( 'Upgrade to Solidie Pro, monetize contents and elevate your business', 'solidie' ) . '</p>
-										</div>
-									</a>'
-								);
-							?>
 						</div>
 					</div>
 				</div>
