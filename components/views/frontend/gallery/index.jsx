@@ -12,16 +12,14 @@ import { applyFilters } from "solidie-materials/hooks.jsx";
 import { TextField } from "solidie-materials/text-field/text-field.jsx";
 
 import { SingleWrapper } from "../single/index.jsx";
-
 import { Image } from "./image/image.jsx";
 import { Video } from "./video/video.jsx";
 import { Audio } from "./audio/audio.jsx";
-
 import { Sidebar } from "./sidebar.jsx";
 import { Tutorial } from "../tutorial/tutorial.jsx";
+import { GenericCard } from "./generic/generic-card.jsx";
 
 import style from './index.module.scss';
-import { GenericCard } from "./generic/generic-card.jsx";
 
 const {page_path} = window[data_pointer];
 
@@ -75,7 +73,6 @@ function GalleryLayout({resources={}}) {
 	const navigate = useNavigate();
 	
 	const reff_wrapper = useRef();
-	const [is_tablet, setTablet] = useState(false);
 	const [is_mobile, setMobile] = useState(false);
 	const [state, setState] = useState({
 		contents:[], 
@@ -131,8 +128,7 @@ function GalleryLayout({resources={}}) {
 
 	const setLayout=()=>{
 		if ( reff_wrapper?.current ) {
-			setTablet(reff_wrapper.current.offsetWidth<697);
-			setMobile(reff_wrapper.current.offsetWidth<473);
+			setMobile(reff_wrapper.current.offsetWidth<697);
 		}
 	}
 
@@ -222,12 +218,12 @@ function GalleryLayout({resources={}}) {
 		<div className={'gallery'.classNames(style)}>
 			<div 
 				ref={reff_wrapper} 
-				className={`content ${is_tablet ? 'mobile' : ''}`.classNames(style)}
+				className={`content ${is_mobile ? 'mobile' : ''}`.classNames(style)}
 			>
 				<Sidebar
 					filters={queryParams}
 					setFilter={setFilter}
-					is_tablet={is_tablet}
+					is_mobile={is_mobile}
 					filterList={
 						applyFilters(
 							'gallery_sidebar_filter_list',
@@ -303,6 +299,7 @@ function GalleryLayout({resources={}}) {
 									navigate(`/${page_path}/${slug}/`);
 									setLocalValue('selected_gallery_type', Object.keys(contents).find(key=>contents[key].slug==slug));
 								}}
+								style={{width: '130px'}}
 							/>
 						</div>
 
@@ -314,6 +311,7 @@ function GalleryLayout({resources={}}) {
 									type="search" 
 									placeholder="Search.."
 									onChange={v=>setFilter('search', v)}
+									style={{width: '140px'}}
 								/>
 							</div>
 						</div>
@@ -337,7 +335,6 @@ function GalleryLayout({resources={}}) {
 									contents={state.contents} 
 									content_type={content_type} 
 									is_mobile={is_mobile} 
-									is_tablet={is_tablet}
 								/>
 								
 								{

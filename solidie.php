@@ -3,11 +3,11 @@
  * Plugin Name: Solidie
  * Plugin URI: https://wordpress.org/plugins/solidie/
  * Description: Multimedia stock plugin to showcase any digital contents like audio, video, image, ebook, apps and so on.
- * Version: 1.1.9
+ * Version: 1.1.10
  * Author: Solidie
  * Author URI: https://solidie.com/
  * Requires at least: 5.3
- * Tested up to: 6.6.2
+ * Tested up to: 6.7.1
  * Requires PHP: 7.4
  * License: GPLv3
  * License URI: https://opensource.org/licenses/GPL-3.0

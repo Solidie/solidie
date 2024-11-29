@@ -7,7 +7,6 @@
 
 namespace Solidie\Setup;
 
-use SolidieLib\Colors;
 use Solidie\Helpers\Utilities;
 use Solidie\Main;
 use Solidie\Models\AdminSetting;
@@ -21,12 +20,16 @@ use SolidieLib\Variables;
  */
 class Scripts {
 
+	private $cache_version;
+
 	/**
 	 * Scripts constructor, register script hooks
 	 *
 	 * @return void
 	 */
 	public function __construct() {
+
+		$this->cache_version = 'development' === Main::$configs->mode ? time() : Main::$configs->version;
 
 		// Load scripts
 		add_action( 'admin_enqueue_scripts', array( $this, 'adminScripts' ), 11 );
@@ -48,18 +51,6 @@ class Scripts {
 	}
 
 	/**
-	 * Get solidie color scheme dynamic values
-	 *
-	 * @return array
-	 */
-	private function getColorScheme() {
-		return array(
-			'color_scheme_materials' => AdminSetting::get( 'color_scheme_materials' ),
-			'color_scheme_texts'     => AdminSetting::get( 'color_scheme_texts' ),
-		);
-	}
-
-	/**
 	 * Load environment and color variables
 	 *
 	 * @return void
@@ -68,7 +59,10 @@ class Scripts {
 
 		// Prepare configs, add color schem
 		$configs = Main::$configs;
-		$configs->color_scheme = $this->getColorScheme();
+		$configs->color_scheme = array(
+			'color_scheme_materials' => AdminSetting::get( 'color_scheme_materials' ),
+			'color_scheme_texts'     => AdminSetting::get( 'color_scheme_texts' ),
+		);
 
 		// Get common variables
 		$data = ( new Variables( $configs ) )->get();
@@ -126,7 +120,7 @@ class Scripts {
 	public function adminScripts() {
 		if ( Utilities::isAdminDashboard() ) {
 			$this->loadTinyMCE();
-			wp_enqueue_script( 'solidie-backend', Main::$configs->dist_url . 'admin-dashboard.js', array( 'jquery' ), Main::$configs->version, true );
+			wp_enqueue_script( 'solidie-backend', Main::$configs->dist_url . 'admin-dashboard.js', array( 'jquery' ), $this->cache_version, true );
 		}
 	}
 
@@ -136,7 +130,7 @@ class Scripts {
 	 * @return void
 	 */
 	public function loadTinyMCE() {
-		wp_enqueue_style( 'solidie-backend-tiny-style', Main::$configs->dist_url . 'libraries/tinymce/css/style.css', array(), Main::$configs->version );
+		wp_enqueue_style( 'solidie-backend-tiny-style', Main::$configs->dist_url . 'libraries/tinymce/css/style.css', array(), $this->cache_version );
 		wp_enqueue_script( 'solidie-backend-tiny', Main::$configs->dist_url . 'libraries/tinymce/js/tinymce/tinymce.min.js', array( 'jquery' ) );
 	}
 
@@ -152,10 +146,10 @@ class Scripts {
 		}
 
 		if ( ! empty( $GLOBALS['solidie_gallery_data'] ) ) {
-			wp_enqueue_style( 'solidie-tiny-styles-css', Main::$configs->dist_url . 'libraries/prism/prism.css', array(), Main::$configs->version );
-			wp_enqueue_script( 'solidie-tiny-styles-js', Main::$configs->dist_url . 'libraries/prism/prism.js', array(), Main::$configs->version, true );
+			wp_enqueue_style( 'solidie-tiny-styles-css', Main::$configs->dist_url . 'libraries/prism/prism.css', array(), $this->cache_version );
+			wp_enqueue_script( 'solidie-tiny-styles-js', Main::$configs->dist_url . 'libraries/prism/prism.js', array(), $this->cache_version, true );
 		}
-		wp_enqueue_script( 'solidie-frontend', Main::$configs->dist_url . 'frontend.js', array( 'jquery' ), Main::$configs->version, true );
+		wp_enqueue_script( 'solidie-frontend', Main::$configs->dist_url . 'frontend.js', array( 'jquery' ), $this->cache_version, true );
 	}
 
 	/**
@@ -165,7 +159,7 @@ class Scripts {
 	 */
 	public function loadScriptForProDashboard() {
 		$this->loadTinyMCE();
-		wp_enqueue_script( 'solidie-frontend-patch', Main::$configs->dist_url . 'frontend-dashboard-patch.js', array( 'jquery' ), Main::$configs->version, true );
+		wp_enqueue_script( 'solidie-frontend-patch', Main::$configs->dist_url . 'frontend-dashboard-patch.js', array( 'jquery' ), $this->cache_version, true );
 	}
 
 	/**
@@ -187,7 +181,7 @@ class Scripts {
 		$domain = Main::$configs->text_domain;
 		$dir    = Main::$configs->dir . 'languages/';
 
-		wp_enqueue_script( 'solidie-translations', Main::$configs->dist_url . 'libraries/translation-loader.js', array( 'jquery' ), Main::$configs->version, true );
+		wp_enqueue_script( 'solidie-translations', Main::$configs->dist_url . 'libraries/translation-loader.js', array( 'jquery' ), $this->cache_version, true );
 		wp_set_script_translations( 'solidie-translations', $domain, $dir );
 	}
 }

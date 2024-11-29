@@ -119,7 +119,7 @@ function MobileFilter({_setFilter, filterList, filters}) {
 				<i className={'sicon sicon-candle font-size-20'.classNames()}></i>
 			</div>
 			{
-				Object.keys(filterList).map((filter_key) => {
+				/* Object.keys(filterList).map((filter_key) => {
 					const { section_label, selection_type, options = [] } = filterList[filter_key];
 					const has_change = ! isEmpty( filters[filter_key] );
 					const selected_label = has_change ? filterList[filter_key].options.find(o=>o.id==filters[filter_key])?.label : null;
@@ -134,13 +134,13 @@ function MobileFilter({_setFilter, filterList, filters}) {
 						</span>
 						<i className={'sicon sicon-arrow-down font-size-20 vertical-align-middle margin-left-10'.classNames()}></i>
 					</div>
-				})
+				}) */
 			}
 		</div>
 	</div>
 }
 
-export function Sidebar({ is_tablet, setFilter, filters, filterList }) {
+export function Sidebar({ is_mobile, setFilter, filters, filterList }) {
 	
     const _setFilter = (name, value) => {
         setFilter(name, filters[name] == value ? null : value);
@@ -152,12 +152,12 @@ export function Sidebar({ is_tablet, setFilter, filters, filterList }) {
 		filters
 	}
 
-	const show_clearer = !is_tablet && Object.keys(filters).filter(k=>k!=='country_code' && !isEmpty(filters[k])).length;
+	const show_clearer = !is_mobile && Object.keys(filters).filter(k=>k!=='country_code' && !isEmpty(filters[k])).length;
 	const is_empty     = !Object.keys(filterList).filter((filter_key) => !isEmpty(filterList[filter_key].options)).length;
 
     return is_empty ? null : <div data-cylector="sidebar" className={'sidebar'.classNames(style)}>
 		{
-			is_tablet ? 
+			is_mobile ? 
 				<MobileFilter  {...prop_drill}/> : 
 				<Filters {...prop_drill}/>
 		}

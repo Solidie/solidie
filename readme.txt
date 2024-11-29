@@ -3,9 +3,9 @@ Contributors: jayedul
 Donate Link: https://solidie.com/pricing/
 Tags: marketplace, contributors, stock, contents
 Requires at least: 5.3
-Tested up to: 6.6.2
+Tested up to: 6.7.1
 Requires PHP: 7.4
-Stable tag: 1.1.9
+Stable tag: 1.1.10
 License: GPLv3
 License URI: https://opensource.org/licenses/GPL-3.0
 
@@ -114,6 +114,10 @@ Totally. There is no static pricing model. You need to set your own pricing plan
 You can [create issue](https://github.com/Solidie/Solidie/issues) on Github repository or write here in [support channel](https://wordpress.org/support/plugin/solidie/).
 
 == Changelog ==
+
+= v1.1.10 -> Dec 02, 2024 =
+--------------------------
+* Update: Gallery UI enhancements
 
 = v1.1.9 -> Oct 24, 2024 =
 --------------------------

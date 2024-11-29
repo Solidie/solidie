@@ -8,7 +8,6 @@ import { renderers } from "../../gallery";
 export function SimilarContents({content_id, content_type}) {
 
 	const reff_wrapper = useRef();
-	const [is_tablet, setTablet] = useState(false);
 	const [is_mobile, setMobile] = useState(false);
 
 	const [state, setState] = useState({
@@ -24,8 +23,7 @@ export function SimilarContents({content_id, content_type}) {
 	
 	const setLayout=()=>{
 		if ( reff_wrapper?.current ) {
-			setTablet(reff_wrapper.current.offsetWidth<697);
-			setMobile(reff_wrapper.current.offsetWidth<473);
+			setMobile(reff_wrapper.current.offsetWidth<697);
 		}
 	}
 
@@ -47,6 +45,6 @@ export function SimilarContents({content_id, content_type}) {
 			<span className={'d-block margin-bottom-10 font-size-16 font-weight-700 color-text-60'.classNames()}>
 				{__('You might also like')}
 			</span>
-			<RenderCom contents={state.contents} is_mobile={is_mobile} is_tablet={is_tablet}/>
+			<RenderCom contents={state.contents} is_mobile={is_mobile}/>
 		</div>
 }
