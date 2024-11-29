@@ -331,11 +331,7 @@ function GalleryLayout({resources={}}) {
 							!state.contents.length ? null :
 							<ErrorBoundary>
 								
-								<RenderComp 
-									contents={state.contents} 
-									content_type={content_type} 
-									is_mobile={is_mobile} 
-								/>
+								<RenderComp contents={state.contents} is_mobile={is_mobile}/>
 								
 								{
 									(state.segmentation?.page_count || 0) < 2 ? null :

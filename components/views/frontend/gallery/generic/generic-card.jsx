@@ -9,12 +9,13 @@ import { MetaData } from "../../single/meta-data/meta-data";
 
 import style from './generic.module.scss';
 
-export function GenericCard({contents=[], content_type, is_mobile}) {
+export function GenericCard({contents=[], is_mobile}) {
 
 	return contents.map((content, index)=>{
 
 		const {
 			content_id, 
+			content_type,
 			content_permalink, 
 			media={}, 
 			content_title,
