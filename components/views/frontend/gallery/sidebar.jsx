@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { TagField } from 'solidie-materials/tag-field/tag-field.jsx';
 import { RadioCheckbox } from 'solidie-materials/radio-checkbox.jsx';
 import { __, isEmpty } from 'solidie-materials/helpers.jsx';
+import { DropDown } from 'solidie-materials/dropdown/dropdown';
 
 import style from './index.module.scss';
 
@@ -58,6 +59,18 @@ function Filters({_setFilter, filterList, filters}) {
 						value={filters[filter_key]}
 						onChange={(v) => _setFilter(filter_key, v)}
 						spanClassName={'color-text-60'.classNames()}
+					/>
+				</div>
+			}
+
+			{
+				selection_type !== 'dropdown' ? null :
+				<div>
+					<DropDown
+						name={filter_key}
+						options={options}
+						value={filters[filter_key]}
+						onChange={(v) => _setFilter(filter_key, v)}
 					/>
 				</div>
 			}

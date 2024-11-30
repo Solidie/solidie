@@ -190,6 +190,33 @@ function GalleryLayout({resources={}}) {
 		});
 	}
 
+	const getFiltersForClassified=()=>{
+		const fields = {}
+
+		if ( country_keys.length >= 2 ) {
+			fields.country_code = {
+				section_label: __('Country'),
+				selection_type: 'dropdown',
+				options: country_keys.map(code=>{
+					return {
+						id: code,
+						label: <>{getFlag(code)} {content_countries[content_type][code].country_name}</>
+					}
+				})
+			}
+		}
+
+		if ( !isEmpty(content_countries[content_type]?.[queryParams.country_code]?.states) ) {
+			fields.state_code = {
+				section_label: __('State'),
+				selection_type: 'dropdown',
+				options: content_countries[content_type][queryParams.country_code].states
+			}
+		}
+		
+		return fields;
+	}
+
 	useEffect(()=>{
 		getContents(true);
 	}, [content_type_slug]);
@@ -228,6 +255,7 @@ function GalleryLayout({resources={}}) {
 						applyFilters(
 							'gallery_sidebar_filter_list',
 							{
+								...(content_type==='classified' ? getFiltersForClassified() : {}),
 								category_ids: {
 									section_label: __('Category'),
 									selection_type: 'checkbox',
@@ -252,41 +280,6 @@ function GalleryLayout({resources={}}) {
 						}
 						style={{rowGap: '15px'}}
 					>
-						{
-							content_type!=='classified' ? null :
-							<div className={'flex-1 d-flex align-items-center column-gap-15'.classNames()}>
-								{
-									country_keys.length<2 ? null :
-									<div>
-										<DropDown
-											clearable={false}
-											value={queryParams.country_code}
-											onChange={v=>setFilter('country_code', v)}
-											options={country_keys.map(code=>{
-												return {
-													id: code,
-													label: <>{getFlag(code)} {content_countries[content_type][code].country_name}</>
-												}
-											})}
-										/>
-									</div>
-								}
-								
-								{
-									isEmpty(content_countries[content_type]?.[queryParams.country_code]?.states) ? null :
-									<div>
-										<DropDown
-											clearable={true}
-											value={queryParams.state_code}
-											onChange={v=>setFilter('state_code', v)}
-											placeholder={__('- Select State - ')}
-											options={content_countries[content_type][queryParams.country_code].states}
-										/>
-									</div>
-								}
-							</div>
-						}
-						
 						<div 
 							style={content_options.length<2 ? {width: 0, visibility: 'hidden'} : {}}
 						>
