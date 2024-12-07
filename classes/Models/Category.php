@@ -140,76 +140,68 @@ class Category {
 	}
 
 	/**
-	 * Get children IDs of a category
+	 * Get nested children IDs under a category
 	 *
 	 * @param int  $category_id The category ID to get children of
 	 * @return array
 	 */
-	public static function getChildren( $category_id, $content_type = null ) {
+	public static function getDescendentIDs( $category_id, $content_type = null ) {
 
 		global $wpdb;
 		
-		$category_id = (int) $category_id;
-
 		$where_clause = '';
 		if ( ! empty( $content_type ) ) {
 			$where_clause .= $wpdb->prepare( ' AND content_type=%s', $content_type);
 		}
 
-		$cats = $wpdb->get_results(
+		$cat_ids = $wpdb->get_col(
 			$wpdb->prepare(
 				"SELECT 
-					* 
+					category_id
 				FROM 
 					{$wpdb->solidie_categories} 
 					WHERE
-						1=1
-						AND category_id > %d
+						1=1 
+						AND parent_id=%d
 						{$where_clause} 
 				ORDER BY sequence ASC",
 				$category_id
-			),
-			ARRAY_A
+			)
 		);
+
+		$cat_ids = _Array::castRecursive( $cat_ids );
+		$new_arr = $cat_ids;
+
+		foreach ( $cat_ids as $id ) {
+			$new_arr = array_merge( $cat_ids, self::getDescendentIDs( $id, $content_type ) );
+		}
 		
-		return _Array::castRecursive( $cats );
+		return array_values( array_unique( $new_arr ) );
 	}
 
 	/**
-	 * Get descendents of parent of the provided category id
-	 *
-	 * @param int $category_id
-	 * @return array
-	 */
-	public static function getDescendentsOfParent( $category_id, $content_type ) {
-		$parent = _Array::getArray( self::getParent( $category_id ) );
-		return self::getChildren( $parent['category_id'] ?? 0, $content_type );
-	}
-
-	/**
-	 * Get parent category by a child category id
+	 * Get immediate parent category by a child category id
 	 *
 	 * @param int $category_id
 	 * @return array|null
 	 */
-	public static function getParent( $category_id ) {
+	public static function getParentID( $category_id ) {
 
 		global $wpdb;
 
-		$parent = $wpdb->get_row(
+		$parent_id = $wpdb->get_var(
 			$wpdb->prepare(
 				"SELECT 
-					* 
+					parent_id 
 				FROM 
 					{$wpdb->solidie_categories} 
-					WHERE category_id = (
-						SELECT parent_id FROM {$wpdb->solidie_categories} WHERE category_id=%d
-					)",
+				WHERE 
+					category_id=%d",
 				$category_id
 			),
 			ARRAY_A
 		);
 
-		return ! empty( $parent ) ? _Array::castRecursive( $parent ) : null;
+		return $parent_id ? (int) $parent_id : 0;
 	}
 }

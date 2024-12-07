@@ -542,8 +542,8 @@ class Contents {
 			// Get child IDs
 			$all_ids = array();
 			foreach ( $category_ids as $id ) {
-				$children = Category::getChildren( $id );
-				$all_ids  = array_merge( $all_ids, array_column( $children, 'category_id' ) );
+				$children_ids = Category::getDescendentIDs( $id, $content_type );
+				$all_ids      = array_merge( $all_ids, $children_ids );
 			}
 
 			// Merge and consolidate all the IDs together
@@ -889,8 +889,7 @@ class Contents {
 	 */
 	private static function getContentIDsByCategory( $category_id, $limit, $exclude, $content_type ) {
 
-		$cats    = Category::getDescendentsOfParent( $category_id, $content_type );
-		$cat_ids = array_column( $cats, 'category_id' );
+		$cat_ids = Category::getDescendentIDs( Category::getParentID( $category_id ), $content_type );
 
 		if ( empty( $cat_ids ) ) {
 			return array();
@@ -929,8 +928,7 @@ class Contents {
 		$remaining = $limit - count( $content_ids );
 
 		if ( $category_id !== 0 && $remaining ) {
-			$parent      = Category::getParent( min( $cat_ids ) );
-			$parent_id   = is_array( $parent ) ? ( $parent['category_id'] ?? 0 ) : 0;
+			$parent_id   = Category::getParentID( min( $cat_ids ) );
 			$more_ids    = self::getContentIDsByCategory( $parent_id, $remaining, array_merge( $exclude, $content_ids ), $content_type );
 			$content_ids = array_merge( $content_ids, $more_ids );
 		}
@@ -994,6 +992,17 @@ class Contents {
 			$content_ids = array_unique( array_map( 'intval', array_merge( $content_ids, $more_content_ids ) ) );
 		}
 
-		return ! empty( $content_ids ) ? self::getContents( array( 'content_id' => $content_ids ) ) : array();
+		$resp = array();
+
+		if ( ! empty( $content_ids ) ) {
+			$resp = self::getContents( 
+				array( 
+					'content_id'   => $content_ids, 
+					'content_type' => $content_type 
+				) 
+			);
+		}
+
+		return $resp;
 	}
 }

@@ -330,11 +330,12 @@ class ContentController {
 			exit;
 		}
 
-		// If editor, make sure the author requested, or the admin who can do anything
+		// If editor, make sure the author requested, or the admin who can do anything.
 		if ( $is_editor ) {
 			self::contentAccessCheck( $content['content_id'], get_current_user_id() );
 		}
 
+		// Get feedback settings for the content type
 		$feedback_settings = AdminSetting::getFeedbackSettings( $content['content_type'] );
 
 		// Remove contributor info from single content view if not enabled
@@ -342,7 +343,7 @@ class ContentController {
 			unset( $content['contributor'] );
 		}
 
-		// Add content reactions
+		// Add content reactions stats
 		$content['reactions'] = ( object ) Reaction::getStats( $content_id, get_current_user_id() );
 
 		// Determine free download label and description
