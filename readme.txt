@@ -115,10 +115,13 @@ You can [create issue](https://github.com/Solidie/Solidie/issues) on Github repo
 
 == Changelog ==
 
-= v1.1.10 -> Dec 07, 2024 =
+= v1.1.10 -> Dec 08, 2024 =
 --------------------------
 * Update: Gallery UI enhancements
+* Update: Message page enhancements
+* Update: Withdrawal method control enhanced (Pro)
 * Fix: Category filter not working properly
+* Fix: Earning stats inconsistency due to data type (Pro)
 * Fix: Content bundle can not be added to cart (Pro)
 
 = v1.1.9 -> Oct 24, 2024 =

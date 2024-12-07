@@ -82,4 +82,14 @@ class Utilities extends LibUtils{
 	public static function getPage( $page = null ) {
 		return _Number::getInt( $page, 1 );
 	}
+
+	/**
+	 * Keep two decimal point, and return float
+	 *
+	 * @param float $num
+	 * @return float
+	 */
+	public static function numberFormat( $num, $point = 2 ) {
+		return (float) number_format( $num, $point, '.', '' ); 
+	}
 }

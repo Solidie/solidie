@@ -7,6 +7,7 @@
 
 namespace Solidie\Models;
 
+use Solidie\Helpers\Utilities;
 use SolidieLib\_Array;
 
 class Reaction {
@@ -103,7 +104,7 @@ class Reaction {
 			)
 		);
 
-		return number_format( $average, 1 );
+		return Utilities::numberFormat( $average, 1 );
 	}
 
 	/**

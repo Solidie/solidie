@@ -172,8 +172,8 @@
 						</small>
 					</div>
 					<div style="display: flex; column-gap: 15px;">
-						<a class="fab fa-facebook-square fa-2x" href="https://www.linkedin.com/company/solidie/" target="_blank"></a>
-						<a class="fab fa-linkedin  fa-2x" href="https://facebook.com/SolidieOfficial" target="_blank"></a>
+						<a class="fab fa-linkedin fa-2x" href="https://www.linkedin.com/company/solidie/" target="_blank"></a>
+						<a class="fab fa-facebook-square fa-2x" href="https://facebook.com/SolidieOfficial" target="_blank"></a>
 					</div>
 				</div>
 			</div>
