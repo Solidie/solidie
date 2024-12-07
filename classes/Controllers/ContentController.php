@@ -109,9 +109,6 @@ class ContentController {
 		$submitted = 0;
 		$resp      = array();
 
-		error_log( var_export( $bulk_files, true ) );
-		error_log( var_export( $thumbnails, true ) );
-
 		foreach ( $bulk_files as $index => $file ) {
 
 			$resp    = self::createOrUpdateContent( $content, $file, $thumbnails[ $index ], true );

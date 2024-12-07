@@ -74,7 +74,7 @@ const fields = [
 	},
 	{
 		name: 'enable_dislike',
-		label: __('Would you like to show dislike too?'),
+		label: __('Show dislike option too?'),
 		type: 'switch',
 		placeholder: __('Enable dislike'),
 		when: ['reaction_type', 'like' ]
