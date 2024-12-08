@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
 import {__, data_pointer, purgeBasePath} from 'solidie-materials/helpers.jsx';
 import { DoAction } from 'solidie-materials/mountpoint.jsx';
+import { Tabs } from "solidie-materials/tabs/tabs.jsx";
 
 import { CategoryEditor } from "./category-editor.jsx";
 import { OptionFields, label_class } from "../options/options.jsx";
@@ -112,6 +114,9 @@ export function ContentTypeEditor(props) {
 		className=''
 	} = props;
 
+	const navigate = useNavigate();
+	const {sub_sub_segment: active_tab = 'configurations'} = useParams();
+	
 	const onChange=(name, value)=>{
 		updateWholeSetting({
 			...settings,
@@ -125,32 +130,57 @@ export function ContentTypeEditor(props) {
 		});
 	}
 
+	const {is_pro_active} = window[data_pointer];
+
 	return <div className={className}>
-		<OptionFields 
-			fields={fields.filter(f=>!f.supports || f.supports.indexOf(content_type)>-1)} 
-			settings={settings.contents[content_type]}
-			onChange={onChange}
+
+		<Tabs
+			active={active_tab}
+			onNavigate={tab=>navigate(`/settings/contents/${content_type}/${tab}/`)}
+			theme='transparent'
+			style={{paddingTop: 0}}
+			tabs={[
+				{id: 'configurations', label: __('Configurations')},
+				{id: 'categories', label: __('Categories')},
+				(is_pro_active ? {id: 'pricing', label: __('Pricing')} : null)
+			].filter(f=>f)}
 		/>
-		<div
-			className={`align-items-flex-start padding-vertical-10`.classNames()}
-		>
-			<div className={'margin-bottom-10'.classNames()}>
-				<span className={label_class}>
-					{__('Categories')}
-				</span>
-			</div>
-			<div>
-				<CategoryEditor content_type={content_type}/>
-			</div>
-		</div>
+
+		{
+			active_tab !== 'configurations' ? null :
+			<OptionFields 
+				fields={fields.filter(f=>!f.supports || f.supports.indexOf(content_type)>-1)} 
+				settings={settings.contents[content_type]}
+				onChange={onChange}
+			/>
+		}
 		
-		<DoAction 
-			action="single_content_type_settings" 
-			payload={{
-				content_type,
-				onChange,
-				content: settings.contents[content_type],
-			}}
-		/>
+		{
+			active_tab !== 'categories' ? null :
+			<div
+				className={`align-items-flex-start padding-vertical-10`.classNames()}
+			>
+				<div className={'margin-bottom-10'.classNames()}>
+					<span className={label_class}>
+						{__('Categories')}
+					</span>
+				</div>
+				<div>
+					<CategoryEditor content_type={content_type}/>
+				</div>
+			</div>
+		}
+		
+		{
+			active_tab !== 'pricing' ? null :
+			<DoAction 
+				action="single_content_type_settings" 
+				payload={{
+					content_type,
+					onChange,
+					content: settings.contents[content_type],
+				}}
+			/>
+		}
 	</div>
 }

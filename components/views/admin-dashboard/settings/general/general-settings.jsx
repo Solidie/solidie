@@ -212,7 +212,7 @@ export function GeneralSettings({settings={}, content_list={}, categories={}, re
 							/>
 
 							<Route
-								path="/settings/:segment/:sub_segment/"
+								path="/settings/:segment/:sub_segment/:sub_sub_segment?/"
 								element={<Options/>}
 							/>
 

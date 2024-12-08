@@ -124,7 +124,7 @@ export function CategoryEditor({content_type}) {
 		
 		confirm(
 			__( 'Sure to delete?' ),
-			__( 'Sub categories also will be deleted if there is any.' ),
+			__( 'Immediately deletes without needing to save settings.' ),
 			()=>{
 				request('deleteCategory', {category_id}, resp=>{
 					const {success, data:{categories={}}} = resp;

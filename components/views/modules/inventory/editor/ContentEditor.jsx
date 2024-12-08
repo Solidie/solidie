@@ -229,8 +229,7 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 			name: 'category_id',
 			label: __('Category'),
 			placeholder: __('Select category'),
-			options: getFlattenedCategories(resourceState.categories?.[content_type] || []),
-			show_setup_link: true
+			options: getFlattenedCategories(resourceState.categories?.[content_type] || [])
 		},
 		...classifieds_fields
 	].filter(f=>f);
@@ -491,7 +490,6 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 		getResources();
 	}, [state.values.content_country_code])
 	
-	const setup_link = `${window[data_pointer].permalinks.settings}#/settings/contents/${content_type}/`;
 	const stuff_id = parseInt(active_stuff_id || 0);
 	const upload_progress = (state2.submitting && uploadPercent) ? ` - ${uploadPercent}%` : null;
 	const {content_status} = state.values;
@@ -582,7 +580,6 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 								maxlength, 
 								options=[],
 								render = true,
-								show_setup_link = false
 							} = field;
 
 							return (!render || (type=='dropdown' && isEmpty(options))) ? null : 
@@ -594,9 +591,9 @@ export function ContentEditor({categories=[], navigate, params={}}) {
 												{label}{required ? <span className={'color-error'.classNames()}>*</span> : null}
 											</span>
 											{
-												(!is_admin || !show_setup_link) ? null :
+												(!is_admin || name!=='category_id') ? null :
 												<a 
-													href={setup_link}
+													href={`${window[data_pointer].permalinks.settings}#/settings/contents/${content_type}/categories/`}
 													target="_blank"
 													className={'sicon sicon-settings-gear color-material-80 interactive'.classNames()}
 												></a>
