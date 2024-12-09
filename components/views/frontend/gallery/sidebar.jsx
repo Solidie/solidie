@@ -58,7 +58,6 @@ function Filters({_setFilter, filterList, filters}) {
 						options={options}
 						value={filters[filter_key]}
 						onChange={(v) => _setFilter(filter_key, v)}
-						spanClassName={'color-text-60'.classNames()}
 					/>
 				</div>
 			}

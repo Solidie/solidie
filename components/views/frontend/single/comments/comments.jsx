@@ -140,25 +140,35 @@ export function Comments({content={}}) {
 	}, []);
 	
 	return <div className={`comments-wrapper ${state.show_in_mobile ? 'show-in-mobile' : ''}`.classNames(style)}> 
-		<strong 
-			className={'d-flex align-items-center column-gap-8 padding-vertical-15 margin-top-10'.classNames() + 'comments-control'.classNames(style)}
-			onClick={()=>setState({
-				...state, 
-				show_in_mobile: !state.show_in_mobile
-			})}
-		>
-			{comment_count>1 ? sprintf(__('%s Comments'), comment_count) : sprintf(__('%s Comment'), comment_count)}
-			<i className={'sicon sicon-arrow-right'.classNames() + 'commnents-arrow'.classNames(style)}></i>
-		</strong>
-		<div className={`comments`.classNames(style)}>
+		<div className={'d-flex align-items-center padding-vertical-15 margin-top-10'.classNames()}>
+			<div className={'flex-1'.classNames()}>
+				<strong 
+					className={'d-flex align-items-center column-gap-8 font-size-14 font-weight-600'.classNames() + 'comments-control'.classNames(style)}
+					onClick={()=>setState({
+						...state, 
+						show_in_mobile: !state.show_in_mobile
+					})}
+				>
+					{comment_count>1 ? sprintf(__('%s Comments'), comment_count) : sprintf(__('%s Comment'), comment_count)}
+					<i className={'sicon sicon-arrow-right'.classNames() + 'commnents-arrow'.classNames(style)}></i>
+				</strong>
+			</div>
 			{
-				!user_id ? <div className={"comment-box".classNames(style)}>
-					<a href={`${home_url}/my-account/?redirect_to=${window.location.href}`}>
-						{__('Log in to comment')}
+				user_id ? null :
+				<div>
+					<a 
+						href={`${home_url}/my-account/?redirect_to=${window.location.href}`}
+						className={'font-size-14 font-weight-400 d-flex align-items-center column-gap-5'.classNames()}
+					>
+						<i className={'sicon sicon-message-text-1'.classNames()}></i> <span>{__('Write..')}</span>
 					</a>
 				</div>
-				:
-				<div className={"comment-box".classNames(style)}>
+			}
+		</div>
+		
+		<div className={`comments`.classNames(style)}>
+			{
+				!user_id ? null : <div className={"comment-box".classNames(style)}>
 					<div className={'margin-bottom-15'.classNames()} data-cylector="comment-box">
 						<TextField 
 							type='textarea' 
@@ -195,7 +205,6 @@ export function Comments({content={}}) {
 						highlight
 					} = comment;
 
-
 					const comment_actions = [
 						{
 							id: 'delete', 
@@ -203,7 +212,6 @@ export function Comments({content={}}) {
 							show: user_id == commenter_id
 						}
 					].filter(a=>a.show ? true : false);
-
 
 					return <div 
 						key={comment_id} 
@@ -231,7 +239,7 @@ export function Comments({content={}}) {
 									</span>
 								</div>
 							</div>
-							<div data-cylector="comment-single">
+							<div data-cylector="comment-single" className={'font-size-16 color-text-70'.classNames()}>
 								{comment_content}
 							</div>
 						</div>
@@ -257,7 +265,7 @@ export function Comments({content={}}) {
 				!state.show_load_more ? null :
 				<div className={'text-align-center padding-vertical-20'.classNames()}>
 					<span 
-						className={'cursor-pointer hover-underline'.classNames()}
+						className={'cursor-pointer hover-underline font-size-14'.classNames()}
 						onClick={fetchComments}
 					>
 						{__('Load More..')} <LoadingIcon show={state.fetching}/>

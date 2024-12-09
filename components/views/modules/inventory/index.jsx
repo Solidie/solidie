@@ -515,7 +515,7 @@ export function Inventory({navigate, params={}}) {
 					<th></th>
 				</tr>
 			</thead>
-			<tbody>
+			<tbody className={'font-size-14'.classNames()}>
 				{
 					state.contents.map((content) =>{
 						let {
@@ -552,7 +552,7 @@ export function Inventory({navigate, params={}}) {
 						} = price_range;
 
 						return <tr key={content_id}>
-							<td data-th={__('ID')} className={'white-space-nowrap'.classNames()}>
+							<td data-th={__('ID')} className={'white-space-nowrap font-size-14'.classNames()}>
 								{content_id}
 							</td>
 							<td data-th={__('Content')} style={{paddingTop: '20px', paddingBottom: '20px'}}>
@@ -684,7 +684,7 @@ export function Inventory({navigate, params={}}) {
 									{download_count}
 								</span>
 							</td>
-							
+
 							<td data-th={__('Status')}>
 								<div 
 									className={'d-flex align-items-center column-gap-10'.classNames()}

@@ -339,7 +339,10 @@ export function SingleWrapper() {
 						<ContentTags tags={state.content.meta?.content_tags || ''} className={'margin-top-10'.classNames()}/>
 					</div>
 
-					<div dangerouslySetInnerHTML={{__html: state.content?.content_description || ''}}></div>
+					<div 
+						dangerouslySetInnerHTML={{__html: state.content?.content_description || ''}}
+						className={'font-size-16'.classNames()}
+					></div>
 
 					{
 						!sample_images.length ? null : 

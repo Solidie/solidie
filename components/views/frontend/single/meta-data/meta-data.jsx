@@ -45,7 +45,8 @@ function LikeDislike({content={}, applyReaction, is_overlayer}) {
 	const liked    = my_reaction===1;
 	const disliked = my_reaction===0;
 
-	const color_class = is_overlayer ? 'color-white' : 'color-text-50';
+	const color_class   = is_overlayer ? 'color-white' : 'color-text-50';
+	const font_size_cls = 'font-size-15'.classNames();
 
 	if ( is_overlayer ) {
 		return <div>
@@ -54,7 +55,7 @@ function LikeDislike({content={}, applyReaction, is_overlayer}) {
 				onClick={()=>applyReaction(liked ? -1 : 1)}
 			></i>
 			&nbsp;
-			<span className={`${color_class}`.classNames()}>
+			<span className={`${color_class}`.classNames() + font_size_cls}>
 				{like_count || 0}
 			</span> 
 		</div>
@@ -62,7 +63,7 @@ function LikeDislike({content={}, applyReaction, is_overlayer}) {
 
 	return <div className={'d-flex align-items-center column-gap-8'.classNames() + `like-wrapper`.classNames(style)}>
 		<span>
-			<span className={`${color_class}`.classNames()}>
+			<span className={`${color_class}`.classNames() + font_size_cls}>
 				{like_count || 0}
 			</span> 
 			&nbsp;
@@ -77,7 +78,7 @@ function LikeDislike({content={}, applyReaction, is_overlayer}) {
 			(is_overlayer || dislike_count===null || dislike_count===undefined) ? null :
 			<>
 				<span 
-					className={`${color_class}`.classNames()} 
+					className={`${color_class}`.classNames() + font_size_cls} 
 					style={{fontSize: '9px'}}
 				>
 					|
@@ -87,7 +88,7 @@ function LikeDislike({content={}, applyReaction, is_overlayer}) {
 						className={`sicon ${disliked ? 'sicon-thumbs-down color-material-90' : `sicon-thumbs-o-down ${color_class}`} font-size-14 cursor-pointer`.classNames()}
 						onClick={()=>applyReaction(disliked ? -1 : 0)}
 					></i>&nbsp;
-					<span className={`${color_class}`.classNames()}>
+					<span className={`${color_class}`.classNames() + font_size_cls}>
 						{dislike_count}
 					</span>
 				</span>

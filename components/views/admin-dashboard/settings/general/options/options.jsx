@@ -193,7 +193,6 @@ export function OptionFields({fields=[], settings, onChange: _onChange}) {
 								value={values[name]}
 								options={options}
 								onChange={(value) => onChange(name, value)}
-								spanClassName={'font-size-15 font-weight-400 line-height-24 letter-spacing--15 color-text'.classNames()}
 							/>
 						</div>
 					</>
