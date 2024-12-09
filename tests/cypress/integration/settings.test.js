@@ -31,8 +31,11 @@ describe('Configure plugin settings', ()=>{
 		cy.wait(2500);
 		cy.get('[name="contribution_distribute_model"]').check(['free', 'paid']);
 
-		// Set commision
+		// Set commission
 		cy.get('[name="contributor_revenue_percentage"]').clear().type('55').blur();
+
+		// Enable withdrawal method
+		cy.get('[name="supported_withdrawal_methods"]').check(['paypal', 'payoneer']);
 
 		// Save settings
 		cy.get('[data-cylector="save-settings"]').click();
@@ -49,7 +52,7 @@ describe('Configure plugin settings', ()=>{
 				contributor=false
 			} = content_types[content_type]
 
-			cy.visit(`wp-admin/admin.php?page=solidie-settings#/settings/contents/${content_type}/`);
+			cy.visit(`wp-admin/admin.php?page=solidie-settings#/settings/contents/${content_type}/configurations/`);
 			
 			// Set commenting
 			cy.toggleCheck({'[data-cylector="option-enable_comment"] input': comment});
@@ -61,6 +64,7 @@ describe('Configure plugin settings', ()=>{
 			cy.get(`[data-cylector="option-reaction_type"] [value="${reaction}"]`).check();
 
 			// Set categories
+			cy.visit(`wp-admin/admin.php?page=solidie-settings#/settings/contents/${content_type}/categories/`);
 			common_categories.forEach(category=>{
 
 				const {label, parent} = category;
@@ -77,6 +81,7 @@ describe('Configure plugin settings', ()=>{
 			});
 
 			// Set plans
+			cy.visit(`wp-admin/admin.php?page=solidie-settings#/settings/contents/${content_type}/pricing/`);
 			plans.forEach(plan=>{
 
 				const {

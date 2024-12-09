@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Sep 21, 2024 at 06:40 PM
+-- Generation Time: Dec 08, 2024 at 03:14 PM
 -- Server version: 8.0.16
--- PHP Version: 8.1.23
+-- PHP Version: 8.3.11
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -35,6 +35,20 @@ CREATE TABLE IF NOT EXISTS `wp_solidie_blocks` (
   PRIMARY KEY (`block_id`),
   KEY `blocker_user_id` (`blocker_user_id`),
   KEY `blocked_user_id` (`blocked_user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `wp_solidie_bundle_commissions`
+--
+
+CREATE TABLE IF NOT EXISTS `wp_solidie_bundle_commissions` (
+  `commission_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `sale_id` bigint(20) UNSIGNED NOT NULL,
+  `contributor_id` bigint(20) UNSIGNED NOT NULL,
+  `commission` double NOT NULL COMMENT 'The exact amount contributor will get for a download/access through bundle',
+  PRIMARY KEY (`commission_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
 
 -- --------------------------------------------------------

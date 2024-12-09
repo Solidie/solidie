@@ -111,6 +111,7 @@ add_action(
 			$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->solidie_withdrawals}" );
 			$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->solidie_blocks}" );
 			$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->solidie_messages}" );
+			$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->solidie_bundle_commissions}" );
 
 			// Delete gallery page to create new one
 			deleteGalleryPage();

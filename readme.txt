@@ -117,8 +117,9 @@ You can [create issue](https://github.com/Solidie/Solidie/issues) on Github repo
 
 = v1.1.10 -> Dec 08, 2024 =
 --------------------------
+* New: Bundle revenue distribution among contributors
 * Update: Gallery UI enhancements
-* Update: Message page enhancements
+* Update: Messaging UI enhancements
 * Update: Withdrawal method control enhanced (Pro)
 * Fix: Category filter not working properly
 * Fix: Earning stats inconsistency due to data type (Pro)
