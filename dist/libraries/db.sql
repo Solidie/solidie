@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Dec 08, 2024 at 03:14 PM
+-- Generation Time: Dec 09, 2024 at 08:43 AM
 -- Server version: 8.0.16
 -- PHP Version: 8.3.11
 
@@ -104,7 +104,6 @@ CREATE TABLE IF NOT EXISTS `wp_solidie_contents` (
   `contributor_id` bigint(20) UNSIGNED NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `modified_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `rejection_note` text COLLATE utf8mb4_unicode_520_ci,
   PRIMARY KEY (`content_id`),
   UNIQUE KEY `product_id` (`product_id`),
   UNIQUE KEY `content_slug` (`content_slug`),

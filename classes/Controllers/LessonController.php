@@ -8,6 +8,7 @@
 namespace Solidie\Controllers;
 
 use Solidie\Models\Contents;
+use Solidie\Models\Popularity;
 use Solidie\Models\Tutorial;
 
 class LessonController {
@@ -172,6 +173,7 @@ class LessonController {
 			wp_send_json_error( array( 'message' => __( 'Content not found!', 'solidie' ) ) );
 		}
 
+		// Run the hook to restrict unauthorized access
 		do_action( 'solidie_load_lesson_before', $content_id, $lesson_path );
 
 		$lesson = null;
@@ -179,6 +181,10 @@ class LessonController {
 			$lesson_id = Tutorial::getLessonIdByPath( $lesson_path );
 			$lesson    = $lesson_id ? Tutorial::getLesson( $content_id, $lesson_id, 'publish' ) : null;
 		}
+
+		// Log the popularity in favour of trending filter
+		Popularity::logDownload( $content_id );
+		Contents::logViewCount( $content_id );
 		
 		wp_send_json_success(
 			array(

@@ -29,6 +29,11 @@ class Contents {
 	const PRODUCT_META_KEY_FOR_CONTENT = 'solidie-content-id';
 
 	/**
+	 * Key to store view count for no downloadable contents like tutorial and classified.
+	 */
+	const CONTENT_VIEW_COUNT_KEY = 'solidie-content-view-count';
+
+	/**
 	 * Possible content statuses
 	 */
 	const CONTENT_STATUSES = array(
@@ -352,6 +357,15 @@ class Contents {
 
 		$downloads = _Array::castRecursive( $downloads );
 		$downloads = _Array::indexify( $downloads, 'content_id', 'download_count' );
+
+		// Get download count from meta for especially tutorial and classified
+		foreach ( $content_ids as $id ) {
+			if ( ! empty( $downloads[ $id ] ) ) {
+				continue;
+			}
+
+			$downloads[ $id ] = Meta::content( $id )->getMeta( self::CONTENT_VIEW_COUNT_KEY, 0 );
+		}
 
 		return $downloads;
 	}
@@ -1004,5 +1018,17 @@ class Contents {
 		}
 
 		return $resp;
+	}
+
+	/**
+	 * Log view count for non downloadable contents, such as tutorial and classified.
+	 *
+	 * @param int $content_id
+	 * @return void
+	 */
+	public static function logViewCount( $content_id ) {
+		$meta  = Meta::content( $content_id );
+		$count = $meta->getMeta( self::CONTENT_VIEW_COUNT_KEY, 0 );
+		$meta->updateMeta( self::CONTENT_VIEW_COUNT_KEY, $count + 1 );
 	}
 }

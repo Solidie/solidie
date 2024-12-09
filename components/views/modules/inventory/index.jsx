@@ -410,6 +410,7 @@ export function Inventory({navigate, params={}}) {
 
 	const _content_label = _contents[content_type]?.label || __('Content');
 	const is_classified  = content_type === 'classified';
+	const download_label = content_type === 'tutorial' ? __('Reads') : ( content_type === 'classified' ? __('Views') : __('Downloads') );
 	
 	return <InventoryWrapper 
 		content_label={_content_label} 
@@ -506,9 +507,9 @@ export function Inventory({navigate, params={}}) {
 						<>
 							<th>{__('Price')}</th>
 							{(!is_pro_active || content_type=='app') ? null : <th>{__('Bundled In')}</th>}
-							{content_type == 'tutorial' ? null : <th>{__('Downloads')}</th>}
 						</>
 					}
+					<th>{download_label}</th>
 					<th>{__('Status')}</th>
 					<th>{__('Created')}</th>
 					<th></th>
@@ -675,17 +676,14 @@ export function Inventory({navigate, params={}}) {
 											}
 										</td>
 									}
-
-									{
-										content_type == 'tutorial' ? null :
-										<td data-th={__('Downloads')}>
-											<span className={'color-text-70'.classNames()}>
-												{download_count}
-											</span>
-										</td>
-									}
 								</>
 							}
+					
+							<td data-th={download_label}>
+								<span className={'color-text-70'.classNames()}>
+									{download_count}
+								</span>
+							</td>
 							
 							<td data-th={__('Status')}>
 								<div 

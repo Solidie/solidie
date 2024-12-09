@@ -357,6 +357,11 @@ class ContentController {
 		if ( ! empty( $saved_desc ) ) {
 			$free_desc = $saved_desc;
 		}
+
+		// Log view count for classified and tutorial
+		if ( ! $is_editor && $content_type === 'classified' ) {
+			Contents::logViewCount( $content_id );
+		}
 		
 		wp_send_json_success(
 			array(
