@@ -20,7 +20,7 @@ import { TinyEditor } from "./Tiny.jsx";
 import { contact_formats } from "../../../frontend/single/index.jsx";
 import { bulk_types } from "../index.jsx";
 
-import style from './editor.module.scss';
+import * as style from './editor.module.scss';
 
 const {readonly_mode, is_admin} = window[data_pointer];
 

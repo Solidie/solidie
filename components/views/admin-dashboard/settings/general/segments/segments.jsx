@@ -5,7 +5,7 @@ import {ToggleSwitch} from 'solidie-materials/toggle-switch/ToggleSwitch.jsx';
 
 import { ContextSettings } from '../general-settings.jsx';
 
-import style from './segments.module.scss';
+import * as style from './segments.module.scss';
 
 export function Segments() {
 

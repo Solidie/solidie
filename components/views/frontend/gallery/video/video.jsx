@@ -7,7 +7,7 @@ import {chunkArray} from '../image/image.jsx';
 import { MetaData } from "../../single/meta-data/meta-data.jsx";
 import { DownloadOrPrice } from "../generic-data.jsx";
 
-import style from './video.module.scss';
+import * as style from './video.module.scss';
 
 export function ImageVideoDetails({content={}}) {
 

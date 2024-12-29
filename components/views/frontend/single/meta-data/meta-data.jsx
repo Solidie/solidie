@@ -9,7 +9,7 @@ import { ShareModal } from "solidie-materials/share-modal.jsx";
 import { ContextGallery } from "../../gallery/index.jsx";
 import { DownloadOrPrice } from "../../gallery/generic-data.jsx";
 
-import style from './meta.module.scss';
+import * as style from './meta.module.scss';
 
 const {
 	user:{

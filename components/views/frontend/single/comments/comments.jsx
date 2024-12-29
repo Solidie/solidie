@@ -8,7 +8,7 @@ import { request } from "solidie-materials/request.jsx";
 import { ContextToast } from "solidie-materials/toast/toast.jsx";
 import { Options } from "solidie-materials/dropdown/dropdown.jsx";
 
-import style from './comment.module.scss';
+import * as style from './comment.module.scss';
 
 const {readonly_mode} = window[data_pointer];
 

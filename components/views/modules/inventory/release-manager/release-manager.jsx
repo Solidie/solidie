@@ -8,7 +8,7 @@ import { FileUpload } from "solidie-materials/file-upload/file-upload.jsx";
 import { TextField } from "solidie-materials/text-field/text-field.jsx";
 import { ContextToast } from "solidie-materials/toast/toast.jsx";
 
-import style from './release.module.scss';
+import * as style from './release.module.scss';
 
 const {readonly_mode} = window[data_pointer];
 

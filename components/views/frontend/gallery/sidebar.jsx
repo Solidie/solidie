@@ -5,7 +5,7 @@ import { RadioCheckbox } from 'solidie-materials/radio-checkbox.jsx';
 import { __, isEmpty } from 'solidie-materials/helpers.jsx';
 import { DropDown } from 'solidie-materials/dropdown/dropdown';
 
-import style from './index.module.scss';
+import * as style from './index.module.scss';
 
 function Filters({_setFilter, filterList, filters}) {
 	return Object.keys(filterList).map((filter_key) => {

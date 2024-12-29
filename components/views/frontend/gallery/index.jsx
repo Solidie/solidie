@@ -19,7 +19,7 @@ import { Sidebar } from "./sidebar.jsx";
 import { Tutorial } from "../tutorial/tutorial.jsx";
 import { GenericCard } from "./generic/generic-card.jsx";
 
-import style from './index.module.scss';
+import * as style from './index.module.scss';
 
 const {page_path} = window[data_pointer];
 

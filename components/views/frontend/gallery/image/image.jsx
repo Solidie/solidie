@@ -1,10 +1,11 @@
 import React, { useContext } from "react";
+import { Link } from "react-router-dom";
 
 import { ColCounter, ContextColCounter } from "solidie-materials/col-counter.jsx";
 
-import style from './image.module.scss';
-import { Link } from "react-router-dom";
 import { ImageVideoDetails } from "../video/video.jsx";
+
+import * as style from './image.module.scss';
 
 export function chunkArray(contents=[], column_length){
 	

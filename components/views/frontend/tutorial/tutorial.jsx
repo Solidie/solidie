@@ -1,15 +1,15 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState, useRef } from "react";
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 
 import { request } from "solidie-materials/request.jsx";
 import { __ } from "solidie-materials/helpers.jsx";
-
-import style from './tutorial.module.scss';
 import { InitState } from "solidie-materials/init-state";
 import { LoadingIcon } from "solidie-materials/loading-icon/loading-icon";
+
 import { getPageTitle } from "../gallery";
-import { useRef } from "react";
+
+import * as style from './tutorial.module.scss';
 
 function LessonList({lessons=[], level=1, active_slug, fetching=false}) {
 	return <div className={`${level>1 ? 'margin-left-10' : ''}`.classNames()}>

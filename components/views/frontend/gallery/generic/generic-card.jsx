@@ -7,7 +7,7 @@ import {Ratio} from 'solidie-materials/responsive-layout.jsx';
 import { ContentTags, DownloadOrPrice } from "../generic-data";
 import { MetaData } from "../../single/meta-data/meta-data";
 
-import style from './generic.module.scss';
+import * as style from './generic.module.scss';
 
 export function GenericCard({contents=[], is_mobile}) {
 

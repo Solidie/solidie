@@ -14,7 +14,7 @@ import { ToolTip } from 'solidie-materials/tooltip.jsx';
 
 import { getPriceRange } from '../../frontend/gallery/generic-data.jsx';
 
-import style from './inventory.module.scss';
+import * as style from './inventory.module.scss';
 
 const {
 	readonly_mode, 

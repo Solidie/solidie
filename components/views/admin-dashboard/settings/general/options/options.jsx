@@ -8,11 +8,10 @@ import { NumberField } from 'solidie-materials/number-field/index.js';
 import { RadioCheckbox } from 'solidie-materials/radio-checkbox.jsx';
 import { DropDown } from 'solidie-materials/dropdown/dropdown.jsx';
 import { RenderExternal } from 'solidie-materials/render-external.jsx';
-import tag_style from 'solidie-materials/tag-field/tag.module.scss';
-
 import { ContextSettings } from '../general-settings.jsx';
 
-import style from './options.module.scss';
+import * as tag_style from 'solidie-materials/tag-field/tag.module.scss';
+import * as style from './options.module.scss';
 
 export const label_class =
     'd-block font-size-15 font-weight-500 line-height-24 letter-spacing--16 color-text'.classNames();

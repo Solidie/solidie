@@ -20,12 +20,11 @@ import { AudioPreview } from "./previews/audio.jsx";
 import { Comments } from "./comments/comments.jsx";
 import { MetaData } from "./meta-data/meta-data.jsx";
 import { content_statuses } from "../../modules/inventory/index.jsx";
-
 import { getPageTitle } from "../gallery/index.jsx";
 import { SimilarContents } from "./similar-contents/similar.jsx";
-
-import style from './single.module.scss';
 import { ContentTags } from "../gallery/generic-data.jsx";
+
+import * as style from './single.module.scss';
 
 export const ContextSingleData = createContext();
 
