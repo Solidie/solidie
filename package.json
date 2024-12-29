@@ -1,6 +1,6 @@
 {
   "name": "solidie",
-  "version": "1.1.10",
+  "version": "1.1.11",
   "description": "Digital content marketplace",
   "main": "index.js",
   "scripts": {

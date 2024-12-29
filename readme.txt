@@ -1,11 +1,11 @@
-=== Solidie - Digital Content Marketplace ===
+=== Solidie - Digital Product Downloads and Marketplace ===
 Contributors: jayedul
 Donate Link: https://solidie.com/pricing/
 Tags: marketplace, contributors, stock, contents
 Requires at least: 5.3
 Tested up to: 6.7.1
 Requires PHP: 7.4
-Stable tag: 1.1.10
+Stable tag: 1.1.11
 License: GPLv3
 License URI: https://opensource.org/licenses/GPL-3.0
 
@@ -114,6 +114,10 @@ Totally. There is no static pricing model. You need to set your own pricing plan
 You can [create issue](https://github.com/Solidie/Solidie/issues) on Github repository or write here in [support channel](https://wordpress.org/support/plugin/solidie/).
 
 == Changelog ==
+
+= v1.1.11 -> Jan 10, 2025 =
+--------------------------
+* New: TBD
 
 = v1.1.10 -> Dec 09, 2024 =
 --------------------------
