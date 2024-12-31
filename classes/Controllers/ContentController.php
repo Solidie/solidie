@@ -555,8 +555,14 @@ class ContentController {
 		}
 	}
 
-	public static function enableInitialContentType( string $content_type ) {
-		AdminSetting::toggleContentType( $content_type, true );
+	/**
+	 * Enable content type from initial inventory screen when none is enabled yet
+	 *
+	 * @param array $content_types
+	 * @return void
+	 */
+	public static function enableInitialContentType( array $content_types ) {
+		AdminSetting::toggleContentType( $content_types, true );
 		wp_send_json_success();
 	}
 

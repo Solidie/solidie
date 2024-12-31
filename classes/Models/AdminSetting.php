@@ -169,17 +169,22 @@ class AdminSetting {
 	/**
 	 * Enable/disable single content type
 	 *
-	 * @param string $content_type
+	 * @param string|array $content_type
+	 * @param bool         $enable
+	 * 
 	 * @return void
 	 */
-	public static function toggleContentType( string $content_type, bool $enable = true ) {
+	public static function toggleContentType( $content_type, $enable ) {
 		
+		$content_types = _Array::getArray( $content_type );
 		$options = self::get();
 
-		if ( isset( $options['contents'][ $content_type ] ) ) {
-			$options['contents'][ $content_type ]['enable'] = true;
+		foreach ( $content_types as $content_type ) {
+			if ( isset( $options['contents'][ $content_type ] ) ) {
+				$options['contents'][ $content_type ]['enable'] = $enable;
+			}
 		}
-
+		
 		self::save( $options, false );
 	}
 }

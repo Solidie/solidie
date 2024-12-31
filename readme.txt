@@ -117,7 +117,8 @@ You can [create issue](https://github.com/Solidie/Solidie/issues) on Github repo
 
 = v1.1.11 -> Jan 10, 2025 =
 --------------------------
-* New: TBD
+* Update: Initial content type selection screen UI enhanced
+* Fix: Real color update in settings not working
 
 = v1.1.10 -> Dec 09, 2024 =
 --------------------------

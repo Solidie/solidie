@@ -126,11 +126,11 @@ export function GeneralSettings({settings={}, content_list={}, categories={}, re
 				const intensity = (opacity / 1) * 100;
 				const shade     = intensity === 100 ? ''  : `-${intensity}`;
 
-				document.querySelector(':root').style.setProperty(`--solidie-color-${var_name}${shade}`, hexToRgba(value, opacity));
+				document.querySelector(`.${data_pointer}`).style.setProperty(`--solidie-color-${var_name}${shade}`, hexToRgba(value, opacity));
 			});
 
 			// Contrasted color for hover effect
-			document.querySelector(':root').style.setProperty(`--solidie-color-${var_name}-150`, increaseContrast(value));
+			document.querySelector(`.${data_pointer}`).style.setProperty(`--solidie-color-${var_name}-150`, increaseContrast(value));
 		}
 	};
 

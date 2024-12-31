@@ -13,6 +13,7 @@ import {DropDownStatus} from 'solidie-materials/dropdown-status/dropdown-status.
 import { ToolTip } from 'solidie-materials/tooltip.jsx';
 
 import { getPriceRange } from '../../frontend/gallery/generic-data.jsx';
+import { Initial } from './type-selection/type-selection.jsx';
 
 import * as style from './inventory.module.scss';
 
@@ -94,68 +95,6 @@ const getContentActions = content=>{
 	}
 
 	return actions;
-}
-
-function Initial({contents: _contents}) {
-
-	const {ajaxToast} = useContext(ContextToast);
-
-	const [state, setState] = useState({
-		selected_type: null,
-		saving: false
-	});
-
-	const submit=()=>{
-
-		setState({
-			...state,
-			saving: true
-		})
-
-		request('enableInitialContentType', {content_type: state.selected_type}, resp=>{
-			
-			if ( resp.success ) {
-				window.location.reload();
-				return;
-			}
-
-			setState({...state, saving: false});
-			ajaxToast(resp);
-		});
-	}
-
-	return <div className={'padding-vertical-40'.classNames()}>
-		<span className={'d-block margin-bottom-10 font-size-18 font-weight-500 color-text'.classNames()}>
-			{__('What would you like to showcase?')}
-		</span>
-		<span className={'d-block font-size-12 color-text-60 margin-bottom-15'.classNames()}>
-			You can always configure it in <a 
-				target="_blank" 
-				href={window[data_pointer]?.permalinks?.settings} >
-					settings
-			</a>.
-		</span>
-		<div className={'d-flex align-items-center column-gap-8'.classNames()}>
-			<div style={{width: '300px'}}>
-				<DropDown
-					value={state.selected_type}
-					options={Object.keys(_contents).map(type=>{return {id: type, label: _contents?.[type]?.label}})}
-					onChange={v=>setState({...state, selected_type: v})}
-					label={__('Select One')}
-				/>
-			</div>
-			<div>
-				<button
-					className={'button button-primary'.classNames()}
-					target='_blank'
-					disabled={!state.selected_type || state.saving}
-					onClick={submit}
-				>
-					{__('Start')} <LoadingIcon show={state.saving}/>
-				</button>
-			</div>
-		</div>
-	</div>
 }
 
 function InventoryWrapper({children, content_type, content_label, gallery_permalink, navigate, params={}}) {
