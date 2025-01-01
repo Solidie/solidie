@@ -5,7 +5,7 @@ import {mountExternal} from 'solidie-materials/render-external.jsx';
 import {MountPoint} from 'solidie-materials/mountpoint.jsx';
 import {__, data_pointer} from 'solidie-materials/helpers.jsx';
 
-import { Inventory } from "../modules/inventory/index.jsx";
+import { Inventory } from "../modules/inventory/contents/index.jsx";
 import { ContentEditor } from "../modules/inventory/editor/ContentEditor.jsx";
 
 addFilter(

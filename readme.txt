@@ -117,7 +117,9 @@ You can [create issue](https://github.com/Solidie/Solidie/issues) on Github repo
 
 = v1.1.11 -> Jan 10, 2025 =
 --------------------------
+* New: Bundle filter added in dashboard inventory
 * Update: Initial content type selection screen UI enhanced
+* Fix: Duplicate ajax call in inventory page
 * Fix: Real color update in settings not working
 
 = v1.1.10 -> Dec 09, 2024 =

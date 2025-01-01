@@ -18,7 +18,7 @@ import { ReleaseManager } from "../release-manager/release-manager.jsx";
 import { TutorialManager } from "../tutorial-manager/tutorial-manager.jsx";
 import { TinyEditor } from "./Tiny.jsx";
 import { contact_formats } from "../../../frontend/single/index.jsx";
-import { bulk_types } from "../index.jsx";
+import { bulk_types } from "../contents/index.jsx";
 
 import * as style from './editor.module.scss';
 

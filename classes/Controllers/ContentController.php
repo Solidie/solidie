@@ -62,28 +62,37 @@ class ContentController {
 	 * Provide content list for various area like dashboard, gallery and so on.
 	 *
 	 * @param array $filters Content filter arguments
-	 * @param bool  $is_contributor_inventory Whether it is user dashboard
+	 * @param bool  $is_admin Whether it is admin dashboard
 	 * @param bool  $is_gallery Whether loaded in gallery
 	 * @return void
 	 */
-	public static function getContentList( array $filters, bool $is_contributor_inventory = false, bool $is_gallery = false ) {
-
-		if ( $is_contributor_inventory ) {
-			$filters['contributor_id'] = get_current_user_id();
-		}
+	public static function getContentList( array $filters, bool $is_admin = false, bool $is_gallery = false ) {
 
 		if ( $is_gallery ) {
 			$filters['content_status'] = 'publish';
+		} else {
+			// Non admin means the inventory is loaded in contributor dashboard
+			if ( ! $is_admin ) {
+				$filters['contributor_id'] = get_current_user_id();
+			}
 		}
 
 		$content_list = Contents::getContents( $filters );
 		$segmentation = Contents::getContents( $filters, true );
 
 		wp_send_json_success(
-			array(
-				'contents'          => $content_list,
-				'segmentation'      => $segmentation,
-				'gallery_permalink' => Contents::getGalleryPermalink( $filters['content_type'] ),
+			apply_filters(
+				'solidie_content_list_response',
+				array(
+					'contents'          => $content_list,
+					'segmentation'      => $segmentation,
+					'gallery_permalink' => Contents::getGalleryPermalink( $filters['content_type'] ),
+				),
+				array(
+					'filters'    => $filters,
+					'is_admin'   => $is_admin,
+					'is_gallery' => $is_gallery,
+				)
 			)
 		);
 	}

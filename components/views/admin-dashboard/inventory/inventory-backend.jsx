@@ -4,7 +4,7 @@ import { HashRouter, Route, Navigate, Routes, useNavigate, useParams } from 'rea
 import {RenderExternal} from 'solidie-materials/render-external.jsx';
 import {getDashboardPath} from 'solidie-materials/helpers.jsx';
 
-import { Inventory } from "../../modules/inventory";
+import { Inventory } from "../../modules/inventory/contents/index";
 import { ContentEditor } from "../../modules/inventory/editor/ContentEditor";
 
 function DashboardNavLayer({component, payload}) {

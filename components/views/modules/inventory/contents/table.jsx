@@ -1,19 +1,17 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useState } from 'react'
 
 import { request } from 'solidie-materials/request.jsx';
 import { confirm } from 'solidie-materials/prompts.jsx';
-import { __, data_pointer, sprintf, formatDate, formatTime, getDashboardPath, currency_symbol, getLocalValue, setLocalValue } from 'solidie-materials/helpers.jsx';
+import { __, data_pointer, sprintf, formatDate, formatTime, getDashboardPath, currency_symbol } from 'solidie-materials/helpers.jsx';
 import { ContextToast } from 'solidie-materials/toast/toast.jsx';
 import { LoadingIcon } from 'solidie-materials/loading-icon/loading-icon.jsx';
 import { Pagination } from 'solidie-materials/pagination/pagination.jsx';
-import { TextField } from 'solidie-materials/text-field/text-field.jsx';
 import { TableStat } from 'solidie-materials/table-stat.jsx';
-import { DropDown, Options } from "solidie-materials/dropdown/dropdown.jsx";
+import { Options } from "solidie-materials/dropdown/dropdown.jsx";
 import {DropDownStatus} from 'solidie-materials/dropdown-status/dropdown-status.jsx';
 import { ToolTip } from 'solidie-materials/tooltip.jsx';
 
-import { getPriceRange } from '../../frontend/gallery/generic-data.jsx';
-import { Initial } from './type-selection/type-selection.jsx';
+import { getPriceRange } from '../../../frontend/gallery/generic-data.jsx';
 
 import * as style from './inventory.module.scss';
 
@@ -97,142 +95,13 @@ const getContentActions = content=>{
 	return actions;
 }
 
-function InventoryWrapper({children, content_type, content_label, gallery_permalink, navigate, params={}}) {
+export function InventoryTable({navigate, content_type, contents=[], fetchContents, segmentation, fetching, filterState, setFilter, updateContents}) {
 
-	const _contents = window[data_pointer]?.settings?.contents || {};
-	const enabled_contents = 
-		Object.keys(_contents)
-		.map(c=>{
-			return _contents[c].enable ? {..._contents[c], content_type:c} : null
-		})
-		.filter(c=>c)
-		.map(c=>{
-			return {...c, id: c.content_type}
-		});
-
-	const [state, setState] = useState({
-		error_message: null
-	});
-
-	useEffect(()=>{
-		if ( ! content_type || !enabled_contents.find(c=>c.content_type==content_type) ) {
-			const first = enabled_contents[0]?.content_type;
-			if ( first ) {
-				navigate(getDashboardPath('inventory/'+first), {replace: true});
-			} else {
-				setState({
-					...state, 
-					error_message: <div 
-						className={'d-flex align-items-center justify-content-center bg-color-white border-radius-8'.classNames()}
-						style={{padding: '140px 0'}}
-					>
-						{
-							is_admin ? <Initial contents={_contents}/> :
-							<div className={'text-align-center padding-vertical-40'.classNames()}>
-								<span className={'d-block margin-bottom-10 font-size-16 color-text'.classNames()}>
-									{__('No content type is enabled.')}
-								</span>
-								<span className={'d-block margin-bottom-10 font-size-14 color-text-70'.classNames()}>
-									{__('Please contact the site administrator.')}
-								</span>
-							</div>
-						}
-					</div> 
-				});
-			}
-		} else if( ! enabled_contents.find(e=>e.content_type===content_type)?.enable ) {
-			setState({
-				...state, 
-				error_message: <div className={'text-align-center padding-vertical-40'.classNames()}>
-						<span className={'d-block margin-bottom-10'.classNames()}>
-							{sprintf(__('The content type \'%s\' is not found or maybe disabled meanwhile'), content_type)}
-						</span>
-						<a href={window[data_pointer]?.permalinks?.settings} className={'button button-primary button-outlined button-small'.classNames()}>
-							{__('Check Content Types')}
-						</a>
-					</div>
-			});
-		}
-	}, [content_type]);
-
-	if ( state.error_message ) {
-		return <div>
-			<div>
-				<strong className={"d-flex align-items-center column-gap-8 color-text padding-vertical-10 position-sticky top-0".classNames()}>
-					<span className={'font-size-24 font-weight-600 letter-spacing-3'.classNames()}>
-						{__('Inventory')}
-					</span>
-				</strong>
-			</div>
-			{state.error_message}
-		</div>
-	}
-
-	return children;
-}
-
-export function Inventory({navigate, params={}}) {
-
-	const {content_type = getLocalValue('selected_inventory_type')} = params;
 	const {ajaxToast} = useContext(ContextToast);
 
 	const [state, setState] = useState({
-		fetching: false,
 		changing_status_for: null,
-		contents: [],
-		segmentation: null,
-		gallery_permalink: null,
-		content_type: content_type
 	});
-
-	const filterStateInitial = {
-		page: 1,
-		search: '',
-		content_status: ''
-	}
-	const [filterState, setFilterState] = useState(filterStateInitial);
-
-	const setFilter=(name, value)=>{
-		setFilterState({
-			...filterState,
-			page: name=='search' ? 1 : filterState.page,
-			[name]: value
-		});
-	}
-
-	const fetchContents=(variables={})=>{
-		setState({
-			...state,
-			fetching: true,
-			...variables
-		});
-
-		const payload = {
-			...filterState, 
-			content_type, 
-			segmentation: true, 
-			order_by: 'newest'
-		}
-
-		request( 'getContentList', {filters: payload, is_contributor_inventory: !is_admin}, resp=>{
-			const {
-				success, 
-				data: {
-					segmentation = {}, 
-					contents=[],
-					gallery_permalink
-				}
-			} = resp;
-
-			setState({
-				...state,
-				contents,
-				fetching: false,
-				segmentation,
-				gallery_permalink
-			});
-		} );
-	}
 
 	const deleteContent=(content_id)=>{
 		
@@ -268,8 +137,11 @@ export function Inventory({navigate, params={}}) {
 					setState({
 						...state,
 						changing_status_for: null,
-						contents: resp.success ? state.contents.map(c=>c.content_id==content_id ? {...c, content_status: status} : c) : state.contents
 					});
+
+					if (resp.success) {
+						updateContents(contents.map(c=>c.content_id==content_id ? {...c, content_status: status} : c));
+					}
 				});
 			}
 		);
@@ -323,115 +195,12 @@ export function Inventory({navigate, params={}}) {
 		</a>
 	}
 
-	useEffect(()=>{
-		if ( content_type ) {
-			fetchContents({
-				content_type,
-				contents: state.content_type!=content_type ? [] : state.contents
-			});
-		}
-	}, [content_type, filterState]);
-
-	useEffect(()=>{
-		setFilterState(filterStateInitial);
-	}, [content_type]);
-
-	const _contents = window[data_pointer]?.settings?.contents || {};
-	const enabled_contents = 
-		Object.keys(_contents)
-		.map(c=>{
-			return _contents[c].enable ? {..._contents[c], content_type:c} : null
-		})
-		.filter(c=>c)
-		.map(c=>{
-			return {...c, id: c.content_type}
-		});
-
+	const _contents      = window[data_pointer]?.settings?.contents || {};
 	const _content_label = _contents[content_type]?.label || __('Content');
 	const is_classified  = content_type === 'classified';
 	const download_label = content_type === 'tutorial' ? __('Reads') : ( content_type === 'classified' ? __('Views') : __('Downloads') );
 	
-	return <InventoryWrapper 
-		content_label={_content_label} 
-		content_type={content_type}
-		gallery_permalink={state.gallery_permalink}
-		navigate={navigate}
-		params={params}
-	>
-		<div className={'d-flex align-items-center flex-wrap-wrap column-gap-15 row-gap-15 margin-top-10 margin-bottom-10'.classNames()}>
-			
-			<div className={'flex-1 d-flex align-items-center column-gap-8'.classNames()}>
-				<a 
-					href={state.gallery_permalink}
-					className={
-						"d-flex align-items-center column-gap-8 padding-vertical-10".classNames() + 'inventory-link'.classNames(style)
-					}
-					target='_blank'
-				>
-					<span className={'font-size-24 font-weight-600 letter-spacing-3'.classNames()}>
-						{sprintf(__('%s Inventory'), _content_label || '')}
-					</span>
-				</a>
-
-				<Link 
-					to={getDashboardPath(`inventory/${content_type}/editor/new`)}
-					className={'sicon sicon-add-circle font-size-24 color-material'.classNames()}
-				/>
-			</div>
-			
-			{
-				bulk_types.indexOf(content_type)===-1 ? null :
-				<div>
-					<span 
-						className={'hover-underline cursor-pointer color-material-80 font-weight-500 interactive'.classNames()}
-						onClick={()=>navigate(getDashboardPath(`/inventory/${content_type}/editor/bulk/`))}
-					>
-						+ Add Bulk
-					</span>
-				</div>
-			}
-
-			<div className={'d-flex align-items-center column-gap-10'.classNames()}>
-				{
-					enabled_contents.length < 2 ? null :
-					<div>
-						<DropDown
-							placeholder={__('Content Type')}
-							value={content_type}
-							clearable={false}
-							options={enabled_contents}
-							onChange={type=>{
-								navigate(getDashboardPath(`inventory/${type}`));
-								setLocalValue('selected_inventory_type', type);
-							}}
-						/>
-					</div>
-				}
-				
-				<div>
-					<DropDown
-						placeholder={__('Status')}
-						onChange={v=>setFilter('content_status', v)}
-						value={filterState.content_status}
-						options={Object.keys(content_statuses).map(status=>{
-							return {
-								id: status,
-								label: content_statuses[status]
-							}
-						})}
-					/>
-				</div>
-				<div>
-					<TextField
-						placeholder={__('Enter Keyword')}
-						onChange={key=>setFilter('search', key)}
-						value={filterState.search}
-						type='search'
-					/>
-				</div>
-			</div>
-		</div>
-
+	return <>
 		<table 
 			className={'table'.classNames(style) + 'table '.classNames()} 
 		>
@@ -456,7 +225,7 @@ export function Inventory({navigate, params={}}) {
 			</thead>
 			<tbody className={'font-size-14'.classNames()}>
 				{
-					state.contents.map((content) =>{
+					contents.map((content) =>{
 						let {
 							content_id, 
 							content_title, 
@@ -676,8 +445,8 @@ export function Inventory({navigate, params={}}) {
 					})
 				}
 				<TableStat 
-					empty={!state.contents.length} 
-					loading={state.fetching}
+					empty={!contents.length} 
+					loading={fetching}
 					message={
 						<div className={'padding-vertical-40 text-align-center'.classNames()}>
 							<strong className={'d-block font-size-14 margin-bottom-20'.classNames()}>
@@ -691,17 +460,17 @@ export function Inventory({navigate, params={}}) {
 			</tbody>
 		</table>
 		{
-			(state.segmentation?.page_count || 0) < 2 ? null :
+			(segmentation?.page_count || 0) < 2 ? null :
 			<>
 				<br/>
 				<div className={'d-flex justify-content-center'.classNames()}>
 					<Pagination
 						onChange={(page) => setFilter('page', page)}
 						pageNumber={filterState.page}
-						pageCount={state.segmentation.page_count}
+						pageCount={segmentation.page_count}
 					/>
 				</div>
 			</>
 		}
-	</InventoryWrapper>
+	</>
 }
